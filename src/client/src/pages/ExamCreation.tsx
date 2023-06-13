@@ -11,7 +11,7 @@ function ExamCreation() {
     return (
         <div>
             {exam.questions.map((question, questionIndex) => (
-                <div>
+                <div key={question.id}>
                     <p>
                         Intitulé:
                         <input
@@ -27,14 +27,14 @@ function ExamCreation() {
                             const isRightAnswer =
                                 possibleAnswerIndex === exam.solution[question.id];
                             return (
-                                <p>
+                                <React.Fragment key={possibleAnswer}>
                                     <input
                                         type="radio"
                                         id={possibleAnswer}
                                         name={question.id}
                                         value={possibleAnswer}
                                         checked={isRightAnswer}
-                                        onClick={() => {}}
+                                        onChange={() => {}}
                                     />
                                     <input
                                         value={possibleAnswer}
@@ -46,7 +46,7 @@ function ExamCreation() {
                                             )
                                         }
                                     />
-                                </p>
+                                </React.Fragment>
                             );
                         })}
                     </p>

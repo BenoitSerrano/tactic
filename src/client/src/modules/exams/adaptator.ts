@@ -54,6 +54,7 @@ function buildExamAdaptator() {
             exams.splice(examIndex, 1);
         }
         exams.push({ id: examId, questions, solution });
+        console.log(exams);
     }
 
     function fetchQuestions(examId: string) {
