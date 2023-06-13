@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { examAdaptator } from '../modules/exams/adaptator';
 
 function Home() {
-    const questions = examAdaptator.fetchQuestions();
+    const examId = 'mon-examen';
+
+    const questions = examAdaptator.fetchQuestions(examId);
     const [trial, setTrial] = useState({});
 
     return (
@@ -31,7 +33,7 @@ function Home() {
     );
 
     function submitTrial() {
-        const score = examAdaptator.computeScore(trial);
+        const score = examAdaptator.computeScore(examId, trial);
         alert(`Votre score est de ${score} / ${questions.length}`);
     }
 }
