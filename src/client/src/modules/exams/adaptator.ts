@@ -1,26 +1,28 @@
 const examAdaptator = {
-    fetch,
+    fetchQuestions,
 };
 
-function fetch() {
-    return [
-        {
-            question: 'How old are you? I ________',
-            possibilities: ['have 30', 'have 30 years', 'am 30 years', 'am 30 years old'],
-            answer: 3,
-        },
-        {
-            question: 'Please, _________ you speak slower?',
-            possibilities: ['could', 'will', 'do', 'are'],
-            answer: 0,
-        },
+const questions = [
+    {
+        id: 'truc',
+        title: 'How old are you? I ________',
+        possibleAnswers: ['have 30', 'have 30 years', 'am 30 years', 'am 30 years old'],
+    },
+    {
+        id: 'machin',
+        title: 'Please, _________ you speak slower?',
+        possibleAnswers: ['could', 'will', 'do', 'are'],
+    },
 
-        {
-            question: 'London is the capital of the United ________ .',
-            possibilities: ['country', 'land', 'headquarters', 'Kingdom'],
-            answer: 3,
-        },
-    ];
+    {
+        id: 'bidule',
+        title: 'London is the capital of the United ________ .',
+        possibleAnswers: ['country', 'land', 'headquarters', 'Kingdom'],
+    },
+];
+
+function fetchQuestions() {
+    return questions;
 }
 
 export { examAdaptator };
