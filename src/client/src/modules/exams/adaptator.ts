@@ -1,5 +1,6 @@
 const examAdaptator = {
     fetchQuestions,
+    computeScore,
 };
 
 const questions = [
@@ -21,8 +22,18 @@ const questions = [
     },
 ];
 
+const solution: trialType = { truc: 3, machin: 0, bidule: 3 };
+
 function fetchQuestions() {
     return questions;
+}
+type trialType = Record<string, number>;
+
+function computeScore(trial: trialType) {
+    return Object.keys(trial).reduce((acc, questionId) => {
+        const value = trial[questionId] === solution[questionId] ? 1 : 0;
+        return acc + value;
+    }, 0);
 }
 
 export { examAdaptator };
