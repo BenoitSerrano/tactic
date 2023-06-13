@@ -9,11 +9,19 @@ function Home() {
             {exam.map(({ question, possibilities }, index) => (
                 <p>
                     <h2>{question}</h2>
-                    <ul>
+                    <div>
                         {possibilities.map((possibility) => (
-                            <li>{possibility}</li>
+                            <div key={possibility}>
+                                <input
+                                    type="radio"
+                                    id={possibility}
+                                    name={question}
+                                    value={possibility}
+                                />
+                                <label htmlFor={possibility}>{possibility}</label>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </p>
             ))}
         </div>
