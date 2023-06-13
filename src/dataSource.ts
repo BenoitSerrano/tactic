@@ -1,5 +1,7 @@
 import { DataSource } from 'typeorm';
 import { config } from './config';
+import { Exam } from './modules/exam';
+import { QuestionChoixMultiple } from './modules/questionChoixMultiple';
 
 const dataSource = new DataSource({
     type: 'postgres',
@@ -9,9 +11,9 @@ const dataSource = new DataSource({
     password: config.DB_PASSWORD,
     database: config.DB_NAME,
     logging: true,
-    entities: [],
+    entities: [Exam, QuestionChoixMultiple],
     subscribers: [],
-    migrations: [],
+    migrations: ['**/migrations/*.js'],
 });
 
 export { dataSource };
