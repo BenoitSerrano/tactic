@@ -30,6 +30,7 @@ function buildExamAdaptator() {
 
     return {
         findExam,
+        updateExam,
         fetchQuestions,
         computeScore,
         getSolution,
@@ -41,6 +42,18 @@ function buildExamAdaptator() {
             throw new Error(`L'examId ${examId} ne correspond à aucun examen`);
         }
         return exam;
+    }
+
+    function updateExam(
+        examId: string,
+        questions: examType['questions'],
+        solution: examType['solution'],
+    ) {
+        const examIndex = exams.findIndex(({ id }) => id === examId);
+        if (examIndex) {
+            exams.splice(examIndex, 1);
+        }
+        exams.push({ id: examId, questions, solution });
     }
 
     function fetchQuestions(examId: string) {
