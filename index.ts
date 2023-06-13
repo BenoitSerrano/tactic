@@ -1,18 +1,26 @@
 import Express, { Response } from 'express';
+import 'reflect-metadata';
 import cors from 'cors';
 import path from 'path';
 import { config } from './src/config';
+import { dataSource } from './src/dataSource';
 
-const app = Express();
+runApp();
 
-app.use(cors());
+async function runApp() {
+    const app = Express();
 
-app.use(Express.static(path.join(__dirname, '..', 'src', 'client', 'build')));
+    app.use(cors());
 
-app.get('/*', (_, res: Response) => {
-    res.sendFile(path.join(__dirname, '..', 'src', 'client', 'build', 'index.html'));
-});
+    app.use(Express.static(path.join(__dirname, '..', 'src', 'client', 'build')));
 
-app.listen(config.PORT, async () => {
-    console.log(`Server is running on port ${config.PORT}`);
-});
+    app.get('/*', (_, res: Response) => {
+        res.sendFile(path.join(__dirname, '..', 'src', 'client', 'build', 'index.html'));
+    });
+
+    await dataSource.initialize();
+
+    app.listen(config.PORT, async () => {
+        console.log(`Server is running on port ${config.PORT}`);
+    });
+}
