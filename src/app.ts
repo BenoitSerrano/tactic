@@ -1,6 +1,7 @@
 import Express, { Response } from 'express';
 import cors from 'cors';
 import path from 'path';
+import bodyParser from 'body-parser';
 import { config } from './config';
 import { dataSource } from './dataSource';
 import { router } from './router';
@@ -15,7 +16,7 @@ async function runApp() {
 
     app.use(cors());
 
-    app.use('/api', router);
+    app.use('/api', bodyParser.json(), router);
 
     app.use(Express.static(path.join(__dirname, '..', '..', 'src', 'client', 'build')));
 
