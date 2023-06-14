@@ -5,11 +5,11 @@ import { QuestionChoixMultiple } from './modules/questionChoixMultiple';
 
 const dataSource = new DataSource({
     type: 'postgres',
-    host: config.DB_HOST,
-    port: config.DB_PORT,
-    username: config.DB_USERNAME,
-    password: config.DB_PASSWORD,
-    database: config.DB_NAME,
+    host: config.DATABASE_HOST,
+    port: config.DATABASE_PORT,
+    username: config.DATABASE_USERNAME,
+    password: config.DATABASE_PASSWORD,
+    database: config.DATABASE_NAME,
     logging: true,
     entities: [Exam, QuestionChoixMultiple],
     subscribers: [],
