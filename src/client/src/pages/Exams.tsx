@@ -21,7 +21,8 @@ function Exams() {
                 {query.data?.map((exam: any) => {
                     return (
                         <li key={exam.id}>
-                            <Link to={`/exams/${exam.id}/edit`}>{exam.name}</Link>
+                            {exam.name} : <Link to={`/exams/${exam.id}/edit`}>Editer</Link> |{' '}
+                            <Link to={`/exams/${exam.id}/take`}>Commencer l'examen</Link>
                         </li>
                     );
                 })}
