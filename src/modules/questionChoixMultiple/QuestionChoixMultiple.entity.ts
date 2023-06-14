@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Exam } from '../exam';
 
 @Entity()
 export class QuestionChoixMultiple {
@@ -16,4 +17,7 @@ export class QuestionChoixMultiple {
 
     @Column('int')
     rightAnswerIndex: number;
+
+    @ManyToOne(() => Exam, (exam) => exam.questionsChoixMultiple)
+    exam: Exam;
 }
