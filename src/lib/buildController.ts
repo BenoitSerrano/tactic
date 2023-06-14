@@ -9,6 +9,7 @@ function buildController<bodyT>(
     options?: { schema?: Joi.Schema },
 ) {
     return async (req: Request, res: Response) => {
+        console.log(req.body);
         if (options?.schema) {
             const { error } = options.schema.validate(req.body);
             if (error) {

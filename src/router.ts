@@ -9,7 +9,7 @@ const examService = buildExamService();
 router.get('/exams', buildController(examService.getExams));
 
 router.post(
-    '/exam',
+    '/exams',
     buildController(examService.createExam, {
         schema: Joi.object({
             name: Joi.string().required(),
