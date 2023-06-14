@@ -39,7 +39,7 @@ async function createExam(name: string) {
 }
 
 async function createQuestionChoixMultiple(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/question-choix-multiple`;
+    const URL = `${BASE_URL}/exams/${examId}/questions-choix-multiple`;
     const response = await fetch(URL, {
         method: 'POST',
         headers: {

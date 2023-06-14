@@ -8,6 +8,7 @@ function buildQuestionChoixMultipleService() {
     const questionChoixMultipleRepository = dataSource.getRepository(QuestionChoixMultiple);
     const examService = {
         createQuestionChoixMultiple,
+        updateQuestionChoixMultiple,
     };
 
     return examService;
@@ -21,6 +22,29 @@ function buildQuestionChoixMultipleService() {
         questionChoixMultiple.rightAnswerIndex = 0;
         questionChoixMultiple.title = '';
         questionChoixMultiple.exam = exam;
+        return questionChoixMultipleRepository.save(questionChoixMultiple);
+    }
+
+    async function updateQuestionChoixMultiple({
+        examId,
+        qcmId,
+        title,
+        possibleAnswers,
+        rightAnswerIndex,
+    }: {
+        examId: string;
+        qcmId: number;
+        title: string;
+        possibleAnswers: string[];
+        rightAnswerIndex: number;
+    }) {
+        const questionChoixMultiple = await questionChoixMultipleRepository.findOneOrFail({
+            where: { exam: { id: examId }, id: qcmId },
+        });
+        questionChoixMultiple.title = title;
+        questionChoixMultiple.possibleAnswers = possibleAnswers;
+        questionChoixMultiple.rightAnswerIndex = rightAnswerIndex;
+
         return questionChoixMultipleRepository.save(questionChoixMultiple);
     }
 }

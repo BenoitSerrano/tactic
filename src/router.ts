@@ -1,8 +1,8 @@
 import Express from 'express';
+import Joi from 'joi';
 import { buildExamController } from './modules/exam';
 import { buildController } from './lib/buildController';
-import Joi from 'joi';
-import { buildQuestionChoixMultipleController } from './modules/questionChoixMultiple/questionChoixMultiple.controller';
+import { buildQuestionChoixMultipleController } from './modules/questionChoixMultiple';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -22,8 +22,19 @@ router.post(
 );
 
 router.post(
-    '/exams/:examId/question-choix-multiple',
+    '/exams/:examId/questions-choix-multiple',
     buildController(questionChoixMultipleController.createQuestionChoixMultiple),
+);
+
+router.put(
+    '/exams/:examId/questions-choix-multiple/:qcmId',
+    buildController(questionChoixMultipleController.updateQuestionChoixMultiple, {
+        schema: Joi.object({
+            title: Joi.string().required(),
+            rightAnswerIndex: Joi.number().required(),
+            possibleAnswers: Joi.array().items(Joi.string().required()).required(),
+        }),
+    }),
 );
 
 export { router };
