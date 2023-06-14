@@ -6,8 +6,6 @@ import { Attempt } from './modules/attempt/Attempt.entity';
 import { QcmAnswer } from './modules/qcmAnswer/QcmAnswer.entity';
 import { Student } from './modules/student/Student.entity';
 
-console.log('HERE');
-console.log(config);
 const dataSource = new DataSource({
     type: 'postgres',
     host: config.DATABASE_HOST,
@@ -20,6 +18,5 @@ const dataSource = new DataSource({
     subscribers: [],
     migrations: ['**/migrations/*.js'],
 });
-console.log('THERE');
 
 export { dataSource };
