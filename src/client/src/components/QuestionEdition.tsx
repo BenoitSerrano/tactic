@@ -18,6 +18,7 @@ function QuestionEdition(props: { examId: string; questionChoixMultiple: any }) 
 
     return (
         <div>
+            <strong>{props.questionChoixMultiple.order + 1}.</strong>
             <input value={title} placeholder="Intitulé de la question" onChange={onChangeTitle} />
             {possibleAnswers.map((possibleAnswer: string, possibleAnswerIndex: number) => {
                 const isRightAnswer = possibleAnswerIndex === rightAnswerIndex;

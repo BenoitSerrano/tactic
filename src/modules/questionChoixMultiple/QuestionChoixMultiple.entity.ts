@@ -15,6 +15,9 @@ export class QuestionChoixMultiple {
     @Column('int')
     rightAnswerIndex: number;
 
+    @Column('int')
+    order: number;
+
     @ManyToOne(() => Exam, (exam) => exam.questionsChoixMultiple)
     exam: Exam;
 }

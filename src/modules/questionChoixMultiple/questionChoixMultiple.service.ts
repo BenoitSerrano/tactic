@@ -18,11 +18,28 @@ function buildQuestionChoixMultipleService() {
         const exam = await examService.getExam(examId);
 
         const questionChoixMultiple = new QuestionChoixMultiple();
+        const highestOrder = await getHighestQuestionChoixMultipleOrder(examId);
+
         questionChoixMultiple.possibleAnswers = ['', '', '', ''];
         questionChoixMultiple.rightAnswerIndex = 0;
         questionChoixMultiple.title = '';
         questionChoixMultiple.exam = exam;
+        questionChoixMultiple.order = highestOrder + 1;
         return questionChoixMultipleRepository.save(questionChoixMultiple);
+    }
+
+    async function getHighestQuestionChoixMultipleOrder(examId: string) {
+        const questionsChoixMultiple = await questionChoixMultipleRepository.find({
+            where: { exam: { id: examId } },
+            select: { order: true, id: true },
+            order: { order: 'DESC' },
+            take: 1,
+        });
+
+        if (questionsChoixMultiple.length == 0) {
+            return -1;
+        }
+        return questionsChoixMultiple[0].order;
     }
 
     async function updateQuestionChoixMultiple({
