@@ -8,6 +8,8 @@ const examService = buildExamService();
 
 router.get('/exams', buildController(examService.getExams));
 
+router.get('/exams/:examId', buildController(examService.getExam));
+
 router.post(
     '/exams',
     buildController(examService.createExam, {

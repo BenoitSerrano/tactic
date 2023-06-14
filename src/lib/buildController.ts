@@ -4,12 +4,11 @@ import Joi from 'joi';
 
 export { buildController };
 
-function buildController<bodyT>(
-    controller: (body: bodyT) => any | Promise<any>,
+function buildController<paramsT extends Record<string, string>, bodyT>(
+    controller: ({ urlParams, body }: { urlParams: paramsT; body: bodyT }) => any | Promise<any>,
     options?: { schema?: Joi.Schema },
 ) {
     return async (req: Request, res: Response) => {
-        console.log(req.body);
         if (options?.schema) {
             const { error } = options.schema.validate(req.body);
             if (error) {
@@ -19,7 +18,7 @@ function buildController<bodyT>(
         }
 
         try {
-            const result = await controller(req.body);
+            const result = await controller({ urlParams: req.params as paramsT, body: req.body });
             res.send(result);
         } catch (error) {
             console.error(error);
