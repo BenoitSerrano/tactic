@@ -3,11 +3,23 @@ import Joi from 'joi';
 import { buildExamController } from './modules/exam';
 import { buildController } from './lib/buildController';
 import { buildQuestionChoixMultipleController } from './modules/questionChoixMultiple';
+import { buildStudentController } from './modules/student';
 
 const router = Express.Router();
 const examController = buildExamController();
+const studentController = buildStudentController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
 
+router.get('/students', buildController(studentController.getStudents));
+router.post(
+    '/students',
+    buildController(studentController.createStudent, {
+        schema: Joi.object({
+            firstName: Joi.string().required(),
+            lastName: Joi.string().required(),
+        }),
+    }),
+);
 router.get('/exams', buildController(examController.getExams));
 
 router.get('/exams/:examId', buildController(examController.getExam));
