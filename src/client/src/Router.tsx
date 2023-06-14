@@ -7,8 +7,9 @@ function Router() {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/creation-examen" element={<ExamCreation />} />
-            <Route path="/examens" element={<Exams />} />
+            <Route path="/exams" element={<Exams />} />
+            <Route path="/exams/:examId/take" element={<Home />} />
+            <Route path="/exams/:examId/edit" element={<ExamCreation />} />
         </Routes>
     );
 }
