@@ -1,6 +1,8 @@
 import { config } from '../config';
 
 const api = {
+    fetchStudents,
+    createStudent,
     createExam,
     fetchExam,
     fetchExams,
@@ -9,6 +11,27 @@ const api = {
 };
 
 const BASE_URL = `${config.API_URL}/api`;
+
+async function fetchStudents() {
+    const URL = `${BASE_URL}/students`;
+    const response = await fetch(URL, {
+        method: 'GET',
+    });
+    return response.json();
+}
+
+async function createStudent({ firstName, lastName }: { firstName: string; lastName: string }) {
+    const URL = `${BASE_URL}/students`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ firstName, lastName }),
+    });
+    return response.json();
+}
 
 async function fetchExams() {
     const URL = `${BASE_URL}/exams`;
