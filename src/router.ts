@@ -30,9 +30,9 @@ router.put(
     '/exams/:examId/questions-choix-multiple/:qcmId',
     buildController(questionChoixMultipleController.updateQuestionChoixMultiple, {
         schema: Joi.object({
-            title: Joi.string().required(),
+            title: Joi.string(),
             rightAnswerIndex: Joi.number().required(),
-            possibleAnswers: Joi.array().items(Joi.string().required()).required(),
+            possibleAnswers: Joi.array().items(Joi.string()).required(),
         }),
     }),
 );

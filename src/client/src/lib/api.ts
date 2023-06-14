@@ -5,6 +5,7 @@ const api = {
     fetchExam,
     fetchExams,
     createQuestionChoixMultiple,
+    updateQuestionChoixMultiple,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -46,6 +47,30 @@ async function createQuestionChoixMultiple(examId: string) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+    });
+    return response.json();
+}
+
+async function updateQuestionChoixMultiple(params: {
+    examId: string;
+    qcmId: string;
+    title: string;
+    possibleAnswers: string[];
+    rightAnswerIndex: number;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/questions-choix-multiple/${params.qcmId}`;
+    const body = JSON.stringify({
+        title: params.title,
+        possibleAnswers: params.possibleAnswers,
+        rightAnswerIndex: params.rightAnswerIndex,
+    });
+    const response = await fetch(URL, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: body,
     });
     return response.json();
 }
