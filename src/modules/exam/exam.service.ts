@@ -1,9 +1,10 @@
 import { DataSource } from 'typeorm';
 import { Exam } from './Exam.entity';
+import { dataSource } from '../../dataSource';
 
 export { buildExamService };
 
-function buildExamService(dataSource: DataSource) {
+function buildExamService() {
     const examRepository = dataSource.getRepository(Exam);
     const examService = {
         createExam,
@@ -11,9 +12,9 @@ function buildExamService(dataSource: DataSource) {
 
     return examService;
 
-    async function createExam(name: string) {
+    async function createExam(examDto: { name: string }) {
         const exam = new Exam();
-        exam.name = name;
+        exam.name = examDto.name;
         return examRepository.save(exam);
     }
 }
