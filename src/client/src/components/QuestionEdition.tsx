@@ -67,6 +67,9 @@ function QuestionEdition(props: { examId: string; questionChoixMultiple: any }) 
 
     function buildOnChangePossibleAnswer(possibleAnswerIndex: number) {
         return (event: React.ChangeEvent<HTMLInputElement>) => {
+            if (event.target.value.indexOf(',') !== -1) {
+                return;
+            }
             setPossibleAnswers([
                 ...possibleAnswers.slice(0, possibleAnswerIndex),
                 event.target.value,
