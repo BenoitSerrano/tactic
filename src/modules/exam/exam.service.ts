@@ -25,6 +25,9 @@ function buildExamService() {
     }
 
     async function getExam(examId: string) {
-        return examRepository.findOneOrFail({ where: { id: examId } });
+        return examRepository.findOneOrFail({
+            where: { id: examId },
+            relations: { questionsChoixMultiple: true },
+        });
     }
 }

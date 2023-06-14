@@ -9,9 +9,37 @@ function ExamEdition() {
     const mutation = useMutation({
         mutationFn: api.createQuestionChoixMultiple,
     });
+    console.log(query.data);
 
     return (
         <div>
+            {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
+                <div>
+                    <input
+                        value={questionChoixMultiple.title}
+                        placeholder="Intitulé de la question"
+                    />
+                    {questionChoixMultiple.possibleAnswers.map(
+                        (possibleAnswer: string, possibleAnswerIndex: number) => {
+                            const isRightAnswer =
+                                possibleAnswerIndex === questionChoixMultiple.rightAnswerIndex;
+                            return (
+                                <React.Fragment key={possibleAnswer}>
+                                    <input
+                                        type="radio"
+                                        id={possibleAnswer}
+                                        name={questionChoixMultiple.id}
+                                        value={possibleAnswer}
+                                        checked={isRightAnswer}
+                                        onChange={() => {}}
+                                    />
+                                    <input value={possibleAnswer} onChange={() => {}} />
+                                </React.Fragment>
+                            );
+                        },
+                    )}
+                </div>
+            ))}
             <button onClick={addNewQuestionChoixMultiple}>
                 Ajouter une nouvelle question à choix multiple
             </button>
