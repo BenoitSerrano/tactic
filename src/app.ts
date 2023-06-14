@@ -16,10 +16,10 @@ async function runApp() {
 
     app.use('/api', cors({ origin: ['http://localhost:3000'] }), bodyParser.json(), router);
 
-    app.use(Express.static(path.join(__dirname, '..', 'src', 'client', 'build')));
+    app.use(Express.static(path.join(__dirname, '..', '..', 'src', 'client', 'build')));
 
     app.get('/*', (_, res: Response) => {
-        res.sendFile(path.join(__dirname, '..', 'src', 'client', 'build', 'index.html'));
+        res.sendFile(path.join(__dirname, '..', '..', 'src', 'client', 'build', 'index.html'));
     });
 
     app.listen(config.PORT, async () => {
