@@ -2,9 +2,11 @@ import Express from 'express';
 import { buildExamController } from './modules/exam';
 import { buildController } from './lib/buildController';
 import Joi from 'joi';
+import { buildQuestionChoixMultipleController } from './modules/questionChoixMultiple/questionChoixMultiple.controller';
 
 const router = Express.Router();
 const examController = buildExamController();
+const questionChoixMultipleController = buildQuestionChoixMultipleController();
 
 router.get('/exams', buildController(examController.getExams));
 
@@ -19,6 +21,9 @@ router.post(
     }),
 );
 
-// router.post('/exams/:examId/question-choix-multiple', buildController(examService.getExam));
+router.post(
+    '/exams/:examId/question-choix-multiple',
+    buildController(questionChoixMultipleController.createQuestionChoixMultiple),
+);
 
 export { router };

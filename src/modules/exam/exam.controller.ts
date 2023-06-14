@@ -1,5 +1,4 @@
 import { Exam } from './Exam.entity';
-import { dataSource } from '../../dataSource';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
 import { buildExamService } from './exam.service';
 

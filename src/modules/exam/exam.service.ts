@@ -10,7 +10,6 @@ function buildExamService() {
         createExam,
         getExams,
         getExam,
-        // createQuestionChoixMultiple,
     };
 
     return examService;
@@ -28,11 +27,4 @@ function buildExamService() {
     async function getExam(examId: string) {
         return examRepository.findOneOrFail({ where: { id: examId } });
     }
-
-    // async function createQuestionChoixMultiple(params: { urlParams: { examId: string } }) {
-    //     const questionChoixMultiple = new QuestionChoixMultiple();
-    //     questionChoixMultiple.possibleAnswers = ['', '', '', ''];
-    //     questionChoixMultiple.rightAnswerIndex = 0;
-    //     questionChoixMultiple.title = '';
-    // }
 }
