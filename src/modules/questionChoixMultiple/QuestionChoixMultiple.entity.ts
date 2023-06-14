@@ -9,9 +9,6 @@ export class QuestionChoixMultiple {
     @Column()
     title: string;
 
-    @Column('int')
-    order: number;
-
     @Column('simple-array')
     possibleAnswers: string[];
 

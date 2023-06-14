@@ -4,6 +4,7 @@ const api = {
     createExam,
     fetchExam,
     fetchExams,
+    createQuestionChoixMultiple,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -33,6 +34,18 @@ async function createExam(name: string) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name }),
+    });
+    return response.json();
+}
+
+async function createQuestionChoixMultiple(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/question-choix-multiple`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
     });
     return response.json();
 }

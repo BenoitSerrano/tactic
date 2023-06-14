@@ -1,22 +1,24 @@
 import Express from 'express';
-import { buildExamService } from './modules/exam';
+import { buildExamController } from './modules/exam';
 import { buildController } from './lib/buildController';
 import Joi from 'joi';
 
 const router = Express.Router();
-const examService = buildExamService();
+const examController = buildExamController();
 
-router.get('/exams', buildController(examService.getExams));
+router.get('/exams', buildController(examController.getExams));
 
-router.get('/exams/:examId', buildController(examService.getExam));
+router.get('/exams/:examId', buildController(examController.getExam));
 
 router.post(
     '/exams',
-    buildController(examService.createExam, {
+    buildController(examController.createExam, {
         schema: Joi.object({
             name: Joi.string().required(),
         }),
     }),
 );
+
+// router.post('/exams/:examId/question-choix-multiple', buildController(examService.getExam));
 
 export { router };

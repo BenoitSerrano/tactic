@@ -1,5 +1,6 @@
 import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
+import { QuestionChoixMultiple } from '../questionChoixMultiple';
 
 export { buildExamService };
 
@@ -9,13 +10,14 @@ function buildExamService() {
         createExam,
         getExams,
         getExam,
+        // createQuestionChoixMultiple,
     };
 
     return examService;
 
-    async function createExam(params: { body: { name: string } }) {
+    async function createExam(name: string) {
         const exam = new Exam();
-        exam.name = params.body.name;
+        exam.name = name;
         return examRepository.save(exam);
     }
 
@@ -23,8 +25,14 @@ function buildExamService() {
         return examRepository.find();
     }
 
-    async function getExam(params: { urlParams: { examId: string } }) {
-        console.log(params.urlParams.examId);
-        return examRepository.find({ where: { id: params.urlParams.examId } });
+    async function getExam(examId: string) {
+        return examRepository.findOneOrFail({ where: { id: examId } });
     }
+
+    // async function createQuestionChoixMultiple(params: { urlParams: { examId: string } }) {
+    //     const questionChoixMultiple = new QuestionChoixMultiple();
+    //     questionChoixMultiple.possibleAnswers = ['', '', '', ''];
+    //     questionChoixMultiple.rightAnswerIndex = 0;
+    //     questionChoixMultiple.title = '';
+    // }
 }
