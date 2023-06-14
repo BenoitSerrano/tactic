@@ -3,6 +3,8 @@ import { config } from './config';
 import { Exam } from './modules/exam';
 import { QuestionChoixMultiple } from './modules/questionChoixMultiple';
 
+console.log('HERE');
+console.log(config);
 const dataSource = new DataSource({
     type: 'postgres',
     host: config.DATABASE_HOST,
@@ -15,5 +17,6 @@ const dataSource = new DataSource({
     subscribers: [],
     migrations: ['**/migrations/*.js'],
 });
+console.log('THERE');
 
 export { dataSource };
