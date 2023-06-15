@@ -1,9 +1,17 @@
-import { CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    Unique,
+} from 'typeorm';
 import { Student } from '../student/Student.entity';
 import { Exam } from '../exam';
 import { QcmAnswer } from '../qcmAnswer';
 
 @Entity()
+@Unique('One student has one shot for an exam', ['student', 'exam'])
 export class Attempt {
     @PrimaryGeneratedColumn('uuid')
     id: string;

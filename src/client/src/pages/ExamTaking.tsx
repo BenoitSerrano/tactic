@@ -24,7 +24,7 @@ function ExamTaking() {
             ))}
         </div>
     ) : (
-        <div></div>
+        <div />
     );
 
     function adaptAttemptData(queryData: any) {
