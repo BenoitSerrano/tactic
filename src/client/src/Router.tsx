@@ -1,14 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
 import { Exams } from './pages/Exams';
 import { ExamEdition } from './pages/ExamEdition';
-import { Students } from './pages/Students';
+import { StudentsEdition } from './pages/StudentsEdition';
 
 function Router() {
     return (
         <Routes>
-            <Route path="/exams" element={<Exams />} />
-            <Route path="/students" element={<Students />} />
-            <Route path="/exams/:examId/edit" element={<ExamEdition />} />
+            <Route path="/teacher/exams" element={<Exams />} />
+            <Route path="/teacher/students" element={<StudentsEdition />} />
+            <Route path="/teacher/exams/:examId/edit" element={<ExamEdition />} />
         </Routes>
     );
 }

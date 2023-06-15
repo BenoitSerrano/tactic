@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 
-function Students() {
+function StudentsEdition() {
     const queryClient = useQueryClient();
     const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
     const [newStudentFirstName, setNewStudentFirstName] = useState('');
@@ -45,4 +45,4 @@ function Students() {
     }
 }
 
-export { Students };
+export { StudentsEdition };
