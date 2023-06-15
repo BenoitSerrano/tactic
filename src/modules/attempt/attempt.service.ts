@@ -8,6 +8,7 @@ export { buildAttemptService };
 function buildAttemptService() {
     const studentService = {
         createAttempt,
+        fetchAttempt,
     };
 
     return studentService;
@@ -24,5 +25,19 @@ function buildAttemptService() {
         attempt.exam = exam;
         attempt.student = student;
         return attemptRepository.save(attempt);
+    }
+
+    async function fetchAttempt(attemptId: string) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+
+        return attemptRepository.findOneOrFail({
+            where: { id: attemptId },
+            order: {
+                exam: {
+                    questionsChoixMultiple: { order: 'ASC' },
+                },
+            },
+            relations: ['exam', 'qcmAnswers', 'exam.questionsChoixMultiple'],
+        });
     }
 }

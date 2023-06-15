@@ -14,10 +14,7 @@ function Router() {
             <Route path="/teacher/exams/:examId/edit" element={<ExamEdition />} />
             <Route path="/student/exams/:examId/students" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentAction />} />
-            <Route
-                path="/student/exams/:examId/students/:studentId/attempts/:attemptId"
-                element={<ExamTaking />}
-            />
+            <Route path="/student/attempts/:attemptId" element={<ExamTaking />} />
         </Routes>
     );
 }

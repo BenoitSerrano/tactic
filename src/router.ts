@@ -58,6 +58,8 @@ router.post(
     buildController(attemptController.createAttempt),
 );
 
+router.get('/attempts/:attemptId', buildController(attemptController.fetchAttempt));
+
 router.post(
     '/attempts/:attemptId/questionsChoixMultiple/:qcmId',
     buildController(qcmAnswerController.createOrUpdateQcmAnswer, {

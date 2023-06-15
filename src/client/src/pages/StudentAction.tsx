@@ -11,7 +11,7 @@ function StudentAction() {
     const mutation = useMutation({
         mutationFn: api.createAttempt,
         onSuccess: (attempt: any) => {
-            navigate(`/student/exams/${examId}/students/${studentId}/attempts/${attempt.id}`);
+            navigate(`/student/attempts/${attempt.id}`);
         },
     });
 

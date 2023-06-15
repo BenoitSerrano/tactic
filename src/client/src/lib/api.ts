@@ -3,6 +3,7 @@ import { config } from '../config';
 const api = {
     createOrUpdateQcmAnswer,
     createAttempt,
+    fetchAttempt,
     fetchStudents,
     createStudent,
     createExam,
@@ -39,6 +40,14 @@ async function createAttempt({ examId, studentId }: { examId: string; studentId:
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
     const response = await fetch(URL, {
         method: 'POST',
+    });
+    return response.json();
+}
+
+async function fetchAttempt(attemptId: string) {
+    const URL = `${BASE_URL}/attempts/${attemptId}`;
+    const response = await fetch(URL, {
+        method: 'GET',
     });
     return response.json();
 }
