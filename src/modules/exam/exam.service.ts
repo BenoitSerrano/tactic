@@ -1,6 +1,6 @@
 import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
-import { QuestionChoixMultiple } from '../questionChoixMultiple';
+import { examAdaptator } from './exam.adaptator';
 
 export { buildExamService };
 
@@ -10,6 +10,7 @@ function buildExamService() {
         createExam,
         getExams,
         getExam,
+        getExamResults,
     };
 
     return examService;
@@ -32,5 +33,20 @@ function buildExamService() {
             },
             relations: { questionsChoixMultiple: true },
         });
+    }
+
+    async function getExamResults(examId: string) {
+        const examWithAttempts = await examRepository.findOneOrFail({
+            where: { id: examId },
+            relations: [
+                'attempts',
+                'attempts.student',
+                'questionsChoixMultiple',
+                'attempts.qcmAnswers',
+                'attempts.qcmAnswers.questionChoixMultiple',
+            ],
+        });
+        const examWithResults = examAdaptator.convertExamWithAttemptsToResults(examWithAttempts);
+        return examWithResults;
     }
 }

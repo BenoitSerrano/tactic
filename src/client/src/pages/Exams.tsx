@@ -10,7 +10,7 @@ function Exams() {
     const mutation = useMutation({
         mutationFn: api.createExam,
         onSuccess: (exam) => {
-            navigate(`/exams/${exam.id}/edit`);
+            navigate(`/teacher/exams/${exam.id}/edit`);
         },
     });
 
@@ -21,7 +21,9 @@ function Exams() {
                 {query.data?.map((exam: any) => {
                     return (
                         <li key={exam.id}>
-                            {exam.name} : <Link to={`/teacher/exams/${exam.id}/edit`}>Editer</Link>
+                            {exam.name} : <Link to={`/teacher/exams/${exam.id}/edit`}>Éditer</Link>{' '}
+                            |{' '}
+                            <Link to={`/teacher/exams/${exam.id}/results`}>Voir les résultats</Link>
                         </li>
                     );
                 })}

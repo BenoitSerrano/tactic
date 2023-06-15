@@ -9,6 +9,7 @@ const api = {
     createExam,
     fetchExam,
     fetchExams,
+    fetchExamResults,
     createQuestionChoixMultiple,
     updateQuestionChoixMultiple,
 };
@@ -75,6 +76,14 @@ async function createStudent({ firstName, lastName }: { firstName: string; lastN
 
 async function fetchExams() {
     const URL = `${BASE_URL}/exams`;
+    const response = await fetch(URL, {
+        method: 'GET',
+    });
+    return response.json();
+}
+
+async function fetchExamResults(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/results`;
     const response = await fetch(URL, {
         method: 'GET',
     });

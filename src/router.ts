@@ -27,6 +27,7 @@ router.post(
 router.get('/exams', buildController(examController.getExams));
 
 router.get('/exams/:examId', buildController(examController.getExam));
+router.get('/exams/:examId/results', buildController(examController.getExamResults));
 
 router.post(
     '/exams',

@@ -12,9 +12,6 @@ export class Student {
     @Column()
     lastName: string;
 
-    @CreateDateColumn()
-    startedAt: number;
-
     @OneToMany(() => Attempt, (attempt) => attempt.student)
     attempts: Attempt[];
 }

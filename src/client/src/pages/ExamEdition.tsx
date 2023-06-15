@@ -19,7 +19,11 @@ function ExamEdition() {
     return (
         <div>
             {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
-                <QuestionEdition examId={examId} questionChoixMultiple={questionChoixMultiple} />
+                <QuestionEdition
+                    key={`${examId}-${questionChoixMultiple.id}`}
+                    examId={examId}
+                    questionChoixMultiple={questionChoixMultiple}
+                />
             ))}
             <button onClick={addNewQuestionChoixMultiple}>
                 Ajouter une nouvelle question à choix multiple

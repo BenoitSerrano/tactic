@@ -27,7 +27,7 @@ function QuestionEdition(props: { examId: string; questionChoixMultiple: any }) 
                         <input
                             type="radio"
                             id={possibleAnswer}
-                            name={props.questionChoixMultiple.id}
+                            name={`${props.examId}-${props.questionChoixMultiple.id}`}
                             value={possibleAnswer}
                             checked={isRightAnswer}
                             onChange={() => onChangeRightAnswerIndex(possibleAnswerIndex)}
