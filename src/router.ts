@@ -5,12 +5,14 @@ import { buildExamController } from './modules/exam';
 import { buildQuestionChoixMultipleController } from './modules/questionChoixMultiple';
 import { buildStudentController } from './modules/student';
 import { buildAttemptController } from './modules/attempt';
+import { buildQcmAnswerController } from './modules/qcmAnswer';
 
 const router = Express.Router();
 const examController = buildExamController();
 const studentController = buildStudentController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
+const qcmAnswerController = buildQcmAnswerController();
 
 router.get('/students', buildController(studentController.getStudents));
 router.post(
@@ -54,6 +56,15 @@ router.put(
 router.post(
     '/exams/:examId/students/:studentId/attempts',
     buildController(attemptController.createAttempt),
+);
+
+router.post(
+    '/attempts/:attemptId/questionsChoixMultiple/:qcmId',
+    buildController(qcmAnswerController.createOrUpdateQcmAnswer, {
+        schema: Joi.object({
+            choice: Joi.number().required(),
+        }),
+    }),
 );
 
 export { router };
