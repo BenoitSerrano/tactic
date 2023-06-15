@@ -6,14 +6,14 @@ export { buildStudentService };
 function buildStudentService() {
     const studentService = {
         createStudent,
-        getStudents,
+        getStudentsWithAttempts,
     };
 
     return studentService;
 
-    async function getStudents() {
+    async function getStudentsWithAttempts() {
         const studentRepository = dataSource.getRepository(Student);
-        return studentRepository.find();
+        return studentRepository.find({ relations: ['attempts', 'attempts.exam'] });
     }
 
     async function createStudent(firstName: string, lastName: string) {

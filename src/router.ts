@@ -14,7 +14,7 @@ const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
 const qcmAnswerController = buildQcmAnswerController();
 
-router.get('/students', buildController(studentController.getStudents));
+router.get('/students', buildController(studentController.getStudentsWithAttempts));
 router.post(
     '/students',
     buildController(studentController.createStudent, {

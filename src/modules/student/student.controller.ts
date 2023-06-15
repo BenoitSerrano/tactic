@@ -6,7 +6,7 @@ function buildStudentController() {
     const studentService = buildStudentService();
     const studentController = {
         createStudent,
-        getStudents,
+        getStudentsWithAttempts,
     };
 
     return studentController;
@@ -15,7 +15,7 @@ function buildStudentController() {
         return studentService.createStudent(params.body.firstName, params.body.lastName);
     }
 
-    async function getStudents() {
-        return studentService.getStudents();
+    async function getStudentsWithAttempts() {
+        return studentService.getStudentsWithAttempts();
     }
 }

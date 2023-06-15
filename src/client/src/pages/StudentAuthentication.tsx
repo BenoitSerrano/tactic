@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
-import { Link, useParams } from 'react-router-dom';
 
 function StudentAuthentication() {
     const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
@@ -11,16 +11,28 @@ function StudentAuthentication() {
     return (
         <div>
             <ul>
-                {query.data?.map((student: any) => (
-                    <li>
-                        <Link
-                            key={student.id}
-                            to={`/student/exams/${examId}/students/${student.id}`}
-                        >
-                            {student.firstName} {student.lastName}
-                        </Link>
-                    </li>
-                ))}
+                {query.data?.map(
+                    (student: {
+                        id: string;
+                        firstName: string;
+                        lastName: string;
+                        attempts: Array<{ id: string; exam: { id: string; name: string } }>;
+                    }) => {
+                        const currentAttempt = student.attempts.find(
+                            (attempt) => attempt.exam.id === examId,
+                        );
+                        const to = currentAttempt
+                            ? `/student/attempts/${currentAttempt.id}`
+                            : `/student/exams/${examId}/students/${student.id}`;
+                        return (
+                            <li key={student.id}>
+                                <Link key={student.id} to={to}>
+                                    {student.firstName} {student.lastName}
+                                </Link>
+                            </li>
+                        );
+                    },
+                )}
             </ul>
         </div>
     );
