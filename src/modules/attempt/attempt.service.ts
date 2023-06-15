@@ -37,7 +37,12 @@ function buildAttemptService() {
                     questionsChoixMultiple: { order: 'ASC' },
                 },
             },
-            relations: ['exam', 'qcmAnswers', 'exam.questionsChoixMultiple'],
+            relations: [
+                'exam',
+                'qcmAnswers',
+                'exam.questionsChoixMultiple',
+                'qcmAnswers.questionChoixMultiple',
+            ],
         });
     }
 }

@@ -2,26 +2,35 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { api } from '../lib/api';
 
-function QuestionAnswering(props: { questionChoixMultiple: any; attemptId: string }) {
+function QuestionAnswering(props: {
+    questionChoixMultiple: {
+        id: number;
+        title: string;
+        possibleAnswers: string[];
+        choice: number;
+    };
+    index: number;
+    attemptId: string;
+}) {
     const upsertQcmAnswerMutation = useMutation({
         mutationFn: api.createOrUpdateQcmAnswer,
     });
     const qcmId = props.questionChoixMultiple.id;
 
-    const [choice, setChoice] = useState<number>();
+    const [choice, setChoice] = useState<number>(props.questionChoixMultiple.choice);
 
     return (
-        <p key={qcmId}>
+        <div key={qcmId}>
             <h2>
-                {props.questionChoixMultiple.order}. {props.questionChoixMultiple.title}
+                {props.index + 1}. {props.questionChoixMultiple.title}
             </h2>
             {props.questionChoixMultiple.possibleAnswers.map(
                 (possibleAnswer: any, index: number) => (
-                    <React.Fragment>
+                    <React.Fragment key={`${props.questionChoixMultiple.id}-${index}`}>
                         <input
                             type="radio"
                             id={`${qcmId}-${index}`}
-                            name={props.questionChoixMultiple.id}
+                            name={`${props.questionChoixMultiple.id}`}
                             value={possibleAnswer}
                             checked={choice === index}
                             onChange={() => onChooseQcmAnswer(index)}
@@ -30,14 +39,14 @@ function QuestionAnswering(props: { questionChoixMultiple: any; attemptId: strin
                     </React.Fragment>
                 ),
             )}
-        </p>
+        </div>
     );
 
     function onChooseQcmAnswer(newChoice: number) {
         setChoice(newChoice);
         upsertQcmAnswerMutation.mutate({
             attemptId: props.attemptId,
-            qcmId: props.questionChoixMultiple.id,
+            qcmId: `${props.questionChoixMultiple.id}`,
             choice: newChoice,
         });
     }
