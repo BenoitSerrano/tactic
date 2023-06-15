@@ -1,6 +1,7 @@
-import { CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Student } from '../student/Student.entity';
 import { Exam } from '../exam';
+import { QcmAnswer } from '../qcmAnswer';
 
 @Entity()
 export class Attempt {
@@ -15,4 +16,7 @@ export class Attempt {
 
     @ManyToOne(() => Exam)
     exam: Exam;
+
+    @OneToMany(() => QcmAnswer, (qcmAnswer) => qcmAnswer.attempt)
+    qcmAnswers: QcmAnswer[];
 }

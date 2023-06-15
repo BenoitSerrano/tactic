@@ -1,6 +1,7 @@
 import { config } from '../config';
 
 const api = {
+    createOrUpdateQcmAnswer,
     createAttempt,
     fetchStudents,
     createStudent,
@@ -12,6 +13,27 @@ const api = {
 };
 
 const BASE_URL = `${config.API_URL}/api`;
+
+async function createOrUpdateQcmAnswer({
+    attemptId,
+    qcmId,
+    choice,
+}: {
+    attemptId: string;
+    qcmId: string;
+    choice: number;
+}) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/questionsChoixMultiple/${qcmId}`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ choice }),
+    });
+    return response.json();
+}
 
 async function createAttempt({ examId, studentId }: { examId: string; studentId: string }) {
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;

@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
+import { Attempt } from '../attempt';
 
 @Entity()
 export class QcmAnswer {
@@ -11,4 +12,7 @@ export class QcmAnswer {
 
     @ManyToOne(() => QuestionChoixMultiple)
     questionChoixMultiple: QuestionChoixMultiple;
+
+    @ManyToOne(() => Attempt)
+    attempt: Attempt;
 }
