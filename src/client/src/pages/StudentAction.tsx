@@ -1,11 +1,19 @@
 import React from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
+import { api } from '../lib/api';
 
 function StudentAction() {
     const navigate = useNavigate();
     const params = useParams();
     const examId = params.examId as string;
     const studentId = params.studentId as string;
+    const mutation = useMutation({
+        mutationFn: api.createAttempt,
+        onSuccess: (attempt: any) => {
+            navigate(`/student/exams/${examId}/students/${studentId}/attempts/${attempt.id}`);
+        },
+    });
 
     return (
         <div>
@@ -14,7 +22,7 @@ function StudentAction() {
     );
 
     function launchExam() {
-        navigate(`/student/exams/${examId}/students/${studentId}/take`);
+        mutation.mutate({ examId, studentId });
     }
 }
 

@@ -4,6 +4,7 @@ import { ExamEdition } from './pages/ExamEdition';
 import { StudentsEdition } from './pages/StudentsEdition';
 import { StudentAuthentication } from './pages/StudentAuthentication';
 import { StudentAction } from './pages/StudentAction';
+import { ExamTaking } from './pages/ExamTaking';
 
 function Router() {
     return (
@@ -13,6 +14,10 @@ function Router() {
             <Route path="/teacher/exams/:examId/edit" element={<ExamEdition />} />
             <Route path="/student/exams/:examId/students" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentAction />} />
+            <Route
+                path="/student/exams/:examId/students/:studentId/attempts/:attemptId"
+                element={<ExamTaking />}
+            />
         </Routes>
     );
 }

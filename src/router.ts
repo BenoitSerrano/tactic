@@ -1,14 +1,16 @@
 import Express from 'express';
 import Joi from 'joi';
-import { buildExamController } from './modules/exam';
 import { buildController } from './lib/buildController';
+import { buildExamController } from './modules/exam';
 import { buildQuestionChoixMultipleController } from './modules/questionChoixMultiple';
 import { buildStudentController } from './modules/student';
+import { buildAttemptController } from './modules/attempt';
 
 const router = Express.Router();
 const examController = buildExamController();
 const studentController = buildStudentController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
+const attemptController = buildAttemptController();
 
 router.get('/students', buildController(studentController.getStudents));
 router.post(
@@ -47,6 +49,11 @@ router.put(
             possibleAnswers: Joi.array().items(Joi.string().allow('')),
         }),
     }),
+);
+
+router.post(
+    '/exams/:examId/students/:studentId/attempts',
+    buildController(attemptController.createAttempt),
 );
 
 export { router };

@@ -2,9 +2,9 @@ import { DataSource } from 'typeorm';
 import { config } from './config';
 import { Exam } from './modules/exam';
 import { QuestionChoixMultiple } from './modules/questionChoixMultiple';
-import { Attempt } from './modules/attempt/Attempt.entity';
-import { QcmAnswer } from './modules/qcmAnswer/QcmAnswer.entity';
-import { Student } from './modules/student/Student.entity';
+import { Attempt } from './modules/attempt';
+import { QcmAnswer } from './modules/qcmAnswer';
+import { Student } from './modules/student';
 
 const dataSource = new DataSource({
     type: 'postgres',
