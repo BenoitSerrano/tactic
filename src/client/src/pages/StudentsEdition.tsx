@@ -6,10 +6,19 @@ function StudentsEdition() {
     const queryClient = useQueryClient();
     const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
     const [newEmail, setNewEmail] = useState('');
-    const mutation = useMutation({
+    const [emailList, setEmailList] = useState('');
+    const createStudentMutation = useMutation({
         mutationFn: api.createStudent,
         onSuccess: () => {
             setNewEmail('');
+            queryClient.invalidateQueries({ queryKey: ['students'] });
+        },
+    });
+
+    const createStudentsMutation = useMutation({
+        mutationFn: api.createStudents,
+        onSuccess: () => {
+            setEmailList('');
             queryClient.invalidateQueries({ queryKey: ['students'] });
         },
     });
@@ -22,13 +31,27 @@ function StudentsEdition() {
                     return <li key={student.id}>{student.email}</li>;
                 })}
             </ul>
-            <input value={newEmail} onChange={(event) => setNewEmail(event.target.value)} />
-            <button onClick={createStudent}>Créer un.e étudiant.e</button>
+            <div>
+                <input value={newEmail} onChange={(event) => setNewEmail(event.target.value)} />
+                <button onClick={createStudent}>Créer un.e étudiant.e</button>
+            </div>
+            <div>
+                <textarea
+                    value={emailList}
+                    onChange={(event) => setEmailList(event.target.value)}
+                />
+                <button onClick={importStudentEmails}>Importer une liste d'étudiant.es</button>
+            </div>
         </div>
     );
 
     async function createStudent() {
-        mutation.mutate(newEmail);
+        createStudentMutation.mutate(newEmail);
+    }
+
+    async function importStudentEmails() {
+        const emails: string[] = emailList.split('\n');
+        createStudentsMutation.mutate(emails);
     }
 }
 

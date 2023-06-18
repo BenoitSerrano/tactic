@@ -6,6 +6,7 @@ const api = {
     fetchAttempt,
     fetchStudents,
     createStudent,
+    createStudents,
     createExam,
     fetchExam,
     fetchExams,
@@ -70,6 +71,19 @@ async function createStudent(email: string) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
+    });
+    return response.json();
+}
+
+async function createStudents(emails: string[]) {
+    const URL = `${BASE_URL}/student-list`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ emails }),
     });
     return response.json();
 }

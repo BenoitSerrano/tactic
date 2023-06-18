@@ -23,6 +23,14 @@ router.post(
         }),
     }),
 );
+router.post(
+    '/student-list',
+    buildController(studentController.createStudents, {
+        schema: Joi.object({
+            emails: Joi.array().items(Joi.string()),
+        }),
+    }),
+);
 router.get('/exams', buildController(examController.getExams));
 
 router.get('/exams/:examId', buildController(examController.getExam));

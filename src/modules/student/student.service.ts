@@ -6,6 +6,7 @@ export { buildStudentService };
 function buildStudentService() {
     const studentService = {
         createStudent,
+        createStudents,
         getStudentsWithAttempts,
     };
 
@@ -21,5 +22,16 @@ function buildStudentService() {
         const student = new Student();
         student.email = email;
         return studentRepository.save(student);
+    }
+
+    async function createStudents(emails: string[]) {
+        const studentRepository = dataSource.getRepository(Student);
+
+        const students = emails.map((email) => {
+            const student = new Student();
+            student.email = email;
+            return student;
+        });
+        return studentRepository.save(students);
     }
 }
