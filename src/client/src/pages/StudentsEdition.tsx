@@ -5,13 +5,11 @@ import { api } from '../lib/api';
 function StudentsEdition() {
     const queryClient = useQueryClient();
     const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
-    const [newStudentFirstName, setNewStudentFirstName] = useState('');
-    const [newStudentLastName, setNewStudentLastName] = useState('');
+    const [newEmail, setNewEmail] = useState('');
     const mutation = useMutation({
         mutationFn: api.createStudent,
         onSuccess: () => {
-            setNewStudentFirstName('');
-            setNewStudentLastName('');
+            setNewEmail('');
             queryClient.invalidateQueries({ queryKey: ['students'] });
         },
     });
@@ -21,27 +19,16 @@ function StudentsEdition() {
             <h1>Liste des étudiant.es créé.es</h1>
             <ul>
                 {query.data?.map((student: any) => {
-                    return (
-                        <li key={student.id}>
-                            {student.firstName} {student.lastName}
-                        </li>
-                    );
+                    return <li key={student.id}>{student.email}</li>;
                 })}
             </ul>
-            <input
-                value={newStudentFirstName}
-                onChange={(event) => setNewStudentFirstName(event.target.value)}
-            />
-            <input
-                value={newStudentLastName}
-                onChange={(event) => setNewStudentLastName(event.target.value)}
-            />
+            <input value={newEmail} onChange={(event) => setNewEmail(event.target.value)} />
             <button onClick={createStudent}>Créer un.e étudiant.e</button>
         </div>
     );
 
     async function createStudent() {
-        mutation.mutate({ firstName: newStudentFirstName, lastName: newStudentLastName });
+        mutation.mutate(newEmail);
     }
 }
 

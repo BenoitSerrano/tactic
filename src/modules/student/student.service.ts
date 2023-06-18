@@ -16,11 +16,10 @@ function buildStudentService() {
         return studentRepository.find({ relations: ['attempts', 'attempts.exam'] });
     }
 
-    async function createStudent(firstName: string, lastName: string) {
+    async function createStudent(email: string) {
         const studentRepository = dataSource.getRepository(Student);
         const student = new Student();
-        student.firstName = firstName;
-        student.lastName = lastName;
+        student.email = email;
         return studentRepository.save(student);
     }
 }

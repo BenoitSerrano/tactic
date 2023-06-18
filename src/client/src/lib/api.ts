@@ -61,7 +61,7 @@ async function fetchStudents() {
     return response.json();
 }
 
-async function createStudent({ firstName, lastName }: { firstName: string; lastName: string }) {
+async function createStudent(email: string) {
     const URL = `${BASE_URL}/students`;
     const response = await fetch(URL, {
         method: 'POST',
@@ -69,7 +69,7 @@ async function createStudent({ firstName, lastName }: { firstName: string; lastN
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName }),
+        body: JSON.stringify({ email }),
     });
     return response.json();
 }

@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Attempt } from '../attempt/Attempt.entity';
 
 @Entity()
@@ -6,11 +6,8 @@ export class Student {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
-    firstName: string;
-
-    @Column()
-    lastName: string;
+    @Column({ default: '' })
+    email: string;
 
     @OneToMany(() => Attempt, (attempt) => attempt.student)
     attempts: Attempt[];

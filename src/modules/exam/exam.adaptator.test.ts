@@ -9,8 +9,7 @@ const examWithAttempts = {
             createdAt: '2023-06-15T15:05:39.616Z',
             student: {
                 id: 'edf0f1b0-d6a5-4603-b7e3-805828e76f72',
-                firstName: 'Soeren',
-                lastName: 'Larsen',
+                email: 'soeren.larsen@truc.machin',
             },
             qcmAnswers: [
                 {
@@ -42,8 +41,7 @@ const examWithAttempts = {
             createdAt: '2023-06-15T15:06:04.122Z',
             student: {
                 id: '20d07fd1-16f8-4131-a73c-03fc099a8330',
-                firstName: 'Theobald',
-                lastName: 'Beltran',
+                email: 'theobald.beltran@truc.machin',
             },
             qcmAnswers: [
                 {
@@ -96,15 +94,13 @@ describe('examAdaptator', () => {
         expect(examResults).toEqual([
             {
                 id: 'edf0f1b0-d6a5-4603-b7e3-805828e76f72',
-                firstName: 'Soeren',
-                lastName: 'Larsen',
+                email: 'soeren.larsen@truc.machin',
                 attemptId: 'e056210f-19a7-4e85-9c99-d29c8b6410ee',
                 mark: 0,
             },
             {
                 id: '20d07fd1-16f8-4131-a73c-03fc099a8330',
-                firstName: 'Theobald',
-                lastName: 'Beltran',
+                email: 'theobald.beltran@truc.machin',
                 attemptId: 'ff199468-6420-41ef-b15e-bca4138fae4d',
                 mark: 2,
             },

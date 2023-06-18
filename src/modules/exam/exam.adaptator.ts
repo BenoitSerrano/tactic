@@ -8,7 +8,7 @@ type examWithAttemptsType = {
     questionsChoixMultiple: Array<{ id: number; rightAnswerIndex: number }>;
     attempts: Array<{
         id: string;
-        student: { id: string; firstName: string; lastName: string };
+        student: { id: string; email: string };
         qcmAnswers: Array<{ choice: number; id: number; questionChoixMultiple: { id: number } }>;
     }>;
 };
@@ -31,8 +31,7 @@ function convertExamWithAttemptsToResults(examWithAttempts: examWithAttemptsType
         );
         const result = {
             id: student.id,
-            firstName: student.firstName,
-            lastName: student.lastName,
+            email: student.email,
             attemptId: attempt.id,
             mark,
         };

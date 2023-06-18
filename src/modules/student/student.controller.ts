@@ -11,8 +11,8 @@ function buildStudentController() {
 
     return studentController;
 
-    async function createStudent(params: { body: { firstName: string; lastName: string } }) {
-        return studentService.createStudent(params.body.firstName, params.body.lastName);
+    async function createStudent(params: { body: { email: string } }) {
+        return studentService.createStudent(params.body.email);
     }
 
     async function getStudentsWithAttempts() {

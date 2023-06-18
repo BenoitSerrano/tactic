@@ -19,8 +19,7 @@ router.post(
     '/students',
     buildController(studentController.createStudent, {
         schema: Joi.object({
-            firstName: Joi.string().required(),
-            lastName: Joi.string().required(),
+            email: Joi.string().required(),
         }),
     }),
 );

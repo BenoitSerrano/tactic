@@ -14,8 +14,7 @@ function StudentAuthentication() {
                 {query.data?.map(
                     (student: {
                         id: string;
-                        firstName: string;
-                        lastName: string;
+                        email: string;
                         attempts: Array<{ id: string; exam: { id: string; name: string } }>;
                     }) => {
                         const currentAttempt = student.attempts.find(
@@ -27,7 +26,7 @@ function StudentAuthentication() {
                         return (
                             <li key={student.id}>
                                 <Link key={student.id} to={to}>
-                                    {student.firstName} {student.lastName}
+                                    {student.email}
                                 </Link>
                             </li>
                         );
