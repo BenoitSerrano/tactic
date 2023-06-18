@@ -2,6 +2,7 @@ import { dataSource } from '../../dataSource';
 import { Exam } from '../exam';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
+import { attemptAdaptator } from './attempt.adaptator';
 
 export { buildAttemptService };
 
@@ -30,7 +31,7 @@ function buildAttemptService() {
     async function fetchAttempt(attemptId: string) {
         const attemptRepository = dataSource.getRepository(Attempt);
 
-        return attemptRepository.findOneOrFail({
+        const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             order: {
                 exam: {
@@ -44,5 +45,7 @@ function buildAttemptService() {
                 'qcmAnswers.questionChoixMultiple',
             ],
         });
+
+        return attemptAdaptator.convertAttemptToAttemptWithChoices(attempt);
     }
 }
