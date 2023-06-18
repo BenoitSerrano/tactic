@@ -8,13 +8,13 @@ export { buildAttemptService };
 
 function buildAttemptService() {
     const studentService = {
-        createAttempt,
+        findOrCreateAttempt,
         fetchAttempt,
     };
 
     return studentService;
 
-    async function createAttempt(examId: string, studentId: string) {
+    async function findOrCreateAttempt(examId: string, studentId: string) {
         const attemptRepository = dataSource.getRepository(Attempt);
         const studentRepository = dataSource.getRepository(Student);
         const examRepository = dataSource.getRepository(Exam);
@@ -22,10 +22,11 @@ function buildAttemptService() {
         const student = await studentRepository.findOneByOrFail({ id: studentId });
         const exam = await examRepository.findOneByOrFail({ id: examId });
 
-        const attempt = new Attempt();
-        attempt.exam = exam;
-        attempt.student = student;
-        return attemptRepository.save(attempt);
+        const result = await attemptRepository.upsert({ exam, student }, ['student', 'exam']);
+        if (result.identifiers.length !== 1) {
+            throw new Error(`Error while upserting student ${student.id} / exam ${exam.id}`);
+        }
+        return result.identifiers[0];
     }
 
     async function fetchAttempt(attemptId: string) {

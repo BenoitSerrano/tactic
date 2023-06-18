@@ -15,6 +15,7 @@ const attemptController = buildAttemptController();
 const qcmAnswerController = buildQcmAnswerController();
 
 router.get('/students', buildController(studentController.getStudentsWithAttempts));
+router.get('/students/:email', buildController(studentController.getStudentId));
 router.post(
     '/students',
     buildController(studentController.createStudent, {
@@ -63,7 +64,7 @@ router.put(
 
 router.post(
     '/exams/:examId/students/:studentId/attempts',
-    buildController(attemptController.createAttempt),
+    buildController(attemptController.findOrCreateAttempt),
 );
 
 router.get('/attempts/:attemptId', buildController(attemptController.fetchAttempt));

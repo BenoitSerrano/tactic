@@ -8,6 +8,7 @@ function buildStudentService() {
         createStudent,
         createStudents,
         getStudentsWithAttempts,
+        getStudentId,
     };
 
     return studentService;
@@ -15,6 +16,11 @@ function buildStudentService() {
     async function getStudentsWithAttempts() {
         const studentRepository = dataSource.getRepository(Student);
         return studentRepository.find({ relations: ['attempts', 'attempts.exam'] });
+    }
+
+    async function getStudentId(email: string) {
+        const studentRepository = dataSource.getRepository(Student);
+        return studentRepository.findOneOrFail({ where: { email }, select: ['id'] });
     }
 
     async function createStudent(email: string) {

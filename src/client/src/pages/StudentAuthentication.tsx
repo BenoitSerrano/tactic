@@ -1,40 +1,36 @@
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import { api } from '../lib/api';
 
 function StudentAuthentication() {
-    const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
     const params = useParams();
     const examId = params.examId as string;
+    const navigate = useNavigate();
+    const mutation = useMutation({
+        mutationFn: api.findOrCreateAttempt,
+        onSuccess: (attempt: any) => {
+            navigate(`/student/attempts/${attempt.id}`);
+        },
+    });
+    const [email, setEmail] = useState('');
 
     return (
         <div>
-            <ul>
-                {query.data?.map(
-                    (student: {
-                        id: string;
-                        email: string;
-                        attempts: Array<{ id: string; exam: { id: string; name: string } }>;
-                    }) => {
-                        const currentAttempt = student.attempts.find(
-                            (attempt) => attempt.exam.id === examId,
-                        );
-                        const to = currentAttempt
-                            ? `/student/attempts/${currentAttempt.id}`
-                            : `/student/exams/${examId}/students/${student.id}`;
-                        return (
-                            <li key={student.id}>
-                                <Link key={student.id} to={to}>
-                                    {student.email}
-                                </Link>
-                            </li>
-                        );
-                    },
-                )}
-            </ul>
+            <input name="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+            <button onClick={launchExam}>Lancer l'examen</button>
         </div>
     );
+
+    async function launchExam() {
+        const studentId = await getStudentId(email);
+        mutation.mutate({ examId, studentId });
+    }
+
+    async function getStudentId(email: string) {
+        const { id } = await api.fetchStudentId(email);
+        return id;
+    }
 }
 
 export { StudentAuthentication };

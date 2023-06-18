@@ -8,6 +8,7 @@ function buildStudentController() {
         createStudent,
         createStudents,
         getStudentsWithAttempts,
+        getStudentId,
     };
 
     return studentController;
@@ -22,5 +23,9 @@ function buildStudentController() {
 
     async function getStudentsWithAttempts() {
         return studentService.getStudentsWithAttempts();
+    }
+
+    async function getStudentId(params: { urlParams: { email: string } }) {
+        return studentService.getStudentId(params.urlParams.email);
     }
 }

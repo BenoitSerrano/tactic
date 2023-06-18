@@ -2,9 +2,10 @@ import { config } from '../config';
 
 const api = {
     createOrUpdateQcmAnswer,
-    createAttempt,
+    findOrCreateAttempt,
     fetchAttempt,
     fetchStudents,
+    fetchStudentId,
     createStudent,
     createStudents,
     createExam,
@@ -38,7 +39,7 @@ async function createOrUpdateQcmAnswer({
     return response.json();
 }
 
-async function createAttempt({ examId, studentId }: { examId: string; studentId: string }) {
+async function findOrCreateAttempt({ examId, studentId }: { examId: string; studentId: string }) {
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
     const response = await fetch(URL, {
         method: 'POST',
@@ -48,6 +49,14 @@ async function createAttempt({ examId, studentId }: { examId: string; studentId:
 
 async function fetchAttempt(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
+    const response = await fetch(URL, {
+        method: 'GET',
+    });
+    return response.json();
+}
+
+async function fetchStudentId(email: string) {
+    const URL = `${BASE_URL}/students/${email}`;
     const response = await fetch(URL, {
         method: 'GET',
     });
