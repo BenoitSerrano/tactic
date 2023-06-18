@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
 
 type examResultsType = Array<{
@@ -19,8 +19,6 @@ function ExamResults() {
         queryFn: () => api.fetchExamResults(examId),
     });
 
-    console.log(query.data);
-
     return query.data ? (
         <table>
             <thead>
@@ -31,9 +29,11 @@ function ExamResults() {
             </thead>
             <tbody>
                 {query.data.map((result) => (
-                    <tr>
+                    <tr key={result.attemptId}>
                         <td>
-                            {result.firstName} {result.lastName}
+                            <Link to={`/teacher/attempts/${result.attemptId}`}>
+                                {result.firstName} {result.lastName}
+                            </Link>
                         </td>
                         <td>{result.mark}</td>
                     </tr>
