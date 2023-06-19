@@ -17,7 +17,12 @@ function StudentAuthentication() {
 
     return (
         <div>
-            <input name="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+            <input
+                placeholder="Adresse e-mail"
+                name="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+            />
             <button onClick={launchExam}>Lancer l'examen</button>
         </div>
     );
@@ -28,8 +33,16 @@ function StudentAuthentication() {
     }
 
     async function getStudentId(email: string) {
-        const { id } = await api.fetchStudentId(email);
-        return id;
+        try {
+            const result = await api.fetchStudentId(email);
+            console.log(result);
+            return result.id;
+        } catch (error) {
+            console.warn(error);
+            alert(
+                `L'email "${email}" n'existe pas pour cet examen. Veuillez renseigner l'email utilisé lors de vos échanges avec votre professeur.`,
+            );
+        }
     }
 }
 
