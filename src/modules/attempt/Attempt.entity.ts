@@ -18,10 +18,10 @@ export class Attempt {
     id: string;
 
     @CreateDateColumn({ type: 'timestamptz' })
-    startedAt: number;
+    startedAt: string;
 
     @Column({ type: 'timestamptz', nullable: true })
-    endedAt: number;
+    endedAt: string;
 
     @ManyToOne(() => Student)
     student: Student;

@@ -1,5 +1,7 @@
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
+import { buildAttemptService } from '../attempt/attempt.service';
+import { attemptUtils } from '../attempt/attempt.utils';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
 import { QcmAnswer } from './QcmAnswer.entity';
 
@@ -16,8 +18,15 @@ function buildQcmAnswerService() {
         const questionChoixMultipleRepository = dataSource.getRepository(QuestionChoixMultiple);
         const attemptRepository = dataSource.getRepository(Attempt);
         const qcmAnswerRepository = dataSource.getRepository(QcmAnswer);
+        const attemptService = buildAttemptService();
 
-        const attempt = await attemptRepository.findOneByOrFail({ id: attemptId });
+        const attempt = await attemptRepository.findOneOrFail({
+            where: { id: attemptId },
+            relations: ['exam'],
+        });
+
+        await attemptService.assertIsTimeLimitNotExceeded(attempt);
+
         const questionChoixMultiple = await questionChoixMultipleRepository.findOneByOrFail({
             id: qcmId,
         });

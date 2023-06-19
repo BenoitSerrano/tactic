@@ -9,6 +9,7 @@ import { ExamChecking } from './pages/ExamChecking';
 import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
 import { AttemptAlreadySubmitted } from './pages/AttemptAlreadySubmitted';
+import { AttemptTimeout } from './pages/AttemptTimeout';
 
 function Router() {
     return (
@@ -26,6 +27,7 @@ function Router() {
                 path="/student/attempt-already-submitted"
                 element={<AttemptAlreadySubmitted />}
             />
+            <Route path="/student/attempt-timeout" element={<AttemptTimeout />} />
         </Routes>
     );
 }

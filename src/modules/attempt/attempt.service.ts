@@ -3,6 +3,7 @@ import { Exam } from '../exam';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
+import { attemptUtils } from './attempt.utils';
 
 export { buildAttemptService };
 
@@ -11,6 +12,7 @@ function buildAttemptService() {
         findOrCreateAttempt,
         fetchAttempt,
         endAttempt,
+        assertIsTimeLimitNotExceeded,
     };
 
     return studentService;
@@ -51,14 +53,25 @@ function buildAttemptService() {
         return attemptAdaptator.convertAttemptToAttemptWithChoices(attempt);
     }
 
+    async function assertIsTimeLimitNotExceeded(attempt: Attempt) {
+        if (attemptUtils.isTimeLimitExceeded(attempt, new Date())) {
+            endAttempt(attempt.id);
+            throw new Error(`The time limit is exceeded!`);
+        }
+    }
+
     async function endAttempt(attemptId: string) {
         const attemptRepository = dataSource.getRepository(Attempt);
 
-        const attempt = await attemptRepository.update(
-            { id: attemptId },
-            { endedAt: () => 'CURRENT_TIMESTAMP' },
-        );
+        const attempt = await attemptRepository.findOneByOrFail({ id: attemptId });
+        if (!attempt.endedAt) {
+            const result = await attemptRepository.update(
+                { id: attemptId },
+                { endedAt: () => 'CURRENT_TIMESTAMP' },
+            );
+            return result.affected == 1;
+        }
 
-        return attempt.affected == 1;
+        return false;
     }
 }

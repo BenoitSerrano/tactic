@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { api } from '../lib/api';
+import { useNavigate } from 'react-router-dom';
 
 function QuestionAnswering(props: {
     questionChoixMultiple: {
@@ -12,8 +13,13 @@ function QuestionAnswering(props: {
     index: number;
     attemptId: string;
 }) {
+    const navigate = useNavigate();
     const upsertQcmAnswerMutation = useMutation({
         mutationFn: api.createOrUpdateQcmAnswer,
+        onError: async (error) => {
+            console.warn(error);
+            navigate('/student/attempt-timeout');
+        },
     });
     const qcmId = props.questionChoixMultiple.id;
 

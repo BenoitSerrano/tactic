@@ -18,16 +18,20 @@ function ExamTaking() {
         },
     });
 
-    if (query.data && query.data.endedAt) {
-        return <Navigate to="/student/attempt-already-submitted" />;
-    }
-
     if (!query.data) {
         return <div />;
     }
 
-    const remainingSeconds =
+    if (query.data.endedAt) {
+        return <Navigate to="/student/attempt-already-submitted" />;
+    }
+
+    let remainingSeconds =
         query.data.exam.duration * 60 - computeElapsedTime(query.data.startedAt, new Date());
+    if (remainingSeconds + query.data.exam.extraTime * 60 < 0) {
+        api.endAttempt(attemptId);
+        return <Navigate to="/student/attempt-timeout" />;
+    }
 
     return (
         <div>
