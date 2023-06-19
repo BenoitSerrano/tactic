@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionAnswering } from '../components/QuestionAnswering';
@@ -7,6 +7,7 @@ import { QuestionAnswering } from '../components/QuestionAnswering';
 function ExamTaking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
+    const navigate = useNavigate();
     const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
 
     return !!query.data ? (
@@ -22,10 +23,16 @@ function ExamTaking() {
                     />
                 ),
             )}
+            <hr />
+            <button onClick={validateForm}>Valider le questionnaire</button>
         </div>
     ) : (
         <div />
     );
+
+    function validateForm() {
+        navigate('/student/exam-done');
+    }
 }
 
 export { ExamTaking };
