@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionEdition } from '../components/QuestionEdition';
@@ -25,9 +25,12 @@ function ExamEdition() {
                     questionChoixMultiple={questionChoixMultiple}
                 />
             ))}
+            <hr />
             <button onClick={addNewQuestionChoixMultiple}>
                 Ajouter une nouvelle question à choix multiple
             </button>
+            <hr />
+            <Link to="/teacher/exams">Revenir à la liste des examens</Link>
         </div>
     );
 

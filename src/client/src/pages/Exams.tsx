@@ -39,6 +39,8 @@ function Exams() {
                 onChange={(event) => setNewExamName(event.target.value)}
             />
             <button onClick={createExam}>Créer un examen</button>
+            <hr />
+            <Link to="/teacher">Revenir à l'accueil</Link>
         </div>
     );
 
