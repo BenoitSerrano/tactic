@@ -1,4 +1,3 @@
-import { Exam } from './Exam.entity';
 import { buildExamService } from './exam.service';
 
 export { buildExamController };
@@ -14,10 +13,10 @@ function buildExamController() {
 
     return examController;
 
-    async function createExam(params: { body: { name: string } }) {
-        const exam = new Exam();
-        exam.name = params.body.name;
-        return examService.createExam(exam.name);
+    async function createExam(params: {
+        body: { name: string; duration: number; extraTime: number };
+    }) {
+        return examService.createExam(params.body.name, params.body.duration);
     }
 
     async function getExams() {

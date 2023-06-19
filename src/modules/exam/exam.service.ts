@@ -15,9 +15,10 @@ function buildExamService() {
 
     return examService;
 
-    async function createExam(name: string) {
+    async function createExam(name: string, duration: number) {
         const exam = new Exam();
         exam.name = name;
+        exam.duration = duration;
         return examRepository.save(exam);
     }
 

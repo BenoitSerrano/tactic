@@ -10,6 +10,7 @@ function buildAttemptService() {
     const studentService = {
         findOrCreateAttempt,
         fetchAttempt,
+        endAttempt,
     };
 
     return studentService;
@@ -48,5 +49,16 @@ function buildAttemptService() {
         });
 
         return attemptAdaptator.convertAttemptToAttemptWithChoices(attempt);
+    }
+
+    async function endAttempt(attemptId: string) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+
+        const attempt = await attemptRepository.update(
+            { id: attemptId },
+            { endedAt: () => 'CURRENT_TIMESTAMP' },
+        );
+
+        return attempt.affected == 1;
     }
 }

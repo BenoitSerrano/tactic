@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionAnswering } from '../components/QuestionAnswering';
 
@@ -9,6 +9,12 @@ function ExamTaking() {
     const attemptId = params.attemptId as string;
     const navigate = useNavigate();
     const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
+    const mutation = useMutation({
+        mutationFn: api.endAttempt,
+        onSuccess: () => {
+            navigate('/student/exam-done');
+        },
+    });
 
     return !!query.data ? (
         <div>
@@ -31,7 +37,7 @@ function ExamTaking() {
     );
 
     function validateForm() {
-        navigate('/student/exam-done');
+        mutation.mutate(attemptId);
     }
 }
 

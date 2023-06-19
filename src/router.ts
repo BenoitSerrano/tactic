@@ -42,6 +42,7 @@ router.post(
     buildController(examController.createExam, {
         schema: Joi.object({
             name: Joi.string().required(),
+            duration: Joi.number().required(),
         }),
     }),
 );
@@ -68,6 +69,7 @@ router.post(
 );
 
 router.get('/attempts/:attemptId', buildController(attemptController.fetchAttempt));
+router.patch('/attempts/:attemptId/end', buildController(attemptController.endAttempt));
 
 router.post(
     '/attempts/:attemptId/questionsChoixMultiple/:qcmId',

@@ -4,6 +4,7 @@ const api = {
     createOrUpdateQcmAnswer,
     findOrCreateAttempt,
     fetchAttempt,
+    endAttempt,
     fetchStudents,
     fetchStudentId,
     createStudent,
@@ -51,6 +52,14 @@ async function fetchAttempt(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
     const response = await fetch(URL, {
         method: 'GET',
+    });
+    return response.json();
+}
+
+async function endAttempt(attemptId: string) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/end`;
+    const response = await fetch(URL, {
+        method: 'PATCH',
     });
     return response.json();
 }
@@ -121,7 +130,7 @@ async function fetchExam(examId: string) {
     return response.json();
 }
 
-async function createExam(name: string) {
+async function createExam({ name, duration }: { name: string; duration: number }) {
     const URL = `${BASE_URL}/exams`;
     const response = await fetch(URL, {
         method: 'POST',
@@ -129,7 +138,7 @@ async function createExam(name: string) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, duration }),
     });
     return response.json();
 }

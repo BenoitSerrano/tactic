@@ -15,4 +15,10 @@ export class Exam {
 
     @OneToMany(() => Attempt, (attempt) => attempt.exam)
     attempts: Attempt[];
+
+    @Column({ default: 15 })
+    duration: number;
+
+    @Column({ default: 2 })
+    extraTime: number;
 }

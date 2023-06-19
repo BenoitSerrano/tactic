@@ -7,6 +7,7 @@ function buildAttemptController() {
     const attemptController = {
         findOrCreateAttempt,
         fetchAttempt,
+        endAttempt,
     };
 
     return attemptController;
@@ -22,5 +23,9 @@ function buildAttemptController() {
 
     async function fetchAttempt(params: { urlParams: { attemptId: string } }) {
         return attemptService.fetchAttempt(params.urlParams.attemptId);
+    }
+
+    async function endAttempt(params: { urlParams: { attemptId: string } }) {
+        return attemptService.endAttempt(params.urlParams.attemptId);
     }
 }

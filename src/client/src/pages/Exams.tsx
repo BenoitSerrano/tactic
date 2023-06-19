@@ -7,6 +7,7 @@ function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
     const navigate = useNavigate();
     const [newExamName, setNewExamName] = useState('');
+    const [newExamDuration, setNewExamDuration] = useState(15);
     const mutation = useMutation({
         mutationFn: api.createExam,
         onSuccess: (exam) => {
@@ -38,6 +39,12 @@ function Exams() {
                 value={newExamName}
                 onChange={(event) => setNewExamName(event.target.value)}
             />
+            <input
+                type="number"
+                placeholder="Durée de l'examen en minutes"
+                value={newExamDuration}
+                onChange={(event) => setNewExamDuration(Number(event.target.value))}
+            />
             <button onClick={createExam}>Créer un examen</button>
             <hr />
             <Link to="/teacher">Revenir à l'accueil</Link>
@@ -45,7 +52,7 @@ function Exams() {
     );
 
     async function createExam() {
-        mutation.mutate(newExamName);
+        mutation.mutate({ name: newExamName, duration: newExamDuration });
     }
 
     function buildCopyExamLinkToClipboard(examId: string) {
