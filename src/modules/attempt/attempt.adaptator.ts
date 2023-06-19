@@ -14,6 +14,7 @@ function convertAttemptToAttemptWithChoices(attempt: any) {
     return {
         id: attempt.id,
         createdAt: attempt.createdAt,
+        endedAt: attempt.endedAt,
         exam: {
             id: attempt.exam.id,
             name: attempt.exam.name,

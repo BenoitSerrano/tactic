@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, redirect, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionAnswering } from '../components/QuestionAnswering';
@@ -15,6 +15,10 @@ function ExamTaking() {
             navigate('/student/exam-done');
         },
     });
+
+    if (query.data && query.data.endedAt) {
+        return <Navigate to="/student/attempt-already-submitted" />;
+    }
 
     return !!query.data ? (
         <div>

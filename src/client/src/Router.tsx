@@ -8,6 +8,7 @@ import { ExamResults } from './pages/ExamResults';
 import { ExamChecking } from './pages/ExamChecking';
 import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
+import { AttemptAlreadySubmitted } from './pages/AttemptAlreadySubmitted';
 
 function Router() {
     return (
@@ -21,6 +22,10 @@ function Router() {
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/attempts/:attemptId" element={<ExamTaking />} />
             <Route path="/student/exam-done" element={<ExamDone />} />
+            <Route
+                path="/student/attempt-already-submitted"
+                element={<AttemptAlreadySubmitted />}
+            />
         </Routes>
     );
 }

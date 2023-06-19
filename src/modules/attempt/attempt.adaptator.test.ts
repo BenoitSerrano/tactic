@@ -3,6 +3,7 @@ import { attemptAdaptator } from './attempt.adaptator';
 const attempt = {
     id: '6d7a8f5c-a848-4693-bf07-1df75be5b671',
     createdAt: '2023-06-15T17:16:20.542Z',
+    endedAt: '2023-06-15T17:16:27.542Z',
     exam: {
         id: '72b9473b-4243-41b2-9793-2a2bd1a69a24',
         name: 'Test B2 groupe 1',
@@ -56,6 +57,7 @@ describe('examAdaptator', () => {
         expect(attemptWithAnswers).toEqual({
             id: '6d7a8f5c-a848-4693-bf07-1df75be5b671',
             createdAt: '2023-06-15T17:16:20.542Z',
+            endedAt: '2023-06-15T17:16:27.542Z',
             exam: {
                 id: '72b9473b-4243-41b2-9793-2a2bd1a69a24',
                 name: 'Test B2 groupe 1',
