@@ -17,7 +17,7 @@ export class Attempt {
     id: string;
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: number;
+    startedAt: number;
 
     @ManyToOne(() => Student)
     student: Student;
