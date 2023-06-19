@@ -1,4 +1,5 @@
 import {
+    Column,
     CreateDateColumn,
     Entity,
     ManyToOne,
@@ -18,6 +19,9 @@ export class Attempt {
 
     @CreateDateColumn({ type: 'timestamp' })
     startedAt: number;
+
+    @Column({ type: 'timestamp', nullable: true })
+    endedAt: number;
 
     @ManyToOne(() => Student)
     student: Student;
