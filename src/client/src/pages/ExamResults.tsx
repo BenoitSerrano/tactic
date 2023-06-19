@@ -8,6 +8,7 @@ type examResultsType = Array<{
     email: string;
     attemptId: string;
     mark: number;
+    totalPoints: number;
 }>;
 
 function ExamResults() {
@@ -32,7 +33,9 @@ function ExamResults() {
                         <td>
                             <Link to={`/teacher/attempts/${result.attemptId}`}>{result.email}</Link>
                         </td>
-                        <td>{result.mark}</td>
+                        <td>
+                            {result.mark}/{result.totalPoints}
+                        </td>
                     </tr>
                 ))}
             </tbody>

@@ -29,11 +29,13 @@ function convertExamWithAttemptsToResults(examWithAttempts: examWithAttemptsType
                     : 0),
             0,
         );
+        const totalPoints = examWithAttempts.questionsChoixMultiple.length;
         const result = {
             id: student.id,
             email: student.email,
             attemptId: attempt.id,
             mark,
+            totalPoints,
         };
         return result;
     });
