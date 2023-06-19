@@ -1,3 +1,5 @@
+import { Exam } from './Exam.entity';
+
 const examAdaptator = {
     convertExamWithAttemptsToResults,
 };
@@ -8,6 +10,8 @@ type examWithAttemptsType = {
     questionsChoixMultiple: Array<{ id: number; rightAnswerIndex: number }>;
     attempts: Array<{
         id: string;
+        startedAt: string;
+        endedAt: string | undefined;
         student: { id: string; email: string };
         qcmAnswers: Array<{ choice: number; id: number; questionChoixMultiple: { id: number } }>;
     }>;
@@ -29,10 +33,16 @@ function convertExamWithAttemptsToResults(examWithAttempts: examWithAttemptsType
                     : 0),
             0,
         );
+        const startedAtDate = new Date(attempt.startedAt);
+        const duration = attempt.endedAt
+            ? Math.floor((new Date(attempt.endedAt).getTime() - startedAtDate.getTime()) / 1000)
+            : undefined;
         const totalPoints = examWithAttempts.questionsChoixMultiple.length;
         const result = {
             id: student.id,
             email: student.email,
+            startedAt: startedAtDate.getTime(),
+            duration,
             attemptId: attempt.id,
             mark,
             totalPoints,

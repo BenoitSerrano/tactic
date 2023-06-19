@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionAnswering } from '../components/QuestionAnswering';
 import { Countdown } from '../components/Countdown';
-import { computeElapsedTime } from '../lib/time';
+import { time } from '../lib/time';
 
 function ExamTaking() {
     const params = useParams();
@@ -27,7 +27,7 @@ function ExamTaking() {
     }
 
     let remainingSeconds =
-        query.data.exam.duration * 60 - computeElapsedTime(query.data.startedAt, new Date());
+        query.data.exam.duration * 60 - time.computeElapsedTime(query.data.startedAt, new Date());
     if (remainingSeconds + query.data.exam.extraTime * 60 < 0) {
         api.endAttempt(attemptId);
         return <Navigate to="/student/attempt-timeout" />;

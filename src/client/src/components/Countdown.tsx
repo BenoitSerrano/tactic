@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { formatToClock } from '../lib/time';
+import { time } from '../lib/time';
 
 function Countdown(props: { remainingSeconds: number }) {
     const [seconds, setSeconds] = useState(props.remainingSeconds);
@@ -12,7 +12,7 @@ function Countdown(props: { remainingSeconds: number }) {
 
         return () => clearTimeout(timer);
     }, [seconds]);
-    return <div>{formatToClock(seconds)}</div>;
+    return <div>{time.formatToClock(seconds)}</div>;
 }
 
 export { Countdown };
