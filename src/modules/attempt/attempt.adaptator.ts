@@ -13,11 +13,13 @@ function convertAttemptToAttemptWithChoices(attempt: any) {
 
     return {
         id: attempt.id,
-        createdAt: attempt.createdAt,
+        startedAt: attempt.startedAt,
         endedAt: attempt.endedAt,
         exam: {
             id: attempt.exam.id,
             name: attempt.exam.name,
+            duration: attempt.exam.duration,
+            extraTime: attempt.exam.extraTime,
             questionsChoixMultiple: attempt.exam.questionsChoixMultiple.map(
                 (questionChoixMultiple: { id: number }) => ({
                     ...questionChoixMultiple,
