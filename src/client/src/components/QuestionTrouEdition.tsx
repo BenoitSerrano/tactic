@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { debounce } from '../lib/utils';
 import { api } from '../lib/api';
 import { TextField } from '@mui/material';
-import { splitQuestionTrou } from '../lib/splitQuestionTrou';
 
 function QuestionTrouEdition(props: {
     examId: string;
@@ -20,10 +19,9 @@ function QuestionTrouEdition(props: {
     const [acceptableAnswers, setAcceptableAnswers] = useState(
         props.questionTrou.acceptableAnswers.join(','),
     );
-    const [questionText, setQuestionText] = useState(
-        `${props.questionTrou.beforeText} ......... ${props.questionTrou.afterText}`,
-    );
-    const [questionTextError, setQuestionTextError] = useState(false);
+
+    const [beforeText, setBeforeText] = useState(props.questionTrou.beforeText);
+    const [afterText, setAfterText] = useState(props.questionTrou.afterText);
 
     const updateQuestionTrouMutation = useMutation({
         mutationFn: api.updateQuestionTrou,
@@ -32,15 +30,24 @@ function QuestionTrouEdition(props: {
     return (
         <div>
             <p>{props.questionTrou.order + 1}.</p>
+            <div>
+                <TextField
+                    fullWidth
+                    label="Début du texte..."
+                    value={beforeText}
+                    onChange={onChangeBeforeText}
+                    placeholder="Début du texte..."
+                />
+                <TextField
+                    fullWidth
+                    label="... suite du texte"
+                    value={afterText}
+                    onChange={onChangeAfterText}
+                    placeholder="... suite du texte"
+                />
+            </div>
             <TextField
-                error={questionTextError}
                 fullWidth
-                label="Question"
-                value={questionText}
-                onChange={onChangeQuestionText}
-                placeholder="Ecrivez le texte de la question"
-            />
-            <TextField
                 label="Bonne réponse"
                 placeholder="Ecrivez la bonne réponse"
                 value={rightAnswer}
@@ -56,28 +63,26 @@ function QuestionTrouEdition(props: {
         </div>
     );
 
-    function onChangeQuestionText(event: React.ChangeEvent<HTMLInputElement>) {
-        setQuestionText(event.target.value);
+    function onChangeBeforeText(event: React.ChangeEvent<HTMLInputElement>) {
+        setBeforeText(event.target.value);
 
-        debounce((newQuestionText: string) => {
-            const result = splitQuestionTrou(newQuestionText);
-            let beforeText = '',
-                afterText = '';
-            if (result === undefined) {
-                setQuestionTextError(true);
-                return;
-            } else {
-                if (questionTextError) {
-                    setQuestionTextError(false);
-                }
-                beforeText = result.beforeText;
-                afterText = result.afterText;
-            }
+        debounce((newBeforeText: string) => {
             return updateQuestionTrouMutation.mutate({
                 examId: props.examId,
                 questionTrouId: props.questionTrou.id,
-                beforeText,
-                afterText,
+                beforeText: newBeforeText,
+            });
+        })(event.target.value);
+    }
+
+    function onChangeAfterText(event: React.ChangeEvent<HTMLInputElement>) {
+        setAfterText(event.target.value);
+
+        debounce((newAfterText: string) => {
+            return updateQuestionTrouMutation.mutate({
+                examId: props.examId,
+                questionTrouId: props.questionTrou.id,
+                afterText: newAfterText,
             });
         })(event.target.value);
     }
