@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
 import { Attempt } from '../attempt';
 
