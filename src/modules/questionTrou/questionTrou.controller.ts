@@ -6,7 +6,7 @@ function buildQuestionTrouController() {
     const questionTrouService = buildQuestionTrouService();
     const questionTrouController = {
         createQuestionTrou,
-        // updateQuestionTrou,
+        updateQuestionTrou,
     };
 
     return questionTrouController;
@@ -15,16 +15,22 @@ function buildQuestionTrouController() {
         return questionTrouService.createQuestionTrou(params.urlParams.examId);
     }
 
-    // async function updateQuestionTrou(params: {
-    //     urlParams: { examId: string; qcmId: string };
-    //     body: { title: string; possibleAnswers: string[]; rightAnswerIndex: string };
-    // }) {
-    //     return questionTrouService.updateQuestionTrou({
-    //         examId: params.urlParams.examId,
-    //         qcmId: Number(params.urlParams.qcmId),
-    //         title: params.body.title,
-    //         possibleAnswers: params.body.possibleAnswers,
-    //         rightAnswerIndex: Number(params.body.rightAnswerIndex),
-    //     });
-    // }
+    async function updateQuestionTrou(params: {
+        urlParams: { examId: string; questionTrouId: string };
+        body: {
+            beforeText: string;
+            afterText: string;
+            rightAnswer: string;
+            acceptableAnswers: string[];
+        };
+    }) {
+        return questionTrouService.updateQuestionTrou({
+            examId: params.urlParams.examId,
+            questionTrouId: Number(params.urlParams.questionTrouId),
+            beforeText: params.body.beforeText,
+            afterText: params.body.afterText,
+            acceptableAnswers: params.body.acceptableAnswers,
+            rightAnswer: params.body.rightAnswer,
+        });
+    }
 }

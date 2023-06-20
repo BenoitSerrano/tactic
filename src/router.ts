@@ -66,8 +66,20 @@ router.put(
 );
 
 router.post(
-    '/exams/:examId/texte-trou',
+    '/exams/:examId/questions-trou',
     buildController(questionTrouController.createQuestionTrou),
+);
+
+router.patch(
+    '/exams/:examId/questions-trou/:questionTrouId',
+    buildController(questionTrouController.updateQuestionTrou, {
+        schema: Joi.object({
+            beforeText: Joi.string().allow(''),
+            afterText: Joi.string().allow(''),
+            rightAnswer: Joi.string().allow(''),
+            acceptableAnswers: Joi.array().items(Joi.string().allow('')),
+        }),
+    }),
 );
 
 router.post(

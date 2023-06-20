@@ -16,6 +16,7 @@ const api = {
     createQuestionChoixMultiple,
     updateQuestionChoixMultiple,
     createQuestionTrou,
+    updateQuestionTrou,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -181,13 +182,39 @@ async function updateQuestionChoixMultiple(params: {
 }
 
 async function createQuestionTrou(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/texte-trou`;
+    const URL = `${BASE_URL}/exams/${examId}/questions-trou`;
     const response = await fetch(URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+    });
+    return response.json();
+}
+
+async function updateQuestionTrou(params: {
+    examId: string;
+    questionTrouId: number;
+    beforeText?: string;
+    afterText?: string;
+    rightAnswer?: string;
+    acceptableAnswers?: string[];
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/questions-trou/${params.questionTrouId}`;
+    const body = JSON.stringify({
+        beforeText: params.beforeText,
+        afterText: params.afterText,
+        rightAnswer: params.rightAnswer,
+        acceptableAnswers: params.acceptableAnswers,
+    });
+    const response = await fetch(URL, {
+        method: 'PATCH',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: body,
     });
     return response.json();
 }

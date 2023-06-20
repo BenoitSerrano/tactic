@@ -8,7 +8,7 @@ function buildQuestionTrouService() {
     const questionTrouRepository = dataSource.getRepository(QuestionTrou);
     const questionTrouService = {
         createQuestionTrou,
-        // updateQuestionTrou,
+        updateQuestionTrou,
     };
 
     return questionTrouService;
@@ -43,26 +43,37 @@ function buildQuestionTrouService() {
         return questionsTrou[0].order;
     }
 
-    // async function updateQuestionTrou({
-    //     examId,
-    //     qcmId,
-    //     title,
-    //     possibleAnswers,
-    //     rightAnswerIndex,
-    // }: {
-    //     examId: string;
-    //     qcmId: number;
-    //     title: string;
-    //     possibleAnswers: string[];
-    //     rightAnswerIndex: number;
-    // }) {
-    //     const questionTrou = await questionTrouRepository.findOneOrFail({
-    //         where: { exam: { id: examId }, id: qcmId },
-    //     });
-    //     questionTrou.title = title;
-    //     questionTrou.possibleAnswers = possibleAnswers;
-    //     questionTrou.rightAnswerIndex = rightAnswerIndex;
+    async function updateQuestionTrou({
+        examId,
+        questionTrouId,
+        beforeText,
+        afterText,
+        rightAnswer,
+        acceptableAnswers,
+    }: {
+        examId: string;
+        questionTrouId: number;
+        beforeText: string;
+        afterText: string;
+        rightAnswer: string;
+        acceptableAnswers: string[];
+    }) {
+        const questionTrou = await questionTrouRepository.findOneOrFail({
+            where: { exam: { id: examId }, id: questionTrouId },
+        });
+        if (beforeText !== undefined) {
+            questionTrou.beforeText = beforeText;
+        }
+        if (afterText !== undefined) {
+            questionTrou.afterText = afterText;
+        }
+        if (rightAnswer !== undefined) {
+            questionTrou.rightAnswer = rightAnswer;
+        }
+        if (acceptableAnswers !== undefined) {
+            questionTrou.acceptableAnswers = acceptableAnswers;
+        }
 
-    //     return questionTrouRepository.save(questionTrou);
-    // }
+        return questionTrouRepository.save(questionTrou);
+    }
 }
