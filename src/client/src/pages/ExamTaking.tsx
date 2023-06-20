@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
-import { QuestionAnswering } from '../components/QuestionAnswering';
+import { QuestionChoixMultipleAnswering } from '../components/QuestionChoixMultipleAnswering';
 import { Countdown } from '../components/Countdown';
 import { time } from '../lib/time';
 
@@ -39,7 +39,7 @@ function ExamTaking() {
             <Countdown remainingSeconds={remainingSeconds} />
             {query.data.exam.questionsChoixMultiple.map(
                 (questionChoixMultiple: any, index: number) => (
-                    <QuestionAnswering
+                    <QuestionChoixMultipleAnswering
                         key={questionChoixMultiple.id}
                         attemptId={attemptId}
                         index={index}

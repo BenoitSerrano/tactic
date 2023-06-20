@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { api } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
 
-function QuestionAnswering(props: {
+function QuestionChoixMultipleAnswering(props: {
     questionChoixMultiple: {
         id: number;
         title: string;
@@ -58,4 +58,4 @@ function QuestionAnswering(props: {
     }
 }
 
-export { QuestionAnswering };
+export { QuestionChoixMultipleAnswering };
