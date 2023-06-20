@@ -6,12 +6,12 @@ export { buildQuestionChoixMultipleService };
 
 function buildQuestionChoixMultipleService() {
     const questionChoixMultipleRepository = dataSource.getRepository(QuestionChoixMultiple);
-    const examService = {
+    const questionChoixMultipleService = {
         createQuestionChoixMultiple,
         updateQuestionChoixMultiple,
     };
 
-    return examService;
+    return questionChoixMultipleService;
 
     async function createQuestionChoixMultiple(examId: string) {
         const examService = buildExamService();

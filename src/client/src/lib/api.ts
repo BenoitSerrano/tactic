@@ -15,6 +15,7 @@ const api = {
     fetchExamResults,
     createQuestionChoixMultiple,
     updateQuestionChoixMultiple,
+    createQuestionTrou,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -175,6 +176,18 @@ async function updateQuestionChoixMultiple(params: {
             'Content-Type': 'application/json',
         },
         body: body,
+    });
+    return response.json();
+}
+
+async function createQuestionTrou(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/texte-trou`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
     });
     return response.json();
 }

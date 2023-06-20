@@ -31,8 +31,9 @@ function buildExamService() {
             where: { id: examId },
             order: {
                 questionsChoixMultiple: { order: 'ASC' },
+                questionsTrou: { order: 'ASC' },
             },
-            relations: { questionsChoixMultiple: true },
+            relations: ['questionsChoixMultiple', 'questionsTrou'],
         });
     }
 

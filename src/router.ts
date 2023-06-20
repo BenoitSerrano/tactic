@@ -6,10 +6,12 @@ import { buildQuestionChoixMultipleController } from './modules/questionChoixMul
 import { buildStudentController } from './modules/student';
 import { buildAttemptController } from './modules/attempt';
 import { buildQcmAnswerController } from './modules/qcmAnswer';
+import { buildQuestionTrouController } from './modules/questionTrou/questionTrou.controller';
 
 const router = Express.Router();
 const examController = buildExamController();
 const studentController = buildStudentController();
+const questionTrouController = buildQuestionTrouController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
 const qcmAnswerController = buildQcmAnswerController();
@@ -61,6 +63,11 @@ router.put(
             possibleAnswers: Joi.array().items(Joi.string().allow('')),
         }),
     }),
+);
+
+router.post(
+    '/exams/:examId/texte-trou',
+    buildController(questionTrouController.createQuestionTrou),
 );
 
 router.post(

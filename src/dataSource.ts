@@ -5,8 +5,8 @@ import { QuestionChoixMultiple } from './modules/questionChoixMultiple';
 import { Attempt } from './modules/attempt';
 import { QcmAnswer } from './modules/qcmAnswer';
 import { Student } from './modules/student';
-import { TexteTrou } from './modules/texteTrou';
-import { TexteTrouAnswer } from './modules/texteTrouAnswer';
+import { QuestionTrou } from './modules/questionTrou';
+import { QuestionTrouAnswer } from './modules/questionTrouAnswer';
 
 const dataSource = new DataSource({
     type: 'postgres',
@@ -22,8 +22,8 @@ const dataSource = new DataSource({
         Attempt,
         QcmAnswer,
         Student,
-        TexteTrou,
-        TexteTrouAnswer,
+        QuestionTrou,
+        QuestionTrouAnswer,
     ],
     subscribers: [],
     migrations: ['**/migrations/*.js'],

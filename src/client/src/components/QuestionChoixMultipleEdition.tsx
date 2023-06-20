@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { debounce } from '../lib/utils';
 import { api } from '../lib/api';
 
-function QuestionEdition(props: { examId: string; questionChoixMultiple: any }) {
+function QuestionChoixMultipleEdition(props: { examId: string; questionChoixMultiple: any }) {
     const [title, setTitle] = useState(props.questionChoixMultiple.title);
     const [rightAnswerIndex, setRightAnswerIndex] = useState(
         props.questionChoixMultiple.rightAnswerIndex,
@@ -93,4 +93,4 @@ function QuestionEdition(props: { examId: string; questionChoixMultiple: any }) 
     }
 }
 
-export { QuestionEdition };
+export { QuestionChoixMultipleEdition };

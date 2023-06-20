@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Exam } from '../exam';
 
 @Entity()
-export class TexteTrou {
+export class QuestionTrou {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -21,6 +21,6 @@ export class TexteTrou {
     @Column('int')
     order: number;
 
-    @ManyToOne(() => Exam, (exam) => exam.textesTrou)
+    @ManyToOne(() => Exam, (exam) => exam.questionsTrou)
     exam: Exam;
 }

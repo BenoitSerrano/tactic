@@ -1,18 +1,18 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Attempt } from '../attempt';
-import { TexteTrou } from '../texteTrou/TexteTrou.entity';
+import { QuestionTrou } from '../questionTrou/QuestionTrou.entity';
 
 @Entity()
-@Unique('One answer corresponds to one texteTrou and one attempt', ['texteTrou', 'attempt'])
-export class TexteTrouAnswer {
+@Unique('One answer corresponds to one questionTrou and one attempt', ['questionTrou', 'attempt'])
+export class QuestionTrouAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column('int')
     choice: number;
 
-    @ManyToOne(() => TexteTrou)
-    texteTrou: TexteTrou;
+    @ManyToOne(() => QuestionTrou)
+    questionTrou: QuestionTrou;
 
     @ManyToOne(() => Attempt)
     attempt: Attempt;
