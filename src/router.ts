@@ -6,7 +6,8 @@ import { buildQuestionChoixMultipleController } from './modules/questionChoixMul
 import { buildStudentController } from './modules/student';
 import { buildAttemptController } from './modules/attempt';
 import { buildQcmAnswerController } from './modules/qcmAnswer';
-import { buildQuestionTrouController } from './modules/questionTrou/questionTrou.controller';
+import { buildQuestionTrouController } from './modules/questionTrou';
+import { buildQuestionTrouAnswerController } from './modules/questionTrouAnswer';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -15,6 +16,7 @@ const questionTrouController = buildQuestionTrouController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
 const qcmAnswerController = buildQcmAnswerController();
+const questionTrouAnswerController = buildQuestionTrouAnswerController();
 
 router.get('/students', buildController(studentController.getStudentsWithAttempts));
 router.get('/students/:email', buildController(studentController.getStudentId));
@@ -95,6 +97,15 @@ router.post(
     buildController(qcmAnswerController.createOrUpdateQcmAnswer, {
         schema: Joi.object({
             choice: Joi.number().required(),
+        }),
+    }),
+);
+
+router.post(
+    '/attempts/:attemptId/questions-trou/:questionTrouId',
+    buildController(questionTrouAnswerController.createOrUpdateQuestionTrouAnswer, {
+        schema: Joi.object({
+            answer: Joi.string().required().allow(''),
         }),
     }),
 );

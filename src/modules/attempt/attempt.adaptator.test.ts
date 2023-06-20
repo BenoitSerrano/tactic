@@ -25,7 +25,31 @@ const attempt = {
                 order: 1,
             },
         ],
+        questionsTrou: [
+            {
+                id: 1,
+                beforeText: 'Ils',
+                afterText: '(rencontrer) leurs voisins tous les jours',
+                order: 0,
+                rightAnswer: 'rencontrent',
+                acceptableAnswers: [],
+            },
+        ],
     },
+    questionTrouAnswers: [
+        {
+            id: 1,
+            answer: 'rencontré',
+            questionTrou: {
+                id: 1,
+                beforeText: 'Ils',
+                afterText: '(rencontrer) leurs voisins tous les jours',
+                order: 0,
+                rightAnswer: 'rencontrent',
+                acceptableAnswers: [],
+            },
+        },
+    ],
     qcmAnswers: [
         {
             id: 3,
@@ -54,7 +78,9 @@ const attempt = {
 
 describe('examAdaptator', () => {
     it('should extract student marks from database', () => {
-        const attemptWithAnswers = attemptAdaptator.convertAttemptToAttemptWithChoices(attempt);
+        const attemptWithAnswers = attemptAdaptator.convertAttemptToAttemptWithChoices(
+            attempt as any,
+        );
 
         expect(attemptWithAnswers).toEqual({
             id: '6d7a8f5c-a848-4693-bf07-1df75be5b671',
@@ -81,6 +107,17 @@ describe('examAdaptator', () => {
                         rightAnswerIndex: 0,
                         order: 1,
                         choice: 0,
+                    },
+                ],
+                questionsTrou: [
+                    {
+                        id: 1,
+                        beforeText: 'Ils',
+                        afterText: '(rencontrer) leurs voisins tous les jours',
+                        order: 0,
+                        rightAnswer: 'rencontrent',
+                        acceptableAnswers: [],
+                        answer: 'rencontré',
                     },
                 ],
             },

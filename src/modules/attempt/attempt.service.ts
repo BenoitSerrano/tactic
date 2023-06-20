@@ -45,7 +45,10 @@ function buildAttemptService() {
             relations: [
                 'exam',
                 'qcmAnswers',
+                'questionTrouAnswers',
+                'questionTrouAnswers.questionTrou',
                 'exam.questionsChoixMultiple',
+                'exam.questionsTrou',
                 'qcmAnswers.questionChoixMultiple',
             ],
         });

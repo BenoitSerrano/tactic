@@ -1,7 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
 import { buildAttemptService } from '../attempt/attempt.service';
-import { attemptUtils } from '../attempt/attempt.utils';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
 import { QcmAnswer } from './QcmAnswer.entity';
 

@@ -8,8 +8,8 @@ export class QuestionTrouAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('int')
-    choice: number;
+    @Column()
+    answer: string;
 
     @ManyToOne(() => QuestionTrou)
     questionTrou: QuestionTrou;

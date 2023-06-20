@@ -1,15 +1,22 @@
+import { Attempt } from './Attempt.entity';
+
 const attemptAdaptator = {
     convertAttemptToAttemptWithChoices,
 };
 
-function convertAttemptToAttemptWithChoices(attempt: any) {
+function convertAttemptToAttemptWithChoices(attempt: Attempt) {
     const choices: Record<number, number> = {};
-    attempt.qcmAnswers.forEach(
-        (qcmAnswer: { questionChoixMultiple: { id: number }; choice: number }) => {
-            const id = qcmAnswer.questionChoixMultiple.id;
-            choices[id] = qcmAnswer.choice;
-        },
-    );
+    attempt.qcmAnswers.forEach((qcmAnswer) => {
+        const id = qcmAnswer.questionChoixMultiple.id;
+        choices[id] = qcmAnswer.choice;
+    });
+
+    const answers: Record<number, string> = {};
+    console.log(attempt);
+    attempt.questionTrouAnswers.forEach((questionTrouAnswer) => {
+        const id = questionTrouAnswer.questionTrou.id;
+        answers[id] = questionTrouAnswer.answer;
+    });
 
     return {
         id: attempt.id,
@@ -21,14 +28,17 @@ function convertAttemptToAttemptWithChoices(attempt: any) {
             duration: attempt.exam.duration,
             extraTime: attempt.exam.extraTime,
             questionsChoixMultiple: attempt.exam.questionsChoixMultiple.map(
-                (questionChoixMultiple: { id: number }) => ({
+                (questionChoixMultiple) => ({
                     ...questionChoixMultiple,
                     choice: choices[questionChoixMultiple.id],
                 }),
             ),
+            questionsTrou: attempt.exam.questionsTrou.map((questionTrou) => ({
+                ...questionTrou,
+                answer: answers[questionTrou.id],
+            })),
         },
     };
-    return {};
 }
 
 export { attemptAdaptator };

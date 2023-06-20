@@ -2,6 +2,7 @@ import { config } from '../config';
 
 const api = {
     createOrUpdateQcmAnswer,
+    createOrUpdateQuestionTrouAnswer,
     findOrCreateAttempt,
     fetchAttempt,
     endAttempt,
@@ -38,6 +39,27 @@ async function createOrUpdateQcmAnswer({
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ choice }),
+    });
+    return response.json();
+}
+
+async function createOrUpdateQuestionTrouAnswer({
+    attemptId,
+    questionTrouId,
+    answer,
+}: {
+    attemptId: string;
+    questionTrouId: number;
+    answer: string;
+}) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/questions-trou/${questionTrouId}`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answer }),
     });
     return response.json();
 }

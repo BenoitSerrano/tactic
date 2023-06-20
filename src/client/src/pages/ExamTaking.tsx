@@ -5,6 +5,7 @@ import { api } from '../lib/api';
 import { QuestionChoixMultipleAnswering } from '../components/QuestionChoixMultipleAnswering';
 import { Countdown } from '../components/Countdown';
 import { time } from '../lib/time';
+import { QuestionTrouAnswering } from '../components/QuestionTrouAnswering';
 
 function ExamTaking() {
     const params = useParams();
@@ -47,6 +48,14 @@ function ExamTaking() {
                     />
                 ),
             )}
+            {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
+                <QuestionTrouAnswering
+                    key={questionTrou.id}
+                    attemptId={attemptId}
+                    index={index}
+                    questionTrou={questionTrou}
+                />
+            ))}
             <hr />
             <button onClick={validateForm}>Valider le questionnaire</button>
         </div>
