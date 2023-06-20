@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionChoixMultipleChecking } from '../components/QuestionChoixMultipleChecking';
+import { QuestionTrouChecking } from '../components/QuestionTrouChecking';
 
 function ExamChecking() {
     const params = useParams();
@@ -22,6 +23,15 @@ function ExamChecking() {
                     />
                 ),
             )}
+            <hr />
+            {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
+                <QuestionTrouChecking
+                    key={questionTrou.id}
+                    attemptId={attemptId}
+                    index={index}
+                    questionTrou={questionTrou}
+                />
+            ))}
         </div>
     ) : (
         <div />
