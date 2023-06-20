@@ -1,6 +1,6 @@
 import React from 'react';
 
-function QuestionChecking(props: {
+function QuestionChoixMultipleChecking(props: {
     questionChoixMultiple: {
         id: number;
         title: string;
@@ -36,4 +36,4 @@ function QuestionChecking(props: {
     );
 }
 
-export { QuestionChecking };
+export { QuestionChoixMultipleChecking };

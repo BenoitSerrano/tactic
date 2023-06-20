@@ -51,7 +51,6 @@ function buildExamService() {
                 'attempts.questionTrouAnswers.questionTrou',
             ],
         });
-        console.log(JSON.stringify(examWithAttempts));
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(examWithAttempts);
         return examWithResults;
     }

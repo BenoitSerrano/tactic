@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
-import { QuestionChecking } from '../components/QuestionChecking';
+import { QuestionChoixMultipleChecking } from '../components/QuestionChoixMultipleChecking';
 
 function ExamChecking() {
     const params = useParams();
@@ -14,7 +14,7 @@ function ExamChecking() {
             <h1>{query.data.exam.name}</h1>
             {query.data.exam.questionsChoixMultiple.map(
                 (questionChoixMultiple: any, index: number) => (
-                    <QuestionChecking
+                    <QuestionChoixMultipleChecking
                         key={questionChoixMultiple.id}
                         attemptId={attemptId}
                         index={index}

@@ -12,7 +12,6 @@ function convertAttemptToAttemptWithChoices(attempt: Attempt) {
     });
 
     const answers: Record<number, string> = {};
-    console.log(attempt);
     attempt.questionTrouAnswers.forEach((questionTrouAnswer) => {
         const id = questionTrouAnswer.questionTrou.id;
         answers[id] = questionTrouAnswer.answer;
