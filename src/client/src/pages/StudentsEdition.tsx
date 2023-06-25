@@ -55,11 +55,14 @@ function StudentsEdition() {
     );
 
     async function createStudent() {
-        createStudentMutation.mutate(newEmail);
+        createStudentMutation.mutate(newEmail.trim().toLowerCase());
     }
 
     async function importStudentEmails() {
-        const emails: string[] = emailList.split('\n').filter(Boolean);
+        const emails: string[] = emailList
+            .split('\n')
+            .map((email) => email.trim().toLowerCase())
+            .filter(Boolean);
         createStudentsMutation.mutate(emails);
     }
 }

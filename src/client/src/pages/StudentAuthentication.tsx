@@ -28,7 +28,7 @@ function StudentAuthentication() {
 
     async function getStudentId(email: string) {
         try {
-            const result = await api.fetchStudentId(email);
+            const result = await api.fetchStudentId(email.trim().toLowerCase());
             return result.id;
         } catch (error) {
             console.warn(error);
