@@ -6,6 +6,8 @@ import { QuestionChoixMultipleAnswering } from '../components/QuestionChoixMulti
 import { Countdown } from '../components/Countdown';
 import { time } from '../lib/time';
 import { QuestionTrouAnswering } from '../components/QuestionTrouAnswering';
+import { Page } from '../components/Page';
+import { Button, Typography, styled } from '@mui/material';
 
 function ExamTaking() {
     const params = useParams();
@@ -35,9 +37,11 @@ function ExamTaking() {
     }
 
     return (
-        <div>
-            <h1>{query.data.exam.name}</h1>
-            <Countdown remainingSeconds={remainingSeconds} />
+        <Page>
+            <Typography variant="h1">{query.data.exam.name}</Typography>
+            <CountdownContainer>
+                <Countdown remainingSeconds={remainingSeconds} />
+            </CountdownContainer>
             {query.data.exam.questionsChoixMultiple.map(
                 (questionChoixMultiple: any, index: number) => (
                     <QuestionChoixMultipleAnswering
@@ -57,8 +61,10 @@ function ExamTaking() {
                 />
             ))}
             <hr />
-            <button onClick={validateForm}>Valider le questionnaire</button>
-        </div>
+            <Button variant="contained" onClick={validateForm}>
+                Valider le questionnaire
+            </Button>
+        </Page>
     );
 
     function validateForm() {
@@ -67,3 +73,9 @@ function ExamTaking() {
 }
 
 export { ExamTaking };
+
+const CountdownContainer = styled('div')({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+});

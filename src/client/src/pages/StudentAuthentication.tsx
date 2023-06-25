@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
 import { api } from '../lib/api';
 
 function StudentAuthentication() {
     const params = useParams();
     const examId = params.examId as string;
     const navigate = useNavigate();
-    const mutation = useMutation({
-        mutationFn: api.findOrCreateAttempt,
-        onSuccess: (attempt: any) => {
-            navigate(`/student/attempts/${attempt.id}`);
-        },
-    });
+
     const [email, setEmail] = useState('');
 
     return (
@@ -23,13 +17,13 @@ function StudentAuthentication() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
             />
-            <button onClick={launchExam}>Lancer l'examen</button>
+            <button onClick={login}>Se connecter</button>
         </div>
     );
 
-    async function launchExam() {
+    async function login() {
         const studentId = await getStudentId(email);
-        mutation.mutate({ examId, studentId });
+        navigate(`/student/exams/${examId}/students/${studentId}`);
     }
 
     async function getStudentId(email: string) {

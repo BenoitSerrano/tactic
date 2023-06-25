@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { time } from '../lib/time';
+import { Typography } from '@mui/material';
 
 function Countdown(props: { remainingSeconds: number }) {
     const [seconds, setSeconds] = useState(props.remainingSeconds);
@@ -12,7 +13,24 @@ function Countdown(props: { remainingSeconds: number }) {
 
         return () => clearTimeout(timer);
     }, [seconds]);
-    return <div>{time.formatToClock(seconds)}</div>;
+
+    const countdownColor = computeColor(seconds);
+
+    return (
+        <Typography variant="subtitle1" color={countdownColor}>
+            {time.formatToClock(seconds)}
+        </Typography>
+    );
+
+    function computeColor(seconds: number) {
+        if (seconds > 60) {
+            return 'black';
+        } else if (seconds <= 0) {
+            return 'red';
+        } else {
+            return 'orange';
+        }
+    }
 }
 
 export { Countdown };

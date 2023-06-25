@@ -10,6 +10,8 @@ import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
 import { AttemptAlreadySubmitted } from './pages/AttemptAlreadySubmitted';
 import { AttemptTimeout } from './pages/AttemptTimeout';
+import { StudentHome } from './pages/StudentHome';
+import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
 
 function Router() {
     return (
@@ -21,6 +23,7 @@ function Router() {
             <Route path="/teacher" element={<TeacherHome />} />
             <Route path="/teacher/attempts/:attemptId" element={<ExamChecking />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
+            <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route path="/student/attempts/:attemptId" element={<ExamTaking />} />
             <Route path="/student/exam-done" element={<ExamDone />} />
             <Route
@@ -28,6 +31,7 @@ function Router() {
                 element={<AttemptAlreadySubmitted />}
             />
             <Route path="/student/attempt-timeout" element={<AttemptTimeout />} />
+            <Route path="/student/empty-attempt-created" element={<EmptyAttemptCreated />} />
         </Routes>
     );
 }

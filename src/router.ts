@@ -84,9 +84,19 @@ router.patch(
     }),
 );
 
+router.get(
+    '/exams/:examId/students/:studentId/attempts',
+    buildController(attemptController.searchAttempts),
+);
+
+router.post(
+    '/exams/:examId/students/:studentId/empty-attempt',
+    buildController(attemptController.createEmptyAttempt),
+);
+
 router.post(
     '/exams/:examId/students/:studentId/attempts',
-    buildController(attemptController.findOrCreateAttempt),
+    buildController(attemptController.createAttempt),
 );
 
 router.get('/attempts/:attemptId', buildController(attemptController.fetchAttempt));

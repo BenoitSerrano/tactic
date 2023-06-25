@@ -58,7 +58,7 @@ function ExamResults() {
                         </TableCell>
                         <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
                         <TableCell>
-                            {result.duration
+                            {result.duration !== undefined
                                 ? time.formatToClock(result.duration, { hideHours: true })
                                 : '-'}
                         </TableCell>

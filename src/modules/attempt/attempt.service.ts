@@ -9,7 +9,9 @@ export { buildAttemptService };
 
 function buildAttemptService() {
     const studentService = {
-        findOrCreateAttempt,
+        searchAttempts,
+        createAttempt,
+        createEmptyAttempt,
         fetchAttempt,
         endAttempt,
         assertIsTimeLimitNotExceeded,
@@ -17,7 +19,16 @@ function buildAttemptService() {
 
     return studentService;
 
-    async function findOrCreateAttempt(examId: string, studentId: string) {
+    async function searchAttempts(examId: string, studentId: string) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+
+        const attempt = await attemptRepository.find({
+            where: { exam: { id: examId }, student: { id: studentId } },
+        });
+        return attempt;
+    }
+
+    async function createAttempt(examId: string, studentId: string) {
         const attemptRepository = dataSource.getRepository(Attempt);
         const studentRepository = dataSource.getRepository(Student);
         const examRepository = dataSource.getRepository(Exam);
@@ -25,11 +36,26 @@ function buildAttemptService() {
         const student = await studentRepository.findOneByOrFail({ id: studentId });
         const exam = await examRepository.findOneByOrFail({ id: examId });
 
-        const result = await attemptRepository.upsert({ exam, student }, ['student', 'exam']);
-        if (result.identifiers.length !== 1) {
-            throw new Error(`Error while upserting student ${student.id} / exam ${exam.id}`);
-        }
-        return result.identifiers[0];
+        const attempt = await attemptRepository.save({ exam, student });
+
+        return attempt;
+    }
+
+    async function createEmptyAttempt(examId: string, studentId: string) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+        const studentRepository = dataSource.getRepository(Student);
+        const examRepository = dataSource.getRepository(Exam);
+
+        const student = await studentRepository.findOneByOrFail({ id: studentId });
+        const exam = await examRepository.findOneByOrFail({ id: examId });
+
+        const attempt = await attemptRepository.save({
+            exam,
+            student,
+            endedAt: 'NOW()',
+        });
+
+        return attempt;
     }
 
     async function fetchAttempt(attemptId: string) {

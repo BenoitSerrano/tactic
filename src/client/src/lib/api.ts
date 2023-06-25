@@ -3,7 +3,9 @@ import { config } from '../config';
 const api = {
     createOrUpdateQcmAnswer,
     createOrUpdateQuestionTrouAnswer,
-    findOrCreateAttempt,
+    searchAttempt,
+    createAttempt,
+    createEmptyAttempt,
     fetchAttempt,
     endAttempt,
     fetchStudents,
@@ -64,8 +66,24 @@ async function createOrUpdateQuestionTrouAnswer({
     return response.json();
 }
 
-async function findOrCreateAttempt({ examId, studentId }: { examId: string; studentId: string }) {
+async function searchAttempt({ examId, studentId }: { examId: string; studentId: string }) {
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
+    const response = await fetch(URL, {
+        method: 'GET',
+    });
+    return response.json();
+}
+
+async function createAttempt({ examId, studentId }: { examId: string; studentId: string }) {
+    const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
+    const response = await fetch(URL, {
+        method: 'POST',
+    });
+    return response.json();
+}
+
+async function createEmptyAttempt({ examId, studentId }: { examId: string; studentId: string }) {
+    const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/empty-attempt`;
     const response = await fetch(URL, {
         method: 'POST',
     });
