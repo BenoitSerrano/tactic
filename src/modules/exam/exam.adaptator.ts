@@ -28,7 +28,7 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
         const questionTrouMark = examWithAttempts.questionsTrou.reduce((sum, questionTrou) => {
             if (
                 questionTrou.rightAnswer.trim().toLowerCase() ===
-                answers[questionTrou.id].trim().toLowerCase()
+                answers[questionTrou.id]?.trim().toLowerCase()
             ) {
                 return sum + 1;
             } else if (
