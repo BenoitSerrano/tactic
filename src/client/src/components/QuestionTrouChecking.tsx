@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, Typography } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 
 function QuestionTrouChecking(props: {
     questionTrou: {
@@ -12,13 +12,22 @@ function QuestionTrouChecking(props: {
     attemptId: string;
 }) {
     return (
-        <div>
-            <p>{props.index + 1}.</p>
-            <Typography>{props.questionTrou.beforeText}</Typography>
-            <TextField disabled label="Réponse" value={props.questionTrou.answer} />
+        <StyledContainer>
+            <Typography>
+                {props.index + 1}. {props.questionTrou.beforeText}
+            </Typography>
+            <TextField disabled label="..." value={props.questionTrou.answer} />
             <Typography>{props.questionTrou.afterText}</Typography>
-        </div>
+        </StyledContainer>
     );
 }
 
+const StyledContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginTop: '5px',
+    marginBottom: '5px',
+});
 export { QuestionTrouChecking };

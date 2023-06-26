@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { debounce } from '../lib/utils';
 import { api } from '../lib/api';
-import { TextField, Typography } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 
 function QuestionTrouAnswering(props: {
     questionTrou: {
@@ -20,12 +20,13 @@ function QuestionTrouAnswering(props: {
     });
 
     return (
-        <div>
-            <p>{props.index + 1}.</p>
-            <Typography>{props.questionTrou.beforeText}</Typography>
-            <TextField label="Réponse" value={answer} onChange={onChangeAnswer} placeholder="..." />
+        <StyledContainer>
+            <Typography>
+                {props.index + 1}.{props.questionTrou.beforeText}
+            </Typography>
+            <TextField label="..." value={answer} onChange={onChangeAnswer} placeholder="..." />
             <Typography>{props.questionTrou.afterText}</Typography>
-        </div>
+        </StyledContainer>
     );
 
     function onChangeAnswer(event: React.ChangeEvent<HTMLInputElement>) {
@@ -40,5 +41,14 @@ function QuestionTrouAnswering(props: {
         })(event.target.value);
     }
 }
+
+const StyledContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginTop: '5px',
+    marginBottom: '5px',
+});
 
 export { QuestionTrouAnswering };

@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionChoixMultipleChecking } from '../components/QuestionChoixMultipleChecking';
 import { QuestionTrouChecking } from '../components/QuestionTrouChecking';
+import { Typography } from '@mui/material';
+import { Page } from '../components/Page';
 
 function ExamChecking() {
     const params = useParams();
@@ -11,8 +13,8 @@ function ExamChecking() {
     const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
 
     return !!query.data ? (
-        <div>
-            <h1>{query.data.exam.name}</h1>
+        <Page>
+            <Typography variant="h1">{query.data.exam.name}</Typography>
             {query.data.exam.questionsChoixMultiple.map(
                 (questionChoixMultiple: any, index: number) => (
                     <QuestionChoixMultipleChecking
@@ -32,7 +34,7 @@ function ExamChecking() {
                     questionTrou={questionTrou}
                 />
             ))}
-        </div>
+        </Page>
     ) : (
         <div />
     );
