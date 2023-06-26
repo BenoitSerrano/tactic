@@ -78,7 +78,7 @@ const attempt = {
 
 describe('examAdaptator', () => {
     it('should extract student marks from database', () => {
-        const attemptWithAnswers = attemptAdaptator.convertAttemptToAttemptWithChoices(
+        const attemptWithAnswers = attemptAdaptator.convertAttemptToAttemptWithAnswers(
             attempt as any,
         );
 

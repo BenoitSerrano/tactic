@@ -1,10 +1,10 @@
 import { Attempt } from './Attempt.entity';
 
 const attemptAdaptator = {
-    convertAttemptToAttemptWithChoices,
+    convertAttemptToAttemptWithAnswers,
 };
 
-function convertAttemptToAttemptWithChoices(attempt: Attempt) {
+function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
     const choices: Record<number, number> = {};
     attempt.qcmAnswers.forEach((qcmAnswer) => {
         const id = qcmAnswer.questionChoixMultiple.id;

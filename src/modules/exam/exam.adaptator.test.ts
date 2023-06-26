@@ -115,8 +115,17 @@ describe('examAdaptator', () => {
                 startedAt: 1686841539616,
                 duration: 600,
                 attemptId: 'e056210f-19a7-4e85-9c99-d29c8b6410ee',
-                mark: 0,
-                totalPoints: 2,
+                qcmSummary: {
+                    '12': {
+                        choice: 1,
+                        status: 'wrong',
+                    },
+                    '13': {
+                        choice: 0,
+                        status: 'wrong',
+                    },
+                },
+                questionTrouSummary: {},
             },
             {
                 id: '20d07fd1-16f8-4131-a73c-03fc099a8330',
@@ -124,8 +133,17 @@ describe('examAdaptator', () => {
                 duration: undefined,
                 email: 'theobald.beltran@truc.machin',
                 attemptId: 'ff199468-6420-41ef-b15e-bca4138fae4d',
-                mark: 2,
-                totalPoints: 2,
+                qcmSummary: {
+                    '12': {
+                        choice: 2,
+                        status: 'right',
+                    },
+                    '13': {
+                        choice: 1,
+                        status: 'right',
+                    },
+                },
+                questionTrouSummary: {},
             },
         ]);
     });
@@ -226,8 +244,21 @@ describe('examAdaptator', () => {
                 startedAt: 1687292265661,
                 duration: 660,
                 attemptId: 'a7ff95b3-e0de-4757-91de-1edef2a30224',
-                mark: 2,
-                totalPoints: 3,
+                qcmSummary: {},
+                questionTrouSummary: {
+                    '1': {
+                        answer: 'rencontren',
+                        status: 'wrong',
+                    },
+                    '2': {
+                        answer: 'vais',
+                        status: 'right',
+                    },
+                    '3': {
+                        answer: 'du',
+                        status: 'right',
+                    },
+                },
             },
         ]);
     });

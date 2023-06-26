@@ -6,15 +6,21 @@ import { api } from '../lib/api';
 import { Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { time } from '../lib/time';
 
-type examResultsType = Array<{
+type examResultType = {
     id: string;
     email: string;
     attemptId: string;
     startedAt: number;
     duration: number | undefined;
-    mark: number;
+    qcmSummary: Record<number, { status: 'right' | 'wrong'; choice: number }>;
+    questionTrouSummary: Record<
+        number,
+        { status: 'right' | 'acceptable' | 'wrong'; answer: string }
+    >;
     totalPoints: number;
-}>;
+};
+
+type examResultsType = Array<examResultType>;
 
 function ExamResults() {
     const params = useParams();
@@ -62,9 +68,7 @@ function ExamResults() {
                                 ? time.formatToClock(result.duration, { hideHours: true })
                                 : '-'}
                         </TableCell>
-                        <TableCell>
-                            {result.mark}/{result.totalPoints}
-                        </TableCell>
+                        <TableCell>{computeMark(result)}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
@@ -84,6 +88,26 @@ function ExamResults() {
             }
         });
     }
+}
+
+function computeMark(examResult: examResultType) {
+    const qcmLength = Object.keys(examResult.qcmSummary).length;
+    const questionTrouLength = Object.keys(examResult.questionTrouSummary).length;
+    const qcmMark = Object.values(examResult.qcmSummary).reduce(
+        (sum, value) => sum + (value.status === 'right' ? 1 : 0),
+        0,
+    );
+    const questionTrouMark = Object.values(examResult.questionTrouSummary).reduce((sum, value) => {
+        switch (value.status) {
+            case 'right':
+                return sum + 1;
+            case 'acceptable':
+                return sum + 0.5;
+            case 'wrong':
+                return sum + 0;
+        }
+    }, 0);
+    return `${qcmMark + questionTrouMark}/${qcmLength + questionTrouLength}`;
 }
 
 export { ExamResults };

@@ -66,6 +66,7 @@ function buildAttemptService() {
             order: {
                 exam: {
                     questionsChoixMultiple: { order: 'ASC' },
+                    questionsTrou: { order: 'ASC' },
                 },
             },
             relations: [
@@ -79,7 +80,7 @@ function buildAttemptService() {
             ],
         });
 
-        return attemptAdaptator.convertAttemptToAttemptWithChoices(attempt);
+        return attemptAdaptator.convertAttemptToAttemptWithAnswers(attempt);
     }
 
     async function assertIsTimeLimitNotExceeded(attempt: Attempt) {
