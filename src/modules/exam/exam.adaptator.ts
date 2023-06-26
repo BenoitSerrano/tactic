@@ -33,7 +33,9 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
                 return sum + 1;
             } else if (
                 questionTrou.acceptableAnswers.some(
-                    (acceptableAnswer) => acceptableAnswer === answers[questionTrou.id],
+                    (acceptableAnswer) =>
+                        acceptableAnswer.toLowerCase() ===
+                        answers[questionTrou.id]?.trim().toLowerCase(),
                 )
             ) {
                 return sum + 0.5;
