@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { api } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 function QuestionChoixMultipleAnswering(props: {
     questionChoixMultiple: {
@@ -21,34 +22,35 @@ function QuestionChoixMultipleAnswering(props: {
             navigate('/student/attempt-timeout');
         },
     });
-    const qcmId = props.questionChoixMultiple.id;
 
     const [choice, setChoice] = useState<number>(props.questionChoixMultiple.choice);
 
     return (
-        <div key={qcmId}>
-            <h2>
-                {props.index + 1}. {props.questionChoixMultiple.title}
-            </h2>
-            {props.questionChoixMultiple.possibleAnswers.map(
-                (possibleAnswer: any, index: number) => (
-                    <React.Fragment key={`${props.questionChoixMultiple.id}-${index}`}>
-                        <input
-                            type="radio"
-                            id={`${qcmId}-${index}`}
-                            name={`${props.questionChoixMultiple.id}`}
-                            value={possibleAnswer}
-                            checked={choice === index}
-                            onChange={() => onChooseQcmAnswer(index)}
-                        />
-                        <label htmlFor={`${qcmId}-${index}`}>{possibleAnswer}</label>
-                    </React.Fragment>
-                ),
-            )}
+        <div>
+            <FormControl>
+                <FormLabel>
+                    {props.index + 1}. {props.questionChoixMultiple.title}
+                </FormLabel>
+                <RadioGroup value={choice} onChange={onChooseQcmAnswer}>
+                    {props.questionChoixMultiple.possibleAnswers.map(
+                        (possibleAnswer: any, index: number) => (
+                            <React.Fragment key={`${props.questionChoixMultiple.id}-${index}`}>
+                                <FormControlLabel
+                                    value={index}
+                                    control={<Radio />}
+                                    label={possibleAnswer}
+                                />
+                            </React.Fragment>
+                        ),
+                    )}
+                </RadioGroup>
+            </FormControl>
         </div>
     );
 
-    function onChooseQcmAnswer(newChoice: number) {
+    function onChooseQcmAnswer(event: ChangeEvent<HTMLInputElement>) {
+        const newChoice = Number(event.target.value);
+        console.log(newChoice);
         setChoice(newChoice);
         upsertQcmAnswerMutation.mutate({
             attemptId: props.attemptId,

@@ -1,4 +1,14 @@
 import React from 'react';
+import { colorLib } from '../lib/colors';
+import {
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Radio,
+    RadioGroup,
+    Typography,
+    styled,
+} from '@mui/material';
 
 function QuestionChoixMultipleChecking(props: {
     questionChoixMultiple: {
@@ -6,32 +16,35 @@ function QuestionChoixMultipleChecking(props: {
         title: string;
         possibleAnswers: string[];
         choice: number;
+        status: 'right' | 'wrong';
     };
     index: number;
     attemptId: string;
 }) {
-    const qcmId = props.questionChoixMultiple.id;
+    const color = colorLib.computeTextColor(props.questionChoixMultiple.status);
+    const StyledFormLabel = styled(FormLabel)({ color });
 
     return (
-        <div key={qcmId}>
-            <h2>
-                {props.index + 1}. {props.questionChoixMultiple.title}
-            </h2>
-            {props.questionChoixMultiple.possibleAnswers.map(
-                (possibleAnswer: any, index: number) => (
-                    <React.Fragment key={`${props.questionChoixMultiple.id}-${index}`}>
-                        <input
-                            type="radio"
-                            id={`${qcmId}-${index}`}
-                            name={`${props.questionChoixMultiple.id}`}
-                            value={possibleAnswer}
-                            disabled
-                            checked={props.questionChoixMultiple.choice === index}
-                        />
-                        <label htmlFor={`${qcmId}-${index}`}>{possibleAnswer}</label>
-                    </React.Fragment>
-                ),
-            )}
+        <div>
+            <FormControl>
+                <StyledFormLabel>
+                    {props.index + 1}. {props.questionChoixMultiple.title}
+                </StyledFormLabel>
+                <RadioGroup value={props.questionChoixMultiple.choice}>
+                    {props.questionChoixMultiple.possibleAnswers.map(
+                        (possibleAnswer: any, index: number) => (
+                            <React.Fragment key={`${props.questionChoixMultiple.id}-${index}`}>
+                                <FormControlLabel
+                                    value={index}
+                                    control={<Radio />}
+                                    label={possibleAnswer}
+                                    disabled
+                                />
+                            </React.Fragment>
+                        ),
+                    )}
+                </RadioGroup>
+            </FormControl>
         </div>
     );
 }
