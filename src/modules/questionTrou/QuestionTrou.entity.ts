@@ -15,8 +15,8 @@ export class QuestionTrou {
     @Column('simple-array')
     acceptableAnswers: string[];
 
-    @Column()
-    rightAnswer: string;
+    @Column('simple-array', { default: '' })
+    rightAnswers: string[];
 
     @Column('int')
     order: number;

@@ -21,7 +21,7 @@ function buildQuestionTrouService() {
         const highestOrder = await getHighestQuestionTrouOrder(examId);
 
         questionTrou.acceptableAnswers = [''];
-        questionTrou.rightAnswer = '';
+        questionTrou.rightAnswers = [''];
         questionTrou.beforeText = '';
         questionTrou.afterText = '';
         questionTrou.exam = exam;
@@ -48,14 +48,14 @@ function buildQuestionTrouService() {
         questionTrouId,
         beforeText,
         afterText,
-        rightAnswer,
+        rightAnswers,
         acceptableAnswers,
     }: {
         examId: string;
         questionTrouId: number;
         beforeText: string;
         afterText: string;
-        rightAnswer: string;
+        rightAnswers: string[];
         acceptableAnswers: string[];
     }) {
         const questionTrou = await questionTrouRepository.findOneOrFail({
@@ -67,8 +67,8 @@ function buildQuestionTrouService() {
         if (afterText !== undefined) {
             questionTrou.afterText = afterText;
         }
-        if (rightAnswer !== undefined) {
-            questionTrou.rightAnswer = rightAnswer;
+        if (rightAnswers !== undefined) {
+            questionTrou.rightAnswers = rightAnswers;
         }
         if (acceptableAnswers !== undefined) {
             questionTrou.acceptableAnswers = acceptableAnswers;

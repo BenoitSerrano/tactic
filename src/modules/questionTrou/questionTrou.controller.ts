@@ -20,7 +20,7 @@ function buildQuestionTrouController() {
         body: {
             beforeText: string;
             afterText: string;
-            rightAnswer: string;
+            rightAnswers: string[];
             acceptableAnswers: string[];
         };
     }) {
@@ -30,7 +30,7 @@ function buildQuestionTrouController() {
             beforeText: params.body.beforeText,
             afterText: params.body.afterText,
             acceptableAnswers: params.body.acceptableAnswers,
-            rightAnswer: params.body.rightAnswer,
+            rightAnswers: params.body.rightAnswers,
         });
     }
 }

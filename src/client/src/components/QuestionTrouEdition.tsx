@@ -11,11 +11,11 @@ function QuestionTrouEdition(props: {
         beforeText: string;
         afterText: string;
         acceptableAnswers: string[];
-        rightAnswer: string;
+        rightAnswers: string[];
         order: number;
     };
 }) {
-    const [rightAnswer, setRightAnswer] = useState(props.questionTrou.rightAnswer);
+    const [rightAnswers, setRightAnswers] = useState(props.questionTrou.rightAnswers.join(','));
     const [acceptableAnswers, setAcceptableAnswers] = useState(
         props.questionTrou.acceptableAnswers.join(','),
     );
@@ -50,8 +50,8 @@ function QuestionTrouEdition(props: {
                 fullWidth
                 label="Bonne réponse"
                 placeholder="Ecrivez la bonne réponse"
-                value={rightAnswer}
-                onChange={onChangeRightAnswer}
+                value={rightAnswers}
+                onChange={onChangeRightAnswers}
             />
             <TextField
                 fullWidth
@@ -87,14 +87,17 @@ function QuestionTrouEdition(props: {
         })(event.target.value);
     }
 
-    function onChangeRightAnswer(event: React.ChangeEvent<HTMLInputElement>) {
-        setRightAnswer(event.target.value);
+    function onChangeRightAnswers(event: React.ChangeEvent<HTMLInputElement>) {
+        setRightAnswers(event.target.value);
 
-        debounce((newRightAnswer: string) => {
+        debounce((newRightAnswers: string) => {
             return updateQuestionTrouMutation.mutate({
                 examId: props.examId,
                 questionTrouId: props.questionTrou.id,
-                rightAnswer: newRightAnswer,
+                rightAnswers: newRightAnswers
+                    .split(',')
+                    .map((rightAnswer) => rightAnswer.trim())
+                    .filter(Boolean),
             });
         })(event.target.value);
     }
@@ -108,7 +111,8 @@ function QuestionTrouEdition(props: {
                 questionTrouId: props.questionTrou.id,
                 acceptableAnswers: newAcceptableAnswers
                     .split(',')
-                    .map((acceptableAnswer) => acceptableAnswer.trim()),
+                    .map((acceptableAnswer) => acceptableAnswer.trim())
+                    .filter(Boolean),
             });
         })(event.target.value);
     }

@@ -78,7 +78,7 @@ router.patch(
         schema: Joi.object({
             beforeText: Joi.string().allow(''),
             afterText: Joi.string().allow(''),
-            rightAnswer: Joi.string().allow(''),
+            rightAnswers: Joi.array().items(Joi.string().allow('')),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
         }),
     }),

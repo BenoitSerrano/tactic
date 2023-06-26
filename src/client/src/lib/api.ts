@@ -238,14 +238,14 @@ async function updateQuestionTrou(params: {
     questionTrouId: number;
     beforeText?: string;
     afterText?: string;
-    rightAnswer?: string;
+    rightAnswers?: string[];
     acceptableAnswers?: string[];
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/questions-trou/${params.questionTrouId}`;
     const body = JSON.stringify({
         beforeText: params.beforeText,
         afterText: params.afterText,
-        rightAnswer: params.rightAnswer,
+        rightAnswers: params.rightAnswers,
         acceptableAnswers: params.acceptableAnswers,
     });
     const response = await fetch(URL, {
