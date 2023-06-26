@@ -1,3 +1,5 @@
+import { qcmAnswerAdaptator } from '../qcmAnswer';
+import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
 import { Attempt } from './Attempt.entity';
 
 const attemptAdaptator = {
@@ -17,6 +19,15 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
         answers[id] = questionTrouAnswer.answer;
     });
 
+    const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
+        attempt.qcmAnswers,
+        attempt.exam.questionsChoixMultiple,
+    );
+    const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
+        attempt.questionTrouAnswers,
+        attempt.exam.questionsTrou,
+    );
+
     return {
         id: attempt.id,
         startedAt: attempt.startedAt,
@@ -29,12 +40,14 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
             questionsChoixMultiple: attempt.exam.questionsChoixMultiple.map(
                 (questionChoixMultiple) => ({
                     ...questionChoixMultiple,
-                    choice: choices[questionChoixMultiple.id],
+                    choice: qcmSummary[questionChoixMultiple.id]?.choice,
+                    status: qcmSummary[questionChoixMultiple.id]?.status,
                 }),
             ),
             questionsTrou: attempt.exam.questionsTrou.map((questionTrou) => ({
                 ...questionTrou,
-                answer: answers[questionTrou.id],
+                answer: questionTrouSummary[questionTrou.id]?.answer,
+                status: questionTrouSummary[questionTrou.id]?.status,
             })),
         },
     };
