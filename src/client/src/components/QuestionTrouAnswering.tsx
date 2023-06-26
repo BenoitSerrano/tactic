@@ -24,7 +24,12 @@ function QuestionTrouAnswering(props: {
             <Typography>
                 {props.index + 1}.{props.questionTrou.beforeText}
             </Typography>
-            <TextField label="..." value={answer} onChange={onChangeAnswer} placeholder="..." />
+            <StyledTextField
+                label="Réponse"
+                value={answer}
+                onChange={onChangeAnswer}
+                placeholder="..."
+            />
             <Typography>{props.questionTrou.afterText}</Typography>
         </StyledContainer>
     );
@@ -47,8 +52,12 @@ const StyledContainer = styled('div')({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginTop: '5px',
-    marginBottom: '5px',
+    marginTop: '10px',
+    marginBottom: '10px',
 });
 
+const StyledTextField = styled(TextField)({
+    marginLeft: '5px',
+    marginRight: '5px',
+});
 export { QuestionTrouAnswering };
