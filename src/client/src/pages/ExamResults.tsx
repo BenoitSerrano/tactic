@@ -30,12 +30,15 @@ function ExamResults() {
         queryKey: ['examResults', examId],
         queryFn: () => api.fetchExamResults(examId),
     });
+    const [activeSort, setActiveSort] = useState<'email' | 'mark'>('email');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     if (!query.data) {
         return <div />;
     }
 
-    const sortedData = sortData(query.data, sortDirection);
+    const formattedData = formatData(query.data);
+
+    const sortedData = sortData(formattedData, activeSort, sortDirection);
 
     return (
         <Table>
@@ -43,18 +46,34 @@ function ExamResults() {
                 <TableRow>
                     <TableCell sortDirection={sortDirection}>
                         <TableSortLabel
-                            active
+                            active={activeSort === 'email'}
                             direction={sortDirection}
-                            onClick={() =>
-                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
-                            }
+                            onClick={() => {
+                                if (activeSort !== 'email') {
+                                    setActiveSort('email');
+                                }
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                            }}
                         >
                             Adresse e-mail
                         </TableSortLabel>
                     </TableCell>
                     <TableCell>Heure de début du test</TableCell>
                     <TableCell>Durée</TableCell>
-                    <TableCell>Note</TableCell>
+                    <TableCell>
+                        <TableSortLabel
+                            active={activeSort === 'mark'}
+                            direction={sortDirection}
+                            onClick={() => {
+                                if (activeSort !== 'mark') {
+                                    setActiveSort('mark');
+                                }
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                            }}
+                        >
+                            Note
+                        </TableSortLabel>
+                    </TableCell>
                     <TableCell>Commentaire de l'étudiant.e</TableCell>
                 </TableRow>
             </TableHead>
@@ -64,13 +83,9 @@ function ExamResults() {
                         <TableCell>
                             <Link to={`/teacher/attempts/${result.attemptId}`}>{result.email}</Link>
                         </TableCell>
-                        <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
-                        <TableCell>
-                            {result.duration !== undefined
-                                ? time.formatToClock(result.duration, { hideHours: true })
-                                : '-'}
-                        </TableCell>
-                        <TableCell>{computeMark(result)}</TableCell>
+                        <TableCell>{result.startedAt}</TableCell>
+                        <TableCell>{result.duration}</TableCell>
+                        <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
                         <TableCell>{result.comment || '-'}</TableCell>
                     </TableRow>
                 ))}
@@ -78,16 +93,45 @@ function ExamResults() {
         </Table>
     );
 
-    function sortData<T extends { email: string }>(data: Array<T>, sortDirection: 'asc' | 'desc') {
+    function formatData(data: examResultType[]) {
+        return data.map((result) => {
+            const { mark, totalPoints } = computeMark(result);
+            return {
+                email: result.email,
+                attemptId: result.attemptId,
+                startedAt: time.formatToReadableDatetime(result.startedAt),
+                duration:
+                    result.duration !== undefined
+                        ? time.formatToClock(result.duration, { hideHours: true })
+                        : '-',
+                mark,
+                totalPoints,
+                comment: result.comment || '-',
+            };
+        });
+    }
+
+    function sortData<T extends { email: string; mark: number }>(
+        data: Array<T>,
+        activeSort: 'email' | 'mark',
+        sortDirection: 'asc' | 'desc',
+    ): Array<T> {
         return data.sort((resultA, resultB) => {
-            const result = resultA.email.localeCompare(resultB.email);
+            let result = 0;
+            switch (activeSort) {
+                case 'email':
+                    result = resultA.email.localeCompare(resultB.email);
+                    break;
+                case 'mark':
+                    result = resultA.mark - resultB.mark;
+            }
             if (sortDirection === 'asc') {
                 return result;
             } else {
                 if (result === 0) {
                     return 0;
                 }
-                return result === 1 ? -1 : 1;
+                return result > 0 ? -1 : 1;
             }
         });
     }
@@ -116,7 +160,10 @@ function computeMark(examResult: examResultType) {
                 return sum;
         }
     }, 0);
-    return `${qcmMark + questionTrouMark}/${qcmTotalPoints + questionTrouTotalPoints}`;
+    return {
+        mark: qcmMark + questionTrouMark,
+        totalPoints: qcmTotalPoints + questionTrouTotalPoints,
+    };
 }
 
 export { ExamResults };
