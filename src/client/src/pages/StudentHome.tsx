@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Modal, styled } from '@mui/material';
+import { Button, Modal, styled } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';

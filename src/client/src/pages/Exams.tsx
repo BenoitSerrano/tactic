@@ -4,13 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import {
     Button,
-    Icon,
     IconButton,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
+    TextField,
     Typography,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -68,18 +68,22 @@ function Exams() {
                 </TableBody>
             </Table>
             <hr />
-            <input
+            <TextField
+                label="Nom de l'examen"
                 placeholder="Nom de l'examen"
                 value={newExamName}
                 onChange={(event) => setNewExamName(event.target.value)}
             />
-            <input
+            <TextField
                 type="number"
+                label="Durée de l'examen en minutes"
                 placeholder="Durée de l'examen en minutes"
                 value={newExamDuration}
                 onChange={(event) => setNewExamDuration(Number(event.target.value))}
             />
-            <button onClick={createExam}>Créer un examen</button>
+            <Button variant="contained" onClick={createExam}>
+                Créer un examen
+            </Button>
             <hr />
             <Link to="/teacher">Revenir à l'accueil</Link>
         </div>

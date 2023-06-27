@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Link } from 'react-router-dom';
+import { Button, TextField, Typography } from '@mui/material';
 
 function StudentsEdition() {
     const queryClient = useQueryClient();
@@ -26,7 +27,7 @@ function StudentsEdition() {
 
     return (
         <div>
-            <h1>Liste des étudiant.es créé.es</h1>
+            <Typography variant="h1">Liste des étudiant.es créé.es</Typography>
             <ul>
                 {query.data?.map((student: any) => {
                     return <li key={student.id}>{student.email}</li>;
@@ -34,20 +35,17 @@ function StudentsEdition() {
             </ul>
             <hr />
             <div>
-                <form onSubmit={createStudent}>
-                    <input value={newEmail} onChange={(event) => setNewEmail(event.target.value)} />
-                    <button type="submit">Créer un.e étudiant.e</button>
-                </form>
+                <TextField value={newEmail} onChange={(event) => setNewEmail(event.target.value)} />
+                <Button onClick={createStudent}>Créer un.e étudiant.e</Button>
             </div>
             <hr />
             <div>
-                <form onSubmit={importStudentEmails}>
-                    <textarea
-                        value={emailList}
-                        onChange={(event) => setEmailList(event.target.value)}
-                    />
-                    <button type="submit">Importer une liste d'étudiant.es</button>
-                </form>
+                <TextField
+                    multiline
+                    value={emailList}
+                    onChange={(event) => setEmailList(event.target.value)}
+                />
+                <Button onClick={importStudentEmails}>Importer une liste d'étudiant.es</Button>
             </div>
             <hr />
             <Link to="/teacher">Revenir à l'accueil</Link>
