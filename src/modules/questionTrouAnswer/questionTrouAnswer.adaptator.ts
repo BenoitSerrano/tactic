@@ -23,6 +23,7 @@ function computeQuestionTrouSummary(
         questionTrouSummary[questionTrou.id] = {
             answer: trouAnswers[questionTrou.id],
             status,
+            points: questionTrou.points,
         };
     });
     return questionTrouSummary;

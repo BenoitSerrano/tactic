@@ -12,10 +12,10 @@ type examResultType = {
     attemptId: string;
     startedAt: number;
     duration: number | undefined;
-    qcmSummary: Record<number, { status: 'right' | 'wrong'; choice: number }>;
+    qcmSummary: Record<number, { status: 'right' | 'wrong'; choice: number; points: number }>;
     questionTrouSummary: Record<
         number,
-        { status: 'right' | 'acceptable' | 'wrong'; answer: string }
+        { status: 'right' | 'acceptable' | 'wrong'; answer: string; points: number }
     >;
     totalPoints: number;
 };
@@ -91,23 +91,29 @@ function ExamResults() {
 }
 
 function computeMark(examResult: examResultType) {
-    const qcmLength = Object.keys(examResult.qcmSummary).length;
-    const questionTrouLength = Object.keys(examResult.questionTrouSummary).length;
+    const qcmTotalPoints = Object.values(examResult.qcmSummary).reduce(
+        (sum, summary) => sum + summary.points,
+        0,
+    );
+    const questionTrouTotalPoints = Object.values(examResult.questionTrouSummary).reduce(
+        (sum, summary) => sum + summary.points,
+        0,
+    );
     const qcmMark = Object.values(examResult.qcmSummary).reduce(
-        (sum, value) => sum + (value.status === 'right' ? 1 : 0),
+        (sum, value) => sum + (value.status === 'right' ? value.points : 0),
         0,
     );
     const questionTrouMark = Object.values(examResult.questionTrouSummary).reduce((sum, value) => {
         switch (value.status) {
             case 'right':
-                return sum + 1;
+                return sum + value.points;
             case 'acceptable':
-                return sum + 0.5;
+                return sum + value.points / 2;
             case 'wrong':
-                return sum + 0;
+                return sum;
         }
     }, 0);
-    return `${qcmMark + questionTrouMark}/${qcmLength + questionTrouLength}`;
+    return `${qcmMark + questionTrouMark}/${qcmTotalPoints + questionTrouTotalPoints}`;
 }
 
 export { ExamResults };

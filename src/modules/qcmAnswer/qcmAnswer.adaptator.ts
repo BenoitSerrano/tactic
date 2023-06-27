@@ -21,6 +21,7 @@ function computeQcmSummary(
     questionsChoixMultiple.forEach((questionChoixMultiple) => {
         qcmSummary[questionChoixMultiple.id] = {
             choice: choices[questionChoixMultiple.id],
+            points: questionChoixMultiple.points,
             status:
                 questionChoixMultiple.rightAnswerIndex === choices[questionChoixMultiple.id]
                     ? ('right' as const)
