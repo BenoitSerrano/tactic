@@ -12,7 +12,10 @@ export class QuestionTrou {
     @Column()
     afterText: string;
 
-    @Column('simple-array')
+    @Column('int', { default: 1 })
+    points: number;
+
+    @Column('simple-array', { default: '' })
     acceptableAnswers: string[];
 
     @Column('simple-array', { default: '' })

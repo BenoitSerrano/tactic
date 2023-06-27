@@ -15,6 +15,9 @@ export class QuestionChoixMultiple {
     @Column('int')
     rightAnswerIndex: number;
 
+    @Column('int', { default: 1 })
+    points: number;
+
     @Column('int')
     order: number;
 
