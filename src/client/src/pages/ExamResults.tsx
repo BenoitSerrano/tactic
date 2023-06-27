@@ -9,6 +9,7 @@ import { time } from '../lib/time';
 type examResultType = {
     id: string;
     email: string;
+    comment?: string;
     attemptId: string;
     startedAt: number;
     duration: number | undefined;
@@ -54,6 +55,7 @@ function ExamResults() {
                     <TableCell>Heure de début du test</TableCell>
                     <TableCell>Durée</TableCell>
                     <TableCell>Note</TableCell>
+                    <TableCell>Commentaire de l'étudiant.e</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -69,6 +71,7 @@ function ExamResults() {
                                 : '-'}
                         </TableCell>
                         <TableCell>{computeMark(result)}</TableCell>
+                        <TableCell>{result.comment || '-'}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>

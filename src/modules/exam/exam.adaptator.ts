@@ -25,6 +25,7 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
         const result = {
             id: student.id,
             email: student.email,
+            comment: student.comment,
             startedAt: startedAtDate.getTime(),
             duration,
             attemptId: attempt.id,
