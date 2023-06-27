@@ -12,12 +12,13 @@ import { Button, Typography, styled } from '@mui/material';
 function ExamTaking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
+    const studentId = params.studentId as string;
     const navigate = useNavigate();
     const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
     const mutation = useMutation({
         mutationFn: api.endAttempt,
         onSuccess: () => {
-            navigate('/student/exam-done');
+            navigate(`/student/${studentId}/exam-done`);
         },
     });
 

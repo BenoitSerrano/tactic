@@ -19,7 +19,7 @@ function StudentHome() {
     const createAttemptMutation = useMutation({
         mutationFn: api.createAttempt,
         onSuccess: (attempt: any) => {
-            navigate(`/student/attempts/${attempt.id}`);
+            navigate(`/student/${studentId}/attempts/${attempt.id}`);
         },
     });
 
@@ -35,7 +35,7 @@ function StudentHome() {
     }
 
     if (query.data.length > 0) {
-        navigate(`/student/attempts/${query.data[0].id}`);
+        navigate(`/student/${studentId}/attempts/${query.data[0].id}`);
         return <div />;
     }
 

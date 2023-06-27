@@ -9,6 +9,9 @@ export class Student {
     @Column({ default: '' })
     email: string;
 
+    @Column({ nullable: true })
+    comment?: string;
+
     @OneToMany(() => Attempt, (attempt) => attempt.student)
     attempts: Attempt[];
 }

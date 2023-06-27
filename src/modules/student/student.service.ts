@@ -6,6 +6,7 @@ export { buildStudentService };
 function buildStudentService() {
     const studentService = {
         createStudent,
+        patchStudent,
         createStudents,
         getStudentsWithAttempts,
         getStudentId,
@@ -39,5 +40,12 @@ function buildStudentService() {
             return student;
         });
         return studentRepository.save(students);
+    }
+
+    async function patchStudent(studentId: string, { comment }: { comment: string }) {
+        const studentRepository = dataSource.getRepository(Student);
+
+        const result = await studentRepository.update({ id: studentId }, { comment });
+        return result.affected == 1;
     }
 }

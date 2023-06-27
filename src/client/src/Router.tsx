@@ -24,8 +24,8 @@ function Router() {
             <Route path="/teacher/attempts/:attemptId" element={<ExamChecking />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
-            <Route path="/student/attempts/:attemptId" element={<ExamTaking />} />
-            <Route path="/student/exam-done" element={<ExamDone />} />
+            <Route path="/student/:studentId/attempts/:attemptId" element={<ExamTaking />} />
+            <Route path="/student/:studentId/exam-done" element={<ExamDone />} />
             <Route
                 path="/student/attempt-already-submitted"
                 element={<AttemptAlreadySubmitted />}

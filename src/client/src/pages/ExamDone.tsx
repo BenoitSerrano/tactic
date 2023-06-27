@@ -1,7 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Button, TextField, styled } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { api } from '../lib/api';
 
 function ExamDone() {
-    return <div>Merci, vos résultats ont bien été pris en compte</div>;
+    const [comment, setComment] = useState('');
+    const params = useParams();
+    const studentId = params.studentId as string;
+    return (
+        <MainContainer>
+            <TopContainer>
+                <LeftContainer>
+                    Merci d'avoir passé le test. S'il y a des informations sur vous que vous
+                    souhaitez nous faire connaître, ou si vous avez des besoins spécifiques (par
+                    exemple dyslexie, troubles de l'attention, autisme...), vous pouvez les indiquer
+                    ci-dessous ou écrire à Hélène Boisson (helene.boisson@ens.psl.eu)
+                </LeftContainer>
+                <RightContainer>
+                    Thank you for completing the test. If there is any information you would like to
+                    share with us or if you have specific needs (for instance dyslexia, ADHD,
+                    autism...), you can let us know here or write an email to Hélène Boisson
+                    (helene.boisson@ens.psl.eu)
+                </RightContainer>
+            </TopContainer>
+
+            <BottomContainer>
+                <TextField
+                    label="Commentaires"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={comment}
+                    onChange={(event) => setComment(event.target.value)}
+                />
+                <Button disabled={!comment} variant="contained" onClick={sendComment}>
+                    Envoyer
+                </Button>
+            </BottomContainer>
+        </MainContainer>
+    );
+
+    async function sendComment() {
+        await api.patchComment(studentId, comment);
+        alert('Your comment has been sent. You can now close this tab.');
+    }
 }
+
+const MainContainer = styled('div')({
+    width: '100%',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    textAlign: 'justify',
+});
+const LeftContainer = styled('div')({ padding: '20px' });
+const RightContainer = styled('div')({ fontStyle: 'italic', padding: '20px' });
+const BottomContainer = styled('div')({
+    width: '50%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+});
+const TopContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+    width: '50%',
+    marginBottom: '24px',
+});
 
 export { ExamDone };

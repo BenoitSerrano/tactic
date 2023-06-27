@@ -7,6 +7,7 @@ function buildStudentController() {
     const studentController = {
         createStudent,
         createStudents,
+        patchStudent,
         getStudentsWithAttempts,
         getStudentId,
     };
@@ -19,6 +20,15 @@ function buildStudentController() {
 
     async function createStudents(params: { body: { emails: string[] } }) {
         return studentService.createStudents(params.body.emails);
+    }
+
+    async function patchStudent(params: {
+        urlParams: { studentId: string };
+        body: { comment: string };
+    }) {
+        return studentService.patchStudent(params.urlParams.studentId, {
+            comment: params.body.comment,
+        });
     }
 
     async function getStudentsWithAttempts() {

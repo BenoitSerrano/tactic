@@ -1,6 +1,7 @@
 import { config } from '../config';
 
 const api = {
+    patchComment,
     createOrUpdateQcmAnswer,
     createOrUpdateQuestionTrouAnswer,
     searchAttempt,
@@ -23,6 +24,19 @@ const api = {
 };
 
 const BASE_URL = `${config.API_URL}/api`;
+
+async function patchComment(studentId: string, comment: string) {
+    const URL = `${BASE_URL}/students/${studentId}`;
+    const response = await fetch(URL, {
+        method: 'PATCH',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ comment }),
+    });
+    return response.json();
+}
 
 async function createOrUpdateQcmAnswer({
     attemptId,

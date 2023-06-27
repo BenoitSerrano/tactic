@@ -19,6 +19,14 @@ const qcmAnswerController = buildQcmAnswerController();
 const questionTrouAnswerController = buildQuestionTrouAnswerController();
 
 router.get('/students', buildController(studentController.getStudentsWithAttempts));
+router.patch(
+    '/students/:studentId',
+    buildController(studentController.patchStudent, {
+        schema: Joi.object({
+            comment: Joi.string().required(),
+        }),
+    }),
+);
 router.get('/students/:email', buildController(studentController.getStudentId));
 router.post(
     '/students',
