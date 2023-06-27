@@ -2,6 +2,20 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
+import {
+    Button,
+    Icon,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography,
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -17,22 +31,42 @@ function Exams() {
 
     return (
         <div>
-            <h1>Liste des examens créés</h1>
-            <ul>
-                {query.data?.map((exam: any) => {
-                    return (
-                        <li key={exam.id}>
-                            {exam.name} : <Link to={`/teacher/exams/${exam.id}/edit`}>Éditer</Link>{' '}
-                            |{' '}
-                            <Link to={`/teacher/exams/${exam.id}/results`}>Voir les résultats</Link>{' '}
-                            |
-                            <button onClick={buildCopyExamLinkToClipboard(exam.id)}>
-                                Copier le lien vers l'examen à partager aux étudiant.es
-                            </button>
-                        </li>
-                    );
-                })}
-            </ul>
+            <Typography variant="h1">Liste des examens créés</Typography>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Nom de l'examen</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {query.data?.map((exam: any) => (
+                        <TableRow key={exam.id}>
+                            <TableCell>{exam.name}</TableCell>
+                            <TableCell>
+                                <IconButton
+                                    title="Editer"
+                                    onClick={buildNavigateToEdition(exam.id)}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    title="Voir les copies des étudiant.es"
+                                    onClick={buildNavigateToResults(exam.id)}
+                                >
+                                    <RateReviewIcon />
+                                </IconButton>
+                                <IconButton
+                                    title="Copier le lien à partager aux étudiant.es"
+                                    onClick={buildCopyExamLinkToClipboard(exam.id)}
+                                >
+                                    <ContentCopyIcon />
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
             <hr />
             <input
                 placeholder="Nom de l'examen"
@@ -53,6 +87,14 @@ function Exams() {
 
     async function createExam() {
         mutation.mutate({ name: newExamName, duration: newExamDuration });
+    }
+
+    function buildNavigateToEdition(examId: string) {
+        return () => navigate(`/teacher/exams/${examId}/edit`);
+    }
+
+    function buildNavigateToResults(examId: string) {
+        return () => navigate(`/teacher/exams/${examId}/results`);
     }
 
     function buildCopyExamLinkToClipboard(examId: string) {
