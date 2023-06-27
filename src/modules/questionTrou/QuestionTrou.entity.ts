@@ -12,7 +12,7 @@ export class QuestionTrou {
     @Column()
     afterText: string;
 
-    @Column('int', { default: 1 })
+    @Column('float', { default: 1.0 })
     points: number;
 
     @Column('simple-array', { default: '' })

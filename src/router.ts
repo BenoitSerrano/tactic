@@ -80,6 +80,7 @@ router.patch(
             afterText: Joi.string().allow(''),
             rightAnswers: Joi.array().items(Joi.string().allow('')),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
+            points: Joi.number().allow(''),
         }),
     }),
 );

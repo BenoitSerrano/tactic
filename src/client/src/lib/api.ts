@@ -240,6 +240,7 @@ async function updateQuestionTrou(params: {
     afterText?: string;
     rightAnswers?: string[];
     acceptableAnswers?: string[];
+    points?: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/questions-trou/${params.questionTrouId}`;
     const body = JSON.stringify({
@@ -247,6 +248,7 @@ async function updateQuestionTrou(params: {
         afterText: params.afterText,
         rightAnswers: params.rightAnswers,
         acceptableAnswers: params.acceptableAnswers,
+        points: params.points,
     });
     const response = await fetch(URL, {
         method: 'PATCH',

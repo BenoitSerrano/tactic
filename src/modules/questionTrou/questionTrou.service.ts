@@ -50,13 +50,15 @@ function buildQuestionTrouService() {
         afterText,
         rightAnswers,
         acceptableAnswers,
+        points,
     }: {
-        examId: string;
-        questionTrouId: number;
-        beforeText: string;
-        afterText: string;
-        rightAnswers: string[];
-        acceptableAnswers: string[];
+        examId?: string;
+        questionTrouId?: number;
+        beforeText?: string;
+        afterText?: string;
+        rightAnswers?: string[];
+        acceptableAnswers?: string[];
+        points?: number;
     }) {
         const questionTrou = await questionTrouRepository.findOneOrFail({
             where: { exam: { id: examId }, id: questionTrouId },
@@ -73,6 +75,10 @@ function buildQuestionTrouService() {
         if (acceptableAnswers !== undefined) {
             questionTrou.acceptableAnswers = acceptableAnswers;
         }
+        if (points !== undefined) {
+            questionTrou.points = points;
+        }
+        console.log(questionTrou);
 
         return questionTrouRepository.save(questionTrou);
     }

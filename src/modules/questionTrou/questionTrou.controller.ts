@@ -18,10 +18,11 @@ function buildQuestionTrouController() {
     async function updateQuestionTrou(params: {
         urlParams: { examId: string; questionTrouId: string };
         body: {
-            beforeText: string;
-            afterText: string;
-            rightAnswers: string[];
-            acceptableAnswers: string[];
+            beforeText?: string;
+            afterText?: string;
+            rightAnswers?: string[];
+            acceptableAnswers?: string[];
+            points?: number;
         };
     }) {
         return questionTrouService.updateQuestionTrou({
@@ -31,6 +32,7 @@ function buildQuestionTrouController() {
             afterText: params.body.afterText,
             acceptableAnswers: params.body.acceptableAnswers,
             rightAnswers: params.body.rightAnswers,
+            points: params.body.points,
         });
     }
 }

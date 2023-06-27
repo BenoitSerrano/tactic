@@ -13,8 +13,10 @@ function QuestionTrouEdition(props: {
         acceptableAnswers: string[];
         rightAnswers: string[];
         order: number;
+        points: number;
     };
 }) {
+    const [points, setPoints] = useState(`${props.questionTrou.points}`);
     const [rightAnswers, setRightAnswers] = useState(props.questionTrou.rightAnswers.join(','));
     const [acceptableAnswers, setAcceptableAnswers] = useState(
         props.questionTrou.acceptableAnswers.join(','),
@@ -60,6 +62,7 @@ function QuestionTrouEdition(props: {
                 value={acceptableAnswers}
                 onChange={onChangeAcceptableAnswers}
             />
+            <TextField value={points} onChange={onChangePoints} label="Point(s) pour la question" />
         </div>
     );
 
@@ -115,6 +118,20 @@ function QuestionTrouEdition(props: {
                     .filter(Boolean),
             });
         })(event.target.value);
+    }
+
+    function onChangePoints(event: React.ChangeEvent<HTMLInputElement>) {
+        setPoints(event.target.value);
+
+        const castValue = Number(event.target.value);
+        console.log(castValue);
+        if (!isNaN(castValue)) {
+            updateQuestionTrouMutation.mutate({
+                examId: props.examId,
+                questionTrouId: props.questionTrou.id,
+                points: castValue,
+            });
+        }
     }
 }
 

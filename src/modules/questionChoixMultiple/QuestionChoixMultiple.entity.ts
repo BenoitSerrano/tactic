@@ -15,7 +15,7 @@ export class QuestionChoixMultiple {
     @Column('int')
     rightAnswerIndex: number;
 
-    @Column('int', { default: 1 })
+    @Column('float', { default: 1.0 })
     points: number;
 
     @Column('int')
