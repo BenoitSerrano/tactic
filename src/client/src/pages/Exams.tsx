@@ -28,6 +28,7 @@ function Exams() {
             navigate(`/teacher/exams/${exam.id}/edit`);
         },
     });
+    console.log(query.data);
 
     return (
         <div>

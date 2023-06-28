@@ -78,7 +78,6 @@ function buildQuestionTrouService() {
         if (points !== undefined) {
             questionTrou.points = points;
         }
-        console.log(questionTrou);
 
         return questionTrouRepository.save(questionTrou);
     }

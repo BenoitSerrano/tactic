@@ -50,7 +50,6 @@ function QuestionChoixMultipleAnswering(props: {
 
     function onChooseQcmAnswer(event: ChangeEvent<HTMLInputElement>) {
         const newChoice = Number(event.target.value);
-        console.log(newChoice);
         setChoice(newChoice);
         upsertQcmAnswerMutation.mutate({
             attemptId: props.attemptId,

@@ -124,7 +124,6 @@ function QuestionTrouEdition(props: {
         setPoints(event.target.value);
 
         const castValue = Number(event.target.value);
-        console.log(castValue);
         if (!isNaN(castValue)) {
             updateQuestionTrouMutation.mutate({
                 examId: props.examId,
