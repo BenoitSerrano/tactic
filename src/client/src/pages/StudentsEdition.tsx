@@ -95,7 +95,15 @@ function StudentsEdition() {
     }
 
     function buildDeleteStudent(studentId: string) {
-        return () => deleteStudentMutation.mutate(studentId);
+        return () => {
+            // eslint-disable-next-line no-restricted-globals
+            const hasConfirmed = confirm(
+                'Souhaitez-vous réellement supprimer cet.te étudiant.e ? Tous ses résultats aux examens seront également supprimés.',
+            );
+            if (hasConfirmed) {
+                deleteStudentMutation.mutate(studentId);
+            }
+        };
     }
 
     async function importStudentEmails() {
