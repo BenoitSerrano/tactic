@@ -5,7 +5,10 @@ import { Typography } from '@mui/material';
 function AttemptAlreadySubmitted() {
     return (
         <Page>
-            <Typography>Vous avez déjà soumis vos réponses pour cet examen.</Typography>
+            <Typography>
+                Vos réponses ont bien été enregistrées. Vous recevrez la confirmation de votre
+                groupe avant le stage de septembre.
+            </Typography>
         </Page>
     );
 }

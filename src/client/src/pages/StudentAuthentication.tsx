@@ -20,7 +20,7 @@ function StudentAuthentication() {
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                 />
-                <Button variant="contained" onClick={login}>
+                <Button variant="contained" onClick={login} disabled={!email}>
                     Se connecter
                 </Button>
             </ContentContainer>
@@ -28,14 +28,9 @@ function StudentAuthentication() {
     );
 
     async function login() {
-        const studentId = await getStudentId(email);
-        navigate(`/student/exams/${examId}/students/${studentId}`);
-    }
-
-    async function getStudentId(email: string) {
         try {
-            const result = await api.fetchStudentId(email.trim().toLowerCase());
-            return result.id;
+            const studentId = await getStudentId(email);
+            navigate(`/student/exams/${examId}/students/${studentId}`);
         } catch (error) {
             console.warn(error);
             alert(
@@ -43,15 +38,12 @@ function StudentAuthentication() {
             );
         }
     }
-}
 
-const Container = styled('div')({
-    display: 'flex',
-    width: '100%',
-    height: '100vh',
-    justifyContent: 'center',
-    alignItems: 'center',
-});
+    async function getStudentId(email: string) {
+        const result = await api.fetchStudentId(email.trim().toLowerCase());
+        return result.id;
+    }
+}
 
 const ContentContainer = styled('div')({
     display: 'flex',

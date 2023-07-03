@@ -54,13 +54,14 @@ function StudentHome() {
                 <p>
                     <Typography>
                         <em>
-                            If you have never studied French, click on "I have never studied French"
-                            below!
+                            If you have studied French, even at a basic level or a long time ago,
+                            you have to take the test. But if you have never studied French, click
+                            on "I have never studied French" below!
                         </em>
                     </Typography>
                 </p>
                 <Button variant="contained" onClick={launchExam}>
-                    I have studied French (even at a basic level)
+                    Passer le test
                 </Button>
                 <Button onClick={openModaleConfirmation}>I have never studied French</Button>
             </ContentContainer>
