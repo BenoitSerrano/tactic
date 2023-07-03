@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
+import { Button, TextField, styled } from '@mui/material';
 
 function StudentAuthentication() {
     const params = useParams();
@@ -10,15 +11,19 @@ function StudentAuthentication() {
     const [email, setEmail] = useState('');
 
     return (
-        <div>
-            <input
-                placeholder="Adresse e-mail"
-                name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-            />
-            <button onClick={login}>Se connecter</button>
-        </div>
+        <Container>
+            <ContentContainer>
+                <TextField
+                    placeholder="Adresse e-mail"
+                    name="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                />
+                <Button variant="contained" onClick={login}>
+                    Se connecter
+                </Button>
+            </ContentContainer>
+        </Container>
     );
 
     async function login() {
@@ -38,5 +43,19 @@ function StudentAuthentication() {
         }
     }
 }
+
+const Container = styled('div')({
+    display: 'flex',
+    width: '100%',
+    height: '100vh',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
+
+const ContentContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
 
 export { StudentAuthentication };
