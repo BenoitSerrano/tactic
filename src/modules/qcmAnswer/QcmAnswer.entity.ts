@@ -17,6 +17,6 @@ export class QcmAnswer {
     @ManyToOne(() => QuestionChoixMultiple)
     questionChoixMultiple: QuestionChoixMultiple;
 
-    @ManyToOne(() => Attempt)
+    @ManyToOne(() => Attempt, { onDelete: 'CASCADE' })
     attempt: Attempt;
 }

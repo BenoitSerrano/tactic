@@ -27,6 +27,7 @@ router.patch(
         }),
     }),
 );
+router.delete('/students/:studentId', buildController(studentController.deleteStudent));
 router.get('/students/:email', buildController(studentController.getStudentId));
 router.post(
     '/students',

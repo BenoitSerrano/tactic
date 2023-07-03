@@ -14,6 +14,6 @@ export class QuestionTrouAnswer {
     @ManyToOne(() => QuestionTrou)
     questionTrou: QuestionTrou;
 
-    @ManyToOne(() => Attempt)
+    @ManyToOne(() => Attempt, { onDelete: 'CASCADE' })
     attempt: Attempt;
 }

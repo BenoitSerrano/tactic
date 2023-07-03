@@ -24,7 +24,7 @@ export class Attempt {
     @Column({ type: 'timestamptz', nullable: true })
     endedAt: string;
 
-    @ManyToOne(() => Student)
+    @ManyToOne(() => Student, { onDelete: 'CASCADE' })
     student: Student;
 
     @ManyToOne(() => Exam)

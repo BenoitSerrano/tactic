@@ -13,6 +13,7 @@ const api = {
     fetchStudentId,
     createStudent,
     createStudents,
+    deleteStudent,
     createExam,
     fetchExam,
     fetchExams,
@@ -124,6 +125,14 @@ async function fetchStudentId(email: string) {
     const URL = `${BASE_URL}/students/${email}`;
     const response = await fetch(URL, {
         method: 'GET',
+    });
+    return response.json();
+}
+
+async function deleteStudent(studentId: string) {
+    const URL = `${BASE_URL}/students/${studentId}`;
+    const response = await fetch(URL, {
+        method: 'DELETE',
     });
     return response.json();
 }

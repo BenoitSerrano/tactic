@@ -10,6 +10,7 @@ function buildStudentController() {
         patchStudent,
         getStudentsWithAttempts,
         getStudentId,
+        deleteStudent,
     };
 
     return studentController;
@@ -37,5 +38,9 @@ function buildStudentController() {
 
     async function getStudentId(params: { urlParams: { email: string } }) {
         return studentService.getStudentId(params.urlParams.email);
+    }
+
+    async function deleteStudent(params: { urlParams: { studentId: string } }) {
+        return studentService.deleteStudent(params.urlParams.studentId);
     }
 }

@@ -10,6 +10,7 @@ function buildStudentService() {
         createStudents,
         getStudentsWithAttempts,
         getStudentId,
+        deleteStudent,
     };
 
     return studentService;
@@ -46,6 +47,13 @@ function buildStudentService() {
         const studentRepository = dataSource.getRepository(Student);
 
         const result = await studentRepository.update({ id: studentId }, { comment });
+        return result.affected == 1;
+    }
+
+    async function deleteStudent(studentId: string) {
+        const studentRepository = dataSource.getRepository(Student);
+
+        const result = await studentRepository.delete({ id: studentId });
         return result.affected == 1;
     }
 }
