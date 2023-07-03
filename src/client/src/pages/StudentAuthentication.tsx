@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { Button, TextField, styled } from '@mui/material';
+import { Page } from '../components/Page';
 
 function StudentAuthentication() {
     const params = useParams();
@@ -11,10 +12,10 @@ function StudentAuthentication() {
     const [email, setEmail] = useState('');
 
     return (
-        <Container>
+        <Page>
             <ContentContainer>
                 <TextField
-                    placeholder="Adresse e-mail"
+                    label="Adresse e-mail"
                     name="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
@@ -23,7 +24,7 @@ function StudentAuthentication() {
                     Se connecter
                 </Button>
             </ContentContainer>
-        </Container>
+        </Page>
     );
 
     async function login() {

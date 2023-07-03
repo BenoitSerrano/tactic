@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, styled } from '@mui/material';
+import { Button, Modal, Typography, styled } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
@@ -41,20 +41,34 @@ function StudentHome() {
 
     return (
         <Page>
-            <div>
-                Complétez les phrases suivantes. Conjuguez le verbe ou ajoutez l’élément grammatical
-                qui manque. Un seul objectif : trouver le cours le plus utile pour vous ! Chaque
-                étudiant.e s’engage sur l’honneur à faire le test en 15 minutes maximum, sans
-                utiliser aucun document et sans faire aucune recherche en ligne. Si vous ne savez
-                pas, pas de stress : laissez juste la question en blanc.
-            </div>
-            <Button variant="contained" onClick={launchExam}>
-                I have studied French (even at a basic level)
-            </Button>
-            <Button onClick={openModaleConfirmation}>I have never studied French</Button>
+            <ContentContainer>
+                <p>
+                    <Typography>
+                        L'objectif de ce test est de trouver le cours le plus adapté à votre niveau.
+                        Chaque étudiant.e s’engage sur l’honneur à faire le test en 15 minutes
+                        maximum, sans utiliser aucun document et sans faire aucune recherche en
+                        ligne. Si vous ne savez pas, pas de stress : laissez juste la question en
+                        blanc.
+                    </Typography>
+                </p>
+                <p>
+                    <Typography>
+                        <em>
+                            If you have never studied French, click on "I have never studied French"
+                            below!
+                        </em>
+                    </Typography>
+                </p>
+                <Button variant="contained" onClick={launchExam}>
+                    I have studied French (even at a basic level)
+                </Button>
+                <Button onClick={openModaleConfirmation}>I have never studied French</Button>
+            </ContentContainer>
             <Modal open={isConfirmationModalOpen} onClose={closeConfirmationModal}>
                 <ModalContent>
-                    Do you confirm that you've never studied French?
+                    <p>
+                        <Typography>Do you confirm that you've never studied French?</Typography>
+                    </p>
                     <div>
                         <Button onClick={closeConfirmationModal}>Cancel</Button>
                         <Button variant="contained" onClick={launchAndEndExam}>
@@ -87,14 +101,21 @@ function StudentHome() {
 export { StudentHome };
 
 const ModalContent = styled('div')({
-    backgroundColor: 'white',
     borderRadius: '2px',
-    width: '50%',
-    height: '50%',
-    margin: 'auto',
-    top: '25%',
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '40%',
+    height: '40%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: '20px',
+    backgroundColor: 'white',
+});
+
+const ContentContainer = styled('div')({
+    width: '50%',
 });

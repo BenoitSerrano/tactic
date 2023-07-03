@@ -22,14 +22,9 @@ function QuestionTrouAnswering(props: {
     return (
         <StyledContainer>
             <Typography>
-                {props.index + 1}.{props.questionTrou.beforeText}
+                {props.index + 1}. {props.questionTrou.beforeText}
             </Typography>
-            <StyledTextField
-                label="Réponse"
-                value={answer}
-                onChange={onChangeAnswer}
-                placeholder="..."
-            />
+            <StyledTextField value={answer} onChange={onChangeAnswer} placeholder="..." />
             <Typography>{props.questionTrou.afterText}</Typography>
         </StyledContainer>
     );

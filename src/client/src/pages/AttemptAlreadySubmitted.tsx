@@ -1,7 +1,13 @@
 import React from 'react';
+import { Page } from '../components/Page';
+import { Typography } from '@mui/material';
 
 function AttemptAlreadySubmitted() {
-    return <div>Vous avez déjà soumis vos réponses pour cet examen.</div>;
+    return (
+        <Page>
+            <Typography>Vous avez déjà soumis vos réponses pour cet examen.</Typography>
+        </Page>
+    );
 }
 
 export { AttemptAlreadySubmitted };

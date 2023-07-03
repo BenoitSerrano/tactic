@@ -39,32 +39,43 @@ function ExamTaking() {
 
     return (
         <Page>
-            <Typography variant="h1">{query.data.exam.name}</Typography>
-            <CountdownContainer>
-                <Countdown remainingSeconds={remainingSeconds} />
-            </CountdownContainer>
-            {query.data.exam.questionsChoixMultiple.map(
-                (questionChoixMultiple: any, index: number) => (
-                    <QuestionChoixMultipleAnswering
-                        key={questionChoixMultiple.id}
+            <MainContainer>
+                <Typography variant="h1">{query.data.exam.name}</Typography>
+                <CountdownContainer>
+                    <Countdown remainingSeconds={remainingSeconds} />
+                </CountdownContainer>
+                {query.data.exam.questionsChoixMultiple.map(
+                    (questionChoixMultiple: any, index: number) => (
+                        <QuestionChoixMultipleAnswering
+                            key={questionChoixMultiple.id}
+                            attemptId={attemptId}
+                            index={index}
+                            questionChoixMultiple={questionChoixMultiple}
+                        />
+                    ),
+                )}
+                {query.data.exam.questionsTrou.length > 0 && (
+                    <p>
+                        <Typography variant="h5">
+                            Complétez les phrases suivantes. Conjuguez le verbe ou ajoutez l’élément
+                            grammatical qui manque. Si vous ne savez pas, pas de stress : laissez
+                            juste la question en blanc.
+                        </Typography>
+                    </p>
+                )}
+                {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
+                    <QuestionTrouAnswering
+                        key={questionTrou.id}
                         attemptId={attemptId}
                         index={index}
-                        questionChoixMultiple={questionChoixMultiple}
+                        questionTrou={questionTrou}
                     />
-                ),
-            )}
-            {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
-                <QuestionTrouAnswering
-                    key={questionTrou.id}
-                    attemptId={attemptId}
-                    index={index}
-                    questionTrou={questionTrou}
-                />
-            ))}
-            <hr />
-            <Button variant="contained" onClick={validateForm}>
-                Valider le questionnaire
-            </Button>
+                ))}
+                <hr />
+                <Button variant="contained" onClick={validateForm}>
+                    Valider le questionnaire
+                </Button>
+            </MainContainer>
         </Page>
     );
 
@@ -79,4 +90,11 @@ const CountdownContainer = styled('div')({
     position: 'fixed',
     top: 0,
     left: 0,
+});
+
+const MainContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '60%',
 });

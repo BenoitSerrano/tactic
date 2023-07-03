@@ -6,8 +6,10 @@ function Page(props: { children: React.ReactElement | React.ReactElement[] }) {
 }
 
 const Container = styled('div')({
-    paddingLeft: '15%',
-    paddingRight: '15%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
 });
 
 export { Page };
