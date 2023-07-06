@@ -14,6 +14,7 @@ function buildAttemptService() {
         createEmptyAttempt,
         fetchAttempt,
         endAttempt,
+        deleteAttempt,
         assertIsTimeLimitNotExceeded,
     };
 
@@ -103,5 +104,12 @@ function buildAttemptService() {
         }
 
         return false;
+    }
+
+    async function deleteAttempt(attemptId: string) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+
+        const result = await attemptRepository.delete({ id: attemptId });
+        return result.affected == 1;
     }
 }

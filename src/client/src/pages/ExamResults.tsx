@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { api } from '../lib/api';
-import { Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import {
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TableSortLabel,
+} from '@mui/material';
 import { time } from '../lib/time';
 
 type examResultType = {
@@ -24,6 +32,7 @@ type examResultType = {
 type examResultsType = Array<examResultType>;
 
 function ExamResults() {
+    const queryClient = useQueryClient();
     const params = useParams();
     const examId = params.examId as string;
     const query = useQuery<examResultsType>({
@@ -32,6 +41,13 @@ function ExamResults() {
     });
     const [activeSort, setActiveSort] = useState<'email' | 'mark'>('email');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const deleteAttemptMutation = useMutation({
+        mutationFn: api.deleteAttempt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['examResults'] });
+        },
+    });
+
     if (!query.data) {
         return <div />;
     }
@@ -75,6 +91,7 @@ function ExamResults() {
                         </TableSortLabel>
                     </TableCell>
                     <TableCell>Commentaire de l'étudiant.e</TableCell>
+                    <TableCell>Actions</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -87,11 +104,29 @@ function ExamResults() {
                         <TableCell>{result.duration}</TableCell>
                         <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
                         <TableCell>{result.comment || '-'}</TableCell>
+                        <TableCell>
+                            <IconButton
+                                title="Supprimer"
+                                onClick={buildDeleteAttempt(result.attemptId)}
+                            >
+                                <DeleteForeverIcon />
+                            </IconButton>
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
         </Table>
     );
+
+    function buildDeleteAttempt(attemptId: string) {
+        return () => {
+            // eslint-disable-next-line no-restricted-globals
+            const hasConfirmed = confirm('Souhaitez-vous réellement supprimer cette copie ?');
+            if (hasConfirmed) {
+                deleteAttemptMutation.mutate(attemptId);
+            }
+        };
+    }
 
     function formatData(data: examResultType[]) {
         return data.map((result) => {

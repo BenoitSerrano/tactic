@@ -130,4 +130,6 @@ router.post(
     }),
 );
 
+router.delete('/attempts/:attemptId', buildController(attemptController.deleteAttempt));
+
 export { router };

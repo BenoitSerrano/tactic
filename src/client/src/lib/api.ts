@@ -9,6 +9,7 @@ const api = {
     createEmptyAttempt,
     fetchAttempt,
     endAttempt,
+    deleteAttempt,
     fetchStudents,
     fetchStudentId,
     createStudent,
@@ -117,6 +118,14 @@ async function endAttempt(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}/end`;
     const response = await fetch(URL, {
         method: 'PATCH',
+    });
+    return response.json();
+}
+
+async function deleteAttempt(attemptId: string) {
+    const URL = `${BASE_URL}/attempts/${attemptId}`;
+    const response = await fetch(URL, {
+        method: 'DELETE',
     });
     return response.json();
 }

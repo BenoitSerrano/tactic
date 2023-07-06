@@ -10,6 +10,7 @@ function buildAttemptController() {
         searchAttempts,
         fetchAttempt,
         endAttempt,
+        deleteAttempt,
     };
 
     return attemptController;
@@ -37,5 +38,9 @@ function buildAttemptController() {
 
     async function endAttempt(params: { urlParams: { attemptId: string } }) {
         return attemptService.endAttempt(params.urlParams.attemptId);
+    }
+
+    async function deleteAttempt(params: { urlParams: { attemptId: string } }) {
+        return attemptService.deleteAttempt(params.urlParams.attemptId);
     }
 }
