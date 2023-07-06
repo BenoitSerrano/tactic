@@ -16,6 +16,8 @@ function StudentHome() {
         api.searchAttempt({ examId, studentId }),
     );
 
+    const examQuery = useQuery(['exams', examId], () => api.fetchExam(examId));
+
     const createAttemptMutation = useMutation({
         mutationFn: api.createAttempt,
         onSuccess: (attempt: any) => {
@@ -38,9 +40,16 @@ function StudentHome() {
         navigate(`/student/${studentId}/attempts/${query.data[0].id}`);
         return <div />;
     }
+    console.log(examQuery.data);
 
     return (
         <Page>
+            <img
+                width={100}
+                src="https://www.sorbonne.fr/wp-content/uploads/ENS_Logo_TL.jpg"
+                alt="Logo de l'ENS"
+            />
+            {examQuery.data && <Typography variant="h4">{examQuery.data.name}</Typography>}
             <ContentContainer>
                 <p>
                     <Typography>

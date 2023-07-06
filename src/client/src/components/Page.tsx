@@ -9,6 +9,7 @@ const Container = styled('div')({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'column',
     minHeight: '100vh',
 });
 

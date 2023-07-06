@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
-import { Button, TextField, styled } from '@mui/material';
+import { Button, TextField, Typography, styled } from '@mui/material';
 import { Page } from '../components/Page';
+import { useQuery } from '@tanstack/react-query';
 
 function StudentAuthentication() {
     const params = useParams();
     const examId = params.examId as string;
+    const query = useQuery(['exams', examId], () => api.fetchExam(examId));
+
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
 
     return (
         <Page>
+            <TitleContainer>
+                <img
+                    width={100}
+                    src="https://www.sorbonne.fr/wp-content/uploads/ENS_Logo_TL.jpg"
+                    alt="Logo de l'ENS"
+                />
+                {query.data && <Typography variant="h4">{query.data.name}</Typography>}
+            </TitleContainer>
             <ContentContainer>
                 <TextField
                     label="Adresse e-mail"
@@ -44,6 +55,14 @@ function StudentAuthentication() {
         return result.id;
     }
 }
+
+const TitleContainer = styled('div')({
+    marginBottom: '12px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
 
 const ContentContainer = styled('div')({
     display: 'flex',
