@@ -40,7 +40,6 @@ function StudentHome() {
         navigate(`/student/${studentId}/attempts/${query.data[0].id}`);
         return <div />;
     }
-    console.log(examQuery.data);
 
     return (
         <Page>
