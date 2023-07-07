@@ -17,11 +17,9 @@ function StudentAuthentication() {
     return (
         <Page>
             <TitleContainer>
-                <img
-                    width={100}
-                    src="https://www.sorbonne.fr/wp-content/uploads/ENS_Logo_TL.jpg"
-                    alt="Logo de l'ENS"
-                />
+                <p>
+                    <img width={100} src="/ENS_Logo.png" alt="Logo de l'ENS" />
+                </p>
                 {query.data && <Typography variant="h4">{query.data.name}</Typography>}
             </TitleContainer>
             <ContentContainer>
