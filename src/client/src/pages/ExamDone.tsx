@@ -69,7 +69,9 @@ function ExamDone() {
 
     async function sendComment() {
         await api.patchComment(studentId, comment);
-        alert('Your comment has been sent. You can now close this tab.');
+        alert(
+            'Votre commentaire a bien été envoyé, merci ! Vous pouvez fermer cette fenêtre.\nYour comment has been sent. You can now close this tab.',
+        );
     }
 }
 
