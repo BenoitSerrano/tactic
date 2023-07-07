@@ -13,7 +13,7 @@ function ExamDone() {
             <MainContainer>
                 <Header>
                     <p>
-                        <Typography variant="h5">
+                        <Typography variant="h4">
                             Merci d'avoir répondu au test, vos réponses ont été enregistrées. Vous
                             recevrez un message avant le stage de septembre pour vous indiquer dans
                             quel groupe vous serez.
@@ -70,7 +70,7 @@ function ExamDone() {
     async function sendComment() {
         await api.patchComment(studentId, comment);
         alert(
-            'Votre commentaire a bien été envoyé, merci ! Vous pouvez fermer cette fenêtre.\nYour comment has been sent. You can now close this tab.',
+            'Votre commentaire a bien été envoyé, merci ! Vous pouvez fermer cette fenêtre.\nYour comment has been sent, thank you! You can now close this tab.',
         );
     }
 }

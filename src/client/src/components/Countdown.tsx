@@ -17,7 +17,7 @@ function Countdown(props: { remainingSeconds: number }) {
     const countdownColor = computeColor(seconds);
 
     return (
-        <Typography variant="subtitle1" color={countdownColor}>
+        <Typography variant="h3" color={countdownColor}>
             {time.formatToClock(seconds)}
         </Typography>
     );

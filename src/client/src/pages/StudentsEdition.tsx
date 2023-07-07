@@ -45,7 +45,7 @@ function StudentsEdition() {
 
     return (
         <div>
-            <Typography variant="h1">Liste des étudiant.es créé.es</Typography>
+            <Typography variant="h1">Étudiant.es</Typography>
             <Table>
                 <TableHead>
                     <TableRow>

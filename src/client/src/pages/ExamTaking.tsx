@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { QuestionChoixMultipleAnswering } from '../components/QuestionChoixMultipleAnswering';
 import { Countdown } from '../components/Countdown';
@@ -45,7 +45,7 @@ function ExamTaking() {
                 )}
                 {query.data.exam.questionsTrou.length > 0 && (
                     <p>
-                        <Typography variant="h5">
+                        <Typography variant="h2">
                             Complétez les phrases suivantes. Conjuguez le verbe ou ajoutez l’élément
                             grammatical qui manque. Si vous ne savez pas, pas de stress : laissez
                             juste la question en blanc.
@@ -69,7 +69,7 @@ function ExamTaking() {
     );
 
     function validateForm() {
-        navigate(`/student/${studentId}/exam-done`);
+        navigate(`/student/students/${studentId}/exam-done`);
     }
 }
 

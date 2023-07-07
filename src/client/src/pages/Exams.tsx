@@ -31,7 +31,7 @@ function Exams() {
 
     return (
         <div>
-            <Typography variant="h1">Liste des examens créés</Typography>
+            <Typography variant="h1">Examens</Typography>
             <Table>
                 <TableHead>
                     <TableRow>
