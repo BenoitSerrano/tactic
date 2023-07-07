@@ -31,6 +31,8 @@ type examResultType = {
 
 type examResultsType = Array<examResultType>;
 
+type sortColumnType = 'email' | 'mark' | 'startedAt';
+
 function ExamResults() {
     const queryClient = useQueryClient();
     const params = useParams();
@@ -39,7 +41,7 @@ function ExamResults() {
         queryKey: ['examResults', examId],
         queryFn: () => api.fetchExamResults(examId),
     });
-    const [activeSort, setActiveSort] = useState<'email' | 'mark'>('email');
+    const [activeSort, setActiveSort] = useState<sortColumnType>('email');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const deleteAttemptMutation = useMutation({
         mutationFn: api.deleteAttempt,
@@ -74,7 +76,20 @@ function ExamResults() {
                             Adresse e-mail
                         </TableSortLabel>
                     </TableCell>
-                    <TableCell>Heure de début du test</TableCell>
+                    <TableCell>
+                        <TableSortLabel
+                            active={activeSort === 'startedAt'}
+                            direction={sortDirection}
+                            onClick={() => {
+                                if (activeSort !== 'startedAt') {
+                                    setActiveSort('startedAt');
+                                }
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                            }}
+                        >
+                            Heure de début du test
+                        </TableSortLabel>
+                    </TableCell>
                     <TableCell>Durée</TableCell>
                     <TableCell>
                         <TableSortLabel
@@ -100,7 +115,7 @@ function ExamResults() {
                         <TableCell>
                             <Link to={`/teacher/attempts/${result.attemptId}`}>{result.email}</Link>
                         </TableCell>
-                        <TableCell>{result.startedAt}</TableCell>
+                        <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
                         <TableCell>{result.duration}</TableCell>
                         <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
                         <TableCell>{result.comment || '-'}</TableCell>
@@ -134,7 +149,7 @@ function ExamResults() {
             return {
                 email: result.email,
                 attemptId: result.attemptId,
-                startedAt: time.formatToReadableDatetime(result.startedAt),
+                startedAt: result.startedAt,
                 duration:
                     result.duration !== undefined
                         ? time.formatToClock(result.duration, { hideHours: true })
@@ -146,9 +161,9 @@ function ExamResults() {
         });
     }
 
-    function sortData<T extends { email: string; mark: number }>(
+    function sortData<T extends { email: string; mark: number; startedAt: number }>(
         data: Array<T>,
-        activeSort: 'email' | 'mark',
+        activeSort: sortColumnType,
         sortDirection: 'asc' | 'desc',
     ): Array<T> {
         return data.sort((resultA, resultB) => {
@@ -159,6 +174,9 @@ function ExamResults() {
                     break;
                 case 'mark':
                     result = resultA.mark - resultB.mark;
+                    break;
+                case 'startedAt':
+                    result = resultA.startedAt - resultB.startedAt;
             }
             if (sortDirection === 'asc') {
                 return result;
