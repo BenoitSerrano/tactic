@@ -8,7 +8,6 @@ const api = {
     createAttempt,
     createEmptyAttempt,
     fetchAttempt,
-    endAttempt,
     deleteAttempt,
     fetchStudents,
     fetchStudentId,
@@ -110,14 +109,6 @@ async function fetchAttempt(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
     const response = await fetch(URL, {
         method: 'GET',
-    });
-    return response.json();
-}
-
-async function endAttempt(attemptId: string) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/end`;
-    const response = await fetch(URL, {
-        method: 'PATCH',
     });
     return response.json();
 }

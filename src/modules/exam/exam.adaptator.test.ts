@@ -10,7 +10,7 @@ describe('examAdaptator', () => {
                 {
                     id: 'e056210f-19a7-4e85-9c99-d29c8b6410ee',
                     startedAt: '2023-06-15T15:05:39.616Z',
-                    endedAt: '2023-06-15T15:15:39.616Z',
+                    updatedAt: '2023-06-15T15:15:39.616Z',
                     student: {
                         id: 'edf0f1b0-d6a5-4603-b7e3-805828e76f72',
                         email: 'soeren.larsen@truc.machin',
@@ -49,7 +49,7 @@ describe('examAdaptator', () => {
                 {
                     id: 'ff199468-6420-41ef-b15e-bca4138fae4d',
                     startedAt: '2023-06-15T15:06:04.122Z',
-                    endedAt: undefined,
+                    updatedAt: undefined,
                     student: {
                         id: '20d07fd1-16f8-4131-a73c-03fc099a8330',
                         email: 'theobald.beltran@truc.machin',
@@ -158,7 +158,7 @@ describe('examAdaptator', () => {
                 {
                     id: 'a7ff95b3-e0de-4757-91de-1edef2a30224',
                     startedAt: '2023-06-20T20:17:45.661Z',
-                    endedAt: '2023-06-20T20:28:45.661Z',
+                    updatedAt: '2023-06-20T20:28:45.661Z',
                     student: {
                         id: '1da8c428-23fd-468a-9caa-c2d989dd643e',
                         email: 'chiara.atamea@proton.me',

@@ -13,9 +13,9 @@ function buildAttemptService() {
         createAttempt,
         createEmptyAttempt,
         fetchAttempt,
-        endAttempt,
         deleteAttempt,
         assertIsTimeLimitNotExceeded,
+        updateAttemptDuration,
     };
 
     return studentService;
@@ -53,7 +53,7 @@ function buildAttemptService() {
         const attempt = await attemptRepository.save({
             exam,
             student,
-            endedAt: 'NOW()',
+            updatedAt: 'NOW()',
         });
 
         return attempt;
@@ -86,24 +86,18 @@ function buildAttemptService() {
 
     async function assertIsTimeLimitNotExceeded(attempt: Attempt) {
         if (attemptUtils.isTimeLimitExceeded(attempt, new Date())) {
-            endAttempt(attempt.id);
             throw new Error(`The time limit is exceeded!`);
         }
     }
 
-    async function endAttempt(attemptId: string) {
+    async function updateAttemptDuration(attemptId: string) {
         const attemptRepository = dataSource.getRepository(Attempt);
 
-        const attempt = await attemptRepository.findOneByOrFail({ id: attemptId });
-        if (!attempt.endedAt) {
-            const result = await attemptRepository.update(
-                { id: attemptId },
-                { endedAt: () => 'CURRENT_TIMESTAMP' },
-            );
-            return result.affected == 1;
-        }
-
-        return false;
+        const result = await attemptRepository.update(
+            { id: attemptId },
+            { updatedAt: () => 'CURRENT_TIMESTAMP' },
+        );
+        return result.affected == 1;
     }
 
     async function deleteAttempt(attemptId: string) {

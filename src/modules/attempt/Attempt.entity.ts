@@ -22,7 +22,7 @@ export class Attempt {
     startedAt: string;
 
     @Column({ type: 'timestamptz', nullable: true })
-    endedAt: string;
+    updatedAt: string;
 
     @ManyToOne(() => Student, { onDelete: 'CASCADE' })
     student: Student;

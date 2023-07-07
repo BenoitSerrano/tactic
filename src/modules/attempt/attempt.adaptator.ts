@@ -31,7 +31,7 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
     return {
         id: attempt.id,
         startedAt: attempt.startedAt,
-        endedAt: attempt.endedAt,
+        updatedAt: attempt.updatedAt,
         exam: {
             id: attempt.exam.id,
             name: attempt.exam.name,

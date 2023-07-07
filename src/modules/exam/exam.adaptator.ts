@@ -10,8 +10,8 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
     const examWithResults = examWithAttempts.attempts.map((attempt) => {
         const student = attempt.student;
         const startedAtDate = new Date(attempt.startedAt);
-        const duration = attempt.endedAt
-            ? Math.floor((new Date(attempt.endedAt).getTime() - startedAtDate.getTime()) / 1000)
+        const duration = attempt.updatedAt
+            ? Math.floor((new Date(attempt.updatedAt).getTime() - startedAtDate.getTime()) / 1000)
             : undefined;
         const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
             attempt.questionTrouAnswers,

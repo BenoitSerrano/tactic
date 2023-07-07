@@ -25,6 +25,7 @@ function buildQcmAnswerService() {
         });
 
         await attemptService.assertIsTimeLimitNotExceeded(attempt);
+        await attemptService.updateAttemptDuration(attempt.id);
 
         const questionChoixMultiple = await questionChoixMultipleRepository.findOneByOrFail({
             id: qcmId,

@@ -29,6 +29,7 @@ function buildQuestionTrouAnswerService() {
         });
 
         await attemptService.assertIsTimeLimitNotExceeded(attempt);
+        await attemptService.updateAttemptDuration(attempt.id);
 
         const questionTrou = await questionTrouRepository.findOneByOrFail({
             id: questionTrouId,

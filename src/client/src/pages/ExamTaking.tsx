@@ -15,25 +15,14 @@ function ExamTaking() {
     const studentId = params.studentId as string;
     const navigate = useNavigate();
     const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
-    const mutation = useMutation({
-        mutationFn: api.endAttempt,
-        onSuccess: () => {
-            navigate(`/student/${studentId}/exam-done`);
-        },
-    });
 
     if (!query.data) {
         return <div />;
     }
 
-    if (query.data.endedAt) {
-        return <Navigate to="/student/attempt-already-submitted" />;
-    }
-
     let remainingSeconds =
         query.data.exam.duration * 60 - time.computeElapsedTime(query.data.startedAt, new Date());
     if (remainingSeconds + query.data.exam.extraTime * 60 < 0) {
-        api.endAttempt(attemptId);
         return <Navigate to="/student/attempt-timeout" />;
     }
 
@@ -80,7 +69,7 @@ function ExamTaking() {
     );
 
     function validateForm() {
-        mutation.mutate(attemptId);
+        navigate(`/student/${studentId}/exam-done`);
     }
 }
 
