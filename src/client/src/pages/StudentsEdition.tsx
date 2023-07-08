@@ -14,6 +14,7 @@ import {
     Typography,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { authentication } from '../lib/authentication';
 
 function StudentsEdition() {
     const queryClient = useQueryClient();
@@ -86,7 +87,7 @@ function StudentsEdition() {
                 <Button onClick={importStudentEmails}>Importer une liste d'étudiant.es</Button>
             </div>
             <hr />
-            <Link to="/teacher">Revenir à l'accueil</Link>
+            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
         </div>
     );
 

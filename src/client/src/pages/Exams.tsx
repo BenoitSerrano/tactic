@@ -16,6 +16,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RateReviewIcon from '@mui/icons-material/RateReview';
+import { authentication } from '../lib/authentication';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -25,7 +26,7 @@ function Exams() {
     const mutation = useMutation({
         mutationFn: api.createExam,
         onSuccess: (exam) => {
-            navigate(`/teacher/exams/${exam.id}/edit`);
+            navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${exam.id}/edit`);
         },
     });
 
@@ -85,7 +86,7 @@ function Exams() {
                 Créer un examen
             </Button>
             <hr />
-            <Link to="/teacher">Revenir à l'accueil</Link>
+            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
         </div>
     );
 
@@ -94,11 +95,13 @@ function Exams() {
     }
 
     function buildNavigateToEdition(examId: string) {
-        return () => navigate(`/teacher/exams/${examId}/edit`);
+        return () =>
+            navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/edit`);
     }
 
     function buildNavigateToResults(examId: string) {
-        return () => navigate(`/teacher/exams/${examId}/results`);
+        return () =>
+            navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/results`);
     }
 
     function buildCopyExamLinkToClipboard(examId: string) {

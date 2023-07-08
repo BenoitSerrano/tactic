@@ -5,6 +5,7 @@ import { api } from '../lib/api';
 import { QuestionChoixMultipleEdition } from '../components/QuestionChoixMultipleEdition';
 import { QuestionTrouEdition } from '../components/QuestionTrouEdition';
 import { Button, styled } from '@mui/material';
+import { authentication } from '../lib/authentication';
 
 const HEADER_SIZE = 50;
 const FOOTER_SIZE = 50;
@@ -67,7 +68,7 @@ function ExamEdition() {
     }
 
     function navigateToExamList() {
-        navigate('/teacher/exams');
+        navigate(`/teacher/${authentication.getEncodedPassword()}/exams`);
     }
 }
 

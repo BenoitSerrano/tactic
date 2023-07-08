@@ -13,6 +13,7 @@ import {
     TableSortLabel,
 } from '@mui/material';
 import { time } from '../lib/time';
+import { authentication } from '../lib/authentication';
 
 type examResultType = {
     id: string;
@@ -113,7 +114,13 @@ function ExamResults() {
                 {sortedData.map((result) => (
                     <TableRow key={result.attemptId}>
                         <TableCell>
-                            <Link to={`/teacher/attempts/${result.attemptId}`}>{result.email}</Link>
+                            <Link
+                                to={`/teacher/${authentication.getEncodedPassword()}/attempts/${
+                                    result.attemptId
+                                }`}
+                            >
+                                {result.email}
+                            </Link>
                         </TableCell>
                         <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
                         <TableCell>{result.duration}</TableCell>

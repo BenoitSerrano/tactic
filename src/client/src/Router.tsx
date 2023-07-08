@@ -12,16 +12,29 @@ import { AttemptAlreadySubmitted } from './pages/AttemptAlreadySubmitted';
 import { AttemptTimeout } from './pages/AttemptTimeout';
 import { StudentHome } from './pages/StudentHome';
 import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
+import { authentication } from './lib/authentication';
+import { TeacherLogin } from './pages/TeacherLogin';
 
 function Router() {
+    const encodedPassword = authentication.getEncodedPassword();
     return (
         <Routes>
-            <Route path="/teacher/exams" element={<Exams />} />
-            <Route path="/teacher/students" element={<StudentsEdition />} />
-            <Route path="/teacher/exams/:examId/edit" element={<ExamEdition />} />
-            <Route path="/teacher/exams/:examId/results" element={<ExamResults />} />
-            <Route path="/teacher" element={<TeacherHome />} />
-            <Route path="/teacher/attempts/:attemptId" element={<ExamChecking />} />
+            <Route path={`/teacher/${encodedPassword}/exams`} element={<Exams />} />
+            <Route path={`/teacher/${encodedPassword}/students`} element={<StudentsEdition />} />
+            <Route
+                path={`/teacher/${encodedPassword}/exams/:examId/edit`}
+                element={<ExamEdition />}
+            />
+            <Route
+                path={`/teacher/${encodedPassword}/exams/:examId/results`}
+                element={<ExamResults />}
+            />
+            <Route
+                path={`/teacher/${encodedPassword}/attempts/:attemptId`}
+                element={<ExamChecking />}
+            />
+            <Route path={`/teacher/${encodedPassword}/`} element={<TeacherHome />} />
+            <Route path="/teacher/login" element={<TeacherLogin />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route

@@ -43,11 +43,7 @@ function StudentHome() {
 
     return (
         <Page>
-            <img
-                width={100}
-                src="https://www.sorbonne.fr/wp-content/uploads/ENS_Logo_TL.jpg"
-                alt="Logo de l'ENS"
-            />
+            <img width={100} src="/ENS_Logo.png" alt="Logo de l'ENS" />
             {examQuery.data && <Typography variant="h4">{examQuery.data.name}</Typography>}
             <ContentContainer>
                 <p>
