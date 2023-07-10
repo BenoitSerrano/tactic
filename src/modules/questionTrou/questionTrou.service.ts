@@ -1,6 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { buildExamService } from '../exam/exam.service';
-import { QuestionTrou } from '.';
+import { QuestionTrou } from './QuestionTrou.entity';
 
 export { buildQuestionTrouService };
 

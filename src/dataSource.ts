@@ -7,6 +7,7 @@ import { QcmAnswer } from './modules/qcmAnswer';
 import { Student } from './modules/student';
 import { QuestionTrou } from './modules/questionTrou';
 import { QuestionTrouAnswer } from './modules/questionTrouAnswer';
+import { PhraseMelangee } from './modules/phraseMelangee';
 
 const dataSource = new DataSource({
     type: 'postgres',
@@ -24,6 +25,7 @@ const dataSource = new DataSource({
         Student,
         QuestionTrou,
         QuestionTrouAnswer,
+        PhraseMelangee,
     ],
     subscribers: [],
     migrations: ['**/migrations/*.js'],

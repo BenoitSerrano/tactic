@@ -71,14 +71,14 @@ function Exams() {
             <hr />
             <TextField
                 label="Nom de l'examen"
-                placeholder="Nom de l'examen"
+                placeholder="..."
                 value={newExamName}
                 onChange={(event) => setNewExamName(event.target.value)}
             />
             <TextField
                 type="number"
                 label="Durée de l'examen en minutes"
-                placeholder="Durée de l'examen en minutes"
+                placeholder="..."
                 value={newExamDuration}
                 onChange={(event) => setNewExamDuration(Number(event.target.value))}
             />

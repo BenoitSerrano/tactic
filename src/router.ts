@@ -8,6 +8,7 @@ import { buildAttemptController } from './modules/attempt';
 import { buildQcmAnswerController } from './modules/qcmAnswer';
 import { buildQuestionTrouController } from './modules/questionTrou';
 import { buildQuestionTrouAnswerController } from './modules/questionTrouAnswer';
+import { buildPhraseMelangeeController } from './modules/phraseMelangee';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -17,6 +18,7 @@ const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
 const qcmAnswerController = buildQcmAnswerController();
 const questionTrouAnswerController = buildQuestionTrouAnswerController();
+const phraseMelangeeController = buildPhraseMelangeeController();
 
 router.get('/students', buildController(studentController.getStudentsWithAttempts));
 router.patch(
@@ -90,6 +92,21 @@ router.patch(
             rightAnswers: Joi.array().items(Joi.string().allow('')),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
             points: Joi.number().allow(''),
+        }),
+    }),
+);
+
+router.post(
+    '/exams/:examId/phrases-melangees',
+    buildController(phraseMelangeeController.createPhraseMelangee),
+);
+
+router.patch(
+    '/exams/:examId/phrases-melangees/:phraseMelangeeId',
+    buildController(phraseMelangeeController.updatePhraseMelangee, {
+        schema: Joi.object({
+            rightCombination: Joi.array().items(Joi.string()),
+            words: Joi.array().items(Joi.string().allow('')),
         }),
     }),
 );

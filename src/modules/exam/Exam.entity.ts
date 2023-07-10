@@ -1,7 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
 import { Attempt } from '../attempt';
-import { QuestionTrou } from '../questionTrou/QuestionTrou.entity';
+import { QuestionTrou } from '../questionTrou';
+import { PhraseMelangee } from '../phraseMelangee';
 
 @Entity()
 export class Exam {
@@ -16,6 +17,9 @@ export class Exam {
 
     @OneToMany(() => QuestionTrou, (questionTrou) => questionTrou.exam)
     questionsTrou: QuestionTrou[];
+
+    @OneToMany(() => PhraseMelangee, (phraseMelangee) => phraseMelangee.exam)
+    phrasesMelangees: PhraseMelangee[];
 
     @OneToMany(() => Attempt, (attempt) => attempt.exam)
     attempts: Attempt[];

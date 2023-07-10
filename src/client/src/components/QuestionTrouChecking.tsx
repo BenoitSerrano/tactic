@@ -21,7 +21,7 @@ function QuestionTrouChecking(props: {
             <StyledText>
                 {props.index + 1}. {props.questionTrou.beforeText}
             </StyledText>
-            <StyledTextField disabled label="Réponse" value={props.questionTrou.answer} />
+            <StyledTextField disabled placeholder="..." value={props.questionTrou.answer} />
             <StyledText>{props.questionTrou.afterText}</StyledText>
         </StyledContainer>
     );
