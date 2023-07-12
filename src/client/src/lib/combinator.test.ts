@@ -21,20 +21,4 @@ describe('combinator', () => {
             expect(combination).toEqual([0, 1, 2, 3, 4]);
         });
     });
-
-    describe('reverse', () => {
-        it('should generate the reverse of a combination', () => {
-            const combination = combinator.generate(count);
-            const reversedCombination = combinator.reverse(combination);
-            const reversedReversedCombination = combinator.reverse(reversedCombination);
-            expect(reversedReversedCombination).toEqual(combination);
-            expect(reversedCombination).not.toEqual(combination);
-        });
-
-        it('should generate the reverse of a simple', () => {
-            const combination = [1, 2, 3, 4, 0];
-            const reversedCombination = combinator.reverse(combination);
-            expect(reversedCombination).toEqual([4, 0, 1, 2, 3]);
-        });
-    });
 });

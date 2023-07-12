@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { debounce } from '../../lib/utils';
 import { api } from '../../lib/api';
-import { TextField } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 
 function QuestionTrouEdition(props: {
     examId: string;
@@ -31,30 +31,30 @@ function QuestionTrouEdition(props: {
 
     return (
         <div>
-            <p>{props.questionTrou.order + 1}.</p>
-            <div>
+            <Typography>{props.questionTrou.order + 1}.</Typography>
+            <PhraseContainer>
                 <TextField
                     fullWidth
                     label="Début du texte..."
                     value={beforeText}
                     onChange={onChangeBeforeText}
-                    placeholder="Début du texte..."
+                    placeholder="..."
+                />
+                <TextField
+                    label="Bonne réponse"
+                    placeholder="..."
+                    value={rightAnswers}
+                    onChange={onChangeRightAnswers}
                 />
                 <TextField
                     fullWidth
                     label="... suite du texte"
                     value={afterText}
                     onChange={onChangeAfterText}
-                    placeholder="... suite du texte"
+                    placeholder="..."
                 />
-            </div>
-            <TextField
-                fullWidth
-                label="Bonne réponse"
-                placeholder="Ecrivez la bonne réponse"
-                value={rightAnswers}
-                onChange={onChangeRightAnswers}
-            />
+            </PhraseContainer>
+
             <TextField
                 fullWidth
                 label="Réponses acceptables"
@@ -133,5 +133,10 @@ function QuestionTrouEdition(props: {
         }
     }
 }
+
+const PhraseContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+});
 
 export { QuestionTrouEdition };

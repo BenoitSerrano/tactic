@@ -67,12 +67,8 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
             })),
             phrasesMelangees: attempt.exam.phrasesMelangees.map((phraseMelangee) => ({
                 ...phraseMelangee,
-                shuffledCombination: phraseMelangee.shuffledCombination.map((value) =>
-                    Number(value),
-                ),
-                combination: phraseMelangeeSummary[phraseMelangee.id]?.combination,
+                answer: phraseMelangeeSummary[phraseMelangee.id]?.answer,
                 status: phraseMelangeeSummary[phraseMelangee.id]?.status,
-                reconstitutedPhrase: phraseMelangeeSummary[phraseMelangee.id]?.reconstitutedPhrase,
             })),
         },
     };

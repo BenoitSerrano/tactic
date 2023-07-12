@@ -16,7 +16,7 @@ function buildPhraseMelangeeAnswerService() {
     async function createOrUpdatePhraseMelangeeAnswer(
         attemptId: string,
         phraseMelangeeId: number,
-        combination: number[],
+        answer: string,
     ) {
         const phraseMelangeeRepository = dataSource.getRepository(PhraseMelangee);
         const attemptRepository = dataSource.getRepository(Attempt);
@@ -35,13 +35,9 @@ function buildPhraseMelangeeAnswerService() {
             id: phraseMelangeeId,
         });
 
-        if (phraseMelangee.words.length !== combination.length) {
-            throw new Error(`The length between words and shuffledCombination are not compatible.`);
-        }
-
-        return phraseMelangeeAnswerRepository.upsert(
-            { attempt, phraseMelangee, combination: combination.map((value) => `${value}`) },
-            ['phraseMelangee', 'attempt'],
-        );
+        return phraseMelangeeAnswerRepository.upsert({ attempt, phraseMelangee, answer }, [
+            'phraseMelangee',
+            'attempt',
+        ]);
     }
 }

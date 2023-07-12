@@ -9,8 +9,11 @@ export class PhraseMelangee {
     @Column('simple-array')
     words: string[];
 
-    @Column('simple-array')
-    shuffledCombination: string[];
+    @Column('simple-array', { default: '' })
+    correctPhrases: string[];
+
+    @Column({ default: '' })
+    shuffledPhrase: string;
 
     @Column('int')
     order: number;

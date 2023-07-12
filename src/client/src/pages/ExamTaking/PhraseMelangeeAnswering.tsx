@@ -1,63 +1,57 @@
 import React, { useState } from 'react';
 import { Typography, styled } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
-import { phraseMelangeeModule } from '../../modules/phraseMelangee';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 
 function PhraseMelangeeAnswering(props: {
     phraseMelangee: {
         id: number;
-        words: string[];
-        shuffledCombination: number[];
-        reconstitutedPhrase: string | undefined;
-        combination: number[] | undefined;
-        status: 'right' | 'wrong' | undefined;
+        shuffledPhrase: string;
+        answer: string;
     };
     index: number;
     attemptId: string;
 }) {
-    const [combination, setCombination] = useState<number[]>(
-        props.phraseMelangee.combination || [],
-    );
-
-    const shuffledWords = phraseMelangeeModule.computeShuffledWords(
-        props.phraseMelangee.words,
-        props.phraseMelangee.shuffledCombination,
-    );
-    const reconstitutedWords = phraseMelangeeModule.computeShuffledWords(
-        shuffledWords,
-        combination,
-    );
+    const [combination, setCombination] = useState<number[]>([]);
+    const queryClient = useQueryClient();
 
     const createOrUpdatePhraseMelangeeAnswerMutation = useMutation({
         mutationFn: api.createOrUpdatePhraseMelangeeAnswer,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+        },
     });
+
+    const shuffledWords = props.phraseMelangee.shuffledPhrase.split(' ');
 
     return (
         <div>
             <StyledContainer>
                 <Typography>{props.index + 1}. </Typography>
-                {shuffledWords.map((shuffledWord, index) =>
+                {shuffledWords.map((word, index) =>
                     combination.includes(index) ? undefined : (
                         <ShuffledWordContainer
                             key={index}
                             onClick={buildOnClickOnShuffledWord(index)}
                         >
-                            <Typography>{shuffledWord}</Typography>
+                            <Typography>{word}</Typography>
                         </ShuffledWordContainer>
                     ),
                 )}
             </StyledContainer>
             <StyledContainer>
-                {reconstitutedWords.map((reconstitutedWord, index) => (
-                    <ReconstitudedWordContainer
+                {combination.map((combinationIndex, index) => (
+                    <ShuffledWordContainer
                         key={index}
                         onClick={buildOnClickOnReconstitutedWord(index)}
                     >
-                        <Typography>{reconstitutedWord}</Typography>
-                    </ReconstitudedWordContainer>
+                        <Typography>{shuffledWords[combinationIndex]}</Typography>
+                    </ShuffledWordContainer>
                 ))}
             </StyledContainer>
+            {!!props.phraseMelangee.answer && (
+                <Typography>Votre réponse : {props.phraseMelangee.answer}</Typography>
+            )}
         </div>
     );
 
@@ -66,11 +60,11 @@ function PhraseMelangeeAnswering(props: {
             const newCombination = [...combination, index];
             setCombination(newCombination);
 
-            if (newCombination.length === props.phraseMelangee.words.length) {
+            if (newCombination.length === shuffledWords.length) {
                 createOrUpdatePhraseMelangeeAnswerMutation.mutate({
                     attemptId: props.attemptId,
                     phraseMelangeeId: props.phraseMelangee.id,
-                    combination: newCombination,
+                    answer: newCombination.map((index) => shuffledWords[index]).join(' '),
                 });
             }
         };
@@ -97,16 +91,6 @@ const StyledContainer = styled('div')({
 const ShuffledWordContainer = styled('div')({
     borderWidth: '2px',
     borderStyle: 'dotted',
-    padding: '4px',
-    marginLeft: '4px',
-    marginRight: '4px',
-    cursor: 'pointer',
-});
-
-const ReconstitudedWordContainer = styled('div')({
-    borderWidth: '2px',
-    borderStyle: 'dotted',
-    borderColor: 'green',
     padding: '4px',
     marginLeft: '4px',
     marginRight: '4px',

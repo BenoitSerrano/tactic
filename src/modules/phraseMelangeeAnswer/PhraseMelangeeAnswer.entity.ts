@@ -11,8 +11,8 @@ export class PhraseMelangeeAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('simple-array')
-    combination: string[];
+    @Column()
+    answer: string;
 
     @ManyToOne(() => PhraseMelangee)
     phraseMelangee: PhraseMelangee;

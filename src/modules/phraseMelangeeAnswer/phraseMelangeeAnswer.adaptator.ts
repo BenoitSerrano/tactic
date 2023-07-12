@@ -5,14 +5,11 @@ const phraseMelangeeAdaptator = {
     computePhraseMelangeeSummary,
 };
 
-type phrasesMelangeesCombinationsType = Record<number, string[]>;
-
 type phraseMelangeeSummaryType = Record<
     number,
     {
         status: 'right' | 'wrong';
-        combination?: number[];
-        reconstitutedPhrase?: string;
+        answer: string | undefined;
         points: number;
     }
 >;
@@ -21,54 +18,32 @@ function computePhraseMelangeeSummary(
     phraseMelangeeAnswers: PhraseMelangeeAnswer[],
     phrasesMelangees: PhraseMelangee[],
 ): phraseMelangeeSummaryType {
-    const combinations: phrasesMelangeesCombinationsType = {};
+    const answers: Record<number, string> = {};
 
     phraseMelangeeAnswers.forEach((phraseMelangeeAnswer) => {
         const id = phraseMelangeeAnswer.phraseMelangee.id;
-        combinations[id] = phraseMelangeeAnswer.combination;
+        answers[id] = phraseMelangeeAnswer.answer;
     });
 
     const phraseMelangeeAnswerSummary = {} as phraseMelangeeSummaryType;
     phrasesMelangees.forEach((phraseMelangee) => {
-        if (!combinations[phraseMelangee.id]) {
+        if (!answers[phraseMelangee.id]) {
             phraseMelangeeAnswerSummary[phraseMelangee.id] = {
                 status: 'wrong',
-                combination: undefined,
-                reconstitutedPhrase: undefined,
+                answer: undefined,
                 points: phraseMelangee.points,
             };
             return;
         }
-        const combination = combinations[phraseMelangee.id].map(Number);
-        const reconstitutedPhrase = computeReconstitutedPhrase(
-            phraseMelangee.words,
-            phraseMelangee.shuffledCombination.map(Number),
-            combination,
-        );
+        const answer = answers[phraseMelangee.id];
+
         phraseMelangeeAnswerSummary[phraseMelangee.id] = {
-            status: reconstitutedPhrase === phraseMelangee.words.join(' ') ? 'right' : 'wrong',
-            combination,
-            reconstitutedPhrase,
+            status: phraseMelangee.correctPhrases.includes(answer) ? 'right' : 'wrong',
             points: phraseMelangee.points,
+            answer,
         };
     });
     return phraseMelangeeAnswerSummary;
-}
-
-function computeReconstitutedPhrase(
-    words: string[],
-    shuffledCombination: number[],
-    combination: number[],
-) {
-    const shuffledWords: string[] = [];
-    shuffledCombination.forEach((index) => {
-        shuffledWords.push(words[index]);
-    });
-    const reconstitutedWords: string[] = [];
-    combination.forEach((index) => {
-        reconstitutedWords.push(shuffledWords[index]);
-    });
-    return reconstitutedWords.join(' ');
 }
 
 export { phraseMelangeeAdaptator };

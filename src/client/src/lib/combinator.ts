@@ -1,6 +1,5 @@
 const combinator = {
     generate,
-    reverse,
     generateIdentity,
 };
 
@@ -15,21 +14,8 @@ function generate(count: number) {
     return combination;
 }
 
-// 2, 10 => entre 2 et 10 inclus
 function getRandomInteger(inf: number, sup: number) {
     return Math.floor(Math.random() * (sup - inf + 1)) + inf;
-}
-
-function reverse(combination: number[]) {
-    const reversedCombination = ' '
-        .repeat(combination.length)
-        .split('')
-        .map((_) => -1);
-
-    combination.forEach((value, index) => {
-        reversedCombination[value] = index;
-    });
-    return reversedCombination;
 }
 
 function generateIdentity(count: number) {

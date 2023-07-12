@@ -6,22 +6,21 @@ function PhraseMelangeeChecking(props: {
     phraseMelangee: {
         id: number;
         words: string[];
-        shuffledCombination: number[];
-        reconstitutedPhrase: string | undefined;
-        combination: number[] | undefined;
-        status: 'right' | 'wrong' | undefined;
+        correctPhrases: string[];
+        answer: string | undefined;
+        status: 'right' | 'wrong';
     };
     index: number;
     attemptId: string;
 }) {
-    const color = colorLib.computeTextColor(props.phraseMelangee.status || 'wrong');
+    const color = colorLib.computeTextColor(props.phraseMelangee.status);
 
     const StyledText = styled(Typography)({ color });
     return (
         <div>
             <StyledContainer>
                 <StyledText>
-                    {props.index + 1}. {props.phraseMelangee.reconstitutedPhrase}
+                    {props.index + 1}. {props.phraseMelangee.answer}
                 </StyledText>
             </StyledContainer>
         </div>

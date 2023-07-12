@@ -107,8 +107,9 @@ router.patch(
     '/exams/:examId/phrases-melangees/:phraseMelangeeId',
     buildController(phraseMelangeeController.updatePhraseMelangee, {
         schema: Joi.object({
-            shuffledCombination: Joi.array().items(Joi.number()),
-            words: Joi.array().items(Joi.string().allow('')),
+            shuffledPhrase: Joi.string().required(),
+            correctPhrases: Joi.array().items(Joi.string()),
+            words: Joi.array().items(Joi.string()),
         }),
     }),
 );
@@ -150,7 +151,7 @@ router.post(
     '/attempts/:attemptId/phrases-melangees/:phraseMelangeeId',
     buildController(phraseMelangeeAnswerController.createOrUpdatePhraseMelangeeAnswer, {
         schema: Joi.object({
-            combination: Joi.array().items(Joi.number()),
+            answer: Joi.string().required(),
         }),
     }),
 );
@@ -159,7 +160,7 @@ router.post(
     '/attempts/:attemptId/questions-trou/:questionTrouId',
     buildController(questionTrouAnswerController.createOrUpdateQuestionTrouAnswer, {
         schema: Joi.object({
-            answer: Joi.string().required().allow(''),
+            answer: Joi.string().required(),
         }),
     }),
 );

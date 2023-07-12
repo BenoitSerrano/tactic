@@ -88,11 +88,11 @@ async function createOrUpdateQuestionTrouAnswer({
 async function createOrUpdatePhraseMelangeeAnswer({
     attemptId,
     phraseMelangeeId,
-    combination,
+    answer,
 }: {
     attemptId: string;
     phraseMelangeeId: number;
-    combination: number[];
+    answer: string;
 }) {
     const URL = `${BASE_URL}/attempts/${attemptId}/phrases-melangees/${phraseMelangeeId}`;
     const response = await fetch(URL, {
@@ -101,7 +101,7 @@ async function createOrUpdatePhraseMelangeeAnswer({
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ combination }),
+        body: JSON.stringify({ answer }),
     });
     return response.json();
 }
@@ -343,12 +343,14 @@ async function createPhraseMelangee(examId: string) {
 async function updatePhraseMelangee(params: {
     examId: string;
     phraseMelangeeId: number;
-    shuffledCombination?: number[];
-    words?: string[];
+    words: string[];
+    correctPhrases: string[];
+    shuffledPhrase: string;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/phrases-melangees/${params.phraseMelangeeId}`;
     const body = JSON.stringify({
-        shuffledCombination: params.shuffledCombination,
+        correctPhrases: params.correctPhrases,
+        shuffledPhrase: params.shuffledPhrase,
         words: params.words,
     });
     const response = await fetch(URL, {

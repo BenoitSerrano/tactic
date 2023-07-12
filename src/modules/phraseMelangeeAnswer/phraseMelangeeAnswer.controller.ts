@@ -12,12 +12,12 @@ function buildPhraseMelangeeAnswerController() {
 
     async function createOrUpdatePhraseMelangeeAnswer(params: {
         urlParams: { attemptId: string; phraseMelangeeId: string };
-        body: { combination: number[] };
+        body: { answer: string };
     }) {
         return phraseMelangeeAnswerService.createOrUpdatePhraseMelangeeAnswer(
             params.urlParams.attemptId,
             Number(params.urlParams.phraseMelangeeId),
-            params.body.combination,
+            params.body.answer,
         );
     }
 }
