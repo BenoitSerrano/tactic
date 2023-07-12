@@ -2,7 +2,7 @@ const colorLib = {
     computeTextColor,
 };
 
-function computeTextColor(status: string) {
+function computeTextColor(status: 'right' | 'wrong' | 'acceptable' | undefined) {
     switch (status) {
         case 'right':
             return 'green';

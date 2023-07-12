@@ -9,12 +9,16 @@ function PhraseMelangeeAnswering(props: {
         id: number;
         words: string[];
         shuffledCombination: number[];
-        combination: number[];
+        reconstitutedPhrase: string | undefined;
+        combination: number[] | undefined;
+        status: 'right' | 'wrong' | undefined;
     };
     index: number;
     attemptId: string;
 }) {
-    const [combination, setCombination] = useState<number[]>(props.phraseMelangee.combination);
+    const [combination, setCombination] = useState<number[]>(
+        props.phraseMelangee.combination || [],
+    );
 
     const shuffledWords = phraseMelangeeModule.computeShuffledWords(
         props.phraseMelangee.words,

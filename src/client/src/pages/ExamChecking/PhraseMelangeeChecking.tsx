@@ -1,6 +1,5 @@
 import React from 'react';
 import { Typography, styled } from '@mui/material';
-import { phraseMelangeeModule } from '../../modules/phraseMelangee';
 import { colorLib } from '../../lib/colors';
 
 function PhraseMelangeeChecking(props: {
@@ -8,33 +7,22 @@ function PhraseMelangeeChecking(props: {
         id: number;
         words: string[];
         shuffledCombination: number[];
-        combination: number[];
-        status: 'right' | 'wrong';
+        reconstitutedPhrase: string | undefined;
+        combination: number[] | undefined;
+        status: 'right' | 'wrong' | undefined;
     };
     index: number;
     attemptId: string;
 }) {
-    const shuffledWords = phraseMelangeeModule.computeShuffledWords(
-        props.phraseMelangee.words,
-        props.phraseMelangee.shuffledCombination,
-    );
-    const reconstitutedWords = phraseMelangeeModule.computeShuffledWords(
-        shuffledWords,
-        props.phraseMelangee.combination,
-    );
-
-    const color = colorLib.computeTextColor(props.phraseMelangee.status);
+    const color = colorLib.computeTextColor(props.phraseMelangee.status || 'wrong');
 
     const StyledText = styled(Typography)({ color });
     return (
         <div>
             <StyledContainer>
-                <Typography>{props.index + 1}. </Typography>
-                {reconstitutedWords.map((reconstitutedWord, index) => (
-                    <ReconstitudedWordContainer key={index}>
-                        <StyledText>{reconstitutedWord}</StyledText>
-                    </ReconstitudedWordContainer>
-                ))}
+                <StyledText>
+                    {props.index + 1}. {props.phraseMelangee.reconstitutedPhrase}
+                </StyledText>
             </StyledContainer>
         </div>
     );
@@ -47,15 +35,6 @@ const StyledContainer = styled('div')({
     alignItems: 'center',
     marginTop: '10px',
     marginBottom: '10px',
-});
-
-const ReconstitudedWordContainer = styled('div')({
-    borderWidth: '2px',
-    borderStyle: 'dotted',
-    borderColor: 'green',
-    padding: '4px',
-    marginLeft: '4px',
-    marginRight: '4px',
 });
 
 export { PhraseMelangeeChecking };

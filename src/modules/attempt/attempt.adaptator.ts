@@ -70,9 +70,9 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
                 shuffledCombination: phraseMelangee.shuffledCombination.map((value) =>
                     Number(value),
                 ),
-                combination: phraseMelangeeSummary[phraseMelangee.id].combination,
-                status: phraseMelangeeSummary[phraseMelangee.id].status,
-                reconstitutedPhrase: phraseMelangeeSummary[phraseMelangee.id].reconstitutedPhrase,
+                combination: phraseMelangeeSummary[phraseMelangee.id]?.combination,
+                status: phraseMelangeeSummary[phraseMelangee.id]?.status,
+                reconstitutedPhrase: phraseMelangeeSummary[phraseMelangee.id]?.reconstitutedPhrase,
             })),
         },
     };
