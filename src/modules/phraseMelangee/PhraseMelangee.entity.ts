@@ -15,6 +15,9 @@ export class PhraseMelangee {
     @Column('int')
     order: number;
 
+    @Column('float', { default: 1.0 })
+    points: number;
+
     @ManyToOne(() => Exam, (exam) => exam.phrasesMelangees)
     exam: Exam;
 }

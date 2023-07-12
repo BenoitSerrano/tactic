@@ -46,10 +46,13 @@ function buildExamService() {
                 'attempts.student',
                 'questionsChoixMultiple',
                 'questionsTrou',
+                'phrasesMelangees',
                 'attempts.qcmAnswers',
                 'attempts.qcmAnswers.questionChoixMultiple',
                 'attempts.questionTrouAnswers',
                 'attempts.questionTrouAnswers.questionTrou',
+                'attempts.phraseMelangeAnswers',
+                'attempts.phraseMelangeAnswers.phraseMelangee',
             ],
         });
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(examWithAttempts);

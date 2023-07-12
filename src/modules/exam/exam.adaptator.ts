@@ -1,3 +1,4 @@
+import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
 import { qcmAnswerAdaptator } from '../qcmAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
 import { Exam } from './Exam.entity';
@@ -21,6 +22,10 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
             attempt.qcmAnswers,
             examWithAttempts.questionsChoixMultiple,
         );
+        const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
+            attempt.phraseMelangeAnswers,
+            examWithAttempts.phrasesMelangees,
+        );
 
         const result = {
             id: student.id,
@@ -31,6 +36,7 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
             attemptId: attempt.id,
             questionTrouSummary,
             qcmSummary,
+            phraseMelangeeSummary,
         };
         return result;
     });

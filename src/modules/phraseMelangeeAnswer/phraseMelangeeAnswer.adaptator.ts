@@ -36,6 +36,7 @@ function computePhraseMelangeeSummary(
             status: reconstitutedPhrase === phraseMelangee.words.join(' ') ? 'right' : 'wrong',
             combination,
             reconstitutedPhrase,
+            points: phraseMelangee.points,
         };
     });
     return phraseMelangeeAnswerSummary;

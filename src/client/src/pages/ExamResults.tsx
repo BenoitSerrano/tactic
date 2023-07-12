@@ -23,6 +23,7 @@ type examResultType = {
     startedAt: number;
     duration: number | undefined;
     qcmSummary: Record<number, { status: 'right' | 'wrong'; choice: number; points: number }>;
+    phraseMelangeeSummary: Record<number, { status: 'right' | 'wrong'; points: number }>;
     questionTrouSummary: Record<
         number,
         { status: 'right' | 'acceptable' | 'wrong'; answer: string; points: number }
@@ -206,7 +207,15 @@ function computeMark(examResult: examResultType) {
         (sum, summary) => sum + summary.points,
         0,
     );
+    const phraseMelangeeTotalPoints = Object.values(examResult.phraseMelangeeSummary).reduce(
+        (sum, summary) => sum + summary.points,
+        0,
+    );
     const qcmMark = Object.values(examResult.qcmSummary).reduce(
+        (sum, value) => sum + (value.status === 'right' ? value.points : 0),
+        0,
+    );
+    const phraseMelangeeMark = Object.values(examResult.phraseMelangeeSummary).reduce(
         (sum, value) => sum + (value.status === 'right' ? value.points : 0),
         0,
     );
@@ -216,13 +225,12 @@ function computeMark(examResult: examResultType) {
                 return sum + value.points;
             case 'acceptable':
                 return sum + value.points / 2;
-            case 'wrong':
-                return sum;
         }
+        return sum;
     }, 0);
     return {
-        mark: qcmMark + questionTrouMark,
-        totalPoints: qcmTotalPoints + questionTrouTotalPoints,
+        mark: qcmMark + questionTrouMark + phraseMelangeeMark,
+        totalPoints: qcmTotalPoints + questionTrouTotalPoints + phraseMelangeeTotalPoints,
     };
 }
 
