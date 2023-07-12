@@ -5,7 +5,17 @@ import { Attempt } from './Attempt.entity';
 
 const attemptAdaptator = {
     convertAttemptToAttemptWithAnswers,
+    computeTreatmentStatusSummary,
 };
+
+function computeTreatmentStatusSummary(attempts: Attempt[]) {
+    const treatmentStatusSummary: Record<string, boolean> = {};
+    attempts.forEach((attempt) => {
+        treatmentStatusSummary[attempt.id] = attempt.hasBeenTreated;
+    });
+
+    return treatmentStatusSummary;
+}
 
 function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
     const choices: Record<number, number> = {};

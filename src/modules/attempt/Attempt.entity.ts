@@ -25,6 +25,9 @@ export class Attempt {
     @Column({ type: 'timestamptz', nullable: true })
     updatedAt: string;
 
+    @Column({ default: false })
+    hasBeenTreated: boolean;
+
     @ManyToOne(() => Student, { onDelete: 'CASCADE' })
     student: Student;
 

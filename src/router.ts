@@ -139,6 +139,13 @@ router.post(
     }),
 );
 
+router.patch(
+    '/attempts/:attemptId/hasBeenTreated',
+    buildController(attemptController.updateAttemptTreatmentStatus, {
+        schema: Joi.object({ hasBeenTreated: Joi.boolean().required() }),
+    }),
+);
+
 router.post(
     '/attempts/:attemptId/phrases-melangees/:phraseMelangeeId',
     buildController(phraseMelangeeAnswerController.createOrUpdatePhraseMelangeeAnswer, {

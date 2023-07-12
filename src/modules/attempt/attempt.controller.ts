@@ -10,6 +10,7 @@ function buildAttemptController() {
         searchAttempts,
         fetchAttempt,
         deleteAttempt,
+        updateAttemptTreatmentStatus,
     };
 
     return attemptController;
@@ -37,5 +38,15 @@ function buildAttemptController() {
 
     async function deleteAttempt(params: { urlParams: { attemptId: string } }) {
         return attemptService.deleteAttempt(params.urlParams.attemptId);
+    }
+
+    async function updateAttemptTreatmentStatus(params: {
+        urlParams: { attemptId: string };
+        body: { hasBeenTreated: boolean };
+    }) {
+        return attemptService.updateAttemptTreatmentStatus(
+            params.urlParams.attemptId,
+            params.body.hasBeenTreated,
+        );
     }
 }

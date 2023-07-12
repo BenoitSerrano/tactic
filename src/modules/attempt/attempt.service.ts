@@ -16,6 +16,7 @@ function buildAttemptService() {
         deleteAttempt,
         assertIsTimeLimitNotExceeded,
         updateAttemptDuration,
+        updateAttemptTreatmentStatus,
     };
 
     return studentService;
@@ -108,6 +109,13 @@ function buildAttemptService() {
         const attemptRepository = dataSource.getRepository(Attempt);
 
         const result = await attemptRepository.delete({ id: attemptId });
+        return result.affected == 1;
+    }
+
+    async function updateAttemptTreatmentStatus(attemptId: string, hasBeenTreated: boolean) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+
+        const result = await attemptRepository.update({ id: attemptId }, { hasBeenTreated });
         return result.affected == 1;
     }
 }

@@ -8,6 +8,7 @@ const api = {
     createAttempt,
     createEmptyAttempt,
     fetchAttempt,
+    updateAttemptTreatementStatus,
     deleteAttempt,
     fetchStudents,
     fetchStudentId,
@@ -133,6 +134,25 @@ async function fetchAttempt(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
     const response = await fetch(URL, {
         method: 'GET',
+    });
+    return response.json();
+}
+
+async function updateAttemptTreatementStatus({
+    attemptId,
+    hasBeenTreated,
+}: {
+    attemptId: string;
+    hasBeenTreated: boolean;
+}) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/hasBeenTreated`;
+    const response = await fetch(URL, {
+        method: 'PATCH',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ hasBeenTreated }),
     });
     return response.json();
 }

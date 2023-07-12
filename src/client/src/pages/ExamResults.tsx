@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { api } from '../lib/api';
 import {
     IconButton,
@@ -28,6 +30,7 @@ type examResultType = {
         number,
         { status: 'right' | 'acceptable' | 'wrong'; answer: string; points: number }
     >;
+    hasBeenTreated: boolean;
     totalPoints: number;
 };
 
@@ -47,6 +50,13 @@ function ExamResults() {
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
     const deleteAttemptMutation = useMutation({
         mutationFn: api.deleteAttempt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['examResults'] });
+        },
+    });
+
+    const updateAttemptTreatementStatusMutation = useMutation({
+        mutationFn: api.updateAttemptTreatementStatus,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['examResults'] });
         },
@@ -129,6 +139,19 @@ function ExamResults() {
                         <TableCell>{result.comment || '-'}</TableCell>
                         <TableCell>
                             <IconButton
+                                title={
+                                    'Marquer comme' +
+                                    (result.hasBeenTreated ? ' non ' : ' ') +
+                                    'traité'
+                                }
+                                onClick={buildUpdateTreatementStatus(
+                                    result.attemptId,
+                                    !result.hasBeenTreated,
+                                )}
+                            >
+                                {result.hasBeenTreated ? <RemoveDoneIcon /> : <DoneAllIcon />}
+                            </IconButton>
+                            <IconButton
                                 title="Supprimer"
                                 onClick={buildDeleteAttempt(result.attemptId)}
                             >
@@ -151,6 +174,12 @@ function ExamResults() {
         };
     }
 
+    function buildUpdateTreatementStatus(attemptId: string, hasBeenTreated: boolean) {
+        return () => {
+            updateAttemptTreatementStatusMutation.mutate({ attemptId, hasBeenTreated });
+        };
+    }
+
     function formatData(data: examResultType[]) {
         return data.map((result) => {
             const { mark, totalPoints } = computeMark(result);
@@ -164,6 +193,7 @@ function ExamResults() {
                         : '-',
                 mark,
                 totalPoints,
+                hasBeenTreated: result.hasBeenTreated,
                 comment: result.comment || '-',
             };
         });

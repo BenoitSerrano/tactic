@@ -1,3 +1,4 @@
+import { attemptAdaptator } from '../attempt/attempt.adaptator';
 import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
 import { qcmAnswerAdaptator } from '../qcmAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
@@ -8,6 +9,9 @@ const examAdaptator = {
 };
 
 function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
+    const treatmentStatusSummary = attemptAdaptator.computeTreatmentStatusSummary(
+        examWithAttempts.attempts,
+    );
     const examWithResults = examWithAttempts.attempts.map((attempt) => {
         const student = attempt.student;
         const startedAtDate = new Date(attempt.startedAt);
@@ -37,6 +41,7 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
             questionTrouSummary,
             qcmSummary,
             phraseMelangeeSummary,
+            hasBeenTreated: treatmentStatusSummary[attempt.id],
         };
         return result;
     });
