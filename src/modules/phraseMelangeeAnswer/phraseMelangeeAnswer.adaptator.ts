@@ -20,13 +20,41 @@ function computePhraseMelangeeSummary(
 
     const phraseMelangeeAnswerSummary = {} as any;
     phrasesMelangees.forEach((phraseMelangee) => {
+        if (!combinations[phraseMelangee.id]) {
+            return {
+                status: 'wrong' as const,
+                combination: [],
+            };
+        }
+        const combination = combinations[phraseMelangee.id].map(Number);
+        const reconstitutedPhrase = computeReconstitutedPhrase(
+            phraseMelangee.words,
+            phraseMelangee.shuffledCombination.map(Number),
+            combination,
+        );
         phraseMelangeeAnswerSummary[phraseMelangee.id] = {
-            combination: combinations[phraseMelangee.id]
-                ? combinations[phraseMelangee.id].map((value) => Number(value))
-                : [],
+            status: reconstitutedPhrase === phraseMelangee.words.join(' ') ? 'right' : 'wrong',
+            combination,
+            reconstitutedPhrase,
         };
     });
     return phraseMelangeeAnswerSummary;
+}
+
+function computeReconstitutedPhrase(
+    words: string[],
+    shuffledCombination: number[],
+    combination: number[],
+) {
+    const shuffledWords: string[] = [];
+    shuffledCombination.forEach((index) => {
+        shuffledWords.push(words[index]);
+    });
+    const reconstitutedWords: string[] = [];
+    combination.forEach((index) => {
+        reconstitutedWords.push(shuffledWords[index]);
+    });
+    return reconstitutedWords.join(' ');
 }
 
 export { phraseMelangeeAdaptator };

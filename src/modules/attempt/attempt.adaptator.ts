@@ -61,6 +61,8 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
                     Number(value),
                 ),
                 combination: phraseMelangeeSummary[phraseMelangee.id].combination,
+                status: phraseMelangeeSummary[phraseMelangee.id].status,
+                reconstitutedPhrase: phraseMelangeeSummary[phraseMelangee.id].reconstitutedPhrase,
             })),
         },
     };

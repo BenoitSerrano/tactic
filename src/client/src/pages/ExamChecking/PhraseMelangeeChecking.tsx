@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, styled } from '@mui/material';
 import { phraseMelangeeModule } from '../../modules/phraseMelangee';
+import { colorLib } from '../../lib/colors';
 
 function PhraseMelangeeChecking(props: {
     phraseMelangee: {
@@ -8,6 +9,7 @@ function PhraseMelangeeChecking(props: {
         words: string[];
         shuffledCombination: number[];
         combination: number[];
+        status: 'right' | 'wrong';
     };
     index: number;
     attemptId: string;
@@ -21,13 +23,16 @@ function PhraseMelangeeChecking(props: {
         props.phraseMelangee.combination,
     );
 
+    const color = colorLib.computeTextColor(props.phraseMelangee.status);
+
+    const StyledText = styled(Typography)({ color });
     return (
         <div>
             <StyledContainer>
                 <Typography>{props.index + 1}. </Typography>
                 {reconstitutedWords.map((reconstitutedWord, index) => (
                     <ReconstitudedWordContainer key={index}>
-                        <Typography>{reconstitutedWord}</Typography>
+                        <StyledText>{reconstitutedWord}</StyledText>
                     </ReconstitudedWordContainer>
                 ))}
             </StyledContainer>
