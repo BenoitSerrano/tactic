@@ -43,8 +43,8 @@ function ExamResults() {
         queryKey: ['examResults', examId],
         queryFn: () => api.fetchExamResults(examId),
     });
-    const [activeSort, setActiveSort] = useState<sortColumnType>('email');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const [activeSort, setActiveSort] = useState<sortColumnType>('startedAt');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
     const deleteAttemptMutation = useMutation({
         mutationFn: api.deleteAttempt,
         onSuccess: () => {
