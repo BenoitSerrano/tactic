@@ -13,6 +13,7 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
+    styled,
 } from '@mui/material';
 import { time } from '../lib/time';
 import { authentication } from '../lib/authentication';
@@ -122,44 +123,50 @@ function ExamResults() {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {sortedData.map((result) => (
-                    <TableRow key={result.attemptId}>
-                        <TableCell>
-                            <Link
-                                to={`/teacher/${authentication.getEncodedPassword()}/attempts/${
-                                    result.attemptId
-                                }`}
-                            >
-                                {result.email}
-                            </Link>
-                        </TableCell>
-                        <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
-                        <TableCell>{result.duration}</TableCell>
-                        <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
-                        <TableCell>{result.comment || '-'}</TableCell>
-                        <TableCell>
-                            <IconButton
-                                title={
-                                    'Marquer comme' +
-                                    (result.hasBeenTreated ? ' non ' : ' ') +
-                                    'traité'
-                                }
-                                onClick={buildUpdateTreatementStatus(
-                                    result.attemptId,
-                                    !result.hasBeenTreated,
-                                )}
-                            >
-                                {result.hasBeenTreated ? <RemoveDoneIcon /> : <DoneAllIcon />}
-                            </IconButton>
-                            <IconButton
-                                title="Supprimer"
-                                onClick={buildDeleteAttempt(result.attemptId)}
-                            >
-                                <DeleteForeverIcon />
-                            </IconButton>
-                        </TableCell>
-                    </TableRow>
-                ))}
+                {sortedData.map((result) => {
+                    const isHighlighted = result.hasBeenTreated;
+                    const StyledRow = isHighlighted
+                        ? styled(TableRow)({ backgroundColor: '#ccffcc' })
+                        : TableRow;
+                    return (
+                        <StyledRow key={result.attemptId}>
+                            <TableCell>
+                                <Link
+                                    to={`/teacher/${authentication.getEncodedPassword()}/attempts/${
+                                        result.attemptId
+                                    }`}
+                                >
+                                    {result.email}
+                                </Link>
+                            </TableCell>
+                            <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
+                            <TableCell>{result.duration}</TableCell>
+                            <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
+                            <TableCell>{result.comment || '-'}</TableCell>
+                            <TableCell>
+                                <IconButton
+                                    title={
+                                        'Marquer comme' +
+                                        (result.hasBeenTreated ? ' non ' : ' ') +
+                                        'traité'
+                                    }
+                                    onClick={buildUpdateTreatementStatus(
+                                        result.attemptId,
+                                        !result.hasBeenTreated,
+                                    )}
+                                >
+                                    {result.hasBeenTreated ? <RemoveDoneIcon /> : <DoneAllIcon />}
+                                </IconButton>
+                                <IconButton
+                                    title="Supprimer"
+                                    onClick={buildDeleteAttempt(result.attemptId)}
+                                >
+                                    <DeleteForeverIcon />
+                                </IconButton>
+                            </TableCell>
+                        </StyledRow>
+                    );
+                })}
             </TableBody>
         </Table>
     );
