@@ -1,5 +1,5 @@
 import React from 'react';
-import { colorLib } from '../lib/colors';
+import { colorLib } from '../../lib/colors';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, styled } from '@mui/material';
 
 function QuestionChoixMultipleChecking(props: {

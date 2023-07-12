@@ -96,6 +96,7 @@ const ShuffledWordContainer = styled('div')({
     padding: '4px',
     marginLeft: '4px',
     marginRight: '4px',
+    cursor: 'pointer',
 });
 
 const ReconstitudedWordContainer = styled('div')({
@@ -105,6 +106,7 @@ const ReconstitudedWordContainer = styled('div')({
     padding: '4px',
     marginLeft: '4px',
     marginRight: '4px',
+    cursor: 'pointer',
 });
 
 export { PhraseMelangeeAnswering };

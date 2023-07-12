@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, Typography, styled } from '@mui/material';
-import { colorLib } from '../lib/colors';
+import { colorLib } from '../../lib/colors';
 
 function QuestionTrouChecking(props: {
     questionTrou: {

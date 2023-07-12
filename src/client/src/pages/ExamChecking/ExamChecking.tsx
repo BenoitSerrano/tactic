@@ -1,11 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../lib/api';
-import { QuestionChoixMultipleChecking } from '../components/QuestionChoixMultipleChecking';
-import { QuestionTrouChecking } from '../components/QuestionTrouChecking';
+import { api } from '../../lib/api';
+import { QuestionChoixMultipleChecking } from './QuestionChoixMultipleChecking';
+import { QuestionTrouChecking } from './QuestionTrouChecking';
 import { Typography, styled } from '@mui/material';
-import { Page } from '../components/Page';
+import { Page } from '../../components/Page';
+import { PhraseMelangeeChecking } from './PhraseMelangeeChecking';
 
 function ExamChecking() {
     const params = useParams();
@@ -33,6 +34,15 @@ function ExamChecking() {
                         attemptId={attemptId}
                         index={index}
                         questionTrou={questionTrou}
+                    />
+                ))}
+
+                {query.data.exam.phrasesMelangees.map((phraseMelangee: any, index: number) => (
+                    <PhraseMelangeeChecking
+                        key={`phraseMelangee-${phraseMelangee.id}`}
+                        attemptId={attemptId}
+                        index={index}
+                        phraseMelangee={phraseMelangee}
                     />
                 ))}
             </MainContainer>
