@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Typography, styled } from '@mui/material';
 import { phraseMelangeeModule } from '../../modules/phraseMelangee';
+import { api } from '../../lib/api';
+import { useMutation } from '@tanstack/react-query';
 
 function PhraseMelangeeAnswering(props: {
     phraseMelangee: {
@@ -11,6 +13,7 @@ function PhraseMelangeeAnswering(props: {
     index: number;
     attemptId: string;
 }) {
+    // TODO : pré-remplir
     const [combination, setCombination] = useState<number[]>([]);
 
     const shuffledWords = phraseMelangeeModule.computeShuffledWords(
@@ -21,6 +24,10 @@ function PhraseMelangeeAnswering(props: {
         shuffledWords,
         combination,
     );
+
+    const createOrUpdatePhraseMelangeeAnswerMutation = useMutation({
+        mutationFn: api.createOrUpdatePhraseMelangeeAnswer,
+    });
 
     return (
         <div>
@@ -52,7 +59,16 @@ function PhraseMelangeeAnswering(props: {
 
     function buildOnClickOnShuffledWord(index: number) {
         return () => {
-            setCombination([...combination, index]);
+            const newCombination = [...combination, index];
+            setCombination(newCombination);
+
+            if (newCombination.length === props.phraseMelangee.words.length) {
+                createOrUpdatePhraseMelangeeAnswerMutation.mutate({
+                    attemptId: props.attemptId,
+                    phraseMelangeeId: props.phraseMelangee.id,
+                    combination: newCombination,
+                });
+            }
         };
     }
 

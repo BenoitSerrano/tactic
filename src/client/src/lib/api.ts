@@ -24,6 +24,7 @@ const api = {
     updateQuestionTrou,
     createPhraseMelangee,
     updatePhraseMelangee,
+    createOrUpdatePhraseMelangeeAnswer,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -79,6 +80,27 @@ async function createOrUpdateQuestionTrouAnswer({
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ answer }),
+    });
+    return response.json();
+}
+
+async function createOrUpdatePhraseMelangeeAnswer({
+    attemptId,
+    phraseMelangeeId,
+    combination,
+}: {
+    attemptId: string;
+    phraseMelangeeId: number;
+    combination: number[];
+}) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/phrases-melangees/${phraseMelangeeId}`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ combination }),
     });
     return response.json();
 }

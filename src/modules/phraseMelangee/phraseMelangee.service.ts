@@ -55,8 +55,18 @@ function buildPhraseMelangeeService() {
         const phraseMelangee = await phraseMelangeeRepository.findOneOrFail({
             where: { exam: { id: examId }, id: phraseMelangeeId },
         });
+
+        if (
+            (words ? words.length : phraseMelangee.words.length) !==
+            (shuffledCombination
+                ? shuffledCombination.length
+                : phraseMelangee.shuffledCombination.length)
+        ) {
+            throw new Error(`The length between words and shuffledCombination are not compatible.`);
+        }
+
         if (shuffledCombination !== undefined) {
-            phraseMelangee.shuffledCombination = shuffledCombination;
+            phraseMelangee.shuffledCombination = shuffledCombination.map((value) => `${value}`);
         }
 
         if (words !== undefined) {

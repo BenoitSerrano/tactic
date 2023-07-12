@@ -9,6 +9,7 @@ import { buildQcmAnswerController } from './modules/qcmAnswer';
 import { buildQuestionTrouController } from './modules/questionTrou';
 import { buildQuestionTrouAnswerController } from './modules/questionTrouAnswer';
 import { buildPhraseMelangeeController } from './modules/phraseMelangee';
+import { buildPhraseMelangeeAnswerController } from './modules/phraseMelangeeAnswer';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -19,6 +20,7 @@ const attemptController = buildAttemptController();
 const qcmAnswerController = buildQcmAnswerController();
 const questionTrouAnswerController = buildQuestionTrouAnswerController();
 const phraseMelangeeController = buildPhraseMelangeeController();
+const phraseMelangeeAnswerController = buildPhraseMelangeeAnswerController();
 
 router.get('/students', buildController(studentController.getStudentsWithAttempts));
 router.patch(
@@ -133,6 +135,15 @@ router.post(
     buildController(qcmAnswerController.createOrUpdateQcmAnswer, {
         schema: Joi.object({
             choice: Joi.number().required(),
+        }),
+    }),
+);
+
+router.post(
+    '/attempts/:attemptId/phrases-melangees/:phraseMelangeeId',
+    buildController(phraseMelangeeAnswerController.createOrUpdatePhraseMelangeeAnswer, {
+        schema: Joi.object({
+            combination: Joi.array().items(Joi.number()),
         }),
     }),
 );
