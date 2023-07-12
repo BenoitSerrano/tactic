@@ -45,7 +45,20 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
         };
         return result;
     });
-    return examWithResults;
+    const qcmTotalPoints = examWithAttempts.questionsChoixMultiple.reduce(
+        (sum, summary) => sum + summary.points,
+        0,
+    );
+    const questionTrouTotalPoints = examWithAttempts.questionsTrou.reduce(
+        (sum, summary) => sum + summary.points,
+        0,
+    );
+    const phraseMelangeeTotalPoints = examWithAttempts.phrasesMelangees.reduce(
+        (sum, summary) => sum + summary.points,
+        0,
+    );
+    const totalPoints = qcmTotalPoints + questionTrouTotalPoints + phraseMelangeeTotalPoints;
+    return { totalPoints, results: examWithResults };
 }
 
 export { examAdaptator };

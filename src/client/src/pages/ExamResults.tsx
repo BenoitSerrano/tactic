@@ -35,7 +35,7 @@ type examResultApiType = {
     hasBeenTreated: boolean;
 };
 
-type examResultsApiType = Array<examResultApiType>;
+type examResultsApiType = { results: Array<examResultApiType>; totalPoints: number };
 
 type sortColumnType = 'email' | 'mark' | 'startedAt';
 
@@ -68,12 +68,12 @@ function ExamResults() {
         return <div />;
     }
 
-    const formattedData = formatData(query.data);
+    const formattedData = formatData(query.data.results);
 
     const sortedData = sortData(formattedData, activeSort, sortDirection);
 
     return (
-        <Table>
+        <Table stickyHeader>
             <TableHead>
                 <TableRow>
                     <TableCell width={120}>Actions</TableCell>
@@ -105,7 +105,7 @@ function ExamResults() {
                             Adresse e-mail
                         </TableSortLabel>
                     </TableCell>
-                    <TableCell width={50}>
+                    <TableCell width={70}>
                         <TableSortLabel
                             active={activeSort === 'mark'}
                             direction={sortDirection}
@@ -116,7 +116,7 @@ function ExamResults() {
                                 setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                             }}
                         >
-                            Note
+                            Note (/ {query.data.totalPoints})
                         </TableSortLabel>
                     </TableCell>
                     <TableCell width={50}>Durée</TableCell>
@@ -169,7 +169,7 @@ function ExamResults() {
                                     {result.email}
                                 </Link>
                             </TableCell>
-                            <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
+                            <TableCell>{result.mark}</TableCell>
                             <TableCell>{result.duration}</TableCell>
                             <TableCell>{result.comment || '-'}</TableCell>
                         </StyledRow>
@@ -201,9 +201,9 @@ function ExamResults() {
         };
     }
 
-    function formatData(data: examResultApiType[]) {
+    function formatData(data: examResultsApiType['results']) {
         return data.map((result) => {
-            const { mark, totalPoints } = computeMark(result);
+            const mark = computeMark(result);
             return {
                 email: result.email,
                 attemptId: result.attemptId,
@@ -213,7 +213,6 @@ function ExamResults() {
                         ? time.formatToClock(result.duration, { hideHours: true })
                         : '-',
                 mark,
-                totalPoints,
                 hasBeenTreated: result.hasBeenTreated,
                 comment: result.comment || '-',
             };
@@ -250,18 +249,6 @@ function ExamResults() {
 }
 
 function computeMark(examResult: examResultApiType) {
-    const qcmTotalPoints = Object.values(examResult.qcmSummary).reduce(
-        (sum, summary) => sum + summary.points,
-        0,
-    );
-    const questionTrouTotalPoints = Object.values(examResult.questionTrouSummary).reduce(
-        (sum, summary) => sum + summary.points,
-        0,
-    );
-    const phraseMelangeeTotalPoints = Object.values(examResult.phraseMelangeeSummary).reduce(
-        (sum, summary) => sum + summary.points,
-        0,
-    );
     const qcmMark = Object.values(examResult.qcmSummary).reduce(
         (sum, value) => sum + (value.status === 'right' ? value.points : 0),
         0,
@@ -279,10 +266,7 @@ function computeMark(examResult: examResultApiType) {
         }
         return sum;
     }, 0);
-    return {
-        mark: qcmMark + questionTrouMark + phraseMelangeeMark,
-        totalPoints: qcmTotalPoints + questionTrouTotalPoints + phraseMelangeeTotalPoints,
-    };
+    return qcmMark + questionTrouMark + phraseMelangeeMark;
 }
 
 export { ExamResults };
