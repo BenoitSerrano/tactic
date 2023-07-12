@@ -7,7 +7,7 @@ function QuestionTrouChecking(props: {
         id: number;
         beforeText: string;
         afterText: string;
-        answer: string;
+        answer: string | undefined;
         status: 'right' | 'wrong' | 'acceptable';
     };
     index: number;

@@ -7,7 +7,7 @@ function QuestionChoixMultipleChecking(props: {
         id: number;
         title: string;
         possibleAnswers: string[];
-        choice: number;
+        choice: number | undefined;
         status: 'right' | 'wrong';
     };
     index: number;

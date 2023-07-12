@@ -11,8 +11,8 @@ type phraseMelangeeSummaryType = Record<
     number,
     {
         status: 'right' | 'wrong';
-        combination: number[];
-        reconstitutedPhrase: string;
+        combination?: number[];
+        reconstitutedPhrase?: string;
         points: number;
     }
 >;
@@ -31,6 +31,12 @@ function computePhraseMelangeeSummary(
     const phraseMelangeeAnswerSummary = {} as phraseMelangeeSummaryType;
     phrasesMelangees.forEach((phraseMelangee) => {
         if (!combinations[phraseMelangee.id]) {
+            phraseMelangeeAnswerSummary[phraseMelangee.id] = {
+                status: 'wrong',
+                combination: undefined,
+                reconstitutedPhrase: undefined,
+                points: phraseMelangee.points,
+            };
             return;
         }
         const combination = combinations[phraseMelangee.id].map(Number);

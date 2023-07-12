@@ -19,7 +19,7 @@ import {
 import { time } from '../lib/time';
 import { authentication } from '../lib/authentication';
 
-type examResultType = {
+type examResultApiType = {
     id: string;
     email: string;
     comment?: string;
@@ -33,10 +33,9 @@ type examResultType = {
         { status: 'right' | 'acceptable' | 'wrong'; answer: string; points: number }
     >;
     hasBeenTreated: boolean;
-    totalPoints: number;
 };
 
-type examResultsType = Array<examResultType>;
+type examResultsApiType = Array<examResultApiType>;
 
 type sortColumnType = 'email' | 'mark' | 'startedAt';
 
@@ -45,7 +44,7 @@ function ExamResults() {
     const queryClient = useQueryClient();
     const params = useParams();
     const examId = params.examId as string;
-    const query = useQuery<examResultsType>({
+    const query = useQuery<examResultsApiType>({
         queryKey: ['examResults', examId],
         queryFn: () => api.fetchExamResults(examId),
     });
@@ -193,7 +192,7 @@ function ExamResults() {
         };
     }
 
-    function formatData(data: examResultType[]) {
+    function formatData(data: examResultApiType[]) {
         return data.map((result) => {
             const { mark, totalPoints } = computeMark(result);
             return {
@@ -241,7 +240,7 @@ function ExamResults() {
     }
 }
 
-function computeMark(examResult: examResultType) {
+function computeMark(examResult: examResultApiType) {
     const qcmTotalPoints = Object.values(examResult.qcmSummary).reduce(
         (sum, summary) => sum + summary.points,
         0,
