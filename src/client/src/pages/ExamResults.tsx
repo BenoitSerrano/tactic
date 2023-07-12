@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
@@ -76,6 +76,21 @@ function ExamResults() {
         <Table>
             <TableHead>
                 <TableRow>
+                    <TableCell width={120}>Actions</TableCell>
+                    <TableCell width={120}>
+                        <TableSortLabel
+                            active={activeSort === 'startedAt'}
+                            direction={sortDirection}
+                            onClick={() => {
+                                if (activeSort !== 'startedAt') {
+                                    setActiveSort('startedAt');
+                                }
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                            }}
+                        >
+                            Heure de début
+                        </TableSortLabel>
+                    </TableCell>
                     <TableCell sortDirection={sortDirection}>
                         <TableSortLabel
                             active={activeSort === 'email'}
@@ -90,22 +105,7 @@ function ExamResults() {
                             Adresse e-mail
                         </TableSortLabel>
                     </TableCell>
-                    <TableCell>
-                        <TableSortLabel
-                            active={activeSort === 'startedAt'}
-                            direction={sortDirection}
-                            onClick={() => {
-                                if (activeSort !== 'startedAt') {
-                                    setActiveSort('startedAt');
-                                }
-                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                            }}
-                        >
-                            Heure de début du test
-                        </TableSortLabel>
-                    </TableCell>
-                    <TableCell>Durée</TableCell>
-                    <TableCell>
+                    <TableCell width={50}>
                         <TableSortLabel
                             active={activeSort === 'mark'}
                             direction={sortDirection}
@@ -119,8 +119,9 @@ function ExamResults() {
                             Note
                         </TableSortLabel>
                     </TableCell>
+                    <TableCell width={50}>Durée</TableCell>
+
                     <TableCell>Commentaire de l'étudiant.e</TableCell>
-                    <TableCell>Actions</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -131,11 +132,6 @@ function ExamResults() {
                         : TableRow;
                     return (
                         <StyledRow key={result.attemptId}>
-                            <TableCell>{result.email}</TableCell>
-                            <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
-                            <TableCell>{result.duration}</TableCell>
-                            <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
-                            <TableCell>{result.comment || '-'}</TableCell>
                             <TableCell>
                                 <IconButton
                                     title="Voir la copie"
@@ -163,6 +159,19 @@ function ExamResults() {
                                     <DeleteForeverIcon />
                                 </IconButton>
                             </TableCell>
+                            <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
+                            <TableCell>
+                                <Link
+                                    to={`/teacher/${authentication.getEncodedPassword()}/attempts/${
+                                        result.attemptId
+                                    }`}
+                                >
+                                    {result.email}
+                                </Link>
+                            </TableCell>
+                            <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
+                            <TableCell>{result.duration}</TableCell>
+                            <TableCell>{result.comment || '-'}</TableCell>
                         </StyledRow>
                     );
                 })}
