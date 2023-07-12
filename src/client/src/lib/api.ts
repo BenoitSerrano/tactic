@@ -22,6 +22,8 @@ const api = {
     updateQuestionChoixMultiple,
     createQuestionTrou,
     updateQuestionTrou,
+    createPhraseMelangee,
+    updatePhraseMelangee,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -280,6 +282,40 @@ async function updateQuestionTrou(params: {
             'Content-Type': 'application/json',
         },
         body: body,
+    });
+    return response.json();
+}
+
+async function createPhraseMelangee(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/phrases-melangees`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.json();
+}
+
+async function updatePhraseMelangee(params: {
+    examId: string;
+    phraseMelangeeId: number;
+    shuffledCombination?: number[];
+    words?: string[];
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/phrases-melangees/${params.phraseMelangeeId}`;
+    const body = JSON.stringify({
+        shuffledCombination: params.shuffledCombination,
+        words: params.words,
+    });
+    const response = await fetch(URL, {
+        method: 'PATCH',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body,
     });
     return response.json();
 }

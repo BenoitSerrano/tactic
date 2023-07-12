@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { Exams } from './pages/Exams';
-import { ExamEdition } from './pages/ExamEdition';
+import { ExamEdition } from './pages/ExamEdition/ExamEdition';
 import { StudentsEdition } from './pages/StudentsEdition';
 import { StudentAuthentication } from './pages/StudentAuthentication';
 import { ExamTaking } from './pages/ExamTaking';

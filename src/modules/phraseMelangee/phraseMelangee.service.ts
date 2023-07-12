@@ -21,7 +21,7 @@ function buildPhraseMelangeeService() {
         const highestOrder = await getHighestPhraseMelangeeOrder(examId);
 
         phraseMelangee.words = [];
-        phraseMelangee.rightCombination = [];
+        phraseMelangee.shuffledCombination = [];
         phraseMelangee.exam = exam;
         phraseMelangee.order = highestOrder + 1;
         return phraseMelangeeRepository.save(phraseMelangee);
@@ -44,18 +44,23 @@ function buildPhraseMelangeeService() {
     async function updatePhraseMelangee({
         examId,
         phraseMelangeeId,
-        rightCombination,
+        shuffledCombination,
+        words,
     }: {
         examId?: string;
         phraseMelangeeId?: number;
         words?: string[];
-        rightCombination?: number[];
+        shuffledCombination?: number[];
     }) {
         const phraseMelangee = await phraseMelangeeRepository.findOneOrFail({
             where: { exam: { id: examId }, id: phraseMelangeeId },
         });
-        if (rightCombination !== undefined) {
-            phraseMelangee.rightCombination = rightCombination;
+        if (shuffledCombination !== undefined) {
+            phraseMelangee.shuffledCombination = shuffledCombination;
+        }
+
+        if (words !== undefined) {
+            phraseMelangee.words = words;
         }
 
         return phraseMelangeeRepository.save(phraseMelangee);

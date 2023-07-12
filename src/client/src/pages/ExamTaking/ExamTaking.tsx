@@ -1,13 +1,14 @@
 import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../lib/api';
-import { QuestionChoixMultipleAnswering } from '../components/QuestionChoixMultipleAnswering';
-import { Countdown } from '../components/Countdown';
-import { time } from '../lib/time';
-import { QuestionTrouAnswering } from '../components/QuestionTrouAnswering';
-import { Page } from '../components/Page';
 import { Button, Typography, styled } from '@mui/material';
+import { api } from '../../lib/api';
+import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
+import { Countdown } from '../../components/Countdown';
+import { Page } from '../../components/Page';
+import { time } from '../../lib/time';
+import { QuestionTrouAnswering } from './QuestionTrouAnswering';
+import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
 
 function ExamTaking() {
     const params = useParams();
@@ -58,6 +59,14 @@ function ExamTaking() {
                         attemptId={attemptId}
                         index={index}
                         questionTrou={questionTrou}
+                    />
+                ))}
+                {query.data.exam.phrasesMelangees.map((phraseMelangee: any, index: number) => (
+                    <PhraseMelangeeAnswering
+                        key={phraseMelangee.id}
+                        attemptId={attemptId}
+                        index={index}
+                        phraseMelangee={phraseMelangee}
                     />
                 ))}
                 <hr />

@@ -68,6 +68,7 @@ function buildAttemptService() {
                 exam: {
                     questionsChoixMultiple: { order: 'ASC' },
                     questionsTrou: { order: 'ASC' },
+                    phrasesMelangees: { order: 'ASC' },
                 },
             },
             relations: [
@@ -77,6 +78,7 @@ function buildAttemptService() {
                 'questionTrouAnswers.questionTrou',
                 'exam.questionsChoixMultiple',
                 'exam.questionsTrou',
+                'exam.phrasesMelangees',
                 'qcmAnswers.questionChoixMultiple',
             ],
         });

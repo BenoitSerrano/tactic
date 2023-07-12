@@ -18,14 +18,14 @@ function buildPhraseMelangeeController() {
     async function updatePhraseMelangee(params: {
         urlParams: { examId: string; phraseMelangeeId: string };
         body: {
-            rightCombination?: number[];
+            shuffledCombination?: number[];
             words?: string[];
         };
     }) {
         return phraseMelangeeService.updatePhraseMelangee({
             examId: params.urlParams.examId,
             phraseMelangeeId: Number(params.urlParams.phraseMelangeeId),
-            rightCombination: params.body.rightCombination,
+            shuffledCombination: params.body.shuffledCombination,
             words: params.body.words,
         });
     }

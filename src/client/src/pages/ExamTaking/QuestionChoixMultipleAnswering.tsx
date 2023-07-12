@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { ChangeEvent, useState } from 'react';
-import { api } from '../lib/api';
+import { api } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 

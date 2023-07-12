@@ -32,8 +32,9 @@ function buildExamService() {
             order: {
                 questionsChoixMultiple: { order: 'ASC' },
                 questionsTrou: { order: 'ASC' },
+                phrasesMelangees: { order: 'ASC' },
             },
-            relations: ['questionsChoixMultiple', 'questionsTrou'],
+            relations: ['questionsChoixMultiple', 'questionsTrou', 'phrasesMelangees'],
         });
     }
 

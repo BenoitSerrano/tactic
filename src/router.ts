@@ -105,7 +105,7 @@ router.patch(
     '/exams/:examId/phrases-melangees/:phraseMelangeeId',
     buildController(phraseMelangeeController.updatePhraseMelangee, {
         schema: Joi.object({
-            rightCombination: Joi.array().items(Joi.string()),
+            shuffledCombination: Joi.array().items(Joi.number()),
             words: Joi.array().items(Joi.string().allow('')),
         }),
     }),

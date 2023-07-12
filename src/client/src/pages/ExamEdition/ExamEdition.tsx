@@ -1,11 +1,12 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../lib/api';
-import { QuestionChoixMultipleEdition } from '../components/QuestionChoixMultipleEdition';
-import { QuestionTrouEdition } from '../components/QuestionTrouEdition';
+import { api } from '../../lib/api';
+import { QuestionChoixMultipleEdition } from './QuestionChoixMultipleEdition';
+import { QuestionTrouEdition } from './QuestionTrouEdition';
 import { Button, styled } from '@mui/material';
-import { authentication } from '../lib/authentication';
+import { authentication } from '../../lib/authentication';
+import { PhraseMelangeeEdition } from './PhraseMelangeeEdition';
 
 const HEADER_SIZE = 50;
 const FOOTER_SIZE = 50;
@@ -24,6 +25,13 @@ function ExamEdition() {
     });
     const createQuestionTrouMutation = useMutation({
         mutationFn: api.createQuestionTrou,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['exams', examId] });
+        },
+    });
+
+    const createPhraseMelangeeMutation = useMutation({
+        mutationFn: api.createPhraseMelangee,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exams', examId] });
         },
@@ -48,12 +56,22 @@ function ExamEdition() {
                     questionTrou={questionTrou}
                 />
             ))}
+            {query.data?.phrasesMelangees.map((phrasesMelangee: any) => (
+                <PhraseMelangeeEdition
+                    key={`${examId}-${phrasesMelangee.id}`}
+                    examId={examId}
+                    phraseMelangee={phrasesMelangee}
+                />
+            ))}
             <FooterContainer>
                 <Button variant="contained" onClick={addNewQuestionChoixMultiple}>
                     Ajouter une nouvelle question à choix multiple
                 </Button>
                 <Button variant="contained" onClick={addNewQuestionTrou}>
                     Ajouter une nouvelle question à trou
+                </Button>
+                <Button variant="contained" onClick={addNewPhraseMelangee}>
+                    Ajouter une nouvelle phrase mélangée
                 </Button>
             </FooterContainer>
         </MainContainer>
@@ -65,6 +83,10 @@ function ExamEdition() {
 
     function addNewQuestionTrou() {
         createQuestionTrouMutation.mutate(params.examId as string);
+    }
+
+    function addNewPhraseMelangee() {
+        createPhraseMelangeeMutation.mutate(params.examId as string);
     }
 
     function navigateToExamList() {

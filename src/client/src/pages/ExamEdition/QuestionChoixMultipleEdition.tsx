@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { debounce } from '../lib/utils';
-import { api } from '../lib/api';
+import { debounce } from '../../lib/utils';
+import { api } from '../../lib/api';
 
 function QuestionChoixMultipleEdition(props: { examId: string; questionChoixMultiple: any }) {
     const [title, setTitle] = useState(props.questionChoixMultiple.title);

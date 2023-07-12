@@ -10,7 +10,7 @@ export class PhraseMelangee {
     words: string[];
 
     @Column('simple-array')
-    rightCombination: number[];
+    shuffledCombination: number[];
 
     @Column('int')
     order: number;

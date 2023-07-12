@@ -49,6 +49,12 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
                 answer: questionTrouSummary[questionTrou.id]?.answer,
                 status: questionTrouSummary[questionTrou.id]?.status,
             })),
+            phrasesMelangees: attempt.exam.phrasesMelangees.map((phraseMelangee) => ({
+                ...phraseMelangee,
+                shuffledCombination: phraseMelangee.shuffledCombination.map((value) =>
+                    Number(value),
+                ),
+            })),
         },
     };
 }
