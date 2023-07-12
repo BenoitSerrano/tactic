@@ -1,3 +1,4 @@
+import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
 import { qcmAnswerAdaptator } from '../qcmAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
 import { Attempt } from './Attempt.entity';
@@ -28,6 +29,11 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
         attempt.exam.questionsTrou,
     );
 
+    const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
+        attempt.phraseMelangeAnswers,
+        attempt.exam.phrasesMelangees,
+    );
+
     return {
         id: attempt.id,
         startedAt: attempt.startedAt,
@@ -54,6 +60,7 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
                 shuffledCombination: phraseMelangee.shuffledCombination.map((value) =>
                     Number(value),
                 ),
+                combination: phraseMelangeeSummary[phraseMelangee.id].combination,
             })),
         },
     };

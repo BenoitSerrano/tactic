@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Typography, styled } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { phraseMelangeeModule } from '../../modules/phraseMelangee';
 import { api } from '../../lib/api';
-import { useMutation } from '@tanstack/react-query';
 
 function PhraseMelangeeAnswering(props: {
     phraseMelangee: {
         id: number;
         words: string[];
         shuffledCombination: number[];
+        combination: number[];
     };
     index: number;
     attemptId: string;
 }) {
-    // TODO : pré-remplir
-    const [combination, setCombination] = useState<number[]>([]);
+    const [combination, setCombination] = useState<number[]>(props.phraseMelangee.combination);
 
     const shuffledWords = phraseMelangeeModule.computeShuffledWords(
         props.phraseMelangee.words,

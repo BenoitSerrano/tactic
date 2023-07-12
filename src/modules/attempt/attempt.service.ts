@@ -80,6 +80,8 @@ function buildAttemptService() {
                 'exam.questionsTrou',
                 'exam.phrasesMelangees',
                 'qcmAnswers.questionChoixMultiple',
+                'phraseMelangeAnswers',
+                'phraseMelangeAnswers.phraseMelangee',
             ],
         });
 

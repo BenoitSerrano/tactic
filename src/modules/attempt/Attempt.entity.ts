@@ -11,6 +11,7 @@ import { Student } from '../student/Student.entity';
 import { Exam } from '../exam';
 import { QcmAnswer } from '../qcmAnswer';
 import { QuestionTrouAnswer } from '../questionTrouAnswer';
+import { PhraseMelangeeAnswer } from '../phraseMelangeeAnswer';
 
 @Entity()
 @Unique('One student has one shot for an exam', ['student', 'exam'])
@@ -35,4 +36,7 @@ export class Attempt {
 
     @OneToMany(() => QuestionTrouAnswer, (questionTrouAnswer) => questionTrouAnswer.attempt)
     questionTrouAnswers: QuestionTrouAnswer[];
+
+    @OneToMany(() => PhraseMelangeeAnswer, (phraseMelangeAnswer) => phraseMelangeAnswer.attempt)
+    phraseMelangeAnswers: PhraseMelangeeAnswer[];
 }
