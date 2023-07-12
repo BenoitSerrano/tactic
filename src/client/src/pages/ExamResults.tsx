@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { api } from '../lib/api';
@@ -40,6 +41,7 @@ type examResultsType = Array<examResultType>;
 type sortColumnType = 'email' | 'mark' | 'startedAt';
 
 function ExamResults() {
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const params = useParams();
     const examId = params.examId as string;
@@ -130,20 +132,18 @@ function ExamResults() {
                         : TableRow;
                     return (
                         <StyledRow key={result.attemptId}>
-                            <TableCell>
-                                <Link
-                                    to={`/teacher/${authentication.getEncodedPassword()}/attempts/${
-                                        result.attemptId
-                                    }`}
-                                >
-                                    {result.email}
-                                </Link>
-                            </TableCell>
+                            <TableCell>{result.email}</TableCell>
                             <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
                             <TableCell>{result.duration}</TableCell>
                             <TableCell>{`${result.mark} / ${result.totalPoints}`}</TableCell>
                             <TableCell>{result.comment || '-'}</TableCell>
                             <TableCell>
+                                <IconButton
+                                    title="Voir la copie"
+                                    onClick={buildGoToAttempt(result.attemptId)}
+                                >
+                                    <VisibilityIcon />
+                                </IconButton>
                                 <IconButton
                                     title={
                                         'Marquer comme' +
@@ -178,6 +178,12 @@ function ExamResults() {
             if (hasConfirmed) {
                 deleteAttemptMutation.mutate(attemptId);
             }
+        };
+    }
+
+    function buildGoToAttempt(attemptId: string) {
+        return () => {
+            navigate(`/teacher/${authentication.getEncodedPassword()}/attempts/${attemptId}`);
         };
     }
 
