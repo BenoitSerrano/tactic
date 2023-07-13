@@ -11,7 +11,6 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { authentication } from '../lib/authentication';
