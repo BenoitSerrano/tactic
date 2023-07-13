@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 import { QuestionChoixMultipleEdition } from './QuestionChoixMultipleEdition';
 import { QuestionTrouEdition } from './QuestionTrouEdition';
-import { Button, styled } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, styled } from '@mui/material';
 import { authentication } from '../../lib/authentication';
 import { PhraseMelangeeEdition } from './PhraseMelangeeEdition';
 
@@ -42,6 +42,96 @@ function ExamEdition() {
             <HeaderContainer>
                 <Button onClick={navigateToExamList}>Revenir à la liste des examens</Button>
             </HeaderContainer>
+            <Table stickyHeader>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Type</TableCell>
+                        <TableCell>Intitulé</TableCell>
+                        <TableCell>Bonne(s) réponse(s)</TableCell>
+                        <TableCell>Réponse(s) acceptée(s)</TableCell>
+                        <TableCell>Points</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
+                        <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
+                            <TableCell>QCM</TableCell>
+                            <TableCell>
+                                {questionChoixMultiple.title}
+                                <br />
+                                <ul>
+                                    {questionChoixMultiple.possibleAnswers.map(
+                                        (possibleAnswer: string) => (
+                                            <li
+                                                key={`questionChoixMultiple-${questionChoixMultiple}-${possibleAnswer}`}
+                                            >
+                                                {possibleAnswer}
+                                            </li>
+                                        ),
+                                    )}
+                                </ul>
+                            </TableCell>
+                            <TableCell>
+                                {
+                                    questionChoixMultiple.possibleAnswers[
+                                        questionChoixMultiple.rightAnswerIndex
+                                    ]
+                                }
+                            </TableCell>
+                            <TableCell />
+                            <TableCell>{questionChoixMultiple.points}</TableCell>
+                        </TableRow>
+                    ))}
+                    {query.data?.phrasesMelangees.map((phraseMelangee: any) => (
+                        <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
+                            <TableCell>Phrase mélangée</TableCell>
+                            <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
+                            <TableCell>
+                                <ul>
+                                    {phraseMelangee.correctPhrases.map((correctPhrase: string) => (
+                                        <li>{correctPhrase}</li>
+                                    ))}
+                                </ul>
+                            </TableCell>
+                            <TableCell />
+                            <TableCell>{phraseMelangee.points}</TableCell>
+                        </TableRow>
+                    ))}
+                    {query.data?.questionsTrou.map((questionTrou: any) => (
+                        <TableRow>
+                            <TableCell>Texte à trou</TableCell>
+                            <TableCell>
+                                {questionTrou.beforeText} ....... {questionTrou.afterText}
+                            </TableCell>
+                            <TableCell>
+                                <ul>
+                                    {questionTrou.rightAnswers.map((rightAnswer: string) => (
+                                        <li
+                                            key={`questionTrou-${questionTrou.id}-rightAnswer-${rightAnswer}`}
+                                        >
+                                            {rightAnswer}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </TableCell>
+                            <TableCell>
+                                <ul>
+                                    {questionTrou.acceptableAnswers.map(
+                                        (acceptableAnswer: string) => (
+                                            <li
+                                                key={`questionTrou-${questionTrou.id}-acceptableAnswer-${acceptableAnswer}`}
+                                            >
+                                                {acceptableAnswer}
+                                            </li>
+                                        ),
+                                    )}
+                                </ul>
+                            </TableCell>
+                            <TableCell>{questionTrou.points}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
             {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
                 <QuestionChoixMultipleEdition
                     key={`${examId}-${questionChoixMultiple.id}`}
@@ -63,6 +153,7 @@ function ExamEdition() {
                     phraseMelangee={phrasesMelangee}
                 />
             ))}
+
             <FooterContainer>
                 <Button variant="contained" onClick={addNewQuestionChoixMultiple}>
                     Ajouter une nouvelle question à choix multiple
