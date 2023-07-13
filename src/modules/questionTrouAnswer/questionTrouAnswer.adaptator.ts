@@ -1,10 +1,10 @@
 import { QuestionTrou } from '../questionTrou/QuestionTrou.entity';
 import { QuestionTrouAnswer } from './QuestionTrouAnswer.entity';
+import { computeQuestionTrouStatus } from './utils/computeQuestionTrouStatus';
 
 const questionTrouAnswerAdaptator = {
     computeQuestionTrouSummary,
 };
-type questionTrouAnswersType = Record<number, string>;
 
 function computeQuestionTrouSummary(
     questionTrouAnswers: QuestionTrouAnswer[],
@@ -19,9 +19,14 @@ function computeQuestionTrouSummary(
     const questionTrouSummary: any = {};
 
     questionsTrou.forEach((questionTrou) => {
-        const status = computeQuestionTrouStatus(questionTrou, trouAnswers);
+        const answer = trouAnswers[questionTrou.id];
+        const status = computeQuestionTrouStatus(
+            answer,
+            questionTrou.rightAnswers,
+            questionTrou.acceptableAnswers,
+        );
         questionTrouSummary[questionTrou.id] = {
-            answer: trouAnswers[questionTrou.id],
+            answer,
             status,
             points: questionTrou.points,
         };
@@ -29,29 +34,29 @@ function computeQuestionTrouSummary(
     return questionTrouSummary;
 }
 
-function computeQuestionTrouStatus(
-    questionTrou: QuestionTrou,
-    questionTrouAnswers: questionTrouAnswersType,
-) {
-    if (
-        questionTrou.rightAnswers.some(
-            (rightAnswer) =>
-                rightAnswer.trim().toLowerCase() ===
-                questionTrouAnswers[questionTrou.id]?.trim().toLowerCase(),
-        )
-    ) {
-        return 'right';
-    } else if (
-        questionTrou.acceptableAnswers.some(
-            (acceptableAnswer) =>
-                acceptableAnswer.toLowerCase() ===
-                questionTrouAnswers[questionTrou.id]?.trim().toLowerCase(),
-        )
-    ) {
-        return 'acceptable';
-    } else {
-        return 'wrong';
-    }
-}
+// function computeQuestionTrouStatus(
+//     questionTrou: QuestionTrou,
+//     questionTrouAnswers: questionTrouAnswersType,
+// ) {
+//     if (
+//         questionTrou.rightAnswers.some(
+//             (rightAnswer) =>
+//                 rightAnswer.trim().toLowerCase() ===
+//                 questionTrouAnswers[questionTrou.id]?.trim().toLowerCase(),
+//         )
+//     ) {
+//         return 'right';
+//     } else if (
+//         questionTrou.acceptableAnswers.some(
+//             (acceptableAnswer) =>
+//                 acceptableAnswer.toLowerCase() ===
+//                 questionTrouAnswers[questionTrou.id]?.trim().toLowerCase(),
+//         )
+//     ) {
+//         return 'acceptable';
+//     } else {
+//         return 'wrong';
+//     }
+// }
 
 export { questionTrouAnswerAdaptator };
