@@ -15,6 +15,7 @@ import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
 import { authentication } from './lib/authentication';
 import { TeacherLogin } from './pages/TeacherLogin';
 import { NotFound } from './pages/NotFound';
+import { AdminPage } from './components/AdminPage';
 
 function Router() {
     const encodedPassword = authentication.getEncodedPassword();
@@ -28,7 +29,11 @@ function Router() {
             />
             <Route
                 path={`/teacher/${encodedPassword}/exams/:examId/results`}
-                element={<ExamResults />}
+                element={
+                    <AdminPage>
+                        <ExamResults />
+                    </AdminPage>
+                }
             />
             <Route
                 path={`/teacher/${encodedPassword}/attempts/:attemptId`}

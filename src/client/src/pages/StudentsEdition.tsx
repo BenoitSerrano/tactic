@@ -15,6 +15,8 @@ import {
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { authentication } from '../lib/authentication';
+import { AdminPage } from '../components/AdminPage';
+import { Loader } from '../components/Loader';
 
 function StudentsEdition() {
     const queryClient = useQueryClient();
@@ -44,10 +46,15 @@ function StudentsEdition() {
         },
     });
 
+    if (!query.data && query.isLoading) {
+        return <Loader />;
+    }
+
     return (
-        <div>
-            <Typography variant="h1">Étudiant.es</Typography>
-            <Table>
+        <AdminPage>
+            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
+
+            <Table stickyHeader>
                 <TableHead>
                     <TableRow>
                         <TableCell>Adresse e-mail</TableCell>
@@ -87,8 +94,7 @@ function StudentsEdition() {
                 <Button onClick={importStudentEmails}>Importer une liste d'étudiant.es</Button>
             </div>
             <hr />
-            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
-        </div>
+        </AdminPage>
     );
 
     async function createStudent() {

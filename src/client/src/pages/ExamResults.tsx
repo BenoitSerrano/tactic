@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { time } from '../lib/time';
 import { authentication } from '../lib/authentication';
+import { Loader } from '../components/Loader';
 
 type examResultApiType = {
     id: string;
@@ -65,6 +66,9 @@ function ExamResults() {
     });
 
     if (!query.data) {
+        if (query.isLoading) {
+            return <Loader />;
+        }
         return <div />;
     }
 
@@ -105,7 +109,7 @@ function ExamResults() {
                             Adresse e-mail
                         </TableSortLabel>
                     </TableCell>
-                    <TableCell width={70}>
+                    <TableCell width={80}>
                         <TableSortLabel
                             active={activeSort === 'mark'}
                             direction={sortDirection}
@@ -116,7 +120,7 @@ function ExamResults() {
                                 setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                             }}
                         >
-                            Note (/ {query.data.totalPoints})
+                            Note (/ {query.data.totalPoints})
                         </TableSortLabel>
                     </TableCell>
                     <TableCell width={50}>Durée</TableCell>
