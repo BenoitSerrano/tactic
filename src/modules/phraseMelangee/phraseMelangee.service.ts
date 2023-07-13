@@ -13,16 +13,27 @@ function buildPhraseMelangeeService() {
 
     return phraseMelangeeService;
 
-    async function createPhraseMelangee(examId: string) {
+    async function createPhraseMelangee(
+        examId: string,
+        {
+            shuffledPhrase,
+            correctPhrases,
+            words,
+        }: {
+            words: string[];
+            shuffledPhrase: string;
+            correctPhrases: string[];
+        },
+    ) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
 
         const phraseMelangee = new PhraseMelangee();
         const highestOrder = await getHighestPhraseMelangeeOrder(examId);
 
-        phraseMelangee.words = [];
-        phraseMelangee.correctPhrases = [];
-        phraseMelangee.shuffledPhrase = '';
+        phraseMelangee.words = words;
+        phraseMelangee.correctPhrases = correctPhrases;
+        phraseMelangee.shuffledPhrase = shuffledPhrase;
         phraseMelangee.exam = exam;
         phraseMelangee.order = highestOrder + 1;
         return phraseMelangeeRepository.save(phraseMelangee);

@@ -328,14 +328,25 @@ async function updateQuestionTrou(params: {
     return response.json();
 }
 
-async function createPhraseMelangee(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/phrases-melangees`;
+async function createPhraseMelangee(params: {
+    examId: string;
+    words: string[];
+    correctPhrases: string[];
+    shuffledPhrase: string;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/phrases-melangees`;
+    const body = JSON.stringify({
+        correctPhrases: params.correctPhrases,
+        shuffledPhrase: params.shuffledPhrase,
+        words: params.words,
+    });
     const response = await fetch(URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        body,
     });
     return response.json();
 }
@@ -354,7 +365,7 @@ async function updatePhraseMelangee(params: {
         words: params.words,
     });
     const response = await fetch(URL, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

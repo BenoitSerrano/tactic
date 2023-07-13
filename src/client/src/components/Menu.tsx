@@ -4,6 +4,7 @@ import { IconButton, styled } from '@mui/material';
 type buttonType = {
     IconComponent: React.ElementType;
     onClick: () => void;
+    title?: string;
 };
 
 function Menu(props: { buttons: Array<buttonType> }) {
@@ -12,7 +13,7 @@ function Menu(props: { buttons: Array<buttonType> }) {
             {props.buttons.map((button) => {
                 const { IconComponent, onClick } = button;
                 return (
-                    <IconButton onClick={onClick} size="large">
+                    <IconButton title={button.title} onClick={onClick} size="large">
                         <IconComponent fontSize="large" />
                     </IconButton>
                 );

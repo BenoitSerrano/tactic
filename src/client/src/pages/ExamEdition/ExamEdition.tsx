@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
+import LowPriorityIcon from '@mui/icons-material/LowPriority';
 import {
     Button,
     IconButton,
@@ -21,6 +22,7 @@ import {
     phraseMelangeeModalStatusType,
     phraseMelangeeType,
 } from './PhraseMelangeeUpsertionModal';
+import { Menu } from '../../components/Menu';
 
 const HEADER_SIZE = 50;
 const FOOTER_SIZE = 50;
@@ -179,6 +181,15 @@ function ExamEdition() {
                     questionTrou={questionTrou}
                 />
             ))}
+            <Menu
+                buttons={[
+                    {
+                        title: 'Créer une phrase à reconstituer',
+                        onClick: () => setCurrentPhraseMelangeeModalStatus({ kind: 'creating' }),
+                        IconComponent: LowPriorityIcon,
+                    },
+                ]}
+            />
             {/* {query.data?.phrasesMelangees.map((phrasesMelangee: any) => (
                 <PhraseMelangeeEdition
                     key={`${examId}-${phrasesMelangee.id}`}
@@ -213,10 +224,6 @@ function ExamEdition() {
 
     function addNewQuestionTrou() {
         createQuestionTrouMutation.mutate(params.examId as string);
-    }
-
-    function addNewPhraseMelangee() {
-        createPhraseMelangeeMutation.mutate(params.examId as string);
     }
 
     function navigateToExamList() {

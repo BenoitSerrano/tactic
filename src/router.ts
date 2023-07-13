@@ -100,10 +100,16 @@ router.patch(
 
 router.post(
     '/exams/:examId/phrases-melangees',
-    buildController(phraseMelangeeController.createPhraseMelangee),
+    buildController(phraseMelangeeController.createPhraseMelangee, {
+        schema: Joi.object({
+            shuffledPhrase: Joi.string().required(),
+            correctPhrases: Joi.array().items(Joi.string()),
+            words: Joi.array().items(Joi.string()),
+        }),
+    }),
 );
 
-router.patch(
+router.put(
     '/exams/:examId/phrases-melangees/:phraseMelangeeId',
     buildController(phraseMelangeeController.updatePhraseMelangee, {
         schema: Joi.object({

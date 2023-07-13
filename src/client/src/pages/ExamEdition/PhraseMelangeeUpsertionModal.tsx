@@ -19,25 +19,23 @@ type phraseMelangeeModalStatusType =
 
 function PhraseMelangeeUpsertionModal(props: {
     close: () => void;
-    modalStatus?: phraseMelangeeModalStatusType;
+    modalStatus: phraseMelangeeModalStatusType;
     examId: string;
 }) {
     const queryClient = useQueryClient();
     const [originalPhrase, setOriginalPhrase] = useState<string>(
-        (props.modalStatus?.kind === 'editing' &&
-            props.modalStatus?.phraseMelangee.correctPhrases[0]) ||
+        (props.modalStatus.kind === 'editing' &&
+            props.modalStatus.phraseMelangee.correctPhrases[0]) ||
             '',
     );
 
     const [shuffledPhrase, setShuffledPhrase] = useState<string>(
-        (props.modalStatus?.kind === 'editing' &&
-            props.modalStatus?.phraseMelangee.shuffledPhrase) ||
+        (props.modalStatus.kind === 'editing' && props.modalStatus.phraseMelangee.shuffledPhrase) ||
             '',
     );
 
     const [correctPhrases, setCorrectPhrases] = useState<string[]>(
-        (props.modalStatus?.kind === 'editing' &&
-            props.modalStatus?.phraseMelangee.correctPhrases) ||
+        (props.modalStatus.kind === 'editing' && props.modalStatus.phraseMelangee.correctPhrases) ||
             [],
     );
 
@@ -50,18 +48,28 @@ function PhraseMelangeeUpsertionModal(props: {
         },
     });
 
+    const createPhraseMelangeeMutation = useMutation({
+        mutationFn: api.createPhraseMelangee,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
+        },
+    });
+
     const words = originalPhrase.trim().split(' ');
 
     const isUpdating = updatePhraseMelangeeMutation.isLoading;
+    const isCreating = createPhraseMelangeeMutation.isLoading;
+
+    const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
 
     return (
         <Modal
             isOpen={!!props.modalStatus}
             close={props.close}
             onConfirm={savePhraseMelangee}
-            confirmButtonLabel="Modifier"
+            confirmButtonLabel={confirmButtonLabel}
             cancelButtonLabel="Annuler"
-            isConfirmLoading={isUpdating}
+            isConfirmLoading={isUpdating || isCreating}
         >
             <TextField
                 fullWidth
@@ -120,6 +128,14 @@ function PhraseMelangeeUpsertionModal(props: {
         </Modal>
     );
 
+    function computeConfirmButtonLabel(modalStatus: phraseMelangeeModalStatusType) {
+        switch (modalStatus.kind) {
+            case 'creating':
+                return 'Créer';
+            case 'editing':
+                return 'Modifier';
+        }
+    }
     function buildOnClickOnCorrectPhraseWord(index: number) {
         return () => {
             const newCorrectCombination = [...correctCombination];
@@ -162,6 +178,12 @@ function PhraseMelangeeUpsertionModal(props: {
                 words,
             });
         } else {
+            createPhraseMelangeeMutation.mutate({
+                examId: props.examId,
+                correctPhrases,
+                shuffledPhrase,
+                words,
+            });
         }
     }
 }

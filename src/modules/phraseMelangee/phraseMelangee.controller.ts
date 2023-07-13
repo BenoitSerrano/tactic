@@ -11,8 +11,15 @@ function buildPhraseMelangeeController() {
 
     return phraseMelangeeController;
 
-    async function createPhraseMelangee(params: { urlParams: { examId: string } }) {
-        return phraseMelangeeService.createPhraseMelangee(params.urlParams.examId);
+    async function createPhraseMelangee(params: {
+        urlParams: { examId: string };
+        body: {
+            shuffledPhrase: string;
+            words: string[];
+            correctPhrases: string[];
+        };
+    }) {
+        return phraseMelangeeService.createPhraseMelangee(params.urlParams.examId, params.body);
     }
 
     async function updatePhraseMelangee(params: {
