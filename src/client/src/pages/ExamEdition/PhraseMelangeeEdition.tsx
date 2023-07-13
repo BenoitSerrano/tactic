@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button, TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
 import { combinator } from '../../lib/combinator';
+import { LoadingButton } from '@mui/lab';
 
 function PhraseMelangeeEdition(props: {
     examId: string;
@@ -33,6 +34,8 @@ function PhraseMelangeeEdition(props: {
     });
 
     const words = originalPhrase.trim().split(' ');
+
+    const isUpdating = updatePhraseMelangeeMutation.isLoading;
 
     return (
         <div>
@@ -91,9 +94,9 @@ function PhraseMelangeeEdition(props: {
                 </>
             )}
 
-            <Button variant="outlined" onClick={savePhraseMelangee}>
+            <LoadingButton variant="outlined" onClick={savePhraseMelangee} loading={isUpdating}>
                 Sauvegarder
-            </Button>
+            </LoadingButton>
         </div>
     );
 
