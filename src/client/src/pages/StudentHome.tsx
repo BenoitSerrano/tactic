@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Modal, Typography, styled } from '@mui/material';
+import { Button, Typography, styled } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Page } from '../components/Page';
+import { Modal } from '../components/Modal';
 
 function StudentHome() {
     const params = useParams();
@@ -69,18 +70,13 @@ function StudentHome() {
                 </Button>
                 <Button onClick={openModaleConfirmation}>I have never studied French</Button>
             </ContentContainer>
-            <Modal open={isConfirmationModalOpen} onClose={closeConfirmationModal}>
-                <ModalContent>
-                    <p>
-                        <Typography>Do you confirm that you've never studied French?</Typography>
-                    </p>
-                    <div>
-                        <Button onClick={closeConfirmationModal}>Cancel</Button>
-                        <Button variant="contained" onClick={launchAndEndExam}>
-                            Yes, I confirm
-                        </Button>
-                    </div>
-                </ModalContent>
+            <Modal
+                close={closeConfirmationModal}
+                isOpen={isConfirmationModalOpen}
+                onConfirm={launchAndEndExam}
+                confirmButtonLabel="Yes, I confirm"
+            >
+                <Typography>Do you confirm that you've never studied French?</Typography>
             </Modal>
         </Page>
     );
@@ -98,28 +94,11 @@ function StudentHome() {
     }
 
     function launchAndEndExam() {
-        closeConfirmationModal();
         createEmptyAttemptMutation.mutate({ examId, studentId });
     }
 }
 
 export { StudentHome };
-
-const ModalContent = styled('div')({
-    borderRadius: '2px',
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '40%',
-    height: '40%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '20px',
-    backgroundColor: 'white',
-});
 
 const ContentContainer = styled('div')({
     width: '50%',
