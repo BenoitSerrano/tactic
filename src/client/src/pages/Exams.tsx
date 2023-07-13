@@ -17,6 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import { authentication } from '../lib/authentication';
+import { config } from '../config';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -106,7 +107,7 @@ function Exams() {
 
     function buildCopyExamLinkToClipboard(examId: string) {
         return () => {
-            const url = `https://test-de-langue.osc-fr1.scalingo.io/student/exams/${examId}`;
+            const url = `${config.HOST_URL}/student/exams/${examId}`;
             navigator.clipboard.writeText(url);
         };
     }
