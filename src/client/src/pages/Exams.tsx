@@ -18,6 +18,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import { authentication } from '../lib/authentication';
 import { config } from '../config';
+import { Loader } from '../components/Loader';
+import { AdminPage } from '../components/AdminPage';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -32,9 +34,10 @@ function Exams() {
     });
 
     return (
-        <div>
-            <Typography variant="h1">Examens</Typography>
-            <Table>
+        <AdminPage>
+            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
+
+            <Table stickyHeader>
                 <TableHead>
                     <TableRow>
                         <TableCell>Nom de l'examen</TableCell>
@@ -69,6 +72,7 @@ function Exams() {
                     ))}
                 </TableBody>
             </Table>
+            {!query.data && !!query.isLoading && <Loader />}
             <hr />
             <TextField
                 label="Nom de l'examen"
@@ -87,8 +91,7 @@ function Exams() {
                 Créer un examen
             </Button>
             <hr />
-            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
-        </div>
+        </AdminPage>
     );
 
     async function createExam() {
