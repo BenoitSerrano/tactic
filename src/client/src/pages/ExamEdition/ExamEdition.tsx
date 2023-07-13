@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
 import LowPriorityIcon from '@mui/icons-material/LowPriority';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import {
     Button,
     IconButton,
@@ -38,12 +39,12 @@ function ExamEdition() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const query = useQuery(['exams', examId], () => api.fetchExam(examId));
-    const createQcmMutation = useMutation({
-        mutationFn: api.createQuestionChoixMultiple,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exams', examId] });
-        },
-    });
+    // const createQcmMutation = useMutation({
+    //     mutationFn: api.createQuestionChoixMultiple,
+    //     onSuccess: () => {
+    //         queryClient.invalidateQueries({ queryKey: ['exams', examId] });
+    //     },
+    // });
     const createQuestionTrouMutation = useMutation({
         mutationFn: api.createQuestionTrou,
         onSuccess: () => {
@@ -201,6 +202,11 @@ function ExamEdition() {
             <Menu
                 buttons={[
                     {
+                        title: 'Créer un QCM',
+                        onClick: () => setCurrentQCMModalStatus({ kind: 'creating' }),
+                        IconComponent: RadioButtonCheckedIcon,
+                    },
+                    {
                         title: 'Créer une phrase à reconstituer',
                         onClick: () => setCurrentPhraseMelangeeModalStatus({ kind: 'creating' }),
                         IconComponent: LowPriorityIcon,
@@ -243,9 +249,9 @@ function ExamEdition() {
         };
     }
 
-    function addNewQuestionChoixMultiple() {
-        createQcmMutation.mutate(params.examId as string);
-    }
+    // function addNewQuestionChoixMultiple() {
+    //     createQcmMutation.mutate(params.examId as string);
+    // }
 
     function addNewQuestionTrou() {
         createQuestionTrouMutation.mutate(params.examId as string);

@@ -48,7 +48,7 @@ function QuestionChoixMultipleUpsertionModal(props: {
     const [possibleAnswers, setPossibleAnswers] = useState(
         props.modalStatus.kind === 'editing'
             ? props.modalStatus.questionChoixMultiple.possibleAnswers
-            : [],
+            : ['', '', '', ''],
     );
 
     const isUpdating = updateQuestionChoixMultipleMutation.isLoading;
@@ -126,12 +126,12 @@ function QuestionChoixMultipleUpsertionModal(props: {
                 title,
             });
         } else {
-            // createQuestionChoixMultipleMutation.mutate({
-            //     examId: props.examId,
-            //     correctPhrases,
-            //     shuffledPhrase,
-            //     words,
-            // });
+            createQuestionChoixMultipleMutation.mutate({
+                examId: props.examId,
+                possibleAnswers,
+                rightAnswerIndex,
+                title,
+            });
         }
     }
 }

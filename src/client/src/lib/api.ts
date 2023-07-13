@@ -252,15 +252,27 @@ async function createExam({ name, duration }: { name: string; duration: number }
     return response.json();
 }
 
-async function createQuestionChoixMultiple(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/questions-choix-multiple`;
+async function createQuestionChoixMultiple(params: {
+    examId: string;
+    title: string;
+    possibleAnswers: string[];
+    rightAnswerIndex: number;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/questions-choix-multiple`;
+    const body = JSON.stringify({
+        title: params.title,
+        possibleAnswers: params.possibleAnswers,
+        rightAnswerIndex: params.rightAnswerIndex,
+    });
     const response = await fetch(URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        body,
     });
+
     return response.json();
 }
 

@@ -13,16 +13,23 @@ function buildQuestionChoixMultipleService() {
 
     return questionChoixMultipleService;
 
-    async function createQuestionChoixMultiple(examId: string) {
+    async function createQuestionChoixMultiple(
+        examId: string,
+        body: {
+            title: string;
+            possibleAnswers: string[];
+            rightAnswerIndex: number;
+        },
+    ) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
 
         const questionChoixMultiple = new QuestionChoixMultiple();
         const highestOrder = await getHighestQuestionChoixMultipleOrder(examId);
 
-        questionChoixMultiple.possibleAnswers = ['', '', '', ''];
-        questionChoixMultiple.rightAnswerIndex = 0;
-        questionChoixMultiple.title = '';
+        questionChoixMultiple.possibleAnswers = body.possibleAnswers;
+        questionChoixMultiple.rightAnswerIndex = body.rightAnswerIndex;
+        questionChoixMultiple.title = body.title;
         questionChoixMultiple.exam = exam;
         questionChoixMultiple.order = highestOrder + 1;
         return questionChoixMultipleRepository.save(questionChoixMultiple);

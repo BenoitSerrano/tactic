@@ -11,13 +11,19 @@ function buildQuestionChoixMultipleController() {
 
     return questionChoixMultipleController;
 
-    async function createQuestionChoixMultiple(params: { urlParams: { examId: string } }) {
-        return questionChoixMultipleService.createQuestionChoixMultiple(params.urlParams.examId);
+    async function createQuestionChoixMultiple(params: {
+        urlParams: { examId: string };
+        body: { title: string; possibleAnswers: string[]; rightAnswerIndex: number };
+    }) {
+        return questionChoixMultipleService.createQuestionChoixMultiple(
+            params.urlParams.examId,
+            params.body,
+        );
     }
 
     async function updateQuestionChoixMultiple(params: {
         urlParams: { examId: string; qcmId: string };
-        body: { title: string; possibleAnswers: string[]; rightAnswerIndex: string };
+        body: { title: string; possibleAnswers: string[]; rightAnswerIndex: number };
     }) {
         return questionChoixMultipleService.updateQuestionChoixMultiple({
             examId: params.urlParams.examId,

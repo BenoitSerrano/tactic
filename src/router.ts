@@ -66,7 +66,13 @@ router.post(
 
 router.post(
     '/exams/:examId/questions-choix-multiple',
-    buildController(questionChoixMultipleController.createQuestionChoixMultiple),
+    buildController(questionChoixMultipleController.createQuestionChoixMultiple, {
+        schema: Joi.object({
+            title: Joi.string(),
+            rightAnswerIndex: Joi.number().required(),
+            possibleAnswers: Joi.array().items(Joi.string().allow('')),
+        }),
+    }),
 );
 
 router.put(
