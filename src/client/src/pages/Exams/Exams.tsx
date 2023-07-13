@@ -20,6 +20,7 @@ import { config } from '../../config';
 import { Loader } from '../../components/Loader';
 import { AdminPage } from '../../components/AdminPage';
 import { ExamCreationModal } from './ExamCreationModal';
+import { Menu } from '../../components/Menu';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -73,11 +74,16 @@ function Exams() {
                     navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/edit`)
                 }
             />
-            <MenuContainer>
+            <Menu
+                buttons={[
+                    { onClick: () => setIsExamCreationModalOpen(true), IconComponent: PostAddIcon },
+                ]}
+            />
+            {/* <MenuContainer>
                 <IconButton onClick={() => setIsExamCreationModalOpen(true)} size="large">
                     <PostAddIcon fontSize="large" />
                 </IconButton>
-            </MenuContainer>
+            </MenuContainer> */}
         </AdminPage>
     );
 
