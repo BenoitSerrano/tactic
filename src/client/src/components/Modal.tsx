@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal as MuiModal, styled } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 function Modal(props: {
     children: React.ReactElement | Array<React.ReactElement>;
@@ -7,16 +8,22 @@ function Modal(props: {
     close: () => void;
     onConfirm: () => void;
     confirmButtonLabel?: string;
+    cancelButtonLabel?: string;
+    isConfirmLoading?: boolean;
 }) {
     return (
         <MuiModal open={props.isOpen} onClose={props.close}>
             <ModalContent>
                 <ModalBody>{props.children}</ModalBody>
                 <ModalFooter>
-                    <Button onClick={props.close}>Cancel</Button>
-                    <Button variant="contained" onClick={onConfirm}>
+                    <Button onClick={props.close}>{props.cancelButtonLabel || 'Cancel'}</Button>
+                    <LoadingButton
+                        loading={props.isConfirmLoading}
+                        variant="contained"
+                        onClick={onConfirm}
+                    >
                         {props.confirmButtonLabel || 'Confirm'}
-                    </Button>
+                    </LoadingButton>
                 </ModalFooter>
             </ModalContent>
         </MuiModal>

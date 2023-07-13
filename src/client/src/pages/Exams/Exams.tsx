@@ -1,37 +1,30 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { api } from '../lib/api';
+import { api } from '../../lib/api';
 import {
-    Button,
     IconButton,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
-    TextField,
-    Typography,
+    styled,
 } from '@mui/material';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RateReviewIcon from '@mui/icons-material/RateReview';
-import { authentication } from '../lib/authentication';
-import { config } from '../config';
-import { Loader } from '../components/Loader';
-import { AdminPage } from '../components/AdminPage';
+import { authentication } from '../../lib/authentication';
+import { config } from '../../config';
+import { Loader } from '../../components/Loader';
+import { AdminPage } from '../../components/AdminPage';
+import { ExamCreationModal } from './ExamCreationModal';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
     const navigate = useNavigate();
-    const [newExamName, setNewExamName] = useState('');
-    const [newExamDuration, setNewExamDuration] = useState(15);
-    const mutation = useMutation({
-        mutationFn: api.createExam,
-        onSuccess: (exam) => {
-            navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${exam.id}/edit`);
-        },
-    });
+    const [isExamCreationModalOpen, setIsExamCreationModalOpen] = useState(false);
 
     return (
         <AdminPage>
@@ -40,14 +33,13 @@ function Exams() {
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
+                        <TableCell width={150}>Actions</TableCell>
                         <TableCell>Nom de l'examen</TableCell>
-                        <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {query.data?.map((exam: any) => (
                         <TableRow key={exam.id}>
-                            <TableCell>{exam.name}</TableCell>
                             <TableCell>
                                 <IconButton
                                     title="Editer"
@@ -68,35 +60,26 @@ function Exams() {
                                     <ContentCopyIcon />
                                 </IconButton>
                             </TableCell>
+                            <TableCell>{exam.name}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
             {!query.data && !!query.isLoading && <Loader />}
-            <hr />
-            <TextField
-                label="Nom de l'examen"
-                placeholder="..."
-                value={newExamName}
-                onChange={(event) => setNewExamName(event.target.value)}
+            <ExamCreationModal
+                isOpen={isExamCreationModalOpen}
+                close={() => setIsExamCreationModalOpen(false)}
+                onExamCreated={(examId: string) =>
+                    navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/edit`)
+                }
             />
-            <TextField
-                type="number"
-                label="Durée de l'examen en minutes"
-                placeholder="..."
-                value={newExamDuration}
-                onChange={(event) => setNewExamDuration(Number(event.target.value))}
-            />
-            <Button variant="contained" onClick={createExam}>
-                Créer un examen
-            </Button>
-            <hr />
+            <MenuContainer>
+                <IconButton onClick={() => setIsExamCreationModalOpen(true)} size="large">
+                    <PostAddIcon fontSize="large" />
+                </IconButton>
+            </MenuContainer>
         </AdminPage>
     );
-
-    async function createExam() {
-        mutation.mutate({ name: newExamName, duration: newExamDuration });
-    }
 
     function buildNavigateToEdition(examId: string) {
         return () =>
@@ -115,5 +98,21 @@ function Exams() {
         };
     }
 }
+
+const MENU_CONTAINER_HEIGHT = 80;
+
+const MenuContainer = styled('div')({
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    backgroundColor: 'white',
+    width: MENU_CONTAINER_HEIGHT,
+    height: MENU_CONTAINER_HEIGHT,
+    borderRadius: MENU_CONTAINER_HEIGHT / 2,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
 
 export { Exams };
