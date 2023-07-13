@@ -14,6 +14,7 @@ import { StudentHome } from './pages/StudentHome';
 import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
 import { authentication } from './lib/authentication';
 import { TeacherLogin } from './pages/TeacherLogin';
+import { NotFound } from './pages/NotFound';
 
 function Router() {
     const encodedPassword = authentication.getEncodedPassword();
@@ -48,6 +49,7 @@ function Router() {
             />
             <Route path="/student/attempt-timeout" element={<AttemptTimeout />} />
             <Route path="/student/empty-attempt-created" element={<EmptyAttemptCreated />} />
+            <Route path="/*" element={<NotFound />} />
         </Routes>
     );
 }
