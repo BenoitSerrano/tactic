@@ -266,7 +266,7 @@ async function createQuestionChoixMultiple(examId: string) {
 
 async function updateQuestionChoixMultiple(params: {
     examId: string;
-    qcmId: string;
+    qcmId: number;
     title: string;
     possibleAnswers: string[];
     rightAnswerIndex: number;

@@ -23,6 +23,11 @@ import {
     phraseMelangeeType,
 } from './PhraseMelangeeUpsertionModal';
 import { Menu } from '../../components/Menu';
+import {
+    QuestionChoixMultipleUpsertionModal,
+    questionChoixMultipleModalStatusType,
+    questionChoixMultipleType,
+} from './QuestionChoixMultipleUpsertionModal';
 
 const HEADER_SIZE = 50;
 const FOOTER_SIZE = 50;
@@ -46,15 +51,11 @@ function ExamEdition() {
         },
     });
 
-    const createPhraseMelangeeMutation = useMutation({
-        mutationFn: api.createPhraseMelangee,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exams', examId] });
-        },
-    });
-
     const [currentPhraseMelangeeModalStatus, setCurrentPhraseMelangeeModalStatus] = useState<
         phraseMelangeeModalStatusType | undefined
+    >();
+    const [currentQCMModalStatus, setCurrentQCMModalStatus] = useState<
+        questionChoixMultipleModalStatusType | undefined
     >();
 
     return (
@@ -76,6 +77,15 @@ function ExamEdition() {
                 <TableBody>
                     {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
                         <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
+                            <TableCell>
+                                <IconButton
+                                    onClick={buildEditQuestionChoixMultipleOnClick(
+                                        questionChoixMultiple,
+                                    )}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                            </TableCell>
                             <TableCell>QCM</TableCell>
                             <TableCell>
                                 {questionChoixMultiple.title}
@@ -167,6 +177,13 @@ function ExamEdition() {
                     close={() => setCurrentPhraseMelangeeModalStatus(undefined)}
                 />
             )}
+            {!!currentQCMModalStatus && (
+                <QuestionChoixMultipleUpsertionModal
+                    examId={examId}
+                    modalStatus={currentQCMModalStatus}
+                    close={() => setCurrentQCMModalStatus(undefined)}
+                />
+            )}
             {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
                 <QuestionChoixMultipleEdition
                     key={`${examId}-${questionChoixMultiple.id}`}
@@ -215,6 +232,14 @@ function ExamEdition() {
     function buildEditPhraseMelangeeOnClick(phraseMelangee: phraseMelangeeType) {
         return () => {
             setCurrentPhraseMelangeeModalStatus({ kind: 'editing', phraseMelangee });
+        };
+    }
+
+    function buildEditQuestionChoixMultipleOnClick(
+        questionChoixMultiple: questionChoixMultipleType,
+    ) {
+        return () => {
+            setCurrentQCMModalStatus({ kind: 'editing', questionChoixMultiple });
         };
     }
 
