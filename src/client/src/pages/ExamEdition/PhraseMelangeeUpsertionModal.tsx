@@ -1,36 +1,53 @@
-import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Modal } from '../../components/Modal';
 import { Button, TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
 import { combinator } from '../../lib/combinator';
-import { LoadingButton } from '@mui/lab';
 
-function PhraseMelangeeEdition(props: {
+type phraseMelangeeType = {
+    id: number;
+    correctPhrases: string[];
+    shuffledPhrase: string;
+    words: string[];
+    points: number;
+};
+
+type phraseMelangeeModalStatusType =
+    | { kind: 'editing'; phraseMelangee: phraseMelangeeType }
+    | { kind: 'creating' };
+
+function PhraseMelangeeUpsertionModal(props: {
+    close: () => void;
+    modalStatus?: phraseMelangeeModalStatusType;
     examId: string;
-    phraseMelangee: {
-        id: number;
-        correctPhrases: string[];
-        shuffledPhrase: string;
-        words: string[];
-        order: number;
-    };
 }) {
+    const queryClient = useQueryClient();
     const [originalPhrase, setOriginalPhrase] = useState<string>(
-        props.phraseMelangee.correctPhrases[0] || '',
+        (props.modalStatus?.kind === 'editing' &&
+            props.modalStatus?.phraseMelangee.correctPhrases[0]) ||
+            '',
     );
 
     const [shuffledPhrase, setShuffledPhrase] = useState<string>(
-        props.phraseMelangee.shuffledPhrase || '',
+        (props.modalStatus?.kind === 'editing' &&
+            props.modalStatus?.phraseMelangee.shuffledPhrase) ||
+            '',
     );
 
     const [correctPhrases, setCorrectPhrases] = useState<string[]>(
-        props.phraseMelangee.correctPhrases || [],
+        (props.modalStatus?.kind === 'editing' &&
+            props.modalStatus?.phraseMelangee.correctPhrases) ||
+            [],
     );
 
     const [correctCombination, setCorrectCombination] = useState<number[]>([]);
 
     const updatePhraseMelangeeMutation = useMutation({
         mutationFn: api.updatePhraseMelangee,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
+        },
     });
 
     const words = originalPhrase.trim().split(' ');
@@ -38,7 +55,14 @@ function PhraseMelangeeEdition(props: {
     const isUpdating = updatePhraseMelangeeMutation.isLoading;
 
     return (
-        <div>
+        <Modal
+            isOpen={!!props.modalStatus}
+            close={props.close}
+            onConfirm={savePhraseMelangee}
+            confirmButtonLabel="Modifier"
+            cancelButtonLabel="Annuler"
+            isConfirmLoading={isUpdating}
+        >
             <TextField
                 fullWidth
                 label="Phrase originale"
@@ -46,11 +70,11 @@ function PhraseMelangeeEdition(props: {
                 value={originalPhrase}
                 onChange={onChangeOriginalPhrase}
             />
-            {originalPhrase && (
+            {!!originalPhrase && (
                 <>
                     <RowContainer>
                         <Typography>Phrase mélangée : {shuffledPhrase}</Typography>
-                        <Button onClick={shuffle}>Mélanger</Button>
+                        <Button onClick={shufflePhrase}>Mélanger</Button>
                     </RowContainer>
                     <RowContainer>
                         <Typography>Phrases correctes :</Typography>
@@ -93,11 +117,7 @@ function PhraseMelangeeEdition(props: {
                     </RowContainer>
                 </>
             )}
-
-            <LoadingButton variant="outlined" onClick={savePhraseMelangee} loading={isUpdating}>
-                Sauvegarder
-            </LoadingButton>
-        </div>
+        </Modal>
     );
 
     function buildOnClickOnCorrectPhraseWord(index: number) {
@@ -108,30 +128,7 @@ function PhraseMelangeeEdition(props: {
         };
     }
 
-    function savePhraseMelangee() {
-        updatePhraseMelangeeMutation.mutate({
-            examId: props.examId,
-            phraseMelangeeId: props.phraseMelangee.id,
-            correctPhrases,
-            shuffledPhrase,
-            words,
-        });
-    }
-
-    function validateCorrectPhrase() {
-        const newCorrectPhrase = correctCombination.map((index) => words[index]).join(' ');
-        setCorrectPhrases([...correctPhrases, newCorrectPhrase]);
-        setCorrectCombination([]);
-    }
-
-    function onChangeOriginalPhrase(event: React.ChangeEvent<HTMLInputElement>) {
-        const originalPhrase = event.target.value;
-        setOriginalPhrase(originalPhrase);
-        setShuffledPhrase(originalPhrase);
-        setCorrectPhrases([originalPhrase]);
-    }
-
-    function shuffle() {
+    function shufflePhrase() {
         setOriginalPhrase(originalPhrase.trim());
         const words = originalPhrase.trim().split(' ');
         const shuffledCombination = combinator.generate(words.length);
@@ -141,6 +138,32 @@ function PhraseMelangeeEdition(props: {
         }
         setShuffledPhrase(shuffledWords.join(' '));
     }
+
+    function onChangeOriginalPhrase(event: React.ChangeEvent<HTMLInputElement>) {
+        const originalPhrase = event.target.value;
+        setOriginalPhrase(originalPhrase);
+        setShuffledPhrase(originalPhrase);
+        setCorrectPhrases([originalPhrase]);
+    }
+
+    function validateCorrectPhrase() {
+        const newCorrectPhrase = correctCombination.map((index) => words[index]).join(' ');
+        setCorrectPhrases([...correctPhrases, newCorrectPhrase]);
+        setCorrectCombination([]);
+    }
+
+    function savePhraseMelangee() {
+        if (props.modalStatus?.kind === 'editing') {
+            updatePhraseMelangeeMutation.mutate({
+                examId: props.examId,
+                phraseMelangeeId: props.modalStatus.phraseMelangee.id,
+                correctPhrases,
+                shuffledPhrase,
+                words,
+            });
+        } else {
+        }
+    }
 }
 
 const RowContainer = styled('div')({ display: 'flex' });
@@ -149,5 +172,6 @@ const WordContainer = styled(Typography)({
     margin: '4px',
     cursor: 'pointer',
 });
+export { PhraseMelangeeUpsertionModal };
 
-export { PhraseMelangeeEdition };
+export type { phraseMelangeeType, phraseMelangeeModalStatusType };

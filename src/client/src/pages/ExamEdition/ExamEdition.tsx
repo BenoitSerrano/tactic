@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import EditIcon from '@mui/icons-material/Edit';
+import {
+    Button,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    styled,
+} from '@mui/material';
 import { api } from '../../lib/api';
 import { QuestionChoixMultipleEdition } from './QuestionChoixMultipleEdition';
 import { QuestionTrouEdition } from './QuestionTrouEdition';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, styled } from '@mui/material';
 import { authentication } from '../../lib/authentication';
-import { PhraseMelangeeEdition } from './PhraseMelangeeEdition';
+import {
+    PhraseMelangeeUpsertionModal,
+    phraseMelangeeModalStatusType,
+    phraseMelangeeType,
+} from './PhraseMelangeeUpsertionModal';
 
 const HEADER_SIZE = 50;
 const FOOTER_SIZE = 50;
@@ -37,6 +51,10 @@ function ExamEdition() {
         },
     });
 
+    const [currentPhraseMelangeeModalStatus, setCurrentPhraseMelangeeModalStatus] = useState<
+        phraseMelangeeModalStatusType | undefined
+    >();
+
     return (
         <MainContainer>
             <HeaderContainer>
@@ -45,6 +63,7 @@ function ExamEdition() {
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
+                        <TableCell>Actions</TableCell>
                         <TableCell>Type</TableCell>
                         <TableCell>Intitulé</TableCell>
                         <TableCell>Bonne(s) réponse(s)</TableCell>
@@ -82,8 +101,15 @@ function ExamEdition() {
                             <TableCell>{questionChoixMultiple.points}</TableCell>
                         </TableRow>
                     ))}
-                    {query.data?.phrasesMelangees.map((phraseMelangee: any) => (
+                    {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => (
                         <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
+                            <TableCell>
+                                <IconButton
+                                    onClick={buildEditPhraseMelangeeOnClick(phraseMelangee)}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                            </TableCell>
                             <TableCell>Phrase mélangée</TableCell>
                             <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
                             <TableCell>
@@ -132,6 +158,13 @@ function ExamEdition() {
                     ))}
                 </TableBody>
             </Table>
+            {!!currentPhraseMelangeeModalStatus && (
+                <PhraseMelangeeUpsertionModal
+                    examId={examId}
+                    modalStatus={currentPhraseMelangeeModalStatus}
+                    close={() => setCurrentPhraseMelangeeModalStatus(undefined)}
+                />
+            )}
             {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
                 <QuestionChoixMultipleEdition
                     key={`${examId}-${questionChoixMultiple.id}`}
@@ -146,14 +179,14 @@ function ExamEdition() {
                     questionTrou={questionTrou}
                 />
             ))}
-            {query.data?.phrasesMelangees.map((phrasesMelangee: any) => (
+            {/* {query.data?.phrasesMelangees.map((phrasesMelangee: any) => (
                 <PhraseMelangeeEdition
                     key={`${examId}-${phrasesMelangee.id}`}
                     examId={examId}
                     phraseMelangee={phrasesMelangee}
                 />
-            ))}
-
+            ))} */}
+            {/* 
             <FooterContainer>
                 <Button variant="contained" onClick={addNewQuestionChoixMultiple}>
                     Ajouter une nouvelle question à choix multiple
@@ -164,9 +197,15 @@ function ExamEdition() {
                 <Button variant="contained" onClick={addNewPhraseMelangee}>
                     Ajouter une nouvelle phrase mélangée
                 </Button>
-            </FooterContainer>
+            </FooterContainer> */}
         </MainContainer>
     );
+
+    function buildEditPhraseMelangeeOnClick(phraseMelangee: phraseMelangeeType) {
+        return () => {
+            setCurrentPhraseMelangeeModalStatus({ kind: 'editing', phraseMelangee });
+        };
+    }
 
     function addNewQuestionChoixMultiple() {
         createQcmMutation.mutate(params.examId as string);

@@ -3,7 +3,7 @@ import { Button, Modal as MuiModal, styled } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 function Modal(props: {
-    children: React.ReactElement | Array<React.ReactElement>;
+    children: React.ReactElement | Array<React.ReactElement | boolean>;
     isOpen: boolean;
     close: () => void;
     onConfirm: () => void;
@@ -41,8 +41,8 @@ const ModalContent = styled('div')({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '40%',
-    height: '40%',
+    minWidth: '40%',
+    minHeight: '40%',
     display: 'flex',
     flexDirection: 'column',
     padding: '20px',
