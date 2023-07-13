@@ -34,29 +34,4 @@ function computeQuestionTrouSummary(
     return questionTrouSummary;
 }
 
-// function computeQuestionTrouStatus(
-//     questionTrou: QuestionTrou,
-//     questionTrouAnswers: questionTrouAnswersType,
-// ) {
-//     if (
-//         questionTrou.rightAnswers.some(
-//             (rightAnswer) =>
-//                 rightAnswer.trim().toLowerCase() ===
-//                 questionTrouAnswers[questionTrou.id]?.trim().toLowerCase(),
-//         )
-//     ) {
-//         return 'right';
-//     } else if (
-//         questionTrou.acceptableAnswers.some(
-//             (acceptableAnswer) =>
-//                 acceptableAnswer.toLowerCase() ===
-//                 questionTrouAnswers[questionTrou.id]?.trim().toLowerCase(),
-//         )
-//     ) {
-//         return 'acceptable';
-//     } else {
-//         return 'wrong';
-//     }
-// }
-
 export { questionTrouAnswerAdaptator };
