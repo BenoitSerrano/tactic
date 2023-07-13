@@ -15,7 +15,6 @@ import {
     styled,
 } from '@mui/material';
 import { api } from '../../lib/api';
-import { QuestionChoixMultipleEdition } from './QuestionChoixMultipleEdition';
 import { QuestionTrouEdition } from './QuestionTrouEdition';
 import { authentication } from '../../lib/authentication';
 import {
@@ -185,13 +184,6 @@ function ExamEdition() {
                     close={() => setCurrentQCMModalStatus(undefined)}
                 />
             )}
-            {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
-                <QuestionChoixMultipleEdition
-                    key={`${examId}-${questionChoixMultiple.id}`}
-                    examId={examId}
-                    questionChoixMultiple={questionChoixMultiple}
-                />
-            ))}
             {query.data?.questionsTrou.map((questionTrou: any) => (
                 <QuestionTrouEdition
                     key={`${examId}-${questionTrou.id}`}
@@ -213,13 +205,6 @@ function ExamEdition() {
                     },
                 ]}
             />
-            {/* {query.data?.phrasesMelangees.map((phrasesMelangee: any) => (
-                <PhraseMelangeeEdition
-                    key={`${examId}-${phrasesMelangee.id}`}
-                    examId={examId}
-                    phraseMelangee={phrasesMelangee}
-                />
-            ))} */}
             {/* 
             <FooterContainer>
                 <Button variant="contained" onClick={addNewQuestionChoixMultiple}>
@@ -248,10 +233,6 @@ function ExamEdition() {
             setCurrentQCMModalStatus({ kind: 'editing', questionChoixMultiple });
         };
     }
-
-    // function addNewQuestionChoixMultiple() {
-    //     createQcmMutation.mutate(params.examId as string);
-    // }
 
     function addNewQuestionTrou() {
         createQuestionTrouMutation.mutate(params.examId as string);
