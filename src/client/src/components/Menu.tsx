@@ -28,6 +28,7 @@ const MenuContainer = styled('div')({
     position: 'fixed',
     bottom: '20px',
     right: '20px',
+    backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 2,
     borderStyle: 'outset',
