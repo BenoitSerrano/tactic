@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
-import { TextField, Typography, styled } from '@mui/material';
+import { TextField, styled } from '@mui/material';
 
 type questionTrouType = {
     id: number;

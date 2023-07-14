@@ -24,5 +24,5 @@ function computeQuestionTrouStatus(
 }
 
 function sanitizeString(value: string) {
-    return value.trim().toLowerCase().replace(/ ?' ?/g, "'");
+    return value.trim().toLowerCase().replace(/ ?' ?/g, "'").replace(/’/g, "'");
 }

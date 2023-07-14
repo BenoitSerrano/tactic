@@ -54,4 +54,13 @@ describe('computeQuestionTrouStatus', () => {
 
         expect(status).toBe('right');
     });
+
+    it('should return right for match modulo different apostrophe', () => {
+        const answer = 'c’est';
+        const rightAnswers = ["c'est"];
+        const acceptableAnswers: string[] = [];
+        const status = computeQuestionTrouStatus(answer, rightAnswers, acceptableAnswers);
+
+        expect(status).toBe('right');
+    });
 });
