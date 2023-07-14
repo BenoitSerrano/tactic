@@ -28,7 +28,6 @@ const MenuContainer = styled('div')({
     position: 'fixed',
     bottom: '20px',
     right: '20px',
-    backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 2,
     borderStyle: 'outset',
@@ -37,7 +36,7 @@ const MenuContainer = styled('div')({
     borderRadius: MENU_CONTAINER_HEIGHT / 2,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
 });
 
