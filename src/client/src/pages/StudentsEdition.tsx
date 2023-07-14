@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
-import { Link } from 'react-router-dom';
 import {
     Button,
     IconButton,
@@ -13,9 +12,9 @@ import {
     TextField,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { authentication } from '../lib/authentication';
 import { AdminPage } from '../components/AdminPage';
 import { Loader } from '../components/Loader';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 
 function StudentsEdition() {
     const queryClient = useQueryClient();
@@ -51,7 +50,7 @@ function StudentsEdition() {
 
     return (
         <AdminPage>
-            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
+            <Breadcrumbs />
 
             <Table stickyHeader>
                 <TableHead>

@@ -33,6 +33,7 @@ import {
     questionTrouModalStatusType,
     questionTrouType,
 } from './QuestionTrouUpsertionModal';
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 
 const HEADER_SIZE = 50;
 const FOOTER_SIZE = 50;
@@ -54,10 +55,8 @@ function ExamEdition() {
     >();
 
     return (
-        <MainContainer>
-            <HeaderContainer>
-                <Button onClick={navigateToExamList}>Revenir à la liste des examens</Button>
-            </HeaderContainer>
+        <>
+            <Breadcrumbs />
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -234,7 +233,7 @@ function ExamEdition() {
                     },
                 ]}
             />
-        </MainContainer>
+        </>
     );
 
     function buildEditPhraseMelangeeOnClick(phraseMelangee: phraseMelangeeType) {
@@ -270,11 +269,6 @@ const HeaderContainer = styled('div')({
     backgroundColor: 'white',
 
     height: `${HEADER_SIZE}px`,
-});
-
-const MainContainer = styled('div')({
-    paddingTop: `${HEADER_SIZE + 10}px`,
-    paddingBottom: `${FOOTER_SIZE}px`,
 });
 
 const QuestionTypeCellContent = styled('div')({

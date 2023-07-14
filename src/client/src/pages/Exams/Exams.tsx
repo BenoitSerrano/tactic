@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
 import {
     IconButton,
@@ -21,6 +21,7 @@ import { Loader } from '../../components/Loader';
 import { AdminPage } from '../../components/AdminPage';
 import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -29,8 +30,7 @@ function Exams() {
 
     return (
         <AdminPage>
-            <Link to={`/teacher/${authentication.getEncodedPassword()}`}>Revenir à l'accueil</Link>
-
+            <Breadcrumbs />
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -79,11 +79,6 @@ function Exams() {
                     { onClick: () => setIsExamCreationModalOpen(true), IconComponent: PostAddIcon },
                 ]}
             />
-            {/* <MenuContainer>
-                <IconButton onClick={() => setIsExamCreationModalOpen(true)} size="large">
-                    <PostAddIcon fontSize="large" />
-                </IconButton>
-            </MenuContainer> */}
         </AdminPage>
     );
 

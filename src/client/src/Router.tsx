@@ -36,7 +36,7 @@ function Router() {
                 }
             />
             <Route
-                path={`/teacher/${encodedPassword}/attempts/:attemptId`}
+                path={`/teacher/${encodedPassword}/exams/:examId/results/:attemptId`}
                 element={<ExamChecking />}
             />
             <Route path={`/teacher/${encodedPassword}/`} element={<TeacherHome />} />

@@ -5,8 +5,9 @@ import { api } from '../../lib/api';
 import { QuestionChoixMultipleChecking } from './QuestionChoixMultipleChecking';
 import { QuestionTrouChecking } from './QuestionTrouChecking';
 import { Typography, styled } from '@mui/material';
-import { Page } from '../../components/Page';
 import { PhraseMelangeeChecking } from './PhraseMelangeeChecking';
+import { AdminPage } from '../../components/AdminPage';
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 
 function ExamChecking() {
     const params = useParams();
@@ -14,7 +15,8 @@ function ExamChecking() {
     const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
 
     return !!query.data ? (
-        <Page>
+        <AdminPage>
+            <Breadcrumbs />
             <MainContainer>
                 <Typography variant="h1">{query.data.exam.name}</Typography>
                 {query.data.exam.questionsChoixMultiple.map(
@@ -46,7 +48,7 @@ function ExamChecking() {
                     />
                 ))}
             </MainContainer>
-        </Page>
+        </AdminPage>
     ) : (
         <div />
     );
@@ -57,6 +59,7 @@ const MainContainer = styled('div')({
     flexDirection: 'column',
     justifyContent: 'center',
     width: '60%',
+    margin: 'auto',
 });
 
 export { ExamChecking };
