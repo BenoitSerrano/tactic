@@ -11,18 +11,27 @@ function buildQuestionTrouController() {
 
     return questionTrouController;
 
-    async function createQuestionTrou(params: { urlParams: { examId: string } }) {
-        return questionTrouService.createQuestionTrou(params.urlParams.examId);
+    async function createQuestionTrou(params: {
+        urlParams: { examId: string };
+        body: {
+            beforeText: string;
+            afterText: string;
+            rightAnswers: string[];
+            acceptableAnswers: string[];
+            points: number;
+        };
+    }) {
+        return questionTrouService.createQuestionTrou(params.urlParams.examId, params.body);
     }
 
     async function updateQuestionTrou(params: {
         urlParams: { examId: string; questionTrouId: string };
         body: {
-            beforeText?: string;
-            afterText?: string;
-            rightAnswers?: string[];
-            acceptableAnswers?: string[];
-            points?: number;
+            beforeText: string;
+            afterText: string;
+            rightAnswers: string[];
+            acceptableAnswers: string[];
+            points: number;
         };
     }) {
         return questionTrouService.updateQuestionTrou({

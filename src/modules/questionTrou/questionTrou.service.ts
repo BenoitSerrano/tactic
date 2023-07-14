@@ -13,17 +13,27 @@ function buildQuestionTrouService() {
 
     return questionTrouService;
 
-    async function createQuestionTrou(examId: string) {
+    async function createQuestionTrou(
+        examId: string,
+        body: {
+            beforeText: string;
+            afterText: string;
+            rightAnswers: string[];
+            acceptableAnswers: string[];
+            points: number;
+        },
+    ) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
 
         const questionTrou = new QuestionTrou();
         const highestOrder = await getHighestQuestionTrouOrder(examId);
 
-        questionTrou.acceptableAnswers = [''];
-        questionTrou.rightAnswers = [''];
-        questionTrou.beforeText = '';
-        questionTrou.afterText = '';
+        questionTrou.acceptableAnswers = body.acceptableAnswers;
+        questionTrou.rightAnswers = body.rightAnswers;
+        questionTrou.beforeText = body.beforeText;
+        questionTrou.afterText = body.afterText;
+        questionTrou.points = body.points;
         questionTrou.exam = exam;
         questionTrou.order = highestOrder + 1;
         return questionTrouRepository.save(questionTrou);
@@ -52,32 +62,22 @@ function buildQuestionTrouService() {
         acceptableAnswers,
         points,
     }: {
-        examId?: string;
-        questionTrouId?: number;
-        beforeText?: string;
-        afterText?: string;
-        rightAnswers?: string[];
-        acceptableAnswers?: string[];
-        points?: number;
+        examId: string;
+        questionTrouId: number;
+        beforeText: string;
+        afterText: string;
+        rightAnswers: string[];
+        acceptableAnswers: string[];
+        points: number;
     }) {
         const questionTrou = await questionTrouRepository.findOneOrFail({
             where: { exam: { id: examId }, id: questionTrouId },
         });
-        if (beforeText !== undefined) {
-            questionTrou.beforeText = beforeText;
-        }
-        if (afterText !== undefined) {
-            questionTrou.afterText = afterText;
-        }
-        if (rightAnswers !== undefined) {
-            questionTrou.rightAnswers = rightAnswers;
-        }
-        if (acceptableAnswers !== undefined) {
-            questionTrou.acceptableAnswers = acceptableAnswers;
-        }
-        if (points !== undefined) {
-            questionTrou.points = points;
-        }
+        questionTrou.beforeText = beforeText;
+        questionTrou.afterText = afterText;
+        questionTrou.rightAnswers = rightAnswers;
+        questionTrou.acceptableAnswers = acceptableAnswers;
+        questionTrou.points = points;
 
         return questionTrouRepository.save(questionTrou);
     }

@@ -300,15 +300,31 @@ async function updateQuestionChoixMultiple(params: {
     return response.json();
 }
 
-async function createQuestionTrou(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/questions-trou`;
+async function createQuestionTrou(params: {
+    examId: string;
+    beforeText: string;
+    afterText: string;
+    rightAnswers: string[];
+    acceptableAnswers: string[];
+    points: number;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/questions-trou`;
+    const body = JSON.stringify({
+        beforeText: params.beforeText,
+        afterText: params.afterText,
+        rightAnswers: params.rightAnswers,
+        acceptableAnswers: params.acceptableAnswers,
+        points: params.points,
+    });
     const response = await fetch(URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        body,
     });
+
     return response.json();
 }
 
@@ -335,7 +351,7 @@ async function updateQuestionTrou(params: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: body,
+        body,
     });
     return response.json();
 }

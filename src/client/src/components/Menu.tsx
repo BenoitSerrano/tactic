@@ -29,12 +29,15 @@ const MenuContainer = styled('div')({
     bottom: '20px',
     right: '20px',
     backgroundColor: 'white',
-    width: MENU_CONTAINER_HEIGHT,
+    borderColor: 'black',
+    borderWidth: 2,
+    borderStyle: 'outset',
+    minWidth: MENU_CONTAINER_HEIGHT,
     height: MENU_CONTAINER_HEIGHT,
     borderRadius: MENU_CONTAINER_HEIGHT / 2,
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     alignItems: 'center',
 });
 

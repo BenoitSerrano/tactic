@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
-import { Button, TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
-import { combinator } from '../../lib/combinator';
 
 type questionChoixMultipleType = {
     id: number;
     title: string;
     rightAnswerIndex: number;
     possibleAnswers: string[];
+    points: number;
 };
 
 type questionChoixMultipleModalStatusType =

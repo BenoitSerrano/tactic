@@ -88,7 +88,15 @@ router.put(
 
 router.post(
     '/exams/:examId/questions-trou',
-    buildController(questionTrouController.createQuestionTrou),
+    buildController(questionTrouController.createQuestionTrou, {
+        schema: Joi.object({
+            beforeText: Joi.string().allow(''),
+            afterText: Joi.string().allow(''),
+            rightAnswers: Joi.array().items(Joi.string()),
+            acceptableAnswers: Joi.array().items(Joi.string().allow('')),
+            points: Joi.number(),
+        }),
+    }),
 );
 
 router.patch(
@@ -97,9 +105,9 @@ router.patch(
         schema: Joi.object({
             beforeText: Joi.string().allow(''),
             afterText: Joi.string().allow(''),
-            rightAnswers: Joi.array().items(Joi.string().allow('')),
+            rightAnswers: Joi.array().items(Joi.string()),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
-            points: Joi.number().allow(''),
+            points: Joi.number(),
         }),
     }),
 );

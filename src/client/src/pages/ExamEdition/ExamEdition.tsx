@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import LowPriorityIcon from '@mui/icons-material/LowPriority';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import {
@@ -15,7 +16,6 @@ import {
     styled,
 } from '@mui/material';
 import { api } from '../../lib/api';
-import { QuestionTrouEdition } from './QuestionTrouEdition';
 import { authentication } from '../../lib/authentication';
 import {
     PhraseMelangeeUpsertionModal,
@@ -28,6 +28,11 @@ import {
     questionChoixMultipleModalStatusType,
     questionChoixMultipleType,
 } from './QuestionChoixMultipleUpsertionModal';
+import {
+    QuestionTrouUpsertionModal,
+    questionTrouModalStatusType,
+    questionTrouType,
+} from './QuestionTrouUpsertionModal';
 
 const HEADER_SIZE = 50;
 const FOOTER_SIZE = 50;
@@ -35,27 +40,17 @@ const FOOTER_SIZE = 50;
 function ExamEdition() {
     const params = useParams<{ examId: string }>();
     const examId = params.examId as string;
-    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const query = useQuery(['exams', examId], () => api.fetchExam(examId));
-    // const createQcmMutation = useMutation({
-    //     mutationFn: api.createQuestionChoixMultiple,
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({ queryKey: ['exams', examId] });
-    //     },
-    // });
-    const createQuestionTrouMutation = useMutation({
-        mutationFn: api.createQuestionTrou,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exams', examId] });
-        },
-    });
 
     const [currentPhraseMelangeeModalStatus, setCurrentPhraseMelangeeModalStatus] = useState<
         phraseMelangeeModalStatusType | undefined
     >();
     const [currentQCMModalStatus, setCurrentQCMModalStatus] = useState<
         questionChoixMultipleModalStatusType | undefined
+    >();
+    const [currentQuestionTrouModalStatus, setCurrentQuestionTrouModalStatus] = useState<
+        questionTrouModalStatusType | undefined
     >();
 
     return (
@@ -75,44 +70,53 @@ function ExamEdition() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {query.data?.questionsChoixMultiple.map((questionChoixMultiple: any) => (
-                        <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
-                            <TableCell>
-                                <IconButton
-                                    onClick={buildEditQuestionChoixMultipleOnClick(
-                                        questionChoixMultiple,
-                                    )}
-                                >
-                                    <EditIcon />
-                                </IconButton>
-                            </TableCell>
-                            <TableCell>QCM</TableCell>
-                            <TableCell>
-                                {questionChoixMultiple.title}
-                                <br />
-                                <ul>
-                                    {questionChoixMultiple.possibleAnswers.map(
-                                        (possibleAnswer: string) => (
-                                            <li
-                                                key={`questionChoixMultiple-${questionChoixMultiple}-${possibleAnswer}`}
-                                            >
-                                                {possibleAnswer}
-                                            </li>
-                                        ),
-                                    )}
-                                </ul>
-                            </TableCell>
-                            <TableCell>
-                                {
-                                    questionChoixMultiple.possibleAnswers[
-                                        questionChoixMultiple.rightAnswerIndex
-                                    ]
-                                }
-                            </TableCell>
-                            <TableCell />
-                            <TableCell>{questionChoixMultiple.points}</TableCell>
-                        </TableRow>
-                    ))}
+                    {query.data?.questionsChoixMultiple.map(
+                        (questionChoixMultiple: questionChoixMultipleType) => (
+                            <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
+                                <TableCell>
+                                    <IconButton
+                                        onClick={buildEditQuestionChoixMultipleOnClick(
+                                            questionChoixMultiple,
+                                        )}
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>
+                                    <QuestionTypeCellContent>
+                                        <QuestionTypeIconContainer>
+                                            <RadioButtonCheckedIcon />
+                                        </QuestionTypeIconContainer>
+                                        QCM
+                                    </QuestionTypeCellContent>
+                                </TableCell>
+                                <TableCell>
+                                    {questionChoixMultiple.title}
+                                    <br />
+                                    <ul>
+                                        {questionChoixMultiple.possibleAnswers.map(
+                                            (possibleAnswer: string) => (
+                                                <li
+                                                    key={`questionChoixMultiple-${questionChoixMultiple}-${possibleAnswer}`}
+                                                >
+                                                    {possibleAnswer}
+                                                </li>
+                                            ),
+                                        )}
+                                    </ul>
+                                </TableCell>
+                                <TableCell>
+                                    {
+                                        questionChoixMultiple.possibleAnswers[
+                                            questionChoixMultiple.rightAnswerIndex
+                                        ]
+                                    }
+                                </TableCell>
+                                <TableCell />
+                                <TableCell>{questionChoixMultiple.points}</TableCell>
+                            </TableRow>
+                        ),
+                    )}
                     {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => (
                         <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
                             <TableCell>
@@ -122,7 +126,14 @@ function ExamEdition() {
                                     <EditIcon />
                                 </IconButton>
                             </TableCell>
-                            <TableCell>Phrase mélangée</TableCell>
+                            <TableCell>
+                                <QuestionTypeCellContent>
+                                    <QuestionTypeIconContainer>
+                                        <LowPriorityIcon />
+                                    </QuestionTypeIconContainer>
+                                    Phrase mélangée
+                                </QuestionTypeCellContent>
+                            </TableCell>
                             <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
                             <TableCell>
                                 <ul>
@@ -135,9 +146,22 @@ function ExamEdition() {
                             <TableCell>{phraseMelangee.points}</TableCell>
                         </TableRow>
                     ))}
-                    {query.data?.questionsTrou.map((questionTrou: any) => (
+                    {query.data?.questionsTrou.map((questionTrou: questionTrouType) => (
                         <TableRow>
-                            <TableCell>Texte à trou</TableCell>
+                            <TableCell>
+                                <IconButton onClick={buildEditQuestionTrouOnClick(questionTrou)}>
+                                    <EditIcon />
+                                </IconButton>
+                            </TableCell>
+                            <TableCell>
+                                {' '}
+                                <QuestionTypeCellContent>
+                                    <QuestionTypeIconContainer>
+                                        <SaveAltIcon />
+                                    </QuestionTypeIconContainer>
+                                    Texte à trou
+                                </QuestionTypeCellContent>
+                            </TableCell>
                             <TableCell>
                                 {questionTrou.beforeText} ....... {questionTrou.afterText}
                             </TableCell>
@@ -184,13 +208,13 @@ function ExamEdition() {
                     close={() => setCurrentQCMModalStatus(undefined)}
                 />
             )}
-            {query.data?.questionsTrou.map((questionTrou: any) => (
-                <QuestionTrouEdition
-                    key={`${examId}-${questionTrou.id}`}
+            {!!currentQuestionTrouModalStatus && (
+                <QuestionTrouUpsertionModal
                     examId={examId}
-                    questionTrou={questionTrou}
+                    modalStatus={currentQuestionTrouModalStatus}
+                    close={() => setCurrentQuestionTrouModalStatus(undefined)}
                 />
-            ))}
+            )}
             <Menu
                 buttons={[
                     {
@@ -199,30 +223,29 @@ function ExamEdition() {
                         IconComponent: RadioButtonCheckedIcon,
                     },
                     {
+                        title: 'Créer un texte à trou',
+                        onClick: () => setCurrentQuestionTrouModalStatus({ kind: 'creating' }),
+                        IconComponent: SaveAltIcon,
+                    },
+                    {
                         title: 'Créer une phrase à reconstituer',
                         onClick: () => setCurrentPhraseMelangeeModalStatus({ kind: 'creating' }),
                         IconComponent: LowPriorityIcon,
                     },
                 ]}
             />
-            {/* 
-            <FooterContainer>
-                <Button variant="contained" onClick={addNewQuestionChoixMultiple}>
-                    Ajouter une nouvelle question à choix multiple
-                </Button>
-                <Button variant="contained" onClick={addNewQuestionTrou}>
-                    Ajouter une nouvelle question à trou
-                </Button>
-                <Button variant="contained" onClick={addNewPhraseMelangee}>
-                    Ajouter une nouvelle phrase mélangée
-                </Button>
-            </FooterContainer> */}
         </MainContainer>
     );
 
     function buildEditPhraseMelangeeOnClick(phraseMelangee: phraseMelangeeType) {
         return () => {
             setCurrentPhraseMelangeeModalStatus({ kind: 'editing', phraseMelangee });
+        };
+    }
+
+    function buildEditQuestionTrouOnClick(questionTrou: questionTrouType) {
+        return () => {
+            setCurrentQuestionTrouModalStatus({ kind: 'editing', questionTrou });
         };
     }
 
@@ -234,27 +257,10 @@ function ExamEdition() {
         };
     }
 
-    function addNewQuestionTrou() {
-        createQuestionTrouMutation.mutate(params.examId as string);
-    }
-
     function navigateToExamList() {
         navigate(`/teacher/${authentication.getEncodedPassword()}/exams`);
     }
 }
-
-const FooterContainer = styled('div')({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    position: 'fixed',
-    zIndex: 10,
-    bottom: 0,
-    flex: 1,
-    width: '100%',
-    height: `${FOOTER_SIZE}px`,
-    backgroundColor: 'white',
-});
 
 const HeaderContainer = styled('div')({
     width: '100%',
@@ -269,6 +275,17 @@ const HeaderContainer = styled('div')({
 const MainContainer = styled('div')({
     paddingTop: `${HEADER_SIZE + 10}px`,
     paddingBottom: `${FOOTER_SIZE}px`,
+});
+
+const QuestionTypeCellContent = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+});
+
+const QuestionTypeIconContainer = styled('div')({
+    marginRight: 8,
+    display: 'flex',
+    alignItems: 'center',
 });
 
 export { ExamEdition };
