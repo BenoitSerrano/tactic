@@ -4,6 +4,7 @@ import { Modal } from '../../components/Modal';
 import { Button, TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
 import { combinator } from '../../lib/combinator';
+import { modalStatusType } from './types';
 
 type phraseMelangeeType = {
     id: number;
@@ -13,9 +14,7 @@ type phraseMelangeeType = {
     points: number;
 };
 
-type phraseMelangeeModalStatusType =
-    | { kind: 'editing'; phraseMelangee: phraseMelangeeType }
-    | { kind: 'creating' };
+type phraseMelangeeModalStatusType = modalStatusType<phraseMelangeeType>;
 
 function PhraseMelangeeUpsertionModal(props: {
     close: () => void;
@@ -24,19 +23,16 @@ function PhraseMelangeeUpsertionModal(props: {
 }) {
     const queryClient = useQueryClient();
     const [originalPhrase, setOriginalPhrase] = useState<string>(
-        (props.modalStatus.kind === 'editing' &&
-            props.modalStatus.phraseMelangee.correctPhrases[0]) ||
+        (props.modalStatus.kind === 'editing' && props.modalStatus.question.correctPhrases[0]) ||
             '',
     );
 
     const [shuffledPhrase, setShuffledPhrase] = useState<string>(
-        (props.modalStatus.kind === 'editing' && props.modalStatus.phraseMelangee.shuffledPhrase) ||
-            '',
+        (props.modalStatus.kind === 'editing' && props.modalStatus.question.shuffledPhrase) || '',
     );
 
     const [correctPhrases, setCorrectPhrases] = useState<string[]>(
-        (props.modalStatus.kind === 'editing' && props.modalStatus.phraseMelangee.correctPhrases) ||
-            [],
+        (props.modalStatus.kind === 'editing' && props.modalStatus.question.correctPhrases) || [],
     );
 
     const [correctCombination, setCorrectCombination] = useState<number[]>([]);
@@ -172,7 +168,7 @@ function PhraseMelangeeUpsertionModal(props: {
         if (props.modalStatus?.kind === 'editing') {
             updatePhraseMelangeeMutation.mutate({
                 examId: props.examId,
-                phraseMelangeeId: props.modalStatus.phraseMelangee.id,
+                phraseMelangeeId: props.modalStatus.question.id,
                 correctPhrases,
                 shuffledPhrase,
                 words,

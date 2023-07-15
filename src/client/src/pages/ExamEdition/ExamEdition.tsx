@@ -230,13 +230,13 @@ function ExamEdition() {
 
     function buildEditPhraseMelangeeOnClick(phraseMelangee: phraseMelangeeType) {
         return () => {
-            setCurrentPhraseMelangeeModalStatus({ kind: 'editing', phraseMelangee });
+            setCurrentPhraseMelangeeModalStatus({ kind: 'editing', question: phraseMelangee });
         };
     }
 
     function buildEditQuestionTrouOnClick(questionTrou: questionTrouType) {
         return () => {
-            setCurrentQuestionTrouModalStatus({ kind: 'editing', questionTrou });
+            setCurrentQuestionTrouModalStatus({ kind: 'editing', question: questionTrou });
         };
     }
 
@@ -244,7 +244,7 @@ function ExamEdition() {
         questionChoixMultiple: questionChoixMultipleType,
     ) {
         return () => {
-            setCurrentQCMModalStatus({ kind: 'editing', questionChoixMultiple });
+            setCurrentQCMModalStatus({ kind: 'editing', question: questionChoixMultiple });
         };
     }
 }

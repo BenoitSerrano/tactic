@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { TextField, styled } from '@mui/material';
+import { modalStatusType } from './types';
 
 type questionTrouType = {
     id: number;
@@ -14,9 +15,7 @@ type questionTrouType = {
     afterText: string;
 };
 
-type questionTrouModalStatusType =
-    | { kind: 'editing'; questionTrou: questionTrouType }
-    | { kind: 'creating' };
+type questionTrouModalStatusType = modalStatusType<questionTrouType>;
 
 function QuestionTrouUpsertionModal(props: {
     close: () => void;
@@ -40,24 +39,24 @@ function QuestionTrouUpsertionModal(props: {
     });
 
     const [points, setPoints] = useState(
-        props.modalStatus.kind === 'editing' ? `${props.modalStatus.questionTrou.points}` : '1.0',
+        props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.points}` : '1.0',
     );
     const [rightAnswers, setRightAnswers] = useState(
         props.modalStatus.kind === 'editing'
-            ? props.modalStatus.questionTrou.rightAnswers.join(', ')
+            ? props.modalStatus.question.rightAnswers.join(', ')
             : '',
     );
     const [acceptableAnswers, setAcceptableAnswers] = useState(
         props.modalStatus.kind === 'editing'
-            ? props.modalStatus.questionTrou.acceptableAnswers.join(', ')
+            ? props.modalStatus.question.acceptableAnswers.join(', ')
             : '',
     );
 
     const [beforeText, setBeforeText] = useState(
-        props.modalStatus.kind === 'editing' ? props.modalStatus.questionTrou.beforeText : '',
+        props.modalStatus.kind === 'editing' ? props.modalStatus.question.beforeText : '',
     );
     const [afterText, setAfterText] = useState(
-        props.modalStatus.kind === 'editing' ? props.modalStatus.questionTrou.afterText : '',
+        props.modalStatus.kind === 'editing' ? props.modalStatus.question.afterText : '',
     );
 
     const isUpdating = updateQuestionTrouMutation.isLoading;
@@ -143,7 +142,7 @@ function QuestionTrouUpsertionModal(props: {
         if (props.modalStatus?.kind === 'editing') {
             updateQuestionTrouMutation.mutate({
                 examId: props.examId,
-                questionTrouId: props.modalStatus.questionTrou.id,
+                questionTrouId: props.modalStatus.question.id,
                 ...newQuestionTrou,
             });
         } else {

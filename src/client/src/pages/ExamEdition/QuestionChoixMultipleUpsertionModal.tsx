@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { FormControlLabel, Radio, RadioGroup, TextField, Typography, styled } from '@mui/material';
+import { modalStatusType } from './types';
 
 type questionChoixMultipleType = {
     id: number;
@@ -12,9 +13,7 @@ type questionChoixMultipleType = {
     points: number;
 };
 
-type questionChoixMultipleModalStatusType =
-    | { kind: 'editing'; questionChoixMultiple: questionChoixMultipleType }
-    | { kind: 'creating' };
+type questionChoixMultipleModalStatusType = modalStatusType<questionChoixMultipleType>;
 
 function QuestionChoixMultipleUpsertionModal(props: {
     close: () => void;
@@ -38,16 +37,14 @@ function QuestionChoixMultipleUpsertionModal(props: {
     });
 
     const [title, setTitle] = useState(
-        props.modalStatus.kind === 'editing' ? props.modalStatus.questionChoixMultiple.title : '',
+        props.modalStatus.kind === 'editing' ? props.modalStatus.question.title : '',
     );
     const [rightAnswerIndex, setRightAnswerIndex] = useState(
-        props.modalStatus.kind === 'editing'
-            ? props.modalStatus.questionChoixMultiple.rightAnswerIndex
-            : 0,
+        props.modalStatus.kind === 'editing' ? props.modalStatus.question.rightAnswerIndex : 0,
     );
     const [possibleAnswers, setPossibleAnswers] = useState(
         props.modalStatus.kind === 'editing'
-            ? props.modalStatus.questionChoixMultiple.possibleAnswers
+            ? props.modalStatus.question.possibleAnswers
             : ['', '', '', ''],
     );
 
@@ -129,7 +126,7 @@ function QuestionChoixMultipleUpsertionModal(props: {
         if (props.modalStatus?.kind === 'editing') {
             updateQuestionChoixMultipleMutation.mutate({
                 examId: props.examId,
-                qcmId: props.modalStatus.questionChoixMultiple.id,
+                qcmId: props.modalStatus.question.id,
                 possibleAnswers,
                 rightAnswerIndex,
                 title,
