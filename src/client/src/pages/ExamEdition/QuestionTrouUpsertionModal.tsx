@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
-import { TextField, styled } from '@mui/material';
-import { modalStatusType } from './types';
+import { TextField, Typography, styled } from '@mui/material';
+import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
 
 type questionTrouType = {
     id: number;
@@ -63,6 +63,7 @@ function QuestionTrouUpsertionModal(props: {
     const isCreating = createQuestionTrouMutation.isLoading;
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
+    const titlePrefix = computeModalTitlePrefix(props.modalStatus);
 
     return (
         <Modal
@@ -74,7 +75,8 @@ function QuestionTrouUpsertionModal(props: {
             isConfirmLoading={isUpdating || isCreating}
         >
             <>
-                <PhraseContainer>
+                <Typography variant="h2">{titlePrefix} d'un texte à trou</Typography>
+                <RowContainer>
                     <TextField
                         fullWidth
                         label="Début du texte..."
@@ -95,20 +97,25 @@ function QuestionTrouUpsertionModal(props: {
                         onChange={(event) => setAfterText(event.target.value)}
                         placeholder="..."
                     />
-                </PhraseContainer>
-
-                <TextField
-                    fullWidth
-                    label="Réponses acceptables"
-                    placeholder="Ecrivez les réponses acceptables, séparées par des virgules"
-                    value={acceptableAnswers}
-                    onChange={(event) => setAcceptableAnswers(event.target.value)}
-                />
-                <TextField
-                    value={points}
-                    onChange={onChangePoint}
-                    label="Point(s) pour la question"
-                />
+                </RowContainer>
+                <RowContainer>
+                    <TextField
+                        fullWidth
+                        label="Réponses acceptables"
+                        placeholder="Ecrivez les réponses acceptables, séparées par des virgules"
+                        value={acceptableAnswers}
+                        onChange={(event) => setAcceptableAnswers(event.target.value)}
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <PointsContainer>
+                        <TextField
+                            value={points}
+                            onChange={onChangePoint}
+                            label="Point(s) pour la question"
+                        />
+                    </PointsContainer>
+                </RowContainer>
             </>
         </Modal>
     );
@@ -117,15 +124,6 @@ function QuestionTrouUpsertionModal(props: {
         const value = event.target.value;
         if (value.match(/^[0-9]+(\.)?([0-9]+)?$/)) {
             setPoints(value);
-        }
-    }
-
-    function computeConfirmButtonLabel(modalStatus: questionTrouModalStatusType) {
-        switch (modalStatus.kind) {
-            case 'creating':
-                return 'Créer';
-            case 'editing':
-                return 'Modifier';
         }
     }
 
@@ -154,9 +152,19 @@ function QuestionTrouUpsertionModal(props: {
     }
 }
 
-const PhraseContainer = styled('div')({
+const RowContainer = styled('div')({
     display: 'flex',
     flexDirection: 'row',
+    marginTop: 4,
+    marginBottom: 4,
+    flex: 1,
+    width: '100%',
+});
+
+const PointsContainer = styled('div')({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
 });
 
 export { QuestionTrouUpsertionModal };

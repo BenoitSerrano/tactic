@@ -4,7 +4,7 @@ import { Modal } from '../../components/Modal';
 import { Button, TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
 import { combinator } from '../../lib/combinator';
-import { modalStatusType } from './types';
+import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
 
 type phraseMelangeeType = {
     id: number;
@@ -57,6 +57,7 @@ function PhraseMelangeeUpsertionModal(props: {
     const isCreating = createPhraseMelangeeMutation.isLoading;
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
+    const titlePrefix = computeModalTitlePrefix(props.modalStatus);
 
     return (
         <Modal
@@ -67,6 +68,8 @@ function PhraseMelangeeUpsertionModal(props: {
             cancelButtonLabel="Annuler"
             isConfirmLoading={isUpdating || isCreating}
         >
+            <Typography variant="h2">{titlePrefix} d'une phrase à ordonner</Typography>
+
             <TextField
                 fullWidth
                 label="Phrase originale"
@@ -124,14 +127,6 @@ function PhraseMelangeeUpsertionModal(props: {
         </Modal>
     );
 
-    function computeConfirmButtonLabel(modalStatus: phraseMelangeeModalStatusType) {
-        switch (modalStatus.kind) {
-            case 'creating':
-                return 'Créer';
-            case 'editing':
-                return 'Modifier';
-        }
-    }
     function buildOnClickOnCorrectPhraseWord(index: number) {
         return () => {
             const newCorrectCombination = [...correctCombination];

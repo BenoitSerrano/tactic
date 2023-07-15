@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { FormControlLabel, Radio, RadioGroup, TextField, Typography, styled } from '@mui/material';
-import { modalStatusType } from './types';
+import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
 
 type questionChoixMultipleType = {
     id: number;
@@ -52,6 +52,7 @@ function QuestionChoixMultipleUpsertionModal(props: {
     const isCreating = createQuestionChoixMultipleMutation.isLoading;
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
+    const titlePrefix = computeModalTitlePrefix(props.modalStatus);
 
     return (
         <Modal
@@ -63,7 +64,7 @@ function QuestionChoixMultipleUpsertionModal(props: {
             isConfirmLoading={isUpdating || isCreating}
         >
             <ModalContent>
-                <Typography variant="h2">Création d'une QCM</Typography>
+                <Typography variant="h2">{titlePrefix} d'une QCM</Typography>
                 <InputContainer>
                     <TextField
                         value={title}
@@ -99,15 +100,6 @@ function QuestionChoixMultipleUpsertionModal(props: {
             </ModalContent>
         </Modal>
     );
-
-    function computeConfirmButtonLabel(modalStatus: questionChoixMultipleModalStatusType) {
-        switch (modalStatus.kind) {
-            case 'creating':
-                return 'Créer';
-            case 'editing':
-                return 'Modifier';
-        }
-    }
 
     function buildOnChangePossibleAnswer(possibleAnswerIndex: number) {
         return (event: React.ChangeEvent<HTMLInputElement>) => {
