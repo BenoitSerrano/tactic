@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import LowPriorityIcon from '@mui/icons-material/LowPriority';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import {
-    Button,
     IconButton,
     Table,
     TableBody,
@@ -16,7 +15,6 @@ import {
     styled,
 } from '@mui/material';
 import { api } from '../../lib/api';
-import { authentication } from '../../lib/authentication';
 import {
     PhraseMelangeeUpsertionModal,
     phraseMelangeeModalStatusType,
@@ -33,15 +31,10 @@ import {
     questionTrouModalStatusType,
     questionTrouType,
 } from './QuestionTrouUpsertionModal';
-import { Breadcrumbs } from '../../components/Breadcrumbs';
-
-const HEADER_SIZE = 50;
-const FOOTER_SIZE = 50;
 
 function ExamEdition() {
     const params = useParams<{ examId: string }>();
     const examId = params.examId as string;
-    const navigate = useNavigate();
     const query = useQuery(['exams', examId], () => api.fetchExam(examId));
 
     const [currentPhraseMelangeeModalStatus, setCurrentPhraseMelangeeModalStatus] = useState<
@@ -56,7 +49,6 @@ function ExamEdition() {
 
     return (
         <>
-            <Breadcrumbs />
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -94,9 +86,9 @@ function ExamEdition() {
                                     <br />
                                     <ul>
                                         {questionChoixMultiple.possibleAnswers.map(
-                                            (possibleAnswer: string) => (
+                                            (possibleAnswer: string, index) => (
                                                 <li
-                                                    key={`questionChoixMultiple-${questionChoixMultiple}-${possibleAnswer}`}
+                                                    key={`questionChoixMultiple-${questionChoixMultiple.id}-${index}`}
                                                 >
                                                     {possibleAnswer}
                                                 </li>
@@ -255,21 +247,7 @@ function ExamEdition() {
             setCurrentQCMModalStatus({ kind: 'editing', questionChoixMultiple });
         };
     }
-
-    function navigateToExamList() {
-        navigate(`/teacher/${authentication.getEncodedPassword()}/exams`);
-    }
 }
-
-const HeaderContainer = styled('div')({
-    width: '100%',
-    top: 0,
-    position: 'fixed',
-    zIndex: 10,
-    backgroundColor: 'white',
-
-    height: `${HEADER_SIZE}px`,
-});
 
 const QuestionTypeCellContent = styled('div')({
     display: 'flex',

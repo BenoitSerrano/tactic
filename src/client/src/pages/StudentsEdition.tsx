@@ -12,9 +12,7 @@ import {
     TextField,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { AdminPage } from '../components/AdminPage';
 import { Loader } from '../components/Loader';
-import { Breadcrumbs } from '../components/Breadcrumbs';
 
 function StudentsEdition() {
     const queryClient = useQueryClient();
@@ -49,9 +47,7 @@ function StudentsEdition() {
     }
 
     return (
-        <AdminPage>
-            <Breadcrumbs />
-
+        <>
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -92,7 +88,7 @@ function StudentsEdition() {
                 <Button onClick={importStudentEmails}>Importer une liste d'étudiant.es</Button>
             </div>
             <hr />
-        </AdminPage>
+        </>
     );
 
     async function createStudent() {

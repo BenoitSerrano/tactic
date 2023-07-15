@@ -6,51 +6,52 @@ import { QuestionChoixMultipleChecking } from './QuestionChoixMultipleChecking';
 import { QuestionTrouChecking } from './QuestionTrouChecking';
 import { Typography, styled } from '@mui/material';
 import { PhraseMelangeeChecking } from './PhraseMelangeeChecking';
-import { AdminPage } from '../../components/AdminPage';
-import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { Loader } from '../../components/Loader';
 
 function ExamChecking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
     const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
 
-    return !!query.data ? (
-        <AdminPage>
-            <Breadcrumbs />
-            <MainContainer>
-                <Typography variant="h1">{query.data.exam.name}</Typography>
-                {query.data.exam.questionsChoixMultiple.map(
-                    (questionChoixMultiple: any, index: number) => (
-                        <QuestionChoixMultipleChecking
-                            key={questionChoixMultiple.id}
-                            attemptId={attemptId}
-                            index={index}
-                            questionChoixMultiple={questionChoixMultiple}
-                        />
-                    ),
-                )}
-                <hr />
-                {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
-                    <QuestionTrouChecking
-                        key={questionTrou.id}
-                        attemptId={attemptId}
-                        index={index}
-                        questionTrou={questionTrou}
-                    />
-                ))}
+    if (!query.data) {
+        if (query.isLoading) {
+            return <Loader />;
+        }
+        return <div />;
+    }
 
-                {query.data.exam.phrasesMelangees.map((phraseMelangee: any, index: number) => (
-                    <PhraseMelangeeChecking
-                        key={`phraseMelangee-${phraseMelangee.id}`}
+    return (
+        <MainContainer>
+            <Typography variant="h1">{query.data.exam.name}</Typography>
+            {query.data.exam.questionsChoixMultiple.map(
+                (questionChoixMultiple: any, index: number) => (
+                    <QuestionChoixMultipleChecking
+                        key={questionChoixMultiple.id}
                         attemptId={attemptId}
                         index={index}
-                        phraseMelangee={phraseMelangee}
+                        questionChoixMultiple={questionChoixMultiple}
                     />
-                ))}
-            </MainContainer>
-        </AdminPage>
-    ) : (
-        <div />
+                ),
+            )}
+            <hr />
+            {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
+                <QuestionTrouChecking
+                    key={questionTrou.id}
+                    attemptId={attemptId}
+                    index={index}
+                    questionTrou={questionTrou}
+                />
+            ))}
+
+            {query.data.exam.phrasesMelangees.map((phraseMelangee: any, index: number) => (
+                <PhraseMelangeeChecking
+                    key={`phraseMelangee-${phraseMelangee.id}`}
+                    attemptId={attemptId}
+                    index={index}
+                    phraseMelangee={phraseMelangee}
+                />
+            ))}
+        </MainContainer>
     );
 }
 

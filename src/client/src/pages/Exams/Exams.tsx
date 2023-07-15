@@ -2,15 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
-import {
-    IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    styled,
-} from '@mui/material';
+import { IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -18,10 +10,8 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import { authentication } from '../../lib/authentication';
 import { config } from '../../config';
 import { Loader } from '../../components/Loader';
-import { AdminPage } from '../../components/AdminPage';
 import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
-import { Breadcrumbs } from '../../components/Breadcrumbs';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -29,8 +19,7 @@ function Exams() {
     const [isExamCreationModalOpen, setIsExamCreationModalOpen] = useState(false);
 
     return (
-        <AdminPage>
-            <Breadcrumbs />
+        <>
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -79,7 +68,7 @@ function Exams() {
                     { onClick: () => setIsExamCreationModalOpen(true), IconComponent: PostAddIcon },
                 ]}
             />
-        </AdminPage>
+        </>
     );
 
     function buildNavigateToEdition(examId: string) {
@@ -99,21 +88,5 @@ function Exams() {
         };
     }
 }
-
-const MENU_CONTAINER_HEIGHT = 80;
-
-const MenuContainer = styled('div')({
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    backgroundColor: 'white',
-    width: MENU_CONTAINER_HEIGHT,
-    height: MENU_CONTAINER_HEIGHT,
-    borderRadius: MENU_CONTAINER_HEIGHT / 2,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-});
 
 export { Exams };

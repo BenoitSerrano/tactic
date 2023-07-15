@@ -19,8 +19,6 @@ import {
 import { time } from '../lib/time';
 import { authentication } from '../lib/authentication';
 import { Loader } from '../components/Loader';
-import { AdminPage } from '../components/AdminPage';
-import { Breadcrumbs } from '../components/Breadcrumbs';
 
 type examResultApiType = {
     id: string;
@@ -79,119 +77,110 @@ function ExamResults() {
     const sortedData = sortData(formattedData, activeSort, sortDirection);
 
     return (
-        <AdminPage>
-            <Breadcrumbs />
-            <Table stickyHeader>
-                <TableHead>
-                    <TableRow>
-                        <TableCell width={120}>Actions</TableCell>
-                        <TableCell width={120}>
-                            <TableSortLabel
-                                active={activeSort === 'startedAt'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'startedAt') {
-                                        setActiveSort('startedAt');
-                                    }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                }}
-                            >
-                                Heure de début
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell sortDirection={sortDirection}>
-                            <TableSortLabel
-                                active={activeSort === 'email'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'email') {
-                                        setActiveSort('email');
-                                    }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                }}
-                            >
-                                Adresse e-mail
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell width={80}>
-                            <TableSortLabel
-                                active={activeSort === 'mark'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'mark') {
-                                        setActiveSort('mark');
-                                    }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                }}
-                            >
-                                Note (/ {query.data.totalPoints})
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell width={50}>Durée</TableCell>
+        <Table stickyHeader>
+            <TableHead>
+                <TableRow>
+                    <TableCell width={120}>Actions</TableCell>
+                    <TableCell width={120}>
+                        <TableSortLabel
+                            active={activeSort === 'startedAt'}
+                            direction={sortDirection}
+                            onClick={() => {
+                                if (activeSort !== 'startedAt') {
+                                    setActiveSort('startedAt');
+                                }
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                            }}
+                        >
+                            Heure de début
+                        </TableSortLabel>
+                    </TableCell>
+                    <TableCell sortDirection={sortDirection}>
+                        <TableSortLabel
+                            active={activeSort === 'email'}
+                            direction={sortDirection}
+                            onClick={() => {
+                                if (activeSort !== 'email') {
+                                    setActiveSort('email');
+                                }
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                            }}
+                        >
+                            Adresse e-mail
+                        </TableSortLabel>
+                    </TableCell>
+                    <TableCell width={80}>
+                        <TableSortLabel
+                            active={activeSort === 'mark'}
+                            direction={sortDirection}
+                            onClick={() => {
+                                if (activeSort !== 'mark') {
+                                    setActiveSort('mark');
+                                }
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                            }}
+                        >
+                            Note (/ {query.data.totalPoints})
+                        </TableSortLabel>
+                    </TableCell>
+                    <TableCell width={50}>Durée</TableCell>
 
-                        <TableCell>Commentaire de l'étudiant.e</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {sortedData.map((result) => {
-                        const isHighlighted = result.hasBeenTreated;
-                        const StyledRow = isHighlighted
-                            ? styled(TableRow)({ backgroundColor: '#ccffcc' })
-                            : TableRow;
-                        return (
-                            <StyledRow key={result.attemptId}>
-                                <TableCell>
-                                    <IconButton
-                                        title="Voir la copie"
-                                        onClick={buildGoToAttempt(result.attemptId)}
-                                    >
-                                        <VisibilityIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        title={
-                                            'Marquer comme' +
-                                            (result.hasBeenTreated ? ' non ' : ' ') +
-                                            'traité'
-                                        }
-                                        onClick={buildUpdateTreatementStatus(
-                                            result.attemptId,
-                                            !result.hasBeenTreated,
-                                        )}
-                                    >
-                                        {result.hasBeenTreated ? (
-                                            <RemoveDoneIcon />
-                                        ) : (
-                                            <DoneAllIcon />
-                                        )}
-                                    </IconButton>
-                                    <IconButton
-                                        title="Supprimer"
-                                        onClick={buildDeleteAttempt(result.attemptId)}
-                                    >
-                                        <DeleteForeverIcon />
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell>
-                                    {time.formatToReadableDatetime(result.startedAt)}
-                                </TableCell>
-                                <TableCell>
-                                    <Link
-                                        to={`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/results/${
-                                            result.attemptId
-                                        }`}
-                                    >
-                                        {result.email}
-                                    </Link>
-                                </TableCell>
-                                <TableCell>{result.mark}</TableCell>
-                                <TableCell>{result.duration}</TableCell>
-                                <TableCell>{result.comment}</TableCell>
-                            </StyledRow>
-                        );
-                    })}
-                </TableBody>
-            </Table>
-        </AdminPage>
+                    <TableCell>Commentaire de l'étudiant.e</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {sortedData.map((result) => {
+                    const isHighlighted = result.hasBeenTreated;
+                    const StyledRow = isHighlighted
+                        ? styled(TableRow)({ backgroundColor: '#ccffcc' })
+                        : TableRow;
+                    return (
+                        <StyledRow key={result.attemptId}>
+                            <TableCell>
+                                <IconButton
+                                    title="Voir la copie"
+                                    onClick={buildGoToAttempt(result.attemptId)}
+                                >
+                                    <VisibilityIcon />
+                                </IconButton>
+                                <IconButton
+                                    title={
+                                        'Marquer comme' +
+                                        (result.hasBeenTreated ? ' non ' : ' ') +
+                                        'traité'
+                                    }
+                                    onClick={buildUpdateTreatementStatus(
+                                        result.attemptId,
+                                        !result.hasBeenTreated,
+                                    )}
+                                >
+                                    {result.hasBeenTreated ? <RemoveDoneIcon /> : <DoneAllIcon />}
+                                </IconButton>
+                                <IconButton
+                                    title="Supprimer"
+                                    onClick={buildDeleteAttempt(result.attemptId)}
+                                >
+                                    <DeleteForeverIcon />
+                                </IconButton>
+                            </TableCell>
+                            <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
+                            <TableCell>
+                                <Link
+                                    to={`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/results/${
+                                        result.attemptId
+                                    }`}
+                                >
+                                    {result.email}
+                                </Link>
+                            </TableCell>
+                            <TableCell>{result.mark}</TableCell>
+                            <TableCell>{result.duration}</TableCell>
+                            <TableCell>{result.comment}</TableCell>
+                        </StyledRow>
+                    );
+                })}
+            </TableBody>
+        </Table>
     );
 
     function buildDeleteAttempt(attemptId: string) {

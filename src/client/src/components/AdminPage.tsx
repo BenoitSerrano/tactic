@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 import React from 'react';
 
-function AdminPage(props: { children: React.ReactElement | Array<React.ReactElement | false> }) {
+function AdminPage(props: { children: React.ReactNode | null }) {
     return <Container>{props.children}</Container>;
 }
 

@@ -10,10 +10,15 @@ type buttonType = {
 function Menu(props: { buttons: Array<buttonType> }) {
     return (
         <MenuContainer>
-            {props.buttons.map((button) => {
+            {props.buttons.map((button, index) => {
                 const { IconComponent, onClick } = button;
                 return (
-                    <IconButton title={button.title} onClick={onClick} size="large">
+                    <IconButton
+                        title={button.title}
+                        onClick={onClick}
+                        size="large"
+                        key={`menuButton-${index}`}
+                    >
                         <IconComponent fontSize="large" />
                     </IconButton>
                 );

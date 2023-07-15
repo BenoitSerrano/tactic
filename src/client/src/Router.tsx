@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Exams } from './pages/Exams';
 import { ExamEdition } from './pages/ExamEdition';
@@ -16,30 +17,26 @@ import { authentication } from './lib/authentication';
 import { TeacherLogin } from './pages/TeacherLogin';
 import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
+import { Breadcrumbs } from './components/Breadcrumbs';
 
 function Router() {
     const encodedPassword = authentication.getEncodedPassword();
+
     return (
         <Routes>
-            <Route path={`/teacher/${encodedPassword}/exams`} element={<Exams />} />
-            <Route path={`/teacher/${encodedPassword}/students`} element={<StudentsEdition />} />
-            <Route
-                path={`/teacher/${encodedPassword}/exams/:examId/edit`}
-                element={<ExamEdition />}
-            />
-            <Route
-                path={`/teacher/${encodedPassword}/exams/:examId/results`}
-                element={
-                    <AdminPage>
-                        <ExamResults />
-                    </AdminPage>
-                }
-            />
-            <Route
-                path={`/teacher/${encodedPassword}/exams/:examId/results/:attemptId`}
-                element={<ExamChecking />}
-            />
-            <Route path={`/teacher/${encodedPassword}/`} element={<TeacherHome />} />
+            {authenticatedRoutes.map((authenticatedRoute) => (
+                <Route
+                    key={authenticatedRoute.suffixPath}
+                    path={`/teacher/${encodedPassword}/${authenticatedRoute.suffixPath}`}
+                    element={
+                        <AdminPage>
+                            <Breadcrumbs />
+                            {authenticatedRoute.element}
+                        </AdminPage>
+                    }
+                />
+            ))}
+
             <Route path="/teacher/login" element={<TeacherLogin />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
@@ -58,5 +55,14 @@ function Router() {
         </Routes>
     );
 }
+
+const authenticatedRoutes = [
+    { suffixPath: `exams`, element: <Exams /> },
+    { suffixPath: `students`, element: <StudentsEdition /> },
+    { suffixPath: `exams/:examId/edit`, element: <ExamEdition /> },
+    { suffixPath: `exams/:examId/results`, element: <ExamResults /> },
+    { suffixPath: `exams/:examId/results/:attemptId`, element: <ExamChecking /> },
+    { suffixPath: ``, element: <TeacherHome /> },
+];
 
 export { Router };
