@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
+import { FormControlLabel, Radio, RadioGroup, TextField, Typography, styled } from '@mui/material';
 
 type questionChoixMultipleType = {
     id: number;
@@ -64,32 +65,41 @@ function QuestionChoixMultipleUpsertionModal(props: {
             cancelButtonLabel="Annuler"
             isConfirmLoading={isUpdating || isCreating}
         >
-            <>
-                <input
-                    value={title}
-                    placeholder="Intitulé de la question"
-                    onChange={(event) => setTitle(event.target.value)}
-                />
-                {possibleAnswers.map((possibleAnswer: string, possibleAnswerIndex: number) => {
-                    const isRightAnswer = possibleAnswerIndex === rightAnswerIndex;
-                    return (
-                        <React.Fragment key={possibleAnswerIndex}>
-                            <input
-                                type="radio"
-                                id={possibleAnswer}
-                                name={`${props.examId}`}
-                                value={possibleAnswer}
-                                checked={isRightAnswer}
-                                onChange={() => setRightAnswerIndex(possibleAnswerIndex)}
-                            />
-                            <input
-                                value={possibleAnswer}
-                                onChange={buildOnChangePossibleAnswer(possibleAnswerIndex)}
-                            />
-                        </React.Fragment>
-                    );
-                })}
-            </>
+            <ModalContent>
+                <Typography variant="h2">Création d'une QCM</Typography>
+                <InputContainer>
+                    <TextField
+                        value={title}
+                        label="Intitulé"
+                        onChange={(event) => setTitle(event.target.value)}
+                    />
+                </InputContainer>
+                <RadioGroup
+                    value={rightAnswerIndex}
+                    onChange={(event) => setRightAnswerIndex(Number(event.target.value))}
+                >
+                    {possibleAnswers.map((possibleAnswer: string, possibleAnswerIndex: number) => {
+                        return (
+                            <InputContainer key={possibleAnswerIndex}>
+                                <FormControlLabel
+                                    value={possibleAnswerIndex}
+                                    control={<Radio />}
+                                    label={
+                                        <TextField
+                                            label={`Réponse n°${possibleAnswerIndex + 1}`}
+                                            fullWidth
+                                            value={possibleAnswer}
+                                            onChange={buildOnChangePossibleAnswer(
+                                                possibleAnswerIndex,
+                                            )}
+                                        />
+                                    }
+                                />
+                            </InputContainer>
+                        );
+                    })}
+                </RadioGroup>
+            </ModalContent>
         </Modal>
     );
 
@@ -134,6 +144,9 @@ function QuestionChoixMultipleUpsertionModal(props: {
         }
     }
 }
+
+const ModalContent = styled('div')({ width: '100%' });
+const InputContainer = styled('div')({ marginTop: 4, marginBottom: 4 });
 
 export { QuestionChoixMultipleUpsertionModal };
 
