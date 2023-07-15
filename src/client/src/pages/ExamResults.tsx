@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
+import HistoryIcon from '@mui/icons-material/History';
 import { api } from '../lib/api';
 import {
     IconButton,
@@ -157,10 +157,10 @@ function ExamResults() {
                                     {result.hasBeenTreated ? <RemoveDoneIcon /> : <DoneAllIcon />}
                                 </IconButton>
                                 <IconButton
-                                    title="Supprimer"
+                                    title="Réinitialiser"
                                     onClick={buildDeleteAttempt(result.attemptId)}
                                 >
-                                    <DeleteForeverIcon />
+                                    <HistoryIcon />
                                 </IconButton>
                             </TableCell>
                             <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
@@ -186,7 +186,7 @@ function ExamResults() {
     function buildDeleteAttempt(attemptId: string) {
         return () => {
             // eslint-disable-next-line no-restricted-globals
-            const hasConfirmed = confirm('Souhaitez-vous réellement supprimer cette copie ?');
+            const hasConfirmed = confirm('Souhaitez-vous réellement réinitialiser ce test ?');
             if (hasConfirmed) {
                 deleteAttemptMutation.mutate(attemptId);
             }
