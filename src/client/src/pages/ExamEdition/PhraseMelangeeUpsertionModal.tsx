@@ -5,6 +5,7 @@ import { Button, TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
 import { combinator } from '../../lib/combinator';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
+import { useAlert } from '../../lib/alert';
 
 type phraseMelangeeType = {
     id: number;
@@ -22,6 +23,8 @@ function PhraseMelangeeUpsertionModal(props: {
     examId: string;
 }) {
     const queryClient = useQueryClient();
+    const { displayAlert } = useAlert();
+
     const [originalPhrase, setOriginalPhrase] = useState<string>(
         (props.modalStatus.kind === 'editing' && props.modalStatus.question.correctPhrases[0]) ||
             '',
@@ -40,6 +43,7 @@ function PhraseMelangeeUpsertionModal(props: {
     const updatePhraseMelangeeMutation = useMutation({
         mutationFn: api.updatePhraseMelangee,
         onSuccess: () => {
+            displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });
@@ -47,6 +51,8 @@ function PhraseMelangeeUpsertionModal(props: {
     const createPhraseMelangeeMutation = useMutation({
         mutationFn: api.createPhraseMelangee,
         onSuccess: () => {
+            displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
+
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });

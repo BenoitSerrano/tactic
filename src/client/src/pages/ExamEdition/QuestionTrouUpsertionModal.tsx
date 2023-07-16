@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { TextField, Typography, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
-import { TextField, Typography, styled } from '@mui/material';
+import { useAlert } from '../../lib/alert';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
 
 type questionTrouType = {
@@ -23,10 +24,12 @@ function QuestionTrouUpsertionModal(props: {
     examId: string;
 }) {
     const queryClient = useQueryClient();
+    const { displayAlert } = useAlert();
 
     const updateQuestionTrouMutation = useMutation({
         mutationFn: api.updateQuestionTrou,
         onSuccess: () => {
+            displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });
@@ -34,6 +37,7 @@ function QuestionTrouUpsertionModal(props: {
     const createQuestionTrouMutation = useMutation({
         mutationFn: api.createQuestionTrou,
         onSuccess: () => {
+            displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });

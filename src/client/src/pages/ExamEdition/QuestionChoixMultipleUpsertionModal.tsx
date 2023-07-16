@@ -4,6 +4,7 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { FormControlLabel, Radio, RadioGroup, TextField, Typography, styled } from '@mui/material';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
+import { useAlert } from '../../lib/alert';
 
 type questionChoixMultipleType = {
     id: number;
@@ -21,10 +22,12 @@ function QuestionChoixMultipleUpsertionModal(props: {
     examId: string;
 }) {
     const queryClient = useQueryClient();
+    const { displayAlert } = useAlert();
 
     const updateQuestionChoixMultipleMutation = useMutation({
         mutationFn: api.updateQuestionChoixMultiple,
         onSuccess: () => {
+            displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });
@@ -32,6 +35,8 @@ function QuestionChoixMultipleUpsertionModal(props: {
     const createQuestionChoixMultipleMutation = useMutation({
         mutationFn: api.createQuestionChoixMultiple,
         onSuccess: () => {
+            displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
+
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });

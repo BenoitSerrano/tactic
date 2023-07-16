@@ -10,6 +10,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { ThemeProvider } from '@mui/material';
 import { theme } from './theme';
+import { AlertHandlerContextProvider } from './lib/alert';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const queryClient = new QueryClient();
@@ -18,9 +19,11 @@ root.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-                <BrowserRouter>
-                    <Router />
-                </BrowserRouter>
+                <AlertHandlerContextProvider>
+                    <BrowserRouter>
+                        <Router />
+                    </BrowserRouter>
+                </AlertHandlerContextProvider>
             </QueryClientProvider>
         </ThemeProvider>
     </React.StrictMode>,
