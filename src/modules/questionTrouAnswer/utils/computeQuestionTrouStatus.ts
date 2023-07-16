@@ -24,5 +24,11 @@ function computeQuestionTrouStatus(
 }
 
 function sanitizeString(value: string) {
-    return value.trim().toLowerCase().replace(/ ?' ?/g, "'").replace(/’/g, "'");
+    return value
+        .split(' ')
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .replace(/ ?' ?/g, "'")
+        .replace(/’/g, "'");
 }

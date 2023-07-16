@@ -63,4 +63,13 @@ describe('computeQuestionTrouStatus', () => {
 
         expect(status).toBe('right');
     });
+
+    it('should return right for match modulo multiple spaces in a row', () => {
+        const answer = "s'être  levé";
+        const rightAnswers = ["s'être levé"];
+        const acceptableAnswers: string[] = [];
+        const status = computeQuestionTrouStatus(answer, rightAnswers, acceptableAnswers);
+
+        expect(status).toBe('right');
+    });
 });
