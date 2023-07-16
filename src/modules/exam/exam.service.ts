@@ -41,6 +41,30 @@ function buildExamService() {
     async function getExamResults(examId: string) {
         const examWithAttempts = await examRepository.findOneOrFail({
             where: { id: examId },
+            select: {
+                attempts: {
+                    startedAt: true,
+                    updatedAt: true,
+                    id: true,
+                    student: { id: true, email: true, comment: true },
+                    qcmAnswers: { id: true, choice: true, questionChoixMultiple: { id: true } },
+                    hasBeenTreated: true,
+                    phraseMelangeAnswers: { id: true, answer: true, phraseMelangee: { id: true } },
+                    questionTrouAnswers: { id: true, answer: true, questionTrou: { id: true } },
+                },
+                phrasesMelangees: { id: true, points: true, correctPhrases: true },
+                questionsTrou: {
+                    id: true,
+                    points: true,
+                    acceptableAnswers: true,
+                    rightAnswers: true,
+                },
+                questionsChoixMultiple: {
+                    id: true,
+                    points: true,
+                    rightAnswerIndex: true,
+                },
+            },
             relations: [
                 'attempts',
                 'attempts.student',
