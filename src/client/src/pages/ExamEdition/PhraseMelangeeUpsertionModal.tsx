@@ -73,9 +73,8 @@ function PhraseMelangeeUpsertionModal(props: {
             confirmButtonLabel={confirmButtonLabel}
             cancelButtonLabel="Annuler"
             isConfirmLoading={isUpdating || isCreating}
+            title={`${titlePrefix} d'une phrase à ordonner`}
         >
-            <Typography variant="h2">{titlePrefix} d'une phrase à ordonner</Typography>
-
             <TextField
                 fullWidth
                 label="Phrase originale"

@@ -77,9 +77,9 @@ function QuestionTrouUpsertionModal(props: {
             confirmButtonLabel={confirmButtonLabel}
             cancelButtonLabel="Annuler"
             isConfirmLoading={isUpdating || isCreating}
+            title={`${titlePrefix} d'un texte à trou`}
         >
             <>
-                <Typography variant="h2">{titlePrefix} d'un texte à trou</Typography>
                 <RowContainer>
                     <TextField
                         fullWidth

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
-import { FormControlLabel, Radio, RadioGroup, TextField, Typography, styled } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
 import { useAlert } from '../../lib/alert';
 
@@ -67,9 +67,9 @@ function QuestionChoixMultipleUpsertionModal(props: {
             confirmButtonLabel={confirmButtonLabel}
             cancelButtonLabel="Annuler"
             isConfirmLoading={isUpdating || isCreating}
+            title={`${titlePrefix} d'une QCM`}
         >
             <ModalContent>
-                <Typography variant="h2">{titlePrefix} d'une QCM</Typography>
                 <InputContainer>
                     <TextField
                         value={title}

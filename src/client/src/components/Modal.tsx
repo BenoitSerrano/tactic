@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal as MuiModal, styled } from '@mui/material';
+import { Button, Modal as MuiModal, Typography, styled } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 function Modal(props: {
@@ -10,10 +10,16 @@ function Modal(props: {
     confirmButtonLabel?: string;
     cancelButtonLabel?: string;
     isConfirmLoading?: boolean;
+    title?: string;
 }) {
     return (
         <MuiModal open={props.isOpen} onClose={props.close}>
             <ModalContent>
+                {!!props.title && (
+                    <ModalHeader>
+                        <Typography variant="h2">{props.title}</Typography>
+                    </ModalHeader>
+                )}
                 <ModalBody>{props.children}</ModalBody>
                 <ModalFooter>
                     <Button onClick={props.close}>{props.cancelButtonLabel || 'Cancel'}</Button>
@@ -34,6 +40,8 @@ function Modal(props: {
         props.onConfirm();
     }
 }
+
+const ModalHeader = styled('div')({ marginBottom: 8 });
 
 const ModalContent = styled('div')({
     borderRadius: '2px',
