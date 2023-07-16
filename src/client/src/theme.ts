@@ -11,11 +11,11 @@ const theme = createTheme({
             fontWeight: 'normal',
         },
         h3: {
-            fontSize: '2rem',
+            fontSize: '1.5rem',
             fontWeight: 'normal',
         },
         h4: {
-            fontSize: '1.5rem',
+            fontSize: '1.2rem',
             fontWeight: 'normal',
         },
     },

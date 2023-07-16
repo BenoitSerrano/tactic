@@ -46,10 +46,13 @@ function ExamTaking() {
                 )}
                 {query.data.exam.questionsTrou.length > 0 && (
                     <p>
-                        <Typography variant="h2">
-                            Complétez les phrases suivantes. Conjuguez le verbe ou ajoutez l’élément
-                            grammatical qui manque. Si vous ne savez pas, pas de stress : laissez
-                            juste la question en blanc.
+                        <Typography variant="h3">
+                            Complétez les phrases suivantes. <br />
+                            Conjuguez le verbe ou ajoutez l’élément grammatical qui manque. <br />
+                            Si vous ne savez pas, pas de stress : laissez juste la question en
+                            blanc. <br />
+                            Attention : il y a parfois plusieurs réponses correctes, il ne faut en
+                            mettre qu'une seule.
                         </Typography>
                     </p>
                 )}
