@@ -39,6 +39,7 @@ function buildExamService() {
     }
 
     async function getExamResults(examId: string) {
+        console.time('examResults');
         const examWithAttempts = await examRepository.findOneOrFail({
             where: { id: examId },
             relations: [
@@ -55,7 +56,11 @@ function buildExamService() {
                 'attempts.phraseMelangeAnswers.phraseMelangee',
             ],
         });
+        console.timeLog('examResults');
+
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(examWithAttempts);
+        console.timeEnd('examResults');
+
         return examWithResults;
     }
 }
