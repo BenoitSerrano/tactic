@@ -27,12 +27,7 @@ type examResultApiType = {
     attemptId: string;
     startedAt: number;
     duration: number | undefined;
-    qcmSummary: Record<number, { status: 'right' | 'wrong'; choice: number; points: number }>;
-    phraseMelangeeSummary: Record<number, { status: 'right' | 'wrong'; points: number }>;
-    questionTrouSummary: Record<
-        number,
-        { status: 'right' | 'acceptable' | 'wrong'; answer: string; points: number }
-    >;
+    mark: number;
     hasBeenTreated: boolean;
 };
 
@@ -209,7 +204,6 @@ function ExamResults() {
 
     function formatData(data: examResultsApiType['results']) {
         return data.map((result) => {
-            const mark = computeMark(result);
             return {
                 email: result.email,
                 attemptId: result.attemptId,
@@ -218,7 +212,7 @@ function ExamResults() {
                     result.duration !== undefined
                         ? time.formatToClock(result.duration, { hideHours: true })
                         : '-',
-                mark,
+                mark: result.mark,
                 hasBeenTreated: result.hasBeenTreated,
                 comment: result.comment,
             };
@@ -252,27 +246,6 @@ function ExamResults() {
             }
         });
     }
-}
-
-function computeMark(examResult: examResultApiType) {
-    const qcmMark = Object.values(examResult.qcmSummary).reduce(
-        (sum, value) => sum + (value.status === 'right' ? value.points : 0),
-        0,
-    );
-    const phraseMelangeeMark = Object.values(examResult.phraseMelangeeSummary).reduce(
-        (sum, value) => sum + (value.status === 'right' ? value.points : 0),
-        0,
-    );
-    const questionTrouMark = Object.values(examResult.questionTrouSummary).reduce((sum, value) => {
-        switch (value.status) {
-            case 'right':
-                return sum + value.points;
-            case 'acceptable':
-                return sum + value.points / 2;
-        }
-        return sum;
-    }, 0);
-    return qcmMark + questionTrouMark + phraseMelangeeMark;
 }
 
 export { ExamResults };

@@ -31,6 +31,8 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
             examWithAttempts.phrasesMelangees,
         );
 
+        const mark = computeMark([questionTrouSummary, qcmSummary, phraseMelangeeSummary]);
+
         const result = {
             id: student.id,
             email: student.email,
@@ -38,9 +40,7 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
             startedAt: startedAtDate.getTime(),
             duration,
             attemptId: attempt.id,
-            questionTrouSummary,
-            qcmSummary,
-            phraseMelangeeSummary,
+            mark,
             hasBeenTreated: treatmentStatusSummary[attempt.id],
         };
         return result;
@@ -59,6 +59,26 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
     );
     const totalPoints = qcmTotalPoints + questionTrouTotalPoints + phraseMelangeeTotalPoints;
     return { totalPoints, results: examWithResults };
+}
+
+function computeMark<summaryT extends { status: 'right' | 'acceptable' | 'wrong'; points: number }>(
+    summaries: Array<Record<number, summaryT>>,
+) {
+    let sum = 0;
+
+    summaries.forEach((summary) => {
+        Object.values(summary).forEach(({ points, status }) => {
+            switch (status) {
+                case 'right':
+                    sum += points;
+                    break;
+                case 'acceptable':
+                    sum += points / 2;
+                    break;
+            }
+        });
+    });
+    return sum;
 }
 
 export { examAdaptator };
