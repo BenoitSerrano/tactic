@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import { Modal } from '../../components/Modal';
 import { Button, TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
@@ -83,12 +84,14 @@ function PhraseMelangeeUpsertionModal(props: {
                 onChange={onChangeOriginalPhrase}
             />
             {!!originalPhrase && (
-                <>
+                <MainContainer>
                     <RowContainer>
-                        <Typography>Phrase mélangée : {shuffledPhrase}</Typography>
+                        <Typography>
+                            Phrase mélangée : <strong>{shuffledPhrase}</strong>
+                        </Typography>
                         <Button onClick={shufflePhrase}>Mélanger</Button>
                     </RowContainer>
-                    <RowContainer>
+                    <>
                         <Typography>Phrases correctes :</Typography>
                         <ul>
                             {correctPhrases.map((correctPhrase) => (
@@ -97,37 +100,50 @@ function PhraseMelangeeUpsertionModal(props: {
                                 </li>
                             ))}
                             <li>
-                                {words.map((word, index) =>
-                                    correctCombination.includes(index) ? undefined : (
-                                        <WordContainer
-                                            key={word}
-                                            onClick={() =>
-                                                setCorrectCombination([
-                                                    ...correctCombination,
-                                                    index,
-                                                ])
-                                            }
-                                        >
-                                            {word}
-                                        </WordContainer>
-                                    ),
-                                )}
-                                DEVIENT
-                                {correctCombination.map((combinationIndex, index) => (
-                                    <WordContainer onClick={buildOnClickOnCorrectPhraseWord(index)}>
-                                        {words[combinationIndex]}
-                                    </WordContainer>
-                                ))}
-                                <Button
-                                    onClick={validateCorrectPhrase}
-                                    disabled={correctCombination.length !== words.length}
-                                >
-                                    Valider
-                                </Button>
+                                <CorrectPhraseCreationContainer>
+                                    <WordLinesContainer>
+                                        <WordLineContainer>
+                                            {words.map((word, index) =>
+                                                correctCombination.includes(index) ? undefined : (
+                                                    <WordContainer
+                                                        key={word}
+                                                        onClick={() =>
+                                                            setCorrectCombination([
+                                                                ...correctCombination,
+                                                                index,
+                                                            ])
+                                                        }
+                                                    >
+                                                        <Typography>{word}</Typography>
+                                                    </WordContainer>
+                                                ),
+                                            )}
+                                        </WordLineContainer>
+                                        <WordLineContainer>
+                                            <SubdirectoryArrowRightIcon />
+                                            {correctCombination.map((combinationIndex, index) => (
+                                                <WordContainer
+                                                    key={index}
+                                                    onClick={buildOnClickOnCorrectPhraseWord(index)}
+                                                >
+                                                    <Typography>
+                                                        {words[combinationIndex]}
+                                                    </Typography>
+                                                </WordContainer>
+                                            ))}
+                                        </WordLineContainer>
+                                    </WordLinesContainer>
+                                    <Button
+                                        onClick={validateCorrectPhrase}
+                                        disabled={correctCombination.length !== words.length}
+                                    >
+                                        Ajouter
+                                    </Button>
+                                </CorrectPhraseCreationContainer>
                             </li>
                         </ul>
-                    </RowContainer>
-                </>
+                    </>
+                </MainContainer>
             )}
         </Modal>
     );
@@ -184,10 +200,33 @@ function PhraseMelangeeUpsertionModal(props: {
     }
 }
 
-const RowContainer = styled('div')({ display: 'flex' });
-const WordContainer = styled(Typography)({
+const MainContainer = styled('div')({ width: '100%' });
+
+const RowContainer = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+});
+
+const CorrectPhraseCreationContainer = styled('div')({
+    display: 'flex',
+});
+
+const WordLineContainer = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+});
+const WordLinesContainer = styled('div')({
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+});
+const WordContainer = styled('span')({
+    borderWidth: '1px',
+    borderStyle: 'dotted',
     padding: '4px',
-    margin: '4px',
+    marginLeft: '4px',
+    marginRight: '4px',
     cursor: 'pointer',
 });
 export { PhraseMelangeeUpsertionModal };
