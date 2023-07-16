@@ -65,6 +65,9 @@ function PhraseMelangeeUpsertionModal(props: {
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);
+    const isAddCombinationDisabled =
+        correctCombination.length !== words.length ||
+        correctPhrases.includes(correctCombination.map((index) => words[index]).join(' '));
 
     return (
         <Modal
@@ -135,7 +138,7 @@ function PhraseMelangeeUpsertionModal(props: {
                                     </WordLinesContainer>
                                     <Button
                                         onClick={validateCorrectPhrase}
-                                        disabled={correctCombination.length !== words.length}
+                                        disabled={isAddCombinationDisabled}
                                     >
                                         Ajouter
                                     </Button>
