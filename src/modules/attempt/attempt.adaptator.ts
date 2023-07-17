@@ -6,6 +6,7 @@ import { Attempt } from './Attempt.entity';
 const attemptAdaptator = {
     convertAttemptToAttemptWithAnswers,
     computeTreatmentStatusSummary,
+    convertAttemptToAttemptWithoutAnswers,
 };
 
 function computeTreatmentStatusSummary(attempts: Attempt[]) {
@@ -17,19 +18,53 @@ function computeTreatmentStatusSummary(attempts: Attempt[]) {
     return treatmentStatusSummary;
 }
 
-function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
-    const choices: Record<number, number> = {};
+function convertAttemptToAttemptWithoutAnswers(attempt: Attempt) {
+    const qcmChoices: Record<number, number> = {};
     attempt.qcmAnswers.forEach((qcmAnswer) => {
         const id = qcmAnswer.questionChoixMultiple.id;
-        choices[id] = qcmAnswer.choice;
+        qcmChoices[id] = qcmAnswer.choice;
     });
 
-    const answers: Record<number, string> = {};
+    const questionTrouAnswers: Record<number, string> = {};
     attempt.questionTrouAnswers.forEach((questionTrouAnswer) => {
         const id = questionTrouAnswer.questionTrou.id;
-        answers[id] = questionTrouAnswer.answer;
+        questionTrouAnswers[id] = questionTrouAnswer.answer;
     });
 
+    const phraseMelangeeAnswers: Record<number, string> = {};
+    attempt.phraseMelangeAnswers.forEach((phraseMelangeAnswer) => {
+        const id = phraseMelangeAnswer.phraseMelangee.id;
+        phraseMelangeeAnswers[id] = phraseMelangeAnswer.answer;
+    });
+
+    return {
+        id: attempt.id,
+        startedAt: attempt.startedAt,
+        updatedAt: attempt.updatedAt,
+        exam: {
+            id: attempt.exam.id,
+            name: attempt.exam.name,
+            duration: attempt.exam.duration,
+            extraTime: attempt.exam.extraTime,
+            questionsChoixMultiple: attempt.exam.questionsChoixMultiple.map(
+                (questionChoixMultiple) => ({
+                    ...questionChoixMultiple,
+                    choice: qcmChoices[questionChoixMultiple.id],
+                }),
+            ),
+            questionsTrou: attempt.exam.questionsTrou.map((questionTrou) => ({
+                ...questionTrou,
+                answer: questionTrouAnswers[questionTrou.id],
+            })),
+            phrasesMelangees: attempt.exam.phrasesMelangees.map((phraseMelangee) => ({
+                ...phraseMelangee,
+                answer: phraseMelangeeAnswers[phraseMelangee.id],
+            })),
+        },
+    };
+}
+
+function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
     const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
         attempt.qcmAnswers,
         attempt.exam.questionsChoixMultiple,

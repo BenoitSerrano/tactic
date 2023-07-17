@@ -13,6 +13,7 @@ function buildAttemptService() {
         createAttempt,
         createEmptyAttempt,
         fetchAttempt,
+        fetchAttemptWithoutAnswers,
         deleteAttempt,
         assertIsTimeLimitNotExceeded,
         updateAttemptDuration,
@@ -75,18 +76,68 @@ function buildAttemptService() {
             relations: [
                 'exam',
                 'qcmAnswers',
+                'qcmAnswers.questionChoixMultiple',
                 'questionTrouAnswers',
                 'questionTrouAnswers.questionTrou',
+                'phraseMelangeAnswers',
+                'phraseMelangeAnswers.phraseMelangee',
                 'exam.questionsChoixMultiple',
                 'exam.questionsTrou',
                 'exam.phrasesMelangees',
-                'qcmAnswers.questionChoixMultiple',
-                'phraseMelangeAnswers',
-                'phraseMelangeAnswers.phraseMelangee',
             ],
         });
 
         return attemptAdaptator.convertAttemptToAttemptWithAnswers(attempt);
+    }
+
+    async function fetchAttemptWithoutAnswers(attemptId: string) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+
+        const attempt = await attemptRepository.findOneOrFail({
+            where: { id: attemptId },
+            select: {
+                id: true,
+                exam: {
+                    id: true,
+                    duration: true,
+                    extraTime: true,
+                    name: true,
+                    questionsChoixMultiple: {
+                        id: true,
+                        order: true,
+                        possibleAnswers: true,
+                        title: true,
+                    },
+                    questionsTrou: { id: true, beforeText: true, afterText: true, order: true },
+                    phrasesMelangees: { id: true, order: true, words: true, shuffledPhrase: true },
+                },
+                phraseMelangeAnswers: { answer: true, id: true, phraseMelangee: { id: true } },
+                qcmAnswers: { choice: true, id: true, questionChoixMultiple: { id: true } },
+                questionTrouAnswers: { answer: true, id: true },
+                startedAt: true,
+            },
+            order: {
+                exam: {
+                    questionsChoixMultiple: { order: 'ASC' },
+                    questionsTrou: { order: 'ASC' },
+                    phrasesMelangees: { order: 'ASC' },
+                },
+            },
+            relations: [
+                'exam',
+                'qcmAnswers',
+                'qcmAnswers.questionChoixMultiple',
+                'questionTrouAnswers',
+                'questionTrouAnswers.questionTrou',
+                'phraseMelangeAnswers',
+                'phraseMelangeAnswers.phraseMelangee',
+                'exam.questionsChoixMultiple',
+                'exam.questionsTrou',
+                'exam.phrasesMelangees',
+            ],
+        });
+
+        return attemptAdaptator.convertAttemptToAttemptWithoutAnswers(attempt);
     }
 
     async function assertIsTimeLimitNotExceeded(attempt: Attempt) {

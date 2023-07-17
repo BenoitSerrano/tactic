@@ -8,6 +8,7 @@ const api = {
     createAttempt,
     createEmptyAttempt,
     fetchAttempt,
+    fetchAttemptWithoutAnswers,
     updateAttemptTreatementStatus,
     deleteAttempt,
     fetchStudents,
@@ -132,6 +133,14 @@ async function createEmptyAttempt({ examId, studentId }: { examId: string; stude
 
 async function fetchAttempt(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
+    const response = await fetch(URL, {
+        method: 'GET',
+    });
+    return response.json();
+}
+
+async function fetchAttemptWithoutAnswers(attemptId: string) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/without-answers`;
     const response = await fetch(URL, {
         method: 'GET',
     });

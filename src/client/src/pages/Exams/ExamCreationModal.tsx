@@ -26,20 +26,22 @@ function ExamCreationModal(props: {
             confirmButtonLabel="Créer"
             cancelButtonLabel="Annuler"
             isConfirmLoading={mutation.isLoading}
+            title="Création d'un nouvel examen"
         >
-            <TextField
-                label="Nom de l'examen"
-                placeholder="..."
-                value={newExamName}
-                onChange={(event) => setNewExamName(event.target.value)}
-            />
-            <TextField
-                type="number"
-                label="Durée de l'examen en minutes"
-                placeholder="..."
-                value={newExamDuration}
-                onChange={(event) => setNewExamDuration(Number(event.target.value))}
-            />
+            <div>
+                <TextField
+                    label="Nom de l'examen"
+                    fullWidth
+                    value={newExamName}
+                    onChange={(event) => setNewExamName(event.target.value)}
+                />
+                <TextField
+                    type="number"
+                    label="Durée de l'examen en minutes"
+                    value={newExamDuration}
+                    onChange={(event) => setNewExamDuration(Number(event.target.value))}
+                />
+            </div>
         </Modal>
     );
 

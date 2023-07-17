@@ -150,6 +150,10 @@ router.post(
 );
 
 router.get('/attempts/:attemptId', buildController(attemptController.fetchAttempt));
+router.get(
+    '/attempts/:attemptId/without-answers',
+    buildController(attemptController.fetchAttemptWithoutAnswers),
+);
 
 router.post(
     '/attempts/:attemptId/questionsChoixMultiple/:qcmId',

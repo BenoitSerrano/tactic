@@ -9,16 +9,23 @@ import { Page } from '../../components/Page';
 import { time } from '../../lib/time';
 import { QuestionTrouAnswering } from './QuestionTrouAnswering';
 import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
+import { Loader } from '../../components/Loader';
 
 function ExamTaking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
     const studentId = params.studentId as string;
     const navigate = useNavigate();
-    const query = useQuery(['attempts', attemptId], () => api.fetchAttempt(attemptId));
+    const query = useQuery(['attempts-without-answers', attemptId], () =>
+        api.fetchAttemptWithoutAnswers(attemptId),
+    );
 
     if (!query.data) {
-        return <div />;
+        return (
+            <Page>
+                <Loader />
+            </Page>
+        );
     }
 
     let remainingSeconds =
