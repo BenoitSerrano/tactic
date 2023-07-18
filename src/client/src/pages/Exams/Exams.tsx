@@ -12,10 +12,12 @@ import { config } from '../../config';
 import { Loader } from '../../components/Loader';
 import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
+import { useAlert } from '../../lib/alert';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
     const navigate = useNavigate();
+    const { displayAlert } = useAlert();
     const [isExamCreationModalOpen, setIsExamCreationModalOpen] = useState(false);
 
     return (
@@ -85,6 +87,10 @@ function Exams() {
         return () => {
             const url = `${config.HOST_URL}/student/exams/${examId}`;
             navigator.clipboard.writeText(url);
+            displayAlert({
+                text: 'Le lien a bien été copié dans le presse-papiers',
+                variant: 'success',
+            });
         };
     }
 }
