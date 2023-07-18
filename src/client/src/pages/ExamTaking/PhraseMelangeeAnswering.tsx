@@ -18,7 +18,9 @@ function PhraseMelangeeAnswering(props: {
     const createOrUpdatePhraseMelangeeAnswerMutation = useMutation({
         mutationFn: api.createOrUpdatePhraseMelangeeAnswer,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            queryClient.invalidateQueries({
+                queryKey: ['attempts-without-answers', props.attemptId],
+            });
         },
     });
 
