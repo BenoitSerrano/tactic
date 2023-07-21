@@ -1,8 +1,9 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Attempt } from '../attempt/Attempt.entity';
+import { StudentInterface } from './student.interface';
+import { AttemptInterface } from '../attempt/attempt.interface';
 
 @Entity()
-export class Student {
+export class Student implements StudentInterface {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -12,6 +13,6 @@ export class Student {
     @Column({ nullable: true })
     comment?: string;
 
-    @OneToMany(() => Attempt, (attempt) => attempt.student)
-    attempts: Attempt[];
+    @OneToMany('Attempt', 'student')
+    attempts: AttemptInterface[];
 }

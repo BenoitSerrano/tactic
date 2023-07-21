@@ -7,15 +7,16 @@ import {
     PrimaryGeneratedColumn,
     Unique,
 } from 'typeorm';
-import { Student } from '../student/Student.entity';
+import { AttemptInterface } from './attempt.interface';
 import { Exam } from '../exam';
 import { QcmAnswer } from '../qcmAnswer';
 import { QuestionTrouAnswer } from '../questionTrouAnswer';
 import { PhraseMelangeeAnswer } from '../phraseMelangeeAnswer';
+import { StudentInterface } from '../student/student.interface';
 
 @Entity()
 @Unique('One student has one shot for an exam', ['student', 'exam'])
-export class Attempt {
+export class Attempt implements AttemptInterface {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -28,8 +29,8 @@ export class Attempt {
     @Column({ default: false })
     hasBeenTreated: boolean;
 
-    @ManyToOne(() => Student, { onDelete: 'CASCADE' })
-    student: Student;
+    @ManyToOne('Student', { onDelete: 'CASCADE' })
+    student: StudentInterface;
 
     @ManyToOne(() => Exam)
     exam: Exam;
