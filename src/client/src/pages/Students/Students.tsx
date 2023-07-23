@@ -1,39 +1,20 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../lib/api';
-import {
-    Button,
-    IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    TextField,
-} from '@mui/material';
+import { api } from '../../lib/api';
+import { IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Loader } from '../components/Loader';
+import { Loader } from '../../components/Loader';
+import { StudentCreationModal } from './StudentCreationModal';
+import { StudentsCreationModal } from './StudentsCreationModal';
+import { Menu } from '../../components/Menu';
 
-function StudentsEdition() {
+function Students() {
+    const [isStudentCreationModalOpen, setIsStudentCreationModalOpen] = useState(false);
+    const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
     const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
-    const [newEmail, setNewEmail] = useState('');
-    const [emailList, setEmailList] = useState('');
-    const createStudentMutation = useMutation({
-        mutationFn: api.createStudent,
-        onSuccess: () => {
-            setNewEmail('');
-            queryClient.invalidateQueries({ queryKey: ['students'] });
-        },
-    });
-
-    const createStudentsMutation = useMutation({
-        mutationFn: api.createStudents,
-        onSuccess: () => {
-            setEmailList('');
-            queryClient.invalidateQueries({ queryKey: ['students'] });
-        },
-    });
 
     const deleteStudentMutation = useMutation({
         mutationFn: api.deleteStudent,
@@ -41,6 +22,19 @@ function StudentsEdition() {
             queryClient.invalidateQueries({ queryKey: ['students'] });
         },
     });
+
+    const buttons = [
+        {
+            IconComponent: PersonAddAlt1Icon,
+            onClick: () => setIsStudentCreationModalOpen(true),
+            title: 'Ajouter un.e étudiant.e',
+        },
+        {
+            IconComponent: PlaylistAddIcon,
+            onClick: () => setIsStudentsCreationModalOpen(true),
+            title: 'Ajouter plusieurs étudiant.es',
+        },
+    ];
 
     if (!query.data && query.isLoading) {
         return <Loader />;
@@ -73,27 +67,17 @@ function StudentsEdition() {
                     ))}
                 </TableBody>
             </Table>
-            <hr />
-            <div>
-                <TextField value={newEmail} onChange={(event) => setNewEmail(event.target.value)} />
-                <Button onClick={createStudent}>Créer un.e étudiant.e</Button>
-            </div>
-            <hr />
-            <div>
-                <TextField
-                    multiline
-                    value={emailList}
-                    onChange={(event) => setEmailList(event.target.value)}
-                />
-                <Button onClick={importStudentEmails}>Importer une liste d'étudiant.es</Button>
-            </div>
-            <hr />
+            <StudentCreationModal
+                isOpen={isStudentCreationModalOpen}
+                close={() => setIsStudentCreationModalOpen(false)}
+            />
+            <StudentsCreationModal
+                isOpen={isStudentsCreationModalOpen}
+                close={() => setIsStudentsCreationModalOpen(false)}
+            />
+            <Menu buttons={buttons} />
         </>
     );
-
-    async function createStudent() {
-        createStudentMutation.mutate(newEmail.trim().toLowerCase());
-    }
 
     function buildDeleteStudent(studentId: string) {
         return () => {
@@ -106,14 +90,6 @@ function StudentsEdition() {
             }
         };
     }
-
-    async function importStudentEmails() {
-        const emails: string[] = emailList
-            .split('\n')
-            .map((email) => email.trim().toLowerCase())
-            .filter(Boolean);
-        createStudentsMutation.mutate(emails);
-    }
 }
 
-export { StudentsEdition };
+export { Students };

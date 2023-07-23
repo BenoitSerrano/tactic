@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Exams } from './pages/Exams';
 import { ExamEdition } from './pages/ExamEdition';
-import { StudentsEdition } from './pages/StudentsEdition';
+import { Students } from './pages/Students';
 import { StudentAuthentication } from './pages/StudentAuthentication';
 import { ExamTaking } from './pages/ExamTaking';
 import { ExamResults } from './pages/ExamResults';
@@ -58,7 +58,7 @@ function Router() {
 
 const authenticatedRoutes = [
     { suffixPath: `exams`, element: <Exams /> },
-    { suffixPath: `students`, element: <StudentsEdition /> },
+    { suffixPath: `students`, element: <Students /> },
     { suffixPath: `exams/:examId/edit`, element: <ExamEdition /> },
     { suffixPath: `exams/:examId/results`, element: <ExamResults /> },
     { suffixPath: `exams/:examId/results/:attemptId`, element: <ExamChecking /> },
