@@ -31,7 +31,8 @@ const MENU_CONTAINER_HEIGHT = 80;
 
 const MenuContainer = styled('div')({
     position: 'fixed',
-    bottom: '20px',
+    top: '20px',
+    zIndex: 1000,
     right: '20px',
     backgroundColor: 'white',
     borderColor: 'black',
