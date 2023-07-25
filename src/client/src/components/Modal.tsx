@@ -36,7 +36,6 @@ function Modal(props: {
     );
 
     function onConfirm() {
-        props.close();
         props.onConfirm();
     }
 }

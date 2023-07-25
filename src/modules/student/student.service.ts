@@ -5,7 +5,6 @@ export { buildStudentService };
 
 function buildStudentService() {
     const studentService = {
-        createStudent,
         patchStudent,
         createStudents,
         getStudentsWithAttempts,
@@ -23,13 +22,6 @@ function buildStudentService() {
     async function getStudentId(email: string) {
         const studentRepository = dataSource.getRepository(Student);
         return studentRepository.findOneOrFail({ where: { email }, select: ['id'] });
-    }
-
-    async function createStudent(email: string) {
-        const studentRepository = dataSource.getRepository(Student);
-        const student = new Student();
-        student.email = email;
-        return studentRepository.save(student);
     }
 
     async function createStudents(emails: string[]) {

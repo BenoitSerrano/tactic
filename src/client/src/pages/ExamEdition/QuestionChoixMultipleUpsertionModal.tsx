@@ -27,6 +27,7 @@ function QuestionChoixMultipleUpsertionModal(props: {
     const updateQuestionChoixMultipleMutation = useMutation({
         mutationFn: api.updateQuestionChoixMultiple,
         onSuccess: () => {
+            props.close();
             displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
@@ -35,8 +36,8 @@ function QuestionChoixMultipleUpsertionModal(props: {
     const createQuestionChoixMultipleMutation = useMutation({
         mutationFn: api.createQuestionChoixMultiple,
         onSuccess: () => {
+            props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
-
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });

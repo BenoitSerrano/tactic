@@ -33,14 +33,7 @@ router.patch(
 );
 router.delete('/students/:studentId', buildController(studentController.deleteStudent));
 router.get('/students/:email', buildController(studentController.getStudentId));
-router.post(
-    '/students',
-    buildController(studentController.createStudent, {
-        schema: Joi.object({
-            email: Joi.string().required(),
-        }),
-    }),
-);
+
 router.post(
     '/student-list',
     buildController(studentController.createStudents, {

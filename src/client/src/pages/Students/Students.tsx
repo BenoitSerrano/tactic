@@ -11,17 +11,14 @@ import {
     TableSortLabel,
 } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../components/Loader';
-import { StudentCreationModal } from './StudentCreationModal';
 import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
 
 type sortColumnType = 'email';
 
 function Students() {
-    const [isStudentCreationModalOpen, setIsStudentCreationModalOpen] = useState(false);
     const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
     const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
@@ -38,13 +35,8 @@ function Students() {
     const buttons = [
         {
             IconComponent: PersonAddAlt1Icon,
-            onClick: () => setIsStudentCreationModalOpen(true),
-            title: 'Ajouter un.e étudiant.e',
-        },
-        {
-            IconComponent: PlaylistAddIcon,
             onClick: () => setIsStudentsCreationModalOpen(true),
-            title: 'Ajouter plusieurs étudiant.es',
+            title: 'Ajouter un.e ou plusieurs étudiant.es',
         },
     ];
 
@@ -94,10 +86,6 @@ function Students() {
                     ))}
                 </TableBody>
             </Table>
-            <StudentCreationModal
-                isOpen={isStudentCreationModalOpen}
-                close={() => setIsStudentCreationModalOpen(false)}
-            />
             <StudentsCreationModal
                 isOpen={isStudentsCreationModalOpen}
                 close={() => setIsStudentsCreationModalOpen(false)}

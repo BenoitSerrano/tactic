@@ -14,6 +14,7 @@ function ExamCreationModal(props: {
     const mutation = useMutation({
         mutationFn: api.createExam,
         onSuccess: (exam) => {
+            props.close();
             props.onExamCreated(exam.id);
         },
     });

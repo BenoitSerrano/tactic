@@ -2,19 +2,25 @@ import { useState } from 'react';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TextField } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import { useAlert } from '../../lib/alert';
+import { extractEmailsFromEmailList } from './utils';
 
 function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
     const [emailList, setEmailList] = useState('');
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
+    const emails = extractEmailsFromEmailList(emailList);
 
     const createStudentsMutation = useMutation({
         mutationFn: api.createStudents,
         onSuccess: () => {
+            setEmailList('');
             queryClient.invalidateQueries({ queryKey: ['students'] });
-            displayAlert({ text: `Les étudiant.es ont bien été importé.es`, variant: 'success' });
+            displayAlert({
+                text: `Les ${emails.length} étudiant.es ont bien été importé.es`,
+                variant: 'success',
+            });
             props.close();
         },
     });
@@ -22,10 +28,16 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
         <Modal
             onConfirm={importStudentEmails}
             isOpen={props.isOpen}
-            title="Importer une liste d'étudiant.es"
+            title="Ajouter des étudiant.es"
             close={props.close}
         >
+            <Typography>
+                Vous pouvez ajouter plusieurs adresses e-mail dans le champ ci-dessous, en les
+                séparant par des espaces.
+            </Typography>
             <TextField
+                label="Adresses e-mail"
+                fullWidth
                 multiline
                 value={emailList}
                 onChange={(event) => setEmailList(event.target.value)}
@@ -34,10 +46,6 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
     );
 
     async function importStudentEmails() {
-        const emails: string[] = emailList
-            .split('\n')
-            .map((email) => email.trim().toLowerCase())
-            .filter(Boolean);
         createStudentsMutation.mutate(emails);
     }
 }

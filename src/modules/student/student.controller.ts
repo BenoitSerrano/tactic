@@ -5,7 +5,6 @@ export { buildStudentController };
 function buildStudentController() {
     const studentService = buildStudentService();
     const studentController = {
-        createStudent,
         createStudents,
         patchStudent,
         getStudentsWithAttempts,
@@ -14,10 +13,6 @@ function buildStudentController() {
     };
 
     return studentController;
-
-    async function createStudent(params: { body: { email: string } }) {
-        return studentService.createStudent(params.body.email);
-    }
 
     async function createStudents(params: { body: { emails: string[] } }) {
         return studentService.createStudents(params.body.emails);

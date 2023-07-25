@@ -44,6 +44,7 @@ function PhraseMelangeeUpsertionModal(props: {
     const updatePhraseMelangeeMutation = useMutation({
         mutationFn: api.updatePhraseMelangee,
         onSuccess: () => {
+            props.close();
             displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
@@ -52,8 +53,8 @@ function PhraseMelangeeUpsertionModal(props: {
     const createPhraseMelangeeMutation = useMutation({
         mutationFn: api.createPhraseMelangee,
         onSuccess: () => {
+            props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
-
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });

@@ -29,6 +29,7 @@ function QuestionTrouUpsertionModal(props: {
     const updateQuestionTrouMutation = useMutation({
         mutationFn: api.updateQuestionTrou,
         onSuccess: () => {
+            props.close();
             displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
@@ -37,6 +38,7 @@ function QuestionTrouUpsertionModal(props: {
     const createQuestionTrouMutation = useMutation({
         mutationFn: api.createQuestionTrou,
         onSuccess: () => {
+            props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
