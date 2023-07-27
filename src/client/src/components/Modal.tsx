@@ -50,9 +50,11 @@ const ModalContent = styled('div')({
     transform: 'translate(-50%, -50%)',
     minWidth: '40%',
     minHeight: '40%',
+    maxHeight: '80%',
     display: 'flex',
     flexDirection: 'column',
     padding: '20px',
+    overflow: 'auto',
     backgroundColor: 'white',
 });
 
