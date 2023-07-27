@@ -32,7 +32,7 @@ function buildStudentService() {
             student.email = email;
             return student;
         });
-        return studentRepository.save(students);
+        return studentRepository.upsert(students, ['email']);
     }
 
     async function patchStudent(studentId: string, { comment }: { comment: string }) {

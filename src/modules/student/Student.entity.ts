@@ -7,7 +7,7 @@ export class Student implements StudentInterface {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ default: '' })
+    @Column({ default: '', unique: true })
     email: string;
 
     @Column({ nullable: true })
