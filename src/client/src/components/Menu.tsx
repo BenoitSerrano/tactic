@@ -10,37 +10,36 @@ type buttonType = {
 function Menu(props: { buttons: Array<buttonType> }) {
     return (
         <MenuContainer>
-            {props.buttons.map((button, index) => {
-                const { IconComponent, onClick } = button;
-                return (
-                    <IconButton
-                        title={button.title}
-                        onClick={onClick}
-                        size="large"
-                        key={`menuButton-${index}`}
-                    >
-                        <IconComponent fontSize="large" />
-                    </IconButton>
-                );
-            })}
+            <ButtonContainer>
+                {props.buttons.map((button, index) => {
+                    const { IconComponent, onClick } = button;
+                    return (
+                        <IconButton
+                            title={button.title}
+                            onClick={onClick}
+                            size="large"
+                            key={`menuButton-${index}`}
+                        >
+                            <IconComponent fontSize="large" />
+                        </IconButton>
+                    );
+                })}
+            </ButtonContainer>
         </MenuContainer>
     );
 }
 
-const MENU_CONTAINER_HEIGHT = 80;
+const BUTTON_CONTAINER_HEIGHT = 80;
 
 const MenuContainer = styled('div')({
-    position: 'fixed',
-    top: '20px',
-    zIndex: 1000,
-    right: '20px',
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderStyle: 'outset',
-    minWidth: MENU_CONTAINER_HEIGHT,
-    height: MENU_CONTAINER_HEIGHT,
-    borderRadius: MENU_CONTAINER_HEIGHT / 2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+});
+
+const ButtonContainer = styled('div')({
+    minWidth: BUTTON_CONTAINER_HEIGHT,
+    height: BUTTON_CONTAINER_HEIGHT,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',

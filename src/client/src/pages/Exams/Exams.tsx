@@ -22,6 +22,14 @@ function Exams() {
 
     return (
         <>
+            <Menu
+                buttons={[
+                    {
+                        onClick: () => setIsExamCreationModalOpen(true),
+                        IconComponent: PostAddIcon,
+                    },
+                ]}
+            />
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -64,11 +72,6 @@ function Exams() {
                 onExamCreated={(examId: string) =>
                     navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/edit`)
                 }
-            />
-            <Menu
-                buttons={[
-                    { onClick: () => setIsExamCreationModalOpen(true), IconComponent: PostAddIcon },
-                ]}
             />
         </>
     );

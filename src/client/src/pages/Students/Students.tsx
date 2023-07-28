@@ -75,6 +75,7 @@ function Students() {
 
     return (
         <>
+            <Menu buttons={buttons} />
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -138,7 +139,6 @@ function Students() {
                 isOpen={isStudentsCreationModalOpen}
                 close={() => setIsStudentsCreationModalOpen(false)}
             />
-            <Menu buttons={buttons} />
         </>
     );
 

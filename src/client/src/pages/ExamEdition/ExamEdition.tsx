@@ -47,8 +47,27 @@ function ExamEdition() {
         questionTrouModalStatusType | undefined
     >();
 
+    const menuButtons = [
+        {
+            title: 'Créer un QCM',
+            onClick: () => setCurrentQCMModalStatus({ kind: 'creating' }),
+            IconComponent: RadioButtonCheckedIcon,
+        },
+        {
+            title: 'Créer un texte à trou',
+            onClick: () => setCurrentQuestionTrouModalStatus({ kind: 'creating' }),
+            IconComponent: SaveAltIcon,
+        },
+        {
+            title: 'Créer une phrase à reconstituer',
+            onClick: () => setCurrentPhraseMelangeeModalStatus({ kind: 'creating' }),
+            IconComponent: LowPriorityIcon,
+        },
+    ];
+
     return (
         <>
+            <Menu buttons={menuButtons} />
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -206,25 +225,6 @@ function ExamEdition() {
                     close={() => setCurrentQuestionTrouModalStatus(undefined)}
                 />
             )}
-            <Menu
-                buttons={[
-                    {
-                        title: 'Créer un QCM',
-                        onClick: () => setCurrentQCMModalStatus({ kind: 'creating' }),
-                        IconComponent: RadioButtonCheckedIcon,
-                    },
-                    {
-                        title: 'Créer un texte à trou',
-                        onClick: () => setCurrentQuestionTrouModalStatus({ kind: 'creating' }),
-                        IconComponent: SaveAltIcon,
-                    },
-                    {
-                        title: 'Créer une phrase à reconstituer',
-                        onClick: () => setCurrentPhraseMelangeeModalStatus({ kind: 'creating' }),
-                        IconComponent: LowPriorityIcon,
-                    },
-                ]}
-            />
         </>
     );
 
