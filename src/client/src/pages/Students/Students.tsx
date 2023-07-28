@@ -51,6 +51,7 @@ function Students() {
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
+                        <TableCell width={20}>N°</TableCell>
                         <TableCell width={100}>Actions</TableCell>
                         <TableCell>
                             <TableSortLabel
@@ -66,12 +67,12 @@ function Students() {
                                 Adresse e-mail
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell>Commentaire</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {sortedData.map((student: any) => (
+                    {sortedData.map((student: any, index) => (
                         <TableRow key={student.id}>
+                            <TableCell>{index + 1}</TableCell>
                             <TableCell>
                                 <IconButton
                                     title="Supprimer"
@@ -81,7 +82,6 @@ function Students() {
                                 </IconButton>
                             </TableCell>
                             <TableCell>{student.email}</TableCell>
-                            <TableCell>{student.comment}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
