@@ -1,5 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { Student } from './Student.entity';
+import { studentAdaptator } from './student.adaptator';
 
 export { buildStudentService };
 
@@ -16,7 +17,12 @@ function buildStudentService() {
 
     async function getStudentsWithAttempts() {
         const studentRepository = dataSource.getRepository(Student);
-        return studentRepository.find({ relations: ['attempts', 'attempts.exam'] });
+        const studentsWithAttempts = await studentRepository.find({
+            relations: ['attempts', 'attempts.exam'],
+        });
+        const studentsSummary =
+            studentAdaptator.formatStudentsIntoStudentsSummary(studentsWithAttempts);
+        return studentsSummary;
     }
 
     async function getStudentId(email: string) {

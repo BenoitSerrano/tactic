@@ -1,8 +1,9 @@
 import { Attempt } from './Attempt.entity';
+import { AttemptInterface } from './attempt.interface';
 
 const attemptUtils = { isTimeLimitExceeded };
 
-function isTimeLimitExceeded(attempt: Attempt, now: Date) {
+function isTimeLimitExceeded(attempt: AttemptInterface, now: Date) {
     const attemptStartedDate = new Date(attempt.startedAt);
 
     const elapsedSeconds = Math.floor((now.getTime() - attemptStartedDate.getTime()) / 1000);

@@ -15,13 +15,26 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
+import { iconLib } from '../../lib/icons';
 
 type sortColumnType = 'email';
+
+type studentsSummaryType = {
+    students: Array<{
+        id: string;
+        email: string;
+        examStatus: Record<string, 'blank' | 'pending' | 'done'>;
+    }>;
+    examIds: string[];
+};
 
 function Students() {
     const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
-    const query = useQuery({ queryKey: ['students'], queryFn: api.fetchStudents });
+    const query = useQuery<studentsSummaryType>({
+        queryKey: ['students'],
+        queryFn: api.fetchStudents,
+    });
 
     const deleteStudentMutation = useMutation({
         mutationFn: api.deleteStudent,
@@ -44,7 +57,11 @@ function Students() {
         return <Loader />;
     }
 
-    const sortedData = sortData(query.data, activeSort, sortDirection);
+    if (!query.data) {
+        return <div />;
+    }
+
+    const sortedData = sortData(query.data.students, activeSort, sortDirection);
 
     return (
         <>
@@ -67,10 +84,13 @@ function Students() {
                                 Adresse e-mail
                             </TableSortLabel>
                         </TableCell>
+                        {query.data.examIds.map((examId) => (
+                            <TableCell>{examId}</TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {sortedData.map((student: any, index) => (
+                    {sortedData.map((student, index) => (
                         <TableRow key={student.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>
@@ -82,6 +102,11 @@ function Students() {
                                 </IconButton>
                             </TableCell>
                             <TableCell>{student.email}</TableCell>
+                            {query.data.examIds.map((examId) => (
+                                <TableCell>
+                                    {iconLib.computeIconColor(student.examStatus[examId])}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     ))}
                 </TableBody>
