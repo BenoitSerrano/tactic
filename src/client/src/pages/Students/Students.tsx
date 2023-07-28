@@ -17,13 +17,14 @@ import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
 import { iconLib } from '../../lib/icons';
 
-type sortColumnType = 'email';
+type sortColumnType = 'email' | string;
+type examStatusType = 'blank' | 'pending' | 'done';
 
 type studentsSummaryType = {
     students: Array<{
         id: string;
         email: string;
-        examStatus: Record<string, 'blank' | 'pending' | 'done'>;
+        examStatus: Record<string, examStatusType>;
     }>;
     examIds: string[];
 };
@@ -85,7 +86,20 @@ function Students() {
                             </TableSortLabel>
                         </TableCell>
                         {query.data.examIds.map((examId) => (
-                            <TableCell>{examId}</TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={activeSort === examId}
+                                    direction={sortDirection}
+                                    onClick={() => {
+                                        if (activeSort !== examId) {
+                                            setActiveSort(examId);
+                                        }
+                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                    }}
+                                >
+                                    {examId}
+                                </TableSortLabel>
+                            </TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
@@ -119,8 +133,8 @@ function Students() {
         </>
     );
 
-    function sortData<T extends { email: string }>(
-        data: Array<T>,
+    function sortData(
+        data: studentsSummaryType['students'],
         activeSort: sortColumnType,
         sortDirection: 'asc' | 'desc',
     ) {
@@ -129,6 +143,11 @@ function Students() {
             switch (activeSort) {
                 case 'email':
                     result = resultA.email.localeCompare(resultB.email);
+                    break;
+                default:
+                    result =
+                        convertExamStatusToValue(resultA.examStatus[activeSort]) -
+                        convertExamStatusToValue(resultB.examStatus[activeSort]);
                     break;
             }
             if (sortDirection === 'asc') {
@@ -152,6 +171,17 @@ function Students() {
                 deleteStudentMutation.mutate(studentId);
             }
         };
+    }
+}
+
+function convertExamStatusToValue(status: examStatusType): number {
+    switch (status) {
+        case 'done':
+            return 1;
+        case 'pending':
+            return 0;
+        case 'blank':
+            return -1;
     }
 }
 
