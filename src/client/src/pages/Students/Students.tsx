@@ -11,11 +11,13 @@ import {
     TableSortLabel,
 } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
 import { iconLib } from '../../lib/icons';
+import { useAlert } from '../../lib/alert';
 
 type sortColumnType = 'email' | string;
 type examStatusType = 'blank' | 'pending' | 'done';
@@ -32,6 +34,8 @@ type studentsSummaryType = {
 function Students() {
     const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
+    const { displayAlert } = useAlert();
+
     const query = useQuery<studentsSummaryType>({
         queryKey: ['students'],
         queryFn: api.fetchStudents,
@@ -46,14 +50,6 @@ function Students() {
     const [activeSort, setActiveSort] = useState<sortColumnType>('email');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-    const buttons = [
-        {
-            IconComponent: PersonAddAlt1Icon,
-            onClick: () => setIsStudentsCreationModalOpen(true),
-            title: 'Ajouter un.e ou plusieurs étudiant.es',
-        },
-    ];
-
     if (!query.data && query.isLoading) {
         return <Loader />;
     }
@@ -61,6 +57,19 @@ function Students() {
     if (!query.data) {
         return <div />;
     }
+
+    const buttons = [
+        {
+            IconComponent: PersonAddAlt1Icon,
+            onClick: () => setIsStudentsCreationModalOpen(true),
+            title: 'Ajouter un.e ou plusieurs étudiant.es',
+        },
+        {
+            IconComponent: ContentCopyIcon,
+            onClick: () => copyStudentsEmailsWithoutAttemptsToClipboard(query.data),
+            title: "Copier les adresses e-mails des étudiant.es n'ayant pas passé l'examen",
+        },
+    ];
 
     const sortedData = sortData(query.data.students, activeSort, sortDirection);
 
@@ -158,6 +167,19 @@ function Students() {
                 }
                 return result > 0 ? -1 : 1;
             }
+        });
+    }
+
+    function copyStudentsEmailsWithoutAttemptsToClipboard(studentsSummary: studentsSummaryType) {
+        const emails = studentsSummary.students
+            .filter((student) =>
+                studentsSummary.examIds.every((examId) => student.examStatus[examId] === 'blank'),
+            )
+            .map((student) => student.email);
+        navigator.clipboard.writeText(emails.join(', '));
+        displayAlert({
+            text: "Les e-mails d'étudiants n'ayant passé aucun examen a été copiée dans le presse-papiers",
+            variant: 'success',
         });
     }
 
