@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Typography, styled } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { api } from '../../lib/api';
+import { useTimeoutAlert } from './useTimeoutAlert';
 
 function PhraseMelangeeAnswering(props: {
     phraseMelangee: {
@@ -13,14 +14,13 @@ function PhraseMelangeeAnswering(props: {
     attemptId: string;
 }) {
     const [combination, setCombination] = useState<number[]>([]);
-    const queryClient = useQueryClient();
+    const { displayTimeoutAlert } = useTimeoutAlert();
 
     const createOrUpdatePhraseMelangeeAnswerMutation = useMutation({
         mutationFn: api.createOrUpdatePhraseMelangeeAnswer,
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ['attempts-without-answers', props.attemptId],
-            });
+        onError: async (error) => {
+            console.warn(error);
+            displayTimeoutAlert();
         },
     });
 

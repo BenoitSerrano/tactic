@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { debounce } from '../../lib/utils';
 import { api } from '../../lib/api';
 import { TextField, Typography, styled } from '@mui/material';
+import { useTimeoutAlert } from './useTimeoutAlert';
 
 function QuestionTrouAnswering(props: {
     questionTrou: {
@@ -15,8 +16,14 @@ function QuestionTrouAnswering(props: {
     attemptId: string;
 }) {
     const [answer, setAnswer] = useState(props.questionTrou.answer);
+    const { displayTimeoutAlert } = useTimeoutAlert();
+
     const createOrUpdateQuestionTrouAnswerMutation = useMutation({
         mutationFn: api.createOrUpdateQuestionTrouAnswer,
+        onError: async (error) => {
+            console.warn(error);
+            displayTimeoutAlert();
+        },
     });
 
     return (

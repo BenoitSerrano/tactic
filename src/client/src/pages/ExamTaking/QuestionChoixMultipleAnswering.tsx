@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { ChangeEvent, useState } from 'react';
 import { api } from '../../lib/api';
-import { useNavigate } from 'react-router-dom';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { useTimeoutAlert } from './useTimeoutAlert';
 
 function QuestionChoixMultipleAnswering(props: {
     questionChoixMultiple: {
@@ -14,12 +14,13 @@ function QuestionChoixMultipleAnswering(props: {
     index: number;
     attemptId: string;
 }) {
-    const navigate = useNavigate();
+    const { displayTimeoutAlert } = useTimeoutAlert();
+
     const upsertQcmAnswerMutation = useMutation({
         mutationFn: api.createOrUpdateQcmAnswer,
         onError: async (error) => {
             console.warn(error);
-            navigate('/student/attempt-timeout');
+            displayTimeoutAlert();
         },
     });
 

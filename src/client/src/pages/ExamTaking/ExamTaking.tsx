@@ -28,10 +28,12 @@ function ExamTaking() {
         );
     }
 
+    const examDonePath = `/student/students/${studentId}/exam-done`;
+
     let remainingSeconds =
         query.data.exam.duration * 60 - time.computeElapsedTime(query.data.startedAt, new Date());
     if (remainingSeconds + query.data.exam.extraTime * 60 < 0) {
-        return <Navigate to="/student/attempt-timeout" />;
+        return <Navigate to={examDonePath} />;
     }
 
     return (
@@ -88,7 +90,7 @@ function ExamTaking() {
     );
 
     function validateForm() {
-        navigate(`/student/students/${studentId}/exam-done`);
+        navigate(examDonePath);
     }
 }
 

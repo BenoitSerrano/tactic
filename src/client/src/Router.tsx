@@ -9,8 +9,6 @@ import { ExamResults } from './pages/ExamResults';
 import { ExamChecking } from './pages/ExamChecking';
 import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
-import { AttemptAlreadySubmitted } from './pages/AttemptAlreadySubmitted';
-import { AttemptTimeout } from './pages/AttemptTimeout';
 import { StudentHome } from './pages/StudentHome';
 import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
 import { authentication } from './lib/authentication';
@@ -45,11 +43,6 @@ function Router() {
                 element={<ExamTaking />}
             />
             <Route path="/student/students/:studentId/exam-done" element={<ExamDone />} />
-            <Route
-                path="/student/attempt-already-submitted"
-                element={<AttemptAlreadySubmitted />}
-            />
-            <Route path="/student/attempt-timeout" element={<AttemptTimeout />} />
             <Route path="/student/empty-attempt-created" element={<EmptyAttemptCreated />} />
             <Route path="/*" element={<NotFound />} />
         </Routes>
