@@ -24,6 +24,6 @@ export class QuestionTrou {
     @Column('int')
     order: number;
 
-    @ManyToOne(() => Exam, (exam) => exam.questionsTrou)
+    @ManyToOne(() => Exam, (exam) => exam.questionsTrou, { onDelete: 'CASCADE' })
     exam: Exam;
 }

@@ -21,6 +21,6 @@ export class QuestionChoixMultiple {
     @Column('int')
     order: number;
 
-    @ManyToOne(() => Exam, (exam) => exam.questionsChoixMultiple)
+    @ManyToOne(() => Exam, (exam) => exam.questionsChoixMultiple, { onDelete: 'CASCADE' })
     exam: Exam;
 }

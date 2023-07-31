@@ -14,7 +14,7 @@ export class QcmAnswer {
     @Column('int')
     choice: number;
 
-    @ManyToOne(() => QuestionChoixMultiple)
+    @ManyToOne(() => QuestionChoixMultiple, { onDelete: 'CASCADE' })
     questionChoixMultiple: QuestionChoixMultiple;
 
     @ManyToOne(() => Attempt, { onDelete: 'CASCADE' })

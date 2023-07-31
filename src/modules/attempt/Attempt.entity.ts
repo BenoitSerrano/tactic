@@ -32,7 +32,7 @@ export class Attempt implements AttemptInterface {
     @ManyToOne('Student', { onDelete: 'CASCADE' })
     student: StudentInterface;
 
-    @ManyToOne(() => Exam)
+    @ManyToOne(() => Exam, { onDelete: 'CASCADE' })
     exam: Exam;
 
     @OneToMany(() => QcmAnswer, (qcmAnswer) => qcmAnswer.attempt)

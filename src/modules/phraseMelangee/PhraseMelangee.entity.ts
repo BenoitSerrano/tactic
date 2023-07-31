@@ -21,6 +21,6 @@ export class PhraseMelangee {
     @Column('float', { default: 1.0 })
     points: number;
 
-    @ManyToOne(() => Exam, (exam) => exam.phrasesMelangees)
+    @ManyToOne(() => Exam, (exam) => exam.phrasesMelangees, { onDelete: 'CASCADE' })
     exam: Exam;
 }

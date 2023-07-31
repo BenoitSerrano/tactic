@@ -11,7 +11,7 @@ export class QuestionTrouAnswer {
     @Column()
     answer: string;
 
-    @ManyToOne(() => QuestionTrou)
+    @ManyToOne(() => QuestionTrou, { onDelete: 'CASCADE' })
     questionTrou: QuestionTrou;
 
     @ManyToOne(() => Attempt, { onDelete: 'CASCADE' })

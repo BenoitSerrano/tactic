@@ -14,7 +14,7 @@ export class PhraseMelangeeAnswer {
     @Column()
     answer: string;
 
-    @ManyToOne(() => PhraseMelangee)
+    @ManyToOne(() => PhraseMelangee, { onDelete: 'CASCADE' })
     phraseMelangee: PhraseMelangee;
 
     @ManyToOne(() => Attempt, { onDelete: 'CASCADE' })
