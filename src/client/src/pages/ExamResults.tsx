@@ -75,6 +75,7 @@ function ExamResults() {
         <Table stickyHeader>
             <TableHead>
                 <TableRow>
+                    <TableCell width={20}>N°</TableCell>
                     <TableCell width={120}>Actions</TableCell>
                     <TableCell width={120}>
                         <TableSortLabel
@@ -124,13 +125,15 @@ function ExamResults() {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {sortedData.map((result) => {
+                {sortedData.map((result, index) => {
                     const isHighlighted = result.hasBeenTreated;
                     const StyledRow = isHighlighted
                         ? styled(TableRow)({ backgroundColor: '#ccffcc' })
                         : TableRow;
                     return (
                         <StyledRow key={result.attemptId}>
+                            <TableCell>{index + 1}</TableCell>
+
                             <TableCell>
                                 <IconButton
                                     title="Voir la copie"
