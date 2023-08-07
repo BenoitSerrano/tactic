@@ -73,9 +73,18 @@ describe('computeQuestionTrouStatus', () => {
         expect(status).toBe('right');
     });
 
-    it('should return right for match modulo same-looking accent', () => {
+    it('should return right for match modulo same-looking accent é', () => {
         const answer = 'a sonné';
         const rightAnswers = ['a sonné'];
+        const acceptableAnswers: string[] = [];
+        const status = computeQuestionTrouStatus(answer, rightAnswers, acceptableAnswers);
+
+        expect(status).toBe('right');
+    });
+
+    it('should return right for match modulo same-looking accent ê', () => {
+        const answer = 's’être levé';
+        const rightAnswers = ["s'être levé"];
         const acceptableAnswers: string[] = [];
         const status = computeQuestionTrouStatus(answer, rightAnswers, acceptableAnswers);
 
