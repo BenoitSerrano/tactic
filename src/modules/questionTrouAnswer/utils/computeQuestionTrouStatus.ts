@@ -30,5 +30,6 @@ function sanitizeString(value: string) {
         .join(' ')
         .toLowerCase()
         .replace(/ ?' ?/g, "'")
+        .replace(/é/g, 'é')
         .replace(/’/g, "'");
 }

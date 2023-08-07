@@ -72,4 +72,13 @@ describe('computeQuestionTrouStatus', () => {
 
         expect(status).toBe('right');
     });
+
+    it('should return right for match modulo same-looking accent', () => {
+        const answer = 'a sonné';
+        const rightAnswers = ['a sonné'];
+        const acceptableAnswers: string[] = [];
+        const status = computeQuestionTrouStatus(answer, rightAnswers, acceptableAnswers);
+
+        expect(status).toBe('right');
+    });
 });
