@@ -11,8 +11,6 @@ import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
 import { StudentHome } from './pages/StudentHome';
 import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
-import { authentication } from './lib/authentication';
-import { TeacherLogin } from './pages/TeacherLogin';
 import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
 import { Breadcrumbs } from './components/Breadcrumbs';
@@ -20,25 +18,22 @@ import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
 
 function Router() {
-    const encodedPassword = authentication.getEncodedPassword();
-
     return (
         <Routes>
-            {authenticatedRoutes.map((authenticatedRoute) => (
+            {adminRoutes.map((adminRoute) => (
                 <Route
-                    key={authenticatedRoute.suffixPath}
-                    path={`/teacher/${encodedPassword}/${authenticatedRoute.suffixPath}`}
+                    key={adminRoute.suffixPath}
+                    path={`/teacher/${adminRoute.suffixPath}`}
                     element={
                         <AdminPage>
                             <Breadcrumbs />
-                            {authenticatedRoute.element}
+                            {adminRoute.element}
                         </AdminPage>
                     }
                 />
             ))}
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/teacher/login" element={<TeacherLogin />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route
@@ -52,7 +47,7 @@ function Router() {
     );
 }
 
-const authenticatedRoutes = [
+const adminRoutes = [
     { suffixPath: `exams`, element: <Exams /> },
     { suffixPath: `students`, element: <Students /> },
     { suffixPath: `exams/:examId/edit`, element: <ExamEdition /> },

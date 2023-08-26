@@ -1,16 +1,17 @@
 import Express from 'express';
 import Joi from 'joi';
-import { buildController } from './lib/buildController';
-import { buildExamController } from './modules/exam';
-import { buildQuestionChoixMultipleController } from './modules/questionChoixMultiple';
-import { buildStudentController } from './modules/student';
-import { buildAttemptController } from './modules/attempt';
-import { buildQcmAnswerController } from './modules/qcmAnswer';
-import { buildQuestionTrouController } from './modules/questionTrou';
-import { buildQuestionTrouAnswerController } from './modules/questionTrouAnswer';
-import { buildPhraseMelangeeController } from './modules/phraseMelangee';
-import { buildPhraseMelangeeAnswerController } from './modules/phraseMelangeeAnswer';
-import { buildUserController } from './modules/user';
+import { buildController } from '../lib/buildController';
+import { buildExamController } from '../modules/exam';
+import { buildQuestionChoixMultipleController } from '../modules/questionChoixMultiple';
+import { buildStudentController } from '../modules/student';
+import { buildAttemptController } from '../modules/attempt';
+import { buildQcmAnswerController } from '../modules/qcmAnswer';
+import { buildQuestionTrouController } from '../modules/questionTrou';
+import { buildQuestionTrouAnswerController } from '../modules/questionTrouAnswer';
+import { buildPhraseMelangeeController } from '../modules/phraseMelangee';
+import { buildPhraseMelangeeAnswerController } from '../modules/phraseMelangeeAnswer';
+import { buildUserController } from '../modules/user';
+import { accessControlBuilder } from '../lib/accessControlBuilder';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -27,7 +28,12 @@ const phraseMelangeeAnswerController = buildPhraseMelangeeAnswerController();
 router.post('/users', buildController(userController.createUser));
 router.post('/login', buildController(userController.login));
 
-router.get('/students', buildController(studentController.getStudentsWithAttempts));
+router.get(
+    '/students',
+    buildController(studentController.getStudentsWithAttempts, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
+    }),
+);
 router.patch(
     '/students/:studentId',
     buildController(studentController.patchStudent, {
@@ -47,14 +53,40 @@ router.post(
         }),
     }),
 );
-router.get('/exams', buildController(examController.getExams));
+router.get(
+    '/exams',
+    buildController(examController.getExams, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
+    }),
+);
 
-router.get('/exams/:examId', buildController(examController.getExam));
-router.get('/exams/:examId/results', buildController(examController.getExamResults));
+router.get(
+    '/exams/:examId',
+    buildController(examController.getExam, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
+router.get(
+    '/exams/:examId/results',
+    buildController(examController.getExamResults, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
 
 router.post(
     '/exams',
     buildController(examController.createExam, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
         schema: Joi.object({
             name: Joi.string().required(),
             duration: Joi.number().required(),
@@ -65,6 +97,12 @@ router.post(
 router.post(
     '/exams/:examId/questions-choix-multiple',
     buildController(questionChoixMultipleController.createQuestionChoixMultiple, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
         schema: Joi.object({
             title: Joi.string(),
             rightAnswerIndex: Joi.number().required(),
@@ -76,6 +114,12 @@ router.post(
 router.put(
     '/exams/:examId/questions-choix-multiple/:qcmId',
     buildController(questionChoixMultipleController.updateQuestionChoixMultiple, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
         schema: Joi.object({
             title: Joi.string(),
             rightAnswerIndex: Joi.number().required(),
@@ -87,6 +131,12 @@ router.put(
 router.post(
     '/exams/:examId/questions-trou',
     buildController(questionTrouController.createQuestionTrou, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
         schema: Joi.object({
             beforeText: Joi.string().allow(''),
             afterText: Joi.string().allow(''),
@@ -100,6 +150,12 @@ router.post(
 router.patch(
     '/exams/:examId/questions-trou/:questionTrouId',
     buildController(questionTrouController.updateQuestionTrou, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
         schema: Joi.object({
             beforeText: Joi.string().allow(''),
             afterText: Joi.string().allow(''),
@@ -113,6 +169,12 @@ router.patch(
 router.post(
     '/exams/:examId/phrases-melangees',
     buildController(phraseMelangeeController.createPhraseMelangee, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
         schema: Joi.object({
             shuffledPhrase: Joi.string().required(),
             correctPhrases: Joi.array().items(Joi.string()),
@@ -124,6 +186,12 @@ router.post(
 router.put(
     '/exams/:examId/phrases-melangees/:phraseMelangeeId',
     buildController(phraseMelangeeController.updatePhraseMelangee, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
         schema: Joi.object({
             shuffledPhrase: Joi.string().required(),
             correctPhrases: Joi.array().items(Joi.string()),

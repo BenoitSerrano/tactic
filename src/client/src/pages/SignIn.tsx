@@ -5,10 +5,13 @@ import { useMutation } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { useAlert } from '../lib/alert';
 import { localStorage } from '../lib/localStorage';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
     const { displayAlert } = useAlert();
 
     const loginMutation = useMutation({
@@ -16,10 +19,7 @@ function SignIn() {
         onSuccess: (data) => {
             const { token } = data;
             localStorage.jwtTokenHandler.set(token);
-            displayAlert({
-                variant: 'success',
-                text: 'Votre compte a bien été créé. Vous pouvez maintenant vous connecter',
-            });
+            navigate(`/teacher`);
         },
         onError: () => {
             displayAlert({

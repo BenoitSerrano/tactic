@@ -7,7 +7,6 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RateReviewIcon from '@mui/icons-material/RateReview';
-import { authentication } from '../../lib/authentication';
 import { config } from '../../config';
 import { Loader } from '../../components/Loader';
 import { ExamCreationModal } from './ExamCreationModal';
@@ -69,21 +68,17 @@ function Exams() {
             <ExamCreationModal
                 isOpen={isExamCreationModalOpen}
                 close={() => setIsExamCreationModalOpen(false)}
-                onExamCreated={(examId: string) =>
-                    navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/edit`)
-                }
+                onExamCreated={(examId: string) => navigate(`/teacher/exams/${examId}/edit`)}
             />
         </>
     );
 
     function buildNavigateToEdition(examId: string) {
-        return () =>
-            navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/edit`);
+        return () => navigate(`/teacher/exams/${examId}/edit`);
     }
 
     function buildNavigateToResults(examId: string) {
-        return () =>
-            navigate(`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/results`);
+        return () => navigate(`/teacher/exams/${examId}/results`);
     }
 
     function buildCopyExamLinkToClipboard(examId: string) {

@@ -1,8 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
 import { Attempt } from '../attempt';
 import { QuestionTrou } from '../questionTrou';
 import { PhraseMelangee } from '../phraseMelangee';
+import { User } from '../user';
 
 @Entity()
 export class Exam {
@@ -11,6 +12,9 @@ export class Exam {
 
     @Column()
     name: string;
+
+    @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
+    user?: User;
 
     @OneToMany(() => QuestionChoixMultiple, (questionChoixMultiple) => questionChoixMultiple.exam)
     questionsChoixMultiple: QuestionChoixMultiple[];

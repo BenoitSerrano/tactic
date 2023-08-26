@@ -17,8 +17,15 @@
 
 <!-- -   quand je reçois le JWT, je le stocke dans le localstorage -->
 
--   dans tous mes appels API, j'ajoute le Bearer à Authorization
--   dans buildController, j'ajoute l'option pour demander le signup
--   dans buildController, si l'option est activée, je vérifie le JWT token. S'il est OK, je continue, sinon je renvoie 401
+<!-- -   dans tous mes appels API, j'ajoute le Bearer à Authorization -->
+
+<!-- -   dans buildController, j'ajoute l'option pour demander le signup -->
+
+<!-- -   dans buildController, si l'option est activée, je vérifie le JWT token. S'il est OK, je continue, sinon je renvoie 401 -->
+
+<!-- -   interdire la consultation de l'exam si on n'en est pas le propriétaire -->
+
+-   binder l'exam à l'user si c'est lui qui le créé
 -   Si je reçois une 401, je supprime le JWT token chez le client, et je suis redirigé vers la page de login avec une alerte
 -   si je tente d'accéder à une page alors que je n'ai pas de JWT token, alors je suis redirigé vers le login (créer une AuthenticatedRoute)
+-
