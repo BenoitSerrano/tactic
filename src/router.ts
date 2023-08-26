@@ -25,6 +25,7 @@ const phraseMelangeeController = buildPhraseMelangeeController();
 const phraseMelangeeAnswerController = buildPhraseMelangeeAnswerController();
 
 router.post('/users', buildController(userController.createUser));
+router.post('/login', buildController(userController.login));
 
 router.get('/students', buildController(studentController.getStudentsWithAttempts));
 router.patch(

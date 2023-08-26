@@ -4,14 +4,18 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { useAlert } from '../lib/alert';
+import { localStorage } from '../lib/localStorage';
 
-function SignUp() {
+function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { displayAlert } = useAlert();
-    const createUserMutation = useMutation({
-        mutationFn: api.createUser,
-        onSuccess: () => {
+
+    const loginMutation = useMutation({
+        mutationFn: api.login,
+        onSuccess: (data) => {
+            const { token } = data;
+            localStorage.jwtTokenHandler.set(token);
             displayAlert({
                 variant: 'success',
                 text: 'Votre compte a bien été créé. Vous pouvez maintenant vous connecter',
@@ -20,10 +24,11 @@ function SignUp() {
         onError: () => {
             displayAlert({
                 variant: 'error',
-                text: 'Une erreur est survenue lors de la création de votre compte.',
+                text: 'Une erreur est survenue lors de la connexion.',
             });
         },
     });
+
     return (
         <Page>
             <TextField
@@ -40,15 +45,15 @@ function SignUp() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
             />
-            <Button variant="contained" onClick={onSignUpClick}>
-                Créer un compte
+            <Button variant="contained" onClick={onSignInClick}>
+                Se connecter
             </Button>
         </Page>
     );
 
-    async function onSignUpClick() {
-        createUserMutation.mutate({ email, password });
+    async function onSignInClick() {
+        loginMutation.mutate({ email, password });
     }
 }
 
-export { SignUp };
+export { SignIn };

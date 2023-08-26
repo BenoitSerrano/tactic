@@ -17,6 +17,7 @@ import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { SignUp } from './pages/SignUp';
+import { SignIn } from './pages/SignIn';
 
 function Router() {
     const encodedPassword = authentication.getEncodedPassword();
@@ -36,6 +37,7 @@ function Router() {
                 />
             ))}
             <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/sign-in" element={<SignIn />} />
             <Route path="/teacher/login" element={<TeacherLogin />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
