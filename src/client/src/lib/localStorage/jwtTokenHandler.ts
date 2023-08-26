@@ -8,6 +8,10 @@ function set(value: string) {
     localStorage.setItem(KEY, value);
 }
 
-const jwtTokenHandler = { get, set };
+function remove() {
+    localStorage.removeItem(KEY);
+}
+
+const jwtTokenHandler = { get, set, remove };
 
 export { jwtTokenHandler };

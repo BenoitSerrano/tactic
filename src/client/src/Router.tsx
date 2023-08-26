@@ -13,7 +13,6 @@ import { StudentHome } from './pages/StudentHome';
 import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
 import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
-import { Breadcrumbs } from './components/Breadcrumbs';
 import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
 
@@ -24,12 +23,7 @@ function Router() {
                 <Route
                     key={adminRoute.suffixPath}
                     path={`/teacher/${adminRoute.suffixPath}`}
-                    element={
-                        <AdminPage>
-                            <Breadcrumbs />
-                            {adminRoute.element}
-                        </AdminPage>
-                    }
+                    element={<AdminPage>{adminRoute.element}</AdminPage>}
                 />
             ))}
             <Route path="/sign-up" element={<SignUp />} />

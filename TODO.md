@@ -27,6 +27,8 @@
 
 <!-- -   binder l'exam à l'user si c'est lui qui le créé -->
 
+-   ajouter bouton déconnexion en haut des admin page
+
 -   Si je reçois une 401, je supprime le JWT token chez le client, et je suis redirigé vers la page de login avec une alerte
 -   si je tente d'accéder à une page alors que je n'ai pas de JWT token, alors je suis redirigé vers le login (créer une AuthenticatedRoute)
 -
