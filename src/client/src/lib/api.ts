@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { localStorage } from './localStorage';
 
 const api = {
     login,
@@ -38,12 +39,15 @@ async function performApiCall(
     body?: Object,
 ) {
     let response: Response;
+    const token = localStorage.jwtTokenHandler.get();
+
     if (method === 'GET' || method === 'DELETE') {
-        response = await fetch(url, { method });
+        response = await fetch(url, { method, headers: { Authorization: `Bearer ${token}` } });
     } else {
         response = await fetch(url, {
             method,
             headers: {
+                Authorization: `Bearer ${token}`,
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
