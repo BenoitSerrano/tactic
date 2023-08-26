@@ -20,6 +20,7 @@ function hasAccessToResources(resources: Array<{ entity: 'exam' | 'student'; key
                             `exam.user.id "${exam.user?.id}" does not match user.id ${user.id}`,
                         );
                     }
+                    break;
                 case 'student':
                     const studentId = params[key];
                     const studentRepository = dataSource.getRepository(Student);
@@ -32,6 +33,7 @@ function hasAccessToResources(resources: Array<{ entity: 'exam' | 'student'; key
                             `student.user.id "${student.user?.id}" does not match user.id ${user.id}`,
                         );
                     }
+                    break;
             }
         }
     };
