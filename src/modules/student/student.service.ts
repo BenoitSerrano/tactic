@@ -1,4 +1,5 @@
 import { dataSource } from '../../dataSource';
+import { User } from '../user';
 import { Student } from './Student.entity';
 import { studentAdaptator } from './student.adaptator';
 
@@ -15,9 +16,10 @@ function buildStudentService() {
 
     return studentService;
 
-    async function getStudentsWithAttempts() {
+    async function getStudentsWithAttempts(user?: User) {
         const studentRepository = dataSource.getRepository(Student);
         const studentsWithAttempts = await studentRepository.find({
+            where: { user },
             relations: ['attempts', 'attempts.exam'],
         });
         const studentsSummary =
@@ -30,12 +32,12 @@ function buildStudentService() {
         return studentRepository.findOneOrFail({ where: { email }, select: ['id'] });
     }
 
-    async function createStudents(emails: string[]) {
+    async function createStudents(emails: string[], user?: User) {
         const studentRepository = dataSource.getRepository(Student);
-
         const students = emails.map((email) => {
             const student = new Student();
             student.email = email;
+            student.user = user;
             return student;
         });
         return studentRepository.upsert(students, ['email']);

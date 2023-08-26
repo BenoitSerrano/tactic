@@ -42,12 +42,20 @@ router.patch(
         }),
     }),
 );
-router.delete('/students/:studentId', buildController(studentController.deleteStudent));
+router.delete(
+    '/students/:studentId',
+    buildController(studentController.deleteStudent, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'student', key: 'studentId' },
+        ]),
+    }),
+);
 router.get('/students/:email', buildController(studentController.getStudentId));
 
 router.post(
     '/student-list',
     buildController(studentController.createStudents, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
         schema: Joi.object({
             emails: Joi.array().items(Joi.string()),
         }),

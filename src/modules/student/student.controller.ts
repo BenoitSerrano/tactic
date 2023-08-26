@@ -1,3 +1,4 @@
+import { User } from '../user';
 import { buildStudentService } from './student.service';
 
 export { buildStudentController };
@@ -14,8 +15,8 @@ function buildStudentController() {
 
     return studentController;
 
-    async function createStudents(params: { body: { emails: string[] } }) {
-        return studentService.createStudents(params.body.emails);
+    async function createStudents(params: { body: { emails: string[] } }, user?: User) {
+        return studentService.createStudents(params.body.emails, user);
     }
 
     async function patchStudent(params: {
@@ -27,8 +28,8 @@ function buildStudentController() {
         });
     }
 
-    async function getStudentsWithAttempts() {
-        return studentService.getStudentsWithAttempts();
+    async function getStudentsWithAttempts(_params: {}, user?: User) {
+        return studentService.getStudentsWithAttempts(user);
     }
 
     async function getStudentId(params: { urlParams: { email: string } }) {
