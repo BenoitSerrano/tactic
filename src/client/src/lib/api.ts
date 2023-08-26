@@ -54,6 +54,12 @@ async function performApiCall(
             body: JSON.stringify(body),
         });
     }
+    if (!response.ok) {
+        if (response.status === 401) {
+            localStorage.jwtTokenHandler.remove();
+        }
+        throw new Error(response.statusText);
+    }
     return response.json();
 }
 

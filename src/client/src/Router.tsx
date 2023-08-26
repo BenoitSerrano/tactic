@@ -15,6 +15,7 @@ import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
 import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
+import { Home } from './pages/Home';
 
 function Router() {
     return (
@@ -26,6 +27,7 @@ function Router() {
                     element={<AdminPage>{adminRoute.element}</AdminPage>}
                 />
             ))}
+            <Route path="/" element={<Home />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />

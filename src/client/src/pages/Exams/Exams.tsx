@@ -18,7 +18,6 @@ function Exams() {
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const [isExamCreationModalOpen, setIsExamCreationModalOpen] = useState(false);
-
     return (
         <>
             <Menu
