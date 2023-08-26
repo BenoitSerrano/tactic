@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { StudentInterface } from './student.interface';
 import { AttemptInterface } from '../attempt/attempt.interface';
+import { User } from '../user';
 
 @Entity()
 export class Student implements StudentInterface {
@@ -15,4 +16,7 @@ export class Student implements StudentInterface {
 
     @OneToMany('Attempt', 'student')
     attempts: AttemptInterface[];
+
+    @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
+    user?: User;
 }
