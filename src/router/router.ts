@@ -60,6 +60,15 @@ router.get(
     }),
 );
 
+router.delete(
+    '/exams/:examId',
+    buildController(examController.deleteExam, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'exam', key: 'examId' },
+        ]),
+    }),
+);
+
 router.get(
     '/exams/:examId',
     buildController(examController.getExam, {

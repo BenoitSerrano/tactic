@@ -44,6 +44,7 @@ function buildController<paramsT extends Record<string, string>, bodyT>(
             } catch (error) {
                 console.error(error);
                 res.sendStatus(httpStatus.FORBIDDEN);
+                return;
             }
         }
 

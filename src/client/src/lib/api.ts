@@ -22,6 +22,7 @@ const api = {
     fetchExam,
     fetchExams,
     fetchExamResults,
+    deleteExam,
     createQuestionChoixMultiple,
     updateQuestionChoixMultiple,
     createQuestionTrou,
@@ -181,6 +182,11 @@ async function createStudents(emails: string[]) {
 async function fetchExams() {
     const URL = `${BASE_URL}/exams`;
     return performApiCall(URL, 'GET');
+}
+
+async function deleteExam(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}`;
+    return performApiCall(URL, 'DELETE');
 }
 
 async function fetchExamResults(examId: string) {

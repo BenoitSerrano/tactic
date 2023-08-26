@@ -11,6 +11,7 @@ function buildExamService() {
         createExam,
         getExams,
         getExam,
+        deleteExam,
         getExamResults,
     };
 
@@ -24,8 +25,8 @@ function buildExamService() {
         return examRepository.save(exam);
     }
 
-    async function getExams() {
-        return examRepository.find();
+    async function getExams(user?: User) {
+        return examRepository.find({ where: { user } });
     }
 
     async function getExam(examId: string) {
@@ -85,5 +86,12 @@ function buildExamService() {
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(examWithAttempts);
 
         return examWithResults;
+    }
+
+    async function deleteExam(examId: string) {
+        const examRepository = dataSource.getRepository(Exam);
+
+        const result = await examRepository.delete({ id: examId });
+        return result.affected == 1;
     }
 }

@@ -10,6 +10,7 @@ function buildExamController() {
         getExams,
         getExam,
         getExamResults,
+        deleteExam,
     };
 
     return examController;
@@ -23,8 +24,8 @@ function buildExamController() {
         return examService.createExam(params.body.name, params.body.duration, user);
     }
 
-    async function getExams() {
-        return examService.getExams();
+    async function getExams(_params: {}, user?: User) {
+        return examService.getExams(user);
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {
@@ -33,5 +34,9 @@ function buildExamController() {
 
     async function getExamResults(params: { urlParams: { examId: string } }) {
         return examService.getExamResults(params.urlParams.examId);
+    }
+
+    async function deleteExam(params: { urlParams: { examId: string } }) {
+        return examService.deleteExam(params.urlParams.examId);
     }
 }
