@@ -1,6 +1,7 @@
 import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
 import { examAdaptator } from './exam.adaptator';
+import { User } from '../user';
 
 export { buildExamService };
 
@@ -15,10 +16,11 @@ function buildExamService() {
 
     return examService;
 
-    async function createExam(name: string, duration: number) {
+    async function createExam(name: string, duration: number, user?: User) {
         const exam = new Exam();
         exam.name = name;
         exam.duration = duration;
+        exam.user = user;
         return examRepository.save(exam);
     }
 
