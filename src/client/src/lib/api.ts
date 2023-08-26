@@ -1,6 +1,7 @@
 import { config } from '../config';
 
 const api = {
+    createUser,
     patchComment,
     createOrUpdateQcmAnswer,
     createOrUpdateQuestionTrouAnswer,
@@ -29,6 +30,19 @@ const api = {
 };
 
 const BASE_URL = `${config.API_URL}/api`;
+
+async function createUser(params: { email: string; password: string }) {
+    const URL = `${BASE_URL}/users`;
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: params.email, password: params.password }),
+    });
+    return response.json();
+}
 
 async function patchComment(studentId: string, comment: string) {
     const URL = `${BASE_URL}/students/${studentId}`;

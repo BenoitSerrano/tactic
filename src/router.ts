@@ -10,9 +10,11 @@ import { buildQuestionTrouController } from './modules/questionTrou';
 import { buildQuestionTrouAnswerController } from './modules/questionTrouAnswer';
 import { buildPhraseMelangeeController } from './modules/phraseMelangee';
 import { buildPhraseMelangeeAnswerController } from './modules/phraseMelangeeAnswer';
+import { buildUserController } from './modules/user';
 
 const router = Express.Router();
 const examController = buildExamController();
+const userController = buildUserController();
 const studentController = buildStudentController();
 const questionTrouController = buildQuestionTrouController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
@@ -21,6 +23,8 @@ const qcmAnswerController = buildQcmAnswerController();
 const questionTrouAnswerController = buildQuestionTrouAnswerController();
 const phraseMelangeeController = buildPhraseMelangeeController();
 const phraseMelangeeAnswerController = buildPhraseMelangeeAnswerController();
+
+router.post('/users', buildController(userController.createUser));
 
 router.get('/students', buildController(studentController.getStudentsWithAttempts));
 router.patch(
