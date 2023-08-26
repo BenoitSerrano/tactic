@@ -1,4 +1,5 @@
--   ajouter page d'accueil avec boutons login / créer un compte
+<!-- -   ajouter page d'accueil avec boutons login / créer un compte -->
+
 -   ajouter bouton "Supprimer un examen"
 -   ajouter lien entre student et user
 -   interdire la modification d'un student par le user pas associé
