@@ -13,9 +13,9 @@ import { StudentHome } from './pages/StudentHome';
 import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
 import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
-import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
 import { Home } from './pages/Home';
+import { api } from './lib/api';
 
 function Router() {
     return (
@@ -28,8 +28,14 @@ function Router() {
                 />
             ))}
             <Route path="/" element={<Home />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/sign-in" element={<SignIn />} />
+            <Route
+                path="/sign-up"
+                element={<SignIn apiCall={api.createUser} buttonLabel="Créer un compte" />}
+            />
+            <Route
+                path="/sign-in"
+                element={<SignIn apiCall={api.login} buttonLabel="Se connecter" />}
+            />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route

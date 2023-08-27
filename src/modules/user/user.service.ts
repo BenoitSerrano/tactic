@@ -21,7 +21,13 @@ function buildUserService() {
         newUser.hashedPassword = hasher.hash(password);
 
         const result = await userRepository.insert(newUser);
-        return result.identifiers.length === 1;
+        if (result.identifiers.length !== 1) {
+            throw new Error(
+                `Something wrong happened. ${result.identifiers.length} users were created.`,
+            );
+        }
+        const token = signer.sign({ userId: result.identifiers[0].id });
+        return { token };
     }
 
     async function login(email: string, password: string) {
