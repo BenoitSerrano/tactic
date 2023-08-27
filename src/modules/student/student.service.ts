@@ -40,7 +40,7 @@ function buildStudentService() {
             student.user = user;
             return student;
         });
-        return studentRepository.upsert(students, ['email']);
+        return studentRepository.upsert(students, ['email', 'user']);
     }
 
     async function patchStudent(studentId: string, { comment }: { comment: string }) {

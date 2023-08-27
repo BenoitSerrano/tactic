@@ -21,6 +21,7 @@ function formatStudentsIntoStudentsSummary(studentsWithAttempts: Array<Student>)
         return {
             id: studentWithAttempts.id,
             email: studentWithAttempts.email,
+            createdDate: new Date(studentWithAttempts.createdDate).getTime(),
             examStatus: computeExamStatus(examIds, studentWithAttempts.attempts),
         };
     });

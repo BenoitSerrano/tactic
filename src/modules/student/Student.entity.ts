@@ -1,4 +1,12 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    Unique,
+} from 'typeorm';
 import { StudentInterface } from './student.interface';
 import { AttemptInterface } from '../attempt/attempt.interface';
 import { User } from '../user';
@@ -20,4 +28,7 @@ export class Student implements StudentInterface {
 
     @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
     user?: User;
+
+    @CreateDateColumn()
+    createdDate: string;
 }
