@@ -11,31 +11,31 @@ import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
 import { StudentHome } from './pages/StudentHome';
 import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
-import { authentication } from './lib/authentication';
-import { TeacherLogin } from './pages/TeacherLogin';
 import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
-import { Breadcrumbs } from './components/Breadcrumbs';
+import { SignIn } from './pages/SignIn';
+import { Home } from './pages/Home';
+import { api } from './lib/api';
 
 function Router() {
-    const encodedPassword = authentication.getEncodedPassword();
-
     return (
         <Routes>
-            {authenticatedRoutes.map((authenticatedRoute) => (
+            {adminRoutes.map((adminRoute) => (
                 <Route
-                    key={authenticatedRoute.suffixPath}
-                    path={`/teacher/${encodedPassword}/${authenticatedRoute.suffixPath}`}
-                    element={
-                        <AdminPage>
-                            <Breadcrumbs />
-                            {authenticatedRoute.element}
-                        </AdminPage>
-                    }
+                    key={adminRoute.suffixPath}
+                    path={`/teacher/${adminRoute.suffixPath}`}
+                    element={<AdminPage>{adminRoute.element}</AdminPage>}
                 />
             ))}
-
-            <Route path="/teacher/login" element={<TeacherLogin />} />
+            <Route path="/" element={<Home />} />
+            <Route
+                path="/sign-up"
+                element={<SignIn apiCall={api.createUser} buttonLabel="Créer un compte" />}
+            />
+            <Route
+                path="/sign-in"
+                element={<SignIn apiCall={api.login} buttonLabel="Se connecter" />}
+            />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route
@@ -49,7 +49,7 @@ function Router() {
     );
 }
 
-const authenticatedRoutes = [
+const adminRoutes = [
     { suffixPath: `exams`, element: <Exams /> },
     { suffixPath: `students`, element: <Students /> },
     { suffixPath: `exams/:examId/edit`, element: <ExamEdition /> },

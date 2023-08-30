@@ -18,14 +18,16 @@ import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
 import { iconLib } from '../../lib/icons';
 import { useAlert } from '../../lib/alert';
+import { time } from '../../lib/time';
 
-type sortColumnType = 'email' | string;
+type sortColumnType = 'email' | 'createdDate' | string;
 type examStatusType = 'blank' | 'pending' | 'done';
 
 type studentsSummaryType = {
     students: Array<{
         id: string;
         email: string;
+        createdDate: number;
         examStatus: Record<string, examStatusType>;
     }>;
     examIds: string[];
@@ -62,12 +64,12 @@ function Students() {
         {
             IconComponent: PersonAddAlt1Icon,
             onClick: () => setIsStudentsCreationModalOpen(true),
-            title: 'Ajouter un.e ou plusieurs étudiant.es',
+            title: 'Ajouter un ou plusieurs étudiants',
         },
         {
             IconComponent: ContentCopyIcon,
             onClick: () => copyStudentsEmailsWithoutAttemptsToClipboard(query.data),
-            title: "Copier les adresses e-mails des étudiant.es n'ayant pas passé l'examen",
+            title: "Copier les adresses e-mails des étudiants n'ayant pas passé l'examen",
         },
     ];
 
@@ -93,6 +95,20 @@ function Students() {
                                 }}
                             >
                                 Adresse e-mail
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell width={100}>
+                            <TableSortLabel
+                                active={activeSort === 'createdDate'}
+                                direction={sortDirection}
+                                onClick={() => {
+                                    if (activeSort !== 'createdDate') {
+                                        setActiveSort('createdDate');
+                                    }
+                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                }}
+                            >
+                                Date d'ajout
                             </TableSortLabel>
                         </TableCell>
                         {query.data.examIds.map((examId) => (
@@ -126,6 +142,9 @@ function Students() {
                                 </IconButton>
                             </TableCell>
                             <TableCell>{student.email}</TableCell>
+                            <TableCell>
+                                {time.formatToReadableDatetime(student.createdDate)}
+                            </TableCell>
                             {query.data.examIds.map((examId) => (
                                 <TableCell>
                                     {iconLib.computeIconColor(student.examStatus[examId])}
@@ -152,6 +171,9 @@ function Students() {
             switch (activeSort) {
                 case 'email':
                     result = resultA.email.localeCompare(resultB.email);
+                    break;
+                case 'createdDate':
+                    result = resultA.createdDate - resultB.createdDate;
                     break;
                 default:
                     result =
@@ -187,7 +209,7 @@ function Students() {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                'Souhaitez-vous réellement supprimer cet.te étudiant.e ? Tous ses résultats aux examens seront également supprimés.',
+                'Souhaitez-vous réellement supprimer cet étudiant ? Tous ses résultats aux examens seront également supprimés.',
             );
             if (hasConfirmed) {
                 deleteStudentMutation.mutate(studentId);

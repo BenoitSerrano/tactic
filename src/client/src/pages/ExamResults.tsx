@@ -17,7 +17,6 @@ import {
     styled,
 } from '@mui/material';
 import { time } from '../lib/time';
-import { authentication } from '../lib/authentication';
 import { Loader } from '../components/Loader';
 
 type examResultApiType = {
@@ -163,11 +162,7 @@ function ExamResults() {
                             </TableCell>
                             <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
                             <TableCell>
-                                <Link
-                                    to={`/teacher/${authentication.getEncodedPassword()}/exams/${examId}/results/${
-                                        result.attemptId
-                                    }`}
-                                >
+                                <Link to={`/teacher/exams/${examId}/results/${result.attemptId}`}>
                                     {result.email}
                                 </Link>
                             </TableCell>
@@ -193,9 +188,7 @@ function ExamResults() {
 
     function buildGoToAttempt(attemptId: string) {
         return () => {
-            navigate(
-                `/teacher/${authentication.getEncodedPassword()}/exams/${examId}/results/${attemptId}`,
-            );
+            navigate(`/teacher/exams/${examId}/results/${attemptId}`);
         };
     }
 

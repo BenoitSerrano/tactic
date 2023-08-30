@@ -1,6 +1,7 @@
 import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
 import { examAdaptator } from './exam.adaptator';
+import { User } from '../user';
 
 export { buildExamService };
 
@@ -10,20 +11,22 @@ function buildExamService() {
         createExam,
         getExams,
         getExam,
+        deleteExam,
         getExamResults,
     };
 
     return examService;
 
-    async function createExam(name: string, duration: number) {
+    async function createExam(name: string, duration: number, user?: User) {
         const exam = new Exam();
         exam.name = name;
         exam.duration = duration;
+        exam.user = user;
         return examRepository.save(exam);
     }
 
-    async function getExams() {
-        return examRepository.find();
+    async function getExams(user?: User) {
+        return examRepository.find({ where: { user } });
     }
 
     async function getExam(examId: string) {
@@ -83,5 +86,12 @@ function buildExamService() {
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(examWithAttempts);
 
         return examWithResults;
+    }
+
+    async function deleteExam(examId: string) {
+        const examRepository = dataSource.getRepository(Exam);
+
+        const result = await examRepository.delete({ id: examId });
+        return result.affected == 1;
     }
 }
