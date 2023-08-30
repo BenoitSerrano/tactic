@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
 
-const ONE_WEEK = 60 * 60 * 24 * 7;
+const ONE_MONTH = 60 * 60 * 24 * 30;
 
 function sign(payload: Object) {
     const token = jwt.sign(payload, config.JWT_TOKEN_SECRET, {
         algorithm: 'HS256',
-        expiresIn: ONE_WEEK,
+        expiresIn: ONE_MONTH,
     });
 
     return token;
