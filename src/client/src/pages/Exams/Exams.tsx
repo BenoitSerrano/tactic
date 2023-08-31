@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
-import { IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Tooltip,
+} from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -48,30 +56,26 @@ function Exams() {
                     {query.data?.map((exam: any) => (
                         <TableRow key={exam.id}>
                             <TableCell>
-                                <IconButton
-                                    title="Editer"
-                                    onClick={buildNavigateToEdition(exam.id)}
-                                >
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton
-                                    title="Voir les copies des étudiant.es"
-                                    onClick={buildNavigateToResults(exam.id)}
-                                >
-                                    <RateReviewIcon />
-                                </IconButton>
-                                <IconButton
-                                    title="Copier le lien à partager aux étudiant.es"
-                                    onClick={buildCopyExamLinkToClipboard(exam.id)}
-                                >
-                                    <ContentCopyIcon />
-                                </IconButton>
-                                <IconButton
-                                    title="Supprimer l'examen"
-                                    onClick={buildDeleteExam(exam.id)}
-                                >
-                                    <DeleteForeverIcon />
-                                </IconButton>
+                                <Tooltip title="Editer">
+                                    <IconButton onClick={buildNavigateToEdition(exam.id)}>
+                                        <EditIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Voir les copies des étudiants">
+                                    <IconButton onClick={buildNavigateToResults(exam.id)}>
+                                        <RateReviewIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Copier le lien à partager aux étudiants">
+                                    <IconButton onClick={buildCopyExamLinkToClipboard(exam.id)}>
+                                        <ContentCopyIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Supprimer l'examen">
+                                    <IconButton onClick={buildDeleteExam(exam.id)}>
+                                        <DeleteForeverIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </TableCell>
                             <TableCell>{exam.name}</TableCell>
                         </TableRow>

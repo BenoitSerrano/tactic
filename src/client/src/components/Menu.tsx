@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, styled } from '@mui/material';
+import { IconButton, Tooltip, styled } from '@mui/material';
 
 type buttonType = {
     IconComponent: React.ElementType;
@@ -14,14 +14,11 @@ function Menu(props: { buttons: Array<buttonType> }) {
                 {props.buttons.map((button, index) => {
                     const { IconComponent, onClick } = button;
                     return (
-                        <IconButton
-                            title={button.title}
-                            onClick={onClick}
-                            size="large"
-                            key={`menuButton-${index}`}
-                        >
-                            <IconComponent fontSize="large" />
-                        </IconButton>
+                        <Tooltip title={button.title}>
+                            <IconButton onClick={onClick} size="large" key={`menuButton-${index}`}>
+                                <IconComponent fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
                     );
                 })}
             </ButtonContainer>

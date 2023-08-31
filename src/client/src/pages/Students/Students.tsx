@@ -9,6 +9,7 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
+    Tooltip,
 } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -134,12 +135,11 @@ function Students() {
                         <TableRow key={student.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>
-                                <IconButton
-                                    title="Supprimer"
-                                    onClick={buildDeleteStudent(student.id)}
-                                >
-                                    <DeleteForeverIcon />
-                                </IconButton>
+                                <Tooltip title="Supprimer">
+                                    <IconButton onClick={buildDeleteStudent(student.id)}>
+                                        <DeleteForeverIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </TableCell>
                             <TableCell>{student.email}</TableCell>
                             <TableCell>

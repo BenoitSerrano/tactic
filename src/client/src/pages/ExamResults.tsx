@@ -14,6 +14,7 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
+    Tooltip,
     styled,
 } from '@mui/material';
 import { time } from '../lib/time';
@@ -134,31 +135,36 @@ function ExamResults() {
                             <TableCell>{index + 1}</TableCell>
 
                             <TableCell>
-                                <IconButton
-                                    title="Voir la copie"
-                                    onClick={buildGoToAttempt(result.attemptId)}
-                                >
-                                    <VisibilityIcon />
-                                </IconButton>
-                                <IconButton
+                                <Tooltip title="Voir la copie">
+                                    <IconButton onClick={buildGoToAttempt(result.attemptId)}>
+                                        <VisibilityIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip
                                     title={
                                         'Marquer comme' +
                                         (result.hasBeenTreated ? ' non ' : ' ') +
                                         'traité'
                                     }
-                                    onClick={buildUpdateTreatementStatus(
-                                        result.attemptId,
-                                        !result.hasBeenTreated,
-                                    )}
                                 >
-                                    {result.hasBeenTreated ? <RemoveDoneIcon /> : <DoneAllIcon />}
-                                </IconButton>
-                                <IconButton
-                                    title="Réinitialiser"
-                                    onClick={buildDeleteAttempt(result.attemptId)}
-                                >
-                                    <HistoryIcon />
-                                </IconButton>
+                                    <IconButton
+                                        onClick={buildUpdateTreatementStatus(
+                                            result.attemptId,
+                                            !result.hasBeenTreated,
+                                        )}
+                                    >
+                                        {result.hasBeenTreated ? (
+                                            <RemoveDoneIcon />
+                                        ) : (
+                                            <DoneAllIcon />
+                                        )}
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Réinitialiser">
+                                    <IconButton onClick={buildDeleteAttempt(result.attemptId)}>
+                                        <HistoryIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </TableCell>
                             <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
                             <TableCell>
