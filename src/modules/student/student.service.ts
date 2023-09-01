@@ -29,14 +29,17 @@ function buildStudentService() {
 
     async function getStudentId(email: string) {
         const studentRepository = dataSource.getRepository(Student);
-        return studentRepository.findOneOrFail({ where: { email }, select: ['id'] });
+        return studentRepository.findOneOrFail({
+            where: { email: email.trim().toLowerCase() },
+            select: ['id'],
+        });
     }
 
     async function createStudents(emails: string[], user?: User) {
         const studentRepository = dataSource.getRepository(Student);
         const students = emails.map((email) => {
             const student = new Student();
-            student.email = email;
+            student.email = email.trim().toLowerCase();
             student.user = user;
             return student;
         });

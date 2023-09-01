@@ -49,7 +49,7 @@ function StudentAuthentication() {
     }
 
     async function getStudentId(email: string) {
-        const result = await api.fetchStudentId(email.trim().toLowerCase());
+        const result = await api.fetchStudentId(email);
         return result.id;
     }
 }
