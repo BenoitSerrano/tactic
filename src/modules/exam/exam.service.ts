@@ -54,6 +54,8 @@ function buildExamService() {
                     hasBeenTreated: true,
                     phraseMelangeAnswers: { id: true, answer: true, phraseMelangee: { id: true } },
                     questionTrouAnswers: { id: true, answer: true, questionTrou: { id: true } },
+                    roundTrips: true,
+                    timeSpentOutside: true,
                 },
                 phrasesMelangees: { id: true, points: true, correctPhrases: true },
                 questionsTrou: {

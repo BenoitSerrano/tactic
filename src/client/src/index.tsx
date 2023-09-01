@@ -11,6 +11,9 @@ import '@fontsource/roboto/700.css';
 import { ThemeProvider } from '@mui/material';
 import { theme } from './theme';
 import { AlertHandlerContextProvider } from './lib/alert';
+import { focusHandler } from './lib/focusHandler';
+import { api } from './lib/api';
+import { cheatingHandler } from './lib/cheatingHandler';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const queryClient = new QueryClient();
@@ -29,6 +32,14 @@ root.render(
     </React.StrictMode>,
 );
 
+window.addEventListener(
+    'blur',
+    focusHandler.buildHandleFocusEvent(cheatingHandler.buildOnFocusChangeCallback('blur')),
+);
+window.addEventListener(
+    'focus',
+    focusHandler.buildHandleFocusEvent(cheatingHandler.buildOnFocusChangeCallback('focus')),
+);
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

@@ -42,6 +42,8 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
             attemptId: attempt.id,
             mark,
             hasBeenTreated: treatmentStatusSummary[attempt.id],
+            roundTrips: attempt.roundTrips,
+            timeSpentOutside: attempt.timeSpentOutside,
         };
         return result;
     });

@@ -12,6 +12,7 @@ function buildAttemptController() {
         fetchAttemptWithoutAnswers,
         deleteAttempt,
         updateAttemptTreatmentStatus,
+        updateAttemptCheatingSummary,
     };
 
     return attemptController;
@@ -53,5 +54,12 @@ function buildAttemptController() {
             params.urlParams.attemptId,
             params.body.hasBeenTreated,
         );
+    }
+
+    async function updateAttemptCheatingSummary(params: {
+        urlParams: { attemptId: string };
+        body: { roundTrips: number; timeSpentOutside: number };
+    }) {
+        return attemptService.updateAttemptCheatingSummary(params.urlParams.attemptId, params.body);
     }
 }
