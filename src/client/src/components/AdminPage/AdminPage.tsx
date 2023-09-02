@@ -1,8 +1,14 @@
 import { styled } from '@mui/material';
 import React from 'react';
 import { AdminHeader } from './AdminHeader';
+import { localStorage } from '../../lib/localStorage';
+import { Navigate } from 'react-router-dom';
 
 function AdminPage(props: { children: React.ReactNode | null }) {
+    const token = localStorage.jwtTokenHandler.get();
+    if (!token) {
+        return <Navigate to="/sign-in" />;
+    }
     return (
         <Container>
             <AdminHeader />
