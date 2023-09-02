@@ -12,7 +12,6 @@ import { ThemeProvider } from '@mui/material';
 import { theme } from './theme';
 import { AlertHandlerContextProvider } from './lib/alert';
 import { focusHandler } from './lib/focusHandler';
-import { api } from './lib/api';
 import { cheatingHandler } from './lib/cheatingHandler';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
