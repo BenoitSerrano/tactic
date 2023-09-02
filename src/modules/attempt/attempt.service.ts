@@ -18,6 +18,7 @@ function buildAttemptService() {
         assertIsTimeLimitNotExceeded,
         updateAttemptDuration,
         updateAttemptTreatmentStatus,
+        updateAttemptCheatingSummary,
     };
 
     return studentService;
@@ -167,6 +168,19 @@ function buildAttemptService() {
         const attemptRepository = dataSource.getRepository(Attempt);
 
         const result = await attemptRepository.update({ id: attemptId }, { hasBeenTreated });
+        return result.affected == 1;
+    }
+
+    async function updateAttemptCheatingSummary(
+        attemptId: string,
+        body: { roundTrips: number; timeSpentOutside: number },
+    ) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+
+        const result = await attemptRepository.update(
+            { id: attemptId },
+            { roundTrips: body.roundTrips, timeSpentOutside: body.timeSpentOutside },
+        );
         return result.affected == 1;
     }
 }

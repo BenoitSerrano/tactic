@@ -13,6 +13,7 @@ const api = {
     fetchAttempt,
     fetchAttemptWithoutAnswers,
     updateAttemptTreatementStatus,
+    updateAttemptCheatingSummary,
     deleteAttempt,
     fetchStudents,
     fetchStudentId,
@@ -152,6 +153,19 @@ async function updateAttemptTreatementStatus({
 }) {
     const URL = `${BASE_URL}/attempts/${attemptId}/hasBeenTreated`;
     return performApiCall(URL, 'PATCH', { hasBeenTreated });
+}
+
+async function updateAttemptCheatingSummary({
+    attemptId,
+    roundTrips,
+    timeSpentOutside,
+}: {
+    attemptId: string;
+    roundTrips: number;
+    timeSpentOutside: number;
+}) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/cheatingSummary`;
+    return performApiCall(URL, 'PATCH', { roundTrips, timeSpentOutside });
 }
 
 async function deleteAttempt(attemptId: string) {

@@ -254,6 +254,16 @@ router.patch(
     }),
 );
 
+router.patch(
+    '/attempts/:attemptId/cheatingSummary',
+    buildController(attemptController.updateAttemptCheatingSummary, {
+        schema: Joi.object({
+            roundTrips: Joi.number().required(),
+            timeSpentOutside: Joi.number().required(),
+        }),
+    }),
+);
+
 router.post(
     '/attempts/:attemptId/phrases-melangees/:phraseMelangeeId',
     buildController(phraseMelangeeAnswerController.createOrUpdatePhraseMelangeeAnswer, {

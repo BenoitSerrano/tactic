@@ -14,8 +14,8 @@ function Menu(props: { buttons: Array<buttonType> }) {
                 {props.buttons.map((button, index) => {
                     const { IconComponent, onClick } = button;
                     return (
-                        <Tooltip title={button.title}>
-                            <IconButton onClick={onClick} size="large" key={`menuButton-${index}`}>
+                        <Tooltip title={button.title} key={`menuButton-${index}`}>
+                            <IconButton onClick={onClick} size="large">
                                 <IconComponent fontSize="large" />
                             </IconButton>
                         </Tooltip>

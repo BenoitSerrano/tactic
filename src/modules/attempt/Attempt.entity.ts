@@ -43,4 +43,10 @@ export class Attempt implements AttemptInterface {
 
     @OneToMany(() => PhraseMelangeeAnswer, (phraseMelangeAnswer) => phraseMelangeAnswer.attempt)
     phraseMelangeAnswers: PhraseMelangeeAnswer[];
+
+    @Column({ default: 0 })
+    roundTrips: number;
+
+    @Column({ default: 0 })
+    timeSpentOutside: number;
 }

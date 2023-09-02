@@ -29,6 +29,8 @@ type examResultApiType = {
     duration: number | undefined;
     mark: number;
     hasBeenTreated: boolean;
+    roundTrips: number;
+    timeSpentOutside: number;
 };
 
 type examResultsApiType = { results: Array<examResultApiType>; totalPoints: number };
@@ -120,6 +122,8 @@ function ExamResults() {
                         </TableSortLabel>
                     </TableCell>
                     <TableCell width={50}>Durée</TableCell>
+                    <TableCell width={50}>Sorties d'examen</TableCell>
+                    <TableCell width={50}>Temps hors examen</TableCell>
 
                     <TableCell>Commentaire de l'étudiant.e</TableCell>
                 </TableRow>
@@ -174,6 +178,8 @@ function ExamResults() {
                             </TableCell>
                             <TableCell>{result.mark}</TableCell>
                             <TableCell>{result.duration}</TableCell>
+                            <TableCell>{result.roundTrips}</TableCell>
+                            <TableCell>{result.timeSpentOutside}</TableCell>
                             <TableCell>{result.comment}</TableCell>
                         </StyledRow>
                     );
@@ -216,6 +222,10 @@ function ExamResults() {
                         : '-',
                 mark: result.mark,
                 hasBeenTreated: result.hasBeenTreated,
+                roundTrips: result.roundTrips,
+                timeSpentOutside: time.formatToClock(Math.floor(result.timeSpentOutside / 1000), {
+                    hideHours: true,
+                }),
                 comment: result.comment,
             };
         });
