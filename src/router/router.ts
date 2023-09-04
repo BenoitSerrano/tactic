@@ -77,17 +77,7 @@ router.delete(
     }),
 );
 
-router.get(
-    '/exams/:examId',
-    buildController(examController.getExam, {
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-    }),
-);
+router.get('/exams/:examId', buildController(examController.getExam));
 router.get(
     '/exams/:examId/results',
     buildController(examController.getExamResults, {
