@@ -52,8 +52,8 @@ function buildController<paramsT extends Record<string, string>, bodyT>(
 
         if (options?.schema) {
             const { error } = options.schema.validate(req.body);
-            console.error(error);
             if (error) {
+                console.error(error);
                 res.status(httpStatus.BAD_REQUEST).send(error.message);
                 return;
             }
