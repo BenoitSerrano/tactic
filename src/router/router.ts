@@ -267,7 +267,7 @@ router.post(
     '/attempts/:attemptId/questions-trou/:questionTrouId',
     buildController(questionTrouAnswerController.createOrUpdateQuestionTrouAnswer, {
         schema: Joi.object({
-            answer: Joi.string().required(),
+            answer: Joi.string().allow(''),
         }),
     }),
 );
