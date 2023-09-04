@@ -89,7 +89,7 @@ async function createOrUpdateQcmAnswer({
     qcmId: string;
     choice: number;
 }) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/questionsChoixMultiple/${qcmId}`;
+    const URL = `${BASE_URL}/attempts/${attemptId}/questions-choix-multiple/${qcmId}`;
     return performApiCall(URL, 'POST', { choice });
 }
 
@@ -151,7 +151,7 @@ async function updateAttemptTreatementStatus({
     attemptId: string;
     hasBeenTreated: boolean;
 }) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/hasBeenTreated`;
+    const URL = `${BASE_URL}/attempts/${attemptId}/has-been-treated`;
     return performApiCall(URL, 'PATCH', { hasBeenTreated });
 }
 
@@ -164,7 +164,7 @@ async function updateAttemptCheatingSummary({
     roundTrips: number;
     timeSpentOutside: number;
 }) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/cheatingSummary`;
+    const URL = `${BASE_URL}/attempts/${attemptId}/cheating-summary`;
     return performApiCall(URL, 'PATCH', { roundTrips, timeSpentOutside });
 }
 

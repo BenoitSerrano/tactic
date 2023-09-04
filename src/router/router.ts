@@ -229,7 +229,7 @@ router.get(
 );
 
 router.post(
-    '/attempts/:attemptId/questionsChoixMultiple/:qcmId',
+    '/attempts/:attemptId/questions-choix-multiple/:qcmId',
     buildController(qcmAnswerController.createOrUpdateQcmAnswer, {
         schema: Joi.object({
             choice: Joi.number().required(),
@@ -238,14 +238,14 @@ router.post(
 );
 
 router.patch(
-    '/attempts/:attemptId/hasBeenTreated',
+    '/attempts/:attemptId/has-been-treated',
     buildController(attemptController.updateAttemptTreatmentStatus, {
         schema: Joi.object({ hasBeenTreated: Joi.boolean().required() }),
     }),
 );
 
 router.patch(
-    '/attempts/:attemptId/cheatingSummary',
+    '/attempts/:attemptId/cheating-summary',
     buildController(attemptController.updateAttemptCheatingSummary, {
         schema: Joi.object({
             roundTrips: Joi.number().required(),
