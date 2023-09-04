@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { ChangeEvent, useState } from 'react';
 import { api } from '../../lib/api';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
@@ -15,9 +15,13 @@ function QuestionChoixMultipleAnswering(props: {
     attemptId: string;
 }) {
     const { displayTimeoutAlert } = useTimeoutAlert();
+    const queryClient = useQueryClient();
 
     const upsertQcmAnswerMutation = useMutation({
         mutationFn: api.createOrUpdateQcmAnswer,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['attempts-without-answers'] });
+        },
         onError: async (error) => {
             console.warn(error);
             displayTimeoutAlert();

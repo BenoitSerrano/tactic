@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { debounce } from '../../lib/utils';
 import { api } from '../../lib/api';
@@ -17,9 +17,13 @@ function QuestionTrouAnswering(props: {
 }) {
     const [answer, setAnswer] = useState(props.questionTrou.answer);
     const { displayTimeoutAlert } = useTimeoutAlert();
+    const queryClient = useQueryClient();
 
     const createOrUpdateQuestionTrouAnswerMutation = useMutation({
         mutationFn: api.createOrUpdateQuestionTrouAnswer,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['attempts-without-answers'] });
+        },
         onError: async (error) => {
             console.warn(error);
             displayTimeoutAlert();
