@@ -15,6 +15,8 @@ function buildController<paramsT extends Record<string, string>, bodyT>(
     },
 ) {
     return async (req: Request, res: Response) => {
+        console.log(`${req.method} ${req.originalUrl}`);
+
         let user: User | undefined;
         if (options?.checkAuthorization) {
             const userRepository = dataSource.getRepository(User);
