@@ -20,15 +20,23 @@ function buildOnFocusChangeCallback(kind: focusChangeEventType['kind']) {
         const currentAttemptId = pathHandler.extractCurrentAttemptId(pathname);
         if (!!currentAttemptId) {
             const now = new Date();
-            const previousFocusChangesEvent = localStorage.focusChanges.get(currentAttemptId);
+            const previousFocusChangesEvents = localStorage.focusChanges.get(currentAttemptId);
+            const nextFocusChangesEvent = { kind, timestamp: now.getTime() };
 
-            const nextFocusChangesEvent = [
-                ...previousFocusChangesEvent,
-                { kind, timestamp: now.getTime() },
-            ];
-            localStorage.focusChanges.set(currentAttemptId, nextFocusChangesEvent);
+            const nextFocusChangesEvents = [...previousFocusChangesEvents];
+
+            // in case of a bug, i.e. there is a double event "blur" or "focus", we delete the previous one
+            if (
+                nextFocusChangesEvents.length > 0 &&
+                nextFocusChangesEvents[nextFocusChangesEvents.length - 1].kind === kind
+            ) {
+                nextFocusChangesEvents.splice(nextFocusChangesEvents.length - 1, 1);
+            }
+
+            nextFocusChangesEvents.push(nextFocusChangesEvent);
+            localStorage.focusChanges.set(currentAttemptId, nextFocusChangesEvents);
             if (kind === 'focus') {
-                const cheatingSummary = computeCheatingSummary(nextFocusChangesEvent);
+                const cheatingSummary = computeCheatingSummary(nextFocusChangesEvents);
                 if (!!cheatingSummary) {
                     api.updateAttemptCheatingSummary({
                         attemptId: currentAttemptId,
