@@ -127,35 +127,6 @@ function ExamEdition() {
                             </TableRow>
                         ),
                     )}
-                    {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => (
-                        <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
-                            <TableCell>
-                                <IconButton
-                                    onClick={buildEditPhraseMelangeeOnClick(phraseMelangee)}
-                                >
-                                    <EditIcon />
-                                </IconButton>
-                            </TableCell>
-                            <TableCell>
-                                <QuestionTypeCellContent>
-                                    <QuestionTypeIconContainer>
-                                        <LowPriorityIcon />
-                                    </QuestionTypeIconContainer>
-                                    Phrase mélangée
-                                </QuestionTypeCellContent>
-                            </TableCell>
-                            <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
-                            <TableCell>
-                                <ul>
-                                    {phraseMelangee.correctPhrases.map((correctPhrase: string) => (
-                                        <li>{correctPhrase}</li>
-                                    ))}
-                                </ul>
-                            </TableCell>
-                            <TableCell />
-                            <TableCell>{phraseMelangee.points}</TableCell>
-                        </TableRow>
-                    ))}
                     {query.data?.questionsTrou.map((questionTrou: questionTrouType) => (
                         <TableRow>
                             <TableCell>
@@ -200,6 +171,35 @@ function ExamEdition() {
                                 </ul>
                             </TableCell>
                             <TableCell>{questionTrou.points}</TableCell>
+                        </TableRow>
+                    ))}
+                    {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => (
+                        <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
+                            <TableCell>
+                                <IconButton
+                                    onClick={buildEditPhraseMelangeeOnClick(phraseMelangee)}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                            </TableCell>
+                            <TableCell>
+                                <QuestionTypeCellContent>
+                                    <QuestionTypeIconContainer>
+                                        <LowPriorityIcon />
+                                    </QuestionTypeIconContainer>
+                                    Phrase mélangée
+                                </QuestionTypeCellContent>
+                            </TableCell>
+                            <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
+                            <TableCell>
+                                <ul>
+                                    {phraseMelangee.correctPhrases.map((correctPhrase: string) => (
+                                        <li>{correctPhrase}</li>
+                                    ))}
+                                </ul>
+                            </TableCell>
+                            <TableCell />
+                            <TableCell>{phraseMelangee.points}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
