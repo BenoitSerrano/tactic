@@ -10,6 +10,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableFooter,
     TableHead,
     TableRow,
     styled,
@@ -66,6 +67,7 @@ function ExamEdition() {
     ];
 
     let index = 0;
+    let totalPoints = 0;
 
     return (
         <>
@@ -87,6 +89,7 @@ function ExamEdition() {
                     {query.data?.questionsChoixMultiple.map(
                         (questionChoixMultiple: questionChoixMultipleType) => {
                             index++;
+                            totalPoints += questionChoixMultiple.points;
                             return (
                                 <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
                                     <TableCell>{index}</TableCell>
@@ -137,6 +140,8 @@ function ExamEdition() {
                     )}
                     {query.data?.questionsTrou.map((questionTrou: questionTrouType) => {
                         index++;
+                        totalPoints += questionTrou.points;
+
                         return (
                             <TableRow>
                                 <TableCell>{index}</TableCell>
@@ -189,6 +194,8 @@ function ExamEdition() {
                     })}
                     {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => {
                         index++;
+                        totalPoints += phraseMelangee.points;
+
                         return (
                             <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
                                 <TableCell>{index}</TableCell>
@@ -223,6 +230,15 @@ function ExamEdition() {
                         );
                     })}
                 </TableBody>
+                <TableFooter>
+                    <TableCell>Total</TableCell>
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell>{totalPoints}</TableCell>
+                </TableFooter>
             </Table>
             {!!currentPhraseMelangeeModalStatus && (
                 <PhraseMelangeeUpsertionModal
