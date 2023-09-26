@@ -65,13 +65,17 @@ function ExamEdition() {
         },
     ];
 
+    let index = 0;
+
     return (
         <>
             <Menu buttons={menuButtons} />
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Actions</TableCell>
+                        <TableCell width={20}>N°</TableCell>
+
+                        <TableCell width={30}>Actions</TableCell>
                         <TableCell>Type</TableCell>
                         <TableCell>Intitulé</TableCell>
                         <TableCell>Bonne(s) réponse(s)</TableCell>
@@ -81,13 +85,116 @@ function ExamEdition() {
                 </TableHead>
                 <TableBody>
                     {query.data?.questionsChoixMultiple.map(
-                        (questionChoixMultiple: questionChoixMultipleType) => (
-                            <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
+                        (questionChoixMultiple: questionChoixMultipleType) => {
+                            index++;
+                            return (
+                                <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
+                                    <TableCell>{index}</TableCell>
+                                    <TableCell>
+                                        <IconButton
+                                            onClick={buildEditQuestionChoixMultipleOnClick(
+                                                questionChoixMultiple,
+                                            )}
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell>
+                                        <QuestionTypeCellContent>
+                                            <QuestionTypeIconContainer>
+                                                <RadioButtonCheckedIcon />
+                                            </QuestionTypeIconContainer>
+                                            QCM
+                                        </QuestionTypeCellContent>
+                                    </TableCell>
+                                    <TableCell>
+                                        {questionChoixMultiple.title}
+                                        <br />
+                                        <ul>
+                                            {questionChoixMultiple.possibleAnswers.map(
+                                                (possibleAnswer: string, index) => (
+                                                    <li
+                                                        key={`questionChoixMultiple-${questionChoixMultiple.id}-${index}`}
+                                                    >
+                                                        {possibleAnswer}
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    </TableCell>
+                                    <TableCell>
+                                        {
+                                            questionChoixMultiple.possibleAnswers[
+                                                questionChoixMultiple.rightAnswerIndex
+                                            ]
+                                        }
+                                    </TableCell>
+                                    <TableCell />
+                                    <TableCell>{questionChoixMultiple.points}</TableCell>
+                                </TableRow>
+                            );
+                        },
+                    )}
+                    {query.data?.questionsTrou.map((questionTrou: questionTrouType) => {
+                        index++;
+                        return (
+                            <TableRow>
+                                <TableCell>{index}</TableCell>
                                 <TableCell>
                                     <IconButton
-                                        onClick={buildEditQuestionChoixMultipleOnClick(
-                                            questionChoixMultiple,
+                                        onClick={buildEditQuestionTrouOnClick(questionTrou)}
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>
+                                    {' '}
+                                    <QuestionTypeCellContent>
+                                        <QuestionTypeIconContainer>
+                                            <SaveAltIcon />
+                                        </QuestionTypeIconContainer>
+                                        Texte à trou
+                                    </QuestionTypeCellContent>
+                                </TableCell>
+                                <TableCell>
+                                    {questionTrou.beforeText} ....... {questionTrou.afterText}
+                                </TableCell>
+                                <TableCell>
+                                    <ul>
+                                        {questionTrou.rightAnswers.map((rightAnswer: string) => (
+                                            <li
+                                                key={`questionTrou-${questionTrou.id}-rightAnswer-${rightAnswer}`}
+                                            >
+                                                {rightAnswer}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </TableCell>
+                                <TableCell>
+                                    <ul>
+                                        {questionTrou.acceptableAnswers.map(
+                                            (acceptableAnswer: string) => (
+                                                <li
+                                                    key={`questionTrou-${questionTrou.id}-acceptableAnswer-${acceptableAnswer}`}
+                                                >
+                                                    {acceptableAnswer}
+                                                </li>
+                                            ),
                                         )}
+                                    </ul>
+                                </TableCell>
+                                <TableCell>{questionTrou.points}</TableCell>
+                            </TableRow>
+                        );
+                    })}
+                    {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => {
+                        index++;
+                        return (
+                            <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
+                                <TableCell>{index}</TableCell>
+                                <TableCell>
+                                    <IconButton
+                                        onClick={buildEditPhraseMelangeeOnClick(phraseMelangee)}
                                     >
                                         <EditIcon />
                                     </IconButton>
@@ -95,113 +202,26 @@ function ExamEdition() {
                                 <TableCell>
                                     <QuestionTypeCellContent>
                                         <QuestionTypeIconContainer>
-                                            <RadioButtonCheckedIcon />
+                                            <LowPriorityIcon />
                                         </QuestionTypeIconContainer>
-                                        QCM
+                                        Phrase mélangée
                                     </QuestionTypeCellContent>
                                 </TableCell>
+                                <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
                                 <TableCell>
-                                    {questionChoixMultiple.title}
-                                    <br />
                                     <ul>
-                                        {questionChoixMultiple.possibleAnswers.map(
-                                            (possibleAnswer: string, index) => (
-                                                <li
-                                                    key={`questionChoixMultiple-${questionChoixMultiple.id}-${index}`}
-                                                >
-                                                    {possibleAnswer}
-                                                </li>
+                                        {phraseMelangee.correctPhrases.map(
+                                            (correctPhrase: string) => (
+                                                <li>{correctPhrase}</li>
                                             ),
                                         )}
                                     </ul>
                                 </TableCell>
-                                <TableCell>
-                                    {
-                                        questionChoixMultiple.possibleAnswers[
-                                            questionChoixMultiple.rightAnswerIndex
-                                        ]
-                                    }
-                                </TableCell>
                                 <TableCell />
-                                <TableCell>{questionChoixMultiple.points}</TableCell>
+                                <TableCell>{phraseMelangee.points}</TableCell>
                             </TableRow>
-                        ),
-                    )}
-                    {query.data?.questionsTrou.map((questionTrou: questionTrouType) => (
-                        <TableRow>
-                            <TableCell>
-                                <IconButton onClick={buildEditQuestionTrouOnClick(questionTrou)}>
-                                    <EditIcon />
-                                </IconButton>
-                            </TableCell>
-                            <TableCell>
-                                {' '}
-                                <QuestionTypeCellContent>
-                                    <QuestionTypeIconContainer>
-                                        <SaveAltIcon />
-                                    </QuestionTypeIconContainer>
-                                    Texte à trou
-                                </QuestionTypeCellContent>
-                            </TableCell>
-                            <TableCell>
-                                {questionTrou.beforeText} ....... {questionTrou.afterText}
-                            </TableCell>
-                            <TableCell>
-                                <ul>
-                                    {questionTrou.rightAnswers.map((rightAnswer: string) => (
-                                        <li
-                                            key={`questionTrou-${questionTrou.id}-rightAnswer-${rightAnswer}`}
-                                        >
-                                            {rightAnswer}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </TableCell>
-                            <TableCell>
-                                <ul>
-                                    {questionTrou.acceptableAnswers.map(
-                                        (acceptableAnswer: string) => (
-                                            <li
-                                                key={`questionTrou-${questionTrou.id}-acceptableAnswer-${acceptableAnswer}`}
-                                            >
-                                                {acceptableAnswer}
-                                            </li>
-                                        ),
-                                    )}
-                                </ul>
-                            </TableCell>
-                            <TableCell>{questionTrou.points}</TableCell>
-                        </TableRow>
-                    ))}
-                    {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => (
-                        <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
-                            <TableCell>
-                                <IconButton
-                                    onClick={buildEditPhraseMelangeeOnClick(phraseMelangee)}
-                                >
-                                    <EditIcon />
-                                </IconButton>
-                            </TableCell>
-                            <TableCell>
-                                <QuestionTypeCellContent>
-                                    <QuestionTypeIconContainer>
-                                        <LowPriorityIcon />
-                                    </QuestionTypeIconContainer>
-                                    Phrase mélangée
-                                </QuestionTypeCellContent>
-                            </TableCell>
-                            <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
-                            <TableCell>
-                                <ul>
-                                    {phraseMelangee.correctPhrases.map((correctPhrase: string) => (
-                                        <li>{correctPhrase}</li>
-                                    ))}
-                                </ul>
-                            </TableCell>
-                            <TableCell />
-                            <TableCell>{phraseMelangee.points}</TableCell>
-                        </TableRow>
-                    ))}
+                        );
+                    })}
                 </TableBody>
             </Table>
             {!!currentPhraseMelangeeModalStatus && (
