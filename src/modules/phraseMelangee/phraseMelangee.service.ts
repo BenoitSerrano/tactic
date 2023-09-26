@@ -19,10 +19,12 @@ function buildPhraseMelangeeService() {
             shuffledPhrase,
             correctPhrases,
             words,
+            points,
         }: {
             words: string[];
             shuffledPhrase: string;
             correctPhrases: string[];
+            points: number;
         },
     ) {
         const examService = buildExamService();
@@ -34,6 +36,7 @@ function buildPhraseMelangeeService() {
         phraseMelangee.words = words;
         phraseMelangee.correctPhrases = correctPhrases;
         phraseMelangee.shuffledPhrase = shuffledPhrase;
+        phraseMelangee.points = points;
         phraseMelangee.exam = exam;
         phraseMelangee.order = highestOrder + 1;
         return phraseMelangeeRepository.save(phraseMelangee);
@@ -59,12 +62,14 @@ function buildPhraseMelangeeService() {
         shuffledPhrase,
         correctPhrases,
         words,
+        points,
     }: {
         examId: string;
         phraseMelangeeId: number;
         words: string[];
         shuffledPhrase: string;
         correctPhrases: string[];
+        points: number;
     }) {
         const phraseMelangee = await phraseMelangeeRepository.findOneOrFail({
             where: { exam: { id: examId }, id: phraseMelangeeId },
@@ -73,6 +78,7 @@ function buildPhraseMelangeeService() {
         phraseMelangee.words = words;
         phraseMelangee.shuffledPhrase = shuffledPhrase;
         phraseMelangee.correctPhrases = correctPhrases;
+        phraseMelangee.points = points;
 
         return phraseMelangeeRepository.save(phraseMelangee);
     }

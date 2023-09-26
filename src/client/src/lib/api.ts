@@ -223,12 +223,14 @@ async function createQuestionChoixMultiple(params: {
     title: string;
     possibleAnswers: string[];
     rightAnswerIndex: number;
+    points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/questions-choix-multiple`;
     return performApiCall(URL, 'POST', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
         rightAnswerIndex: params.rightAnswerIndex,
+        points: params.points,
     });
 }
 
@@ -238,12 +240,14 @@ async function updateQuestionChoixMultiple(params: {
     title: string;
     possibleAnswers: string[];
     rightAnswerIndex: number;
+    points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/questions-choix-multiple/${params.qcmId}`;
     return performApiCall(URL, 'PUT', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
         rightAnswerIndex: params.rightAnswerIndex,
+        points: params.points,
     });
 }
 
@@ -289,12 +293,14 @@ async function createPhraseMelangee(params: {
     words: string[];
     correctPhrases: string[];
     shuffledPhrase: string;
+    points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/phrases-melangees`;
     return performApiCall(URL, 'POST', {
         correctPhrases: params.correctPhrases,
         shuffledPhrase: params.shuffledPhrase,
         words: params.words,
+        points: params.points,
     });
 }
 
@@ -304,12 +310,14 @@ async function updatePhraseMelangee(params: {
     words: string[];
     correctPhrases: string[];
     shuffledPhrase: string;
+    points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/phrases-melangees/${params.phraseMelangeeId}`;
     return performApiCall(URL, 'PUT', {
         correctPhrases: params.correctPhrases,
         shuffledPhrase: params.shuffledPhrase,
         words: params.words,
+        points: params.points,
     });
 }
 

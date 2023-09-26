@@ -17,6 +17,7 @@ function buildPhraseMelangeeController() {
             shuffledPhrase: string;
             words: string[];
             correctPhrases: string[];
+            points: number;
         };
     }) {
         return phraseMelangeeService.createPhraseMelangee(params.urlParams.examId, params.body);
@@ -28,6 +29,7 @@ function buildPhraseMelangeeController() {
             shuffledPhrase: string;
             words: string[];
             correctPhrases: string[];
+            points: number;
         };
     }) {
         return phraseMelangeeService.updatePhraseMelangee({
@@ -36,6 +38,7 @@ function buildPhraseMelangeeController() {
             shuffledPhrase: params.body.shuffledPhrase,
             correctPhrases: params.body.correctPhrases,
             words: params.body.words,
+            points: params.body.points,
         });
     }
 }

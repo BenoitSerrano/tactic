@@ -41,6 +41,10 @@ function PhraseMelangeeUpsertionModal(props: {
 
     const [correctCombination, setCorrectCombination] = useState<number[]>([]);
 
+    const [points, setPoints] = useState(
+        props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.points}` : '3.0',
+    );
+
     const updatePhraseMelangeeMutation = useMutation({
         mutationFn: api.updatePhraseMelangee,
         onSuccess: () => {
@@ -149,6 +153,13 @@ function PhraseMelangeeUpsertionModal(props: {
                     </>
                 </MainContainer>
             )}
+            <PointsContainer>
+                <TextField
+                    value={points}
+                    onChange={onChangePoint}
+                    label="Point(s) pour la question"
+                />
+            </PointsContainer>
         </Modal>
     );
 
@@ -169,6 +180,13 @@ function PhraseMelangeeUpsertionModal(props: {
             shuffledWords.push(words[shuffledCombination[i]]);
         }
         setShuffledPhrase(shuffledWords.join(' '));
+    }
+
+    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(/^[0-9]+(\.)?([0-9]+)?$/)) {
+            setPoints(value);
+        }
     }
 
     function onChangeOriginalPhrase(event: React.ChangeEvent<HTMLInputElement>) {
@@ -192,6 +210,7 @@ function PhraseMelangeeUpsertionModal(props: {
                 correctPhrases,
                 shuffledPhrase,
                 words,
+                points: Number(points),
             });
         } else {
             createPhraseMelangeeMutation.mutate({
@@ -199,6 +218,7 @@ function PhraseMelangeeUpsertionModal(props: {
                 correctPhrases,
                 shuffledPhrase,
                 words,
+                points: Number(points),
             });
         }
     }
@@ -210,6 +230,12 @@ const RowContainer = styled('div')({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+});
+
+const PointsContainer = styled('div')({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
 });
 
 const CorrectPhraseCreationContainer = styled('div')({

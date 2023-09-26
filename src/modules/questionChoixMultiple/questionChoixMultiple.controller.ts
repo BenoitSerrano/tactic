@@ -13,7 +13,12 @@ function buildQuestionChoixMultipleController() {
 
     async function createQuestionChoixMultiple(params: {
         urlParams: { examId: string };
-        body: { title: string; possibleAnswers: string[]; rightAnswerIndex: number };
+        body: {
+            title: string;
+            possibleAnswers: string[];
+            rightAnswerIndex: number;
+            points: number;
+        };
     }) {
         return questionChoixMultipleService.createQuestionChoixMultiple(
             params.urlParams.examId,
@@ -23,7 +28,12 @@ function buildQuestionChoixMultipleController() {
 
     async function updateQuestionChoixMultiple(params: {
         urlParams: { examId: string; qcmId: string };
-        body: { title: string; possibleAnswers: string[]; rightAnswerIndex: number };
+        body: {
+            title: string;
+            possibleAnswers: string[];
+            rightAnswerIndex: number;
+            points: number;
+        };
     }) {
         return questionChoixMultipleService.updateQuestionChoixMultiple({
             examId: params.urlParams.examId,
@@ -31,6 +41,7 @@ function buildQuestionChoixMultipleController() {
             title: params.body.title,
             possibleAnswers: params.body.possibleAnswers,
             rightAnswerIndex: Number(params.body.rightAnswerIndex),
+            points: params.body.points,
         });
     }
 }

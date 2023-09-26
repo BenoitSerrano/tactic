@@ -45,7 +45,7 @@ function QuestionTrouUpsertionModal(props: {
     });
 
     const [points, setPoints] = useState(
-        props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.points}` : '1.0',
+        props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.points}` : '2.0',
     );
     const [rightAnswers, setRightAnswers] = useState(
         props.modalStatus.kind === 'editing'

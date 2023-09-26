@@ -114,6 +114,7 @@ router.post(
             title: Joi.string(),
             rightAnswerIndex: Joi.number().required(),
             possibleAnswers: Joi.array().items(Joi.string().allow('')),
+            points: Joi.number(),
         }),
     }),
 );
@@ -131,6 +132,7 @@ router.put(
             title: Joi.string(),
             rightAnswerIndex: Joi.number().required(),
             possibleAnswers: Joi.array().items(Joi.string().allow('')),
+            points: Joi.number(),
         }),
     }),
 );
@@ -186,6 +188,7 @@ router.post(
             shuffledPhrase: Joi.string().required(),
             correctPhrases: Joi.array().items(Joi.string()),
             words: Joi.array().items(Joi.string()),
+            points: Joi.number(),
         }),
     }),
 );
@@ -203,6 +206,7 @@ router.put(
             shuffledPhrase: Joi.string().required(),
             correctPhrases: Joi.array().items(Joi.string()),
             words: Joi.array().items(Joi.string()),
+            points: Joi.number(),
         }),
     }),
 );

@@ -54,6 +54,10 @@ function QuestionChoixMultipleUpsertionModal(props: {
             : ['', '', '', ''],
     );
 
+    const [points, setPoints] = useState(
+        props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.points}` : '1.0',
+    );
+
     const isUpdating = updateQuestionChoixMultipleMutation.isLoading;
     const isCreating = createQuestionChoixMultipleMutation.isLoading;
 
@@ -102,7 +106,16 @@ function QuestionChoixMultipleUpsertionModal(props: {
                             </InputContainer>
                         );
                     })}
-                </RadioGroup>
+                </RadioGroup>{' '}
+                <RowContainer>
+                    <PointsContainer>
+                        <TextField
+                            value={points}
+                            onChange={onChangePoint}
+                            label="Point(s) pour la question"
+                        />
+                    </PointsContainer>
+                </RowContainer>
             </ModalContent>
         </Modal>
     );
@@ -120,6 +133,13 @@ function QuestionChoixMultipleUpsertionModal(props: {
         };
     }
 
+    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(/^[0-9]+(\.)?([0-9]+)?$/)) {
+            setPoints(value);
+        }
+    }
+
     function saveQuestionChoixMultiple() {
         if (props.modalStatus?.kind === 'editing') {
             updateQuestionChoixMultipleMutation.mutate({
@@ -128,6 +148,7 @@ function QuestionChoixMultipleUpsertionModal(props: {
                 possibleAnswers,
                 rightAnswerIndex,
                 title,
+                points: Number(points),
             });
         } else {
             createQuestionChoixMultipleMutation.mutate({
@@ -135,6 +156,7 @@ function QuestionChoixMultipleUpsertionModal(props: {
                 possibleAnswers,
                 rightAnswerIndex,
                 title,
+                points: Number(points),
             });
         }
     }
@@ -142,6 +164,21 @@ function QuestionChoixMultipleUpsertionModal(props: {
 
 const ModalContent = styled('div')({ width: '100%' });
 const InputContainer = styled('div')({ marginTop: 4, marginBottom: 4 });
+
+const RowContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 4,
+    marginBottom: 4,
+    flex: 1,
+    width: '100%',
+});
+
+const PointsContainer = styled('div')({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+});
 
 export { QuestionChoixMultipleUpsertionModal };
 

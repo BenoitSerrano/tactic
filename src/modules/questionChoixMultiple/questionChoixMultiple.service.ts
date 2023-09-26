@@ -19,6 +19,7 @@ function buildQuestionChoixMultipleService() {
             title: string;
             possibleAnswers: string[];
             rightAnswerIndex: number;
+            points: number;
         },
     ) {
         const examService = buildExamService();
@@ -30,6 +31,7 @@ function buildQuestionChoixMultipleService() {
         questionChoixMultiple.possibleAnswers = body.possibleAnswers;
         questionChoixMultiple.rightAnswerIndex = body.rightAnswerIndex;
         questionChoixMultiple.title = body.title;
+        questionChoixMultiple.points = body.points;
         questionChoixMultiple.exam = exam;
         questionChoixMultiple.order = highestOrder + 1;
         return questionChoixMultipleRepository.save(questionChoixMultiple);
@@ -55,12 +57,14 @@ function buildQuestionChoixMultipleService() {
         title,
         possibleAnswers,
         rightAnswerIndex,
+        points,
     }: {
         examId: string;
         qcmId: number;
         title: string;
         possibleAnswers: string[];
         rightAnswerIndex: number;
+        points: number;
     }) {
         const questionChoixMultiple = await questionChoixMultipleRepository.findOneOrFail({
             where: { exam: { id: examId }, id: qcmId },
@@ -68,6 +72,7 @@ function buildQuestionChoixMultipleService() {
         questionChoixMultiple.title = title;
         questionChoixMultiple.possibleAnswers = possibleAnswers;
         questionChoixMultiple.rightAnswerIndex = rightAnswerIndex;
+        questionChoixMultiple.points = points;
 
         return questionChoixMultipleRepository.save(questionChoixMultiple);
     }
