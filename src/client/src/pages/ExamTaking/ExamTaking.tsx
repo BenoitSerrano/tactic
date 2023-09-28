@@ -53,18 +53,7 @@ function ExamTaking() {
                         />
                     ),
                 )}
-                {query.data.exam.questionsTrou.length > 0 && (
-                    <p>
-                        <Typography variant="h3">
-                            Complétez les phrases suivantes. <br />
-                            Conjuguez le verbe ou ajoutez l’élément grammatical qui manque. <br />
-                            Si vous ne savez pas, pas de stress : laissez juste la question en
-                            blanc. <br />
-                            Attention : il y a parfois plusieurs réponses correctes, il ne faut en
-                            mettre qu'une seule.
-                        </Typography>
-                    </p>
-                )}
+
                 {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
                     <QuestionTrouAnswering
                         key={questionTrou.id}
@@ -83,7 +72,7 @@ function ExamTaking() {
                 ))}
                 <hr />
                 <Button variant="contained" onClick={validateForm}>
-                    Valider le questionnaire
+                    Valider les réponses
                 </Button>
             </MainContainer>
         </Page>

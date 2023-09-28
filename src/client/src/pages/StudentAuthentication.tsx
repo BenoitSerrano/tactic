@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { api } from '../lib/api';
-import { Button, TextField, Typography, styled } from '@mui/material';
-import { Page } from '../components/Page';
 import { useQuery } from '@tanstack/react-query';
+import { Button, TextField, Typography, styled } from '@mui/material';
+import { api } from '../lib/api';
+import { Page } from '../components/Page';
 
 function StudentAuthentication() {
     const params = useParams();
@@ -17,9 +17,6 @@ function StudentAuthentication() {
     return (
         <Page>
             <TitleContainer>
-                <p>
-                    <img width={100} src="/ENS_Logo.png" alt="Logo de l'ENS" />
-                </p>
                 {query.data && <Typography variant="h4">{query.data.name}</Typography>}
             </TitleContainer>
             <ContentContainer>
