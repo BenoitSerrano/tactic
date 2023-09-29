@@ -19,6 +19,7 @@ const dataSource = new DataSource({
     password: config.DATABASE_PASSWORD,
     database: config.DATABASE_NAME,
     logging: ['warn', 'error'],
+    connectTimeoutMS: 20000,
     entities: [
         Exam,
         QuestionChoixMultiple,
