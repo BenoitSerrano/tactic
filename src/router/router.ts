@@ -5,11 +5,8 @@ import { buildExamController } from '../modules/exam';
 import { buildQuestionChoixMultipleController } from '../modules/questionChoixMultiple';
 import { buildStudentController } from '../modules/student';
 import { buildAttemptController } from '../modules/attempt';
-import { buildQcmAnswerController } from '../modules/qcmAnswer';
 import { buildQuestionTrouController } from '../modules/questionTrou';
-import { buildQuestionTrouAnswerController } from '../modules/questionTrouAnswer';
 import { buildPhraseMelangeeController } from '../modules/phraseMelangee';
-import { buildPhraseMelangeeAnswerController } from '../modules/phraseMelangeeAnswer';
 import { buildUserController } from '../modules/user';
 import { accessControlBuilder } from '../lib/accessControlBuilder';
 
@@ -20,10 +17,7 @@ const studentController = buildStudentController();
 const questionTrouController = buildQuestionTrouController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
-const qcmAnswerController = buildQcmAnswerController();
-const questionTrouAnswerController = buildQuestionTrouAnswerController();
 const phraseMelangeeController = buildPhraseMelangeeController();
-const phraseMelangeeAnswerController = buildPhraseMelangeeAnswerController();
 
 router.post('/users', buildController(userController.createUser));
 router.post('/login', buildController(userController.login));
@@ -232,15 +226,6 @@ router.get(
     buildController(attemptController.fetchAttemptWithoutAnswers),
 );
 
-router.post(
-    '/attempts/:attemptId/questions-choix-multiple/:qcmId',
-    buildController(qcmAnswerController.createOrUpdateQcmAnswer, {
-        schema: Joi.object({
-            choice: Joi.number().required(),
-        }),
-    }),
-);
-
 router.patch(
     '/attempts/:attemptId/has-been-treated',
     buildController(attemptController.updateAttemptTreatmentStatus, {
@@ -254,24 +239,6 @@ router.patch(
         schema: Joi.object({
             roundTrips: Joi.number().required(),
             timeSpentOutside: Joi.number().required(),
-        }),
-    }),
-);
-
-router.post(
-    '/attempts/:attemptId/phrases-melangees/:phraseMelangeeId',
-    buildController(phraseMelangeeAnswerController.createOrUpdatePhraseMelangeeAnswer, {
-        schema: Joi.object({
-            answer: Joi.string().required(),
-        }),
-    }),
-);
-
-router.post(
-    '/attempts/:attemptId/questions-trou/:questionTrouId',
-    buildController(questionTrouAnswerController.createOrUpdateQuestionTrouAnswer, {
-        schema: Joi.object({
-            answer: Joi.string().allow(''),
         }),
     }),
 );

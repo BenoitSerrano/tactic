@@ -5,8 +5,6 @@ const api = {
     login,
     createUser,
     patchComment,
-    createOrUpdateQcmAnswer,
-    createOrUpdateQuestionTrouAnswer,
     searchAttempt,
     createAttempt,
     createEmptyAttempt,
@@ -30,7 +28,6 @@ const api = {
     updateQuestionTrou,
     createPhraseMelangee,
     updatePhraseMelangee,
-    createOrUpdatePhraseMelangeeAnswer,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -78,45 +75,6 @@ async function login(params: { email: string; password: string }) {
 async function patchComment(studentId: string, comment: string) {
     const URL = `${BASE_URL}/students/${studentId}`;
     return performApiCall(URL, 'PATCH', { comment });
-}
-
-async function createOrUpdateQcmAnswer({
-    attemptId,
-    qcmId,
-    choice,
-}: {
-    attemptId: string;
-    qcmId: string;
-    choice: number;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/questions-choix-multiple/${qcmId}`;
-    return performApiCall(URL, 'POST', { choice });
-}
-
-async function createOrUpdateQuestionTrouAnswer({
-    attemptId,
-    questionTrouId,
-    answer,
-}: {
-    attemptId: string;
-    questionTrouId: number;
-    answer: string;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/questions-trou/${questionTrouId}`;
-    return performApiCall(URL, 'POST', { answer });
-}
-
-async function createOrUpdatePhraseMelangeeAnswer({
-    attemptId,
-    phraseMelangeeId,
-    answer,
-}: {
-    attemptId: string;
-    phraseMelangeeId: number;
-    answer: string;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/phrases-melangees/${phraseMelangeeId}`;
-    return performApiCall(URL, 'POST', { answer });
 }
 
 async function searchAttempt({ examId, studentId }: { examId: string; studentId: string }) {

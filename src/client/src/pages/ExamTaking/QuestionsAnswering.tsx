@@ -47,7 +47,6 @@ function QuestionsAnswering(props: {
                     questionChoixMultiple={questionChoixMultiple}
                 />
             ))}
-
             {props.questionsTrou.map((questionTrou, index: number) => (
                 <QuestionTrouAnswering
                     setAnswer={buildSetQuestionTrouAnswer(questionTrou.id)}
