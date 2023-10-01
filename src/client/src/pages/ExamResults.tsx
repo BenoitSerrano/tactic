@@ -23,7 +23,6 @@ import { Loader } from '../components/Loader';
 type examResultApiType = {
     id: string;
     email: string;
-    comment?: string;
     attemptId: string;
     startedAt: number;
     duration: number | undefined;
@@ -124,8 +123,6 @@ function ExamResults() {
                     <TableCell width={50}>Durée</TableCell>
                     <TableCell width={50}>Sorties d'examen</TableCell>
                     <TableCell width={50}>Temps hors examen</TableCell>
-
-                    <TableCell>Commentaire de l'étudiant.e</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -180,7 +177,6 @@ function ExamResults() {
                             <TableCell>{result.duration}</TableCell>
                             <TableCell>{result.roundTrips}</TableCell>
                             <TableCell>{result.timeSpentOutside}</TableCell>
-                            <TableCell>{result.comment}</TableCell>
                         </StyledRow>
                     );
                 })}
@@ -226,7 +222,6 @@ function ExamResults() {
                 timeSpentOutside: time.formatToClock(Math.floor(result.timeSpentOutside / 1000), {
                     hideHours: true,
                 }),
-                comment: result.comment,
             };
         });
     }
