@@ -71,11 +71,11 @@ function Exams() {
                                         <ContentCopyIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Supprimer l'examen">
+                                {/* <Tooltip title="Supprimer l'examen">
                                     <IconButton onClick={buildDeleteExam(exam.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
-                                </Tooltip>
+                                </Tooltip> */}
                             </TableCell>
                             <TableCell>{exam.name}</TableCell>
                         </TableRow>
