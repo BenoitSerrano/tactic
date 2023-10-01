@@ -2,6 +2,13 @@ import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
 import { examAdaptator } from './exam.adaptator';
 import { User } from '../user';
+import { buildQcmAnswerService } from '../qcmAnswer';
+import { buildQuestionTrouAnswerService } from '../questionTrouAnswer';
+import { buildPhraseMelangeeAnswerService } from '../phraseMelangeeAnswer';
+import { buildStudentService } from '../student';
+import { buildQuestionChoixMultipleService } from '../questionChoixMultiple';
+import { buildQuestionTrouService } from '../questionTrou';
+import { buildPhraseMelangeeService } from '../phraseMelangee';
 
 export { buildExamService };
 
@@ -42,6 +49,14 @@ function buildExamService() {
     }
 
     async function getExamResults(examId: string) {
+        const qcmAnswerService = buildQcmAnswerService();
+        const questionTrouAnswerService = buildQuestionTrouAnswerService();
+        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
+        const studentService = buildStudentService();
+        const qcmService = buildQuestionChoixMultipleService();
+        const questionTrouService = buildQuestionTrouService();
+        const phraseMelangeeService = buildPhraseMelangeeService();
+
         const examWithAttempts = await examRepository.findOneOrFail({
             where: { id: examId },
             select: {
@@ -49,26 +64,34 @@ function buildExamService() {
                     startedAt: true,
                     updatedAt: true,
                     id: true,
-                    student: { id: true, email: true, comment: true },
-                    qcmAnswers: { id: true, choice: true, questionChoixMultiple: { id: true } },
+                    student: { id: true },
+                    qcmAnswers: { id: true },
+                    phraseMelangeAnswers: { id: true },
+                    questionTrouAnswers: { id: true },
+
+                    // student: { id: true, email: true, comment: true },
+                    // qcmAnswers: { id: true, choice: true, questionChoixMultiple: { id: true } },
                     hasBeenTreated: true,
-                    phraseMelangeAnswers: { id: true, answer: true, phraseMelangee: { id: true } },
-                    questionTrouAnswers: { id: true, answer: true, questionTrou: { id: true } },
+                    // phraseMelangeAnswers: { id: true, answer: true, phraseMelangee: { id: true } },
+                    // questionTrouAnswers: { id: true, answer: true, questionTrou: { id: true } },
                     roundTrips: true,
                     timeSpentOutside: true,
                 },
-                phrasesMelangees: { id: true, points: true, correctPhrases: true },
-                questionsTrou: {
-                    id: true,
-                    points: true,
-                    acceptableAnswers: true,
-                    rightAnswers: true,
-                },
-                questionsChoixMultiple: {
-                    id: true,
-                    points: true,
-                    rightAnswerIndex: true,
-                },
+                phrasesMelangees: { id: true },
+                questionsTrou: { id: true },
+                questionsChoixMultiple: { id: true },
+                // phrasesMelangees: { id: true, points: true, correctPhrases: true },
+                // questionsTrou: {
+                //     id: true,
+                //     points: true,
+                //     acceptableAnswers: true,
+                //     rightAnswers: true,
+                // },
+                // questionsChoixMultiple: {
+                //     id: true,
+                //     points: true,
+                //     rightAnswerIndex: true,
+                // },
             },
             relations: [
                 'attempts',
@@ -77,15 +100,66 @@ function buildExamService() {
                 'questionsTrou',
                 'phrasesMelangees',
                 'attempts.qcmAnswers',
-                'attempts.qcmAnswers.questionChoixMultiple',
+                // 'attempts.qcmAnswers.questionChoixMultiple',
                 'attempts.questionTrouAnswers',
-                'attempts.questionTrouAnswers.questionTrou',
+                // 'attempts.questionTrouAnswers.questionTrou',
                 'attempts.phraseMelangeAnswers',
-                'attempts.phraseMelangeAnswers.phraseMelangee',
+                // 'attempts.phraseMelangeAnswers.phraseMelangee',
             ],
         });
+        const studentIds = examWithAttempts.attempts.map((attempt) => attempt.student.id);
+        const students = await studentService.getStudents(studentIds);
 
-        const examWithResults = examAdaptator.convertExamWithAttemptsToResults(examWithAttempts);
+        const qcmAnswerIds = examWithAttempts.attempts.reduce((acc, attempt) => {
+            return [...acc, ...attempt.qcmAnswers.map((qcmAnswer) => qcmAnswer.id)];
+        }, [] as number[]);
+        const qcmAnswers = await qcmAnswerService.getQcmAnswers(qcmAnswerIds);
+
+        const questionTrouAnswerIds = examWithAttempts.attempts.reduce((acc, attempt) => {
+            return [
+                ...acc,
+                ...attempt.questionTrouAnswers.map((questionTrouAnswer) => questionTrouAnswer.id),
+            ];
+        }, [] as number[]);
+        const questionTrouAnswers = await questionTrouAnswerService.getQuestionTrouAnswers(
+            questionTrouAnswerIds,
+        );
+
+        const phraseMelangeeAnswerIds = examWithAttempts.attempts.reduce((acc, attempt) => {
+            return [
+                ...acc,
+                ...attempt.phraseMelangeAnswers.map(
+                    (phraseMelangeeAnswer) => phraseMelangeeAnswer.id,
+                ),
+            ];
+        }, [] as number[]);
+        const phraseMelangeeAnswers = await phraseMelangeeAnswerService.getPhraseMelangeeAnswers(
+            phraseMelangeeAnswerIds,
+        );
+
+        const qcmIds = examWithAttempts.questionsChoixMultiple.map((qcm) => qcm.id);
+        const questionsChoixMultiple = await qcmService.getQuestionsChoixMultiples(qcmIds);
+
+        const questionTrouIds = examWithAttempts.questionsTrou.map(
+            (questionTrou) => questionTrou.id,
+        );
+        const questionsTrou = await questionTrouService.getQuestionsTrou(questionTrouIds);
+
+        const phraseMelangeeIds = examWithAttempts.phrasesMelangees.map(
+            (phraseMelangee) => phraseMelangee.id,
+        );
+        const phrasesMelangees = await phraseMelangeeService.getPhrasesMelangees(phraseMelangeeIds);
+
+        const examWithResults = examAdaptator.convertExamWithAttemptsToResults(
+            examWithAttempts,
+            students,
+            { questionsChoixMultiple, questionsTrou, phrasesMelangees },
+            {
+                qcmAnswers,
+                questionTrouAnswers,
+                phraseMelangeeAnswers,
+            },
+        );
 
         return examWithResults;
     }

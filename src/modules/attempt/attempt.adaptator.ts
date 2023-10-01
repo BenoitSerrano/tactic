@@ -26,9 +26,9 @@ function convertAttemptToAttemptWithoutAnswers(
     attempt: Attempt,
     exam: Exam,
     answers: {
-        qcmAnswers: Record<number, QcmAnswer>;
-        questionTrouAnswers: Record<number, QuestionTrouAnswer>;
-        phraseMelangeeAnswers: Record<number, PhraseMelangeeAnswer>;
+        qcmAnswers: Record<QcmAnswer['id'], QcmAnswer>;
+        questionTrouAnswers: Record<QuestionTrouAnswer['id'], QuestionTrouAnswer>;
+        phraseMelangeeAnswers: Record<PhraseMelangeeAnswer['id'], PhraseMelangeeAnswer>;
     },
 ) {
     const qcmChoices: Record<number, number> = {};

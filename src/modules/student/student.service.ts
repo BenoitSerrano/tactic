@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { User } from '../user';
 import { Student } from './Student.entity';
@@ -9,6 +10,7 @@ function buildStudentService() {
     const studentService = {
         patchStudent,
         createStudents,
+        getStudents,
         getStudentsWithAttempts,
         getStudentId,
         deleteStudent,
@@ -25,6 +27,18 @@ function buildStudentService() {
         const studentsSummary =
             studentAdaptator.formatStudentsIntoStudentsSummary(studentsWithAttempts);
         return studentsSummary;
+    }
+
+    async function getStudents(studentIds: Student['id'][]) {
+        const studentRepository = dataSource.getRepository(Student);
+
+        const students = await studentRepository.find({
+            where: { id: In(studentIds) },
+            select: { id: true, email: true },
+        });
+        return students.reduce((acc, student) => {
+            return { ...acc, [student.id]: student };
+        }, {} as Record<string, Student>);
     }
 
     async function getStudentId(email: string) {
