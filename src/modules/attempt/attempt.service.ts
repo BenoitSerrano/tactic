@@ -138,48 +138,18 @@ function buildAttemptService() {
         const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
         const examService = buildExamService();
 
-        console.time('attempt-without-answer');
-
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
                 id: true,
-                // exam: {
-                //     id: true,
-                //     duration: true,
-                //     extraTime: true,
-                //     name: true,
-                //     questionsChoixMultiple: {
-                //         id: true,
-                //         order: true,
-                //         possibleAnswers: true,
-                //         title: true,
-                //     },
-                //     questionsTrou: { id: true, beforeText: true, afterText: true, order: true },
-                //     phrasesMelangees: { id: true, order: true, words: true, shuffledPhrase: true },
-                // },
                 exam: { id: true },
                 phraseMelangeAnswers: { id: true },
                 qcmAnswers: { id: true },
                 questionTrouAnswers: { id: true },
                 startedAt: true,
             },
-            // order: {
-            //     exam: {
-            //         questionsChoixMultiple: { order: 'ASC' },
-            //         questionsTrou: { order: 'ASC' },
-            //         phrasesMelangees: { order: 'ASC' },
-            //     },
-            // },
-            relations: [
-                'exam',
-                'qcmAnswers',
-                'questionTrouAnswers',
-                'phraseMelangeAnswers',
-                // 'exam.questionsChoixMultiple',
-                // 'exam.questionsTrou',
-                // 'exam.phrasesMelangees',
-            ],
+
+            relations: ['exam', 'qcmAnswers', 'questionTrouAnswers', 'phraseMelangeAnswers'],
         });
 
         const exam = await examService.getExam(attempt.exam.id);
@@ -201,7 +171,6 @@ function buildAttemptService() {
             questionTrouAnswers,
             phraseMelangeeAnswers,
         });
-        console.timeEnd('attempt-without-answer');
 
         return result;
     }
