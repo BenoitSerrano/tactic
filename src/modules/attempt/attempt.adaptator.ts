@@ -1,3 +1,4 @@
+import { Exam } from '../exam';
 import { phraseMelangeeAnswersType } from '../phraseMelangee';
 import { PhraseMelangeeAnswer, phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
 import { QcmAnswer, qcmAnswerAdaptator, qcmChoicesType } from '../qcmAnswer';
@@ -23,6 +24,7 @@ function computeTreatmentStatusSummary(attempts: Attempt[]) {
 
 function convertAttemptToAttemptWithoutAnswers(
     attempt: Attempt,
+    exam: Exam,
     answers: {
         qcmAnswers: Record<number, QcmAnswer>;
         questionTrouAnswers: Record<number, QuestionTrouAnswer>;
@@ -52,21 +54,19 @@ function convertAttemptToAttemptWithoutAnswers(
         startedAt: attempt.startedAt,
         updatedAt: attempt.updatedAt,
         exam: {
-            id: attempt.exam.id,
-            name: attempt.exam.name,
-            duration: attempt.exam.duration,
-            extraTime: attempt.exam.extraTime,
-            questionsChoixMultiple: attempt.exam.questionsChoixMultiple.map(
-                (questionChoixMultiple) => ({
-                    ...questionChoixMultiple,
-                    choice: qcmChoices[questionChoixMultiple.id],
-                }),
-            ),
-            questionsTrou: attempt.exam.questionsTrou.map((questionTrou) => ({
+            id: exam.id,
+            name: exam.name,
+            duration: exam.duration,
+            extraTime: exam.extraTime,
+            questionsChoixMultiple: exam.questionsChoixMultiple.map((questionChoixMultiple) => ({
+                ...questionChoixMultiple,
+                choice: qcmChoices[questionChoixMultiple.id],
+            })),
+            questionsTrou: exam.questionsTrou.map((questionTrou) => ({
                 ...questionTrou,
                 answer: questionTrouAnswers[questionTrou.id],
             })),
-            phrasesMelangees: attempt.exam.phrasesMelangees.map((phraseMelangee) => ({
+            phrasesMelangees: exam.phrasesMelangees.map((phraseMelangee) => ({
                 ...phraseMelangee,
                 answer: phraseMelangeeAnswers[phraseMelangee.id],
             })),

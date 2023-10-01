@@ -1,5 +1,5 @@
 import { dataSource } from '../../dataSource';
-import { Exam } from '../exam';
+import { Exam, buildExamService } from '../exam';
 import { phraseMelangeeAnswersType } from '../phraseMelangee';
 import { buildPhraseMelangeeAnswerService } from '../phraseMelangeeAnswer';
 import { buildQcmAnswerService, qcmChoicesType } from '../qcmAnswer';
@@ -136,48 +136,53 @@ function buildAttemptService() {
         const qcmAnswerService = buildQcmAnswerService();
         const questionTrouAnswerService = buildQuestionTrouAnswerService();
         const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
+        const examService = buildExamService();
 
         console.time('attempt-without-answer');
+
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
                 id: true,
-                exam: {
-                    id: true,
-                    duration: true,
-                    extraTime: true,
-                    name: true,
-                    questionsChoixMultiple: {
-                        id: true,
-                        order: true,
-                        possibleAnswers: true,
-                        title: true,
-                    },
-                    questionsTrou: { id: true, beforeText: true, afterText: true, order: true },
-                    phrasesMelangees: { id: true, order: true, words: true, shuffledPhrase: true },
-                },
+                // exam: {
+                //     id: true,
+                //     duration: true,
+                //     extraTime: true,
+                //     name: true,
+                //     questionsChoixMultiple: {
+                //         id: true,
+                //         order: true,
+                //         possibleAnswers: true,
+                //         title: true,
+                //     },
+                //     questionsTrou: { id: true, beforeText: true, afterText: true, order: true },
+                //     phrasesMelangees: { id: true, order: true, words: true, shuffledPhrase: true },
+                // },
+                exam: { id: true },
                 phraseMelangeAnswers: { id: true },
                 qcmAnswers: { id: true },
                 questionTrouAnswers: { id: true },
                 startedAt: true,
             },
-            order: {
-                exam: {
-                    questionsChoixMultiple: { order: 'ASC' },
-                    questionsTrou: { order: 'ASC' },
-                    phrasesMelangees: { order: 'ASC' },
-                },
-            },
+            // order: {
+            //     exam: {
+            //         questionsChoixMultiple: { order: 'ASC' },
+            //         questionsTrou: { order: 'ASC' },
+            //         phrasesMelangees: { order: 'ASC' },
+            //     },
+            // },
             relations: [
                 'exam',
                 'qcmAnswers',
                 'questionTrouAnswers',
                 'phraseMelangeAnswers',
-                'exam.questionsChoixMultiple',
-                'exam.questionsTrou',
-                'exam.phrasesMelangees',
+                // 'exam.questionsChoixMultiple',
+                // 'exam.questionsTrou',
+                // 'exam.phrasesMelangees',
             ],
         });
+
+        const exam = await examService.getExam(attempt.exam.id);
 
         const qcmAnswerIds = attempt.qcmAnswers.map(({ id }) => id);
         const questionTrouAnswerIds = attempt.questionTrouAnswers.map(({ id }) => id);
@@ -191,7 +196,7 @@ function buildAttemptService() {
             phraseMelangeeAnswerIds,
         );
 
-        const result = attemptAdaptator.convertAttemptToAttemptWithoutAnswers(attempt, {
+        const result = attemptAdaptator.convertAttemptToAttemptWithoutAnswers(attempt, exam, {
             qcmAnswers,
             questionTrouAnswers,
             phraseMelangeeAnswers,
