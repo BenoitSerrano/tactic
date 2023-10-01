@@ -137,6 +137,7 @@ function buildAttemptService() {
         const questionTrouAnswerService = buildQuestionTrouAnswerService();
         const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
 
+        console.time('attempt-without-answer');
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
@@ -195,6 +196,7 @@ function buildAttemptService() {
             questionTrouAnswers,
             phraseMelangeeAnswers,
         });
+        console.timeEnd('attempt-without-answer');
 
         return result;
     }
