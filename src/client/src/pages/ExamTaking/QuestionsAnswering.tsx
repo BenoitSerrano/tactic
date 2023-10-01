@@ -7,6 +7,8 @@ import { phraseMelangeeType, questionChoixMultipleType, questionTrouType } from 
 
 type qcmChoicesType = Record<number, number>;
 
+type questionTrouAnswersType = Record<number, string>;
+
 function QuestionsAnswering(props: {
     attemptId: string;
     questionsChoixMultiple: Array<questionChoixMultipleType>;
@@ -17,13 +19,19 @@ function QuestionsAnswering(props: {
         return { ...acc, [questionChoixMultiple.id]: questionChoixMultiple.choice };
     }, {} as qcmChoicesType);
 
-    const [qcmChoices, setQcmChoices] = useState<qcmChoicesType>(initialQcmChoices);
+    const initialQuestionTrouAnswers = props.questionsTrou.reduce((acc, questionTrou) => {
+        return { ...acc, [questionTrou.id]: questionTrou.answer };
+    }, {} as questionTrouAnswersType);
+
+    const [qcmChoices, setQcmChoices] = useState(initialQcmChoices);
+
+    const [questionTrouAnswers, setQuestionTrouAnswers] = useState(initialQuestionTrouAnswers);
 
     return (
         <Container>
             {props.questionsChoixMultiple.map((questionChoixMultiple, index: number) => (
                 <QuestionChoixMultipleAnswering
-                    setChoice={buildSetChoice(questionChoixMultiple.id)}
+                    setChoice={buildSetQcmChoice(questionChoixMultiple.id)}
                     choice={qcmChoices[questionChoixMultiple.id]}
                     key={questionChoixMultiple.id}
                     attemptId={props.attemptId}
@@ -34,6 +42,8 @@ function QuestionsAnswering(props: {
 
             {props.questionsTrou.map((questionTrou, index: number) => (
                 <QuestionTrouAnswering
+                    setAnswer={buildSetQuestionTrouAnswer(questionTrou.id)}
+                    answer={questionTrouAnswers[questionTrou.id]}
                     key={questionTrou.id}
                     attemptId={props.attemptId}
                     index={index}
@@ -51,8 +61,13 @@ function QuestionsAnswering(props: {
         </Container>
     );
 
-    function buildSetChoice(qcmId: number) {
+    function buildSetQcmChoice(qcmId: number) {
         return (choice: number) => setQcmChoices({ ...qcmChoices, [qcmId]: choice });
+    }
+
+    function buildSetQuestionTrouAnswer(questionTrouId: number) {
+        return (answer: string) =>
+            setQuestionTrouAnswers({ ...questionTrouAnswers, [questionTrouId]: answer });
     }
 }
 

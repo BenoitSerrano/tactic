@@ -1,51 +1,26 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { debounce } from '../../lib/utils';
-import { api } from '../../lib/api';
+import React from 'react';
 import { TextField, Typography, styled } from '@mui/material';
-import { useTimeoutAlert } from './useTimeoutAlert';
 import { questionTrouType } from './types';
 
 function QuestionTrouAnswering(props: {
     questionTrou: questionTrouType;
     index: number;
     attemptId: string;
+    answer: string;
+    setAnswer: (answer: string) => void;
 }) {
-    const [answer, setAnswer] = useState(props.questionTrou.answer);
-    const { displayTimeoutAlert } = useTimeoutAlert();
-    const queryClient = useQueryClient();
-
-    const createOrUpdateQuestionTrouAnswerMutation = useMutation({
-        mutationFn: api.createOrUpdateQuestionTrouAnswer,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['attempts-without-answers'] });
-        },
-        onError: async (error) => {
-            console.warn(error);
-            displayTimeoutAlert();
-        },
-    });
-
     return (
         <StyledContainer>
             <Typography>
                 {props.index + 1}. {props.questionTrou.beforeText}
             </Typography>
-            <StyledTextField value={answer} onChange={onChangeAnswer} placeholder="..." />
+            <StyledTextField value={props.answer} onChange={onChangeAnswer} placeholder="..." />
             <Typography>{props.questionTrou.afterText}</Typography>
         </StyledContainer>
     );
 
     function onChangeAnswer(event: React.ChangeEvent<HTMLInputElement>) {
-        setAnswer(event.target.value);
-
-        debounce((newAnswer: string) => {
-            return createOrUpdateQuestionTrouAnswerMutation.mutate({
-                attemptId: props.attemptId,
-                questionTrouId: props.questionTrou.id,
-                answer: newAnswer,
-            });
-        })(event.target.value);
+        props.setAnswer(event.target.value);
     }
 }
 
