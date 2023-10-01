@@ -1,3 +1,4 @@
+import { Attempt } from '../attempt';
 import { attemptAdaptator } from '../attempt/attempt.adaptator';
 import { PhraseMelangee } from '../phraseMelangee';
 import { PhraseMelangeeAnswer, phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
@@ -14,7 +15,7 @@ const examAdaptator = {
 };
 
 function convertExamWithAttemptsToResults(
-    examWithAttempts: Exam,
+    attempts: Attempt[],
     students: Record<Student['id'], Pick<Student, 'id' | 'email'>>,
     questions: {
         questionsChoixMultiple: Record<QuestionChoixMultiple['id'], QuestionChoixMultiple>;
@@ -27,10 +28,8 @@ function convertExamWithAttemptsToResults(
         phraseMelangeeAnswers: Record<PhraseMelangeeAnswer['id'], PhraseMelangeeAnswer>;
     },
 ) {
-    const treatmentStatusSummary = attemptAdaptator.computeTreatmentStatusSummary(
-        examWithAttempts.attempts,
-    );
-    const examWithResults = examWithAttempts.attempts.map((attempt) => {
+    const treatmentStatusSummary = attemptAdaptator.computeTreatmentStatusSummary(attempts);
+    const examWithResults = attempts.map((attempt) => {
         const studentId = attempt.student.id;
         const student = students[studentId];
         const startedAtDate = new Date(attempt.startedAt);
@@ -65,15 +64,15 @@ function convertExamWithAttemptsToResults(
         };
         return result;
     });
-    const qcmTotalPoints = examWithAttempts.questionsChoixMultiple.reduce(
+    const qcmTotalPoints = Object.values(questions.questionsChoixMultiple).reduce(
         (sum, summary) => sum + summary.points,
         0,
     );
-    const questionTrouTotalPoints = examWithAttempts.questionsTrou.reduce(
+    const questionTrouTotalPoints = Object.values(questions.questionsTrou).reduce(
         (sum, summary) => sum + summary.points,
         0,
     );
-    const phraseMelangeeTotalPoints = examWithAttempts.phrasesMelangees.reduce(
+    const phraseMelangeeTotalPoints = Object.values(questions.phrasesMelangees).reduce(
         (sum, summary) => sum + summary.points,
         0,
     );

@@ -57,65 +57,48 @@ function buildExamService() {
         const questionTrouService = buildQuestionTrouService();
         const phraseMelangeeService = buildPhraseMelangeeService();
 
-        const examWithAttempts = await examRepository.findOneOrFail({
+        const exam = await examRepository.findOneOrFail({
+            where: { id: examId },
+            select: {
+                phrasesMelangees: { id: true },
+                questionsTrou: { id: true },
+                questionsChoixMultiple: { id: true },
+            },
+            relations: ['questionsChoixMultiple', 'questionsTrou', 'phrasesMelangees'],
+        });
+        const attempts = await examRepository.findOneOrFail({
             where: { id: examId },
             select: {
                 attempts: {
+                    id: true,
                     startedAt: true,
                     updatedAt: true,
-                    id: true,
                     student: { id: true },
                     qcmAnswers: { id: true },
                     phraseMelangeAnswers: { id: true },
                     questionTrouAnswers: { id: true },
-
-                    // student: { id: true, email: true, comment: true },
-                    // qcmAnswers: { id: true, choice: true, questionChoixMultiple: { id: true } },
                     hasBeenTreated: true,
-                    // phraseMelangeAnswers: { id: true, answer: true, phraseMelangee: { id: true } },
-                    // questionTrouAnswers: { id: true, answer: true, questionTrou: { id: true } },
                     roundTrips: true,
                     timeSpentOutside: true,
                 },
-                phrasesMelangees: { id: true },
-                questionsTrou: { id: true },
-                questionsChoixMultiple: { id: true },
-                // phrasesMelangees: { id: true, points: true, correctPhrases: true },
-                // questionsTrou: {
-                //     id: true,
-                //     points: true,
-                //     acceptableAnswers: true,
-                //     rightAnswers: true,
-                // },
-                // questionsChoixMultiple: {
-                //     id: true,
-                //     points: true,
-                //     rightAnswerIndex: true,
-                // },
             },
             relations: [
                 'attempts',
                 'attempts.student',
-                'questionsChoixMultiple',
-                'questionsTrou',
-                'phrasesMelangees',
                 'attempts.qcmAnswers',
-                // 'attempts.qcmAnswers.questionChoixMultiple',
                 'attempts.questionTrouAnswers',
-                // 'attempts.questionTrouAnswers.questionTrou',
                 'attempts.phraseMelangeAnswers',
-                // 'attempts.phraseMelangeAnswers.phraseMelangee',
             ],
         });
-        const studentIds = examWithAttempts.attempts.map((attempt) => attempt.student.id);
+        const studentIds = attempts.attempts.map((attempt) => attempt.student.id);
         const students = await studentService.getStudents(studentIds);
 
-        const qcmAnswerIds = examWithAttempts.attempts.reduce((acc, attempt) => {
+        const qcmAnswerIds = attempts.attempts.reduce((acc, attempt) => {
             return [...acc, ...attempt.qcmAnswers.map((qcmAnswer) => qcmAnswer.id)];
         }, [] as number[]);
         const qcmAnswers = await qcmAnswerService.getQcmAnswers(qcmAnswerIds);
 
-        const questionTrouAnswerIds = examWithAttempts.attempts.reduce((acc, attempt) => {
+        const questionTrouAnswerIds = attempts.attempts.reduce((acc, attempt) => {
             return [
                 ...acc,
                 ...attempt.questionTrouAnswers.map((questionTrouAnswer) => questionTrouAnswer.id),
@@ -125,7 +108,7 @@ function buildExamService() {
             questionTrouAnswerIds,
         );
 
-        const phraseMelangeeAnswerIds = examWithAttempts.attempts.reduce((acc, attempt) => {
+        const phraseMelangeeAnswerIds = attempts.attempts.reduce((acc, attempt) => {
             return [
                 ...acc,
                 ...attempt.phraseMelangeAnswers.map(
@@ -137,21 +120,17 @@ function buildExamService() {
             phraseMelangeeAnswerIds,
         );
 
-        const qcmIds = examWithAttempts.questionsChoixMultiple.map((qcm) => qcm.id);
+        const qcmIds = exam.questionsChoixMultiple.map((qcm) => qcm.id);
         const questionsChoixMultiple = await qcmService.getQuestionsChoixMultiples(qcmIds);
 
-        const questionTrouIds = examWithAttempts.questionsTrou.map(
-            (questionTrou) => questionTrou.id,
-        );
+        const questionTrouIds = exam.questionsTrou.map((questionTrou) => questionTrou.id);
         const questionsTrou = await questionTrouService.getQuestionsTrou(questionTrouIds);
 
-        const phraseMelangeeIds = examWithAttempts.phrasesMelangees.map(
-            (phraseMelangee) => phraseMelangee.id,
-        );
+        const phraseMelangeeIds = exam.phrasesMelangees.map((phraseMelangee) => phraseMelangee.id);
         const phrasesMelangees = await phraseMelangeeService.getPhrasesMelangees(phraseMelangeeIds);
 
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(
-            examWithAttempts,
+            attempts.attempts,
             students,
             { questionsChoixMultiple, questionsTrou, phrasesMelangees },
             {
