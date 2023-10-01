@@ -9,6 +9,8 @@ type qcmChoicesType = Record<number, number>;
 
 type questionTrouAnswersType = Record<number, string>;
 
+type phraseMelangeeAnswersType = Record<number, string>;
+
 function QuestionsAnswering(props: {
     attemptId: string;
     questionsChoixMultiple: Array<questionChoixMultipleType>;
@@ -23,9 +25,15 @@ function QuestionsAnswering(props: {
         return { ...acc, [questionTrou.id]: questionTrou.answer };
     }, {} as questionTrouAnswersType);
 
+    const initialPhraseMelangeAnswers = props.phrasesMelangees.reduce((acc, phraseMelangee) => {
+        return { ...acc, [phraseMelangee.id]: phraseMelangee.answer };
+    }, {} as phraseMelangeeAnswersType);
+
     const [qcmChoices, setQcmChoices] = useState(initialQcmChoices);
 
     const [questionTrouAnswers, setQuestionTrouAnswers] = useState(initialQuestionTrouAnswers);
+
+    const [phraseMelangeeAnswers, setPhraseMelangeeAnswers] = useState(initialPhraseMelangeAnswers);
 
     return (
         <Container>
@@ -52,6 +60,8 @@ function QuestionsAnswering(props: {
             ))}
             {props.phrasesMelangees.map((phraseMelangee, index: number) => (
                 <PhraseMelangeeAnswering
+                    answer={phraseMelangeeAnswers[phraseMelangee.id]}
+                    setAnswer={buildSetPhraseMelangeeAnswer(phraseMelangee.id)}
                     key={phraseMelangee.id}
                     attemptId={props.attemptId}
                     index={index}
@@ -68,6 +78,11 @@ function QuestionsAnswering(props: {
     function buildSetQuestionTrouAnswer(questionTrouId: number) {
         return (answer: string) =>
             setQuestionTrouAnswers({ ...questionTrouAnswers, [questionTrouId]: answer });
+    }
+
+    function buildSetPhraseMelangeeAnswer(phraseMelangeeId: number) {
+        return (answer: string) =>
+            setPhraseMelangeeAnswers({ ...phraseMelangeeAnswers, [phraseMelangeeId]: answer });
     }
 }
 
