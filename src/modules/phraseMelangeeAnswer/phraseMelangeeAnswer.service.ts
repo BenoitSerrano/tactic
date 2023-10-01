@@ -1,43 +1,40 @@
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
-import { buildAttemptService } from '../attempt/attempt.service';
-import { PhraseMelangee } from '../phraseMelangee';
+import { phraseMelangeeAnswersType, buildPhraseMelangeeService } from '../phraseMelangee';
 import { PhraseMelangeeAnswer } from './PhraseMelangeeAnswer.entity';
 
 export { buildPhraseMelangeeAnswerService };
 
 function buildPhraseMelangeeAnswerService() {
     const phraseMelangeeAnswerService = {
-        createOrUpdatePhraseMelangeeAnswer,
+        updatePhraseMelangeeAnswers,
     };
 
     return phraseMelangeeAnswerService;
 
-    async function createOrUpdatePhraseMelangeeAnswer(
-        attemptId: string,
-        phraseMelangeeId: number,
-        answer: string,
+    async function updatePhraseMelangeeAnswers(
+        attempt: Attempt,
+        phraseMelangeeAnswers: phraseMelangeeAnswersType,
     ) {
-        const phraseMelangeeRepository = dataSource.getRepository(PhraseMelangee);
-        const attemptRepository = dataSource.getRepository(Attempt);
+        const phraseMelangeeService = buildPhraseMelangeeService();
         const phraseMelangeeAnswerRepository = dataSource.getRepository(PhraseMelangeeAnswer);
-        const attemptService = buildAttemptService();
+        //TODO
+        const phraseMelangeeIds = Object.keys(phraseMelangeeAnswers) as unknown as number[];
 
-        const attempt = await attemptRepository.findOneOrFail({
-            where: { id: attemptId },
-            relations: ['exam'],
-        });
+        const questionsChoixMultiple = await phraseMelangeeService.getPhrasesMelangees(
+            phraseMelangeeIds,
+        );
 
-        await attemptService.assertIsTimeLimitNotExceeded(attempt);
-        await attemptService.updateAttemptDuration(attempt.id);
-
-        const phraseMelangee = await phraseMelangeeRepository.findOneByOrFail({
-            id: phraseMelangeeId,
-        });
-
-        return phraseMelangeeAnswerRepository.upsert({ attempt, phraseMelangee, answer }, [
-            'phraseMelangee',
-            'attempt',
-        ]);
+        return Promise.all(
+            // TODO
+            Object.keys(phraseMelangeeAnswers).map((phraseMelangeeId: any) => {
+                const answer = phraseMelangeeAnswers[phraseMelangeeId];
+                const phraseMelangee = questionsChoixMultiple[phraseMelangeeId];
+                return phraseMelangeeAnswerRepository.upsert({ attempt, phraseMelangee, answer }, [
+                    'phraseMelangee',
+                    'attempt',
+                ]);
+            }),
+        );
     }
 }

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { styled } from '@mui/material';
+import { Button, styled } from '@mui/material';
 import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
 import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
 import { QuestionTrouAnswering } from './QuestionTrouAnswering';
 import { phraseMelangeeType, questionChoixMultipleType, questionTrouType } from './types';
+import { useMutation } from '@tanstack/react-query';
+import { api } from '../../lib/api';
 
 type qcmChoicesType = Record<number, number>;
 
@@ -16,17 +18,25 @@ function QuestionsAnswering(props: {
     questionsChoixMultiple: Array<questionChoixMultipleType>;
     questionsTrou: Array<questionTrouType>;
     phrasesMelangees: Array<phraseMelangeeType>;
+    onExamDone: () => void;
 }) {
+    const updateAttemptMutation = useMutation({
+        mutationFn: api.updateAttempt,
+        onError: (error: any) => {
+            console.error(error);
+        },
+    });
+
     const initialQcmChoices = props.questionsChoixMultiple.reduce((acc, questionChoixMultiple) => {
         return { ...acc, [questionChoixMultiple.id]: questionChoixMultiple.choice };
     }, {} as qcmChoicesType);
 
     const initialQuestionTrouAnswers = props.questionsTrou.reduce((acc, questionTrou) => {
-        return { ...acc, [questionTrou.id]: questionTrou.answer };
+        return { ...acc, [questionTrou.id]: questionTrou.answer || '' };
     }, {} as questionTrouAnswersType);
 
     const initialPhraseMelangeAnswers = props.phrasesMelangees.reduce((acc, phraseMelangee) => {
-        return { ...acc, [phraseMelangee.id]: phraseMelangee.answer };
+        return { ...acc, [phraseMelangee.id]: phraseMelangee.answer || '' };
     }, {} as phraseMelangeeAnswersType);
 
     const [qcmChoices, setQcmChoices] = useState(initialQcmChoices);
@@ -67,6 +77,10 @@ function QuestionsAnswering(props: {
                     phraseMelangee={phraseMelangee}
                 />
             ))}
+            <Button onClick={saveDraft}>Enregistrer le brouillon</Button>
+            <Button variant="contained" onClick={finishExam}>
+                Valider les réponses
+            </Button>
         </Container>
     );
 
@@ -82,6 +96,20 @@ function QuestionsAnswering(props: {
     function buildSetPhraseMelangeeAnswer(phraseMelangeeId: number) {
         return (answer: string) =>
             setPhraseMelangeeAnswers({ ...phraseMelangeeAnswers, [phraseMelangeeId]: answer });
+    }
+
+    function saveDraft() {
+        updateAttemptMutation.mutate({
+            attemptId: props.attemptId,
+            qcmChoices,
+            questionTrouAnswers,
+            phraseMelangeeAnswers,
+        });
+    }
+
+    function finishExam() {
+        saveDraft();
+        props.onExamDone();
     }
 }
 

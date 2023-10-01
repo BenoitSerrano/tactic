@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { buildExamService } from '../exam/exam.service';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
@@ -9,6 +10,7 @@ function buildQuestionChoixMultipleService() {
     const questionChoixMultipleService = {
         createQuestionChoixMultiple,
         updateQuestionChoixMultiple,
+        getQuestionsChoixMultiples,
     };
 
     return questionChoixMultipleService;
@@ -75,5 +77,14 @@ function buildQuestionChoixMultipleService() {
         questionChoixMultiple.points = points;
 
         return questionChoixMultipleRepository.save(questionChoixMultiple);
+    }
+
+    async function getQuestionsChoixMultiples(qcmIds: number[]) {
+        const questionsChoixMultiple = await questionChoixMultipleRepository.find({
+            where: { id: In(qcmIds) },
+        });
+        return questionsChoixMultiple.reduce((acc, questionChoixMultiple) => {
+            return { ...acc, [questionChoixMultiple.id]: questionChoixMultiple };
+        }, {} as Record<number, QuestionChoixMultiple>);
     }
 }

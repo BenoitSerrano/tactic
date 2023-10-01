@@ -1,5 +1,10 @@
 import { dataSource } from '../../dataSource';
 import { Exam } from '../exam';
+import { phraseMelangeeAnswersType } from '../phraseMelangee';
+import { buildPhraseMelangeeAnswerService } from '../phraseMelangeeAnswer';
+import { buildQcmAnswerService, qcmChoicesType } from '../qcmAnswer';
+import { buildQuestionTrouAnswerService } from '../questionTrouAnswer';
+import { questionTrouAnswersType } from '../questionTrouAnswer/types';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
@@ -7,11 +12,20 @@ import { attemptUtils } from './attempt.utils';
 
 export { buildAttemptService };
 
+export type { attemptAnswersType };
+
+type attemptAnswersType = {
+    qcmChoices: qcmChoicesType;
+    questionTrouAnswers: questionTrouAnswersType;
+    phraseMelangeeAnswers: phraseMelangeeAnswersType;
+};
+
 function buildAttemptService() {
     const studentService = {
         searchAttempts,
         createAttempt,
         createEmptyAttempt,
+        updateAttempt,
         fetchAttempt,
         fetchAttemptWithoutAnswers,
         deleteAttempt,
@@ -60,6 +74,30 @@ function buildAttemptService() {
         });
 
         return attempt;
+    }
+
+    async function updateAttempt(attemptId: string, attemptAnswers: attemptAnswersType) {
+        const attemptRepository = dataSource.getRepository(Attempt);
+        const qcmAnswerService = buildQcmAnswerService();
+        const questionTrouAnswerService = buildQuestionTrouAnswerService();
+        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
+
+        const attempt = await attemptRepository.findOneOrFail({
+            where: { id: attemptId },
+            relations: ['exam'],
+        });
+        await assertIsTimeLimitNotExceeded(attempt);
+        await updateAttemptDuration(attempt.id);
+
+        await qcmAnswerService.updateQcmChoices(attempt, attemptAnswers.qcmChoices);
+        await questionTrouAnswerService.updateQuestionTrouAnswers(
+            attempt,
+            attemptAnswers.questionTrouAnswers,
+        );
+        await phraseMelangeeAnswerService.updatePhraseMelangeeAnswers(
+            attempt,
+            attemptAnswers.phraseMelangeeAnswers,
+        );
     }
 
     async function fetchAttempt(attemptId: string) {

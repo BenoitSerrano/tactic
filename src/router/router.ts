@@ -226,6 +226,23 @@ router.get(
     buildController(attemptController.fetchAttemptWithoutAnswers),
 );
 
+router.put(
+    '/attempts/:attemptId',
+    buildController(attemptController.updateAttempt, {
+        schema: Joi.object({
+            qcmChoices: Joi.object<Record<string, number>>({}).pattern(Joi.string(), Joi.number()),
+            questionTrouAnswers: Joi.object<Record<string, string>>({}).pattern(
+                Joi.string().allow(''),
+                Joi.string().allow(''),
+            ),
+            phraseMelangeeAnswers: Joi.object<Record<string, string>>({}).pattern(
+                Joi.string().allow(''),
+                Joi.string().allow(''),
+            ),
+        }),
+    }),
+);
+
 router.patch(
     '/attempts/:attemptId/has-been-treated',
     buildController(attemptController.updateAttemptTreatmentStatus, {

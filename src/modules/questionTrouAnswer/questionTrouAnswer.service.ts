@@ -1,43 +1,39 @@
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
-import { buildAttemptService } from '../attempt/attempt.service';
-import { QuestionTrou } from '../questionTrou';
+import { buildQuestionTrouService } from '../questionTrou';
 import { QuestionTrouAnswer } from './QuestionTrouAnswer.entity';
+import { questionTrouAnswersType } from './types';
 
 export { buildQuestionTrouAnswerService };
 
 function buildQuestionTrouAnswerService() {
     const questionTrouAnswerService = {
-        createOrUpdateQuestionTrouAnswer,
+        updateQuestionTrouAnswers,
     };
 
     return questionTrouAnswerService;
 
-    async function createOrUpdateQuestionTrouAnswer(
-        attemptId: string,
-        questionTrouId: number,
-        answer: string,
+    async function updateQuestionTrouAnswers(
+        attempt: Attempt,
+        questionTrouAnswers: questionTrouAnswersType,
     ) {
-        const questionTrouRepository = dataSource.getRepository(QuestionTrou);
-        const attemptRepository = dataSource.getRepository(Attempt);
+        const questionTrouService = buildQuestionTrouService();
         const questionTrouAnswerRepository = dataSource.getRepository(QuestionTrouAnswer);
-        const attemptService = buildAttemptService();
+        //TODO
+        const questionTrouIds = Object.keys(questionTrouAnswers) as unknown as number[];
 
-        const attempt = await attemptRepository.findOneOrFail({
-            where: { id: attemptId },
-            relations: ['exam'],
-        });
+        const questionsChoixMultiple = await questionTrouService.getQuestionsTrou(questionTrouIds);
 
-        await attemptService.assertIsTimeLimitNotExceeded(attempt);
-        await attemptService.updateAttemptDuration(attempt.id);
-
-        const questionTrou = await questionTrouRepository.findOneByOrFail({
-            id: questionTrouId,
-        });
-
-        return questionTrouAnswerRepository.upsert({ attempt, questionTrou, answer }, [
-            'questionTrou',
-            'attempt',
-        ]);
+        return Promise.all(
+            // TODO
+            Object.keys(questionTrouAnswers).map((questionTrouId: any) => {
+                const answer = questionTrouAnswers[questionTrouId];
+                const questionTrou = questionsChoixMultiple[questionTrouId];
+                return questionTrouAnswerRepository.upsert({ attempt, questionTrou, answer }, [
+                    'questionTrou',
+                    'attempt',
+                ]);
+            }),
+        );
     }
 }

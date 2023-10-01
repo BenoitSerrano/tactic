@@ -1,4 +1,4 @@
-import { buildAttemptService } from './attempt.service';
+import { attemptAnswersType, buildAttemptService } from './attempt.service';
 
 export { buildAttemptController };
 
@@ -7,6 +7,7 @@ function buildAttemptController() {
     const attemptController = {
         createAttempt,
         createEmptyAttempt,
+        updateAttempt,
         searchAttempts,
         fetchAttempt,
         fetchAttemptWithoutAnswers,
@@ -19,6 +20,13 @@ function buildAttemptController() {
 
     async function searchAttempts(params: { urlParams: { examId: string; studentId: string } }) {
         return attemptService.searchAttempts(params.urlParams.examId, params.urlParams.studentId);
+    }
+
+    async function updateAttempt(params: {
+        urlParams: { attemptId: string };
+        body: attemptAnswersType;
+    }) {
+        return attemptService.updateAttempt(params.urlParams.attemptId, params.body);
     }
 
     async function createAttempt(params: { urlParams: { examId: string; studentId: string } }) {

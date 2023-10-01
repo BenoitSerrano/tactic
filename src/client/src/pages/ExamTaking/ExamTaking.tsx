@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Typography, styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { Countdown } from '../../components/Countdown';
 import { Page } from '../../components/Page';
 import { time } from '../../lib/time';
@@ -47,17 +47,13 @@ function ExamTaking() {
                     questionsTrou={query.data.exam.questionsTrou}
                     phrasesMelangees={query.data.exam.phrasesMelangees}
                     attemptId={attemptId}
+                    onExamDone={onExamDone}
                 />
-
-                <hr />
-                <Button variant="contained" onClick={validateForm}>
-                    Valider les réponses
-                </Button>
             </MainContainer>
         </Page>
     );
 
-    function validateForm() {
+    function onExamDone() {
         navigate(examDonePath);
     }
 }

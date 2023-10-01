@@ -1,39 +1,37 @@
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
-import { buildAttemptService } from '../attempt/attempt.service';
-import { QuestionChoixMultiple } from '../questionChoixMultiple';
+import { buildQuestionChoixMultipleService } from '../questionChoixMultiple/questionChoixMultiple.service';
 import { QcmAnswer } from './QcmAnswer.entity';
+import { qcmChoicesType } from './types';
 
 export { buildQcmAnswerService };
 
 function buildQcmAnswerService() {
     const qcmAnswerService = {
-        createOrUpdateQcmAnswer,
+        updateQcmChoices,
     };
 
     return qcmAnswerService;
 
-    async function createOrUpdateQcmAnswer(attemptId: string, qcmId: number, choice: number) {
-        const questionChoixMultipleRepository = dataSource.getRepository(QuestionChoixMultiple);
-        const attemptRepository = dataSource.getRepository(Attempt);
+    async function updateQcmChoices(attempt: Attempt, qcmAnswers: qcmChoicesType) {
+        const questionChoixMultipleService = buildQuestionChoixMultipleService();
         const qcmAnswerRepository = dataSource.getRepository(QcmAnswer);
-        const attemptService = buildAttemptService();
+        // TODO
+        const qcmIds = Object.keys(qcmAnswers) as unknown as number[];
 
-        const attempt = await attemptRepository.findOneOrFail({
-            where: { id: attemptId },
-            relations: ['exam'],
-        });
+        const questionsChoixMultiple =
+            await questionChoixMultipleService.getQuestionsChoixMultiples(qcmIds);
 
-        await attemptService.assertIsTimeLimitNotExceeded(attempt);
-        await attemptService.updateAttemptDuration(attempt.id);
-
-        const questionChoixMultiple = await questionChoixMultipleRepository.findOneByOrFail({
-            id: qcmId,
-        });
-
-        return qcmAnswerRepository.upsert({ attempt, questionChoixMultiple, choice }, [
-            'questionChoixMultiple',
-            'attempt',
-        ]);
+        return Promise.all(
+            // TODO
+            Object.keys(qcmAnswers).map((qcmId: any) => {
+                const choice = qcmAnswers[qcmId];
+                const questionChoixMultiple = questionsChoixMultiple[qcmId];
+                return qcmAnswerRepository.upsert({ attempt, questionChoixMultiple, choice }, [
+                    'questionChoixMultiple',
+                    'attempt',
+                ]);
+            }),
+        );
     }
 }

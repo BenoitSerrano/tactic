@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Typography, styled } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Page } from '../components/Page';
-import { Modal } from '../components/Modal';
 
 function StudentHome() {
     const params = useParams();

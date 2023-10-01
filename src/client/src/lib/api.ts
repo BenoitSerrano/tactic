@@ -10,6 +10,7 @@ const api = {
     createEmptyAttempt,
     fetchAttempt,
     fetchAttemptWithoutAnswers,
+    updateAttempt,
     updateAttemptTreatementStatus,
     updateAttemptCheatingSummary,
     deleteAttempt,
@@ -100,6 +101,21 @@ async function fetchAttempt(attemptId: string) {
 async function fetchAttemptWithoutAnswers(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}/without-answers`;
     return performApiCall(URL, 'GET');
+}
+
+async function updateAttempt({
+    attemptId,
+    qcmChoices,
+    questionTrouAnswers,
+    phraseMelangeeAnswers,
+}: {
+    attemptId: string;
+    qcmChoices: Record<number, number>;
+    questionTrouAnswers: Record<number, string>;
+    phraseMelangeeAnswers: Record<number, string>;
+}) {
+    const URL = `${BASE_URL}/attempts/${attemptId}`;
+    return performApiCall(URL, 'PUT', { qcmChoices, questionTrouAnswers, phraseMelangeeAnswers });
 }
 
 async function updateAttemptTreatementStatus({
