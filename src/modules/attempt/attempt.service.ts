@@ -133,6 +133,9 @@ function buildAttemptService() {
 
     async function fetchAttemptWithoutAnswers(attemptId: string) {
         const attemptRepository = dataSource.getRepository(Attempt);
+        const qcmAnswerService = buildQcmAnswerService();
+        const questionTrouAnswerService = buildQuestionTrouAnswerService();
+        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
 
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
@@ -152,9 +155,9 @@ function buildAttemptService() {
                     questionsTrou: { id: true, beforeText: true, afterText: true, order: true },
                     phrasesMelangees: { id: true, order: true, words: true, shuffledPhrase: true },
                 },
-                phraseMelangeAnswers: { answer: true, id: true, phraseMelangee: { id: true } },
-                qcmAnswers: { choice: true, id: true, questionChoixMultiple: { id: true } },
-                questionTrouAnswers: { answer: true, id: true },
+                phraseMelangeAnswers: { id: true },
+                qcmAnswers: { id: true },
+                questionTrouAnswers: { id: true },
                 startedAt: true,
             },
             order: {
@@ -167,18 +170,33 @@ function buildAttemptService() {
             relations: [
                 'exam',
                 'qcmAnswers',
-                'qcmAnswers.questionChoixMultiple',
                 'questionTrouAnswers',
-                'questionTrouAnswers.questionTrou',
                 'phraseMelangeAnswers',
-                'phraseMelangeAnswers.phraseMelangee',
                 'exam.questionsChoixMultiple',
                 'exam.questionsTrou',
                 'exam.phrasesMelangees',
             ],
         });
 
-        return attemptAdaptator.convertAttemptToAttemptWithoutAnswers(attempt);
+        const qcmAnswerIds = attempt.qcmAnswers.map(({ id }) => id);
+        const questionTrouAnswerIds = attempt.questionTrouAnswers.map(({ id }) => id);
+        const phraseMelangeeAnswerIds = attempt.phraseMelangeAnswers.map(({ id }) => id);
+
+        const qcmAnswers = await qcmAnswerService.getQcmAnswers(qcmAnswerIds);
+        const questionTrouAnswers = await questionTrouAnswerService.getQuestionTrouAnswers(
+            questionTrouAnswerIds,
+        );
+        const phraseMelangeeAnswers = await phraseMelangeeAnswerService.getPhraseMelangeeAnswers(
+            phraseMelangeeAnswerIds,
+        );
+
+        const result = attemptAdaptator.convertAttemptToAttemptWithoutAnswers(attempt, {
+            qcmAnswers,
+            questionTrouAnswers,
+            phraseMelangeeAnswers,
+        });
+
+        return result;
     }
 
     async function assertIsTimeLimitNotExceeded(attempt: Attempt) {

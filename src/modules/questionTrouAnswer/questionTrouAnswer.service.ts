@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
 import { buildQuestionTrouService } from '../questionTrou';
@@ -8,10 +9,24 @@ export { buildQuestionTrouAnswerService };
 
 function buildQuestionTrouAnswerService() {
     const questionTrouAnswerService = {
+        getQuestionTrouAnswers,
         updateQuestionTrouAnswers,
     };
 
     return questionTrouAnswerService;
+
+    async function getQuestionTrouAnswers(questionTrouAnswerIds: number[]) {
+        const questionTrouAnswerRepository = dataSource.getRepository(QuestionTrouAnswer);
+
+        const questionTrouAnswers = await questionTrouAnswerRepository.find({
+            where: { id: In(questionTrouAnswerIds) },
+            relations: ['questionTrou'],
+            select: { questionTrou: { id: true } },
+        });
+        return questionTrouAnswers.reduce((acc, questionTrouAnswer) => {
+            return { ...acc, [questionTrouAnswer.id]: questionTrouAnswer };
+        }, {} as Record<number, QuestionTrouAnswer>);
+    }
 
     async function updateQuestionTrouAnswers(
         attempt: Attempt,

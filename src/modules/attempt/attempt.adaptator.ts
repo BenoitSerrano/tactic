@@ -1,6 +1,9 @@
-import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
-import { qcmAnswerAdaptator } from '../qcmAnswer';
+import { phraseMelangeeAnswersType } from '../phraseMelangee';
+import { PhraseMelangeeAnswer, phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
+import { QcmAnswer, qcmAnswerAdaptator, qcmChoicesType } from '../qcmAnswer';
+import { QuestionTrouAnswer } from '../questionTrouAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
+import { questionTrouAnswersType } from '../questionTrouAnswer/types';
 import { Attempt } from './Attempt.entity';
 
 const attemptAdaptator = {
@@ -18,23 +21,30 @@ function computeTreatmentStatusSummary(attempts: Attempt[]) {
     return treatmentStatusSummary;
 }
 
-function convertAttemptToAttemptWithoutAnswers(attempt: Attempt) {
+function convertAttemptToAttemptWithoutAnswers(
+    attempt: Attempt,
+    answers: {
+        qcmAnswers: Record<number, QcmAnswer>;
+        questionTrouAnswers: Record<number, QuestionTrouAnswer>;
+        phraseMelangeeAnswers: Record<number, PhraseMelangeeAnswer>;
+    },
+) {
     const qcmChoices: Record<number, number> = {};
-    attempt.qcmAnswers.forEach((qcmAnswer) => {
+    Object.values(answers.qcmAnswers).forEach((qcmAnswer) => {
         const id = qcmAnswer.questionChoixMultiple.id;
         qcmChoices[id] = qcmAnswer.choice;
     });
 
     const questionTrouAnswers: Record<number, string> = {};
-    attempt.questionTrouAnswers.forEach((questionTrouAnswer) => {
+    Object.values(answers.questionTrouAnswers).forEach((questionTrouAnswer) => {
         const id = questionTrouAnswer.questionTrou.id;
         questionTrouAnswers[id] = questionTrouAnswer.answer;
     });
 
     const phraseMelangeeAnswers: Record<number, string> = {};
-    attempt.phraseMelangeAnswers.forEach((phraseMelangeAnswer) => {
-        const id = phraseMelangeAnswer.phraseMelangee.id;
-        phraseMelangeeAnswers[id] = phraseMelangeAnswer.answer;
+    Object.values(answers.phraseMelangeeAnswers).forEach((phraseMelangeeAnswer) => {
+        const id = phraseMelangeeAnswer.phraseMelangee.id;
+        phraseMelangeeAnswers[id] = phraseMelangeeAnswer.answer;
     });
 
     return {
