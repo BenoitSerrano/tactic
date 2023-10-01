@@ -8,13 +8,14 @@ import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
 import { api } from '../../lib/api';
 import { QuestionsAnswering } from './QuestionsAnswering';
+import { attemptWithoutAnswersType } from './types';
 
 function ExamTaking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
     const studentId = params.studentId as string;
     const navigate = useNavigate();
-    const query = useQuery(['attempts-without-answers', attemptId], () =>
+    const query = useQuery<attemptWithoutAnswersType>(['attempts-without-answers', attemptId], () =>
         api.fetchAttemptWithoutAnswers(attemptId),
     );
 

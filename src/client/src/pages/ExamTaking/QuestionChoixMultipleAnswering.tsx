@@ -3,14 +3,10 @@ import React, { ChangeEvent, useState } from 'react';
 import { api } from '../../lib/api';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { useTimeoutAlert } from './useTimeoutAlert';
+import { questionChoixMultipleType } from './types';
 
 function QuestionChoixMultipleAnswering(props: {
-    questionChoixMultiple: {
-        id: number;
-        title: string;
-        possibleAnswers: string[];
-        choice: number;
-    };
+    questionChoixMultiple: questionChoixMultipleType;
     index: number;
     attemptId: string;
 }) {

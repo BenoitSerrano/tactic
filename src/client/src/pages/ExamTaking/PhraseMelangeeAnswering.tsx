@@ -3,13 +3,10 @@ import { Typography, styled } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 import { useTimeoutAlert } from './useTimeoutAlert';
+import { phraseMelangeeType } from './types';
 
 function PhraseMelangeeAnswering(props: {
-    phraseMelangee: {
-        id: number;
-        shuffledPhrase: string;
-        answer: string;
-    };
+    phraseMelangee: phraseMelangeeType;
     index: number;
     attemptId: string;
 }) {

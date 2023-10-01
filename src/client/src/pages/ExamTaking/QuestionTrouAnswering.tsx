@@ -4,14 +4,10 @@ import { debounce } from '../../lib/utils';
 import { api } from '../../lib/api';
 import { TextField, Typography, styled } from '@mui/material';
 import { useTimeoutAlert } from './useTimeoutAlert';
+import { questionTrouType } from './types';
 
 function QuestionTrouAnswering(props: {
-    questionTrou: {
-        id: number;
-        beforeText: string;
-        afterText: string;
-        answer: string;
-    };
+    questionTrou: questionTrouType;
     index: number;
     attemptId: string;
 }) {

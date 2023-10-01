@@ -1,18 +1,19 @@
-import { styled } from '@mui/material';
 import React from 'react';
+import { styled } from '@mui/material';
 import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
 import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
 import { QuestionTrouAnswering } from './QuestionTrouAnswering';
+import { phraseMelangeeType, questionChoixMultipleType, questionTrouType } from './types';
 
 function QuestionsAnswering(props: {
     attemptId: string;
-    questionsChoixMultiple: any;
-    questionsTrou: any;
-    phrasesMelangees: any;
+    questionsChoixMultiple: Array<questionChoixMultipleType>;
+    questionsTrou: Array<questionTrouType>;
+    phrasesMelangees: Array<phraseMelangeeType>;
 }) {
     return (
         <Container>
-            {props.questionsChoixMultiple.map((questionChoixMultiple: any, index: number) => (
+            {props.questionsChoixMultiple.map((questionChoixMultiple, index: number) => (
                 <QuestionChoixMultipleAnswering
                     key={questionChoixMultiple.id}
                     attemptId={props.attemptId}
@@ -21,7 +22,7 @@ function QuestionsAnswering(props: {
                 />
             ))}
 
-            {props.questionsTrou.map((questionTrou: any, index: number) => (
+            {props.questionsTrou.map((questionTrou, index: number) => (
                 <QuestionTrouAnswering
                     key={questionTrou.id}
                     attemptId={props.attemptId}
@@ -29,7 +30,7 @@ function QuestionsAnswering(props: {
                     questionTrou={questionTrou}
                 />
             ))}
-            {props.phrasesMelangees.map((phraseMelangee: any, index: number) => (
+            {props.phrasesMelangees.map((phraseMelangee, index: number) => (
                 <PhraseMelangeeAnswering
                     key={phraseMelangee.id}
                     attemptId={props.attemptId}
