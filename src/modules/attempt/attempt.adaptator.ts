@@ -80,19 +80,27 @@ function convertAttemptToAttemptWithoutAnswers(
     };
 }
 
-function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
+function convertAttemptToAttemptWithAnswers(
+    attempt: Attempt,
+    exam: Exam,
+    answers: {
+        qcmAnswers: Record<QcmAnswer['id'], QcmAnswer>;
+        questionTrouAnswers: Record<QuestionTrouAnswer['id'], QuestionTrouAnswer>;
+        phraseMelangeeAnswers: Record<PhraseMelangeeAnswer['id'], PhraseMelangeeAnswer>;
+    },
+) {
     const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
-        attempt.qcmAnswers,
-        attempt.exam.questionsChoixMultiple,
+        Object.values(answers.qcmAnswers),
+        exam.questionsChoixMultiple,
     );
     const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
-        attempt.questionTrouAnswers,
-        attempt.exam.questionsTrou,
+        Object.values(answers.questionTrouAnswers),
+        exam.questionsTrou,
     );
 
     const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
-        attempt.phraseMelangeAnswers,
-        attempt.exam.phrasesMelangees,
+        Object.values(answers.phraseMelangeeAnswers),
+        exam.phrasesMelangees,
     );
 
     return {
@@ -100,23 +108,21 @@ function convertAttemptToAttemptWithAnswers(attempt: Attempt) {
         startedAt: attempt.startedAt,
         updatedAt: attempt.updatedAt,
         exam: {
-            id: attempt.exam.id,
-            name: attempt.exam.name,
-            duration: attempt.exam.duration,
-            extraTime: attempt.exam.extraTime,
-            questionsChoixMultiple: attempt.exam.questionsChoixMultiple.map(
-                (questionChoixMultiple) => ({
-                    ...questionChoixMultiple,
-                    choice: qcmSummary[questionChoixMultiple.id]?.choice,
-                    status: qcmSummary[questionChoixMultiple.id]?.status,
-                }),
-            ),
-            questionsTrou: attempt.exam.questionsTrou.map((questionTrou) => ({
+            id: exam.id,
+            name: exam.name,
+            duration: exam.duration,
+            extraTime: exam.extraTime,
+            questionsChoixMultiple: exam.questionsChoixMultiple.map((questionChoixMultiple) => ({
+                ...questionChoixMultiple,
+                choice: qcmSummary[questionChoixMultiple.id]?.choice,
+                status: qcmSummary[questionChoixMultiple.id]?.status,
+            })),
+            questionsTrou: exam.questionsTrou.map((questionTrou) => ({
                 ...questionTrou,
                 answer: questionTrouSummary[questionTrou.id]?.answer,
                 status: questionTrouSummary[questionTrou.id]?.status,
             })),
-            phrasesMelangees: attempt.exam.phrasesMelangees.map((phraseMelangee) => ({
+            phrasesMelangees: exam.phrasesMelangees.map((phraseMelangee) => ({
                 ...phraseMelangee,
                 answer: phraseMelangeeSummary[phraseMelangee.id]?.answer,
                 status: phraseMelangeeSummary[phraseMelangee.id]?.status,

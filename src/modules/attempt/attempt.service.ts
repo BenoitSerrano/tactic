@@ -104,31 +104,44 @@ function buildAttemptService() {
 
     async function fetchAttempt(attemptId: string) {
         const attemptRepository = dataSource.getRepository(Attempt);
+        const qcmAnswerService = buildQcmAnswerService();
+        const questionTrouAnswerService = buildQuestionTrouAnswerService();
+        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
+        const examService = buildExamService();
 
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
-            order: {
-                exam: {
-                    questionsChoixMultiple: { order: 'ASC' },
-                    questionsTrou: { order: 'ASC' },
-                    phrasesMelangees: { order: 'ASC' },
-                },
+            select: {
+                id: true,
+                exam: { id: true },
+                phraseMelangeAnswers: { id: true },
+                qcmAnswers: { id: true },
+                questionTrouAnswers: { id: true },
+                startedAt: true,
             },
-            relations: [
-                'exam',
-                'qcmAnswers',
-                'qcmAnswers.questionChoixMultiple',
-                'questionTrouAnswers',
-                'questionTrouAnswers.questionTrou',
-                'phraseMelangeAnswers',
-                'phraseMelangeAnswers.phraseMelangee',
-                'exam.questionsChoixMultiple',
-                'exam.questionsTrou',
-                'exam.phrasesMelangees',
-            ],
+
+            relations: ['exam', 'qcmAnswers', 'questionTrouAnswers', 'phraseMelangeAnswers'],
         });
 
-        return attemptAdaptator.convertAttemptToAttemptWithAnswers(attempt);
+        const exam = await examService.getExam(attempt.exam.id);
+
+        const qcmAnswerIds = attempt.qcmAnswers.map(({ id }) => id);
+        const questionTrouAnswerIds = attempt.questionTrouAnswers.map(({ id }) => id);
+        const phraseMelangeeAnswerIds = attempt.phraseMelangeAnswers.map(({ id }) => id);
+
+        const qcmAnswers = await qcmAnswerService.getQcmAnswers(qcmAnswerIds);
+        const questionTrouAnswers = await questionTrouAnswerService.getQuestionTrouAnswers(
+            questionTrouAnswerIds,
+        );
+        const phraseMelangeeAnswers = await phraseMelangeeAnswerService.getPhraseMelangeeAnswers(
+            phraseMelangeeAnswerIds,
+        );
+
+        return attemptAdaptator.convertAttemptToAttemptWithAnswers(attempt, exam, {
+            qcmAnswers,
+            questionTrouAnswers,
+            phraseMelangeeAnswers,
+        });
     }
 
     async function fetchAttemptWithoutAnswers(attemptId: string) {
