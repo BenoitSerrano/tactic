@@ -6,6 +6,8 @@ import { QuestionTrouAnswering } from './QuestionTrouAnswering';
 import { phraseMelangeeType, questionChoixMultipleType, questionTrouType } from './types';
 import { useMutation } from '@tanstack/react-query';
 import { api } from '../../lib/api';
+import { useAlert } from '../../lib/alert';
+import { LoadingButton } from '@mui/lab';
 
 type qcmChoicesType = Record<number, number>;
 
@@ -20,12 +22,27 @@ function QuestionsAnswering(props: {
     phrasesMelangees: Array<phraseMelangeeType>;
     onExamDone: () => void;
 }) {
-    const updateAttemptMutation = useMutation({
+    const saveDraftMutation = useMutation({
         mutationFn: api.updateAttempt,
+        onSuccess: () => {
+            displayAlert({ variant: 'success', text: 'Vos réponses ont bien été sauvegardées.' });
+        },
         onError: (error: any) => {
             console.error(error);
         },
     });
+
+    const finishExamMutation = useMutation({
+        mutationFn: api.updateAttempt,
+        onSuccess: () => {
+            props.onExamDone();
+        },
+        onError: (error: any) => {
+            console.error(error);
+        },
+    });
+
+    const { displayAlert } = useAlert();
 
     const initialQcmChoices = props.questionsChoixMultiple.reduce((acc, questionChoixMultiple) => {
         return { ...acc, [questionChoixMultiple.id]: questionChoixMultiple.choice };
@@ -77,10 +94,16 @@ function QuestionsAnswering(props: {
                     phraseMelangee={phraseMelangee}
                 />
             ))}
-            <Button onClick={saveDraft}>Enregistrer le brouillon</Button>
-            <Button variant="contained" onClick={finishExam}>
+            <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
+                Enregistrer le brouillon
+            </LoadingButton>
+            <LoadingButton
+                loading={finishExamMutation.isLoading}
+                variant="contained"
+                onClick={finishExam}
+            >
                 Valider les réponses
-            </Button>
+            </LoadingButton>
         </Container>
     );
 
@@ -99,7 +122,7 @@ function QuestionsAnswering(props: {
     }
 
     function saveDraft() {
-        updateAttemptMutation.mutate({
+        saveDraftMutation.mutate({
             attemptId: props.attemptId,
             qcmChoices,
             questionTrouAnswers,
@@ -108,8 +131,12 @@ function QuestionsAnswering(props: {
     }
 
     function finishExam() {
-        saveDraft();
-        props.onExamDone();
+        finishExamMutation.mutate({
+            attemptId: props.attemptId,
+            qcmChoices,
+            questionTrouAnswers,
+            phraseMelangeeAnswers,
+        });
     }
 }
 

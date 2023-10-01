@@ -88,6 +88,7 @@ function buildAttemptService() {
         });
         await assertIsTimeLimitNotExceeded(attempt);
         await updateAttemptDuration(attempt.id);
+        // TODO : vérifier que les questions pour lesquelles on envoie des réponses sont bien dans cet exam
 
         await qcmAnswerService.updateQcmChoices(attempt, attemptAnswers.qcmChoices);
         await questionTrouAnswerService.updateQuestionTrouAnswers(
@@ -98,6 +99,7 @@ function buildAttemptService() {
             attempt,
             attemptAnswers.phraseMelangeeAnswers,
         );
+        return true;
     }
 
     async function fetchAttempt(attemptId: string) {
