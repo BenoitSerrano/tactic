@@ -2,14 +2,12 @@ import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Typography, styled } from '@mui/material';
-import { api } from '../../lib/api';
-import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
 import { Countdown } from '../../components/Countdown';
 import { Page } from '../../components/Page';
 import { time } from '../../lib/time';
-import { QuestionTrouAnswering } from './QuestionTrouAnswering';
-import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
 import { Loader } from '../../components/Loader';
+import { api } from '../../lib/api';
+import { QuestionsAnswering } from './QuestionsAnswering';
 
 function ExamTaking() {
     const params = useParams();
@@ -43,33 +41,13 @@ function ExamTaking() {
                 <CountdownContainer>
                     <Countdown remainingSeconds={remainingSeconds} />
                 </CountdownContainer>
-                {query.data.exam.questionsChoixMultiple.map(
-                    (questionChoixMultiple: any, index: number) => (
-                        <QuestionChoixMultipleAnswering
-                            key={questionChoixMultiple.id}
-                            attemptId={attemptId}
-                            index={index}
-                            questionChoixMultiple={questionChoixMultiple}
-                        />
-                    ),
-                )}
+                <QuestionsAnswering
+                    questionsChoixMultiple={query.data.exam.questionsChoixMultiple}
+                    questionsTrou={query.data.exam.questionsTrou}
+                    phrasesMelangees={query.data.exam.phrasesMelangees}
+                    attemptId={attemptId}
+                />
 
-                {query.data.exam.questionsTrou.map((questionTrou: any, index: number) => (
-                    <QuestionTrouAnswering
-                        key={questionTrou.id}
-                        attemptId={attemptId}
-                        index={index}
-                        questionTrou={questionTrou}
-                    />
-                ))}
-                {query.data.exam.phrasesMelangees.map((phraseMelangee: any, index: number) => (
-                    <PhraseMelangeeAnswering
-                        key={phraseMelangee.id}
-                        attemptId={attemptId}
-                        index={index}
-                        phraseMelangee={phraseMelangee}
-                    />
-                ))}
                 <hr />
                 <Button variant="contained" onClick={validateForm}>
                     Valider les réponses
