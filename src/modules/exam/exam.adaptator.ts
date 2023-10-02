@@ -8,7 +8,6 @@ import { QuestionTrou } from '../questionTrou';
 import { QuestionTrouAnswer } from '../questionTrouAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
 import { Student } from '../student';
-import { Exam } from './Exam.entity';
 
 const examAdaptator = {
     convertExamWithAttemptsToResults,
@@ -36,16 +35,25 @@ function convertExamWithAttemptsToResults(
         const duration = attempt.updatedAt
             ? Math.floor((new Date(attempt.updatedAt).getTime() - startedAtDate.getTime()) / 1000)
             : undefined;
+        const qcmAnswers = attempt.qcmAnswers.map(({ id }) => answers.qcmAnswers[id]);
         const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
-            Object.values(answers.qcmAnswers),
+            qcmAnswers,
             Object.values(questions.questionsChoixMultiple),
         );
+
+        const questionTrouAnswers = attempt.questionTrouAnswers.map(
+            ({ id }) => answers.questionTrouAnswers[id],
+        );
         const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
-            Object.values(answers.questionTrouAnswers),
+            questionTrouAnswers,
             Object.values(questions.questionsTrou),
         );
+
+        const phraseMelangeeAnswers = attempt.phraseMelangeAnswers.map(
+            ({ id }) => answers.phraseMelangeeAnswers[id],
+        );
         const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
-            Object.values(answers.phraseMelangeeAnswers),
+            phraseMelangeeAnswers,
             Object.values(questions.phrasesMelangees),
         );
 
