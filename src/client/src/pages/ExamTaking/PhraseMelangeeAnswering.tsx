@@ -16,7 +16,7 @@ function PhraseMelangeeAnswering(props: {
     return (
         <div>
             <StyledContainer>
-                <Typography>{props.index + 1}. </Typography>
+                <Typography>{props.index}. </Typography>
                 {shuffledWords.map((word, index) =>
                     combination.includes(index) ? undefined : (
                         <ShuffledWordContainer

@@ -62,38 +62,49 @@ function QuestionsAnswering(props: {
 
     const [phraseMelangeeAnswers, setPhraseMelangeeAnswers] = useState(initialPhraseMelangeAnswers);
 
+    let index = 0;
+
     return (
         <Container>
-            {props.questionsChoixMultiple.map((questionChoixMultiple, index: number) => (
-                <QuestionChoixMultipleAnswering
-                    setChoice={buildSetQcmChoice(questionChoixMultiple.id)}
-                    choice={qcmChoices[questionChoixMultiple.id]}
-                    key={questionChoixMultiple.id}
-                    attemptId={props.attemptId}
-                    index={index}
-                    questionChoixMultiple={questionChoixMultiple}
-                />
-            ))}
-            {props.questionsTrou.map((questionTrou, index: number) => (
-                <QuestionTrouAnswering
-                    setAnswer={buildSetQuestionTrouAnswer(questionTrou.id)}
-                    answer={questionTrouAnswers[questionTrou.id]}
-                    key={questionTrou.id}
-                    attemptId={props.attemptId}
-                    index={index}
-                    questionTrou={questionTrou}
-                />
-            ))}
-            {props.phrasesMelangees.map((phraseMelangee, index: number) => (
-                <PhraseMelangeeAnswering
-                    answer={phraseMelangeeAnswers[phraseMelangee.id]}
-                    setAnswer={buildSetPhraseMelangeeAnswer(phraseMelangee.id)}
-                    key={phraseMelangee.id}
-                    attemptId={props.attemptId}
-                    index={index}
-                    phraseMelangee={phraseMelangee}
-                />
-            ))}
+            {props.questionsChoixMultiple.map((questionChoixMultiple) => {
+                index++;
+                return (
+                    <QuestionChoixMultipleAnswering
+                        setChoice={buildSetQcmChoice(questionChoixMultiple.id)}
+                        choice={qcmChoices[questionChoixMultiple.id]}
+                        key={questionChoixMultiple.id}
+                        attemptId={props.attemptId}
+                        index={index}
+                        questionChoixMultiple={questionChoixMultiple}
+                    />
+                );
+            })}
+            {props.questionsTrou.map((questionTrou) => {
+                index++;
+                return (
+                    <QuestionTrouAnswering
+                        setAnswer={buildSetQuestionTrouAnswer(questionTrou.id)}
+                        answer={questionTrouAnswers[questionTrou.id]}
+                        key={questionTrou.id}
+                        attemptId={props.attemptId}
+                        index={index}
+                        questionTrou={questionTrou}
+                    />
+                );
+            })}
+            {props.phrasesMelangees.map((phraseMelangee) => {
+                index++;
+                return (
+                    <PhraseMelangeeAnswering
+                        answer={phraseMelangeeAnswers[phraseMelangee.id]}
+                        setAnswer={buildSetPhraseMelangeeAnswer(phraseMelangee.id)}
+                        key={phraseMelangee.id}
+                        attemptId={props.attemptId}
+                        index={index}
+                        phraseMelangee={phraseMelangee}
+                    />
+                );
+            })}
             <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
                 Enregistrer le brouillon
             </LoadingButton>

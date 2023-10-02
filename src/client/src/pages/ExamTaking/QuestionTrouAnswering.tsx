@@ -12,7 +12,7 @@ function QuestionTrouAnswering(props: {
     return (
         <StyledContainer>
             <Typography>
-                {props.index + 1}. {props.questionTrou.beforeText}
+                {props.index}. {props.questionTrou.beforeText}
             </Typography>
             <StyledTextField value={props.answer} onChange={onChangeAnswer} placeholder="..." />
             <Typography>{props.questionTrou.afterText}</Typography>

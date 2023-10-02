@@ -13,7 +13,7 @@ function QuestionChoixMultipleAnswering(props: {
         <div>
             <FormControl>
                 <FormLabel>
-                    {props.index + 1}. {props.questionChoixMultiple.title}
+                    {props.index}. {props.questionChoixMultiple.title}
                 </FormLabel>
                 <RadioGroup value={props.choice} onChange={onChooseQcmAnswer}>
                     {props.questionChoixMultiple.possibleAnswers.map(
