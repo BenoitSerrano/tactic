@@ -13,7 +13,8 @@ function QuestionChoixMultipleAnswering(props: {
         <div>
             <FormControl>
                 <FormLabel>
-                    {props.index}. {props.questionChoixMultiple.title}
+                    <IndexContainer>{props.index}</IndexContainer>.{' '}
+                    {props.questionChoixMultiple.title}
                 </FormLabel>
                 <RadioGroup value={props.choice} onChange={onChooseQcmAnswer}>
                     {props.questionChoixMultiple.possibleAnswers.map(
@@ -37,5 +38,7 @@ function QuestionChoixMultipleAnswering(props: {
         props.setChoice(newChoice);
     }
 }
+
+const IndexContainer = styled('span')({ fontWeight: 'bold' });
 
 export { QuestionChoixMultipleAnswering };

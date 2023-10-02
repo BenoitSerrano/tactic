@@ -175,6 +175,6 @@ const ButtonContainer = styled('div')({
     bottom: 0,
 });
 
-const QuestionContainer = styled('div')({ marginTop: 20, marginBottom: 20 });
+const QuestionContainer = styled('div')({ marginTop: 30, marginBottom: 30 });
 
 export { QuestionsAnswering };

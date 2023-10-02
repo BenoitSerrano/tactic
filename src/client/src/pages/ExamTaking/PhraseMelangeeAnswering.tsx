@@ -16,7 +16,9 @@ function PhraseMelangeeAnswering(props: {
     return (
         <div>
             <StyledContainer>
-                <Typography>{props.index}. </Typography>
+                <Typography>
+                    <BoldContainer>{props.index}. </BoldContainer>
+                </Typography>
                 {shuffledWords.map((word, index) =>
                     combination.includes(index) ? undefined : (
                         <ShuffledWordContainer
@@ -40,7 +42,7 @@ function PhraseMelangeeAnswering(props: {
             </StyledContainer>
             {
                 <Typography>
-                    Votre réponse :{' '}
+                    <BoldContainer>Votre réponse :</BoldContainer>{' '}
                     {props.answer ? props.answer : '____ '.repeat(shuffledWords.length)}
                 </Typography>
             }
@@ -85,5 +87,7 @@ const ShuffledWordContainer = styled('div')({
     marginRight: '4px',
     cursor: 'pointer',
 });
+
+const BoldContainer = styled('span')({ fontWeight: 'bold' });
 
 export { PhraseMelangeeAnswering };

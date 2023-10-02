@@ -12,7 +12,7 @@ function QuestionTrouAnswering(props: {
     return (
         <StyledContainer>
             <Typography>
-                {props.index}. {props.questionTrou.beforeText}
+                <IndexContainer>{props.index}</IndexContainer>. {props.questionTrou.beforeText}
             </Typography>
             <StyledTextField value={props.answer} onChange={onChangeAnswer} placeholder="..." />
             <Typography>{props.questionTrou.afterText}</Typography>
@@ -37,4 +37,6 @@ const StyledTextField = styled(TextField)({
     marginLeft: '5px',
     marginRight: '5px',
 });
+
+const IndexContainer = styled('span')({ fontWeight: 'bold' });
 export { QuestionTrouAnswering };
