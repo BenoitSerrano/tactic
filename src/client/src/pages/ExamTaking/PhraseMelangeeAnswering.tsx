@@ -38,7 +38,12 @@ function PhraseMelangeeAnswering(props: {
                     </ShuffledWordContainer>
                 ))}
             </StyledContainer>
-            {!!props.answer && <Typography>Votre réponse : {props.answer}</Typography>}
+            {
+                <Typography>
+                    Votre réponse :{' '}
+                    {props.answer ? props.answer : '____ '.repeat(shuffledWords.length)}
+                </Typography>
+            }
         </div>
     );
 
