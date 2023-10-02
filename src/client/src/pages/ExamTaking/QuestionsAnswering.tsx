@@ -65,57 +65,64 @@ function QuestionsAnswering(props: {
     let index = 0;
 
     return (
-        <Container>
-            {props.questionsChoixMultiple.map((questionChoixMultiple) => {
-                index++;
-                return (
-                    <QuestionChoixMultipleAnswering
-                        setChoice={buildSetQcmChoice(questionChoixMultiple.id)}
-                        choice={qcmChoices[questionChoixMultiple.id]}
-                        key={questionChoixMultiple.id}
-                        attemptId={props.attemptId}
-                        index={index}
-                        questionChoixMultiple={questionChoixMultiple}
-                    />
-                );
-            })}
-            {props.questionsTrou.map((questionTrou) => {
-                index++;
-                return (
-                    <QuestionTrouAnswering
-                        setAnswer={buildSetQuestionTrouAnswer(questionTrou.id)}
-                        answer={questionTrouAnswers[questionTrou.id]}
-                        key={questionTrou.id}
-                        attemptId={props.attemptId}
-                        index={index}
-                        questionTrou={questionTrou}
-                    />
-                );
-            })}
-            {props.phrasesMelangees.map((phraseMelangee) => {
-                index++;
-                return (
-                    <PhraseMelangeeAnswering
-                        answer={phraseMelangeeAnswers[phraseMelangee.id]}
-                        setAnswer={buildSetPhraseMelangeeAnswer(phraseMelangee.id)}
-                        key={phraseMelangee.id}
-                        attemptId={props.attemptId}
-                        index={index}
-                        phraseMelangee={phraseMelangee}
-                    />
-                );
-            })}
-            <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
-                Enregistrer le brouillon
-            </LoadingButton>
-            <LoadingButton
-                loading={finishExamMutation.isLoading}
-                variant="contained"
-                onClick={finishExam}
-            >
-                Valider les réponses
-            </LoadingButton>
-        </Container>
+        <>
+            <Container>
+                {props.questionsChoixMultiple.map((questionChoixMultiple) => {
+                    index++;
+                    return (
+                        <QuestionContainer key={'qcm-' + questionChoixMultiple.id}>
+                            <QuestionChoixMultipleAnswering
+                                setChoice={buildSetQcmChoice(questionChoixMultiple.id)}
+                                choice={qcmChoices[questionChoixMultiple.id]}
+                                attemptId={props.attemptId}
+                                index={index}
+                                questionChoixMultiple={questionChoixMultiple}
+                            />
+                        </QuestionContainer>
+                    );
+                })}
+                {props.questionsTrou.map((questionTrou) => {
+                    index++;
+                    return (
+                        <QuestionContainer key={'questionTrou-' + questionTrou.id}>
+                            <QuestionTrouAnswering
+                                setAnswer={buildSetQuestionTrouAnswer(questionTrou.id)}
+                                answer={questionTrouAnswers[questionTrou.id]}
+                                attemptId={props.attemptId}
+                                index={index}
+                                questionTrou={questionTrou}
+                            />
+                        </QuestionContainer>
+                    );
+                })}
+                {props.phrasesMelangees.map((phraseMelangee) => {
+                    index++;
+                    return (
+                        <QuestionContainer key={'phraseMelangee-' + phraseMelangee.id}>
+                            <PhraseMelangeeAnswering
+                                answer={phraseMelangeeAnswers[phraseMelangee.id]}
+                                setAnswer={buildSetPhraseMelangeeAnswer(phraseMelangee.id)}
+                                attemptId={props.attemptId}
+                                index={index}
+                                phraseMelangee={phraseMelangee}
+                            />
+                        </QuestionContainer>
+                    );
+                })}
+            </Container>
+            <ButtonContainer>
+                <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
+                    Enregistrer le brouillon
+                </LoadingButton>
+                <LoadingButton
+                    loading={finishExamMutation.isLoading}
+                    variant="contained"
+                    onClick={finishExam}
+                >
+                    Valider les réponses
+                </LoadingButton>
+            </ButtonContainer>
+        </>
     );
 
     function buildSetQcmChoice(qcmId: number) {
@@ -151,6 +158,23 @@ function QuestionsAnswering(props: {
     }
 }
 
-const Container = styled('div')({});
+const BUTTON_CONTAINER_HEIGHT = 50;
+
+const Container = styled('div')({
+    marginBottom: BUTTON_CONTAINER_HEIGHT,
+    width: '100%',
+});
+const ButtonContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: BUTTON_CONTAINER_HEIGHT,
+    backgroundColor: 'white',
+    position: 'fixed',
+    width: '100%',
+    bottom: 0,
+});
+
+const QuestionContainer = styled('div')({ marginTop: 20, marginBottom: 20 });
 
 export { QuestionsAnswering };

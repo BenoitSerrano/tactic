@@ -70,5 +70,7 @@ const MainContainer = styled('div')({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
     width: '60%',
 });
