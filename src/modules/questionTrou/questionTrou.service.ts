@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { buildExamService } from '../exam/exam.service';
 import { QuestionTrou } from './QuestionTrou.entity';
@@ -9,6 +10,7 @@ function buildQuestionTrouService() {
     const questionTrouService = {
         createQuestionTrou,
         updateQuestionTrou,
+        getQuestionsTrou,
     };
 
     return questionTrouService;
@@ -80,5 +82,14 @@ function buildQuestionTrouService() {
         questionTrou.points = points;
 
         return questionTrouRepository.save(questionTrou);
+    }
+
+    async function getQuestionsTrou(questionTrouIds: number[]) {
+        const questionsTrou = await questionTrouRepository.find({
+            where: { id: In(questionTrouIds) },
+        });
+        return questionsTrou.reduce((acc, questionTrou) => {
+            return { ...acc, [questionTrou.id]: questionTrou };
+        }, {} as Record<number, QuestionTrou>);
     }
 }

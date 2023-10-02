@@ -1,43 +1,55 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
-import { buildAttemptService } from '../attempt/attempt.service';
-import { PhraseMelangee } from '../phraseMelangee';
+import { phraseMelangeeAnswersType, buildPhraseMelangeeService } from '../phraseMelangee';
 import { PhraseMelangeeAnswer } from './PhraseMelangeeAnswer.entity';
 
 export { buildPhraseMelangeeAnswerService };
 
 function buildPhraseMelangeeAnswerService() {
     const phraseMelangeeAnswerService = {
-        createOrUpdatePhraseMelangeeAnswer,
+        updatePhraseMelangeeAnswers,
+        getPhraseMelangeeAnswers,
     };
 
     return phraseMelangeeAnswerService;
 
-    async function createOrUpdatePhraseMelangeeAnswer(
-        attemptId: string,
-        phraseMelangeeId: number,
-        answer: string,
-    ) {
-        const phraseMelangeeRepository = dataSource.getRepository(PhraseMelangee);
-        const attemptRepository = dataSource.getRepository(Attempt);
+    async function getPhraseMelangeeAnswers(phraseMelangeeAnswerIds: number[]) {
         const phraseMelangeeAnswerRepository = dataSource.getRepository(PhraseMelangeeAnswer);
-        const attemptService = buildAttemptService();
 
-        const attempt = await attemptRepository.findOneOrFail({
-            where: { id: attemptId },
-            relations: ['exam'],
+        const phraseMelangeeAnswers = await phraseMelangeeAnswerRepository.find({
+            where: { id: In(phraseMelangeeAnswerIds) },
+            relations: ['phraseMelangee'],
+            select: { phraseMelangee: { id: true } },
         });
+        return phraseMelangeeAnswers.reduce((acc, phraseMelangeeAnswer) => {
+            return { ...acc, [phraseMelangeeAnswer.id]: phraseMelangeeAnswer };
+        }, {} as Record<number, PhraseMelangeeAnswer>);
+    }
 
-        await attemptService.assertIsTimeLimitNotExceeded(attempt);
-        await attemptService.updateAttemptDuration(attempt.id);
+    async function updatePhraseMelangeeAnswers(
+        attempt: Attempt,
+        phraseMelangeeAnswers: phraseMelangeeAnswersType,
+    ) {
+        const phraseMelangeeService = buildPhraseMelangeeService();
+        const phraseMelangeeAnswerRepository = dataSource.getRepository(PhraseMelangeeAnswer);
+        //TODO
+        const phraseMelangeeIds = Object.keys(phraseMelangeeAnswers) as unknown as number[];
 
-        const phraseMelangee = await phraseMelangeeRepository.findOneByOrFail({
-            id: phraseMelangeeId,
-        });
+        const questionsChoixMultiple = await phraseMelangeeService.getPhrasesMelangees(
+            phraseMelangeeIds,
+        );
 
-        return phraseMelangeeAnswerRepository.upsert({ attempt, phraseMelangee, answer }, [
-            'phraseMelangee',
-            'attempt',
-        ]);
+        return Promise.all(
+            // TODO
+            Object.keys(phraseMelangeeAnswers).map((phraseMelangeeId: any) => {
+                const answer = phraseMelangeeAnswers[phraseMelangeeId];
+                const phraseMelangee = questionsChoixMultiple[phraseMelangeeId];
+                return phraseMelangeeAnswerRepository.upsert({ attempt, phraseMelangee, answer }, [
+                    'phraseMelangee',
+                    'attempt',
+                ]);
+            }),
+        );
     }
 }

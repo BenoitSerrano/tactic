@@ -1,4 +1,4 @@
-import { Attempt, attemptUtils } from '../attempt';
+import { attemptUtils } from '../attempt';
 import { AttemptInterface } from '../attempt/attempt.interface';
 import { Student } from './Student.entity';
 

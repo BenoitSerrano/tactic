@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { buildExamService } from '../exam/exam.service';
 import { PhraseMelangee } from './PhraseMelangee.entity';
@@ -9,6 +10,7 @@ function buildPhraseMelangeeService() {
     const phraseMelangeeService = {
         createPhraseMelangee,
         updatePhraseMelangee,
+        getPhrasesMelangees,
     };
 
     return phraseMelangeeService;
@@ -81,5 +83,14 @@ function buildPhraseMelangeeService() {
         phraseMelangee.points = points;
 
         return phraseMelangeeRepository.save(phraseMelangee);
+    }
+
+    async function getPhrasesMelangees(phraseMelangeeIds: number[]) {
+        const phrasesMelangees = await phraseMelangeeRepository.find({
+            where: { id: In(phraseMelangeeIds) },
+        });
+        return phrasesMelangees.reduce((acc, phraseMelangee) => {
+            return { ...acc, [phraseMelangee.id]: phraseMelangee };
+        }, {} as Record<number, PhraseMelangee>);
     }
 }

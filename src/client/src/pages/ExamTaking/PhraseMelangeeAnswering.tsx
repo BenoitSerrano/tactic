@@ -1,32 +1,15 @@
 import React, { useState } from 'react';
 import { Typography, styled } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../lib/api';
-import { useTimeoutAlert } from './useTimeoutAlert';
+import { phraseMelangeeType } from './types';
 
 function PhraseMelangeeAnswering(props: {
-    phraseMelangee: {
-        id: number;
-        shuffledPhrase: string;
-        answer: string;
-    };
+    phraseMelangee: phraseMelangeeType;
     index: number;
     attemptId: string;
+    answer: string;
+    setAnswer: (answer: string) => void;
 }) {
     const [combination, setCombination] = useState<number[]>([]);
-    const { displayTimeoutAlert } = useTimeoutAlert();
-    const queryClient = useQueryClient();
-
-    const createOrUpdatePhraseMelangeeAnswerMutation = useMutation({
-        mutationFn: api.createOrUpdatePhraseMelangeeAnswer,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['attempts-without-answers'] });
-        },
-        onError: async (error) => {
-            console.warn(error);
-            displayTimeoutAlert();
-        },
-    });
 
     const shuffledWords = props.phraseMelangee.shuffledPhrase.split(' ');
 
@@ -55,9 +38,7 @@ function PhraseMelangeeAnswering(props: {
                     </ShuffledWordContainer>
                 ))}
             </StyledContainer>
-            {!!props.phraseMelangee.answer && (
-                <Typography>Votre réponse : {props.phraseMelangee.answer}</Typography>
-            )}
+            {!!props.answer && <Typography>Votre réponse : {props.answer}</Typography>}
         </div>
     );
 
@@ -67,11 +48,8 @@ function PhraseMelangeeAnswering(props: {
             setCombination(newCombination);
 
             if (newCombination.length === shuffledWords.length) {
-                createOrUpdatePhraseMelangeeAnswerMutation.mutate({
-                    attemptId: props.attemptId,
-                    phraseMelangeeId: props.phraseMelangee.id,
-                    answer: newCombination.map((index) => shuffledWords[index]).join(' '),
-                });
+                const answer = newCombination.map((index) => shuffledWords[index]).join(' ');
+                props.setAnswer(answer);
             }
         };
     }

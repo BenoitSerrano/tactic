@@ -1,4 +1,4 @@
 import { QuestionTrouAnswer } from './QuestionTrouAnswer.entity';
-import { buildQuestionTrouAnswerController } from './questionTrouAnswer.controller';
+import { buildQuestionTrouAnswerService } from './questionTrouAnswer.service';
 
-export { QuestionTrouAnswer, buildQuestionTrouAnswerController };
+export { QuestionTrouAnswer, buildQuestionTrouAnswerService };

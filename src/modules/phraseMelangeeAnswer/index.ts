@@ -1,5 +1,5 @@
 import { PhraseMelangeeAnswer } from './PhraseMelangeeAnswer.entity';
-import { buildPhraseMelangeeAnswerController } from './phraseMelangeeAnswer.controller';
 import { phraseMelangeeAdaptator } from './phraseMelangeeAnswer.adaptator';
+import { buildPhraseMelangeeAnswerService } from './phraseMelangeeAnswer.service';
 
-export { PhraseMelangeeAnswer, buildPhraseMelangeeAnswerController, phraseMelangeeAdaptator };
+export { PhraseMelangeeAnswer, phraseMelangeeAdaptator, buildPhraseMelangeeAnswerService };

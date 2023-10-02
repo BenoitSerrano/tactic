@@ -5,13 +5,12 @@ const api = {
     login,
     createUser,
     patchComment,
-    createOrUpdateQcmAnswer,
-    createOrUpdateQuestionTrouAnswer,
     searchAttempt,
     createAttempt,
     createEmptyAttempt,
     fetchAttempt,
     fetchAttemptWithoutAnswers,
+    updateAttempt,
     updateAttemptTreatementStatus,
     updateAttemptCheatingSummary,
     deleteAttempt,
@@ -30,7 +29,6 @@ const api = {
     updateQuestionTrou,
     createPhraseMelangee,
     updatePhraseMelangee,
-    createOrUpdatePhraseMelangeeAnswer,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -80,45 +78,6 @@ async function patchComment(studentId: string, comment: string) {
     return performApiCall(URL, 'PATCH', { comment });
 }
 
-async function createOrUpdateQcmAnswer({
-    attemptId,
-    qcmId,
-    choice,
-}: {
-    attemptId: string;
-    qcmId: string;
-    choice: number;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/questions-choix-multiple/${qcmId}`;
-    return performApiCall(URL, 'POST', { choice });
-}
-
-async function createOrUpdateQuestionTrouAnswer({
-    attemptId,
-    questionTrouId,
-    answer,
-}: {
-    attemptId: string;
-    questionTrouId: number;
-    answer: string;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/questions-trou/${questionTrouId}`;
-    return performApiCall(URL, 'POST', { answer });
-}
-
-async function createOrUpdatePhraseMelangeeAnswer({
-    attemptId,
-    phraseMelangeeId,
-    answer,
-}: {
-    attemptId: string;
-    phraseMelangeeId: number;
-    answer: string;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/phrases-melangees/${phraseMelangeeId}`;
-    return performApiCall(URL, 'POST', { answer });
-}
-
 async function searchAttempt({ examId, studentId }: { examId: string; studentId: string }) {
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
     return performApiCall(URL, 'GET');
@@ -142,6 +101,21 @@ async function fetchAttempt(attemptId: string) {
 async function fetchAttemptWithoutAnswers(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}/without-answers`;
     return performApiCall(URL, 'GET');
+}
+
+async function updateAttempt({
+    attemptId,
+    qcmChoices,
+    questionTrouAnswers,
+    phraseMelangeeAnswers,
+}: {
+    attemptId: string;
+    qcmChoices: Record<number, number>;
+    questionTrouAnswers: Record<number, string>;
+    phraseMelangeeAnswers: Record<number, string>;
+}) {
+    const URL = `${BASE_URL}/attempts/${attemptId}`;
+    return performApiCall(URL, 'PUT', { qcmChoices, questionTrouAnswers, phraseMelangeeAnswers });
 }
 
 async function updateAttemptTreatementStatus({

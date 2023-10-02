@@ -1,34 +1,52 @@
+import { Attempt } from '../attempt';
 import { attemptAdaptator } from '../attempt/attempt.adaptator';
-import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
-import { qcmAnswerAdaptator } from '../qcmAnswer';
+import { PhraseMelangee } from '../phraseMelangee';
+import { PhraseMelangeeAnswer, phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
+import { QcmAnswer, qcmAnswerAdaptator } from '../qcmAnswer';
+import { QuestionChoixMultiple } from '../questionChoixMultiple';
+import { QuestionTrou } from '../questionTrou';
+import { QuestionTrouAnswer } from '../questionTrouAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
+import { Student } from '../student';
 import { Exam } from './Exam.entity';
 
 const examAdaptator = {
     convertExamWithAttemptsToResults,
 };
 
-function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
-    const treatmentStatusSummary = attemptAdaptator.computeTreatmentStatusSummary(
-        examWithAttempts.attempts,
-    );
-    const examWithResults = examWithAttempts.attempts.map((attempt) => {
-        const student = attempt.student;
+function convertExamWithAttemptsToResults(
+    attempts: Attempt[],
+    students: Record<Student['id'], Pick<Student, 'id' | 'email'>>,
+    questions: {
+        questionsChoixMultiple: Record<QuestionChoixMultiple['id'], QuestionChoixMultiple>;
+        questionsTrou: Record<QuestionTrou['id'], QuestionTrou>;
+        phrasesMelangees: Record<PhraseMelangee['id'], PhraseMelangee>;
+    },
+    answers: {
+        qcmAnswers: Record<QcmAnswer['id'], QcmAnswer>;
+        questionTrouAnswers: Record<QuestionTrouAnswer['id'], QuestionTrouAnswer>;
+        phraseMelangeeAnswers: Record<PhraseMelangeeAnswer['id'], PhraseMelangeeAnswer>;
+    },
+) {
+    const treatmentStatusSummary = attemptAdaptator.computeTreatmentStatusSummary(attempts);
+    const examWithResults = attempts.map((attempt) => {
+        const studentId = attempt.student.id;
+        const student = students[studentId];
         const startedAtDate = new Date(attempt.startedAt);
         const duration = attempt.updatedAt
             ? Math.floor((new Date(attempt.updatedAt).getTime() - startedAtDate.getTime()) / 1000)
             : undefined;
-        const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
-            attempt.questionTrouAnswers,
-            examWithAttempts.questionsTrou,
-        );
         const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
-            attempt.qcmAnswers,
-            examWithAttempts.questionsChoixMultiple,
+            Object.values(answers.qcmAnswers),
+            Object.values(questions.questionsChoixMultiple),
+        );
+        const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
+            Object.values(answers.questionTrouAnswers),
+            Object.values(questions.questionsTrou),
         );
         const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
-            attempt.phraseMelangeAnswers,
-            examWithAttempts.phrasesMelangees,
+            Object.values(answers.phraseMelangeeAnswers),
+            Object.values(questions.phrasesMelangees),
         );
 
         const mark = computeMark([questionTrouSummary, qcmSummary, phraseMelangeeSummary]);
@@ -36,7 +54,6 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
         const result = {
             id: student.id,
             email: student.email,
-            comment: student.comment,
             startedAt: startedAtDate.getTime(),
             duration,
             attemptId: attempt.id,
@@ -47,15 +64,15 @@ function convertExamWithAttemptsToResults(examWithAttempts: Exam) {
         };
         return result;
     });
-    const qcmTotalPoints = examWithAttempts.questionsChoixMultiple.reduce(
+    const qcmTotalPoints = Object.values(questions.questionsChoixMultiple).reduce(
         (sum, summary) => sum + summary.points,
         0,
     );
-    const questionTrouTotalPoints = examWithAttempts.questionsTrou.reduce(
+    const questionTrouTotalPoints = Object.values(questions.questionsTrou).reduce(
         (sum, summary) => sum + summary.points,
         0,
     );
-    const phraseMelangeeTotalPoints = examWithAttempts.phrasesMelangees.reduce(
+    const phraseMelangeeTotalPoints = Object.values(questions.phrasesMelangees).reduce(
         (sum, summary) => sum + summary.points,
         0,
     );

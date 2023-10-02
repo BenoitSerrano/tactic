@@ -1,5 +1,8 @@
 import { QcmAnswer } from './QcmAnswer.entity';
-import { buildQcmAnswerController } from './qcmAnswer.controller';
+import { qcmChoicesType } from './types';
 import { qcmAnswerAdaptator } from './qcmAnswer.adaptator';
+import { buildQcmAnswerService } from './qcmAnswer.service';
 
-export { QcmAnswer, buildQcmAnswerController, qcmAnswerAdaptator };
+export { QcmAnswer, qcmAnswerAdaptator, buildQcmAnswerService };
+
+export type { qcmChoicesType };

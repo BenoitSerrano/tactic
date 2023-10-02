@@ -1,43 +1,54 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Attempt } from '../attempt';
-import { buildAttemptService } from '../attempt/attempt.service';
-import { QuestionTrou } from '../questionTrou';
+import { buildQuestionTrouService } from '../questionTrou';
 import { QuestionTrouAnswer } from './QuestionTrouAnswer.entity';
+import { questionTrouAnswersType } from './types';
 
 export { buildQuestionTrouAnswerService };
 
 function buildQuestionTrouAnswerService() {
     const questionTrouAnswerService = {
-        createOrUpdateQuestionTrouAnswer,
+        getQuestionTrouAnswers,
+        updateQuestionTrouAnswers,
     };
 
     return questionTrouAnswerService;
 
-    async function createOrUpdateQuestionTrouAnswer(
-        attemptId: string,
-        questionTrouId: number,
-        answer: string,
-    ) {
-        const questionTrouRepository = dataSource.getRepository(QuestionTrou);
-        const attemptRepository = dataSource.getRepository(Attempt);
+    async function getQuestionTrouAnswers(questionTrouAnswerIds: number[]) {
         const questionTrouAnswerRepository = dataSource.getRepository(QuestionTrouAnswer);
-        const attemptService = buildAttemptService();
 
-        const attempt = await attemptRepository.findOneOrFail({
-            where: { id: attemptId },
-            relations: ['exam'],
+        const questionTrouAnswers = await questionTrouAnswerRepository.find({
+            where: { id: In(questionTrouAnswerIds) },
+            relations: ['questionTrou'],
+            select: { questionTrou: { id: true } },
         });
+        return questionTrouAnswers.reduce((acc, questionTrouAnswer) => {
+            return { ...acc, [questionTrouAnswer.id]: questionTrouAnswer };
+        }, {} as Record<number, QuestionTrouAnswer>);
+    }
 
-        await attemptService.assertIsTimeLimitNotExceeded(attempt);
-        await attemptService.updateAttemptDuration(attempt.id);
+    async function updateQuestionTrouAnswers(
+        attempt: Attempt,
+        questionTrouAnswers: questionTrouAnswersType,
+    ) {
+        const questionTrouService = buildQuestionTrouService();
+        const questionTrouAnswerRepository = dataSource.getRepository(QuestionTrouAnswer);
+        //TODO
+        const questionTrouIds = Object.keys(questionTrouAnswers) as unknown as number[];
 
-        const questionTrou = await questionTrouRepository.findOneByOrFail({
-            id: questionTrouId,
-        });
+        const questionsChoixMultiple = await questionTrouService.getQuestionsTrou(questionTrouIds);
 
-        return questionTrouAnswerRepository.upsert({ attempt, questionTrou, answer }, [
-            'questionTrou',
-            'attempt',
-        ]);
+        return Promise.all(
+            // TODO
+            Object.keys(questionTrouAnswers).map((questionTrouId: any) => {
+                const answer = questionTrouAnswers[questionTrouId];
+                const questionTrou = questionsChoixMultiple[questionTrouId];
+                return questionTrouAnswerRepository.upsert({ attempt, questionTrou, answer }, [
+                    'questionTrou',
+                    'attempt',
+                ]);
+            }),
+        );
     }
 }
