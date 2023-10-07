@@ -2,6 +2,7 @@ import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { buildExamService } from '../exam/exam.service';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
+import { mapEntities } from '../../lib/mapEntities';
 
 export { buildQuestionChoixMultipleService };
 
@@ -11,6 +12,8 @@ function buildQuestionChoixMultipleService() {
         createQuestionChoixMultiple,
         updateQuestionChoixMultiple,
         getQuestionsChoixMultiples,
+        getAllQuestionsChoixMultiples,
+        bulkInsertQcm,
     };
 
     return questionChoixMultipleService;
@@ -86,5 +89,17 @@ function buildQuestionChoixMultipleService() {
         return questionsChoixMultiple.reduce((acc, questionChoixMultiple) => {
             return { ...acc, [questionChoixMultiple.id]: questionChoixMultiple };
         }, {} as Record<number, QuestionChoixMultiple>);
+    }
+
+    async function getAllQuestionsChoixMultiples() {
+        const questionsChoixMultiple = await questionChoixMultipleRepository.find({
+            relations: ['exam'],
+            select: { exam: { id: true } },
+        });
+        return mapEntities(questionsChoixMultiple);
+    }
+
+    async function bulkInsertQcm(questionsChoixMultiple: Array<QuestionChoixMultiple>) {
+        return questionChoixMultipleRepository.insert(questionsChoixMultiple);
     }
 }

@@ -4,33 +4,33 @@ import { Attempt } from '../attempt';
 import { buildQuestionChoixMultipleService } from '../questionChoixMultiple/questionChoixMultiple.service';
 import { QcmAnswer } from './QcmAnswer.entity';
 import { qcmChoicesType } from './types';
+import { mapEntities } from '../../lib/mapEntities';
 
 export { buildQcmAnswerService };
 
 function buildQcmAnswerService() {
+    const qcmAnswerRepository = dataSource.getRepository(QcmAnswer);
+
     const qcmAnswerService = {
         updateQcmChoices,
         getQcmAnswers,
+        getAllQcmAnswers,
+        bulkInsertQcmAnswers,
     };
 
     return qcmAnswerService;
 
     async function getQcmAnswers(qcmAnswerIds: number[]) {
-        const qcmAnswerRepository = dataSource.getRepository(QcmAnswer);
-
         const qcmAnswers = await qcmAnswerRepository.find({
             where: { id: In(qcmAnswerIds) },
             relations: ['questionChoixMultiple'],
             select: { questionChoixMultiple: { id: true } },
         });
-        return qcmAnswers.reduce((acc, qcmAnswer) => {
-            return { ...acc, [qcmAnswer.id]: qcmAnswer };
-        }, {} as Record<number, QcmAnswer>);
+        return mapEntities(qcmAnswers);
     }
 
     async function updateQcmChoices(attempt: Attempt, qcmAnswers: qcmChoicesType) {
         const questionChoixMultipleService = buildQuestionChoixMultipleService();
-        const qcmAnswerRepository = dataSource.getRepository(QcmAnswer);
         // TODO
         const qcmIds = Object.keys(qcmAnswers) as unknown as number[];
 
@@ -48,5 +48,18 @@ function buildQcmAnswerService() {
                 ]);
             }),
         );
+    }
+
+    async function getAllQcmAnswers() {
+        const qcmAnswers = await qcmAnswerRepository.find({
+            relations: ['attempt', 'questionChoixMultiple'],
+            select: { attempt: { id: true }, questionChoixMultiple: { id: true } },
+        });
+
+        return mapEntities(qcmAnswers);
+    }
+
+    async function bulkInsertQcmAnswers(qcmAnswers: Array<QcmAnswer>) {
+        return qcmAnswerRepository.insert(qcmAnswers);
     }
 }

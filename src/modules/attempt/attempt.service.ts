@@ -1,4 +1,5 @@
 import { dataSource } from '../../dataSource';
+import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
 import { phraseMelangeeAnswersType } from '../phraseMelangee';
 import { buildPhraseMelangeeAnswerService } from '../phraseMelangeeAnswer';
@@ -21,6 +22,8 @@ type attemptAnswersType = {
 };
 
 function buildAttemptService() {
+    const attemptRepository = dataSource.getRepository(Attempt);
+
     const studentService = {
         searchAttempts,
         createAttempt,
@@ -33,13 +36,13 @@ function buildAttemptService() {
         updateAttemptDuration,
         updateAttemptTreatmentStatus,
         updateAttemptCheatingSummary,
+        getAllAttempts,
+        bulkInsertAttempts,
     };
 
     return studentService;
 
     async function searchAttempts(examId: string, studentId: string) {
-        const attemptRepository = dataSource.getRepository(Attempt);
-
         const attempt = await attemptRepository.find({
             where: { exam: { id: examId }, student: { id: studentId } },
         });
@@ -47,7 +50,6 @@ function buildAttemptService() {
     }
 
     async function createAttempt(examId: string, studentId: string) {
-        const attemptRepository = dataSource.getRepository(Attempt);
         const studentRepository = dataSource.getRepository(Student);
         const examRepository = dataSource.getRepository(Exam);
 
@@ -60,7 +62,6 @@ function buildAttemptService() {
     }
 
     async function createEmptyAttempt(examId: string, studentId: string) {
-        const attemptRepository = dataSource.getRepository(Attempt);
         const studentRepository = dataSource.getRepository(Student);
         const examRepository = dataSource.getRepository(Exam);
 
@@ -77,7 +78,6 @@ function buildAttemptService() {
     }
 
     async function updateAttempt(attemptId: string, attemptAnswers: attemptAnswersType) {
-        const attemptRepository = dataSource.getRepository(Attempt);
         const qcmAnswerService = buildQcmAnswerService();
         const questionTrouAnswerService = buildQuestionTrouAnswerService();
         const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
@@ -103,7 +103,6 @@ function buildAttemptService() {
     }
 
     async function fetchAttempt(attemptId: string) {
-        const attemptRepository = dataSource.getRepository(Attempt);
         const qcmAnswerService = buildQcmAnswerService();
         const questionTrouAnswerService = buildQuestionTrouAnswerService();
         const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
@@ -145,7 +144,6 @@ function buildAttemptService() {
     }
 
     async function fetchAttemptWithoutAnswers(attemptId: string) {
-        const attemptRepository = dataSource.getRepository(Attempt);
         const qcmAnswerService = buildQcmAnswerService();
         const questionTrouAnswerService = buildQuestionTrouAnswerService();
         const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
@@ -195,8 +193,6 @@ function buildAttemptService() {
     }
 
     async function updateAttemptDuration(attemptId: string) {
-        const attemptRepository = dataSource.getRepository(Attempt);
-
         const result = await attemptRepository.update(
             { id: attemptId },
             { updatedAt: () => 'CURRENT_TIMESTAMP' },
@@ -205,15 +201,11 @@ function buildAttemptService() {
     }
 
     async function deleteAttempt(attemptId: string) {
-        const attemptRepository = dataSource.getRepository(Attempt);
-
         const result = await attemptRepository.delete({ id: attemptId });
         return result.affected == 1;
     }
 
     async function updateAttemptTreatmentStatus(attemptId: string, hasBeenTreated: boolean) {
-        const attemptRepository = dataSource.getRepository(Attempt);
-
         const result = await attemptRepository.update({ id: attemptId }, { hasBeenTreated });
         return result.affected == 1;
     }
@@ -222,12 +214,23 @@ function buildAttemptService() {
         attemptId: string,
         body: { roundTrips: number; timeSpentOutside: number },
     ) {
-        const attemptRepository = dataSource.getRepository(Attempt);
-
         const result = await attemptRepository.update(
             { id: attemptId },
             { roundTrips: body.roundTrips, timeSpentOutside: body.timeSpentOutside },
         );
         return result.affected == 1;
+    }
+
+    async function getAllAttempts() {
+        const attempts = await attemptRepository.find({
+            relations: ['student', 'exam'],
+            select: { student: { id: true }, exam: { id: true } },
+        });
+
+        return mapEntities(attempts);
+    }
+
+    async function bulkInsertAttempts(attempts: Array<Attempt>) {
+        return attemptRepository.insert(attempts);
     }
 }

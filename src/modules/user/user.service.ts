@@ -1,5 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { hasher } from '../../lib/hasher';
+import { mapEntities } from '../../lib/mapEntities';
 import { signer } from '../../lib/signer';
 import { User } from './User.entity';
 
@@ -11,6 +12,8 @@ function buildUserService() {
     const userService = {
         createUser,
         login,
+        getAllAnonymizedUsers,
+        bulkInsertUsers,
     };
 
     return userService;
@@ -41,5 +44,15 @@ function buildUserService() {
         } else {
             throw new Error(`The password sent does not match the hashed stored password`);
         }
+    }
+
+    async function getAllAnonymizedUsers() {
+        const users = await userRepository.find();
+
+        return mapEntities(users.map((user) => ({ ...user, email: hasher.hash(user.email) })));
+    }
+
+    async function bulkInsertUsers(users: Array<User>) {
+        return userRepository.insert(users);
     }
 }

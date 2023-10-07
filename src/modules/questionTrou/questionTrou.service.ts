@@ -2,6 +2,7 @@ import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { buildExamService } from '../exam/exam.service';
 import { QuestionTrou } from './QuestionTrou.entity';
+import { mapEntities } from '../../lib/mapEntities';
 
 export { buildQuestionTrouService };
 
@@ -11,6 +12,8 @@ function buildQuestionTrouService() {
         createQuestionTrou,
         updateQuestionTrou,
         getQuestionsTrou,
+        getAllQuestionsTrou,
+        bulkInsertQuestionsTrou,
     };
 
     return questionTrouService;
@@ -91,5 +94,17 @@ function buildQuestionTrouService() {
         return questionsTrou.reduce((acc, questionTrou) => {
             return { ...acc, [questionTrou.id]: questionTrou };
         }, {} as Record<number, QuestionTrou>);
+    }
+
+    async function getAllQuestionsTrou() {
+        const questionsTrou = await questionTrouRepository.find({
+            relations: ['exam'],
+            select: { exam: { id: true } },
+        });
+        return mapEntities(questionsTrou);
+    }
+
+    async function bulkInsertQuestionsTrou(questionsTrou: Array<QuestionTrou>) {
+        return questionTrouRepository.insert(questionsTrou);
     }
 }

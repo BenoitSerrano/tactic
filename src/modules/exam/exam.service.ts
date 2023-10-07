@@ -9,6 +9,7 @@ import { buildStudentService } from '../student';
 import { buildQuestionChoixMultipleService } from '../questionChoixMultiple';
 import { buildQuestionTrouService } from '../questionTrou';
 import { buildPhraseMelangeeService } from '../phraseMelangee';
+import { mapEntities } from '../../lib/mapEntities';
 
 export { buildExamService };
 
@@ -17,9 +18,11 @@ function buildExamService() {
     const examService = {
         createExam,
         getExams,
+        getAllExams,
         getExam,
         deleteExam,
         getExamResults,
+        bulkInsertExams,
     };
 
     return examService;
@@ -148,5 +151,15 @@ function buildExamService() {
 
         const result = await examRepository.delete({ id: examId });
         return result.affected == 1;
+    }
+
+    async function getAllExams() {
+        const exams = await examRepository.find();
+
+        return mapEntities(exams);
+    }
+
+    async function bulkInsertExams(exams: Array<Exam>) {
+        return examRepository.insert(exams);
     }
 }

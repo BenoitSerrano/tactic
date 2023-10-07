@@ -3,23 +3,28 @@ import { dataSource } from '../../dataSource';
 import { User } from '../user';
 import { Student } from './Student.entity';
 import { studentAdaptator } from './student.adaptator';
+import { mapEntities } from '../../lib/mapEntities';
+import { hasher } from '../../lib/hasher';
 
 export { buildStudentService };
 
 function buildStudentService() {
+    const studentRepository = dataSource.getRepository(Student);
+
     const studentService = {
         patchStudent,
         createStudents,
         getStudents,
+        getAllAnonymizedStudents,
         getStudentsWithAttempts,
         getStudentId,
         deleteStudent,
+        bulkInsertStudents,
     };
 
     return studentService;
 
     async function getStudentsWithAttempts(user?: User) {
-        const studentRepository = dataSource.getRepository(Student);
         const studentsWithAttempts = await studentRepository.find({
             where: { user },
             relations: ['attempts', 'attempts.exam'],
@@ -30,8 +35,6 @@ function buildStudentService() {
     }
 
     async function getStudents(studentIds: Student['id'][]) {
-        const studentRepository = dataSource.getRepository(Student);
-
         const students = await studentRepository.find({
             where: { id: In(studentIds) },
             select: { id: true, email: true },
@@ -41,8 +44,18 @@ function buildStudentService() {
         }, {} as Record<string, Student>);
     }
 
+    async function getAllAnonymizedStudents() {
+        const students = await studentRepository.find({
+            relations: ['user'],
+            select: { user: { id: true } },
+        });
+
+        return mapEntities(
+            students.map((student) => ({ ...student, email: hasher.hash(student.email) })),
+        );
+    }
+
     async function getStudentId(email: string) {
-        const studentRepository = dataSource.getRepository(Student);
         return studentRepository.findOneOrFail({
             where: { email: email.trim().toLowerCase() },
             select: ['id'],
@@ -50,7 +63,6 @@ function buildStudentService() {
     }
 
     async function createStudents(emails: string[], user?: User) {
-        const studentRepository = dataSource.getRepository(Student);
         const students = emails.map((email) => {
             const student = new Student();
             student.email = email.trim().toLowerCase();
@@ -61,16 +73,16 @@ function buildStudentService() {
     }
 
     async function patchStudent(studentId: string, { comment }: { comment: string }) {
-        const studentRepository = dataSource.getRepository(Student);
-
         const result = await studentRepository.update({ id: studentId }, { comment });
         return result.affected == 1;
     }
 
     async function deleteStudent(studentId: string) {
-        const studentRepository = dataSource.getRepository(Student);
-
         const result = await studentRepository.delete({ id: studentId });
         return result.affected == 1;
+    }
+
+    async function bulkInsertStudents(students: Array<Student>) {
+        return studentRepository.insert(students);
     }
 }

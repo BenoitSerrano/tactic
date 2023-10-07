@@ -2,6 +2,7 @@ import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { buildExamService } from '../exam/exam.service';
 import { PhraseMelangee } from './PhraseMelangee.entity';
+import { mapEntities } from '../../lib/mapEntities';
 
 export { buildPhraseMelangeeService };
 
@@ -11,6 +12,8 @@ function buildPhraseMelangeeService() {
         createPhraseMelangee,
         updatePhraseMelangee,
         getPhrasesMelangees,
+        getAllPhrasesMelangees,
+        bulkInsertPhrasesMelangees,
     };
 
     return phraseMelangeeService;
@@ -92,5 +95,17 @@ function buildPhraseMelangeeService() {
         return phrasesMelangees.reduce((acc, phraseMelangee) => {
             return { ...acc, [phraseMelangee.id]: phraseMelangee };
         }, {} as Record<number, PhraseMelangee>);
+    }
+
+    async function getAllPhrasesMelangees() {
+        const phrasesMelangees = await phraseMelangeeRepository.find({
+            relations: ['exam'],
+            select: { exam: { id: true } },
+        });
+        return mapEntities(phrasesMelangees);
+    }
+
+    async function bulkInsertPhrasesMelangees(phrasesMelangees: Array<PhraseMelangee>) {
+        return phraseMelangeeRepository.insert(phrasesMelangees);
     }
 }

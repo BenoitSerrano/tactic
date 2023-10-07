@@ -8,6 +8,7 @@ import { buildAttemptController } from '../modules/attempt';
 import { buildQuestionTrouController } from '../modules/questionTrou';
 import { buildPhraseMelangeeController } from '../modules/phraseMelangee';
 import { buildUserController } from '../modules/user';
+import { buildAnonymizedDataController } from '../modules/anonymizedData';
 import { accessControlBuilder } from '../lib/accessControlBuilder';
 
 const router = Express.Router();
@@ -18,6 +19,7 @@ const questionTrouController = buildQuestionTrouController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
 const phraseMelangeeController = buildPhraseMelangeeController();
+const anonymizedDataController = buildAnonymizedDataController();
 
 router.post('/users', buildController(userController.createUser));
 router.post('/login', buildController(userController.login));
@@ -261,5 +263,7 @@ router.patch(
 );
 
 router.delete('/attempts/:attemptId', buildController(attemptController.deleteAttempt));
+
+router.get('/anonymized-data', buildController(anonymizedDataController.getAnonymizedData));
 
 export { router };

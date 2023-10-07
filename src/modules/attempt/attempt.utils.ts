@@ -1,4 +1,3 @@
-import { Attempt } from './Attempt.entity';
 import { AttemptInterface } from './attempt.interface';
 
 const attemptUtils = { isTimeLimitExceeded };
