@@ -1,11 +1,10 @@
-import { Attempt } from '../attempt';
+import { Attempt, attemptUtils } from '../attempt';
 import { attemptAdaptator } from '../attempt/attempt.adaptator';
 import { PhraseMelangee } from '../phraseMelangee';
-import { PhraseMelangeeAnswer, phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
-import { QcmAnswer, qcmAnswerAdaptator } from '../qcmAnswer';
+import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
+import { qcmAnswerAdaptator } from '../qcmAnswer';
 import { QuestionChoixMultiple } from '../questionChoixMultiple';
 import { QuestionTrou } from '../questionTrou';
-import { QuestionTrouAnswer } from '../questionTrouAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
 import { Student } from '../student';
 
@@ -21,11 +20,6 @@ function convertExamWithAttemptsToResults(
         questionsTrou: Record<QuestionTrou['id'], QuestionTrou>;
         phrasesMelangees: Record<PhraseMelangee['id'], PhraseMelangee>;
     },
-    answers: {
-        qcmAnswers: Record<QcmAnswer['id'], QcmAnswer>;
-        questionTrouAnswers: Record<QuestionTrouAnswer['id'], QuestionTrouAnswer>;
-        phraseMelangeeAnswers: Record<PhraseMelangeeAnswer['id'], PhraseMelangeeAnswer>;
-    },
 ) {
     const treatmentStatusSummary = attemptAdaptator.computeTreatmentStatusSummary(attempts);
     const examWithResults = attempts.map((attempt) => {
@@ -35,25 +29,20 @@ function convertExamWithAttemptsToResults(
         const duration = attempt.updatedAt
             ? Math.floor((new Date(attempt.updatedAt).getTime() - startedAtDate.getTime()) / 1000)
             : undefined;
-        const qcmAnswers = attempt.qcmAnswers.map(({ id }) => answers.qcmAnswers[id]);
+        const answers = attemptUtils.parseAnswers(attempt.answers);
+
         const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
-            qcmAnswers,
+            answers.qcmChoices,
             Object.values(questions.questionsChoixMultiple),
         );
 
-        const questionTrouAnswers = attempt.questionTrouAnswers.map(
-            ({ id }) => answers.questionTrouAnswers[id],
-        );
         const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
-            questionTrouAnswers,
+            answers.questionTrouAnswers,
             Object.values(questions.questionsTrou),
         );
 
-        const phraseMelangeeAnswers = attempt.phraseMelangeAnswers.map(
-            ({ id }) => answers.phraseMelangeeAnswers[id],
-        );
         const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
-            phraseMelangeeAnswers,
+            answers.phraseMelangeeAnswers,
             Object.values(questions.phrasesMelangees),
         );
 

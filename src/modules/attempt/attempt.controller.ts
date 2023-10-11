@@ -1,4 +1,5 @@
-import { attemptAnswersType, buildAttemptService } from './attempt.service';
+import { buildAttemptService } from './attempt.service';
+import { attemptAnswersType } from './types';
 
 export { buildAttemptController };
 

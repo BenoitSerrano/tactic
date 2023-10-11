@@ -1,4 +1,4 @@
-import { PhraseMelangee } from '../phraseMelangee';
+import { PhraseMelangee, phraseMelangeeAnswersType } from '../phraseMelangee';
 import { PhraseMelangeeAnswer } from './PhraseMelangeeAnswer.entity';
 
 const phraseMelangeeAdaptator = {
@@ -15,16 +15,9 @@ type phraseMelangeeSummaryType = Record<
 >;
 
 function computePhraseMelangeeSummary(
-    phraseMelangeeAnswers: PhraseMelangeeAnswer[],
+    answers: phraseMelangeeAnswersType,
     phrasesMelangees: PhraseMelangee[],
 ): phraseMelangeeSummaryType {
-    const answers: Record<number, string> = {};
-
-    phraseMelangeeAnswers.forEach((phraseMelangeeAnswer) => {
-        const id = phraseMelangeeAnswer.phraseMelangee.id;
-        answers[id] = phraseMelangeeAnswer.answer;
-    });
-
     const phraseMelangeeAnswerSummary = {} as phraseMelangeeSummaryType;
     phrasesMelangees.forEach((phraseMelangee) => {
         if (!answers[phraseMelangee.id]) {

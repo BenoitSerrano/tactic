@@ -52,9 +52,6 @@ function buildExamService() {
     }
 
     async function getExamResults(examId: string) {
-        const qcmAnswerService = buildQcmAnswerService();
-        const questionTrouAnswerService = buildQuestionTrouAnswerService();
-        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
         const studentService = buildStudentService();
         const qcmService = buildQuestionChoixMultipleService();
         const questionTrouService = buildQuestionTrouService();
@@ -77,51 +74,16 @@ function buildExamService() {
                     startedAt: true,
                     updatedAt: true,
                     student: { id: true },
-                    qcmAnswers: { id: true },
-                    phraseMelangeAnswers: { id: true },
-                    questionTrouAnswers: { id: true },
                     hasBeenTreated: true,
                     roundTrips: true,
                     timeSpentOutside: true,
+                    answers: true,
                 },
             },
-            relations: [
-                'attempts',
-                'attempts.student',
-                'attempts.qcmAnswers',
-                'attempts.questionTrouAnswers',
-                'attempts.phraseMelangeAnswers',
-            ],
+            relations: ['attempts', 'attempts.student'],
         });
         const studentIds = attempts.attempts.map((attempt) => attempt.student.id);
         const students = await studentService.getStudents(studentIds);
-
-        const qcmAnswerIds = attempts.attempts.reduce((acc, attempt) => {
-            return [...acc, ...attempt.qcmAnswers.map((qcmAnswer) => qcmAnswer.id)];
-        }, [] as number[]);
-        const qcmAnswers = await qcmAnswerService.getQcmAnswers(qcmAnswerIds);
-
-        const questionTrouAnswerIds = attempts.attempts.reduce((acc, attempt) => {
-            return [
-                ...acc,
-                ...attempt.questionTrouAnswers.map((questionTrouAnswer) => questionTrouAnswer.id),
-            ];
-        }, [] as number[]);
-        const questionTrouAnswers = await questionTrouAnswerService.getQuestionTrouAnswers(
-            questionTrouAnswerIds,
-        );
-
-        const phraseMelangeeAnswerIds = attempts.attempts.reduce((acc, attempt) => {
-            return [
-                ...acc,
-                ...attempt.phraseMelangeAnswers.map(
-                    (phraseMelangeeAnswer) => phraseMelangeeAnswer.id,
-                ),
-            ];
-        }, [] as number[]);
-        const phraseMelangeeAnswers = await phraseMelangeeAnswerService.getPhraseMelangeeAnswers(
-            phraseMelangeeAnswerIds,
-        );
 
         const qcmIds = exam.questionsChoixMultiple.map((qcm) => qcm.id);
         const questionsChoixMultiple = await qcmService.getQuestionsChoixMultiples(qcmIds);
@@ -136,11 +98,6 @@ function buildExamService() {
             attempts.attempts,
             students,
             { questionsChoixMultiple, questionsTrou, phrasesMelangees },
-            {
-                qcmAnswers,
-                questionTrouAnswers,
-                phraseMelangeeAnswers,
-            },
         );
 
         return examWithResults;

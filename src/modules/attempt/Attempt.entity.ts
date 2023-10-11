@@ -49,4 +49,7 @@ export class Attempt implements AttemptInterface {
 
     @Column({ default: 0 })
     timeSpentOutside: number;
+
+    @Column('simple-array', { default: '' })
+    answers: string[];
 }

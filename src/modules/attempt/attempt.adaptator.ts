@@ -6,6 +6,7 @@ import { QuestionTrouAnswer } from '../questionTrouAnswer';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
 import { questionTrouAnswersType } from '../questionTrouAnswer/types';
 import { Attempt } from './Attempt.entity';
+import { attemptAnswersType } from './types';
 
 const attemptAdaptator = {
     convertAttemptToAttemptWithAnswers,
@@ -25,30 +26,8 @@ function computeTreatmentStatusSummary(attempts: Attempt[]) {
 function convertAttemptToAttemptWithoutAnswers(
     attempt: Attempt,
     exam: Exam,
-    answers: {
-        qcmAnswers: Record<QcmAnswer['id'], QcmAnswer>;
-        questionTrouAnswers: Record<QuestionTrouAnswer['id'], QuestionTrouAnswer>;
-        phraseMelangeeAnswers: Record<PhraseMelangeeAnswer['id'], PhraseMelangeeAnswer>;
-    },
+    attemptAnswers: attemptAnswersType,
 ) {
-    const qcmChoices: Record<number, number> = {};
-    Object.values(answers.qcmAnswers).forEach((qcmAnswer) => {
-        const id = qcmAnswer.questionChoixMultiple.id;
-        qcmChoices[id] = qcmAnswer.choice;
-    });
-
-    const questionTrouAnswers: Record<number, string> = {};
-    Object.values(answers.questionTrouAnswers).forEach((questionTrouAnswer) => {
-        const id = questionTrouAnswer.questionTrou.id;
-        questionTrouAnswers[id] = questionTrouAnswer.answer;
-    });
-
-    const phraseMelangeeAnswers: Record<number, string> = {};
-    Object.values(answers.phraseMelangeeAnswers).forEach((phraseMelangeeAnswer) => {
-        const id = phraseMelangeeAnswer.phraseMelangee.id;
-        phraseMelangeeAnswers[id] = phraseMelangeeAnswer.answer;
-    });
-
     return {
         id: attempt.id,
         startedAt: attempt.startedAt,
@@ -62,19 +41,19 @@ function convertAttemptToAttemptWithoutAnswers(
                 id: questionChoixMultiple.id,
                 title: questionChoixMultiple.title,
                 possibleAnswers: questionChoixMultiple.possibleAnswers,
-                choice: qcmChoices[questionChoixMultiple.id],
+                choice: attemptAnswers.qcmChoices[questionChoixMultiple.id],
             })),
             questionsTrou: exam.questionsTrou.map((questionTrou) => ({
                 id: questionTrou.id,
                 beforeText: questionTrou.beforeText,
                 afterText: questionTrou.afterText,
-                answer: questionTrouAnswers[questionTrou.id],
+                answer: attemptAnswers.questionTrouAnswers[questionTrou.id],
             })),
             phrasesMelangees: exam.phrasesMelangees.map((phraseMelangee) => ({
                 id: phraseMelangee.id,
                 words: phraseMelangee.words,
                 shuffledPhrase: phraseMelangee.shuffledPhrase,
-                answer: phraseMelangeeAnswers[phraseMelangee.id],
+                answer: attemptAnswers.phraseMelangeeAnswers[phraseMelangee.id],
             })),
         },
     };
@@ -83,23 +62,19 @@ function convertAttemptToAttemptWithoutAnswers(
 function convertAttemptToAttemptWithAnswers(
     attempt: Attempt,
     exam: Exam,
-    answers: {
-        qcmAnswers: Record<QcmAnswer['id'], QcmAnswer>;
-        questionTrouAnswers: Record<QuestionTrouAnswer['id'], QuestionTrouAnswer>;
-        phraseMelangeeAnswers: Record<PhraseMelangeeAnswer['id'], PhraseMelangeeAnswer>;
-    },
+    answers: attemptAnswersType,
 ) {
     const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
-        Object.values(answers.qcmAnswers),
+        answers.qcmChoices,
         exam.questionsChoixMultiple,
     );
     const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
-        Object.values(answers.questionTrouAnswers),
+        answers.questionTrouAnswers,
         exam.questionsTrou,
     );
 
     const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
-        Object.values(answers.phraseMelangeeAnswers),
+        answers.phraseMelangeeAnswers,
         exam.phrasesMelangees,
     );
 

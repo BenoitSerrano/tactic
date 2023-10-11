@@ -39,4 +39,27 @@ describe('attemptsUtils', () => {
             ).toBe(true);
         });
     });
+
+    describe('stringifyAnswers', () => {
+        const attemptAnswers = {
+            qcmChoices: { 1: 2, 2: 3 },
+            questionTrouAnswers: { 1: 'truc' },
+            phraseMelangeeAnswers: { 3: 'are you even sure' },
+        };
+
+        const answers = attemptUtils.stringifyAnswers(attemptAnswers);
+
+        expect(answers).toEqual(['QCM:1-2', 'QCM:2-3', 'QT:1-truc', 'PM:3-are you even sure']);
+    });
+    describe('parseAnswers', () => {
+        const answers = ['QCM:1-2', 'QCM:2-3', 'QT:1-truc', 'PM:3-are you even sure'];
+
+        const attemptAnswers = attemptUtils.parseAnswers(answers);
+
+        expect(attemptAnswers).toEqual({
+            qcmChoices: { 1: '2', 2: '3' },
+            questionTrouAnswers: { 1: 'truc' },
+            phraseMelangeeAnswers: { 3: 'are you even sure' },
+        });
+    });
 });

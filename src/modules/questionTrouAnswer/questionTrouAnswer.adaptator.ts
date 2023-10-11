@@ -1,5 +1,5 @@
 import { QuestionTrou } from '../questionTrou/QuestionTrou.entity';
-import { QuestionTrouAnswer } from './QuestionTrouAnswer.entity';
+import { questionTrouAnswersType } from './types';
 import { computeQuestionTrouStatus } from './utils/computeQuestionTrouStatus';
 
 const questionTrouAnswerAdaptator = {
@@ -7,19 +7,14 @@ const questionTrouAnswerAdaptator = {
 };
 
 function computeQuestionTrouSummary(
-    questionTrouAnswers: QuestionTrouAnswer[],
+    questionTrouAnswers: questionTrouAnswersType,
     questionsTrou: QuestionTrou[],
 ) {
-    const trouAnswers: Record<number, string> = {};
-
-    questionTrouAnswers.forEach((questionTrouAnswer) => {
-        const id = questionTrouAnswer.questionTrou.id;
-        trouAnswers[id] = questionTrouAnswer.answer;
-    });
+    // TODO
     const questionTrouSummary: any = {};
 
     questionsTrou.forEach((questionTrou) => {
-        const answer = trouAnswers[questionTrou.id];
+        const answer = questionTrouAnswers[questionTrou.id];
         const status = computeQuestionTrouStatus(
             answer,
             questionTrou.rightAnswers,

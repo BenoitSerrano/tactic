@@ -1,25 +1,16 @@
 import { dataSource } from '../../dataSource';
 import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
-import { phraseMelangeeAnswersType } from '../phraseMelangee';
 import { buildPhraseMelangeeAnswerService } from '../phraseMelangeeAnswer';
-import { buildQcmAnswerService, qcmChoicesType } from '../qcmAnswer';
+import { buildQcmAnswerService } from '../qcmAnswer';
 import { buildQuestionTrouAnswerService } from '../questionTrouAnswer';
-import { questionTrouAnswersType } from '../questionTrouAnswer/types';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
 import { attemptUtils } from './attempt.utils';
+import { attemptAnswersType } from './types';
 
 export { buildAttemptService };
-
-export type { attemptAnswersType };
-
-type attemptAnswersType = {
-    qcmChoices: qcmChoicesType;
-    questionTrouAnswers: questionTrouAnswersType;
-    phraseMelangeeAnswers: phraseMelangeeAnswersType;
-};
 
 function buildAttemptService() {
     const attemptRepository = dataSource.getRepository(Attempt);
@@ -78,10 +69,6 @@ function buildAttemptService() {
     }
 
     async function updateAttempt(attemptId: string, attemptAnswers: attemptAnswersType) {
-        const qcmAnswerService = buildQcmAnswerService();
-        const questionTrouAnswerService = buildQuestionTrouAnswerService();
-        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
-
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             relations: ['exam'],
@@ -90,22 +77,17 @@ function buildAttemptService() {
         await updateAttemptDuration(attempt.id);
         // TODO : vérifier que les questions pour lesquelles on envoie des réponses sont bien dans cet exam
 
-        await qcmAnswerService.updateQcmChoices(attempt, attemptAnswers.qcmChoices);
-        await questionTrouAnswerService.updateQuestionTrouAnswers(
-            attempt,
-            attemptAnswers.questionTrouAnswers,
-        );
-        await phraseMelangeeAnswerService.updatePhraseMelangeeAnswers(
-            attempt,
-            attemptAnswers.phraseMelangeeAnswers,
-        );
+        const { phraseMelangeeAnswers, qcmChoices, questionTrouAnswers } = attemptAnswers;
+        const answers = attemptUtils.stringifyAnswers({
+            phraseMelangeeAnswers,
+            qcmChoices,
+            questionTrouAnswers,
+        });
+        await attemptRepository.update({ id: attempt.id }, { answers });
         return true;
     }
 
     async function fetchAttempt(attemptId: string) {
-        const qcmAnswerService = buildQcmAnswerService();
-        const questionTrouAnswerService = buildQuestionTrouAnswerService();
-        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
         const examService = buildExamService();
 
         const attempt = await attemptRepository.findOneOrFail({
@@ -113,40 +95,25 @@ function buildAttemptService() {
             select: {
                 id: true,
                 exam: { id: true },
-                phraseMelangeAnswers: { id: true },
-                qcmAnswers: { id: true },
-                questionTrouAnswers: { id: true },
                 startedAt: true,
+                answers: true,
             },
 
-            relations: ['exam', 'qcmAnswers', 'questionTrouAnswers', 'phraseMelangeAnswers'],
+            relations: ['exam'],
         });
-
         const exam = await examService.getExam(attempt.exam.id);
+        const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 
-        const qcmAnswerIds = attempt.qcmAnswers.map(({ id }) => id);
-        const questionTrouAnswerIds = attempt.questionTrouAnswers.map(({ id }) => id);
-        const phraseMelangeeAnswerIds = attempt.phraseMelangeAnswers.map(({ id }) => id);
-
-        const qcmAnswers = await qcmAnswerService.getQcmAnswers(qcmAnswerIds);
-        const questionTrouAnswers = await questionTrouAnswerService.getQuestionTrouAnswers(
-            questionTrouAnswerIds,
-        );
-        const phraseMelangeeAnswers = await phraseMelangeeAnswerService.getPhraseMelangeeAnswers(
-            phraseMelangeeAnswerIds,
+        const result = attemptAdaptator.convertAttemptToAttemptWithAnswers(
+            attempt,
+            exam,
+            attemptAnswers,
         );
 
-        return attemptAdaptator.convertAttemptToAttemptWithAnswers(attempt, exam, {
-            qcmAnswers,
-            questionTrouAnswers,
-            phraseMelangeeAnswers,
-        });
+        return result;
     }
 
     async function fetchAttemptWithoutAnswers(attemptId: string) {
-        const qcmAnswerService = buildQcmAnswerService();
-        const questionTrouAnswerService = buildQuestionTrouAnswerService();
-        const phraseMelangeeAnswerService = buildPhraseMelangeeAnswerService();
         const examService = buildExamService();
 
         const attempt = await attemptRepository.findOneOrFail({
@@ -154,34 +121,20 @@ function buildAttemptService() {
             select: {
                 id: true,
                 exam: { id: true },
-                phraseMelangeAnswers: { id: true },
-                qcmAnswers: { id: true },
-                questionTrouAnswers: { id: true },
                 startedAt: true,
+                answers: true,
             },
 
-            relations: ['exam', 'qcmAnswers', 'questionTrouAnswers', 'phraseMelangeAnswers'],
+            relations: ['exam'],
         });
-
         const exam = await examService.getExam(attempt.exam.id);
+        const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 
-        const qcmAnswerIds = attempt.qcmAnswers.map(({ id }) => id);
-        const questionTrouAnswerIds = attempt.questionTrouAnswers.map(({ id }) => id);
-        const phraseMelangeeAnswerIds = attempt.phraseMelangeAnswers.map(({ id }) => id);
-
-        const qcmAnswers = await qcmAnswerService.getQcmAnswers(qcmAnswerIds);
-        const questionTrouAnswers = await questionTrouAnswerService.getQuestionTrouAnswers(
-            questionTrouAnswerIds,
+        const result = attemptAdaptator.convertAttemptToAttemptWithoutAnswers(
+            attempt,
+            exam,
+            attemptAnswers,
         );
-        const phraseMelangeeAnswers = await phraseMelangeeAnswerService.getPhraseMelangeeAnswers(
-            phraseMelangeeAnswerIds,
-        );
-
-        const result = attemptAdaptator.convertAttemptToAttemptWithoutAnswers(attempt, exam, {
-            qcmAnswers,
-            questionTrouAnswers,
-            phraseMelangeeAnswers,
-        });
 
         return result;
     }
