@@ -1,3 +1,4 @@
+import { encoder } from '../../lib/encoder';
 import { AttemptInterface } from './attempt.interface';
 import { attemptAnswersType } from './types';
 
@@ -17,21 +18,21 @@ function isTimeLimitExceeded(attempt: AttemptInterface, now: Date) {
 function stringifyAnswers(attemptAnswers: attemptAnswersType) {
     let answers: string[] = [];
     for (const [qcmId, qcmAnswer] of Object.entries(attemptAnswers.qcmChoices)) {
-        const answer = `QCM:${qcmId}-${btoa(`${qcmAnswer}`)}`;
+        const answer = `QCM:${qcmId}-${encoder.stringToBase64(`${qcmAnswer}`)}`;
         answers.push(answer);
     }
 
     for (const [questionTrouId, questionTrouAnswer] of Object.entries(
         attemptAnswers.questionTrouAnswers,
     )) {
-        const answer = `QT:${questionTrouId}-${btoa(questionTrouAnswer)}`;
+        const answer = `QT:${questionTrouId}-${encoder.stringToBase64(questionTrouAnswer)}`;
         answers.push(answer);
     }
 
     for (const [phraseMelangeeId, phraseMelangeeAnswer] of Object.entries(
         attemptAnswers.phraseMelangeeAnswers,
     )) {
-        const answer = `PM:${phraseMelangeeId}-${btoa(phraseMelangeeAnswer)}`;
+        const answer = `PM:${phraseMelangeeId}-${encoder.stringToBase64(phraseMelangeeAnswer)}`;
         answers.push(answer);
     }
 
@@ -40,7 +41,6 @@ function stringifyAnswers(attemptAnswers: attemptAnswersType) {
 
 function parseAnswers(answers: string[]): attemptAnswersType {
     const ANSWER_REGEX = /([A-Z]+):(\d+)-(.*)/;
-    // const decodedAnswers = answers.map((answer) => atob(answer));
     let attemptAnswers = answers.reduce(
         (acc, answer) => {
             let regexMatch = answer.match(ANSWER_REGEX);
@@ -48,7 +48,7 @@ function parseAnswers(answers: string[]): attemptAnswersType {
                 throw new Error(`answer ${answer} is wrongly formatted.`);
             }
             const [_, questionType, questionId, encodedQuestionAnswer] = regexMatch;
-            const questionAnswer = atob(encodedQuestionAnswer);
+            const questionAnswer = encoder.base64ToString(encodedQuestionAnswer);
             let key: 'qcmChoices' | 'questionTrouAnswers' | 'phraseMelangeeAnswers' = 'qcmChoices';
             switch (questionType) {
                 case 'QCM':

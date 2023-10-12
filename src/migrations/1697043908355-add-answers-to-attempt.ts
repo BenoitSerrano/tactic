@@ -78,16 +78,5 @@ function stringifyAnswers(attemptAnswers: any) {
 }
 
 function btoa(str: string) {
-    try {
-        const result = Buffer.from(str).toString('base64');
-        return result;
-    } catch (error) {
-        console.log(error);
-        throw new Error(
-            `Erreur avec la string "${str}" : "[${str
-                .split('')
-                .map((chr) => chr.charCodeAt(0))
-                .join(', ')}]"`,
-        );
-    }
+    return Buffer.from(str).toString('base64');
 }
