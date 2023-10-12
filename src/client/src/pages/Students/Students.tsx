@@ -53,11 +53,10 @@ function Students() {
     const [activeSort, setActiveSort] = useState<sortColumnType>('email');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-    if (!query.data && query.isLoading) {
-        return <Loader />;
-    }
-
     if (!query.data) {
+        if (query.isLoading) {
+            return <Loader />;
+        }
         return <div />;
     }
 

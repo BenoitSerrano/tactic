@@ -32,6 +32,7 @@ import {
     questionTrouModalStatusType,
     questionTrouType,
 } from './QuestionTrouUpsertionModal';
+import { Loader } from '../../components/Loader';
 
 function ExamEdition() {
     const params = useParams<{ examId: string }>();
@@ -47,6 +48,13 @@ function ExamEdition() {
     const [currentQuestionTrouModalStatus, setCurrentQuestionTrouModalStatus] = useState<
         questionTrouModalStatusType | undefined
     >();
+
+    if (!query.data) {
+        if (query.isLoading) {
+            return <Loader />;
+        }
+        return <div />;
+    }
 
     const menuButtons = [
         {
