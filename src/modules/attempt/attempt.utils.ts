@@ -13,39 +13,42 @@ function isTimeLimitExceeded(attempt: AttemptInterface, now: Date) {
 }
 
 // TODO: ne plus parler de qcmChoice, en fait c'est la qcmAnswer, c'est une string aussi tséquoi
-// TODO: utiliser fonction à l'insertion et au decodage de la BDD
 
 function stringifyAnswers(attemptAnswers: attemptAnswersType) {
     let answers: string[] = [];
+    for (const [qcmId, qcmAnswer] of Object.entries(attemptAnswers.qcmChoices)) {
+        const answer = `QCM:${qcmId}-${btoa(`${qcmAnswer}`)}`;
+        answers.push(answer);
+    }
 
-    Object.entries(attemptAnswers.qcmChoices).forEach(([qcmId, qcmAnswer]) => {
-        answers.push(`QCM:${qcmId}-${qcmAnswer}`);
-    });
+    for (const [questionTrouId, questionTrouAnswer] of Object.entries(
+        attemptAnswers.questionTrouAnswers,
+    )) {
+        const answer = `QT:${questionTrouId}-${btoa(questionTrouAnswer)}`;
+        answers.push(answer);
+    }
 
-    Object.entries(attemptAnswers.questionTrouAnswers).forEach(
-        ([questionTrouId, questionTrouAnswer]) => {
-            answers.push(`QT:${questionTrouId}-${questionTrouAnswer}`);
-        },
-    );
+    for (const [phraseMelangeeId, phraseMelangeeAnswer] of Object.entries(
+        attemptAnswers.phraseMelangeeAnswers,
+    )) {
+        const answer = `PM:${phraseMelangeeId}-${btoa(phraseMelangeeAnswer)}`;
+        answers.push(answer);
+    }
 
-    Object.entries(attemptAnswers.phraseMelangeeAnswers).forEach(
-        ([phraseMelangeeId, phraseMelangeeAnswer]) => {
-            answers.push(`PM:${phraseMelangeeId}-${phraseMelangeeAnswer}`);
-        },
-    );
-    return answers.map((answer) => btoa(answer));
+    return answers;
 }
 
 function parseAnswers(answers: string[]): attemptAnswersType {
     const ANSWER_REGEX = /([A-Z]+):(\d+)-(.*)/;
-    const decodedAnswers = answers.map((answer) => atob(answer));
-    let attemptAnswers = decodedAnswers.reduce(
+    // const decodedAnswers = answers.map((answer) => atob(answer));
+    let attemptAnswers = answers.reduce(
         (acc, answer) => {
             let regexMatch = answer.match(ANSWER_REGEX);
             if (!regexMatch) {
                 throw new Error(`answer ${answer} is wrongly formatted.`);
             }
-            const [_, questionType, questionId, questionAnswer] = regexMatch;
+            const [_, questionType, questionId, encodedQuestionAnswer] = regexMatch;
+            const questionAnswer = atob(encodedQuestionAnswer);
             let key: 'qcmChoices' | 'questionTrouAnswers' | 'phraseMelangeeAnswers' = 'qcmChoices';
             switch (questionType) {
                 case 'QCM':

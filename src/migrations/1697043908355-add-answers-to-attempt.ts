@@ -54,54 +54,24 @@ export class AddAnswersToAttempt1697043908355 implements MigrationInterface {
 
 function stringifyAnswers(attemptAnswers: any) {
     let answers: string[] = [];
+    for (const [qcmId, qcmAnswer] of Object.entries(attemptAnswers.qcmChoices)) {
+        const answer = `QCM:${qcmId}-${btoa(`${qcmAnswer}`)}`;
+        answers.push(answer);
+    }
 
-    Object.entries(attemptAnswers.qcmChoices).forEach(([qcmId, qcmAnswer]) => {
-        answers.push(`QCM:${qcmId}-${qcmAnswer}`);
-    });
+    for (const [questionTrouId, questionTrouAnswer] of Object.entries(
+        attemptAnswers.questionTrouAnswers,
+    )) {
+        const answer = `QT:${questionTrouId}-${btoa(questionTrouAnswer as string)}`;
+        answers.push(answer);
+    }
 
-    Object.entries(attemptAnswers.questionTrouAnswers).forEach(
-        ([questionTrouId, questionTrouAnswer]) => {
-            answers.push(`QT:${questionTrouId}-${questionTrouAnswer}`);
-        },
-    );
+    for (const [phraseMelangeeId, phraseMelangeeAnswer] of Object.entries(
+        attemptAnswers.phraseMelangeeAnswers,
+    )) {
+        const answer = `PM:${phraseMelangeeId}-${btoa(phraseMelangeeAnswer as string)}`;
+        answers.push(answer);
+    }
 
-    Object.entries(attemptAnswers.phraseMelangeeAnswers).forEach(
-        ([phraseMelangeeId, phraseMelangeeAnswer]) => {
-            answers.push(`PM:${phraseMelangeeId}-${phraseMelangeeAnswer}`);
-        },
-    );
-    return answers.map((answer) => btoa(answer));
-}
-
-function parseAnswers(answers: string[]) {
-    const ANSWER_REGEX = /([A-Z]+):(\d+)-(.*)/;
-    let attemptAnswers = answers.reduce(
-        (acc, answer) => {
-            let regexMatch = answer.match(ANSWER_REGEX);
-            if (!regexMatch) {
-                throw new Error(`answer ${answer} is wrongly formatted.`);
-            }
-            const [_, questionType, questionId, questionAnswer] = regexMatch;
-            let key: 'qcmChoices' | 'questionTrouAnswers' | 'phraseMelangeeAnswers' = 'qcmChoices';
-            switch (questionType) {
-                case 'QCM':
-                    key = 'qcmChoices';
-                    break;
-                case 'QT':
-                    key = 'questionTrouAnswers';
-                    break;
-                case 'PM':
-                    key = 'phraseMelangeeAnswers';
-                    break;
-            }
-
-            return { ...acc, [key]: { ...acc[key], [questionId]: questionAnswer } };
-        },
-        {
-            qcmChoices: {},
-            questionTrouAnswers: {},
-            phraseMelangeeAnswers: {},
-        } as any,
-    );
-    return attemptAnswers;
+    return answers;
 }
