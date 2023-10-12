@@ -112,7 +112,7 @@ function Students() {
                             </TableSortLabel>
                         </TableCell>
                         {query.data.examIds.map((examId) => (
-                            <TableCell>
+                            <TableCell key={'label-' + examId}>
                                 <TableSortLabel
                                     active={activeSort === examId}
                                     direction={sortDirection}
@@ -145,7 +145,7 @@ function Students() {
                                 {time.formatToReadableDatetime(student.createdDate)}
                             </TableCell>
                             {query.data.examIds.map((examId) => (
-                                <TableCell>
+                                <TableCell key={'examStatus-' + examId}>
                                     {iconLib.computeIconColor(student.examStatus[examId])}
                                 </TableCell>
                             ))}
