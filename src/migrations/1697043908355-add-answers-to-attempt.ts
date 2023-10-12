@@ -75,3 +75,13 @@ function stringifyAnswers(attemptAnswers: any) {
 
     return answers;
 }
+
+function btoa(str: string) {
+    try {
+        const result = window.btoa(str);
+        return result;
+    } catch (error) {
+        console.log(error);
+        throw new Error(`Erreur avec la string ${str}`);
+    }
+}
