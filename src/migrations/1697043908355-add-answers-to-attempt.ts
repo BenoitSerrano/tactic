@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { Buffer } from 'node:buffer';
 
 export class AddAnswersToAttempt1697043908355 implements MigrationInterface {
     name = 'AddAnswersToAttempt1697043908355';
@@ -78,7 +79,7 @@ function stringifyAnswers(attemptAnswers: any) {
 
 function btoa(str: string) {
     try {
-        const result = window.btoa(str);
+        const result = Buffer.from(str).toString('base64');
         return result;
     } catch (error) {
         console.log(error);
