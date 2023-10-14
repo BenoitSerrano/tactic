@@ -4,6 +4,7 @@ import { Attempt } from '../attempt';
 import { QuestionTrou } from '../questionTrou';
 import { PhraseMelangee } from '../phraseMelangee';
 import { User } from '../user';
+import { Question } from '../question';
 
 @Entity()
 export class Exam {
@@ -24,6 +25,9 @@ export class Exam {
 
     @OneToMany(() => PhraseMelangee, (phraseMelangee) => phraseMelangee.exam)
     phrasesMelangees: PhraseMelangee[];
+
+    @OneToMany(() => Question, (question) => question.exam)
+    questions: Question[];
 
     @OneToMany(() => Attempt, (attempt) => attempt.exam)
     attempts: Attempt[];
