@@ -1,8 +1,11 @@
-type modalStatusType<questionTypeT> =
-    | { kind: 'editing'; question: questionTypeT }
-    | { kind: 'creating' };
+import { questionKindType } from '../../types';
+import { questionWithAnswersType } from './types';
 
-function computeConfirmButtonLabel<T>(modalStatus: modalStatusType<T>) {
+type modalStatusType =
+    | { kind: 'editing'; question: questionWithAnswersType }
+    | { kind: 'creating'; questionKind: questionKindType };
+
+function computeConfirmButtonLabel(modalStatus: modalStatusType) {
     switch (modalStatus.kind) {
         case 'creating':
             return 'Créer';
@@ -11,7 +14,7 @@ function computeConfirmButtonLabel<T>(modalStatus: modalStatusType<T>) {
     }
 }
 
-function computeModalTitlePrefix<T>(modalStatus: modalStatusType<T>) {
+function computeModalTitlePrefix(modalStatus: modalStatusType) {
     switch (modalStatus.kind) {
         case 'creating':
             return 'Création';

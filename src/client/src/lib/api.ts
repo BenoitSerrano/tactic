@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -23,12 +24,8 @@ const api = {
     fetchExams,
     fetchExamResults,
     deleteExam,
-    createQuestionChoixMultiple,
-    updateQuestionChoixMultiple,
-    createQuestionTrou,
-    updateQuestionTrou,
-    createPhraseMelangee,
-    updatePhraseMelangee,
+    createQuestion,
+    updateQuestion,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -188,105 +185,41 @@ async function createExam({ name, duration }: { name: string; duration: number }
     return performApiCall(URL, 'POST', { name, duration });
 }
 
-async function createQuestionChoixMultiple(params: {
+async function createQuestion(params: {
     examId: string;
     title: string;
-    possibleAnswers: string[];
-    rightAnswerIndex: number;
-    points: number;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/questions-choix-multiple`;
-    return performApiCall(URL, 'POST', {
-        title: params.title,
-        possibleAnswers: params.possibleAnswers,
-        rightAnswerIndex: params.rightAnswerIndex,
-        points: params.points,
-    });
-}
-
-async function updateQuestionChoixMultiple(params: {
-    examId: string;
-    qcmId: number;
-    title: string;
-    possibleAnswers: string[];
-    rightAnswerIndex: number;
-    points: number;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/questions-choix-multiple/${params.qcmId}`;
-    return performApiCall(URL, 'PUT', {
-        title: params.title,
-        possibleAnswers: params.possibleAnswers,
-        rightAnswerIndex: params.rightAnswerIndex,
-        points: params.points,
-    });
-}
-
-async function createQuestionTrou(params: {
-    examId: string;
-    beforeText: string;
-    afterText: string;
+    kind: questionKindType;
+    possibleAnswers?: string[];
     rightAnswers: string[];
     acceptableAnswers: string[];
     points: number;
 }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/questions-trou`;
+    const URL = `${BASE_URL}/exams/${params.examId}/questions`;
     return performApiCall(URL, 'POST', {
-        beforeText: params.beforeText,
-        afterText: params.afterText,
+        title: params.title,
+        kind: params.kind,
+        possibleAnswers: params.possibleAnswers,
         rightAnswers: params.rightAnswers,
         acceptableAnswers: params.acceptableAnswers,
         points: params.points,
     });
 }
 
-async function updateQuestionTrou(params: {
+async function updateQuestion(params: {
     examId: string;
-    questionTrouId: number;
-    beforeText?: string;
-    afterText?: string;
-    rightAnswers?: string[];
-    acceptableAnswers?: string[];
-    points?: number;
+    questionId: number;
+    title: string;
+    possibleAnswers?: string[];
+    rightAnswers: string[];
+    acceptableAnswers: string[];
+    points: number;
 }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/questions-trou/${params.questionTrouId}`;
+    const URL = `${BASE_URL}/exams/${params.examId}/questions/${params.questionId}`;
     return performApiCall(URL, 'PATCH', {
-        beforeText: params.beforeText,
-        afterText: params.afterText,
+        title: params.title,
+        possibleAnswers: params.possibleAnswers,
         rightAnswers: params.rightAnswers,
         acceptableAnswers: params.acceptableAnswers,
-        points: params.points,
-    });
-}
-
-async function createPhraseMelangee(params: {
-    examId: string;
-    words: string[];
-    correctPhrases: string[];
-    shuffledPhrase: string;
-    points: number;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/phrases-melangees`;
-    return performApiCall(URL, 'POST', {
-        correctPhrases: params.correctPhrases,
-        shuffledPhrase: params.shuffledPhrase,
-        words: params.words,
-        points: params.points,
-    });
-}
-
-async function updatePhraseMelangee(params: {
-    examId: string;
-    phraseMelangeeId: number;
-    words: string[];
-    correctPhrases: string[];
-    shuffledPhrase: string;
-    points: number;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/phrases-melangees/${params.phraseMelangeeId}`;
-    return performApiCall(URL, 'PUT', {
-        correctPhrases: params.correctPhrases,
-        shuffledPhrase: params.shuffledPhrase,
-        words: params.words,
         points: params.points,
     });
 }

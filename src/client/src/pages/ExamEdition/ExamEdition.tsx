@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ElementType, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,37 +16,32 @@ import {
     styled,
 } from '@mui/material';
 import { api } from '../../lib/api';
-import {
-    PhraseMelangeeUpsertionModal,
-    phraseMelangeeModalStatusType,
-    phraseMelangeeType,
-} from './PhraseMelangeeUpsertionModal';
 import { Menu } from '../../components/Menu';
-import {
-    QuestionChoixMultipleUpsertionModal,
-    questionChoixMultipleModalStatusType,
-    questionChoixMultipleType,
-} from './QuestionChoixMultipleUpsertionModal';
-import {
-    QuestionTrouUpsertionModal,
-    questionTrouModalStatusType,
-    questionTrouType,
-} from './QuestionTrouUpsertionModal';
 import { Loader } from '../../components/Loader';
+import { questionKindType } from '../../types';
+import { modalStatusType } from './utils';
+import { QuestionUpsertionModal } from './QuestionUpsertionModal';
+import { questionWithAnswersType } from './types';
+
+const questionKindIconComponentMapping: Record<questionKindType, ElementType> = {
+    qcm: RadioButtonCheckedIcon,
+    questionTrou: SaveAltIcon,
+    phraseMelangee: LowPriorityIcon,
+};
+
+const questionKindTitleMapping: Record<questionKindType, string> = {
+    qcm: 'QCM',
+    questionTrou: 'Texte à trou',
+    phraseMelangee: 'Phrase à reconstituer',
+};
 
 function ExamEdition() {
     const params = useParams<{ examId: string }>();
     const examId = params.examId as string;
     const query = useQuery(['exams', examId], () => api.fetchExam(examId));
 
-    const [currentPhraseMelangeeModalStatus, setCurrentPhraseMelangeeModalStatus] = useState<
-        phraseMelangeeModalStatusType | undefined
-    >();
-    const [currentQCMModalStatus, setCurrentQCMModalStatus] = useState<
-        questionChoixMultipleModalStatusType | undefined
-    >();
-    const [currentQuestionTrouModalStatus, setCurrentQuestionTrouModalStatus] = useState<
-        questionTrouModalStatusType | undefined
+    const [currentQuestionModalStatus, setCurrentQuestionModalStatus] = useState<
+        modalStatusType | undefined
     >();
 
     if (!query.data) {
@@ -58,25 +53,28 @@ function ExamEdition() {
 
     const menuButtons = [
         {
-            title: 'Créer un QCM',
-            onClick: () => setCurrentQCMModalStatus({ kind: 'creating' }),
-            IconComponent: RadioButtonCheckedIcon,
+            title: 'Ajouter une nouvelle QCM',
+            onClick: () => setCurrentQuestionModalStatus({ kind: 'creating', questionKind: 'qcm' }),
+            IconComponent: questionKindIconComponentMapping['qcm'],
         },
         {
-            title: 'Créer un texte à trou',
-            onClick: () => setCurrentQuestionTrouModalStatus({ kind: 'creating' }),
-            IconComponent: SaveAltIcon,
+            title: 'Ajouter une nouvelle question à trou',
+            onClick: () =>
+                setCurrentQuestionModalStatus({ kind: 'creating', questionKind: 'questionTrou' }),
+            IconComponent: questionKindIconComponentMapping['questionTrou'],
         },
         {
-            title: 'Créer une phrase à reconstituer',
-            onClick: () => setCurrentPhraseMelangeeModalStatus({ kind: 'creating' }),
-            IconComponent: LowPriorityIcon,
+            title: 'Ajouter une nouvelle phrase mélangée',
+            onClick: () =>
+                setCurrentQuestionModalStatus({ kind: 'creating', questionKind: 'phraseMelangee' }),
+            IconComponent: questionKindIconComponentMapping['phraseMelangee'],
         },
     ];
 
-    let index = 0;
-    let totalPoints = 0;
-
+    const totalPoints = query.data.questions.reduce(
+        (sum: number, question: { points: number }) => sum + question.points,
+        0,
+    );
     return (
         <>
             <Menu buttons={menuButtons} />
@@ -84,7 +82,6 @@ function ExamEdition() {
                 <TableHead>
                     <TableRow>
                         <TableCell width={20}>N°</TableCell>
-
                         <TableCell width={30}>Actions</TableCell>
                         <TableCell>Type</TableCell>
                         <TableCell>Intitulé</TableCell>
@@ -94,39 +91,32 @@ function ExamEdition() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {query.data?.questionsChoixMultiple.map(
-                        (questionChoixMultiple: questionChoixMultipleType) => {
-                            index++;
-                            totalPoints += questionChoixMultiple.points;
+                    {query.data.questions.map(
+                        (question: questionWithAnswersType, index: number) => {
+                            const QuestionKindIconComponent =
+                                questionKindIconComponentMapping[question.kind];
                             return (
-                                <TableRow key={`questionChoixMultiple-${questionChoixMultiple.id}`}>
-                                    <TableCell>{index}</TableCell>
+                                <TableRow key={`question-${question.id}`}>
+                                    <TableCell>{index + 1}</TableCell>
                                     <TableCell>
-                                        <IconButton
-                                            onClick={buildEditQuestionChoixMultipleOnClick(
-                                                questionChoixMultiple,
-                                            )}
-                                        >
+                                        <IconButton onClick={buildEditQuestionOnClick(question)}>
                                             <EditIcon />
                                         </IconButton>
                                     </TableCell>
                                     <TableCell>
                                         <QuestionTypeCellContent>
                                             <QuestionTypeIconContainer>
-                                                <RadioButtonCheckedIcon />
+                                                <QuestionKindIconComponent />
                                             </QuestionTypeIconContainer>
-                                            QCM
+                                            {questionKindTitleMapping[question.kind]}
                                         </QuestionTypeCellContent>
                                     </TableCell>
                                     <TableCell>
-                                        {questionChoixMultiple.title}
-                                        <br />
+                                        {question.title}
                                         <ul>
-                                            {questionChoixMultiple.possibleAnswers.map(
+                                            {question.possibleAnswers?.map(
                                                 (possibleAnswer: string, index) => (
-                                                    <li
-                                                        key={`questionChoixMultiple-${questionChoixMultiple.id}-${index}`}
-                                                    >
+                                                    <li key={`question-${question.id}-${index}`}>
                                                         {possibleAnswer}
                                                     </li>
                                                 ),
@@ -134,161 +124,68 @@ function ExamEdition() {
                                         </ul>
                                     </TableCell>
                                     <TableCell>
-                                        {
-                                            questionChoixMultiple.possibleAnswers[
-                                                questionChoixMultiple.rightAnswerIndex
+                                        {question.kind === 'qcm' && question.possibleAnswers ? (
+                                            question.possibleAnswers[
+                                                Number(question.rightAnswers[0])
                                             ]
-                                        }
+                                        ) : (
+                                            <ul>
+                                                {question.rightAnswers.map(
+                                                    (rightAnswer: string, index: number) => (
+                                                        <li
+                                                            key={`question-right-answers-${question.id}-${index}`}
+                                                        >
+                                                            {rightAnswer}
+                                                        </li>
+                                                    ),
+                                                )}
+                                            </ul>
+                                        )}
                                     </TableCell>
-                                    <TableCell />
-                                    <TableCell>{questionChoixMultiple.points}</TableCell>
+                                    <TableCell>
+                                        <ul>
+                                            {question.acceptableAnswers.map(
+                                                (rightAnswer: string, index: number) => (
+                                                    <li
+                                                        key={`question-acceptable-answers-${question.id}-${index}`}
+                                                    >
+                                                        {rightAnswer}
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    </TableCell>
+                                    <TableCell>{question.points}</TableCell>
                                 </TableRow>
                             );
                         },
                     )}
-                    {query.data?.questionsTrou.map((questionTrou: questionTrouType) => {
-                        index++;
-                        totalPoints += questionTrou.points;
-
-                        return (
-                            <TableRow>
-                                <TableCell>{index}</TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        onClick={buildEditQuestionTrouOnClick(questionTrou)}
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell>
-                                    {' '}
-                                    <QuestionTypeCellContent>
-                                        <QuestionTypeIconContainer>
-                                            <SaveAltIcon />
-                                        </QuestionTypeIconContainer>
-                                        Texte à trou
-                                    </QuestionTypeCellContent>
-                                </TableCell>
-                                <TableCell>
-                                    {questionTrou.beforeText} ....... {questionTrou.afterText}
-                                </TableCell>
-                                <TableCell>
-                                    <ul>
-                                        {questionTrou.rightAnswers.map((rightAnswer: string) => (
-                                            <li
-                                                key={`questionTrou-${questionTrou.id}-rightAnswer-${rightAnswer}`}
-                                            >
-                                                {rightAnswer}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </TableCell>
-                                <TableCell>
-                                    <ul>
-                                        {questionTrou.acceptableAnswers.map(
-                                            (acceptableAnswer: string) => (
-                                                <li
-                                                    key={`questionTrou-${questionTrou.id}-acceptableAnswer-${acceptableAnswer}`}
-                                                >
-                                                    {acceptableAnswer}
-                                                </li>
-                                            ),
-                                        )}
-                                    </ul>
-                                </TableCell>
-                                <TableCell>{questionTrou.points}</TableCell>
-                            </TableRow>
-                        );
-                    })}
-                    {query.data?.phrasesMelangees.map((phraseMelangee: phraseMelangeeType) => {
-                        index++;
-                        totalPoints += phraseMelangee.points;
-
-                        return (
-                            <TableRow key={`phraseMelangee-${phraseMelangee.id}`}>
-                                <TableCell>{index}</TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        onClick={buildEditPhraseMelangeeOnClick(phraseMelangee)}
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell>
-                                    <QuestionTypeCellContent>
-                                        <QuestionTypeIconContainer>
-                                            <LowPriorityIcon />
-                                        </QuestionTypeIconContainer>
-                                        Phrase mélangée
-                                    </QuestionTypeCellContent>
-                                </TableCell>
-                                <TableCell>{phraseMelangee.shuffledPhrase}</TableCell>
-                                <TableCell>
-                                    <ul>
-                                        {phraseMelangee.correctPhrases.map(
-                                            (correctPhrase: string) => (
-                                                <li>{correctPhrase}</li>
-                                            ),
-                                        )}
-                                    </ul>
-                                </TableCell>
-                                <TableCell />
-                                <TableCell>{phraseMelangee.points}</TableCell>
-                            </TableRow>
-                        );
-                    })}
                 </TableBody>
                 <TableFooter>
-                    <TableCell>Total</TableCell>
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell>{totalPoints}</TableCell>
+                    <TableRow>
+                        <TableCell>Total</TableCell>
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell>{totalPoints}</TableCell>
+                    </TableRow>
                 </TableFooter>
             </Table>
-            {!!currentPhraseMelangeeModalStatus && (
-                <PhraseMelangeeUpsertionModal
+            {!!currentQuestionModalStatus && (
+                <QuestionUpsertionModal
                     examId={examId}
-                    modalStatus={currentPhraseMelangeeModalStatus}
-                    close={() => setCurrentPhraseMelangeeModalStatus(undefined)}
-                />
-            )}
-            {!!currentQCMModalStatus && (
-                <QuestionChoixMultipleUpsertionModal
-                    examId={examId}
-                    modalStatus={currentQCMModalStatus}
-                    close={() => setCurrentQCMModalStatus(undefined)}
-                />
-            )}
-            {!!currentQuestionTrouModalStatus && (
-                <QuestionTrouUpsertionModal
-                    examId={examId}
-                    modalStatus={currentQuestionTrouModalStatus}
-                    close={() => setCurrentQuestionTrouModalStatus(undefined)}
+                    modalStatus={currentQuestionModalStatus}
+                    close={() => setCurrentQuestionModalStatus(undefined)}
                 />
             )}
         </>
     );
 
-    function buildEditPhraseMelangeeOnClick(phraseMelangee: phraseMelangeeType) {
+    function buildEditQuestionOnClick(question: any) {
         return () => {
-            setCurrentPhraseMelangeeModalStatus({ kind: 'editing', question: phraseMelangee });
-        };
-    }
-
-    function buildEditQuestionTrouOnClick(questionTrou: questionTrouType) {
-        return () => {
-            setCurrentQuestionTrouModalStatus({ kind: 'editing', question: questionTrou });
-        };
-    }
-
-    function buildEditQuestionChoixMultipleOnClick(
-        questionChoixMultiple: questionChoixMultipleType,
-    ) {
-        return () => {
-            setCurrentQCMModalStatus({ kind: 'editing', question: questionChoixMultiple });
+            setCurrentQuestionModalStatus({ kind: 'editing', question });
         };
     }
 }

@@ -6,6 +6,7 @@ import { buildQuestionChoixMultipleController } from '../modules/questionChoixMu
 import { buildStudentController } from '../modules/student';
 import { buildAttemptController } from '../modules/attempt';
 import { buildQuestionTrouController } from '../modules/questionTrou';
+import { buildQuestionController } from '../modules/question';
 import { buildPhraseMelangeeController } from '../modules/phraseMelangee';
 import { buildUserController } from '../modules/user';
 import { buildAnonymizedDataController } from '../modules/anonymizedData';
@@ -16,6 +17,7 @@ const examController = buildExamController();
 const userController = buildUserController();
 const studentController = buildStudentController();
 const questionTrouController = buildQuestionTrouController();
+const questionController = buildQuestionController();
 const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
 const phraseMelangeeController = buildPhraseMelangeeController();
@@ -134,8 +136,8 @@ router.put(
 );
 
 router.post(
-    '/exams/:examId/questions-trou',
-    buildController(questionTrouController.createQuestionTrou, {
+    '/exams/:examId/questions',
+    buildController(questionController.createQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -143,9 +145,10 @@ router.post(
             },
         ]),
         schema: Joi.object({
-            beforeText: Joi.string().allow(''),
-            afterText: Joi.string().allow(''),
+            title: Joi.string().allow(''),
+            kind: Joi.string().valid('qcm', 'questionTrou', 'phraseMelangee'),
             rightAnswers: Joi.array().items(Joi.string()),
+            possibleAnswers: Joi.array().items(Joi.string()),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
             points: Joi.number(),
         }),
@@ -153,8 +156,8 @@ router.post(
 );
 
 router.patch(
-    '/exams/:examId/questions-trou/:questionTrouId',
-    buildController(questionTrouController.updateQuestionTrou, {
+    '/exams/:examId/questions/:questionId',
+    buildController(questionController.updateQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -162,9 +165,9 @@ router.patch(
             },
         ]),
         schema: Joi.object({
-            beforeText: Joi.string().allow(''),
-            afterText: Joi.string().allow(''),
+            title: Joi.string().allow(''),
             rightAnswers: Joi.array().items(Joi.string()),
+            possibleAnswers: Joi.array().items(Joi.string()),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
             points: Joi.number(),
         }),
@@ -188,6 +191,8 @@ router.post(
         }),
     }),
 );
+
+//TODO add route to create and update question
 
 router.put(
     '/exams/:examId/phrases-melangees/:phraseMelangeeId',

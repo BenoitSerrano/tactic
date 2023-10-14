@@ -1,89 +1,90 @@
 import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Question } from './Question.entity';
+import { buildExamService } from '../exam';
 
 export { buildQuestionService };
 
 function buildQuestionService() {
     const questionRepository = dataSource.getRepository(Question);
     const questionService = {
-        // createQuestion,
-        // updateQuestion,
+        createQuestion,
+        updateQuestion,
         getQuestions,
-        // getAllQuestions,
-        // bulkInsertQuestions,
     };
 
     return questionService;
 
-    // async function createQuestion(
-    //     examId: string,
-    //     body: {
-    //         beforeText: string;
-    //         afterText: string;
-    //         rightAnswers: string[];
-    //         acceptableAnswers: string[];
-    //         points: number;
-    //     },
-    // ) {
-    //     const examService = buildExamService();
-    //     const exam = await examService.getExam(examId);
+    async function createQuestion(
+        examId: string,
+        body: {
+            title: string;
+            possibleAnswers: string[] | undefined;
+            kind: Question['kind'];
+            rightAnswers: string[];
+            acceptableAnswers: string[];
+            points: number;
+        },
+    ) {
+        const examService = buildExamService();
+        const exam = await examService.getExam(examId);
 
-    //     const question = new Question();
-    //     const highestOrder = await getHighestQuestionOrder(examId);
+        const question = new Question();
+        const highestOrder = await getHighestQuestionOrder(examId);
 
-    //     question.acceptableAnswers = body.acceptableAnswers;
-    //     question.rightAnswers = body.rightAnswers;
-    //     question.beforeText = body.beforeText;
-    //     question.afterText = body.afterText;
-    //     question.points = body.points;
-    //     question.exam = exam;
-    //     question.order = highestOrder + 1;
-    //     return questionRepository.save(question);
-    // }
+        question.acceptableAnswers = body.acceptableAnswers;
+        question.rightAnswers = body.rightAnswers;
+        question.possibleAnswers = body.possibleAnswers;
+        question.title = body.title;
+        question.kind = body.kind;
+        question.points = body.points;
+        question.exam = exam;
+        question.order = highestOrder + 1;
+        return questionRepository.save(question);
+    }
 
-    // async function getHighestQuestionOrder(examId: string) {
-    //     const questions = await questionRepository.find({
-    //         where: { exam: { id: examId } },
-    //         select: { order: true, id: true },
-    //         order: { order: 'DESC' },
-    //         take: 1,
-    //     });
+    async function getHighestQuestionOrder(examId: string) {
+        const questions = await questionRepository.find({
+            where: { exam: { id: examId } },
+            select: { order: true, id: true },
+            order: { order: 'DESC' },
+            take: 1,
+        });
 
-    //     if (questions.length == 0) {
-    //         return -1;
-    //     }
-    //     return questions[0].order;
-    // }
+        if (questions.length == 0) {
+            return -1;
+        }
+        return questions[0].order;
+    }
 
-    // async function updateQuestion({
-    //     examId,
-    //     questionId,
-    //     beforeText,
-    //     afterText,
-    //     rightAnswers,
-    //     acceptableAnswers,
-    //     points,
-    // }: {
-    //     examId: string;
-    //     questionId: number;
-    //     beforeText: string;
-    //     afterText: string;
-    //     rightAnswers: string[];
-    //     acceptableAnswers: string[];
-    //     points: number;
-    // }) {
-    //     const question = await questionRepository.findOneOrFail({
-    //         where: { exam: { id: examId }, id: questionId },
-    //     });
-    //     question.beforeText = beforeText;
-    //     question.afterText = afterText;
-    //     question.rightAnswers = rightAnswers;
-    //     question.acceptableAnswers = acceptableAnswers;
-    //     question.points = points;
+    async function updateQuestion({
+        examId,
+        questionId,
+        title,
+        possibleAnswers,
+        rightAnswers,
+        acceptableAnswers,
+        points,
+    }: {
+        examId: string;
+        questionId: number;
+        title: string;
+        possibleAnswers: string[] | undefined;
+        rightAnswers: string[];
+        acceptableAnswers: string[];
+        points: number;
+    }) {
+        const question = await questionRepository.findOneOrFail({
+            where: { exam: { id: examId }, id: questionId },
+        });
+        question.title = title;
+        question.possibleAnswers = possibleAnswers;
+        question.rightAnswers = rightAnswers;
+        question.acceptableAnswers = acceptableAnswers;
+        question.points = points;
 
-    //     return questionRepository.save(question);
-    // }
+        return questionRepository.save(question);
+    }
 
     async function getQuestions(questionIds: Question['id'][]) {
         const questions = await questionRepository.find({
