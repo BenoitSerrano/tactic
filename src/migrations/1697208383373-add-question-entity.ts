@@ -14,7 +14,6 @@ export class AddQuestionEntity1697208383373 implements MigrationInterface {
         await queryRunner.query(
             `ALTER TABLE "question" ADD CONSTRAINT "FK_286bbf761d3af4e2fcac4a634d5" FOREIGN KEY ("examId") REFERENCES "exam"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
         );
-        await queryRunner.query(`ALTER TABLE "attempt" ADD "answerss" text NOT NULL DEFAULT ''`);
 
         const qcms = await queryRunner.query(
             `SELECT * FROM question_choix_multiple ORDER BY "order";`,
@@ -196,7 +195,7 @@ export class AddQuestionEntity1697208383373 implements MigrationInterface {
                 newAnswers.push(newAnswer);
             }
             await queryRunner.query(
-                `UPDATE attempt SET answerss='${newAnswers.join(',')}' WHERE id='${attempt.id}'`,
+                `UPDATE attempt SET answers='${newAnswers.join(',')}' WHERE id='${attempt.id}'`,
             );
         }
     }
@@ -207,6 +206,5 @@ export class AddQuestionEntity1697208383373 implements MigrationInterface {
         );
         await queryRunner.query(`DROP TABLE "question"`);
         await queryRunner.query(`DROP TYPE "public"."question_kind_enum"`);
-        await queryRunner.query(`ALTER TABLE "attempt" DROP COLUMN "answerss"`);
     }
 }

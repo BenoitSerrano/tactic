@@ -75,28 +75,24 @@ function buildAttemptService() {
         // TODO : vérifier que les questions pour lesquelles on envoie des réponses sont bien dans cet exam
 
         const answers = attemptUtils.stringifyAnswers(attemptAnswers);
-        // HERE
-        await attemptRepository.update({ id: attempt.id }, { answerss: answers });
+        await attemptRepository.update({ id: attempt.id }, { answers });
         return true;
     }
 
     async function fetchAttemptWithAnswers(attemptId: string) {
         const examService = buildExamService();
 
-        let attempt = await attemptRepository.findOneOrFail({
+        const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
-                //HERE
-                answerss: true,
+                answers: true,
             },
 
             relations: ['exam'],
         });
-        //HERE
-        attempt = { ...attempt, answers: attempt.answerss };
         const exam = await examService.getExam(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 
@@ -112,20 +108,17 @@ function buildAttemptService() {
     async function fetchAttemptWithoutAnswers(attemptId: string) {
         const examService = buildExamService();
 
-        let attempt = await attemptRepository.findOneOrFail({
+        const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
-                //HERE
-                answerss: true,
+                answers: true,
             },
 
             relations: ['exam'],
         });
-        //HERE
-        attempt = { ...attempt, answers: attempt.answerss };
         const exam = await examService.getExam(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 

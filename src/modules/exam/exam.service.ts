@@ -66,26 +66,20 @@ function buildExamService() {
                     hasBeenTreated: true,
                     roundTrips: true,
                     timeSpentOutside: true,
-                    // HERE
-                    answerss: true,
+                    answers: true,
                 },
             },
             relations: ['attempts', 'attempts.student'],
         });
-        //HERE
-        const attempts = examWithAttempts.attempts.map((attempt) => ({
-            ...attempt,
-            answers: attempt.answerss,
-        }));
 
-        const studentIds = attempts.map((attempt) => attempt.student.id);
+        const studentIds = examWithAttempts.attempts.map((attempt) => attempt.student.id);
         const students = await studentService.getStudents(studentIds);
 
         const questionIds = exam.questions.map((question) => question.id);
         const questions = await questionService.getQuestions(questionIds);
 
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(
-            attempts,
+            examWithAttempts.attempts,
             students,
             questions,
         );
