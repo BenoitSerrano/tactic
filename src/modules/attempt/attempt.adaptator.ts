@@ -1,8 +1,5 @@
 import { Exam } from '../exam';
-import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
-import { qcmAnswerAdaptator } from '../qcmAnswer';
 import { Question } from '../question';
-import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
 import { Attempt } from './Attempt.entity';
 import { computeQuestionAnswerStatus } from './computeQuestionAnswerStatus';
 import { attemptAnswersType, questionAnswerSummaryType } from './types';

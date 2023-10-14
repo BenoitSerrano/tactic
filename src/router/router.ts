@@ -2,12 +2,9 @@ import Express from 'express';
 import Joi from 'joi';
 import { buildController } from '../lib/buildController';
 import { buildExamController } from '../modules/exam';
-import { buildQuestionChoixMultipleController } from '../modules/questionChoixMultiple';
 import { buildStudentController } from '../modules/student';
 import { buildAttemptController } from '../modules/attempt';
-import { buildQuestionTrouController } from '../modules/questionTrou';
 import { buildQuestionController } from '../modules/question';
-import { buildPhraseMelangeeController } from '../modules/phraseMelangee';
 import { buildUserController } from '../modules/user';
 import { buildAnonymizedDataController } from '../modules/anonymizedData';
 import { accessControlBuilder } from '../lib/accessControlBuilder';
@@ -16,11 +13,8 @@ const router = Express.Router();
 const examController = buildExamController();
 const userController = buildUserController();
 const studentController = buildStudentController();
-const questionTrouController = buildQuestionTrouController();
 const questionController = buildQuestionController();
-const questionChoixMultipleController = buildQuestionChoixMultipleController();
 const attemptController = buildAttemptController();
-const phraseMelangeeController = buildPhraseMelangeeController();
 const anonymizedDataController = buildAnonymizedDataController();
 
 router.post('/users', buildController(userController.createUser));
@@ -100,42 +94,6 @@ router.post(
 );
 
 router.post(
-    '/exams/:examId/questions-choix-multiple',
-    buildController(questionChoixMultipleController.createQuestionChoixMultiple, {
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({
-            title: Joi.string(),
-            rightAnswerIndex: Joi.number().required(),
-            possibleAnswers: Joi.array().items(Joi.string().allow('')),
-            points: Joi.number(),
-        }),
-    }),
-);
-
-router.put(
-    '/exams/:examId/questions-choix-multiple/:qcmId',
-    buildController(questionChoixMultipleController.updateQuestionChoixMultiple, {
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({
-            title: Joi.string(),
-            rightAnswerIndex: Joi.number().required(),
-            possibleAnswers: Joi.array().items(Joi.string().allow('')),
-            points: Joi.number(),
-        }),
-    }),
-);
-
-router.post(
     '/exams/:examId/questions',
     buildController(questionController.createQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
@@ -169,44 +127,6 @@ router.patch(
             rightAnswers: Joi.array().items(Joi.string()),
             possibleAnswers: Joi.array().items(Joi.string()),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
-            points: Joi.number(),
-        }),
-    }),
-);
-
-router.post(
-    '/exams/:examId/phrases-melangees',
-    buildController(phraseMelangeeController.createPhraseMelangee, {
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({
-            shuffledPhrase: Joi.string().required(),
-            correctPhrases: Joi.array().items(Joi.string()),
-            words: Joi.array().items(Joi.string()),
-            points: Joi.number(),
-        }),
-    }),
-);
-
-//TODO add route to create and update question
-
-router.put(
-    '/exams/:examId/phrases-melangees/:phraseMelangeeId',
-    buildController(phraseMelangeeController.updatePhraseMelangee, {
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({
-            shuffledPhrase: Joi.string().required(),
-            correctPhrases: Joi.array().items(Joi.string()),
-            words: Joi.array().items(Joi.string()),
             points: Joi.number(),
         }),
     }),
