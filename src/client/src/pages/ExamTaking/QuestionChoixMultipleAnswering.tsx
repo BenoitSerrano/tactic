@@ -1,41 +1,36 @@
 import React, { ChangeEvent } from 'react';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, styled } from '@mui/material';
-import { questionChoixMultipleType } from './types';
+import { questionType } from './types';
 
 function QuestionChoixMultipleAnswering(props: {
-    questionChoixMultiple: questionChoixMultipleType;
+    question: questionType;
     index: number;
-    attemptId: string;
-    choice: number;
-    setChoice: (choice: number) => void;
+    currentAnswer: string;
+    setCurrentAnswer: (newAnswer: string) => void;
 }) {
     return (
         <div>
             <FormControl>
                 <FormLabel>
-                    <IndexContainer>{props.index}</IndexContainer>.{' '}
-                    {props.questionChoixMultiple.title}
+                    <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
                 </FormLabel>
-                <RadioGroup value={props.choice} onChange={onChooseQcmAnswer}>
-                    {props.questionChoixMultiple.possibleAnswers.map(
-                        (possibleAnswer, index: number) => (
-                            <React.Fragment key={`${props.questionChoixMultiple.id}-${index}`}>
-                                <FormControlLabel
-                                    value={index}
-                                    control={<Radio />}
-                                    label={possibleAnswer}
-                                />
-                            </React.Fragment>
-                        ),
-                    )}
+                <RadioGroup value={props.currentAnswer} onChange={onChooseNewAnswer}>
+                    {props.question.possibleAnswers?.map((possibleAnswer, index: number) => (
+                        <React.Fragment key={`${props.question.id}-${index}`}>
+                            <FormControlLabel
+                                value={index}
+                                control={<Radio />}
+                                label={possibleAnswer}
+                            />
+                        </React.Fragment>
+                    ))}
                 </RadioGroup>
             </FormControl>
         </div>
     );
 
-    function onChooseQcmAnswer(event: ChangeEvent<HTMLInputElement>) {
-        const newChoice = Number(event.target.value);
-        props.setChoice(newChoice);
+    function onChooseNewAnswer(event: ChangeEvent<HTMLInputElement>) {
+        props.setCurrentAnswer(event.target.value);
     }
 }
 

@@ -49,10 +49,20 @@ describe('attemptsUtils', () => {
 
         const answers = attemptUtils.stringifyAnswers(attemptAnswers);
 
-        expect(answers).toEqual(['QCM:1-2', 'QCM:2-3', 'QT:1-truc', 'PM:3-are you even sure']);
+        expect(answers).toEqual([
+            'QCM:1-Mg==',
+            'QCM:2-Mw==',
+            'QT:1-dHJ1Yw==',
+            'PM:3-YXJlIHlvdSBldmVuIHN1cmU=',
+        ]);
     });
     describe('parseAnswers', () => {
-        const answers = ['QCM:1-2', 'QCM:2-3', 'QT:1-truc', 'PM:3-are you even sure'];
+        const answers = [
+            'QCM:1-Mg==',
+            'QCM:2-Mw==',
+            'QT:1-dHJ1Yw==',
+            'PM:3-YXJlIHlvdSBldmVuIHN1cmU=',
+        ];
 
         const attemptAnswers = attemptUtils.parseAnswers(answers);
 

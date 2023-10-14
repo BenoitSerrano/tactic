@@ -10,7 +10,7 @@ function buildAttemptController() {
         createEmptyAttempt,
         updateAttempt,
         searchAttempts,
-        fetchAttempt,
+        fetchAttemptWithAnswers,
         fetchAttemptWithoutAnswers,
         deleteAttempt,
         updateAttemptTreatmentStatus,
@@ -43,8 +43,8 @@ function buildAttemptController() {
         );
     }
 
-    async function fetchAttempt(params: { urlParams: { attemptId: string } }) {
-        return attemptService.fetchAttempt(params.urlParams.attemptId);
+    async function fetchAttemptWithAnswers(params: { urlParams: { attemptId: string } }) {
+        return attemptService.fetchAttemptWithAnswers(params.urlParams.attemptId);
     }
 
     async function fetchAttemptWithoutAnswers(params: { urlParams: { attemptId: string } }) {

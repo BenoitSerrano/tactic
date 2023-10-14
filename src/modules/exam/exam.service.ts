@@ -2,14 +2,9 @@ import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
 import { examAdaptator } from './exam.adaptator';
 import { User } from '../user';
-import { buildQcmAnswerService } from '../qcmAnswer';
-import { buildQuestionTrouAnswerService } from '../questionTrouAnswer';
-import { buildPhraseMelangeeAnswerService } from '../phraseMelangeeAnswer';
 import { buildStudentService } from '../student';
-import { buildQuestionChoixMultipleService } from '../questionChoixMultiple';
-import { buildQuestionTrouService } from '../questionTrou';
-import { buildPhraseMelangeeService } from '../phraseMelangee';
 import { mapEntities } from '../../lib/mapEntities';
+import { buildQuestionService } from '../question';
 
 export { buildExamService };
 
@@ -43,30 +38,24 @@ function buildExamService() {
         return examRepository.findOneOrFail({
             where: { id: examId },
             order: {
-                questionsChoixMultiple: { order: 'ASC' },
-                questionsTrou: { order: 'ASC' },
-                phrasesMelangees: { order: 'ASC' },
+                questions: { order: 'ASC' },
             },
-            relations: ['questionsChoixMultiple', 'questionsTrou', 'phrasesMelangees'],
+            relations: ['questions'],
         });
     }
 
     async function getExamResults(examId: string) {
         const studentService = buildStudentService();
-        const qcmService = buildQuestionChoixMultipleService();
-        const questionTrouService = buildQuestionTrouService();
-        const phraseMelangeeService = buildPhraseMelangeeService();
+        const questionService = buildQuestionService();
 
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },
             select: {
-                phrasesMelangees: { id: true },
-                questionsTrou: { id: true },
-                questionsChoixMultiple: { id: true },
+                questions: { id: true },
             },
-            relations: ['questionsChoixMultiple', 'questionsTrou', 'phrasesMelangees'],
+            relations: ['questions'],
         });
-        const attempts = await examRepository.findOneOrFail({
+        const examWithAttempts = await examRepository.findOneOrFail({
             where: { id: examId },
             select: {
                 attempts: {
@@ -77,27 +66,28 @@ function buildExamService() {
                     hasBeenTreated: true,
                     roundTrips: true,
                     timeSpentOutside: true,
-                    answers: true,
+                    // HERE
+                    answerss: true,
                 },
             },
             relations: ['attempts', 'attempts.student'],
         });
-        const studentIds = attempts.attempts.map((attempt) => attempt.student.id);
+        //HERE
+        const attempts = examWithAttempts.attempts.map((attempt) => ({
+            ...attempt,
+            answers: attempt.answerss,
+        }));
+
+        const studentIds = attempts.map((attempt) => attempt.student.id);
         const students = await studentService.getStudents(studentIds);
 
-        const qcmIds = exam.questionsChoixMultiple.map((qcm) => qcm.id);
-        const questionsChoixMultiple = await qcmService.getQuestionsChoixMultiples(qcmIds);
-
-        const questionTrouIds = exam.questionsTrou.map((questionTrou) => questionTrou.id);
-        const questionsTrou = await questionTrouService.getQuestionsTrou(questionTrouIds);
-
-        const phraseMelangeeIds = exam.phrasesMelangees.map((phraseMelangee) => phraseMelangee.id);
-        const phrasesMelangees = await phraseMelangeeService.getPhrasesMelangees(phraseMelangeeIds);
+        const questionIds = exam.questions.map((question) => question.id);
+        const questions = await questionService.getQuestions(questionIds);
 
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(
-            attempts.attempts,
+            attempts,
             students,
-            { questionsChoixMultiple, questionsTrou, phrasesMelangees },
+            questions,
         );
 
         return examWithResults;

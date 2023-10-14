@@ -222,7 +222,11 @@ router.post(
     buildController(attemptController.createAttempt),
 );
 
-router.get('/attempts/:attemptId', buildController(attemptController.fetchAttempt));
+//TODO : add check user is allowed to access this route
+router.get(
+    '/attempts/:attemptId/with-answers',
+    buildController(attemptController.fetchAttemptWithAnswers),
+);
 router.get(
     '/attempts/:attemptId/without-answers',
     buildController(attemptController.fetchAttemptWithoutAnswers),
@@ -231,17 +235,10 @@ router.get(
 router.put(
     '/attempts/:attemptId',
     buildController(attemptController.updateAttempt, {
-        schema: Joi.object({
-            qcmChoices: Joi.object<Record<string, number>>({}).pattern(Joi.string(), Joi.number()),
-            questionTrouAnswers: Joi.object<Record<string, string>>({}).pattern(
-                Joi.string().allow(''),
-                Joi.string().allow(''),
-            ),
-            phraseMelangeeAnswers: Joi.object<Record<string, string>>({}).pattern(
-                Joi.string().allow(''),
-                Joi.string().allow(''),
-            ),
-        }),
+        schema: Joi.object<Record<string, string>>({}).pattern(
+            Joi.string().allow(''),
+            Joi.string().allow(''),
+        ),
     }),
 );
 

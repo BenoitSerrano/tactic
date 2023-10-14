@@ -8,12 +8,13 @@ export class AddQuestionEntity1697208383373 implements MigrationInterface {
             `CREATE TYPE "public"."question_kind_enum" AS ENUM('qcm', 'questionTrou', 'phraseMelangee')`,
         );
         await queryRunner.query(
-            `CREATE TABLE "question" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "kind" "public"."question_kind_enum" NOT NULL, "title" character varying NOT NULL, "points" double precision NOT NULL, "acceptableAnswers" text NOT NULL DEFAULT '', "rightAnswers" text NOT NULL DEFAULT '', "order" integer NOT NULL, "possibleAnswers" text, "examId" uuid, CONSTRAINT "The order for a question is unique inside an exam" UNIQUE ("order", "examId"), CONSTRAINT "PK_21e5786aa0ea704ae185a79b2d5" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "question" ("id" SERIAL NOT NULL, "kind" "public"."question_kind_enum" NOT NULL, "title" character varying NOT NULL, "points" double precision NOT NULL, "acceptableAnswers" text NOT NULL DEFAULT '', "rightAnswers" text NOT NULL DEFAULT '', "order" integer NOT NULL, "possibleAnswers" text, "examId" uuid, CONSTRAINT "The order for a question is unique inside an exam" UNIQUE ("order", "examId"), CONSTRAINT "PK_21e5786aa0ea704ae185a79b2d5" PRIMARY KEY ("id"))`,
         );
 
         await queryRunner.query(
             `ALTER TABLE "question" ADD CONSTRAINT "FK_286bbf761d3af4e2fcac4a634d5" FOREIGN KEY ("examId") REFERENCES "exam"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
         );
+        await queryRunner.query(`ALTER TABLE "attempt" ADD "answerss" text NOT NULL DEFAULT ''`);
 
         const qcms = await queryRunner.query(
             `SELECT * FROM question_choix_multiple ORDER BY "order";`,
@@ -26,6 +27,7 @@ export class AddQuestionEntity1697208383373 implements MigrationInterface {
         );
 
         const questions = [];
+        const organizedQuestions: any = [];
         const columns = [
             'kind',
             'title',
@@ -76,56 +78,127 @@ export class AddQuestionEntity1697208383373 implements MigrationInterface {
         });
         for (const { questionsTrou, phrasesMelangees, qcms } of Object.values(grouppedQuestions)) {
             let order = 0;
+
             for (const qcm of qcms) {
-                questions.push([
-                    "'qcm'",
-                    `'${qcm.title.replace(/'/g, "''")}'`,
-                    qcm.points,
+                const organizedQuestion: any = {};
+                organizedQuestion['id'] = qcm.id;
+                organizedQuestion['kind'] = "'qcm'";
+                organizedQuestion['title'] = `'${qcm.title.replace(/'/g, "''")}'`;
+                organizedQuestion['points'] = qcm.points;
+                organizedQuestion['acceptableAnswers'] = "''";
+                organizedQuestion['rightAnswers'] = `'${qcm.rightAnswerIndex}'`;
+                organizedQuestion['order'] = order;
+                organizedQuestion['possibleAnswers'] = `'${qcm.possibleAnswers.replace(
+                    /'/g,
                     "''",
-                    `'${qcm.rightAnswerIndex}'`,
-                    order,
-                    `'${qcm.possibleAnswers.replace(/'/g, "''")}'`,
-                    `'${qcm.examId}'`,
-                ]);
+                )}'`;
+                organizedQuestion['examId'] = `'${qcm.examId}'`;
+                organizedQuestions.push(organizedQuestion);
+
                 order++;
             }
             for (const questionTrou of questionsTrou) {
-                questions.push([
-                    "'questionTrou'",
-                    `'${questionTrou.beforeText.replace(
-                        /'/g,
-                        "''",
-                    )} .... ${questionTrou.afterText.replace(/'/g, "''")}'`,
-                    questionTrou.points,
-                    `'${questionTrou.acceptableAnswers.replace(/'/g, "''")}'`,
-                    `'${questionTrou.rightAnswers.replace(/'/g, "''")}'`,
-                    order,
-                    `NULL`,
-                    `'${questionTrou.examId}'`,
-                ]);
+                const organizedQuestion: any = {};
+                organizedQuestion['id'] = questionTrou.id;
+
+                organizedQuestion['kind'] = "'questionTrou'";
+                organizedQuestion['title'] = `'${questionTrou.beforeText.replace(
+                    /'/g,
+                    "''",
+                )} .... ${questionTrou.afterText.replace(/'/g, "''")}'`.trim();
+                organizedQuestion['points'] = questionTrou.points;
+                organizedQuestion['acceptableAnswers'] = `'${questionTrou.acceptableAnswers.replace(
+                    /'/g,
+                    "''",
+                )}'`;
+                organizedQuestion['rightAnswers'] = `'${questionTrou.rightAnswers.replace(
+                    /'/g,
+                    "''",
+                )}'`;
+                organizedQuestion['order'] = order;
+                organizedQuestion['possibleAnswers'] = `NULL`;
+                organizedQuestion['examId'] = `'${questionTrou.examId}'`;
+                organizedQuestions.push(organizedQuestion);
                 order++;
             }
             for (const phraseMelangee of phrasesMelangees) {
-                questions.push([
-                    "'phraseMelangee'",
-                    `'${phraseMelangee.shuffledPhrase.replace(/'/g, "''")}'`,
-                    phraseMelangee.points,
-                    `''`,
-                    `'${phraseMelangee.correctPhrases.replace(/'/g, "''")}'`,
-                    order,
-                    `NULL`,
-                    `'${phraseMelangee.examId}'`,
-                ]);
+                const organizedQuestion: any = {};
+                organizedQuestion['id'] = phraseMelangee.id;
+                organizedQuestion['kind'] = "'phraseMelangee'";
+                organizedQuestion['title'] = `'${phraseMelangee.shuffledPhrase.replace(
+                    /'/g,
+                    "''",
+                )}'`;
+                organizedQuestion['points'] = phraseMelangee.points;
+                organizedQuestion['acceptableAnswers'] = `''`;
+                organizedQuestion['rightAnswers'] = `'${phraseMelangee.correctPhrases.replace(
+                    /'/g,
+                    "''",
+                )}'`;
+                organizedQuestion['order'] = order;
+                organizedQuestion['possibleAnswers'] = `NULL`;
+                organizedQuestion['examId'] = `'${phraseMelangee.examId}'`;
+                organizedQuestions.push(organizedQuestion);
                 order++;
             }
         }
 
-        const query = `INSERT INTO question (${columns
-            .map((column) => `"${column}"`)
-            .join(', ')}) VALUES ${questions
-            .map((question) => `(${question.join(', ')})`)
-            .join(', ')}`;
-        await queryRunner.query(query);
+        const mappedIds: Record<string, number> = {};
+
+        for (const organizedQuestion of organizedQuestions) {
+            const query = `INSERT INTO question (${columns
+                .map((column) => `"${column}"`)
+                .join(', ')}) VALUES (${columns
+                .map((column) => organizedQuestion[column])
+                .join(', ')}) RETURNING id`;
+            const result: Array<{ id: number }> = await queryRunner.query(query);
+            let answerPrefix = '';
+            switch (organizedQuestion['kind']) {
+                case "'qcm'":
+                    answerPrefix = 'QCM-' + organizedQuestion['id'];
+                    break;
+                case "'questionTrou'":
+                    answerPrefix = 'QT-' + organizedQuestion['id'];
+                    break;
+                case "'phraseMelangee'":
+                    answerPrefix = 'PM-' + organizedQuestion['id'];
+                    break;
+                default:
+                    throw new Error("Can't handle type " + organizedQuestion['kind']);
+            }
+            mappedIds[answerPrefix] = result[0].id;
+        }
+        const attempts = await queryRunner.query(`SELECT * FROM attempt;`);
+        for (const attempt of attempts) {
+            const answers: string[] = attempt.answers.split(',');
+            const ANSWER_REGEX = /([A-Z]+):(\d+)-(.*)/;
+            const newAnswers: string[] = [];
+            for (const answer of answers) {
+                if (!answer) {
+                    continue;
+                }
+                const regexMatch = answer.match(ANSWER_REGEX);
+                if (!regexMatch) {
+                    throw new Error(
+                        `Wrongly formatted answer: ${answer} for attempt ${attempt.id}`,
+                    );
+                }
+                const [_, questionType, oldQuestionId, encodedQuestionAnswer] = regexMatch;
+                if (!encodedQuestionAnswer) {
+                    continue;
+                }
+                const answerPrefix = questionType + '-' + oldQuestionId;
+                const newQuestionId = mappedIds[answerPrefix];
+                if (!newQuestionId) {
+                    throw new Error(`answerPrefix ${answerPrefix} does not exist`);
+                }
+                const newAnswer = newQuestionId + ':' + encodedQuestionAnswer;
+                newAnswers.push(newAnswer);
+            }
+            await queryRunner.query(
+                `UPDATE attempt SET answerss='${newAnswers.join(',')}' WHERE id='${attempt.id}'`,
+            );
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
@@ -134,5 +207,6 @@ export class AddQuestionEntity1697208383373 implements MigrationInterface {
         );
         await queryRunner.query(`DROP TABLE "question"`);
         await queryRunner.query(`DROP TYPE "public"."question_kind_enum"`);
+        await queryRunner.query(`ALTER TABLE "attempt" DROP COLUMN "answerss"`);
     }
 }

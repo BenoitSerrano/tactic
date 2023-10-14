@@ -1,26 +1,37 @@
 import React from 'react';
 import { TextField, Typography, styled } from '@mui/material';
-import { questionTrouType } from './types';
+import { questionType } from './types';
+
+const questionTrouTitleRegex = /(.*)\.{4}(.*)/;
 
 function QuestionTrouAnswering(props: {
-    questionTrou: questionTrouType;
+    question: questionType;
     index: number;
-    attemptId: string;
-    answer: string;
-    setAnswer: (answer: string) => void;
+    currentAnswer: string;
+    setCurrentAnswer: (newAnswer: string) => void;
 }) {
+    const regexMatch = props.question.title.match(questionTrouTitleRegex);
+    if (!regexMatch) {
+        console.warn(`questionTrou.title "${props.question.title}" does not match regex`);
+        return <div />;
+    }
+    const [_, beforeText, afterText] = regexMatch;
     return (
         <StyledContainer>
             <Typography>
-                <IndexContainer>{props.index}</IndexContainer>. {props.questionTrou.beforeText}
+                <IndexContainer>{props.index}</IndexContainer>. {beforeText}
             </Typography>
-            <StyledTextField value={props.answer} onChange={onChangeAnswer} placeholder="..." />
-            <Typography>{props.questionTrou.afterText}</Typography>
+            <StyledTextField
+                value={props.currentAnswer}
+                onChange={onChangeAnswer}
+                placeholder="..."
+            />
+            <Typography>{afterText}</Typography>
         </StyledContainer>
     );
 
     function onChangeAnswer(event: React.ChangeEvent<HTMLInputElement>) {
-        props.setAnswer(event.target.value);
+        props.setCurrentAnswer(event.target.value);
     }
 }
 

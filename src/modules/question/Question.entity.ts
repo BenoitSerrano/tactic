@@ -5,8 +5,8 @@ import { questionKindType, questionKinds } from './types';
 @Entity()
 @Unique('The order for a question is unique inside an exam', ['order', 'exam'])
 export class Question {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column('enum', { enum: questionKinds })
     kind: questionKindType;

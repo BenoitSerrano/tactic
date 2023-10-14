@@ -1,11 +1,17 @@
-import { phraseMelangeeAnswersType } from '../phraseMelangee';
-import { qcmChoicesType } from '../qcmAnswer';
-import { questionTrouAnswersType } from '../questionTrouAnswer/types';
+import { Question } from '../question';
+import { Attempt } from './Attempt.entity';
 
-type attemptAnswersType = {
-    qcmChoices: qcmChoicesType;
-    questionTrouAnswers: questionTrouAnswersType;
-    phraseMelangeeAnswers: phraseMelangeeAnswersType;
-};
+type attemptAnswersType = Record<Question['id'], Attempt['answers'][number]>;
 
-export type { attemptAnswersType };
+type questionAnswerStatusType = 'wrong' | 'acceptable' | 'right';
+
+type questionAnswerSummaryType = Record<
+    Question['id'],
+    {
+        answer: Attempt['answers'][number];
+        status: questionAnswerStatusType;
+        points: Question['points'];
+    }
+>;
+
+export type { attemptAnswersType, questionAnswerStatusType, questionAnswerSummaryType };

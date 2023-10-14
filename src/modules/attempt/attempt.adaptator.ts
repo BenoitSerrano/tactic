@@ -1,17 +1,17 @@
 import { Exam } from '../exam';
-import { phraseMelangeeAnswersType } from '../phraseMelangee';
-import { PhraseMelangeeAnswer, phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
-import { QcmAnswer, qcmAnswerAdaptator, qcmChoicesType } from '../qcmAnswer';
-import { QuestionTrouAnswer } from '../questionTrouAnswer';
+import { phraseMelangeeAdaptator } from '../phraseMelangeeAnswer';
+import { qcmAnswerAdaptator } from '../qcmAnswer';
+import { Question } from '../question';
 import { questionTrouAnswerAdaptator } from '../questionTrouAnswer/questionTrouAnswer.adaptator';
-import { questionTrouAnswersType } from '../questionTrouAnswer/types';
 import { Attempt } from './Attempt.entity';
-import { attemptAnswersType } from './types';
+import { computeQuestionAnswerStatus } from './computeQuestionAnswerStatus';
+import { attemptAnswersType, questionAnswerSummaryType } from './types';
 
 const attemptAdaptator = {
     convertAttemptToAttemptWithAnswers,
     computeTreatmentStatusSummary,
     convertAttemptToAttemptWithoutAnswers,
+    computeQuestionAnswersSummary,
 };
 
 function computeTreatmentStatusSummary(attempts: Attempt[]) {
@@ -21,6 +21,25 @@ function computeTreatmentStatusSummary(attempts: Attempt[]) {
     });
 
     return treatmentStatusSummary;
+}
+
+function computeQuestionAnswersSummary(attemptAnswers: attemptAnswersType, questions: Question[]) {
+    const questionAnswerSummary: questionAnswerSummaryType = {};
+
+    questions.forEach((question) => {
+        const answer = attemptAnswers[question.id];
+        const status = computeQuestionAnswerStatus(
+            answer,
+            question.rightAnswers,
+            question.acceptableAnswers,
+        );
+        questionAnswerSummary[question.id] = {
+            answer,
+            status,
+            points: question.points,
+        };
+    });
+    return questionAnswerSummary;
 }
 
 function convertAttemptToAttemptWithoutAnswers(
@@ -37,23 +56,13 @@ function convertAttemptToAttemptWithoutAnswers(
             name: exam.name,
             duration: exam.duration,
             extraTime: exam.extraTime,
-            questionsChoixMultiple: exam.questionsChoixMultiple.map((questionChoixMultiple) => ({
-                id: questionChoixMultiple.id,
-                title: questionChoixMultiple.title,
-                possibleAnswers: questionChoixMultiple.possibleAnswers,
-                choice: attemptAnswers.qcmChoices[questionChoixMultiple.id],
-            })),
-            questionsTrou: exam.questionsTrou.map((questionTrou) => ({
-                id: questionTrou.id,
-                beforeText: questionTrou.beforeText,
-                afterText: questionTrou.afterText,
-                answer: attemptAnswers.questionTrouAnswers[questionTrou.id],
-            })),
-            phrasesMelangees: exam.phrasesMelangees.map((phraseMelangee) => ({
-                id: phraseMelangee.id,
-                words: phraseMelangee.words,
-                shuffledPhrase: phraseMelangee.shuffledPhrase,
-                answer: attemptAnswers.phraseMelangeeAnswers[phraseMelangee.id],
+
+            questions: exam.questions.map((question) => ({
+                id: question.id,
+                kind: question.kind,
+                title: question.title,
+                possibleAnswers: question.possibleAnswers,
+                currentAnswer: attemptAnswers[question.id],
             })),
         },
     };
@@ -62,20 +71,11 @@ function convertAttemptToAttemptWithoutAnswers(
 function convertAttemptToAttemptWithAnswers(
     attempt: Attempt,
     exam: Exam,
-    answers: attemptAnswersType,
+    attemptAnswers: attemptAnswersType,
 ) {
-    const qcmSummary = qcmAnswerAdaptator.computeQcmSummary(
-        answers.qcmChoices,
-        exam.questionsChoixMultiple,
-    );
-    const questionTrouSummary = questionTrouAnswerAdaptator.computeQuestionTrouSummary(
-        answers.questionTrouAnswers,
-        exam.questionsTrou,
-    );
-
-    const phraseMelangeeSummary = phraseMelangeeAdaptator.computePhraseMelangeeSummary(
-        answers.phraseMelangeeAnswers,
-        exam.phrasesMelangees,
+    const questionAnswersSummary = attemptAdaptator.computeQuestionAnswersSummary(
+        attemptAnswers,
+        exam.questions,
     );
 
     return {
@@ -87,20 +87,10 @@ function convertAttemptToAttemptWithAnswers(
             name: exam.name,
             duration: exam.duration,
             extraTime: exam.extraTime,
-            questionsChoixMultiple: exam.questionsChoixMultiple.map((questionChoixMultiple) => ({
-                ...questionChoixMultiple,
-                choice: qcmSummary[questionChoixMultiple.id]?.choice,
-                status: qcmSummary[questionChoixMultiple.id]?.status,
-            })),
-            questionsTrou: exam.questionsTrou.map((questionTrou) => ({
-                ...questionTrou,
-                answer: questionTrouSummary[questionTrou.id]?.answer,
-                status: questionTrouSummary[questionTrou.id]?.status,
-            })),
-            phrasesMelangees: exam.phrasesMelangees.map((phraseMelangee) => ({
-                ...phraseMelangee,
-                answer: phraseMelangeeSummary[phraseMelangee.id]?.answer,
-                status: phraseMelangeeSummary[phraseMelangee.id]?.status,
+            questions: exam.questions.map((question) => ({
+                ...question,
+                answer: questionAnswersSummary[question.id]?.answer,
+                status: questionAnswersSummary[question.id]?.status,
             })),
         },
     };

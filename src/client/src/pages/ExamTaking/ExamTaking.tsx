@@ -43,9 +43,7 @@ function ExamTaking() {
                     <Countdown remainingSeconds={remainingSeconds} />
                 </CountdownContainer>
                 <QuestionsAnswering
-                    questionsChoixMultiple={query.data.exam.questionsChoixMultiple}
-                    questionsTrou={query.data.exam.questionsTrou}
-                    phrasesMelangees={query.data.exam.phrasesMelangees}
+                    questions={query.data.exam.questions}
                     attemptId={attemptId}
                     onExamDone={onExamDone}
                 />

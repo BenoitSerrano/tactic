@@ -2,24 +2,16 @@ import React, { useState } from 'react';
 import { styled } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
-import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
-import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
-import { QuestionTrouAnswering } from './QuestionTrouAnswering';
-import { phraseMelangeeType, questionChoixMultipleType, questionTrouType } from './types';
+import { questionType } from './types';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
+import { QuestionAnswering } from './QuestionAnswering';
 
-type qcmChoicesType = Record<number, number>;
-
-type questionTrouAnswersType = Record<number, string>;
-
-type phraseMelangeeAnswersType = Record<number, string>;
+type questionAnswerType = Record<number, string>;
 
 function QuestionsAnswering(props: {
     attemptId: string;
-    questionsChoixMultiple: Array<questionChoixMultipleType>;
-    questionsTrou: Array<questionTrouType>;
-    phrasesMelangees: Array<phraseMelangeeType>;
+    questions: Array<questionType>;
     onExamDone: () => void;
 }) {
     const saveDraftMutation = useMutation({
@@ -44,71 +36,27 @@ function QuestionsAnswering(props: {
 
     const { displayAlert } = useAlert();
 
-    const initialQcmChoices = props.questionsChoixMultiple.reduce((acc, questionChoixMultiple) => {
-        return { ...acc, [questionChoixMultiple.id]: questionChoixMultiple.choice };
-    }, {} as qcmChoicesType);
+    const initialCurrentAnswers = props.questions.reduce((acc, question) => {
+        return { ...acc, [question.id]: question.currentAnswer || '' };
+    }, {} as questionAnswerType);
 
-    const initialQuestionTrouAnswers = props.questionsTrou.reduce((acc, questionTrou) => {
-        return { ...acc, [questionTrou.id]: questionTrou.answer || '' };
-    }, {} as questionTrouAnswersType);
-
-    const initialPhraseMelangeAnswers = props.phrasesMelangees.reduce((acc, phraseMelangee) => {
-        return { ...acc, [phraseMelangee.id]: phraseMelangee.answer || '' };
-    }, {} as phraseMelangeeAnswersType);
-
-    const [qcmChoices, setQcmChoices] = useState(initialQcmChoices);
-
-    const [questionTrouAnswers, setQuestionTrouAnswers] = useState(initialQuestionTrouAnswers);
-
-    const [phraseMelangeeAnswers, setPhraseMelangeeAnswers] = useState(initialPhraseMelangeAnswers);
-
-    let index = 0;
+    const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
 
     return (
         <>
             <Container>
-                {props.questionsChoixMultiple.map((questionChoixMultiple) => {
-                    index++;
-                    return (
-                        <QuestionContainer key={'qcm-' + questionChoixMultiple.id}>
-                            <QuestionChoixMultipleAnswering
-                                setChoice={buildSetQcmChoice(questionChoixMultiple.id)}
-                                choice={qcmChoices[questionChoixMultiple.id]}
-                                attemptId={props.attemptId}
-                                index={index}
-                                questionChoixMultiple={questionChoixMultiple}
-                            />
-                        </QuestionContainer>
-                    );
-                })}
-                {props.questionsTrou.map((questionTrou) => {
-                    index++;
-                    return (
-                        <QuestionContainer key={'questionTrou-' + questionTrou.id}>
-                            <QuestionTrouAnswering
-                                setAnswer={buildSetQuestionTrouAnswer(questionTrou.id)}
-                                answer={questionTrouAnswers[questionTrou.id]}
-                                attemptId={props.attemptId}
-                                index={index}
-                                questionTrou={questionTrou}
-                            />
-                        </QuestionContainer>
-                    );
-                })}
-                {props.phrasesMelangees.map((phraseMelangee) => {
-                    index++;
-                    return (
-                        <QuestionContainer key={'phraseMelangee-' + phraseMelangee.id}>
-                            <PhraseMelangeeAnswering
-                                answer={phraseMelangeeAnswers[phraseMelangee.id]}
-                                setAnswer={buildSetPhraseMelangeeAnswer(phraseMelangee.id)}
-                                attemptId={props.attemptId}
-                                index={index}
-                                phraseMelangee={phraseMelangee}
-                            />
-                        </QuestionContainer>
-                    );
-                })}
+                {props.questions.map((question, index) => (
+                    <QuestionContainer key={`question-${question.id}`}>
+                        <QuestionAnswering
+                            currentAnswer={currentAnswers[question.id]}
+                            setCurrentAnswer={(newAnswer: string) =>
+                                setCurrentAnswers({ ...currentAnswers, [question.id]: newAnswer })
+                            }
+                            question={question}
+                            index={index + 1}
+                        />
+                    </QuestionContainer>
+                ))}
             </Container>
             <ButtonContainer>
                 <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
@@ -125,35 +73,17 @@ function QuestionsAnswering(props: {
         </>
     );
 
-    function buildSetQcmChoice(qcmId: number) {
-        return (choice: number) => setQcmChoices({ ...qcmChoices, [qcmId]: choice });
-    }
-
-    function buildSetQuestionTrouAnswer(questionTrouId: number) {
-        return (answer: string) =>
-            setQuestionTrouAnswers({ ...questionTrouAnswers, [questionTrouId]: answer });
-    }
-
-    function buildSetPhraseMelangeeAnswer(phraseMelangeeId: number) {
-        return (answer: string) =>
-            setPhraseMelangeeAnswers({ ...phraseMelangeeAnswers, [phraseMelangeeId]: answer });
-    }
-
     function saveDraft() {
         saveDraftMutation.mutate({
             attemptId: props.attemptId,
-            qcmChoices,
-            questionTrouAnswers,
-            phraseMelangeeAnswers,
+            answers: currentAnswers,
         });
     }
 
     function finishExam() {
         finishExamMutation.mutate({
             attemptId: props.attemptId,
-            qcmChoices,
-            questionTrouAnswers,
-            phraseMelangeeAnswers,
+            answers: currentAnswers,
         });
     }
 }

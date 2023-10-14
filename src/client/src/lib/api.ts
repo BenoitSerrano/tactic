@@ -8,7 +8,7 @@ const api = {
     searchAttempt,
     createAttempt,
     createEmptyAttempt,
-    fetchAttempt,
+    fetchAttemptWithAnswers,
     fetchAttemptWithoutAnswers,
     updateAttempt,
     updateAttemptTreatementStatus,
@@ -93,8 +93,8 @@ async function createEmptyAttempt({ examId, studentId }: { examId: string; stude
     return performApiCall(URL, 'POST', {});
 }
 
-async function fetchAttempt(attemptId: string) {
-    const URL = `${BASE_URL}/attempts/${attemptId}`;
+async function fetchAttemptWithAnswers(attemptId: string) {
+    const URL = `${BASE_URL}/attempts/${attemptId}/with-answers`;
     return performApiCall(URL, 'GET');
 }
 
@@ -105,17 +105,13 @@ async function fetchAttemptWithoutAnswers(attemptId: string) {
 
 async function updateAttempt({
     attemptId,
-    qcmChoices,
-    questionTrouAnswers,
-    phraseMelangeeAnswers,
+    answers,
 }: {
     attemptId: string;
-    qcmChoices: Record<number, number>;
-    questionTrouAnswers: Record<number, string>;
-    phraseMelangeeAnswers: Record<number, string>;
+    answers: Record<number, string>;
 }) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
-    return performApiCall(URL, 'PUT', { qcmChoices, questionTrouAnswers, phraseMelangeeAnswers });
+    return performApiCall(URL, 'PUT', answers);
 }
 
 async function updateAttemptTreatementStatus({

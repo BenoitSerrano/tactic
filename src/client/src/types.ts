@@ -1,7 +1,11 @@
-type trialType = Record<string, number>;
+type questionType = {
+    id: number;
+    kind: questionKindType;
+    title: string;
+    possibleAnswers: string[] | null;
+    currentAnswer: string;
+};
 
-type questionType = { id: string; title: string; possibleAnswers: string[] };
+type questionKindType = 'qcm' | 'questionTrou' | 'phraseMelangee';
 
-type examType = { id: string; questions: Array<questionType>; solution: trialType };
-
-export type { questionType, trialType, examType };
+export type { questionType, questionKindType };

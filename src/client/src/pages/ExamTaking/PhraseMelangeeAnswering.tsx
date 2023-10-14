@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { Typography, styled } from '@mui/material';
-import { phraseMelangeeType } from './types';
+import { questionType } from './types';
 
 function PhraseMelangeeAnswering(props: {
-    phraseMelangee: phraseMelangeeType;
+    question: questionType;
     index: number;
-    attemptId: string;
-    answer: string;
-    setAnswer: (answer: string) => void;
+    currentAnswer: string;
+    setCurrentAnswer: (newAnswer: string) => void;
 }) {
     const [combination, setCombination] = useState<number[]>([]);
 
-    const shuffledWords = props.phraseMelangee.shuffledPhrase.split(' ');
+    const shuffledWords = props.question.title.split(' ');
 
     return (
         <div>
@@ -43,7 +42,9 @@ function PhraseMelangeeAnswering(props: {
             {
                 <Typography>
                     <BoldContainer>Votre réponse :</BoldContainer>{' '}
-                    {props.answer ? props.answer : '____ '.repeat(shuffledWords.length)}
+                    {props.currentAnswer
+                        ? props.currentAnswer
+                        : '____ '.repeat(shuffledWords.length)}
                 </Typography>
             }
         </div>
@@ -56,7 +57,7 @@ function PhraseMelangeeAnswering(props: {
 
             if (newCombination.length === shuffledWords.length) {
                 const answer = newCombination.map((index) => shuffledWords[index]).join(' ');
-                props.setAnswer(answer);
+                props.setCurrentAnswer(answer);
             }
         };
     }

@@ -1,9 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
-import { buildPhraseMelangeeAnswerService } from '../phraseMelangeeAnswer';
-import { buildQcmAnswerService } from '../qcmAnswer';
-import { buildQuestionTrouAnswerService } from '../questionTrouAnswer';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
@@ -20,7 +17,7 @@ function buildAttemptService() {
         createAttempt,
         createEmptyAttempt,
         updateAttempt,
-        fetchAttempt,
+        fetchAttemptWithAnswers,
         fetchAttemptWithoutAnswers,
         deleteAttempt,
         assertIsTimeLimitNotExceeded,
@@ -77,30 +74,29 @@ function buildAttemptService() {
         await updateAttemptDuration(attempt.id);
         // TODO : vérifier que les questions pour lesquelles on envoie des réponses sont bien dans cet exam
 
-        const { phraseMelangeeAnswers, qcmChoices, questionTrouAnswers } = attemptAnswers;
-        const answers = attemptUtils.stringifyAnswers({
-            phraseMelangeeAnswers,
-            qcmChoices,
-            questionTrouAnswers,
-        });
-        await attemptRepository.update({ id: attempt.id }, { answers });
+        const answers = attemptUtils.stringifyAnswers(attemptAnswers);
+        // HERE
+        await attemptRepository.update({ id: attempt.id }, { answerss: answers });
         return true;
     }
 
-    async function fetchAttempt(attemptId: string) {
+    async function fetchAttemptWithAnswers(attemptId: string) {
         const examService = buildExamService();
 
-        const attempt = await attemptRepository.findOneOrFail({
+        let attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
-                answers: true,
+                //HERE
+                answerss: true,
             },
 
             relations: ['exam'],
         });
+        //HERE
+        attempt = { ...attempt, answers: attempt.answerss };
         const exam = await examService.getExam(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 
@@ -116,17 +112,20 @@ function buildAttemptService() {
     async function fetchAttemptWithoutAnswers(attemptId: string) {
         const examService = buildExamService();
 
-        const attempt = await attemptRepository.findOneOrFail({
+        let attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
-                answers: true,
+                //HERE
+                answerss: true,
             },
 
             relations: ['exam'],
         });
+        //HERE
+        attempt = { ...attempt, answers: attempt.answerss };
         const exam = await examService.getExam(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 
