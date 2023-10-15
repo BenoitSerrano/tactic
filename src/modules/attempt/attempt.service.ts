@@ -1,6 +1,7 @@
 import { dataSource } from '../../dataSource';
 import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
+import { Question } from '../question';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
@@ -26,6 +27,7 @@ function buildAttemptService() {
         updateAttemptCheatingSummary,
         getAllAttempts,
         bulkInsertAttempts,
+        deleteQuestionAnswers,
     };
 
     return studentService;
@@ -177,5 +179,17 @@ function buildAttemptService() {
 
     async function bulkInsertAttempts(attempts: Array<Attempt>) {
         return attemptRepository.insert(attempts);
+    }
+
+    async function deleteQuestionAnswers(questionId: Question['id']) {
+        const attempts = await attemptRepository.find({ select: { id: true, answers: true } });
+        for (const attempt of attempts) {
+            const parsedAnswers = attemptUtils.parseAnswers(attempt.answers);
+            if (parsedAnswers[questionId] !== undefined) {
+                delete parsedAnswers[questionId];
+            }
+            const newAnswers = attemptUtils.stringifyAnswers(parsedAnswers);
+            await attemptRepository.update({ id: attempt.id }, { answers: newAnswers });
+        }
     }
 }

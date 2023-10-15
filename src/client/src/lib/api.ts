@@ -26,6 +26,7 @@ const api = {
     deleteExam,
     createQuestion,
     updateQuestion,
+    deleteQuestion,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -85,6 +86,7 @@ async function createAttempt({ examId, studentId }: { examId: string; studentId:
     return performApiCall(URL, 'POST', {});
 }
 
+// TODO: delete createEmptyAttempt
 async function createEmptyAttempt({ examId, studentId }: { examId: string; studentId: string }) {
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/empty-attempt`;
     return performApiCall(URL, 'POST', {});
@@ -222,6 +224,11 @@ async function updateQuestion(params: {
         acceptableAnswers: params.acceptableAnswers,
         points: params.points,
     });
+}
+
+async function deleteQuestion(params: { examId: string; questionId: number }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/questions/${params.questionId}`;
+    return performApiCall(URL, 'DELETE');
 }
 
 export { api };

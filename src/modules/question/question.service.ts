@@ -2,6 +2,7 @@ import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Question } from './Question.entity';
 import { buildExamService } from '../exam';
+import { buildAttemptService } from '../attempt';
 
 export { buildQuestionService };
 
@@ -11,6 +12,7 @@ function buildQuestionService() {
         createQuestion,
         updateQuestion,
         getQuestions,
+        deleteQuestion,
     };
 
     return questionService;
@@ -95,15 +97,9 @@ function buildQuestionService() {
         }, {} as Record<Question['id'], Question>);
     }
 
-    // async function getAllQuestions() {
-    //     const questions = await questionRepository.find({
-    //         relations: ['exam'],
-    //         select: { exam: { id: true } },
-    //     });
-    //     return mapEntities(questions);
-    // }
-
-    // async function bulkInsertQuestions(questions: Array<Question>) {
-    //     return questionRepository.insert(questions);
-    // }
+    async function deleteQuestion(questionId: Question['id']) {
+        const attemptService = buildAttemptService();
+        await attemptService.deleteQuestionAnswers(questionId);
+        return questionRepository.delete({ id: questionId });
+    }
 }

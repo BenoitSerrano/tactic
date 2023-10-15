@@ -113,6 +113,18 @@ router.post(
     }),
 );
 
+router.delete(
+    `/exams/:examId/questions/:questionId`,
+    buildController(questionController.deleteQuestion, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
+
 router.patch(
     '/exams/:examId/questions/:questionId',
     buildController(questionController.updateQuestion, {

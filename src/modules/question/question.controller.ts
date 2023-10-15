@@ -8,6 +8,7 @@ function buildQuestionController() {
     const questionController = {
         createQuestion,
         updateQuestion,
+        deleteQuestion,
     };
 
     return questionController;
@@ -45,5 +46,9 @@ function buildQuestionController() {
             rightAnswers: params.body.rightAnswers,
             points: params.body.points,
         });
+    }
+
+    async function deleteQuestion(params: { urlParams: { questionId: string } }) {
+        return questionService.deleteQuestion(Number(params.urlParams.questionId));
     }
 }
