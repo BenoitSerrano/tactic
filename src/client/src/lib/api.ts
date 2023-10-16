@@ -27,6 +27,7 @@ const api = {
     createQuestion,
     updateQuestion,
     deleteQuestion,
+    swapQuestions,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -223,6 +224,14 @@ async function updateQuestion(params: {
         rightAnswers: params.rightAnswers,
         acceptableAnswers: params.acceptableAnswers,
         points: params.points,
+    });
+}
+
+async function swapQuestions(params: { questionId1: number; questionId2: number }) {
+    const URL = `${BASE_URL}/questions/order`;
+    return performApiCall(URL, 'PATCH', {
+        questionId1: params.questionId1,
+        questionId2: params.questionId2,
     });
 }
 

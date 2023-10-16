@@ -18,6 +18,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 import { questionKindIconComponentMapping } from './constants';
 import { tableHandler } from '../../lib/tableHandler';
+import { useAlert } from '../../lib/alert';
 
 const questionKindTitleMapping: Record<questionKindType, string> = {
     qcm: 'QCM',
@@ -30,11 +31,22 @@ function ExamsTable(props: {
     questions: Array<questionWithAnswersType>;
     openEditionModal: (question: questionWithAnswersType) => void;
 }) {
+    const { displayAlert } = useAlert();
+
     const queryClient = useQueryClient();
     const deleteQuestionMutation = useMutation({
         mutationFn: api.deleteQuestion,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
+        },
+    });
+    const swapQuestionsMutation = useMutation({
+        mutationFn: api.swapQuestions,
+        onError: () => {
+            displayAlert({
+                variant: 'error',
+                text: "Votre dernière modification n'a pas pu être enregistrée. Veuillez recharger la page.",
+            });
         },
     });
     const [questions, setQuestions] = useState(props.questions);
@@ -47,12 +59,16 @@ function ExamsTable(props: {
         if (!result.destination) {
             return;
         }
+        const questionId1 = questions[result.source.index].id;
+        const questionId2 = questions[result.destination.index].id;
         const newQuestions = tableHandler.swap(
             questions,
             result.source.index,
             result.destination.index,
         );
+
         setQuestions(newQuestions);
+        swapQuestionsMutation.mutate({ questionId1, questionId2 });
     };
     return (
         <Table stickyHeader>

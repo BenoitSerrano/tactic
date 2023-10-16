@@ -3,7 +3,6 @@ import { Exam } from '../exam';
 import { questionKindType, questionKinds } from './types';
 
 @Entity()
-@Unique('The order for a question is unique inside an exam', ['order', 'exam'])
 export class Question {
     @PrimaryGeneratedColumn()
     id: number;

@@ -9,6 +9,7 @@ function buildQuestionController() {
         createQuestion,
         updateQuestion,
         deleteQuestion,
+        swapQuestions,
     };
 
     return questionController;
@@ -50,5 +51,11 @@ function buildQuestionController() {
 
     async function deleteQuestion(params: { urlParams: { questionId: string } }) {
         return questionService.deleteQuestion(Number(params.urlParams.questionId));
+    }
+
+    async function swapQuestions(params: {
+        body: { questionId1: Question['id']; questionId2: Question['id'] };
+    }) {
+        return questionService.swapQuestions(params.body.questionId1, params.body.questionId2);
     }
 }

@@ -142,6 +142,13 @@ router.patch(
     }),
 );
 
+router.patch(
+    `/questions/order`,
+    buildController(questionController.swapQuestions, {
+        schema: Joi.object({ questionId1: Joi.number(), questionId2: Joi.number() }),
+    }),
+);
+
 router.get(
     '/exams/:examId/students/:studentId/attempts',
     buildController(attemptController.searchAttempts),
