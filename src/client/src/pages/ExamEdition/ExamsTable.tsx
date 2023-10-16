@@ -15,6 +15,7 @@ import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react
 import { questionWithAnswersType } from './types';
 import { questionKindType } from '../../types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { api } from '../../lib/api';
 import { questionKindIconComponentMapping } from './constants';
 import { tableHandler } from '../../lib/tableHandler';
@@ -75,7 +76,7 @@ function ExamsTable(props: {
             <TableHead>
                 <TableRow>
                     <TableCell width={20}>N°</TableCell>
-                    <TableCell width={100}>Actions</TableCell>
+                    <TableCell width={130}>Actions</TableCell>
                     <TableCell>Type</TableCell>
                     <TableCell>Intitulé</TableCell>
                     <TableCell>Bonne(s) réponse(s)</TableCell>
@@ -101,10 +102,12 @@ function ExamsTable(props: {
                                                 key={`question-row-${question.id}`}
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
                                             >
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>
+                                                    <IconButton {...provided.dragHandleProps}>
+                                                        <DragIndicatorIcon />
+                                                    </IconButton>
                                                     <IconButton
                                                         onClick={buildEditQuestionOnClick(question)}
                                                     >
