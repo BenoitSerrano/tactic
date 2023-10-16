@@ -1,14 +1,8 @@
 import { DataSource } from 'typeorm';
 import { config } from './config';
 import { Exam } from './modules/exam';
-import { QuestionChoixMultiple } from './modules/questionChoixMultiple';
 import { Attempt } from './modules/attempt';
-import { QcmAnswer } from './modules/qcmAnswer';
 import { Student } from './modules/student';
-import { QuestionTrou } from './modules/questionTrou';
-import { QuestionTrouAnswer } from './modules/questionTrouAnswer';
-import { PhraseMelangee } from './modules/phraseMelangee';
-import { PhraseMelangeeAnswer } from './modules/phraseMelangeeAnswer';
 import { User } from './modules/user';
 import { Question } from './modules/question';
 
@@ -21,19 +15,7 @@ const dataSource = new DataSource({
     database: config.DATABASE_NAME,
     logging: ['warn', 'error'],
     connectTimeoutMS: 20000,
-    entities: [
-        Exam,
-        QuestionChoixMultiple,
-        Attempt,
-        QcmAnswer,
-        Student,
-        QuestionTrou,
-        QuestionTrouAnswer,
-        PhraseMelangee,
-        PhraseMelangeeAnswer,
-        User,
-        Question,
-    ],
+    entities: [Exam, Attempt, Student, User, Question],
     subscribers: [],
     migrations: ['**/migrations/*.js'],
 });

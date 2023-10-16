@@ -13,6 +13,7 @@ function buildQuestionService() {
         updateQuestion,
         getQuestions,
         deleteQuestion,
+        swapQuestions,
     };
 
     return questionService;
@@ -95,6 +96,15 @@ function buildQuestionService() {
         return questions.reduce((acc, question) => {
             return { ...acc, [question.id]: question };
         }, {} as Record<Question['id'], Question>);
+    }
+
+    async function swapQuestions(questionId1: Question['id'], questionId2: Question['id']) {
+        const question1 = await questionRepository.findOneOrFail({ where: { id: questionId1 } });
+        const question2 = await questionRepository.findOneOrFail({ where: { id: questionId2 } });
+
+        await questionRepository.update({ id: questionId1 }, { order: question2.order });
+        await questionRepository.update({ id: questionId2 }, { order: question1.order });
+        return true;
     }
 
     async function deleteQuestion(questionId: Question['id']) {

@@ -3,15 +3,11 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
     Unique,
 } from 'typeorm';
 import { AttemptInterface } from './attempt.interface';
 import { Exam } from '../exam';
-import { QcmAnswer } from '../qcmAnswer';
-import { QuestionTrouAnswer } from '../questionTrouAnswer';
-import { PhraseMelangeeAnswer } from '../phraseMelangeeAnswer';
 import { StudentInterface } from '../student/student.interface';
 
 @Entity()
@@ -34,15 +30,6 @@ export class Attempt implements AttemptInterface {
 
     @ManyToOne(() => Exam, { onDelete: 'CASCADE' })
     exam: Exam;
-
-    @OneToMany(() => QcmAnswer, (qcmAnswer) => qcmAnswer.attempt)
-    qcmAnswers: QcmAnswer[];
-
-    @OneToMany(() => QuestionTrouAnswer, (questionTrouAnswer) => questionTrouAnswer.attempt)
-    questionTrouAnswers: QuestionTrouAnswer[];
-
-    @OneToMany(() => PhraseMelangeeAnswer, (phraseMelangeAnswer) => phraseMelangeAnswer.attempt)
-    phraseMelangeAnswers: PhraseMelangeeAnswer[];
 
     @Column({ default: 0 })
     roundTrips: number;

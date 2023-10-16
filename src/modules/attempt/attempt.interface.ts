@@ -1,7 +1,4 @@
 import { Exam } from '../exam';
-import { PhraseMelangeeAnswer } from '../phraseMelangeeAnswer';
-import { QcmAnswer } from '../qcmAnswer';
-import { QuestionTrouAnswer } from '../questionTrouAnswer';
 
 export interface AttemptInterface {
     id: string;
@@ -13,10 +10,4 @@ export interface AttemptInterface {
     hasBeenTreated: boolean;
 
     exam: Exam;
-
-    qcmAnswers: QcmAnswer[];
-
-    questionTrouAnswers: QuestionTrouAnswer[];
-
-    phraseMelangeAnswers: PhraseMelangeeAnswer[];
 }
