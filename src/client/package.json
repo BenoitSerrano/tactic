@@ -16,6 +16,7 @@
         "@types/jest": "^27.5.2",
         "@types/node": "^16.18.31",
         "@types/react": "^18.2.6",
+        "@types/react-beautiful-dnd": "^13.1.5",
         "@types/react-dom": "^18.2.4",
         "buffer": "^6.0.3",
         "react": "^18.2.0",
@@ -51,7 +52,6 @@
         ]
     },
     "devDependencies": {
-        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-        "@types/react-beautiful-dnd": "^13.1.5"
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
     }
 }
