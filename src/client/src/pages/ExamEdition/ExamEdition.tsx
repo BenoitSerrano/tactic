@@ -1,26 +1,9 @@
-import React, { ElementType, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react-beautiful-dnd';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import LowPriorityIcon from '@mui/icons-material/LowPriority';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import {
-    IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableRow,
-    styled,
-} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 import { Menu } from '../../components/Menu';
 import { Loader } from '../../components/Loader';
-import { questionKindType } from '../../types';
 import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
 import { questionWithAnswersType } from './types';
