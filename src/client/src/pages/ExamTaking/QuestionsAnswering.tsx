@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
 import { questionType } from './types';
@@ -11,6 +11,7 @@ type questionAnswerType = Record<number, string>;
 
 function QuestionsAnswering(props: {
     attemptId: string;
+    title: string;
     questions: Array<questionType>;
     onExamDone: () => void;
 }) {
@@ -45,6 +46,10 @@ function QuestionsAnswering(props: {
     return (
         <>
             <Container>
+                <TitleContainer>
+                    <Typography variant="h1">{props.title}</Typography>
+                </TitleContainer>
+
                 {props.questions.map((question, index) => (
                     <QuestionContainer key={`question-${question.id}`}>
                         <QuestionAnswering
@@ -90,9 +95,20 @@ function QuestionsAnswering(props: {
 
 const BUTTON_CONTAINER_HEIGHT = 50;
 
+const TitleContainer = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+});
+
 const Container = styled('div')({
     marginBottom: BUTTON_CONTAINER_HEIGHT,
     width: '100%',
+    border: 'solid black 1px',
+    boxShadow: '2px 2px 2px -1px rgba(0,0,0,0.5)',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: 20,
 });
 const ButtonContainer = styled('div')({
     display: 'flex',

@@ -37,17 +37,17 @@ function ExamTaking() {
 
     return (
         <Page>
-            <MainContainer>
-                <Typography variant="h1">{query.data.exam.name}</Typography>
-                <CountdownContainer>
-                    <Countdown remainingSeconds={remainingSeconds} />
-                </CountdownContainer>
+            <CountdownContainer>
+                <Countdown remainingSeconds={remainingSeconds} />
+            </CountdownContainer>
+            <ExamPageContainer>
                 <QuestionsAnswering
+                    title={query.data.exam.name}
                     questions={query.data.exam.questions}
                     attemptId={attemptId}
                     onExamDone={onExamDone}
                 />
-            </MainContainer>
+            </ExamPageContainer>
         </Page>
     );
 
@@ -64,11 +64,8 @@ const CountdownContainer = styled('div')({
     left: 0,
 });
 
-const MainContainer = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+const ExamPageContainer = styled('div')({
+    marginTop: 10,
     flex: 1,
     width: '60%',
 });
