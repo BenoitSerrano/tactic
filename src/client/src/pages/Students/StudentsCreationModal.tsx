@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TextField, Typography } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 import { useAlert } from '../../lib/alert';
 import { extractEmailsFromEmailList } from './utils';
 
@@ -32,17 +32,20 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
             close={props.close}
             confirmButtonLabel="Ajouter"
         >
-            <Typography>
-                Vous pouvez ajouter plusieurs adresses e-mail dans le champ ci-dessous, en les
-                séparant par des espaces.
-            </Typography>
             <TextField
                 label="Adresses e-mail"
+                minRows={2}
                 fullWidth
                 multiline
                 value={emailList}
                 onChange={(event) => setEmailList(event.target.value)}
             />
+            <HintContainer>
+                <Typography variant="h6">
+                    Vous pouvez ajouter plusieurs adresses e-mail dans le champ ci-dessus en les
+                    séparant par des espaces, des virgules et/ou des passages à la ligne.
+                </Typography>
+            </HintContainer>
         </Modal>
     );
 
@@ -50,5 +53,8 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
         createStudentsMutation.mutate(emails);
     }
 }
+const HintContainer = styled('div')(({ theme }) => ({
+    paddingTop: theme.spacing(1),
+}));
 
 export { StudentsCreationModal };

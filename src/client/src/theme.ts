@@ -38,7 +38,7 @@ const theme = createTheme({
             fontWeight: 'normal',
         },
         h6: {
-            fontSize: '1.0rem',
+            fontSize: '0.8rem',
             fontWeight: 'normal',
         },
     },

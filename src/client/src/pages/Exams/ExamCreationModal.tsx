@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Modal } from '../../components/Modal';
-import { TextField } from '@mui/material';
-import { api } from '../../lib/api';
 import { useMutation } from '@tanstack/react-query';
+import { TextField, styled } from '@mui/material';
+import { Modal } from '../../components/Modal';
+import { api } from '../../lib/api';
 
 function ExamCreationModal(props: {
     isOpen: boolean;
@@ -10,7 +10,7 @@ function ExamCreationModal(props: {
     onExamCreated: (examId: string) => void;
 }) {
     const [newExamName, setNewExamName] = useState('');
-    const [newExamDuration, setNewExamDuration] = useState(15);
+    const [newExamDuration, setNewExamDuration] = useState(60);
     const mutation = useMutation({
         mutationFn: api.createExam,
         onSuccess: (exam) => {
@@ -29,20 +29,24 @@ function ExamCreationModal(props: {
             isConfirmLoading={mutation.isLoading}
             title="Création d'un nouveau test"
         >
-            <div>
-                <TextField
-                    label="Nom du test"
-                    fullWidth
-                    value={newExamName}
-                    onChange={(event) => setNewExamName(event.target.value)}
-                />
-                <TextField
-                    type="number"
-                    label="Durée du test en minutes"
-                    value={newExamDuration}
-                    onChange={(event) => setNewExamDuration(Number(event.target.value))}
-                />
-            </div>
+            <>
+                <FieldContainer>
+                    <TextField
+                        label="Nom du test"
+                        fullWidth
+                        value={newExamName}
+                        onChange={(event) => setNewExamName(event.target.value)}
+                    />
+                </FieldContainer>
+                <FieldContainer>
+                    <TextField
+                        type="number"
+                        label="Durée du test en minutes"
+                        value={newExamDuration}
+                        onChange={(event) => setNewExamDuration(Number(event.target.value))}
+                    />
+                </FieldContainer>
+            </>
         </Modal>
     );
 
@@ -50,5 +54,11 @@ function ExamCreationModal(props: {
         mutation.mutate({ name: newExamName, duration: newExamDuration });
     }
 }
+
+const FieldContainer = styled('div')(({ theme }) => ({
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    width: '100%',
+}));
 
 export { ExamCreationModal };

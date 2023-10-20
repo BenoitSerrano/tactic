@@ -18,12 +18,12 @@ function Header() {
             <MenuContainer>
                 <LinkContainer>
                     <Link to={'#product'}>
-                        <Typography variant="h6">Produit</Typography>
+                        <Typography variant="h5">Produit</Typography>
                     </Link>
                 </LinkContainer>
                 <LinkContainer>
                     <Link to={'#pricing'}>
-                        <Typography variant="h6">Tarifs</Typography>
+                        <Typography variant="h5">Tarifs</Typography>
                     </Link>
                 </LinkContainer>
             </MenuContainer>

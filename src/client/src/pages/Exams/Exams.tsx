@@ -21,6 +21,7 @@ import { Loader } from '../../components/Loader';
 import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
+import { ExamCreatedModal } from './ExamCreatedModal';
 
 function Exams() {
     const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -28,6 +29,7 @@ function Exams() {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const [isExamCreationModalOpen, setIsExamCreationModalOpen] = useState(false);
+    const [isExamCreatedModalOpen, setIsExamCreatedModalOpen] = useState(false);
     const deleteExamMutation = useMutation({
         mutationFn: api.deleteExam,
         onSuccess: () => {
@@ -87,7 +89,11 @@ function Exams() {
             <ExamCreationModal
                 isOpen={isExamCreationModalOpen}
                 close={() => setIsExamCreationModalOpen(false)}
-                onExamCreated={(examId: string) => navigate(`/teacher/exams/${examId}/edit`)}
+                onExamCreated={() => setIsExamCreatedModalOpen(true)}
+            />
+            <ExamCreatedModal
+                isOpen={isExamCreatedModalOpen}
+                close={() => setIsExamCreatedModalOpen(false)}
             />
         </>
     );
