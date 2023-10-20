@@ -41,7 +41,7 @@ function StudentAuthentication() {
         } catch (error) {
             console.warn(error);
             alert(
-                `L'email "${email}" n'existe pas pour cet examen. Veuillez renseigner l'email utilisé lors de vos échanges avec votre professeur.`,
+                `L'email "${email}" n'existe pas pour ce test. Veuillez renseigner l'email utilisé lors de vos échanges avec votre professeur.`,
             );
         }
     }

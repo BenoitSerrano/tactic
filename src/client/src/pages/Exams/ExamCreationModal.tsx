@@ -27,18 +27,18 @@ function ExamCreationModal(props: {
             confirmButtonLabel="Créer"
             cancelButtonLabel="Annuler"
             isConfirmLoading={mutation.isLoading}
-            title="Création d'un nouvel examen"
+            title="Création d'un nouveau test"
         >
             <div>
                 <TextField
-                    label="Nom de l'examen"
+                    label="Nom du test"
                     fullWidth
                     value={newExamName}
                     onChange={(event) => setNewExamName(event.target.value)}
                 />
                 <TextField
                     type="number"
-                    label="Durée de l'examen en minutes"
+                    label="Durée du test en minutes"
                     value={newExamDuration}
                     onChange={(event) => setNewExamDuration(Number(event.target.value))}
                 />

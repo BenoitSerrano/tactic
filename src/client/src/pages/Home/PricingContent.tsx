@@ -21,7 +21,7 @@ function PricingContent() {
                             price={0}
                             features={[
                                 "Nombre d'élèves illimité",
-                                'Nombre de questions par examen illimité',
+                                'Nombre de questions par test illimité',
                                 'Un test maximum',
                             ]}
                         />
@@ -32,7 +32,7 @@ function PricingContent() {
                             price={5}
                             features={[
                                 "Nombre d'élèves illimité",
-                                'Nombre de questions par examen illimité',
+                                'Nombre de questions par test illimité',
                                 'Nombre de tests illimité',
                                 'Statistiques avancées',
                                 'Support réactif en moins de 24h',

@@ -50,7 +50,7 @@ function Exams() {
                 <TableHead>
                     <TableRow>
                         <TableCell width={170}>Actions</TableCell>
-                        <TableCell>Nom de l'examen</TableCell>
+                        <TableCell>Nom du test</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -72,7 +72,7 @@ function Exams() {
                                         <ContentCopyIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Supprimer l'examen">
+                                <Tooltip title="Supprimer le test">
                                     <IconButton onClick={buildDeleteExam(exam.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
