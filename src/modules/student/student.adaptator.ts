@@ -1,5 +1,6 @@
 import { attemptUtils } from '../attempt';
 import { AttemptInterface } from '../attempt/attempt.interface';
+import { Exam } from '../exam';
 import { Student } from './Student.entity';
 
 const studentAdaptator = {
@@ -7,12 +8,12 @@ const studentAdaptator = {
 };
 
 function formatStudentsIntoStudentsSummary(studentsWithAttempts: Array<Student>) {
-    const examIds: string[] = [];
+    const exams: Record<Exam['id'], Exam['name']> = {};
 
     studentsWithAttempts.forEach((studentWithAttempts) => {
         studentWithAttempts.attempts.forEach((attempt) => {
-            if (!examIds.includes(attempt.exam.id)) {
-                examIds.push(attempt.exam.id);
+            if (!Object.keys(exams).includes(attempt.exam.id)) {
+                exams[attempt.exam.id] = attempt.exam.name;
             }
         });
     });
@@ -22,11 +23,11 @@ function formatStudentsIntoStudentsSummary(studentsWithAttempts: Array<Student>)
             id: studentWithAttempts.id,
             email: studentWithAttempts.email,
             createdDate: new Date(studentWithAttempts.createdDate).getTime(),
-            examStatus: computeExamStatus(examIds, studentWithAttempts.attempts),
+            examStatus: computeExamStatus(Object.keys(exams), studentWithAttempts.attempts),
         };
     });
 
-    return { examIds, students };
+    return { exams, students };
 }
 
 function computeExamStatus(examIds: string[], attempts: AttemptInterface[]) {

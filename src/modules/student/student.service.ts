@@ -27,6 +27,7 @@ function buildStudentService() {
     async function getStudentsWithAttempts(user?: User) {
         const studentsWithAttempts = await studentRepository.find({
             where: { user },
+            select: { attempts: { id: true, exam: { id: true, name: true } } },
             relations: ['attempts', 'attempts.exam'],
         });
         const studentsSummary =

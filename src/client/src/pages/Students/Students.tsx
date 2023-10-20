@@ -17,7 +17,6 @@ import { Loader } from '../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
 import { iconLib } from '../../lib/icons';
-import { useAlert } from '../../lib/alert';
 import { time } from '../../lib/time';
 
 type sortColumnType = 'email' | 'createdDate' | string;
@@ -30,7 +29,7 @@ type studentsSummaryType = {
         createdDate: number;
         examStatus: Record<string, examStatusType>;
     }>;
-    examIds: string[];
+    exams: Record<string, string>;
 };
 
 function Students() {
@@ -104,7 +103,7 @@ function Students() {
                                 Date d'ajout
                             </TableSortLabel>
                         </TableCell>
-                        {query.data.examIds.map((examId) => (
+                        {Object.entries(query.data.exams).map(([examId, examName]) => (
                             <TableCell key={'label-' + examId}>
                                 <TableSortLabel
                                     active={activeSort === examId}
@@ -116,7 +115,7 @@ function Students() {
                                         setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                     }}
                                 >
-                                    {examId}
+                                    {examName}
                                 </TableSortLabel>
                             </TableCell>
                         ))}
@@ -137,7 +136,7 @@ function Students() {
                             <TableCell>
                                 {time.formatToReadableDatetime(student.createdDate)}
                             </TableCell>
-                            {query.data.examIds.map((examId) => (
+                            {Object.keys(query.data.exams).map((examId) => (
                                 <TableCell key={'examStatus-' + examId}>
                                     {iconLib.computeIconColor(student.examStatus[examId])}
                                 </TableCell>
@@ -188,7 +187,7 @@ function Students() {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                'Souhaitez-vous réellement supprimer cet étudiant ? Tous ses résultats aux examens seront également supprimés.',
+                'Souhaitez-vous réellement supprimer cet élève ? Tous ses résultats aux tests seront également supprimés.',
             );
             if (hasConfirmed) {
                 deleteStudentMutation.mutate(studentId);
