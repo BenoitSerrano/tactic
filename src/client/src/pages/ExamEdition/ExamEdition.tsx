@@ -7,8 +7,8 @@ import { Loader } from '../../components/Loader';
 import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
 import { questionWithAnswersType } from './types';
-import { ExamsTable } from './ExamsTable';
-import { questionKindIconComponentMapping } from './constants';
+import { ExamTable } from './ExamTable';
+import QuizIcon from '@mui/icons-material/Quiz';
 
 function ExamEdition() {
     const params = useParams<{ examId: string }>();
@@ -30,21 +30,9 @@ function ExamEdition() {
 
     const menuButtons = [
         {
-            title: 'Ajouter une nouvelle QCM',
-            onClick: () => setCurrentQuestionModalStatus({ kind: 'creating', questionKind: 'qcm' }),
-            IconComponent: questionKindIconComponentMapping['qcm'],
-        },
-        {
-            title: 'Ajouter une nouvelle question à trou',
-            onClick: () =>
-                setCurrentQuestionModalStatus({ kind: 'creating', questionKind: 'questionTrou' }),
-            IconComponent: questionKindIconComponentMapping['questionTrou'],
-        },
-        {
-            title: 'Ajouter une nouvelle phrase mélangée',
-            onClick: () =>
-                setCurrentQuestionModalStatus({ kind: 'creating', questionKind: 'phraseMelangee' }),
-            IconComponent: questionKindIconComponentMapping['phraseMelangee'],
+            title: 'Ajouter une question',
+            onClick: () => setCurrentQuestionModalStatus({ kind: 'creating' }),
+            IconComponent: QuizIcon,
         },
     ];
     function openEditionModal(question: questionWithAnswersType) {
@@ -54,7 +42,7 @@ function ExamEdition() {
     return (
         <>
             <Menu buttons={menuButtons} />
-            <ExamsTable
+            <ExamTable
                 questions={query.data.questions}
                 examId={examId}
                 openEditionModal={openEditionModal}

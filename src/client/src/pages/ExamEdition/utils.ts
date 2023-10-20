@@ -1,9 +1,8 @@
-import { questionKindType } from '../../types';
 import { questionWithAnswersType } from './types';
 
 type modalStatusType =
     | { kind: 'editing'; question: questionWithAnswersType }
-    | { kind: 'creating'; questionKind: questionKindType };
+    | { kind: 'creating' };
 
 function computeConfirmButtonLabel(modalStatus: modalStatusType) {
     switch (modalStatus.kind) {

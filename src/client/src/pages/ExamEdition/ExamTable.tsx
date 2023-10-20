@@ -27,7 +27,7 @@ const questionKindTitleMapping: Record<questionKindType, string> = {
     phraseMelangee: 'Phrase à reconstituer',
 };
 
-function ExamsTable(props: {
+function ExamTable(props: {
     examId: string;
     questions: Array<questionWithAnswersType>;
     openEditionModal: (question: questionWithAnswersType) => void;
@@ -236,4 +236,4 @@ const QuestionTypeIconContainer = styled('div')({
     display: 'flex',
     alignItems: 'center',
 });
-export { ExamsTable };
+export { ExamTable };

@@ -7,6 +7,8 @@ type questionType = {
     points: number;
 };
 
-type questionKindType = 'qcm' | 'questionTrou' | 'phraseMelangee';
+const questionKinds = ['qcm', 'questionTrou', 'phraseMelangee'] as const;
+type questionKindType = (typeof questionKinds)[number];
+export { questionKinds };
 
 export type { questionType, questionKindType };

@@ -1,6 +1,6 @@
 import React, { ElementType, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TextField, styled } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent, TextField, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
@@ -8,21 +8,24 @@ import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } f
 import { QCMUpsertionModalContent } from './QCMUpsertionModalContent';
 import { QuestionTrouUpsertionModalContent } from './QuestionTrouUpsertionModalContent';
 import { PhraseMelangeeUpsertionModalContent } from './PhraseMelangeeUpsertionModalContent';
-import { questionKindType } from '../../types';
+import { questionKindType, questionKinds } from '../../types';
 
 const questionSpecicityMapping: Record<
     questionKindType,
-    { defaultPoints: string; QuestionUpsertionModalContentComponent: ElementType }
+    { defaultPoints: string; QuestionUpsertionModalContentComponent: ElementType; label: string }
 > = {
     qcm: {
+        label: 'Question à Choix Multiple',
         defaultPoints: '1.0',
         QuestionUpsertionModalContentComponent: QCMUpsertionModalContent,
     },
     questionTrou: {
+        label: 'Texte à trou',
         defaultPoints: '2.0',
         QuestionUpsertionModalContentComponent: QuestionTrouUpsertionModalContent,
     },
     phraseMelangee: {
+        label: 'Phrase à reconstituer',
         defaultPoints: '3.0',
         QuestionUpsertionModalContentComponent: PhraseMelangeeUpsertionModalContent,
     },
@@ -37,10 +40,10 @@ function QuestionUpsertionModal(props: {
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
-    const questionKind =
-        props.modalStatus.kind === 'creating'
-            ? props.modalStatus.questionKind
-            : props.modalStatus.question.kind;
+
+    const [currentQuestionKind, setCurrentQuestionKind] = useState<questionKindType>(
+        props.modalStatus.kind === 'creating' ? 'qcm' : props.modalStatus.question.kind,
+    );
 
     const updateQuestionMutation = useMutation({
         mutationFn: api.updateQuestion,
@@ -61,7 +64,7 @@ function QuestionUpsertionModal(props: {
     });
 
     const { defaultPoints, QuestionUpsertionModalContentComponent } =
-        questionSpecicityMapping[questionKind];
+        questionSpecicityMapping[currentQuestionKind];
 
     const [points, setPoints] = useState(
         props.modalStatus.kind === 'editing'
@@ -100,6 +103,24 @@ function QuestionUpsertionModal(props: {
             title={`${titlePrefix} d'une question`}
         >
             <>
+                {props.modalStatus.kind === 'creating' && (
+                    <SelectContainer>
+                        <Select
+                            fullWidth
+                            labelId="select-question-kind-label"
+                            id="select-question-kind"
+                            value={currentQuestionKind}
+                            label="Type de question"
+                            onChange={handleQuestionKindChange}
+                        >
+                            {questionKinds.map((questionKind) => (
+                                <MenuItem value={questionKind}>
+                                    {questionSpecicityMapping[questionKind].label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </SelectContainer>
+                )}
                 <QuestionUpsertionModalContentComponent
                     title={title}
                     setTitle={setTitle}
@@ -134,9 +155,9 @@ function QuestionUpsertionModal(props: {
         const newQuestion = {
             points: Number(points),
             title,
-            kind: questionKind,
+            kind: currentQuestionKind,
             possibleAnswers:
-                questionKind === 'qcm'
+                currentQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
                     : undefined,
             rightAnswers: rightAnswers.map((rightAnswer) => rightAnswer.trim()),
@@ -155,6 +176,14 @@ function QuestionUpsertionModal(props: {
             });
         }
     }
+
+    function handleQuestionKindChange(event: SelectChangeEvent) {
+        setTitle('');
+        setRightAnswers([]);
+        setAcceptableAnswers([]);
+        setPossibleAnswers(['', '', '', '']);
+        setCurrentQuestionKind(event.target.value as questionKindType);
+    }
 }
 
 const RowContainer = styled('div')({
@@ -171,5 +200,11 @@ const PointsContainer = styled('div')({
     display: 'flex',
     justifyContent: 'flex-end',
 });
+
+const SelectContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    width: '100%',
+    marginBottom: theme.spacing(3),
+}));
 
 export { QuestionUpsertionModal };
