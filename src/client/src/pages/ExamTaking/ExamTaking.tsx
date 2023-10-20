@@ -1,6 +1,6 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { Countdown } from '../../components/Countdown';
 import { Page } from '../../components/Page';
 import { time } from '../../lib/time';
