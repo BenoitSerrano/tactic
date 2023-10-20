@@ -7,7 +7,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { ThemeProvider } from '@mui/material';
+import { ThemeProvider, styled } from '@mui/material';
 import { theme } from './theme';
 import { AlertHandlerContextProvider } from './lib/alert';
 import { eventHandler } from './lib/eventHandler';
@@ -16,16 +16,19 @@ import { pathHandler } from './lib/pathHandler';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const queryClient = new QueryClient();
+const StyledBody = styled('div')(({ theme }) => ({ color: theme.palette.common.black }));
 
 root.render(
     <ThemeProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-            <AlertHandlerContextProvider>
-                <BrowserRouter>
-                    <Router />
-                </BrowserRouter>
-            </AlertHandlerContextProvider>
-        </QueryClientProvider>
+        <StyledBody>
+            <QueryClientProvider client={queryClient}>
+                <AlertHandlerContextProvider>
+                    <BrowserRouter>
+                        <Router />
+                    </BrowserRouter>
+                </AlertHandlerContextProvider>
+            </QueryClientProvider>
+        </StyledBody>
     </ThemeProvider>,
 );
 

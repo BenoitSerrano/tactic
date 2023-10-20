@@ -7,6 +7,7 @@ const theme = createTheme({
             dark: '#3732cc',
             main: '#266cff',
         },
+        common: { black: '#001f66' },
         background: { default: '#e2f2ff' },
         divider: '#baddff',
     },
