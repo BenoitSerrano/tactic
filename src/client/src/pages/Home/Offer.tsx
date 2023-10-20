@@ -24,6 +24,6 @@ function Offer(props: { title: string; features: string[]; price: number }) {
 }
 
 const Container = styled('div')({ height: '100%' });
-const TitleContainer = styled('div')({ marginBottom: 24 });
+const TitleContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(3) }));
 
 export { Offer };

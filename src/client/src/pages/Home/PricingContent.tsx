@@ -46,32 +46,37 @@ function PricingContent() {
     );
 }
 
-const MainContainer = styled('div')({
+const MainContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flex: 1,
-    paddingTop: 40,
-    padding: 88,
-});
+    paddingTop: theme.spacing(5),
+    padding: theme.spacing(11),
+}));
 const InnerMainContainer = styled('div')({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
 });
-const PricingDescriptionContainer = styled('div')({ width: '35%', marginRight: 32 });
-const PricingDescriptionTitleContainer = styled('div')({ marginBottom: 16 });
+const PricingDescriptionContainer = styled('div')(({ theme }) => ({
+    width: '35%',
+    marginRight: theme.spacing(4),
+}));
+const PricingDescriptionTitleContainer = styled('div')(({ theme }) => ({
+    marginBottom: theme.spacing(2),
+}));
 const OffersContainer = styled('div')({
     width: '65%',
     display: 'flex',
     justifyContent: 'space-between',
 });
-const OfferContainer = styled('div')({
+const OfferContainer = styled('div')(({ theme }) => ({
     flex: 1,
     padding: 24,
-    marginRight: 8,
-    marginLeft: 8,
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
     backgroundColor: 'white',
     borderRadius: 10,
     border: `solid 1px ${BORDER_COLOR}`,
-});
+}));
 
 export { PricingContent };

@@ -1,6 +1,6 @@
 function ContactContent() {
     //TODO
-    return <div>Contact</div>;
+    return <div></div>;
 }
 
 export { ContactContent };

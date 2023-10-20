@@ -5,7 +5,6 @@ import { Link } from '../../components/Link';
 import { Button } from '../../components/Button';
 
 const HEIGHT = 60;
-const BORDER_COLOR = '#ddf';
 
 function Header() {
     const navigate = useNavigate();
@@ -66,7 +65,7 @@ function Header() {
     }
 }
 
-const Container = styled('div')({
+const Container = styled('div')(({ theme }) => ({
     paddingLeft: 32,
     paddingRight: 32,
     display: 'flex',
@@ -74,12 +73,18 @@ const Container = styled('div')({
     justifyContent: 'space-between',
     height: HEIGHT,
     backgroundColor: 'white',
-    borderBottom: `${BORDER_COLOR} 1px solid`,
-});
+    borderBottom: `${theme.palette.divider} 1px solid`,
+}));
 
 const MenuContainer = styled('div')({ display: 'flex', justifyContent: 'space-between' });
-const LinkContainer = styled('div')({ paddingRight: 48, paddingLeft: 48 });
+const LinkContainer = styled('div')(({ theme }) => ({
+    paddingRight: theme.spacing(6),
+    paddingLeft: theme.spacing(6),
+}));
 const ButtonsContainer = styled('div')({ display: 'flex' });
-const ButtonContainer = styled('div')({ marginRight: 8, marginLeft: 8 });
+const ButtonContainer = styled('div')(({ theme }) => ({
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+}));
 
 export { Header };

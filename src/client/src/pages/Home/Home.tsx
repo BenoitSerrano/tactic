@@ -5,8 +5,6 @@ import { ProductContent } from './ProductContent';
 import { PricingContent } from './PricingContent';
 import { ContactContent } from './ContactContent';
 
-const BACKGROUND_COLOR = '#fafaff';
-
 function Home() {
     const { hash } = useLocation();
     return (
@@ -30,9 +28,9 @@ function Home() {
     }
 }
 
-const Container = styled('div')({
-    backgroundColor: BACKGROUND_COLOR,
+const Container = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
     minHeight: '100vh',
-});
+}));
 
 export { Home };

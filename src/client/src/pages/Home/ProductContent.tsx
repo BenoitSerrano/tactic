@@ -1,6 +1,6 @@
 function ProductContent() {
     //TODO
-    return <>Product</>;
+    return <></>;
 }
 
 export { ProductContent };
