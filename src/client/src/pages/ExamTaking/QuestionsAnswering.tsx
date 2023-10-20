@@ -101,15 +101,17 @@ const TitleContainer = styled('div')({
     flexDirection: 'column',
 });
 
-const Container = styled('div')({
+const Container = styled('div')(({ theme }) => ({
     marginBottom: BUTTON_CONTAINER_HEIGHT,
     width: '100%',
-    border: 'solid black 1px',
-    boxShadow: '2px 2px 2px -1px rgba(0,0,0,0.5)',
+    borderRadius: 2,
+    border: `solid ${theme.palette.common.black} 1px`,
+    boxShadow: theme.shadows[4],
     display: 'flex',
     flexDirection: 'column',
-    padding: 20,
-});
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.common.white,
+}));
 const ButtonContainer = styled('div')({
     display: 'flex',
     justifyContent: 'center',
@@ -119,6 +121,7 @@ const ButtonContainer = styled('div')({
     position: 'fixed',
     width: '100%',
     bottom: 0,
+    left: 0,
 });
 
 const QuestionContainer = styled('div')({ marginTop: 30, marginBottom: 30 });
