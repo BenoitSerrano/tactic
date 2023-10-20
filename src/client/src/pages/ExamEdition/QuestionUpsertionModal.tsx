@@ -91,6 +91,7 @@ function QuestionUpsertionModal(props: {
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);
+    const isConfirmDisabled = computeIsConfirmDisabled();
 
     return (
         <Modal
@@ -101,6 +102,7 @@ function QuestionUpsertionModal(props: {
             cancelButtonLabel="Annuler"
             isConfirmLoading={isUpdating || isCreating}
             title={`${titlePrefix} d'une question`}
+            isConfirmDisabled={isConfirmDisabled}
         >
             <>
                 {props.modalStatus.kind === 'creating' && (
@@ -146,9 +148,30 @@ function QuestionUpsertionModal(props: {
 
     function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
-        if (value.match(/^[0-9]+(\.)?([0-9]+)?$/)) {
+        if (value.match(/^[0-9]?(\.)?([0-9]+)?$/)) {
             setPoints(value);
         }
+    }
+
+    function computeIsConfirmDisabled() {
+        if (!title || rightAnswers.length === 0) {
+            return true;
+        }
+        if (
+            currentQuestionKind === 'qcm' &&
+            possibleAnswers.some((possibleAnswer) => !possibleAnswer)
+        ) {
+            return true;
+        }
+
+        if (currentQuestionKind === 'questionTrou' && !title.match(/\.\.\.\./)) {
+            return true;
+        }
+
+        if (currentQuestionKind === 'phraseMelangee' && title === rightAnswers[0]) {
+            return true;
+        }
+        return false;
     }
 
     function saveQuestion() {
@@ -178,11 +201,13 @@ function QuestionUpsertionModal(props: {
     }
 
     function handleQuestionKindChange(event: SelectChangeEvent) {
+        const newCurrentQuestionKind = event.target.value as questionKindType;
         setTitle('');
         setRightAnswers([]);
         setAcceptableAnswers([]);
         setPossibleAnswers(['', '', '', '']);
-        setCurrentQuestionKind(event.target.value as questionKindType);
+        setPoints(questionSpecicityMapping[newCurrentQuestionKind].defaultPoints);
+        setCurrentQuestionKind(newCurrentQuestionKind);
     }
 }
 

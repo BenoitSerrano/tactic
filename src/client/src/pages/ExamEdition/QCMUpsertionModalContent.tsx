@@ -1,4 +1,4 @@
-import { FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup, TextField, Typography, styled } from '@mui/material';
 
 function QCMUpsertionModalContent(props: {
     title: string;
@@ -15,11 +15,17 @@ function QCMUpsertionModalContent(props: {
         <ModalContent>
             <InputContainer>
                 <TextField
+                    fullWidth
                     value={props.title}
                     label="Intitulé"
                     onChange={(event) => props.setTitle(event.target.value)}
                 />
             </InputContainer>
+            <HintContainer>
+                <Typography variant="h6">
+                    Indiquez les réponses possibles, et sélectionnez la bonne réponse :
+                </Typography>
+            </HintContainer>
             <RadioGroup
                 value={rightAnswer}
                 onChange={(event) => props.setRightAnswers([event.target.value])}
@@ -63,6 +69,10 @@ function QCMUpsertionModalContent(props: {
 }
 
 const ModalContent = styled('div')({ width: '100%' });
-const InputContainer = styled('div')({ marginTop: 4, marginBottom: 4 });
+const InputContainer = styled('div')(({ theme }) => ({
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+}));
+const HintContainer = styled('div')(({ theme }) => ({ marginTop: theme.spacing(2) }));
 
 export { QCMUpsertionModalContent };

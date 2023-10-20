@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import QuizIcon from '@mui/icons-material/Quiz';
 import { api } from '../../lib/api';
 import { Menu } from '../../components/Menu';
 import { Loader } from '../../components/Loader';
@@ -8,7 +9,6 @@ import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
 import { questionWithAnswersType } from './types';
 import { ExamTable } from './ExamTable';
-import QuizIcon from '@mui/icons-material/Quiz';
 
 function ExamEdition() {
     const params = useParams<{ examId: string }>();

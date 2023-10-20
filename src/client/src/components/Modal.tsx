@@ -3,6 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Button } from './Button';
 
 function Modal(props: {
+    isConfirmDisabled?: boolean;
     children: React.ReactElement | Array<React.ReactElement | boolean>;
     isOpen: boolean;
     close: () => void;
@@ -24,6 +25,7 @@ function Modal(props: {
                 <ModalFooter>
                     <Button onClick={props.close}>{props.cancelButtonLabel || 'Annuler'}</Button>
                     <LoadingButton
+                        disabled={props.isConfirmDisabled}
                         loading={props.isConfirmLoading}
                         variant="contained"
                         onClick={onConfirm}
