@@ -1,9 +1,10 @@
-import { IconButton, Tooltip, styled } from '@mui/material';
+import { styled } from '@mui/material';
+import { Button } from './Button';
 
 type buttonType = {
     IconComponent: React.ElementType;
     onClick: () => void;
-    title?: string;
+    title: string;
 };
 
 function Menu(props: { buttons: Array<buttonType> }) {
@@ -11,13 +12,16 @@ function Menu(props: { buttons: Array<buttonType> }) {
         <MenuContainer>
             <ButtonContainer>
                 {props.buttons.map((button, index) => {
-                    const { IconComponent, onClick } = button;
+                    const { IconComponent, onClick, title } = button;
                     return (
-                        <Tooltip title={button.title} key={`menuButton-${index}`}>
-                            <IconButton onClick={onClick} size="large">
-                                <IconComponent fontSize="large" />
-                            </IconButton>
-                        </Tooltip>
+                        <Button
+                            key={index}
+                            variant="contained"
+                            startIcon={<IconComponent />}
+                            onClick={onClick}
+                        >
+                            {title}
+                        </Button>
                     );
                 })}
             </ButtonContainer>
@@ -27,11 +31,12 @@ function Menu(props: { buttons: Array<buttonType> }) {
 
 const BUTTON_CONTAINER_HEIGHT = 80;
 
-const MenuContainer = styled('div')({
+const MenuContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
-});
+    paddingRight: theme.spacing(2),
+}));
 
 const ButtonContainer = styled('div')({
     minWidth: BUTTON_CONTAINER_HEIGHT,

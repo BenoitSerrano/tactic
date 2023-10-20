@@ -42,6 +42,7 @@ function Exams() {
                     {
                         onClick: () => setIsExamCreationModalOpen(true),
                         IconComponent: PostAddIcon,
+                        title: 'Créer',
                     },
                 ]}
             />
@@ -114,7 +115,7 @@ function Exams() {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                'Souhaitez-vous réellement supprimer cet.te étudiant.e ? Tous ses résultats aux examens seront également supprimés.',
+                'Souhaitez-vous réellement supprimer ce test ? Tous les résultats liés à ce test seront supprimés.',
             );
             if (hasConfirmed) {
                 deleteExamMutation.mutate(examId);

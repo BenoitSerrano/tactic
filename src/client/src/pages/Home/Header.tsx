@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { localStorage } from '../../lib/localStorage';
 import { Link } from '../../components/Link';
 import { Button } from '../../components/Button';
+import { Logo } from '../../components/Logo';
 
 const HEIGHT = 60;
 
@@ -12,7 +13,7 @@ function Header() {
     return (
         <Container>
             <Link to="/">
-                <img src="./full_logo.png" alt="Logo Tactic" height="35" />
+                <Logo />
             </Link>
             <MenuContainer>
                 <LinkContainer>

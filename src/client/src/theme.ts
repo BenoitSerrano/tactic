@@ -7,8 +7,11 @@ const theme = createTheme({
             dark: '#3732cc',
             main: '#266cff',
         },
+        secondary: {
+            main: '#eba636',
+        },
         common: { black: '#313f60' },
-        background: { default: '#e2f2ff' },
+        background: { default: '#fafdff' },
         divider: '#baddff',
     },
     spacing: (value: number) => value * 8,

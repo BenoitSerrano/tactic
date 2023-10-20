@@ -22,13 +22,13 @@ function Modal(props: {
                 )}
                 <ModalBody>{props.children}</ModalBody>
                 <ModalFooter>
-                    <Button onClick={props.close}>{props.cancelButtonLabel || 'Cancel'}</Button>
+                    <Button onClick={props.close}>{props.cancelButtonLabel || 'Annuler'}</Button>
                     <LoadingButton
                         loading={props.isConfirmLoading}
                         variant="contained"
                         onClick={onConfirm}
                     >
-                        {props.confirmButtonLabel || 'Confirm'}
+                        {props.confirmButtonLabel || 'Confirmer'}
                     </LoadingButton>
                 </ModalFooter>
             </ModalContent>

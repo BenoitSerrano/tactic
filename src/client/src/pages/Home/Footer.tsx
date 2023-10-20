@@ -1,10 +1,11 @@
 import { Typography, styled } from '@mui/material';
+import { Logo } from '../../components/Logo';
 
 function Footer() {
     return (
         <Container>
             <InnerContainer>
-                <img src="./full_logo.png" alt="Logo Tactic" height="35" />
+                <Logo />
                 <Typography>Copyright © 2023 Tactic SAS</Typography>
             </InnerContainer>
         </Container>

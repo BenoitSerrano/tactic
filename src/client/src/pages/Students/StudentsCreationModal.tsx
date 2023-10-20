@@ -18,7 +18,7 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
             setEmailList('');
             queryClient.invalidateQueries({ queryKey: ['students'] });
             displayAlert({
-                text: `Les ${emails.length} étudiant.es ont bien été importé.es`,
+                text: `Les ${emails.length} élèves ont bien été importés`,
                 variant: 'success',
             });
             props.close();
@@ -28,8 +28,9 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
         <Modal
             onConfirm={importStudentEmails}
             isOpen={props.isOpen}
-            title="Ajouter des étudiant.es"
+            title="Ajouter des élèves"
             close={props.close}
+            confirmButtonLabel="Ajouter"
         >
             <Typography>
                 Vous pouvez ajouter plusieurs adresses e-mail dans le champ ci-dessous, en les
