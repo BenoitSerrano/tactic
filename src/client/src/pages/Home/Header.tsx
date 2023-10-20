@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { localStorage } from '../../lib/localStorage';
 import { Link } from '../../components/Link';
 
-const HEIGHT = 70;
+const HEIGHT = 60;
 const BORDER_COLOR = '#ddf';
 
 function Header() {
@@ -12,9 +12,9 @@ function Header() {
     const jwtToken = localStorage.jwtTokenHandler.get();
     return (
         <Container>
-            <div>
-                <Typography variant="h2">Tactic</Typography>
-            </div>
+            <Link to="/">
+                <Typography variant="h3">Tactic</Typography>
+            </Link>
             <MenuContainer>
                 <LinkContainer>
                     <Link to={'#product'}>
