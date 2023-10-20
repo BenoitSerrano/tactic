@@ -1,7 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import { Offer } from './Offer';
-
-const BORDER_COLOR = '#ddf';
+import { Card } from '../../components/Card';
 
 function PricingContent() {
     return (
@@ -16,7 +15,7 @@ function PricingContent() {
                     </Typography>
                 </PricingDescriptionContainer>
                 <OffersContainer>
-                    <OfferContainer>
+                    <Card>
                         <Offer
                             title="Free"
                             price={0}
@@ -26,8 +25,8 @@ function PricingContent() {
                                 'Un test maximum',
                             ]}
                         />
-                    </OfferContainer>
-                    <OfferContainer>
+                    </Card>
+                    <Card>
                         <Offer
                             title="Pro"
                             price={5}
@@ -39,7 +38,7 @@ function PricingContent() {
                                 'Support réactif en moins de 24h',
                             ]}
                         />
-                    </OfferContainer>
+                    </Card>
                 </OffersContainer>
             </InnerMainContainer>
         </MainContainer>
@@ -69,14 +68,5 @@ const OffersContainer = styled('div')({
     display: 'flex',
     justifyContent: 'space-between',
 });
-const OfferContainer = styled('div')(({ theme }) => ({
-    flex: 1,
-    padding: 24,
-    marginRight: theme.spacing(1),
-    marginLeft: theme.spacing(1),
-    backgroundColor: 'white',
-    borderRadius: 10,
-    border: `solid 1px ${BORDER_COLOR}`,
-}));
 
 export { PricingContent };

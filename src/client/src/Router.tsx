@@ -29,12 +29,9 @@ function Router() {
             <Route path="/" element={<Home />} />
             <Route
                 path="/sign-up"
-                element={<SignIn apiCall={api.createUser} buttonLabel="Créer un compte" />}
+                element={<SignIn apiCall={api.createUser} title="Créer un compte" />}
             />
-            <Route
-                path="/sign-in"
-                element={<SignIn apiCall={api.login} buttonLabel="Se connecter" />}
-            />
+            <Route path="/sign-in" element={<SignIn apiCall={api.login} title="Se connecter" />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route
