@@ -12,7 +12,7 @@ function Header() {
     return (
         <Container>
             <Link to="/">
-                <Typography variant="h3">Tactic</Typography>
+                <img src="./full_logo.png" alt="Logo Tactic" height="35" />
             </Link>
             <MenuContainer>
                 <LinkContainer>
@@ -61,8 +61,8 @@ function Header() {
 }
 
 const Container = styled('div')(({ theme }) => ({
-    paddingLeft: 32,
-    paddingRight: 32,
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
