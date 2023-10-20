@@ -3,7 +3,7 @@ import pgConnectionString from 'pg-connection-string';
 
 dotenv.config();
 
-let databaseConfig: Record<string, string> = {};
+const databaseConfig: Record<string, string> = {};
 
 if (process.env.DATABASE_URL) {
     const infos = pgConnectionString.parse(process.env.DATABASE_URL);
