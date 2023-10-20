@@ -1,4 +1,3 @@
-import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Typography, styled } from '@mui/material';

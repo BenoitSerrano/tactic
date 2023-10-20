@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from '@mui/material';
 import { Header } from './Header';
 import { useLocation } from 'react-router-dom';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal as MuiModal, Typography, styled } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Button } from './Button';

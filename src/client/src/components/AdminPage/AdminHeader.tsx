@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from '@mui/material';
 import { Breadcrumbs } from './Breadcrumbs';
 import { LogoutButton } from './LogoutButton';

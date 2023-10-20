@@ -1,4 +1,3 @@
-import React from 'react';
 import { TextField, Typography, styled } from '@mui/material';
 import { questionType } from './types';
 

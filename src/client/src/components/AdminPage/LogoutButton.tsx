@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconButton, Tooltip } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { localStorage } from '../../lib/localStorage';

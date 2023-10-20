@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 
 function QCMUpsertionModalContent(props: {

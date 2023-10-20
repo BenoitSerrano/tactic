@@ -1,4 +1,3 @@
-import React from 'react';
 import { colorLib } from '../../lib/colors';
 import { Typography, styled } from '@mui/material';
 

@@ -1,5 +1,4 @@
 import { styled } from '@mui/material';
-import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 const LINK_COLOR = '#44445f';

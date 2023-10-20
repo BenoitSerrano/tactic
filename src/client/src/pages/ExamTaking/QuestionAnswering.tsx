@@ -1,4 +1,3 @@
-import React from 'react';
 import { questionType } from './types';
 import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
 import { QuestionTrouAnswering } from './QuestionTrouAnswering';

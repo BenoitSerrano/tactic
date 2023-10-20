@@ -1,5 +1,4 @@
 import { styled } from '@mui/material';
-import React from 'react';
 import { AdminHeader } from './AdminHeader';
 import { localStorage } from '../../lib/localStorage';
 import { Navigate } from 'react-router-dom';
