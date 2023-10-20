@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button, Typography, styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { localStorage } from '../../lib/localStorage';
 import { Link } from '../../components/Link';
+import { Button } from '../../components/Button';
 
 const HEIGHT = 60;
 const BORDER_COLOR = '#ddf';

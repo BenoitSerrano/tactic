@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
-import { Button, TextField, Typography, styled } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
+import { Button } from '../../components/Button';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;

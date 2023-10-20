@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button, Typography, styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Page } from '../components/Page';
+import { Button } from '../components/Button';
 
 function StudentHome() {
     const params = useParams();

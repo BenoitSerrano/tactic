@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Button, TextField, Typography, styled } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 import { api } from '../lib/api';
 import { Page } from '../components/Page';
+import { Button } from '../components/Button';
 
 function StudentAuthentication() {
     const params = useParams();
