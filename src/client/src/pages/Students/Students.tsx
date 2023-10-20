@@ -12,7 +12,6 @@ import {
     Tooltip,
 } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
@@ -37,7 +36,6 @@ type studentsSummaryType = {
 function Students() {
     const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
-    const { displayAlert } = useAlert();
 
     const query = useQuery<studentsSummaryType>({
         queryKey: ['students'],
@@ -64,12 +62,7 @@ function Students() {
         {
             IconComponent: PersonAddAlt1Icon,
             onClick: () => setIsStudentsCreationModalOpen(true),
-            title: 'Ajouter un ou plusieurs étudiants',
-        },
-        {
-            IconComponent: ContentCopyIcon,
-            onClick: () => copyStudentsEmailsWithoutAttemptsToClipboard(query.data),
-            title: "Copier les adresses e-mails des étudiants n'ayant pas passé l'examen",
+            title: 'Ajouter des élèves',
         },
     ];
 
@@ -188,19 +181,6 @@ function Students() {
                 }
                 return result > 0 ? -1 : 1;
             }
-        });
-    }
-
-    function copyStudentsEmailsWithoutAttemptsToClipboard(studentsSummary: studentsSummaryType) {
-        const emails = studentsSummary.students
-            .filter((student) =>
-                studentsSummary.examIds.every((examId) => student.examStatus[examId] === 'blank'),
-            )
-            .map((student) => student.email);
-        navigator.clipboard.writeText(emails.join(', '));
-        displayAlert({
-            text: "Les e-mails d'étudiants n'ayant passé aucun examen a été copiée dans le presse-papiers",
-            variant: 'success',
         });
     }
 
