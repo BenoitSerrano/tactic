@@ -32,16 +32,24 @@ function Header() {
                     </Link>
                 </LinkContainer>
             </MenuContainer>
-            <div>
-                {!!jwtToken ? (
+            {!!jwtToken ? (
+                <ButtonContainer>
                     <Button onClick={onGoToDashboardClick}>Tableau de bord</Button>
-                ) : (
-                    <>
-                        <Button onClick={onSignUpClick}>Créer un compte</Button>
-                        <Button onClick={onSignInClick}>Se connecter</Button>
-                    </>
-                )}
-            </div>
+                </ButtonContainer>
+            ) : (
+                <ButtonsContainer>
+                    <ButtonContainer>
+                        <Button variant="outlined" onClick={onSignInClick}>
+                            Se connecter
+                        </Button>
+                    </ButtonContainer>
+                    <ButtonContainer>
+                        <Button variant="contained" onClick={onSignUpClick}>
+                            Créer un compte
+                        </Button>
+                    </ButtonContainer>
+                </ButtonsContainer>
+            )}
         </Container>
     );
 
@@ -59,11 +67,11 @@ function Header() {
 }
 
 const Container = styled('div')({
-    paddingLeft: 16,
-    paddingright: 16,
+    paddingLeft: 32,
+    paddingRight: 32,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     height: HEIGHT,
     backgroundColor: 'white',
     borderBottom: `${BORDER_COLOR} 1px solid`,
@@ -71,5 +79,7 @@ const Container = styled('div')({
 
 const MenuContainer = styled('div')({ display: 'flex', justifyContent: 'space-between' });
 const LinkContainer = styled('div')({ paddingRight: 48, paddingLeft: 48 });
+const ButtonsContainer = styled('div')({ display: 'flex' });
+const ButtonContainer = styled('div')({ marginRight: 8, marginLeft: 8 });
 
 export { Header };
