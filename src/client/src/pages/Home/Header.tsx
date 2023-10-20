@@ -25,11 +25,6 @@ function Header() {
                         <Typography variant="h6">Tarifs</Typography>
                     </Link>
                 </LinkContainer>
-                <LinkContainer>
-                    <Link to={'#contact'}>
-                        <Typography variant="h6">Contact</Typography>
-                    </Link>
-                </LinkContainer>
             </MenuContainer>
             {!!jwtToken ? (
                 <ButtonContainer>

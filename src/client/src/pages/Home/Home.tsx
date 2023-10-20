@@ -3,7 +3,6 @@ import { Header } from './Header';
 import { useLocation } from 'react-router-dom';
 import { ProductContent } from './ProductContent';
 import { PricingContent } from './PricingContent';
-import { ContactContent } from './ContactContent';
 
 function Home() {
     const { hash } = useLocation();
@@ -20,8 +19,6 @@ function Home() {
                 return <ProductContent />;
             case '#pricing':
                 return <PricingContent />;
-            case '#contact':
-                return <ContactContent />;
             default:
                 return <ProductContent />;
         }
