@@ -65,6 +65,8 @@ const CountdownContainer = styled('div')({
 
 const ExamPageContainer = styled('div')({
     marginTop: 10,
-    flex: 1,
-    width: '60%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
 });

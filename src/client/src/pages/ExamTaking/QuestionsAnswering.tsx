@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
 import { questionType } from './types';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { QuestionAnswering } from './QuestionAnswering';
+import { TestPageLayout } from '../../components/TestPageLayout';
 
 type questionAnswerType = Record<number, string>;
 
@@ -45,11 +46,7 @@ function QuestionsAnswering(props: {
 
     return (
         <>
-            <Container>
-                <TitleContainer>
-                    <Typography variant="h1">{props.title}</Typography>
-                </TitleContainer>
-
+            <TestPageLayout title={props.title} bottomOffset={BUTTON_CONTAINER_HEIGHT}>
                 {props.questions.map((question, index) => (
                     <QuestionContainer key={`question-${question.id}`}>
                         <QuestionAnswering
@@ -62,7 +59,7 @@ function QuestionsAnswering(props: {
                         />
                     </QuestionContainer>
                 ))}
-            </Container>
+            </TestPageLayout>
             <ButtonContainer>
                 <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
                     Enregistrer le brouillon
@@ -95,23 +92,6 @@ function QuestionsAnswering(props: {
 
 const BUTTON_CONTAINER_HEIGHT = 50;
 
-const TitleContainer = styled('div')({
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-});
-
-const Container = styled('div')(({ theme }) => ({
-    marginBottom: BUTTON_CONTAINER_HEIGHT,
-    width: '100%',
-    borderRadius: 2,
-    border: `solid ${theme.palette.common.black} 1px`,
-    boxShadow: theme.shadows[4],
-    display: 'flex',
-    flexDirection: 'column',
-    padding: theme.spacing(3),
-    backgroundColor: theme.palette.common.white,
-}));
 const ButtonContainer = styled('div')({
     display: 'flex',
     justifyContent: 'center',

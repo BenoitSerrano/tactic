@@ -4,6 +4,7 @@ import { api } from '../../lib/api';
 import { Typography, styled } from '@mui/material';
 import { Loader } from '../../components/Loader';
 import { QuestionChecking } from './QuestionChecking';
+import { TestPageLayout } from '../../components/TestPageLayout';
 
 function ExamChecking() {
     const params = useParams();
@@ -19,24 +20,23 @@ function ExamChecking() {
 
     return (
         <MainContainer>
-            <Typography variant="h1">{query.data.exam.name}</Typography>
-            {query.data.exam.questions.map((question: any, index: number) => (
-                <QuestionChecking
-                    key={'question' + question.id}
-                    index={index + 1}
-                    question={question}
-                />
-            ))}
+            <TestPageLayout title={query.data.exam.name}>
+                {query.data.exam.questions.map((question: any, index: number) => (
+                    <QuestionChecking
+                        key={'question' + question.id}
+                        index={index + 1}
+                        question={question}
+                    />
+                ))}
+            </TestPageLayout>
         </MainContainer>
     );
 }
 
 const MainContainer = styled('div')({
     display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
-    width: '60%',
-    margin: 'auto',
+    width: '100%',
 });
 
 export { ExamChecking };
