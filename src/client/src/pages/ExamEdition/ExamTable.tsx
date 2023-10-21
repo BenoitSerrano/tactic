@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     IconButton,
     Table,
@@ -49,6 +49,10 @@ function ExamTable(props: {
         (sum: number, question: { points: number }) => sum + question.points,
         0,
     );
+
+    useEffect(() => {
+        setQuestions(props.questions);
+    }, [props.questions]);
 
     const handleDragEnd: OnDragEndResponder = (result) => {
         if (!result.destination) {
