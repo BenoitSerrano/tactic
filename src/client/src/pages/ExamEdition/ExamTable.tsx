@@ -13,19 +13,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react-beautiful-dnd';
 import { questionWithAnswersType } from './types';
-import { questionKindType } from '../../types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { api } from '../../lib/api';
-import { questionKindIconComponentMapping } from './constants';
+import { questionSpecicityMapping } from './constants';
 import { tableHandler } from '../../lib/tableHandler';
 import { useAlert } from '../../lib/alert';
-
-const questionKindTitleMapping: Record<questionKindType, string> = {
-    qcm: 'QCM',
-    questionTrou: 'Texte à trou',
-    phraseMelangee: 'Phrase à reconstituer',
-};
 
 function ExamTable(props: {
     examId: string;
@@ -90,7 +83,7 @@ function ExamTable(props: {
                         <TableBody ref={provided.innerRef} {...provided.droppableProps}>
                             {questions.map((question, index) => {
                                 const QuestionKindIconComponent =
-                                    questionKindIconComponentMapping[question.kind];
+                                    questionSpecicityMapping[question.kind].IconComponent;
                                 return (
                                     <Draggable
                                         key={'question-' + question.id}
@@ -126,7 +119,10 @@ function ExamTable(props: {
                                                         <QuestionTypeIconContainer>
                                                             <QuestionKindIconComponent />
                                                         </QuestionTypeIconContainer>
-                                                        {questionKindTitleMapping[question.kind]}
+                                                        {
+                                                            questionSpecicityMapping[question.kind]
+                                                                .label
+                                                        }
                                                     </QuestionTypeCellContent>
                                                 </TableCell>
                                                 <TableCell>

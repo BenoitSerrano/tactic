@@ -89,7 +89,7 @@ function Exams() {
             <ExamCreationModal
                 isOpen={isExamCreationModalOpen}
                 close={() => setIsExamCreationModalOpen(false)}
-                onExamCreated={() => setIsExamCreatedModalOpen(true)}
+                onExamCreated={buildOnCreateExam}
             />
             <ExamCreatedModal
                 isOpen={isExamCreatedModalOpen}
@@ -97,6 +97,11 @@ function Exams() {
             />
         </>
     );
+
+    function buildOnCreateExam() {
+        queryClient.invalidateQueries({ queryKey: ['exams'] });
+        setIsExamCreatedModalOpen(true);
+    }
 
     function buildNavigateToEdition(examId: string) {
         return () => navigate(`/teacher/exams/${examId}/edit`);

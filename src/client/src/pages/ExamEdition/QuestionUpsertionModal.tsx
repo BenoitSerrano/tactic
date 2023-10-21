@@ -1,37 +1,13 @@
-import React, { ElementType, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { MenuItem, Select, SelectChangeEvent, TextField, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
-import { QCMUpsertionModalContent } from './QCMUpsertionModalContent';
-import { QuestionTrouUpsertionModalContent } from './QuestionTrouUpsertionModalContent';
-import { PhraseMelangeeUpsertionModalContent } from './PhraseMelangeeUpsertionModalContent';
 import { questionKindType, questionKinds } from '../../types';
-
-const questionSpecicityMapping: Record<
-    questionKindType,
-    { defaultPoints: string; QuestionUpsertionModalContentComponent: ElementType; label: string }
-> = {
-    qcm: {
-        label: 'Question à Choix Multiple',
-        defaultPoints: '1.0',
-        QuestionUpsertionModalContentComponent: QCMUpsertionModalContent,
-    },
-    questionTrou: {
-        label: 'Texte à trou',
-        defaultPoints: '2.0',
-        QuestionUpsertionModalContentComponent: QuestionTrouUpsertionModalContent,
-    },
-    phraseMelangee: {
-        label: 'Phrase à reconstituer',
-        defaultPoints: '3.0',
-        QuestionUpsertionModalContentComponent: PhraseMelangeeUpsertionModalContent,
-    },
-};
-
-// TODO: ajouter toutes les validations ET indications (hint) côté front
+import { questionSpecicityMapping } from './constants';
+import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 
 function QuestionUpsertionModal(props: {
     close: () => void;
@@ -91,7 +67,12 @@ function QuestionUpsertionModal(props: {
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);
-    const isConfirmDisabled = computeIsConfirmDisabled();
+    const isConfirmDisabled = computeIsConfirmDisabled(currentQuestionKind, {
+        title,
+        rightAnswers,
+        possibleAnswers,
+        acceptableAnswers,
+    });
 
     return (
         <Modal
@@ -151,27 +132,6 @@ function QuestionUpsertionModal(props: {
         if (value.match(/^[0-9]?(\.)?([0-9]+)?$/)) {
             setPoints(value);
         }
-    }
-
-    function computeIsConfirmDisabled() {
-        if (!title || rightAnswers.length === 0) {
-            return true;
-        }
-        if (
-            currentQuestionKind === 'qcm' &&
-            possibleAnswers.some((possibleAnswer) => !possibleAnswer)
-        ) {
-            return true;
-        }
-
-        if (currentQuestionKind === 'questionTrou' && !title.match(/\.\.\.\./)) {
-            return true;
-        }
-
-        if (currentQuestionKind === 'phraseMelangee' && title === rightAnswers[0]) {
-            return true;
-        }
-        return false;
     }
 
     function saveQuestion() {
