@@ -43,7 +43,6 @@ function ExamTable(props: {
             });
         },
     });
-    //TODO gérer la création / modification / deletion d'une question
     const [questions, setQuestions] = useState(props.questions);
     const totalPoints = props.questions.reduce(
         (sum: number, question: { points: number }) => sum + question.points,
