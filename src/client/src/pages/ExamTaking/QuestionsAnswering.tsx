@@ -124,6 +124,9 @@ const ButtonContainer = styled('div')({
     left: 0,
 });
 
-const QuestionContainer = styled('div')({ marginTop: 30, marginBottom: 30 });
+const QuestionContainer = styled('div')(({ theme }) => ({
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+}));
 
 export { QuestionsAnswering };

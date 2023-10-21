@@ -39,14 +39,12 @@ const StyledContainer = styled('div')({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginTop: '10px',
-    marginBottom: '10px',
 });
 
-const StyledTextField = styled(TextField)({
-    marginLeft: '5px',
-    marginRight: '5px',
-});
+const StyledTextField = styled(TextField)(({ theme }) => ({
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+}));
 
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
 export { QuestionTrouAnswering };
