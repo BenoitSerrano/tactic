@@ -15,7 +15,7 @@ function QuestionChoixMultipleAnswering(props: {
                     <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
                 </FormLabel>
                 <RadioGroup value={props.currentAnswer} onChange={onChooseNewAnswer}>
-                    {props.question.possibleAnswers?.map((possibleAnswer, index: number) => (
+                    {props.question.possibleAnswers.map((possibleAnswer, index: number) => (
                         <React.Fragment key={`${props.question.id}-${index}`}>
                             <FormControlLabel
                                 value={index}

@@ -39,4 +39,7 @@ export class Attempt implements AttemptInterface {
 
     @Column('simple-array', { default: '' })
     answers: string[];
+
+    // @Column({ default: '' })
+    // points: string;
 }

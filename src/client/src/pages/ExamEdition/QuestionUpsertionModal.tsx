@@ -142,7 +142,7 @@ function QuestionUpsertionModal(props: {
             possibleAnswers:
                 currentQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
-                    : undefined,
+                    : [],
             rightAnswers: rightAnswers.map((rightAnswer) => rightAnswer.trim()),
             acceptableAnswers: acceptableAnswers.map((acceptableAnswer) => acceptableAnswer.trim()),
         };

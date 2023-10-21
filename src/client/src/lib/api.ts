@@ -185,7 +185,7 @@ async function createQuestion(params: {
     examId: string;
     title: string;
     kind: questionKindType;
-    possibleAnswers?: string[];
+    possibleAnswers: string[];
     rightAnswers: string[];
     acceptableAnswers: string[];
     points: number;
@@ -205,7 +205,7 @@ async function updateQuestion(params: {
     examId: string;
     questionId: number;
     title: string;
-    possibleAnswers?: string[];
+    possibleAnswers: string[];
     rightAnswers: string[];
     acceptableAnswers: string[];
     points: number;

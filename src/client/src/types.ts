@@ -2,7 +2,7 @@ type questionType = {
     id: number;
     kind: questionKindType;
     title: string;
-    possibleAnswers: string[] | null;
+    possibleAnswers: string[];
     currentAnswer: string;
     points: number;
 };
