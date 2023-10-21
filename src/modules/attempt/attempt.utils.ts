@@ -1,11 +1,14 @@
 import { encoder } from '../../lib/encoder';
+import { Question } from '../question';
 import { AttemptInterface } from './attempt.interface';
+import { computeQuestionAnswerStatus } from './computeQuestionAnswerStatus';
 import { attemptAnswersType } from './types';
 
 const attemptUtils = {
     isTimeLimitExceeded,
     stringifyAnswers,
     parseAnswers,
+    computeMarks,
 };
 
 function isTimeLimitExceeded(attempt: AttemptInterface, now: Date) {
@@ -39,6 +42,45 @@ function parseAnswers(answers: string[]): attemptAnswersType {
         return { ...acc, [questionId]: questionAnswer };
     }, {} as attemptAnswersType);
     return attemptAnswers;
+}
+
+function computeMarks(
+    questions: Record<
+        Question['id'],
+        Pick<
+            Question,
+            | 'id'
+            | 'kind'
+            | 'title'
+            | 'acceptableAnswers'
+            | 'rightAnswers'
+            | 'possibleAnswers'
+            | 'points'
+        >
+    >,
+    answers: attemptAnswersType,
+) {
+    const marks = Object.entries(answers).reduce((acc, [questionId, answer]) => {
+        const question = questions[Number(questionId)];
+        const status = computeQuestionAnswerStatus(
+            answer,
+            question.rightAnswers,
+            question.acceptableAnswers,
+        );
+        switch (status) {
+            case 'right':
+                return { ...acc, [question.id]: (acc[question.id] || 0) + question.points };
+            case 'acceptable':
+                return { ...acc, [question.id]: (acc[question.id] || 0) + question.points / 2 };
+            case 'wrong':
+                return acc;
+        }
+    }, {} as Record<Question['id'], number>);
+    return convertMarksToString(marks);
+}
+
+function convertMarksToString(marks: Record<Question['id'], number>) {
+    return Object.entries(marks).map(([questionId, mark]) => `${questionId}:${mark}`);
 }
 
 export { attemptUtils };

@@ -1,4 +1,5 @@
 import { Exam } from '../exam';
+import { Question } from '../question';
 import { Attempt } from './Attempt.entity';
 import { attemptUtils } from './attempt.utils';
 
@@ -40,36 +41,42 @@ describe('attemptsUtils', () => {
         });
     });
 
-    describe('stringifyAnswers', () => {
-        const attemptAnswers = {
-            qcmChoices: { 1: 2, 2: 3 },
-            questionTrouAnswers: { 1: 'truc' },
-            phraseMelangeeAnswers: { 3: 'are you even sure' },
+    describe.only('convertAnswersToMarks', () => {
+        const questions = {
+            1: {
+                id: 1,
+                kind: 'qcm' as const,
+                title: 'la 2ème lettre ?',
+                possibleAnswers: ['A', 'B', 'C', 'D'],
+                rightAnswers: ['1'],
+                acceptableAnswers: [],
+                points: 1,
+            },
+            2: {
+                id: 2,
+                kind: 'phraseMelangee' as const,
+                title: 'belle es tu',
+                possibleAnswers: [],
+                rightAnswers: ['tu es belle', 'es tu belle'],
+                acceptableAnswers: [],
+                points: 3,
+            },
+            3: {
+                id: 3,
+                kind: 'questionTrou' as const,
+                title: '.... est une couleur',
+                possibleAnswers: [],
+                rightAnswers: ['bleu', 'rouge'],
+                acceptableAnswers: ['blanc', 'noir'],
+                points: 11,
+            },
         };
+        it('should convert to marks', () => {
+            const answers = { 1: '1', 2: 'es tu belle', 3: 'blanc' };
 
-        const answers = attemptUtils.stringifyAnswers(attemptAnswers);
+            const marks = attemptUtils.computeMarks(questions, answers);
 
-        expect(answers).toEqual([
-            'QCM:1-Mg==',
-            'QCM:2-Mw==',
-            'QT:1-dHJ1Yw==',
-            'PM:3-YXJlIHlvdSBldmVuIHN1cmU=',
-        ]);
-    });
-    describe('parseAnswers', () => {
-        const answers = [
-            'QCM:1-Mg==',
-            'QCM:2-Mw==',
-            'QT:1-dHJ1Yw==',
-            'PM:3-YXJlIHlvdSBldmVuIHN1cmU=',
-        ];
-
-        const attemptAnswers = attemptUtils.parseAnswers(answers);
-
-        expect(attemptAnswers).toEqual({
-            qcmChoices: { 1: '2', 2: '3' },
-            questionTrouAnswers: { 1: 'truc' },
-            phraseMelangeeAnswers: { 3: 'are you even sure' },
+            expect(marks).toEqual(['1:1', '2:3', '3:5.5']);
         });
     });
 });
