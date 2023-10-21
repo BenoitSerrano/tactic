@@ -4,7 +4,7 @@ import { buildController } from '../lib/buildController';
 import { buildExamController } from '../modules/exam';
 import { buildStudentController } from '../modules/student';
 import { buildAttemptController } from '../modules/attempt';
-import { buildQuestionController } from '../modules/question';
+import { buildQuestionController, questionKinds } from '../modules/question';
 import { buildUserController } from '../modules/user';
 import { accessControlBuilder } from '../lib/accessControlBuilder';
 
@@ -102,7 +102,7 @@ router.post(
         ]),
         schema: Joi.object({
             title: Joi.string().allow(''),
-            kind: Joi.string().valid('qcm', 'questionTrou', 'phraseMelangee'),
+            kind: Joi.string().valid(...questionKinds),
             rightAnswers: Joi.array().items(Joi.string()),
             possibleAnswers: Joi.array().items(Joi.string()),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
