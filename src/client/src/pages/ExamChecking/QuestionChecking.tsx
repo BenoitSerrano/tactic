@@ -25,9 +25,9 @@ function QuestionChecking(props: {
 
     return (
         <StyledContainer>
-            <Typography>
-                {props.index}. Intitulé : {props.question.title}
-            </Typography>
+            <Title>
+                {props.index}. {props.question.title}
+            </Title>
             {props.question.possibleAnswers?.length && (
                 <Typography>
                     Réponses proposées :
@@ -42,5 +42,7 @@ function QuestionChecking(props: {
         </StyledContainer>
     );
 }
+
+const Title = styled(Typography)(({ theme }) => ({ fontWeight: 'bold' }));
 
 export { QuestionChecking };

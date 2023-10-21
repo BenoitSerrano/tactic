@@ -12,11 +12,12 @@ function TestPageLayout(props: { title: string; bottomOffset?: number; children:
     );
 }
 
-const TitleContainer = styled('div')({
+const TitleContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
-});
+    marginBottom: theme.spacing(6),
+}));
 
 const Container = styled('div')(({ theme }) => ({
     width: '60%',

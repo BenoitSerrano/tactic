@@ -22,16 +22,23 @@ function ExamChecking() {
         <MainContainer>
             <TestPageLayout title={query.data.exam.name}>
                 {query.data.exam.questions.map((question: any, index: number) => (
-                    <QuestionChecking
-                        key={'question' + question.id}
-                        index={index + 1}
-                        question={question}
-                    />
+                    <QuestionCheckingContainer>
+                        <QuestionChecking
+                            key={'question' + question.id}
+                            index={index + 1}
+                            question={question}
+                        />
+                    </QuestionCheckingContainer>
                 ))}
             </TestPageLayout>
         </MainContainer>
     );
 }
+
+const QuestionCheckingContainer = styled('div')(({ theme }) => ({
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
+}));
 
 const MainContainer = styled('div')({
     display: 'flex',
