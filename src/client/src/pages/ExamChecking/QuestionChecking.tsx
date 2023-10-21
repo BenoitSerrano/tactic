@@ -15,7 +15,7 @@ function QuestionChecking(props: {
     const color = colorLib.computeTextColor(props.question.status);
     const StyledContainer = styled('div')({ color });
     let answer = '';
-    if (props.question.answer !== undefined) {
+    if (props.question.answer !== undefined && props.question.answer !== '') {
         if (props.question.kind === 'qcm' && props.question.possibleAnswers !== null) {
             answer = props.question.possibleAnswers[Number(props.question.answer)];
         } else {
