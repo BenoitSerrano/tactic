@@ -1,14 +1,12 @@
 import { Exam } from '../exam';
-import { Question } from '../question';
 import { Attempt } from './Attempt.entity';
-import { computeQuestionAnswerStatus } from './computeQuestionAnswerStatus';
-import { attemptAnswersType, questionAnswerSummaryType } from './types';
+import { attemptUtils } from './attempt.utils';
+import { attemptAnswersType } from './types';
 
 const attemptAdaptator = {
     convertAttemptToAttemptWithAnswers,
     computeTreatmentStatusSummary,
     convertAttemptToAttemptWithoutAnswers,
-    computeQuestionAnswersSummary,
 };
 
 function computeTreatmentStatusSummary(attempts: Attempt[]) {
@@ -18,25 +16,6 @@ function computeTreatmentStatusSummary(attempts: Attempt[]) {
     });
 
     return treatmentStatusSummary;
-}
-
-function computeQuestionAnswersSummary(attemptAnswers: attemptAnswersType, questions: Question[]) {
-    const questionAnswerSummary: questionAnswerSummaryType = {};
-
-    questions.forEach((question) => {
-        const answer = attemptAnswers[question.id];
-        const status = computeQuestionAnswerStatus(
-            answer,
-            question.rightAnswers,
-            question.acceptableAnswers,
-        );
-        questionAnswerSummary[question.id] = {
-            answer,
-            status,
-            points: question.points,
-        };
-    });
-    return questionAnswerSummary;
 }
 
 function convertAttemptToAttemptWithoutAnswers(
@@ -70,10 +49,7 @@ function convertAttemptToAttemptWithAnswers(
     exam: Exam,
     attemptAnswers: attemptAnswersType,
 ) {
-    const questionAnswersSummary = attemptAdaptator.computeQuestionAnswersSummary(
-        attemptAnswers,
-        exam.questions,
-    );
+    const marks = attemptUtils.decodeMarks(attempt.marks);
 
     return {
         id: attempt.id,
@@ -84,10 +60,11 @@ function convertAttemptToAttemptWithAnswers(
             name: exam.name,
             duration: exam.duration,
             extraTime: exam.extraTime,
+
             questions: exam.questions.map((question) => ({
                 ...question,
-                answer: questionAnswersSummary[question.id]?.answer,
-                status: questionAnswersSummary[question.id]?.status,
+                mark: marks[question.id],
+                answer: attemptAnswers[question.id],
             })),
         },
     };

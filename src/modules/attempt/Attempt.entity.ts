@@ -40,6 +40,6 @@ export class Attempt implements AttemptInterface {
     @Column('simple-array', { default: '' })
     answers: string[];
 
-    @Column({ default: '' })
-    marks: string;
+    @Column('simple-array', { default: '' })
+    marks: string[];
 }

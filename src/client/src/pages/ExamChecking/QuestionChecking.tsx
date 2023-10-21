@@ -1,19 +1,26 @@
-import { colorLib } from '../../lib/colors';
 import { Typography, styled } from '@mui/material';
+import { questionKindType } from '../../types';
+
+const styledContainerMapping = {
+    right: styled('div')({ color: 'green' }),
+    acceptable: styled('div')({ color: 'orange' }),
+    wrong: styled('div')({ color: 'red' }),
+};
 
 function QuestionChecking(props: {
     question: {
         id: number;
         title: string;
-        kind: 'qcm' | 'questionTrou' | 'phraseMelangee';
+        kind: questionKindType;
         possibleAnswers: string[];
         answer: string | undefined;
-        status: 'right' | 'wrong' | 'acceptable';
+        mark: number;
+        points: number;
     };
     index: number;
 }) {
-    const color = colorLib.computeTextColor(props.question.status);
-    const StyledContainer = styled('div')({ color });
+    const status = computeStatus(props.question.mark, props.question.points);
+    const StyledContainer = styledContainerMapping[status];
     let answer = '';
     if (props.question.answer !== undefined && props.question.answer !== '') {
         if (props.question.kind === 'qcm' && props.question.possibleAnswers !== null) {
@@ -39,8 +46,21 @@ function QuestionChecking(props: {
                 </Typography>
             )}
             <Typography>Réponse : {answer}</Typography>
+            <Typography>
+                {props.question.mark || 0} / {props.question.points}
+            </Typography>
         </StyledContainer>
     );
+
+    function computeStatus(mark: number, points: number) {
+        if (!mark) {
+            return 'wrong';
+        }
+        if (mark === points) {
+            return 'right';
+        }
+        return 'acceptable';
+    }
 }
 
 const Title = styled(Typography)(({ theme }) => ({ fontWeight: 'bold' }));

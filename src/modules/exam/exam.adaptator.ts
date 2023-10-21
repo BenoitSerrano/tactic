@@ -21,14 +21,9 @@ function convertExamWithAttemptsToResults(
         const duration = attempt.updatedAt
             ? Math.floor((new Date(attempt.updatedAt).getTime() - startedAtDate.getTime()) / 1000)
             : undefined;
-        const answers = attemptUtils.parseAnswers(attempt.answers);
 
-        const questionAnswerSummary = attemptAdaptator.computeQuestionAnswersSummary(
-            answers,
-            Object.values(questions),
-        );
-
-        const mark = computeMark(Object.values(questionAnswerSummary));
+        const marks = attemptUtils.decodeMarks(attempt.marks);
+        const mark = Object.values(marks).reduce((sum, mark) => sum + mark, 0);
 
         const result = {
             id: student.id,
@@ -49,20 +44,6 @@ function convertExamWithAttemptsToResults(
         0,
     );
     return { totalPoints, results: examWithResults };
-}
-
-function computeMark(questionAnswerSummary: questionAnswerSummaryType) {
-    const sum = Object.values(questionAnswerSummary).reduce((sum, { points, status }) => {
-        switch (status) {
-            case 'right':
-                return sum + points;
-            case 'acceptable':
-                return sum + points / 2;
-            default:
-                return sum;
-        }
-    }, 0);
-    return sum;
 }
 
 export { examAdaptator };

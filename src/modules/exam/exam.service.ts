@@ -66,7 +66,7 @@ function buildExamService() {
                     hasBeenTreated: true,
                     roundTrips: true,
                     timeSpentOutside: true,
-                    answers: true,
+                    marks: true,
                 },
             },
             relations: ['attempts', 'attempts.student'],

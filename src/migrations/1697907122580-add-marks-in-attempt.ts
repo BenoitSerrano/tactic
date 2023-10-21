@@ -45,10 +45,10 @@ function computeMarks(questions: Record<number, any>, answers: Record<number, st
                 return acc;
         }
     }, {} as Record<number, number>);
-    return convertMarksToString(marks);
+    return encodeMarks(marks);
 }
 
-function convertMarksToString(marks: Record<number, number>) {
+function encodeMarks(marks: Record<number, number>) {
     return Object.entries(marks).map(([questionId, mark]) => `${questionId}:${mark}`);
 }
 function computeQuestionAnswerStatus(

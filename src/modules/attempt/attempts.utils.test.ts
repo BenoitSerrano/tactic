@@ -78,5 +78,14 @@ describe('attemptsUtils', () => {
 
             expect(marks).toEqual(['1:1', '2:3', '3:5.5']);
         });
+        describe.only('decodeMarks', () => {
+            it('should decode marks', () => {
+                const str = ['131:1', '132:1', '133:3'];
+
+                const marks = attemptUtils.decodeMarks(str);
+
+                expect(marks).toEqual({ 131: 1, 132: 1, 133: 3 });
+            });
+        });
     });
 });

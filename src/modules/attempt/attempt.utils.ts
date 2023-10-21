@@ -9,6 +9,8 @@ const attemptUtils = {
     stringifyAnswers,
     parseAnswers,
     computeMarks,
+    encodeMarks,
+    decodeMarks,
 };
 
 function isTimeLimitExceeded(attempt: AttemptInterface, now: Date) {
@@ -76,11 +78,22 @@ function computeMarks(
                 return acc;
         }
     }, {} as Record<Question['id'], number>);
-    return convertMarksToString(marks);
+    return encodeMarks(marks);
 }
 
-function convertMarksToString(marks: Record<Question['id'], number>) {
+function encodeMarks(marks: Record<Question['id'], number>) {
     return Object.entries(marks).map(([questionId, mark]) => `${questionId}:${mark}`);
+}
+
+function decodeMarks(marksArray: string[]): Record<Question['id'], number> {
+    return marksArray.reduce((acc, markEntry) => {
+        const splitMark = markEntry.split(':');
+        if (splitMark.length !== 2) {
+            throw new Error(`marksArray '${marksArray.join(',')}' is wrongly formatted`);
+        }
+        const [questionId, mark] = splitMark;
+        return { ...acc, [Number(questionId)]: Number(mark) };
+    }, {} as Record<Question['id'], number>);
 }
 
 export { attemptUtils };

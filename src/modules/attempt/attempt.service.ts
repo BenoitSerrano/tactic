@@ -74,6 +74,7 @@ function buildAttemptService() {
                 exam: { id: true },
                 startedAt: true,
                 answers: true,
+                marks: true,
             },
 
             relations: ['exam'],
