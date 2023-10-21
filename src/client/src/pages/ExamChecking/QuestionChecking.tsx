@@ -28,7 +28,7 @@ function QuestionChecking(props: {
             <Title>
                 {props.index}. {props.question.title}
             </Title>
-            {props.question.possibleAnswers.length && (
+            {!!props.question.possibleAnswers.length && (
                 <Typography>
                     Réponses proposées :
                     <ul>
