@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { Loader } from '../../components/Loader';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../../components/TestPageLayout';

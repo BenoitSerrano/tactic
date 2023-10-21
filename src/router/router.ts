@@ -133,15 +133,16 @@ router.patch(
             },
         ]),
         schema: Joi.object({
-            title: Joi.string().allow(''),
-            rightAnswers: Joi.array().items(Joi.string()),
-            possibleAnswers: Joi.array().items(Joi.string()),
+            title: Joi.string(),
+            rightAnswers: Joi.array().items(Joi.string().allow('')),
+            possibleAnswers: Joi.array().items(Joi.string().allow('')),
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
             points: Joi.number(),
         }),
     }),
 );
 
+//TODO : add check user is allowed to access this route
 router.patch(
     `/questions/order`,
     buildController(questionController.swapQuestions, {

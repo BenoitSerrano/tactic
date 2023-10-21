@@ -25,8 +25,8 @@ export class Question {
     @Column('int')
     order: number;
 
-    @Column('simple-array', { nullable: true })
-    possibleAnswers?: string[];
+    @Column('simple-array', { default: '' })
+    possibleAnswers: string[];
 
     @ManyToOne(() => Exam, (exam) => exam.questions, { onDelete: 'CASCADE' })
     exam: Exam;

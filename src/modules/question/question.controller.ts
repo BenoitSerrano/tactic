@@ -16,37 +16,34 @@ function buildQuestionController() {
 
     async function createQuestion(params: {
         urlParams: { examId: string };
-        body: {
-            title: string;
-            kind: Question['kind'];
-            possibleAnswers: string[] | undefined;
-            rightAnswers: string[];
-            acceptableAnswers: string[];
-            points: number;
-        };
+        body: Pick<
+            Question,
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+        >;
     }) {
         return questionService.createQuestion(params.urlParams.examId, params.body);
     }
 
     async function updateQuestion(params: {
         urlParams: { examId: string; questionId: string };
-        body: {
-            title: string;
-            possibleAnswers: string[] | undefined;
-            rightAnswers: string[];
-            acceptableAnswers: string[];
-            points: number;
-        };
+        body: Pick<
+            Question,
+            'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+        >;
     }) {
-        return questionService.updateQuestion({
-            examId: params.urlParams.examId,
-            questionId: Number(params.urlParams.questionId),
-            title: params.body.title,
-            possibleAnswers: params.body.possibleAnswers,
-            acceptableAnswers: params.body.acceptableAnswers,
-            rightAnswers: params.body.rightAnswers,
-            points: params.body.points,
-        });
+        return questionService.updateQuestion(
+            {
+                examId: params.urlParams.examId,
+                questionId: Number(params.urlParams.questionId),
+            },
+            {
+                title: params.body.title,
+                possibleAnswers: params.body.possibleAnswers,
+                acceptableAnswers: params.body.acceptableAnswers,
+                rightAnswers: params.body.rightAnswers,
+                points: params.body.points,
+            },
+        );
     }
 
     async function deleteQuestion(params: { urlParams: { questionId: string } }) {

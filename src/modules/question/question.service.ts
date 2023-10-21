@@ -20,14 +20,10 @@ function buildQuestionService() {
 
     async function createQuestion(
         examId: string,
-        body: {
-            title: string;
-            possibleAnswers: string[] | undefined;
-            kind: Question['kind'];
-            rightAnswers: string[];
-            acceptableAnswers: string[];
-            points: number;
-        },
+        body: Pick<
+            Question,
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+        >,
     ) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
@@ -60,31 +56,21 @@ function buildQuestionService() {
         return questions[0].order;
     }
 
-    async function updateQuestion({
-        examId,
-        questionId,
-        title,
-        possibleAnswers,
-        rightAnswers,
-        acceptableAnswers,
-        points,
-    }: {
-        examId: string;
-        questionId: number;
-        title: string;
-        possibleAnswers: string[] | undefined;
-        rightAnswers: string[];
-        acceptableAnswers: string[];
-        points: number;
-    }) {
+    async function updateQuestion(
+        criteria: { examId: string; questionId: Question['id'] },
+        body: Pick<
+            Question,
+            'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+        >,
+    ) {
         const question = await questionRepository.findOneOrFail({
-            where: { exam: { id: examId }, id: questionId },
+            where: { exam: { id: criteria.examId }, id: criteria.questionId },
         });
-        question.title = title;
-        question.possibleAnswers = possibleAnswers;
-        question.rightAnswers = rightAnswers;
-        question.acceptableAnswers = acceptableAnswers;
-        question.points = points;
+        question.title = body.title;
+        question.possibleAnswers = body.possibleAnswers;
+        question.rightAnswers = body.rightAnswers;
+        question.acceptableAnswers = body.acceptableAnswers;
+        question.points = body.points;
 
         return questionRepository.save(question);
     }
