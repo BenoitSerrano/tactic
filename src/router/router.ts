@@ -155,11 +155,6 @@ router.get(
 );
 
 router.post(
-    '/exams/:examId/students/:studentId/empty-attempt',
-    buildController(attemptController.createEmptyAttempt),
-);
-
-router.post(
     '/exams/:examId/students/:studentId/attempts',
     buildController(attemptController.createAttempt),
 );

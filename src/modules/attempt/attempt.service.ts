@@ -16,7 +16,6 @@ function buildAttemptService() {
     const studentService = {
         searchAttempts,
         createAttempt,
-        createEmptyAttempt,
         updateAttempt,
         fetchAttemptWithAnswers,
         fetchAttemptWithoutAnswers,
@@ -47,22 +46,6 @@ function buildAttemptService() {
         const exam = await examRepository.findOneByOrFail({ id: examId });
 
         const attempt = await attemptRepository.save({ exam, student });
-
-        return attempt;
-    }
-
-    async function createEmptyAttempt(examId: string, studentId: string) {
-        const studentRepository = dataSource.getRepository(Student);
-        const examRepository = dataSource.getRepository(Exam);
-
-        const student = await studentRepository.findOneByOrFail({ id: studentId });
-        const exam = await examRepository.findOneByOrFail({ id: examId });
-
-        const attempt = await attemptRepository.save({
-            exam,
-            student,
-            updatedAt: 'NOW()',
-        });
 
         return attempt;
     }

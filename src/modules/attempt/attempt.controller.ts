@@ -7,7 +7,6 @@ function buildAttemptController() {
     const attemptService = buildAttemptService();
     const attemptController = {
         createAttempt,
-        createEmptyAttempt,
         updateAttempt,
         searchAttempts,
         fetchAttemptWithAnswers,
@@ -32,15 +31,6 @@ function buildAttemptController() {
 
     async function createAttempt(params: { urlParams: { examId: string; studentId: string } }) {
         return attemptService.createAttempt(params.urlParams.examId, params.urlParams.studentId);
-    }
-
-    async function createEmptyAttempt(params: {
-        urlParams: { examId: string; studentId: string };
-    }) {
-        return attemptService.createEmptyAttempt(
-            params.urlParams.examId,
-            params.urlParams.studentId,
-        );
     }
 
     async function fetchAttemptWithAnswers(params: { urlParams: { attemptId: string } }) {

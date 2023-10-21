@@ -8,7 +8,6 @@ const api = {
     patchComment,
     searchAttempt,
     createAttempt,
-    createEmptyAttempt,
     fetchAttemptWithAnswers,
     fetchAttemptWithoutAnswers,
     updateAttempt,
@@ -84,12 +83,6 @@ async function searchAttempt({ examId, studentId }: { examId: string; studentId:
 
 async function createAttempt({ examId, studentId }: { examId: string; studentId: string }) {
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
-    return performApiCall(URL, 'POST', {});
-}
-
-// TODO: delete createEmptyAttempt
-async function createEmptyAttempt({ examId, studentId }: { examId: string; studentId: string }) {
-    const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/empty-attempt`;
     return performApiCall(URL, 'POST', {});
 }
 

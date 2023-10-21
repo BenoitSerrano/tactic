@@ -27,9 +27,9 @@ function stringifyAnswers(attemptAnswers: attemptAnswersType) {
 }
 
 function parseAnswers(answers: string[]): attemptAnswersType {
-    const ANSWER2_REGEX = /(\d+):(.*)/;
+    const ANSWER_REGEX = /(\d+):(.*)/;
     let attemptAnswers = answers.reduce((acc, answer) => {
-        let regexMatch = answer.match(ANSWER2_REGEX);
+        let regexMatch = answer.match(ANSWER_REGEX);
         if (!regexMatch) {
             throw new Error(`answer ${answer} is wrongly formatted.`);
         }
