@@ -1,7 +1,7 @@
 import { dataSource } from '../../dataSource';
 import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
-import { Question } from '../question';
+import { Question, buildQuestionService } from '../question';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
@@ -51,16 +51,25 @@ function buildAttemptService() {
     }
 
     async function updateAttempt(attemptId: string, attemptAnswers: attemptAnswersType) {
+        const questionService = buildQuestionService();
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
-            relations: ['exam'],
+            select: {
+                id: true,
+                startedAt: true,
+                exam: { id: true, duration: true, extraTime: true, questions: { id: true } },
+            },
+            relations: ['exam', 'exam.questions'],
         });
+        const questionIds = attempt.exam.questions.map(({ id }) => id);
+        const questions = await questionService.getQuestions(questionIds);
         await assertIsTimeLimitNotExceeded(attempt);
         await updateAttemptDuration(attempt.id);
         // TODO : vérifier que les questions pour lesquelles on envoie des réponses sont bien dans cet exam
 
         const answers = attemptUtils.stringifyAnswers(attemptAnswers);
-        await attemptRepository.update({ id: attempt.id }, { answers });
+        const marks = attemptUtils.computeMarks(questions, attemptAnswers);
+        await attemptRepository.update({ id: attempt.id }, { answers, marks });
         return true;
     }
 

@@ -60,7 +60,6 @@ function convertAttemptToAttemptWithAnswers(
             name: exam.name,
             duration: exam.duration,
             extraTime: exam.extraTime,
-
             questions: exam.questions.map((question) => ({
                 ...question,
                 mark: marks[question.id],
