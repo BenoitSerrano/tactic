@@ -66,11 +66,13 @@ function buildQuestionService() {
         const question = await questionRepository.findOneOrFail({
             where: { exam: { id: criteria.examId }, id: criteria.questionId },
         });
+
         question.title = body.title;
         question.possibleAnswers = body.possibleAnswers;
         question.rightAnswers = body.rightAnswers;
         question.acceptableAnswers = body.acceptableAnswers;
         question.points = body.points;
+        // TODO: envoyer un évènement ici pour changer les points de tout le monde
 
         return questionRepository.save(question);
     }
