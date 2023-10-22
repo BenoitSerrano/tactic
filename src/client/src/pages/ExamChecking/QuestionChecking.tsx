@@ -46,9 +46,6 @@ function QuestionChecking(props: {
                 </Typography>
             )}
             <Typography>Réponse : {answer}</Typography>
-            <Typography>
-                {props.question.mark || 0} / {props.question.points}
-            </Typography>
         </StyledContainer>
     );
 

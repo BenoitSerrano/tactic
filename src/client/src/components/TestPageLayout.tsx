@@ -1,16 +1,31 @@
 import { Typography, styled } from '@mui/material';
 
-function TestPageLayout(props: { title: string; bottomOffset?: number; children: JSX.Element[] }) {
+function TestPageLayout(props: { title: string; children: JSX.Element[]; buttons: JSX.Element[] }) {
     return (
-        <Container sx={{ mb: props.bottomOffset ? props.bottomOffset + 'px' : 0 }}>
+        <Container>
             <TitleContainer>
                 <Typography variant="h1">{props.title}</Typography>
             </TitleContainer>
 
             {props.children}
+            <ButtonContainer>{props.buttons}</ButtonContainer>
         </Container>
     );
 }
+
+const BUTTON_CONTAINER_HEIGHT = 50;
+
+const ButtonContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: BUTTON_CONTAINER_HEIGHT,
+    backgroundColor: 'white',
+    position: 'fixed',
+    width: '100%',
+    bottom: 0,
+    left: 0,
+});
 
 const TitleContainer = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -21,6 +36,7 @@ const TitleContainer = styled('div')(({ theme }) => ({
 
 const Container = styled('div')(({ theme }) => ({
     width: '60%',
+    marginBottom: BUTTON_CONTAINER_HEIGHT,
     borderRadius: 2,
     border: `solid ${theme.palette.common.black} 1px`,
     boxShadow: theme.shadows[4],

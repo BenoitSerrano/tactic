@@ -46,7 +46,21 @@ function QuestionsAnswering(props: {
 
     return (
         <>
-            <TestPageLayout title={props.title} bottomOffset={BUTTON_CONTAINER_HEIGHT}>
+            <TestPageLayout
+                title={props.title}
+                buttons={[
+                    <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
+                        Enregistrer le brouillon
+                    </LoadingButton>,
+                    <LoadingButton
+                        loading={finishExamMutation.isLoading}
+                        variant="contained"
+                        onClick={finishExam}
+                    >
+                        Valider les réponses
+                    </LoadingButton>,
+                ]}
+            >
                 {props.questions.map((question, index) => (
                     <QuestionContainer key={`question-${question.id}`}>
                         <QuestionAnswering
@@ -60,18 +74,6 @@ function QuestionsAnswering(props: {
                     </QuestionContainer>
                 ))}
             </TestPageLayout>
-            <ButtonContainer>
-                <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
-                    Enregistrer le brouillon
-                </LoadingButton>
-                <LoadingButton
-                    loading={finishExamMutation.isLoading}
-                    variant="contained"
-                    onClick={finishExam}
-                >
-                    Valider les réponses
-                </LoadingButton>
-            </ButtonContainer>
         </>
     );
 
@@ -89,20 +91,6 @@ function QuestionsAnswering(props: {
         });
     }
 }
-
-const BUTTON_CONTAINER_HEIGHT = 50;
-
-const ButtonContainer = styled('div')({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: BUTTON_CONTAINER_HEIGHT,
-    backgroundColor: 'white',
-    position: 'fixed',
-    width: '100%',
-    bottom: 0,
-    left: 0,
-});
 
 const QuestionContainer = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(3),

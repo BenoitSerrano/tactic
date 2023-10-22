@@ -8,6 +8,7 @@ import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } f
 import { questionKindType, questionKinds } from '../../types';
 import { questionSpecicityMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function QuestionUpsertionModal(props: {
     close: () => void;
@@ -129,7 +130,7 @@ function QuestionUpsertionModal(props: {
 
     function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
-        if (value.match(/^[0-9]?(\.)?([0-9]+)?$/)) {
+        if (value.match(FLOATING_NUMBER_REGEX)) {
             setPoints(value);
         }
     }

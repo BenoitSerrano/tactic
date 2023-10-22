@@ -27,6 +27,7 @@ const api = {
     updateQuestion,
     deleteQuestion,
     swapQuestions,
+    updateMarks,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -225,6 +226,13 @@ async function swapQuestions(params: { questionId1: number; questionId2: number 
     return performApiCall(URL, 'PATCH', {
         questionId1: params.questionId1,
         questionId2: params.questionId2,
+    });
+}
+
+async function updateMarks(params: { attemptId: string; marks: Record<number, number> }) {
+    const URL = `${BASE_URL}/attempts/${params.attemptId}/marks`;
+    return performApiCall(URL, 'PUT', {
+        marks: params.marks,
     });
 }
 
