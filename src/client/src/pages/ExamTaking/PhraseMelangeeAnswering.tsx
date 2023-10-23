@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { IconButton, Tooltip, Typography, styled } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import { questionType } from './types';
+import { questionWithoutAnswer } from './types';
 
 function PhraseMelangeeAnswering(props: {
-    question: questionType;
+    question: questionWithoutAnswer;
     index: number;
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;

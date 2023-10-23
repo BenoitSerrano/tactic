@@ -1,4 +1,4 @@
-import { questionType } from '../../types';
+import { questionKindType } from '../../types';
 
 type attemptWithoutAnswersType = {
     startedAt: string;
@@ -6,8 +6,17 @@ type attemptWithoutAnswersType = {
         duration: number;
         extraTime: number;
         name: string;
-        questions: Array<questionType>;
+        exercises: Array<{ id: number; questions: Array<questionWithoutAnswer> }>;
     };
 };
 
-export type { attemptWithoutAnswersType, questionType };
+type questionWithoutAnswer = {
+    id: number;
+    kind: questionKindType;
+    title: string;
+    possibleAnswers: string[];
+    currentAnswer: string;
+    points: number;
+};
+
+export type { attemptWithoutAnswersType, questionWithoutAnswer };

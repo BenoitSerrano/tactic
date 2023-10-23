@@ -6,6 +6,7 @@ type questionType = {
     currentAnswer: string;
     points: number;
 };
+// TODO voir où c'est utilisé ça
 
 const questionKinds = ['qcm', 'questionTrou', 'phraseMelangee', 'texteLibre'] as const;
 type questionKindType = (typeof questionKinds)[number];

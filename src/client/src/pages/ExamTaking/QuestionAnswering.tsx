@@ -1,8 +1,8 @@
-import { questionType } from './types';
+import { questionWithoutAnswer } from './types';
 import { questionSpecicityMapping } from './constants';
 
 function QuestionAnswering(props: {
-    question: questionType;
+    question: questionWithoutAnswer;
     index: number;
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;

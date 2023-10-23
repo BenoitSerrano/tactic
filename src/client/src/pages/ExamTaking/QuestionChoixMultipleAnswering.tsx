@@ -1,9 +1,9 @@
 import React, { ChangeEvent } from 'react';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, styled } from '@mui/material';
-import { questionType } from './types';
+import { questionWithoutAnswer } from './types';
 
 function QuestionChoixMultipleAnswering(props: {
-    question: questionType;
+    question: questionWithoutAnswer;
     index: number;
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;

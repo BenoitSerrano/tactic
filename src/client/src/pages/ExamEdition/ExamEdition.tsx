@@ -9,7 +9,6 @@ import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
 import { examApiType, questionWithAnswersType } from './types';
 import { ExamTable } from './ExamTable';
-import { questionType } from '../../types';
 
 function ExamEdition() {
     const params = useParams<{ examId: string }>();

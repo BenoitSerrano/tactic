@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { styled } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
-import { questionType } from './types';
+import { questionWithoutAnswer } from './types';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { QuestionAnswering } from './QuestionAnswering';
@@ -13,7 +13,7 @@ type questionAnswerType = Record<number, string>;
 function QuestionsAnswering(props: {
     attemptId: string;
     title: string;
-    questions: Array<questionType>;
+    questions: Array<questionWithoutAnswer>;
     onExamDone: () => void;
 }) {
     const saveDraftMutation = useMutation({

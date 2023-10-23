@@ -1,10 +1,10 @@
 import { TextField, Typography, styled } from '@mui/material';
-import { questionType } from './types';
+import { questionWithoutAnswer } from './types';
 
 const questionTrouTitleRegex = /(.*)\.{4}(.*)/;
 
 function QuestionTrouAnswering(props: {
-    question: questionType;
+    question: questionWithoutAnswer;
     index: number;
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;
