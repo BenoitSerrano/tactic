@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton, Typography, styled } from '@mui/material';
+import { IconButton, Tooltip, Typography, styled } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { questionType } from './types';
@@ -45,13 +45,15 @@ function PhraseMelangeeAnswering(props: {
                         </span>
                     )}
                 </Typography>
-                <IconButton
-                    disabled={isResetButtonDisabled}
-                    onClick={() => setCombination([])}
-                    color="inherit"
-                >
-                    <RefreshIcon />
-                </IconButton>
+                <Tooltip title="Réinitialiser">
+                    <IconButton
+                        disabled={isResetButtonDisabled}
+                        onClick={() => setCombination([])}
+                        color="inherit"
+                    >
+                        <RefreshIcon />
+                    </IconButton>
+                </Tooltip>
             </CurrentAnswerContainer>
         </div>
     );
