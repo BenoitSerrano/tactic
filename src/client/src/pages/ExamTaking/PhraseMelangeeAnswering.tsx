@@ -71,7 +71,7 @@ function PhraseMelangeeAnswering(props: {
     }
 }
 
-const CurrentAnswerContainer = styled('div')({ display: 'flex' });
+const CurrentAnswerContainer = styled('div')({ display: 'flex', alignItems: 'center' });
 
 const StyledContainer = styled('div')({
     display: 'flex',
