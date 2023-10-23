@@ -19,11 +19,29 @@ function buildExerciseService() {
     async function createExercise(examId: Exam['id'], body: { name: string; instruction: string }) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
+        const order = await getHighestExerciseOrder(examId);
+
         const exercise = new Exercise();
         exercise.name = body.name;
         exercise.instruction = body.instruction;
         exercise.exam = exam;
+        exercise.order = order;
+
         return exerciseRepository.save(exercise);
+    }
+
+    async function getHighestExerciseOrder(examId: Exam['id']) {
+        const exercises = await exerciseRepository.find({
+            where: { exam: { id: examId } },
+            select: { order: true, id: true },
+            order: { order: 'DESC' },
+            take: 1,
+        });
+
+        if (exercises.length == 0) {
+            return -1;
+        }
+        return exercises[0].order;
     }
 
     async function updateExercise(

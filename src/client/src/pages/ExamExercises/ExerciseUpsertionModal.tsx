@@ -58,7 +58,7 @@ function ExerciseUpsertionModal(props: {
             confirmButtonLabel={confirmButtonLabel}
             cancelButtonLabel="Annuler"
             isConfirmLoading={isUpdating || isCreating}
-            title={`${titlePrefix} d'une exercise`}
+            title={`${titlePrefix} d'un exercice`}
             isConfirmDisabled={isConfirmDisabled}
         >
             <TextField

@@ -1,11 +1,13 @@
 import { useParams } from 'react-router-dom';
-import { ExercisesTable } from './ExercisesTable';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { ExercisesTable } from './ExercisesTable';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import { examApiType, exerciseType, modalStatusType } from './types';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
-import { useState } from 'react';
+import { Menu } from '../../components/Menu';
 
 function ExamExercises() {
     const params = useParams<{ examId: string }>();
@@ -21,8 +23,17 @@ function ExamExercises() {
         }
         return <div />;
     }
+    const menuButtons = [
+        {
+            title: 'Ajouter un exercice',
+            onClick: () => setCurrentExerciseModalStatus({ kind: 'creating' }),
+            IconComponent: PlaylistAddIcon,
+        },
+    ];
     return (
         <>
+            <Menu buttons={menuButtons} />
+
             <ExercisesTable
                 examId={examId}
                 exercises={query.data.exercises}
