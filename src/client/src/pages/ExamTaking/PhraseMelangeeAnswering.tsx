@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Typography, styled } from '@mui/material';
+import { IconButton, Typography, styled } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+
 import { questionType } from './types';
 
 function PhraseMelangeeAnswering(props: {
@@ -11,6 +13,7 @@ function PhraseMelangeeAnswering(props: {
     const [combination, setCombination] = useState<number[]>([]);
 
     const shuffledWords = props.question.title.split(' ');
+    const isResetButtonDisabled = combination.length === 0;
 
     return (
         <div>
@@ -29,24 +32,27 @@ function PhraseMelangeeAnswering(props: {
                     ),
                 )}
             </StyledContainer>
-            <StyledContainer>
-                {combination.map((combinationIndex, index) => (
-                    <ShuffledWordContainer
-                        key={index}
-                        onClick={buildOnClickOnReconstitutedWord(index)}
-                    >
-                        <Typography>{shuffledWords[combinationIndex]}</Typography>
-                    </ShuffledWordContainer>
-                ))}
-            </StyledContainer>
-            {
+
+            <CurrentAnswerContainer>
                 <Typography>
                     <BoldContainer>Votre réponse :</BoldContainer>{' '}
-                    {props.currentAnswer
-                        ? props.currentAnswer
-                        : '____ '.repeat(shuffledWords.length)}
+                    {props.currentAnswer ? (
+                        props.currentAnswer
+                    ) : (
+                        <span>
+                            {combination.map((index) => shuffledWords[index]).join(' ')}
+                            {' ____'.repeat(shuffledWords.length - combination.length)}
+                        </span>
+                    )}
                 </Typography>
-            }
+                <IconButton
+                    disabled={isResetButtonDisabled}
+                    onClick={() => setCombination([])}
+                    color="inherit"
+                >
+                    <RefreshIcon />
+                </IconButton>
+            </CurrentAnswerContainer>
         </div>
     );
 
@@ -61,15 +67,9 @@ function PhraseMelangeeAnswering(props: {
             }
         };
     }
-
-    function buildOnClickOnReconstitutedWord(index: number) {
-        return () => {
-            const newCombination = [...combination];
-            newCombination.splice(index, 1);
-            setCombination(newCombination);
-        };
-    }
 }
+
+const CurrentAnswerContainer = styled('div')({ display: 'flex' });
 
 const StyledContainer = styled('div')({
     display: 'flex',

@@ -3,7 +3,7 @@ import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRig
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CheckIcon from '@mui/icons-material/Check';
-import { IconButton, List, TextField, Typography, styled } from '@mui/material';
+import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
 
@@ -24,7 +24,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
         correctCombination.length !== words.length ||
         props.rightAnswers.includes(correctCombination.map((index) => words[index]).join(' '));
 
-    const isResetCombinationDisabled = '';
+    const isResetCombinationDisabled = correctCombination?.length === 0;
 
     return (
         <>
@@ -122,6 +122,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton
+                                            disabled={isResetCombinationDisabled}
                                             color="warning"
                                             onClick={() => setCorrectCombination([])}
                                         >
