@@ -128,7 +128,7 @@ router.delete(
 
 router.get(`/exams/:examId/exercises/:exerciseId`, buildController(exerciseController.getExercise));
 router.patch(
-    `/exams/:examId/exercises/:exerciseId/order`,
+    `/exams/:examId/exercises/order`,
     buildController(exerciseController.swapExercises, {
         schema: Joi.object({ exerciseId1: Joi.number(), exerciseId2: Joi.number() }),
     }),

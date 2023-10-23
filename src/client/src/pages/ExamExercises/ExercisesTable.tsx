@@ -34,7 +34,6 @@ function ExercisesTable(props: {
     const navigate = useNavigate();
     const [exercises, setExercises] = useState(props.exercises);
     const swapExercisesMutation = useMutation({
-        // TODO: écrire swapExercises
         mutationFn: api.swapExercises,
         onError: () => {
             displayAlert({
@@ -58,7 +57,7 @@ function ExercisesTable(props: {
                 <Droppable droppableId="droppable">
                     {(provided) => (
                         <TableBody ref={provided.innerRef} {...provided.droppableProps}>
-                            {props.exercises.map((exercise, index) => {
+                            {exercises.map((exercise, index) => {
                                 return (
                                     <Draggable
                                         key={'exercise-' + exercise.id}
