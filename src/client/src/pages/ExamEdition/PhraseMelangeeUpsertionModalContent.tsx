@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
-import { TextField, Typography, styled } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import CheckIcon from '@mui/icons-material/Check';
+import { IconButton, List, TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
 
@@ -12,13 +15,16 @@ function PhraseMelangeeUpsertionModalContent(props: {
     acceptableAnswers: string[];
     setAcceptableAnswers: (acceptableAnswers: string[]) => void;
 }) {
-    const [correctCombination, setCorrectCombination] = useState<number[]>([]);
+    const [correctCombination, setCorrectCombination] = useState<number[] | undefined>();
     const [originalPhrase, setOriginalPhrase] = useState(props.rightAnswers[0] || '');
     const words = originalPhrase.split(' ');
 
-    const isAddCombinationDisabled =
+    const isValidateCombinationDisabled =
+        !correctCombination ||
         correctCombination.length !== words.length ||
         props.rightAnswers.includes(correctCombination.map((index) => words[index]).join(' '));
+
+    const isResetCombinationDisabled = '';
 
     return (
         <>
@@ -39,68 +45,104 @@ function PhraseMelangeeUpsertionModalContent(props: {
                     </RowContainer>
                     <>
                         <Typography>Phrases correctes :</Typography>
-                        <ul>
-                            {props.rightAnswers.map((rightAnswer) => (
-                                <li key={rightAnswer}>
-                                    <Typography>{rightAnswer}</Typography>
-                                </li>
+                        <table>
+                            {props.rightAnswers.map((rightAnswer, index) => (
+                                <tr key={rightAnswer}>
+                                    <td>
+                                        <Typography>{rightAnswer}</Typography>
+                                    </td>
+                                    <td>
+                                        <IconButton
+                                            color="error"
+                                            onClick={buildDeleteRightAnswer(index)}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </td>
+                                </tr>
                             ))}
-                            <li>
-                                <CorrectPhraseCreationContainer>
-                                    <WordLinesContainer>
-                                        <WordLineContainer>
-                                            {words.map((word, index) =>
-                                                correctCombination.includes(index) ? undefined : (
-                                                    <WordContainer
-                                                        key={word}
-                                                        onClick={() =>
-                                                            setCorrectCombination([
-                                                                ...correctCombination,
-                                                                index,
-                                                            ])
-                                                        }
-                                                    >
-                                                        <Typography>{word}</Typography>
-                                                    </WordContainer>
-                                                ),
-                                            )}
-                                        </WordLineContainer>
-                                        <WordLineContainer>
-                                            <SubdirectoryArrowRightIcon />
-                                            {correctCombination.map((combinationIndex, index) => (
-                                                <WordContainer
-                                                    key={index}
-                                                    onClick={buildOnClickOnCorrectPhraseWord(index)}
-                                                >
+                            {correctCombination === undefined && (
+                                <tr>
+                                    <td>
+                                        <Button onClick={() => setCorrectCombination([])}>
+                                            Ajouter
+                                        </Button>
+                                    </td>
+                                    <td />
+                                </tr>
+                            )}
+                            <tr></tr>
+                            {correctCombination !== undefined && (
+                                <tr>
+                                    <td>
+                                        <CorrectPhraseCreationContainer>
+                                            <WordLinesContainer>
+                                                <WordLineContainer>
+                                                    {words.map((word, index) =>
+                                                        correctCombination.includes(
+                                                            index,
+                                                        ) ? undefined : (
+                                                            <WordContainer
+                                                                key={word}
+                                                                onClick={() =>
+                                                                    setCorrectCombination([
+                                                                        ...correctCombination,
+                                                                        index,
+                                                                    ])
+                                                                }
+                                                            >
+                                                                <Typography>{word}</Typography>
+                                                            </WordContainer>
+                                                        ),
+                                                    )}
+                                                </WordLineContainer>
+                                                <WordLineContainer>
+                                                    <SubdirectoryArrowRightIcon />
                                                     <Typography>
-                                                        {words[combinationIndex]}
+                                                        {correctCombination
+                                                            .map(
+                                                                (combinationIndex) =>
+                                                                    words[combinationIndex],
+                                                            )
+                                                            .join(' ')}
+                                                        {' ___'.repeat(
+                                                            words.length -
+                                                                correctCombination.length,
+                                                        )}
                                                     </Typography>
-                                                </WordContainer>
-                                            ))}
-                                        </WordLineContainer>
-                                    </WordLinesContainer>
-                                    <Button
-                                        onClick={validateCorrectPhrase}
-                                        disabled={isAddCombinationDisabled}
-                                    >
-                                        Ajouter
-                                    </Button>
-                                </CorrectPhraseCreationContainer>
-                            </li>
-                        </ul>
+                                                </WordLineContainer>
+                                            </WordLinesContainer>
+                                        </CorrectPhraseCreationContainer>
+                                    </td>
+                                    <td>
+                                        <IconButton
+                                            color="error"
+                                            onClick={() => setCorrectCombination(undefined)}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            color="warning"
+                                            onClick={() => setCorrectCombination([])}
+                                        >
+                                            <RefreshIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            color="success"
+                                            onClick={validateCorrectPhrase}
+                                            disabled={isValidateCombinationDisabled}
+                                        >
+                                            <CheckIcon />
+                                        </IconButton>
+                                    </td>
+                                </tr>
+                            )}
+                        </table>
                     </>
                 </MainContainer>
             )}
         </>
     );
-
-    function buildOnClickOnCorrectPhraseWord(index: number) {
-        return () => {
-            const newCorrectCombination = [...correctCombination];
-            newCorrectCombination.splice(index, 1);
-            setCorrectCombination(newCorrectCombination);
-        };
-    }
 
     function shufflePhrase() {
         setOriginalPhrase(originalPhrase.trim());
@@ -113,6 +155,14 @@ function PhraseMelangeeUpsertionModalContent(props: {
         props.setTitle(shuffledWords.join(' '));
     }
 
+    function buildDeleteRightAnswer(index: number) {
+        return () => {
+            const newRightAnswers = [...props.rightAnswers];
+            newRightAnswers.splice(index, 1);
+            props.setRightAnswers(newRightAnswers);
+        };
+    }
+
     function onChangeOriginalPhrase(event: React.ChangeEvent<HTMLInputElement>) {
         const originalPhrase = event.target.value;
         setOriginalPhrase(originalPhrase);
@@ -121,9 +171,12 @@ function PhraseMelangeeUpsertionModalContent(props: {
     }
 
     function validateCorrectPhrase() {
+        if (!correctCombination) {
+            return;
+        }
         const newRightAnswer = correctCombination.map((index) => words[index]).join(' ');
         props.setRightAnswers([...props.rightAnswers, newRightAnswer]);
-        setCorrectCombination([]);
+        setCorrectCombination(undefined);
     }
 }
 
