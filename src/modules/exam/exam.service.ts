@@ -14,7 +14,8 @@ function buildExamService() {
         createExam,
         getExams,
         getAllExams,
-        getExam,
+        getExamExercises,
+        getExamQuestions,
         deleteExam,
         getExamResults,
         bulkInsertExams,
@@ -34,13 +35,23 @@ function buildExamService() {
         return examRepository.find({ where: { user } });
     }
 
-    async function getExam(examId: string) {
+    async function getExamExercises(examId: string) {
         return examRepository.findOneOrFail({
             where: { id: examId },
             order: {
                 exercises: { order: 'ASC' },
             },
             relations: ['exercises'],
+        });
+    }
+
+    async function getExamQuestions(examId: string) {
+        return examRepository.findOneOrFail({
+            where: { id: examId },
+            order: {
+                exercises: { order: 'ASC' },
+            },
+            relations: ['exercises', 'exercises.questions'],
         });
     }
 

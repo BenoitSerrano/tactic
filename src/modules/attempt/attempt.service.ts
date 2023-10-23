@@ -96,7 +96,7 @@ function buildAttemptService() {
 
             relations: ['exam'],
         });
-        const exam = await examService.getExam(attempt.exam.id);
+        const exam = await examService.getExamQuestions(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 
         const result = attemptAdaptator.convertAttemptToAttemptWithAnswers(
@@ -122,7 +122,7 @@ function buildAttemptService() {
 
             relations: ['exam'],
         });
-        const exam = await examService.getExam(attempt.exam.id);
+        const exam = await examService.getExamQuestions(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
 
         const result = attemptAdaptator.convertAttemptToAttemptWithoutAnswers(

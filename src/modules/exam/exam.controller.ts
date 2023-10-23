@@ -29,7 +29,7 @@ function buildExamController() {
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {
-        return examService.getExam(params.urlParams.examId);
+        return examService.getExamExercises(params.urlParams.examId);
     }
 
     async function getExamResults(params: { urlParams: { examId: string } }) {
