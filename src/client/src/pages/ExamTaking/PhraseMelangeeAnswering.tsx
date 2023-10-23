@@ -10,10 +10,18 @@ function PhraseMelangeeAnswering(props: {
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
-    const [combination, setCombination] = useState<number[]>([]);
-
+    const [pendingAnswer, setPendingAnswer] = useState<string[]>(
+        props.currentAnswer ? props.currentAnswer.split(' ') : [],
+    );
     const shuffledWords = props.question.title.split(' ');
-    const isResetButtonDisabled = combination.length === 0;
+
+    let displayedShuffleWords = [...shuffledWords];
+    for (const word of pendingAnswer) {
+        const wordIndex = displayedShuffleWords.indexOf(word);
+        displayedShuffleWords.splice(wordIndex, 1);
+    }
+
+    const isResetButtonDisabled = pendingAnswer.length === 0;
 
     return (
         <div>
@@ -21,34 +29,25 @@ function PhraseMelangeeAnswering(props: {
                 <Typography>
                     <BoldContainer>{props.index}. </BoldContainer>
                 </Typography>
-                {shuffledWords.map((word, index) =>
-                    combination.includes(index) ? undefined : (
-                        <ShuffledWordContainer
-                            key={index}
-                            onClick={buildOnClickOnShuffledWord(index)}
-                        >
-                            <Typography>{word}</Typography>
-                        </ShuffledWordContainer>
-                    ),
-                )}
+                {displayedShuffleWords.map((word, index) => (
+                    <ShuffledWordContainer key={index} onClick={buildOnClickOnShuffledWord(index)}>
+                        <Typography>{word}</Typography>
+                    </ShuffledWordContainer>
+                ))}
             </StyledContainer>
 
             <CurrentAnswerContainer>
                 <Typography>
                     <BoldContainer>Votre réponse :</BoldContainer>{' '}
-                    {props.currentAnswer ? (
-                        props.currentAnswer
-                    ) : (
-                        <span>
-                            {combination.map((index) => shuffledWords[index]).join(' ')}
-                            {' ____'.repeat(shuffledWords.length - combination.length)}
-                        </span>
-                    )}
+                    <span>
+                        {pendingAnswer.join(' ')}
+                        {' ____'.repeat(shuffledWords.length - pendingAnswer.length)}
+                    </span>
                 </Typography>
                 <Tooltip title="Réinitialiser">
                     <IconButton
                         disabled={isResetButtonDisabled}
-                        onClick={() => setCombination([])}
+                        onClick={() => setPendingAnswer([])}
                         color="inherit"
                     >
                         <RefreshIcon />
@@ -60,11 +59,11 @@ function PhraseMelangeeAnswering(props: {
 
     function buildOnClickOnShuffledWord(index: number) {
         return () => {
-            const newCombination = [...combination, index];
-            setCombination(newCombination);
+            const newPendingAnswer = [...pendingAnswer, displayedShuffleWords[index]];
+            setPendingAnswer(newPendingAnswer);
 
-            if (newCombination.length === shuffledWords.length) {
-                const answer = newCombination.map((index) => shuffledWords[index]).join(' ');
+            if (newPendingAnswer.length === shuffledWords.length) {
+                const answer = newPendingAnswer.join(' ');
                 props.setCurrentAnswer(answer);
             }
         };
