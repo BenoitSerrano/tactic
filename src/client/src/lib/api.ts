@@ -230,8 +230,13 @@ async function updateQuestion(params: {
     });
 }
 
-async function swapQuestions(params: { questionId1: number; questionId2: number }) {
-    const URL = `${BASE_URL}/questions/order`;
+async function swapQuestions(params: {
+    examId: string;
+    exerciseId: number;
+    questionId1: number;
+    questionId2: number;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/order`;
     return performApiCall(URL, 'PATCH', {
         questionId1: params.questionId1,
         questionId2: params.questionId2,

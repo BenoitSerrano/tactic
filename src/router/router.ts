@@ -135,7 +135,20 @@ router.patch(
 );
 
 router.patch(
-    '/exams/:examId/exercises/:exerciseId/questions/:questionId',
+    `/exams/:examId/exercises/:exerciseId/questions/order/`,
+    buildController(questionController.swapQuestions, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({ questionId1: Joi.number(), questionId2: Joi.number() }),
+    }),
+);
+
+router.patch(
+    '/exams/:examId/exercises/:exerciseId/questions/:questionId/',
     buildController(questionController.updateQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
@@ -150,14 +163,6 @@ router.patch(
             acceptableAnswers: Joi.array().items(Joi.string().allow('')),
             points: Joi.number(),
         }),
-    }),
-);
-
-//TODO : add check user is allowed to access this route
-router.patch(
-    `/questions/order`,
-    buildController(questionController.swapQuestions, {
-        schema: Joi.object({ questionId1: Joi.number(), questionId2: Joi.number() }),
     }),
 );
 

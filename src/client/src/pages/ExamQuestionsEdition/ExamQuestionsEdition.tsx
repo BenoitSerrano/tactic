@@ -8,7 +8,7 @@ import { Loader } from '../../components/Loader';
 import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
 import { exerciseApiType, questionWithAnswersType } from './types';
-import { ExamTable } from './ExamTable';
+import { QuestionsTable } from './QuestionsTable';
 
 function ExamQuestionsEdition() {
     const params = useParams<{ examId: string; exerciseId: string }>();
@@ -43,7 +43,8 @@ function ExamQuestionsEdition() {
     return (
         <>
             <Menu buttons={menuButtons} />
-            <ExamTable
+            <QuestionsTable
+                exerciseId={exerciseId}
                 questions={query.data.questions}
                 examId={examId}
                 openEditionModal={openEditionModal}

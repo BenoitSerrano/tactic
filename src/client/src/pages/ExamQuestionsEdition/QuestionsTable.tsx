@@ -20,8 +20,9 @@ import { questionSpecicityMapping } from './constants';
 import { tableHandler } from '../../lib/tableHandler';
 import { useAlert } from '../../lib/alert';
 
-function ExamTable(props: {
+function QuestionsTable(props: {
     examId: string;
+    exerciseId: number;
     questions: Array<questionWithAnswersType>;
     openEditionModal: (question: questionWithAnswersType) => void;
 }) {
@@ -66,7 +67,12 @@ function ExamTable(props: {
         );
 
         setQuestions(newQuestions);
-        swapQuestionsMutation.mutate({ questionId1, questionId2 });
+        swapQuestionsMutation.mutate({
+            examId: props.examId,
+            exerciseId: props.exerciseId,
+            questionId1,
+            questionId2,
+        });
     };
     return (
         <Table stickyHeader>
@@ -233,9 +239,9 @@ const QuestionTypeCellContent = styled('div')({
     alignItems: 'center',
 });
 
-const QuestionTypeIconContainer = styled('div')({
-    marginRight: 8,
+const QuestionTypeIconContainer = styled('div')(({ theme }) => ({
+    marginRight: theme.spacing(1),
     display: 'flex',
     alignItems: 'center',
-});
-export { ExamTable };
+}));
+export { QuestionsTable };
