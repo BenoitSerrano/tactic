@@ -1,6 +1,7 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent } from 'react';
 import { QUESTION_TROU_REGEX } from '../../constants';
+import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
 
 function QuestionTrouUpsertionModalContent(props: {
     title: string;
@@ -26,8 +27,12 @@ function QuestionTrouUpsertionModalContent(props: {
                         variant="standard"
                         label="Bonnes réponses"
                         placeholder="s'envolent"
-                        value={props.rightAnswers.join(',')}
-                        onChange={(event) => props.setRightAnswers(event.target.value.split(','))}
+                        value={props.rightAnswers.join(SPLITTING_CHARACTER_FOR_ANSWERS)}
+                        onChange={(event) =>
+                            props.setRightAnswers(
+                                event.target.value.split(SPLITTING_CHARACTER_FOR_ANSWERS),
+                            )
+                        }
                     />
                     <TextField
                         variant="standard"
@@ -43,12 +48,16 @@ function QuestionTrouUpsertionModalContent(props: {
                     fullWidth
                     variant="standard"
                     label="Réponses acceptables"
-                    value={props.acceptableAnswers.join(',')}
-                    onChange={(event) => props.setAcceptableAnswers(event.target.value.split(','))}
+                    value={props.acceptableAnswers.join(SPLITTING_CHARACTER_FOR_ANSWERS)}
+                    onChange={(event) =>
+                        props.setAcceptableAnswers(
+                            event.target.value.split(SPLITTING_CHARACTER_FOR_ANSWERS),
+                        )
+                    }
                 />
                 <HintContainer>
                     <Typography variant="h6">
-                        Indiquez les réponses acceptables, séparées par des virgules
+                        Indiquez les réponses acceptables, séparées par des point-virgules (;)
                     </Typography>
                 </HintContainer>
             </FieldContainer>

@@ -50,14 +50,25 @@ function buildExamService() {
         });
     }
 
-    async function getExamQuestions(examId: string) {
-        return examRepository.findOneOrFail({
+    async function getExamQuestions(examId: string): Promise<Exam> {
+        const questionService = buildQuestionService();
+        const exam = await examRepository.findOneOrFail({
             where: { id: examId },
             order: {
                 exercises: { order: 'ASC' },
             },
             relations: ['exercises', 'exercises.questions'],
         });
+
+        return {
+            ...exam,
+            exercises: exam.exercises.map((exercise) => ({
+                ...exercise,
+                questions: exercise.questions.map((question) =>
+                    questionService.decodeQuestion(question),
+                ),
+            })),
+        };
     }
 
     async function getExamResults(examId: string) {

@@ -44,4 +44,6 @@ const questionSpecicityMapping: Record<
     },
 };
 
-export { questionSpecicityMapping };
+const SPLITTING_CHARACTER_FOR_ANSWERS = ';';
+
+export { questionSpecicityMapping, SPLITTING_CHARACTER_FOR_ANSWERS };

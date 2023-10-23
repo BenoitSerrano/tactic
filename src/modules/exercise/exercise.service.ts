@@ -1,6 +1,7 @@
 import { Exercise } from './Exercise.entity';
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../exam';
+import { buildQuestionService } from '../question';
 
 export { buildExerciseService };
 
@@ -54,12 +55,20 @@ function buildExerciseService() {
         );
     }
 
-    async function getExercise(exerciseId: Exercise['id']) {
-        return exerciseRepository.findOneOrFail({
+    async function getExercise(exerciseId: Exercise['id']): Promise<Exercise> {
+        const questionService = buildQuestionService();
+        const exercise = await exerciseRepository.findOneOrFail({
             where: { id: exerciseId },
             order: { order: 'ASC', questions: { order: 'ASC' } },
             relations: ['questions'],
         });
+
+        return {
+            ...exercise,
+            questions: exercise.questions.map((question) =>
+                questionService.decodeQuestion(question),
+            ),
+        };
     }
 
     async function swapExercises(exerciseId1: Exercise['id'], exerciseId2: Exercise['id']) {

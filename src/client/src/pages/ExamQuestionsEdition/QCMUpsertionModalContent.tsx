@@ -58,9 +58,6 @@ function QCMUpsertionModalContent(props: {
 
     function buildOnChangePossibleAnswer(possibleAnswerIndex: number) {
         return (event: React.ChangeEvent<HTMLInputElement>) => {
-            if (event.target.value.indexOf(',') !== -1) {
-                return;
-            }
             const possibleAnswers = [...props.possibleAnswers];
             possibleAnswers[possibleAnswerIndex] = event.target.value;
             props.setPossibleAnswers(possibleAnswers);
