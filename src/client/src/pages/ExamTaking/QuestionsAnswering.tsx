@@ -49,10 +49,15 @@ function QuestionsAnswering(props: {
             <TestPageLayout
                 title={props.title}
                 buttons={[
-                    <LoadingButton loading={saveDraftMutation.isLoading} onClick={saveDraft}>
+                    <LoadingButton
+                        key="safe-draft-button"
+                        loading={saveDraftMutation.isLoading}
+                        onClick={saveDraft}
+                    >
                         Enregistrer le brouillon
                     </LoadingButton>,
                     <LoadingButton
+                        key="finish-exam-button"
                         loading={finishExamMutation.isLoading}
                         variant="contained"
                         onClick={finishExam}

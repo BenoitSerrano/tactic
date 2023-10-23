@@ -3,7 +3,7 @@ import { Attempt } from './Attempt.entity';
 
 type attemptAnswersType = Record<Question['id'], Attempt['answers'][number]>;
 
-type questionAnswerStatusType = 'wrong' | 'acceptable' | 'right';
+type questionAnswerStatusType = 'wrong' | 'acceptable' | 'right' | undefined;
 
 type questionAnswerSummaryType = Record<
     Question['id'],

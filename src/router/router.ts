@@ -180,6 +180,7 @@ router.put(
     }),
 );
 
+// TODO: check user
 router.patch(
     '/attempts/:attemptId/has-been-treated',
     buildController(attemptController.updateAttemptTreatmentStatus, {
@@ -197,6 +198,10 @@ router.patch(
     }),
 );
 
+// TODO: check user
 router.delete('/attempts/:attemptId', buildController(attemptController.deleteAttempt));
+
+// TODO vérifier le format en entrée
+router.put('/attempts/:attemptId/marks', buildController(attemptController.updateMarks));
 
 export { router };

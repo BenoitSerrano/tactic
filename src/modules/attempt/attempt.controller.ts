@@ -1,3 +1,4 @@
+import { Question } from '../question';
 import { buildAttemptService } from './attempt.service';
 import { attemptAnswersType } from './types';
 
@@ -14,6 +15,7 @@ function buildAttemptController() {
         deleteAttempt,
         updateAttemptTreatmentStatus,
         updateAttemptCheatingSummary,
+        updateMarks,
     };
 
     return attemptController;
@@ -43,6 +45,13 @@ function buildAttemptController() {
 
     async function deleteAttempt(params: { urlParams: { attemptId: string } }) {
         return attemptService.deleteAttempt(params.urlParams.attemptId);
+    }
+
+    async function updateMarks(params: {
+        urlParams: { attemptId: string };
+        body: { marks: Record<Question['id'], number> };
+    }) {
+        return attemptService.updateMarks(params.urlParams.attemptId, params.body.marks);
     }
 
     async function updateAttemptTreatmentStatus(params: {

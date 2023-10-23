@@ -13,6 +13,7 @@ import { FLOATING_NUMBER_REGEX } from '../../constants';
 function ExamChecking() {
     const params = useParams();
     const { displayAlert } = useAlert();
+    //TODO: initialiser le tableau avec les notes récupérées du back-end
     const [marks, setMarks] = useState<Record<number, string>>({});
     const attemptId = params.attemptId as string;
     const query = useQuery(['attempts', attemptId], () => api.fetchAttemptWithAnswers(attemptId));
@@ -51,16 +52,16 @@ function ExamChecking() {
                 ]}
             >
                 {query.data.exam.questions.map((question: any, index: number) => (
-                    <QuestionCheckingContainer>
+                    <QuestionCheckingContainer key={question.id}>
                         <QuestionIndicatorsContainer>
-                            {question.mark !== undefined ? (
-                                <Typography>{question.mark}</Typography>
-                            ) : (
+                            {question.rightAnswers.length === 0 ? (
                                 <MarkTextField
                                     onChange={buildOnMarkChange(question.id)}
                                     value={marks[question.id] || ''}
                                     variant="standard"
                                 />
+                            ) : (
+                                <Typography>{question.mark}</Typography>
                             )}
 
                             <Typography> / {question.points}</Typography>

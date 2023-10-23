@@ -62,8 +62,8 @@ function computeMarks(
     >,
     answers: attemptAnswersType,
 ) {
-    const marks = Object.entries(answers).reduce((acc, [questionId, answer]) => {
-        const question = questions[Number(questionId)];
+    const marks = Object.entries(questions).reduce((acc, [questionId, question]) => {
+        const answer = answers[Number(questionId)];
         const status = computeQuestionAnswerStatus(
             answer,
             question.rightAnswers,
@@ -71,10 +71,12 @@ function computeMarks(
         );
         switch (status) {
             case 'right':
-                return { ...acc, [question.id]: (acc[question.id] || 0) + question.points };
+                return { ...acc, [question.id]: question.points };
             case 'acceptable':
-                return { ...acc, [question.id]: (acc[question.id] || 0) + question.points / 2 };
+                return { ...acc, [question.id]: question.points / 2 };
             case 'wrong':
+                return { ...acc, [question.id]: 0 };
+            case undefined:
                 return acc;
         }
     }, {} as Record<Question['id'], number>);

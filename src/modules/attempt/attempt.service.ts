@@ -27,6 +27,7 @@ function buildAttemptService() {
         getAllAttempts,
         bulkInsertAttempts,
         deleteQuestionAnswers,
+        updateMarks,
     };
 
     return studentService;
@@ -65,7 +66,6 @@ function buildAttemptService() {
         const questions = await questionService.getQuestions(questionIds);
         await assertIsTimeLimitNotExceeded(attempt);
         await updateAttemptDuration(attempt.id);
-        // TODO : vérifier que les questions pour lesquelles on envoie des réponses sont bien dans cet exam
 
         const answers = attemptUtils.stringifyAnswers(attemptAnswers);
         const marks = attemptUtils.computeMarks(questions, attemptAnswers);
@@ -159,6 +159,18 @@ function buildAttemptService() {
             { roundTrips: body.roundTrips, timeSpentOutside: body.timeSpentOutside },
         );
         return result.affected == 1;
+    }
+
+    async function updateMarks(attemptId: string, marks: Record<Question['id'], number>) {
+        const attempt = await attemptRepository.findOneOrFail({
+            where: { id: attemptId },
+            select: { id: true, marks: true },
+        });
+
+        const previousMarks = attemptUtils.decodeMarks(attempt.marks);
+        const newMarks = attemptUtils.encodeMarks({ ...previousMarks, ...marks });
+        await attemptRepository.update({ id: attemptId }, { marks: newMarks });
+        return true;
     }
 
     async function getAllAttempts() {

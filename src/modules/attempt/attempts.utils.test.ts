@@ -41,7 +41,7 @@ describe('attemptsUtils', () => {
         });
     });
 
-    describe.only('convertAnswersToMarks', () => {
+    describe('convertAnswersToMarks', () => {
         const questions = {
             1: {
                 id: 1,
@@ -78,7 +78,7 @@ describe('attemptsUtils', () => {
 
             expect(marks).toEqual(['1:1', '2:3', '3:5.5']);
         });
-        describe.only('decodeMarks', () => {
+        describe('decodeMarks', () => {
             it('should decode marks', () => {
                 const str = ['131:1', '132:1', '133:3'];
 

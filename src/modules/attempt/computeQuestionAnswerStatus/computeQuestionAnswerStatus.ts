@@ -7,6 +7,9 @@ function computeQuestionAnswerStatus(
     rightAnswers: string[],
     acceptableAnswers: string[],
 ): questionAnswerStatusType {
+    if (rightAnswers.length === 0) {
+        return undefined;
+    }
     if (answer === undefined) {
         return 'wrong';
     }
