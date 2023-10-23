@@ -1,5 +1,6 @@
 import { Exercise } from './Exercise.entity';
 import { dataSource } from '../../dataSource';
+import { Exam, buildExamService } from '../exam';
 
 export { buildExerciseService };
 
@@ -7,6 +8,7 @@ function buildExerciseService() {
     const exerciseRepository = dataSource.getRepository(Exercise);
     const exerciseService = {
         createExercise,
+        updateExercise,
         getExercise,
         deleteExercise,
         swapExercises,
@@ -14,11 +16,24 @@ function buildExerciseService() {
 
     return exerciseService;
 
-    async function createExercise(name: string, instruction: string) {
+    async function createExercise(examId: Exam['id'], body: { name: string; instruction: string }) {
+        const examService = buildExamService();
+        const exam = await examService.getExam(examId);
         const exercise = new Exercise();
-        exercise.name = name;
-        exercise.instruction = instruction;
+        exercise.name = body.name;
+        exercise.instruction = body.instruction;
+        exercise.exam = exam;
         return exerciseRepository.save(exercise);
+    }
+
+    async function updateExercise(
+        criteria: { examId: Exam['id']; exerciseId: Exercise['id'] },
+        body: { name: string; instruction: string },
+    ) {
+        return exerciseRepository.update(
+            { exam: { id: criteria.examId }, id: criteria.exerciseId },
+            { name: body.name, instruction: body.instruction },
+        );
     }
 
     async function getExercise(exerciseId: Exercise['id']) {

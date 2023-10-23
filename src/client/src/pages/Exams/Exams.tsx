@@ -11,8 +11,8 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RateReviewIcon from '@mui/icons-material/RateReview';
@@ -59,9 +59,9 @@ function Exams() {
                     {query.data?.map((exam: any) => (
                         <TableRow key={exam.id}>
                             <TableCell>
-                                <Tooltip title="Editer">
+                                <Tooltip title="Accéder à la liste des exercices">
                                     <IconButton onClick={buildNavigateToEdition(exam.id)}>
-                                        <EditIcon />
+                                        <FormatListBulletedIcon />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Voir les copies des étudiants">

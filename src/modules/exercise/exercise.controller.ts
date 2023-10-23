@@ -9,12 +9,34 @@ function buildExerciseController() {
         getExercise,
         deleteExercise,
         swapExercises,
+        createExercise,
+        updateExercise,
     };
 
     return exerciseController;
 
     function getExercise(params: { urlParams: { exerciseId: string } }) {
         return exerciseService.getExercise(Number(params.urlParams.exerciseId));
+    }
+
+    function createExercise(params: {
+        urlParams: { examId: string };
+        body: { name: string; instruction: string };
+    }) {
+        return exerciseService.createExercise(params.urlParams.examId, params.body);
+    }
+
+    function updateExercise(params: {
+        urlParams: { examId: string; exerciseId: string };
+        body: { name: string; instruction: string };
+    }) {
+        return exerciseService.updateExercise(
+            {
+                examId: params.urlParams.examId,
+                exerciseId: Number(params.urlParams.exerciseId),
+            },
+            params.body,
+        );
     }
 
     async function deleteExercise(params: { urlParams: { exerciseId: string } }) {

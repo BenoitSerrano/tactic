@@ -134,6 +134,26 @@ router.patch(
     }),
 );
 
+router.post(
+    `/exams/:examId/exercises`,
+    buildController(exerciseController.createExercise, {
+        schema: Joi.object({
+            name: Joi.string().required(),
+            instruction: Joi.string().required().allow(''),
+        }),
+    }),
+);
+
+router.put(
+    `/exams/:examId/exercises/:exerciseId`,
+    buildController(exerciseController.updateExercise, {
+        schema: Joi.object({
+            name: Joi.string().required(),
+            instruction: Joi.string().required().allow(''),
+        }),
+    }),
+);
+
 router.patch(
     `/exams/:examId/exercises/:exerciseId/questions/order/`,
     buildController(questionController.swapQuestions, {
@@ -147,7 +167,7 @@ router.patch(
     }),
 );
 
-router.patch(
+router.put(
     '/exams/:examId/exercises/:exerciseId/questions/:questionId/',
     buildController(questionController.updateQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([

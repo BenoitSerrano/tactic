@@ -7,6 +7,7 @@ import {
     TableFooter,
     TableHead,
     TableRow,
+    Tooltip,
     styled,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -108,21 +109,29 @@ function QuestionsTable(props: {
                                             >
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>
-                                                    <IconButton {...provided.dragHandleProps}>
-                                                        <DragIndicatorIcon />
-                                                    </IconButton>
-                                                    <IconButton
-                                                        onClick={buildEditQuestionOnClick(question)}
-                                                    >
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                    <IconButton
-                                                        onClick={buildDeleteQuestionOnClick(
-                                                            question,
-                                                        )}
-                                                    >
-                                                        <DeleteForeverIcon />
-                                                    </IconButton>
+                                                    <Tooltip title="Modifier l'ordre">
+                                                        <IconButton {...provided.dragHandleProps}>
+                                                            <DragIndicatorIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Éditer la question">
+                                                        <IconButton
+                                                            onClick={buildEditQuestionOnClick(
+                                                                question,
+                                                            )}
+                                                        >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Supprimer la question">
+                                                        <IconButton
+                                                            onClick={buildDeleteQuestionOnClick(
+                                                                question,
+                                                            )}
+                                                        >
+                                                            <DeleteForeverIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 </TableCell>
                                                 <TableCell>
                                                     <QuestionTypeCellContent>

@@ -14,6 +14,7 @@ function buildExamService() {
         createExam,
         getExams,
         getAllExams,
+        getExam,
         getExamExercises,
         getExamQuestions,
         deleteExam,
@@ -31,11 +32,15 @@ function buildExamService() {
         return examRepository.save(exam);
     }
 
+    async function getExam(examId: Exam['id']) {
+        return examRepository.findOneOrFail({ where: { id: examId } });
+    }
+
     async function getExams(user?: User) {
         return examRepository.find({ where: { user } });
     }
 
-    async function getExamExercises(examId: string) {
+    async function getExamExercises(examId: Exam['id']) {
         return examRepository.findOneOrFail({
             where: { id: examId },
             order: {

@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Tooltip,
+} from '@mui/material';
 import {
     DragDropContext,
     Draggable,
@@ -8,8 +16,8 @@ import {
     OnDragEndResponder,
 } from 'react-beautiful-dnd';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import EditIcon from '@mui/icons-material/Edit';
-import SettingsIcon from '@mui/icons-material/Settings';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { exerciseType } from './types';
@@ -17,7 +25,11 @@ import { tableHandler } from '../../lib/tableHandler';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 
-function ExercisesTable(props: { examId: string; exercises: Array<exerciseType> }) {
+function ExercisesTable(props: {
+    examId: string;
+    exercises: Array<exerciseType>;
+    openEditionModal: (exercise: exerciseType) => void;
+}) {
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
     const [exercises, setExercises] = useState(props.exercises);
@@ -61,21 +73,29 @@ function ExercisesTable(props: { examId: string; exercises: Array<exerciseType> 
                                             >
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>
-                                                    <IconButton {...provided.dragHandleProps}>
-                                                        <DragIndicatorIcon />
-                                                    </IconButton>
-                                                    <IconButton
-                                                        onClick={buildNavigateToExerciseOnClick(
-                                                            exercise.id,
-                                                        )}
-                                                    >
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                    <IconButton
-                                                        onClick={buildEditExerciseOnClick(exercise)}
-                                                    >
-                                                        <SettingsIcon />
-                                                    </IconButton>
+                                                    <Tooltip title="Modifier l'ordre">
+                                                        <IconButton {...provided.dragHandleProps}>
+                                                            <DragIndicatorIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Accéder à la liste des questions">
+                                                        <IconButton
+                                                            onClick={buildNavigateToExerciseOnClick(
+                                                                exercise.id,
+                                                            )}
+                                                        >
+                                                            <FormatListBulletedIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Éditer l'exercice">
+                                                        <IconButton
+                                                            onClick={buildEditExerciseOnClick(
+                                                                exercise,
+                                                            )}
+                                                        >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 </TableCell>
 
                                                 <TableCell>{exercise.name}</TableCell>
@@ -94,7 +114,9 @@ function ExercisesTable(props: { examId: string; exercises: Array<exerciseType> 
     );
 
     function buildEditExerciseOnClick(exercise: exerciseType) {
-        return () => {};
+        return () => {
+            props.openEditionModal(exercise);
+        };
     }
 
     function buildNavigateToExerciseOnClick(exerciseId: number) {

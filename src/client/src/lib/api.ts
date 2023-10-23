@@ -25,6 +25,8 @@ const api = {
     deleteExam,
     createQuestion,
     fetchExercise,
+    createExercise,
+    updateExercise,
     updateQuestion,
     deleteQuestion,
     swapQuestions,
@@ -189,6 +191,27 @@ async function fetchExercise(params: { examId: string; exerciseId: number }) {
     return performApiCall(URL, 'GET');
 }
 
+async function createExercise(params: { examId: string; name: string; instruction: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises`;
+    return performApiCall(URL, 'POST', {
+        name: params.name,
+        instruction: params.instruction,
+    });
+}
+
+async function updateExercise(params: {
+    examId: string;
+    exerciseId: number;
+    name: string;
+    instruction: string;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
+    return performApiCall(URL, 'PUT', {
+        name: params.name,
+        instruction: params.instruction,
+    });
+}
+
 async function createQuestion(params: {
     examId: string;
     exerciseId: number;
@@ -221,7 +244,7 @@ async function updateQuestion(params: {
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;
-    return performApiCall(URL, 'PATCH', {
+    return performApiCall(URL, 'PUT', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
         rightAnswers: params.rightAnswers,
