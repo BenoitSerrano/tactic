@@ -4,7 +4,7 @@ import { examAdaptator } from './exam.adaptator';
 import { User } from '../user';
 import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
-import { buildQuestionService } from '../question';
+import { Question, buildQuestionService } from '../question';
 
 export { buildExamService };
 
@@ -38,9 +38,9 @@ function buildExamService() {
         return examRepository.findOneOrFail({
             where: { id: examId },
             order: {
-                questions: { order: 'ASC' },
+                exercises: { order: 'ASC', questions: { order: 'ASC' } },
             },
-            relations: ['questions'],
+            relations: ['exercises', 'exercises.questions'],
         });
     }
 
@@ -51,9 +51,9 @@ function buildExamService() {
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },
             select: {
-                questions: { id: true },
+                exercises: { id: true, questions: { id: true } },
             },
-            relations: ['questions'],
+            relations: ['exercises', 'exercises.questions'],
         });
         const examWithAttempts = await examRepository.findOneOrFail({
             where: { id: examId },
@@ -75,7 +75,10 @@ function buildExamService() {
         const studentIds = examWithAttempts.attempts.map((attempt) => attempt.student.id);
         const students = await studentService.getStudents(studentIds);
 
-        const questionIds = exam.questions.map((question) => question.id);
+        const questionIds: Question['id'][] = [];
+        for (const exercise of exam.exercises) {
+            questionIds.push(...exercise.questions.map((question) => question.id));
+        }
         const questions = await questionService.getQuestions(questionIds);
 
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(

@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Attempt } from '../attempt';
 import { User } from '../user';
-import { Question } from '../question';
+import { Exercise } from '../exercise';
 
 @Entity()
 export class Exam {
@@ -14,8 +14,8 @@ export class Exam {
     @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
     user?: User;
 
-    @OneToMany(() => Question, (question) => question.exam)
-    questions: Question[];
+    @OneToMany(() => Exercise, (exercise) => exercise.exam)
+    exercises: Exercise[];
 
     @OneToMany(() => Attempt, (attempt) => attempt.exam)
     attempts: Attempt[];

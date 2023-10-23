@@ -32,13 +32,15 @@ function convertAttemptToAttemptWithoutAnswers(
             name: exam.name,
             duration: exam.duration,
             extraTime: exam.extraTime,
-
-            questions: exam.questions.map((question) => ({
-                id: question.id,
-                kind: question.kind,
-                title: question.title,
-                possibleAnswers: question.possibleAnswers,
-                currentAnswer: attemptAnswers[question.id],
+            exercises: exam.exercises.map((exercise) => ({
+                ...exercise,
+                questions: exercise.questions.map((question) => ({
+                    id: question.id,
+                    kind: question.kind,
+                    title: question.title,
+                    possibleAnswers: question.possibleAnswers,
+                    currentAnswer: attemptAnswers[question.id],
+                })),
             })),
         },
     };
@@ -60,10 +62,13 @@ function convertAttemptToAttemptWithAnswers(
             name: exam.name,
             duration: exam.duration,
             extraTime: exam.extraTime,
-            questions: exam.questions.map((question) => ({
-                ...question,
-                mark: marks[question.id],
-                answer: attemptAnswers[question.id],
+            exercises: exam.exercises.map((exercise) => ({
+                ...exercise,
+                questions: exercise.questions.map((question) => ({
+                    ...question,
+                    mark: marks[question.id],
+                    answer: attemptAnswers[question.id],
+                })),
             })),
         },
     };

@@ -58,11 +58,19 @@ function buildAttemptService() {
             select: {
                 id: true,
                 startedAt: true,
-                exam: { id: true, duration: true, extraTime: true, questions: { id: true } },
+                exam: {
+                    id: true,
+                    duration: true,
+                    extraTime: true,
+                    exercises: { id: true, questions: { id: true } },
+                },
             },
-            relations: ['exam', 'exam.questions'],
+            relations: ['exam', 'exam.exercises', 'exam.exercises.questions'],
         });
-        const questionIds = attempt.exam.questions.map(({ id }) => id);
+        const questionIds: Question['id'][] = [];
+        for (const exercise of attempt.exam.exercises) {
+            questionIds.push(...exercise.questions.map((question) => question.id));
+        }
         const questions = await questionService.getQuestions(questionIds);
         await assertIsTimeLimitNotExceeded(attempt);
         await updateAttemptDuration(attempt.id);

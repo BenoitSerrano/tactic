@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Exam } from '../exam';
 import { questionKindType, questionKinds } from './types';
+import { Exercise } from '../exercise';
 
 @Entity()
 export class Question {
@@ -28,6 +29,9 @@ export class Question {
     @Column('simple-array', { default: '' })
     possibleAnswers: string[];
 
-    @ManyToOne(() => Exam, (exam) => exam.questions, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Exam, { onDelete: 'CASCADE' })
     exam: Exam;
+
+    @ManyToOne(() => Exercise, { onDelete: 'CASCADE', nullable: true })
+    exercise: Exercise;
 }

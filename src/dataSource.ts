@@ -5,6 +5,7 @@ import { Attempt } from './modules/attempt';
 import { Student } from './modules/student';
 import { User } from './modules/user';
 import { Question } from './modules/question';
+import { Exercise } from './modules/exercise';
 
 const dataSource = new DataSource({
     type: 'postgres',
@@ -15,7 +16,7 @@ const dataSource = new DataSource({
     database: config.DATABASE_NAME,
     logging: ['warn', 'error'],
     connectTimeoutMS: 20000,
-    entities: [Exam, Attempt, Student, User, Question],
+    entities: [Exam, Attempt, Student, User, Question, Exercise],
     subscribers: [],
     migrations: ['**/migrations/*.js'],
 });
