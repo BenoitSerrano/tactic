@@ -16,7 +16,7 @@ if (process.env.DATABASE_URL) {
 
 const config = {
     PORT: process.env.PORT || 3000,
-    ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || '',
+    ALLOWED_ORIGIN: (process.env.ALLOWED_ORIGIN || '').split(','),
     HASH_SECRET: process.env.HASH_SECRET || '',
     JWT_TOKEN_SECRET: process.env.JWT_TOKEN_SECRET || '',
     DATABASE_HOST: process.env.DATABASE_HOST || '',
