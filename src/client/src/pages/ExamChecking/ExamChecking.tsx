@@ -4,7 +4,7 @@ import { styled } from '@mui/material';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
-import { attemptWithAnswersApiType } from './types';
+import { attemptWithAnswersApiType, questionType } from './types';
 
 function ExamChecking() {
     const params = useParams();
@@ -20,12 +20,17 @@ function ExamChecking() {
         return <div />;
     }
 
+    const questions: Array<questionType> = [];
+    for (const exercise of query.data.exam.exercises) {
+        questions.push(...exercise.questions);
+    }
+
     return (
         <MainContainer>
             <QuestionsChecking
                 attemptId={attemptId}
                 examName={query.data.exam.name}
-                questions={query.data.exam.questions}
+                questions={questions}
             />
         </MainContainer>
     );
