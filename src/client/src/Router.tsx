@@ -49,8 +49,8 @@ function Router() {
 const adminRoutes = [
     { suffixPath: `exams`, element: <Exams /> },
     { suffixPath: `students`, element: <Students /> },
-    { suffixPath: `exams/:examId/exercises/edit`, element: <ExamExercises /> },
-    { suffixPath: `exams/:examId/exercises/:exerciseId/edit`, element: <ExamQuestionsEdition /> },
+    { suffixPath: `exams/:examId/exercises`, element: <ExamExercises /> },
+    { suffixPath: `exams/:examId/exercises/:exerciseId`, element: <ExamQuestionsEdition /> },
     { suffixPath: `exams/:examId/results`, element: <ExamResults /> },
     { suffixPath: `exams/:examId/results/:attemptId`, element: <ExamChecking /> },
     { suffixPath: ``, element: <TeacherHome /> },

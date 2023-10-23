@@ -22,9 +22,13 @@ function computeBreadcrumbs(pathname: string): Array<{ label: string; href?: str
         if (path.length === 2) {
             return breadcrumbs;
         }
-        if (path[3] === 'edit') {
-            const editExamHref = undefined;
-            breadcrumbs.push({ label: 'Éditer', editExamHref });
+        if (path[3] === 'exercises') {
+            const exercisesHref = path.length > 4 ? `/${path.slice(0, 4).join('/')}` : undefined;
+            breadcrumbs.push({ label: 'Liste des exercices', href: exercisesHref });
+            if (path.length === 4) {
+                return breadcrumbs;
+            }
+            breadcrumbs.push({ label: 'Liste des questions' });
         } else if (path[3] === 'results') {
             const examResultsHref = path.length > 4 ? `/${path.slice(0, 4).join('/')}` : undefined;
             breadcrumbs.push({ label: 'Résultats', href: examResultsHref });

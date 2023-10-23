@@ -21,14 +21,27 @@ describe('computeBreadcrumbs', () => {
     });
 
     it("returns exams edit when you're on exam edit page", () => {
-        const pathname = '/teacher/exams/examId/edit';
+        const pathname = '/teacher/exams/examId/exercises';
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: '/teacher' },
             { label: 'Liste des examens', href: '/teacher/exams' },
-            { label: 'Éditer' },
+            { label: 'Liste des exercices' },
+        ]);
+    });
+
+    it("returns exams questions edit when you're on exam edit questions page", () => {
+        const pathname = '/teacher/exams/examId/exercises/exerciseId';
+
+        const breadcrumbs = computeBreadcrumbs(pathname);
+
+        expect(breadcrumbs).toEqual([
+            { label: 'Accueil', href: '/teacher' },
+            { label: 'Liste des examens', href: '/teacher/exams' },
+            { label: 'Liste des exercices', href: '/teacher/exams/examId/exercises' },
+            { label: 'Liste des questions' },
         ]);
     });
 

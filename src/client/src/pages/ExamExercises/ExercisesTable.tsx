@@ -99,7 +99,7 @@ function ExercisesTable(props: { examId: string; exercises: Array<exerciseType> 
 
     function buildNavigateToExerciseOnClick(exerciseId: number) {
         return () => {
-            navigate(`/teacher/exams/${props.examId}/exercises/${exerciseId}/edit`);
+            navigate(`/teacher/exams/${props.examId}/exercises/${exerciseId}`);
         };
     }
 
