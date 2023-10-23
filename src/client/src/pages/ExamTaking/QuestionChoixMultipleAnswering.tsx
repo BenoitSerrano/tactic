@@ -11,15 +11,15 @@ function QuestionChoixMultipleAnswering(props: {
     return (
         <div>
             <FormControl>
-                <FormLabel>
+                <StyledFormLabel>
                     <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
-                </FormLabel>
+                </StyledFormLabel>
                 <RadioGroup value={props.currentAnswer} onChange={onChooseNewAnswer}>
                     {props.question.possibleAnswers.map((possibleAnswer, index: number) => (
                         <React.Fragment key={`${props.question.id}-${index}`}>
-                            <FormControlLabel
+                            <StyledFormControlLabel
                                 value={index}
-                                control={<Radio />}
+                                control={<StyledRadio />}
                                 label={possibleAnswer}
                             />
                         </React.Fragment>
@@ -33,6 +33,15 @@ function QuestionChoixMultipleAnswering(props: {
         props.setCurrentAnswer(event.target.value);
     }
 }
+
+const StyledFormLabel = styled(FormLabel)(({ theme }) => ({ color: theme.palette.common.black }));
+const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
+    color: theme.palette.common.black,
+}));
+
+const StyledRadio = styled(Radio)(({ theme }) => ({
+    color: theme.palette.common.black,
+}));
 
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
 
