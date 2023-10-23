@@ -15,16 +15,18 @@ function PhraseMelangeeUpsertionModalContent(props: {
     acceptableAnswers: string[];
     setAcceptableAnswers: (acceptableAnswers: string[]) => void;
 }) {
-    const [correctCombination, setCorrectCombination] = useState<number[] | undefined>();
+    const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
     const [originalPhrase, setOriginalPhrase] = useState(props.rightAnswers[0] || '');
     const words = originalPhrase.split(' ');
 
-    const isValidateCombinationDisabled =
-        !correctCombination ||
-        correctCombination.length !== words.length ||
-        props.rightAnswers.includes(correctCombination.map((index) => words[index]).join(' '));
-
-    const isResetCombinationDisabled = correctCombination?.length === 0;
+    const isResetCombinationDisabled = newRightAnswer?.length === 0;
+    let displayedWordsToPlace = [...words];
+    if (newRightAnswer) {
+        for (const word of newRightAnswer) {
+            const wordIndex = displayedWordsToPlace.indexOf(word);
+            displayedWordsToPlace.splice(wordIndex, 1);
+        }
+    }
 
     return (
         <>
@@ -61,10 +63,10 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                     </td>
                                 </tr>
                             ))}
-                            {correctCombination === undefined && (
+                            {newRightAnswer === undefined && (
                                 <tr>
                                     <td>
-                                        <Button onClick={() => setCorrectCombination([])}>
+                                        <Button onClick={() => setNewRightAnswer([])}>
                                             Ajouter
                                         </Button>
                                     </td>
@@ -72,42 +74,29 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                 </tr>
                             )}
                             <tr></tr>
-                            {correctCombination !== undefined && (
+                            {newRightAnswer !== undefined && (
                                 <tr>
                                     <td>
                                         <CorrectPhraseCreationContainer>
                                             <WordLinesContainer>
                                                 <WordLineContainer>
-                                                    {words.map((word, index) =>
-                                                        correctCombination.includes(
-                                                            index,
-                                                        ) ? undefined : (
-                                                            <WordContainer
-                                                                key={word}
-                                                                onClick={() =>
-                                                                    setCorrectCombination([
-                                                                        ...correctCombination,
-                                                                        index,
-                                                                    ])
-                                                                }
-                                                            >
-                                                                <Typography>{word}</Typography>
-                                                            </WordContainer>
-                                                        ),
-                                                    )}
+                                                    {displayedWordsToPlace.map((word, index) => (
+                                                        <WordContainer
+                                                            key={index + word}
+                                                            onClick={buildOnClickOnWordToPlace(
+                                                                index,
+                                                            )}
+                                                        >
+                                                            <Typography>{word}</Typography>
+                                                        </WordContainer>
+                                                    ))}
                                                 </WordLineContainer>
                                                 <WordLineContainer>
                                                     <SubdirectoryArrowRightIcon />
                                                     <Typography>
-                                                        {correctCombination
-                                                            .map(
-                                                                (combinationIndex) =>
-                                                                    words[combinationIndex],
-                                                            )
-                                                            .join(' ')}
+                                                        {newRightAnswer.join(' ')}
                                                         {' ___'.repeat(
-                                                            words.length -
-                                                                correctCombination.length,
+                                                            words.length - newRightAnswer.length,
                                                         )}
                                                     </Typography>
                                                 </WordLineContainer>
@@ -117,23 +106,16 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                     <td>
                                         <IconButton
                                             color="error"
-                                            onClick={() => setCorrectCombination(undefined)}
+                                            onClick={() => setNewRightAnswer(undefined)}
                                         >
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton
                                             disabled={isResetCombinationDisabled}
                                             color="warning"
-                                            onClick={() => setCorrectCombination([])}
+                                            onClick={() => setNewRightAnswer([])}
                                         >
                                             <RefreshIcon />
-                                        </IconButton>
-                                        <IconButton
-                                            color="success"
-                                            onClick={validateCorrectPhrase}
-                                            disabled={isValidateCombinationDisabled}
-                                        >
-                                            <CheckIcon />
                                         </IconButton>
                                     </td>
                                 </tr>
@@ -144,6 +126,20 @@ function PhraseMelangeeUpsertionModalContent(props: {
             )}
         </>
     );
+
+    function buildOnClickOnWordToPlace(index: number) {
+        return () => {
+            if (!newRightAnswer) {
+                return;
+            }
+            setNewRightAnswer([...newRightAnswer, displayedWordsToPlace[index]]);
+
+            if (newRightAnswer.length + 1 === words.length) {
+                props.setRightAnswers([...props.rightAnswers, newRightAnswer.join(' ')]);
+                setNewRightAnswer(undefined);
+            }
+        };
+    }
 
     function shufflePhrase() {
         setOriginalPhrase(originalPhrase.trim());
@@ -169,15 +165,6 @@ function PhraseMelangeeUpsertionModalContent(props: {
         setOriginalPhrase(originalPhrase);
         props.setTitle(originalPhrase);
         props.setRightAnswers([originalPhrase]);
-    }
-
-    function validateCorrectPhrase() {
-        if (!correctCombination) {
-            return;
-        }
-        const newRightAnswer = correctCombination.map((index) => words[index]).join(' ');
-        props.setRightAnswers([...props.rightAnswers, newRightAnswer]);
-        setCorrectCombination(undefined);
     }
 }
 

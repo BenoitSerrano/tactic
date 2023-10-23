@@ -1,5 +1,6 @@
 type examApiType = {
     id: string;
+    name: string;
     exercises: Array<exerciseType>;
 };
 

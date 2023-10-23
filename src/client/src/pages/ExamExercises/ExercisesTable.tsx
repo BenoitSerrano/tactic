@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     IconButton,
     Table,
@@ -42,6 +42,10 @@ function ExercisesTable(props: {
             });
         },
     });
+
+    useEffect(() => {
+        setExercises(props.exercises);
+    }, [props.exercises]);
 
     return (
         <Table stickyHeader>

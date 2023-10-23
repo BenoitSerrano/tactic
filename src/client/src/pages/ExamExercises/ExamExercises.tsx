@@ -8,6 +8,7 @@ import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
 import { Menu } from '../../components/Menu';
+import { Typography, styled } from '@mui/material';
 
 function ExamExercises() {
     const params = useParams<{ examId: string }>();
@@ -32,8 +33,10 @@ function ExamExercises() {
     ];
     return (
         <>
+            <TitleContainer>
+                <Typography variant="h3">{query.data.name}</Typography>
+            </TitleContainer>
             <Menu buttons={menuButtons} />
-
             <ExercisesTable
                 examId={examId}
                 exercises={query.data.exercises}
@@ -53,5 +56,9 @@ function ExamExercises() {
         setCurrentExerciseModalStatus({ kind: 'editing', exercise });
     }
 }
+
+const TitleContainer = styled('div')(({ theme }) => ({
+    textAlign: 'center',
+}));
 
 export { ExamExercises };

@@ -9,6 +9,7 @@ import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
 import { exerciseApiType, questionWithAnswersType } from './types';
 import { QuestionsTable } from './QuestionsTable';
+import { Typography, styled } from '@mui/material';
 
 function ExamQuestionsEdition() {
     const params = useParams<{ examId: string; exerciseId: string }>();
@@ -42,6 +43,9 @@ function ExamQuestionsEdition() {
 
     return (
         <>
+            <TitleContainer>
+                <Typography variant="h3">{query.data.name}</Typography>
+            </TitleContainer>
             <Menu buttons={menuButtons} />
             <QuestionsTable
                 exerciseId={exerciseId}
@@ -60,5 +64,9 @@ function ExamQuestionsEdition() {
         </>
     );
 }
+
+const TitleContainer = styled('div')(({ theme }) => ({
+    textAlign: 'center',
+}));
 
 export { ExamQuestionsEdition };
