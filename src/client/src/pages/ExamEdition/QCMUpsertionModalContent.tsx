@@ -33,7 +33,7 @@ function QCMUpsertionModalContent(props: {
                 {props.possibleAnswers.map(
                     (possibleAnswer: string, possibleAnswerIndex: number) => {
                         return (
-                            <InputContainer key={possibleAnswerIndex}>
+                            <InputContainer key={'possibleAnswer-' + possibleAnswerIndex}>
                                 <FormControlLabel
                                     value={possibleAnswerIndex}
                                     control={<Radio />}

@@ -163,7 +163,11 @@ function QuestionUpsertionModal(props: {
 
     function handleQuestionKindChange(event: SelectChangeEvent) {
         const newCurrentQuestionKind = event.target.value as questionKindType;
-        setTitle('');
+        if (newCurrentQuestionKind === 'questionTrou') {
+            setTitle('....');
+        } else {
+            setTitle('');
+        }
         setRightAnswers([]);
         setAcceptableAnswers([]);
         setPossibleAnswers(['', '', '', '']);

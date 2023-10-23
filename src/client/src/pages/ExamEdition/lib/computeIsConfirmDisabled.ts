@@ -1,3 +1,4 @@
+import { QUESTION_TROU_REGEX } from '../../../constants';
 import { questionKindType } from '../../../types';
 
 function computeIsConfirmDisabled(
@@ -27,7 +28,7 @@ function computeIsConfirmDisabled(
         return true;
     }
 
-    if (questionKind === 'questionTrou' && !params.title.match(/\.\.\.\./)) {
+    if (questionKind === 'questionTrou' && !params.title.match(QUESTION_TROU_REGEX)) {
         return true;
     }
 

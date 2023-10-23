@@ -1,4 +1,6 @@
 import { TextField, Typography, styled } from '@mui/material';
+import { ChangeEvent } from 'react';
+import { QUESTION_TROU_REGEX } from '../../constants';
 
 function QuestionTrouUpsertionModalContent(props: {
     title: string;
@@ -8,39 +10,38 @@ function QuestionTrouUpsertionModalContent(props: {
     acceptableAnswers: string[];
     setAcceptableAnswers: (acceptableAnswers: string[]) => void;
 }) {
+    const { beforeText, afterText } = computeTexts();
     return (
         <>
-            <RowContainer>
+            <FieldContainer>
+                <RowContainer>
+                    <TextField
+                        variant="standard"
+                        label="Début de la question..."
+                        value={beforeText}
+                        onChange={onChangeBeforeText}
+                        placeholder="Les paroles"
+                    />
+                    <TextField
+                        variant="standard"
+                        label="Bonnes réponses"
+                        placeholder="s'envolent"
+                        value={props.rightAnswers.join(',')}
+                        onChange={(event) => props.setRightAnswers(event.target.value.split(','))}
+                    />
+                    <TextField
+                        variant="standard"
+                        label="... suite de la question"
+                        value={afterText}
+                        onChange={onChangeAfterText}
+                        placeholder=", les écrits restent."
+                    />
+                </RowContainer>
+            </FieldContainer>
+            <FieldContainer>
                 <TextField
                     fullWidth
-                    label="Intitulé de la question"
-                    value={props.title}
-                    onChange={(event) => props.setTitle(event.target.value)}
-                    placeholder="Je suis, tu es, ...., nous sommes, vous êtes, ils sont"
-                />
-                <HintContainer>
-                    <Typography variant="h6">
-                        Les 4 points (....) correspondent au texte à remplacer par l'élève.
-                    </Typography>
-                </HintContainer>
-            </RowContainer>
-            <RowContainer>
-                <TextField
-                    fullWidth
-                    label="Bonnes réponses"
-                    placeholder="il est, elle est, on est"
-                    value={props.rightAnswers.join(',')}
-                    onChange={(event) => props.setRightAnswers(event.target.value.split(','))}
-                />
-                <HintContainer>
-                    <Typography variant="h6">
-                        Indiquez les bonnes réponses, séparées par des virgules
-                    </Typography>
-                </HintContainer>
-            </RowContainer>
-            <RowContainer>
-                <TextField
-                    fullWidth
+                    variant="standard"
                     label="Réponses acceptables"
                     value={props.acceptableAnswers.join(',')}
                     onChange={(event) => props.setAcceptableAnswers(event.target.value.split(','))}
@@ -50,12 +51,34 @@ function QuestionTrouUpsertionModalContent(props: {
                         Indiquez les réponses acceptables, séparées par des virgules
                     </Typography>
                 </HintContainer>
-            </RowContainer>
+            </FieldContainer>
         </>
     );
+
+    function computeTexts() {
+        const match = props.title.match(QUESTION_TROU_REGEX);
+        if (!match) {
+            console.error(`Title wrongly formatted: "${props.title}"`);
+            return { beforeText: '', afterText: '' };
+        }
+        const beforeText = match[1];
+        const afterText = match[2];
+        return { beforeText, afterText };
+    }
+
+    function onChangeBeforeText(event: ChangeEvent<HTMLInputElement>) {
+        const beforeText = event.target.value;
+        const title = `${beforeText}....${afterText}`;
+        props.setTitle(title);
+    }
+    function onChangeAfterText(event: ChangeEvent<HTMLInputElement>) {
+        const afterText = event.target.value;
+        const title = `${beforeText}....${afterText}`;
+        props.setTitle(title);
+    }
 }
 
-const RowContainer = styled('div')(({ theme }) => ({
+const FieldContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     marginTop: theme.spacing(1),
@@ -63,6 +86,8 @@ const RowContainer = styled('div')(({ theme }) => ({
     flex: 1,
     width: '100%',
 }));
+
+const RowContainer = styled('div')({ display: 'flex' });
 
 const HintContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(2) }));
 
