@@ -105,7 +105,6 @@ const QuestionIndicatorsContainer = styled('div')({
     minWidth: 100,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
 });
 
 const MarkTextField = styled(TextField)({
