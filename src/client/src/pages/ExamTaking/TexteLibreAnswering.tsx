@@ -14,13 +14,7 @@ function TexteLibreAnswering(props: {
                     <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
                 </Typography>
             </TitleContainer>
-            <TextField
-                multiline
-                fullWidth
-                minRows={3}
-                value={props.currentAnswer}
-                onChange={onChangeAnswer}
-            />
+            <TextField multiline fullWidth value={props.currentAnswer} onChange={onChangeAnswer} />
         </>
     );
 
