@@ -24,10 +24,12 @@ const api = {
     fetchExamResults,
     deleteExam,
     createQuestion,
+    fetchExercise,
     updateQuestion,
     deleteQuestion,
     swapQuestions,
     updateMarks,
+    swapExercises,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -182,8 +184,14 @@ async function createExam({ name, duration }: { name: string; duration: number }
     return performApiCall(URL, 'POST', { name, duration });
 }
 
+async function fetchExercise(params: { examId: string; exerciseId: number }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
+    return performApiCall(URL, 'GET');
+}
+
 async function createQuestion(params: {
     examId: string;
+    exerciseId: number;
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
@@ -191,7 +199,7 @@ async function createQuestion(params: {
     acceptableAnswers: string[];
     points: number;
 }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/questions`;
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
     return performApiCall(URL, 'POST', {
         title: params.title,
         kind: params.kind,
@@ -204,6 +212,7 @@ async function createQuestion(params: {
 
 async function updateQuestion(params: {
     examId: string;
+    exerciseId: number;
     questionId: number;
     title: string;
     possibleAnswers: string[];
@@ -211,7 +220,7 @@ async function updateQuestion(params: {
     acceptableAnswers: string[];
     points: number;
 }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/questions/${params.questionId}`;
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;
     return performApiCall(URL, 'PATCH', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
@@ -239,6 +248,14 @@ async function updateMarks(params: { attemptId: string; marks: Record<number, nu
 async function deleteQuestion(params: { examId: string; questionId: number }) {
     const URL = `${BASE_URL}/exams/${params.examId}/questions/${params.questionId}`;
     return performApiCall(URL, 'DELETE');
+}
+
+async function swapExercises(params: { examId: string; exerciseId1: number; exerciseId2: number }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/order`;
+    return performApiCall(URL, 'PATCH', {
+        exerciseId1: params.exerciseId1,
+        exerciseId2: params.exerciseId2,
+    });
 }
 
 export { api };

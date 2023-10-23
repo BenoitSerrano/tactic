@@ -1,6 +1,6 @@
 import { questionKindType } from '../../types';
 
-type examApiType = { exercises: Array<{ id: number; questions: Array<questionWithAnswersType> }> };
+type exerciseApiType = { id: number; questions: Array<questionWithAnswersType> };
 
 type questionWithAnswersType = {
     id: number;
@@ -12,4 +12,4 @@ type questionWithAnswersType = {
     possibleAnswers: string[] | null;
 };
 
-export type { questionWithAnswersType, examApiType };
+export type { questionWithAnswersType, exerciseApiType };

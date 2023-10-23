@@ -38,9 +38,9 @@ function buildExamService() {
         return examRepository.findOneOrFail({
             where: { id: examId },
             order: {
-                exercises: { order: 'ASC', questions: { order: 'ASC' } },
+                exercises: { order: 'ASC' },
             },
-            relations: ['exercises', 'exercises.questions'],
+            relations: ['exercises'],
         });
     }
 

@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { Exams } from './pages/Exams';
-import { ExamEdition } from './pages/ExamEdition';
+import { ExamQuestionsEdition } from './pages/ExamQuestionsEdition';
 import { Students } from './pages/Students';
 import { StudentAuthentication } from './pages/StudentAuthentication';
 import { ExamTaking } from './pages/ExamTaking';
@@ -15,6 +15,7 @@ import { AdminPage } from './components/AdminPage';
 import { SignIn } from './pages/SignIn';
 import { Home } from './pages/Home';
 import { api } from './lib/api';
+import { ExamExercises } from './pages/ExamExercises';
 
 function Router() {
     return (
@@ -48,7 +49,8 @@ function Router() {
 const adminRoutes = [
     { suffixPath: `exams`, element: <Exams /> },
     { suffixPath: `students`, element: <Students /> },
-    { suffixPath: `exams/:examId/edit`, element: <ExamEdition /> },
+    { suffixPath: `exams/:examId/exercises/edit`, element: <ExamExercises /> },
+    { suffixPath: `exams/:examId/exercises/:exerciseId/edit`, element: <ExamQuestionsEdition /> },
     { suffixPath: `exams/:examId/results`, element: <ExamResults /> },
     { suffixPath: `exams/:examId/results/:attemptId`, element: <ExamChecking /> },
     { suffixPath: ``, element: <TeacherHome /> },

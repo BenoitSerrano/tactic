@@ -7,6 +7,7 @@ import { buildAttemptController } from '../modules/attempt';
 import { buildQuestionController, questionKinds } from '../modules/question';
 import { buildUserController } from '../modules/user';
 import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { buildExerciseController } from '../modules/exercise';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -14,6 +15,7 @@ const userController = buildUserController();
 const studentController = buildStudentController();
 const questionController = buildQuestionController();
 const attemptController = buildAttemptController();
+const exerciseController = buildExerciseController();
 
 router.post('/users', buildController(userController.createUser));
 router.post('/login', buildController(userController.login));
@@ -51,6 +53,7 @@ router.post(
         }),
     }),
 );
+
 router.get(
     '/exams',
     buildController(examController.getExams, {
@@ -92,7 +95,7 @@ router.post(
 );
 
 router.post(
-    '/exams/:examId/questions',
+    '/exams/:examId/exercises/:exerciseId/questions',
     buildController(questionController.createQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
@@ -123,8 +126,16 @@ router.delete(
     }),
 );
 
+router.get(`/exams/:examId/exercises/:exerciseId`, buildController(exerciseController.getExercise));
 router.patch(
-    '/exams/:examId/questions/:questionId',
+    `/exams/:examId/exercises/:exerciseId/order`,
+    buildController(exerciseController.swapExercises, {
+        schema: Joi.object({ exerciseId1: Joi.number(), exerciseId2: Joi.number() }),
+    }),
+);
+
+router.patch(
+    '/exams/:examId/exercises/:exerciseId/questions/:questionId',
     buildController(questionController.updateQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {

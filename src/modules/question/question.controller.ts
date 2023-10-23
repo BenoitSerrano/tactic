@@ -15,17 +15,17 @@ function buildQuestionController() {
     return questionController;
 
     async function createQuestion(params: {
-        urlParams: { examId: string };
+        urlParams: { exerciseId: string };
         body: Pick<
             Question,
             'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
         >;
     }) {
-        return questionService.createQuestion(params.urlParams.examId, params.body);
+        return questionService.createQuestion(Number(params.urlParams.exerciseId), params.body);
     }
 
     async function updateQuestion(params: {
-        urlParams: { examId: string; questionId: string };
+        urlParams: { exerciseId: string; questionId: string };
         body: Pick<
             Question,
             'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
@@ -33,7 +33,7 @@ function buildQuestionController() {
     }) {
         return questionService.updateQuestion(
             {
-                examId: params.urlParams.examId,
+                exerciseId: Number(params.urlParams.exerciseId),
                 questionId: Number(params.urlParams.questionId),
             },
             {

@@ -104,7 +104,7 @@ function Exams() {
     }
 
     function buildNavigateToEdition(examId: string) {
-        return () => navigate(`/teacher/exams/${examId}/edit`);
+        return () => navigate(`/teacher/exams/${examId}/exercises/edit`);
     }
 
     function buildNavigateToResults(examId: string) {

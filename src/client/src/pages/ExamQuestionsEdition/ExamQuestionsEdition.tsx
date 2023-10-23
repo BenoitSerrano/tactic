@@ -7,13 +7,16 @@ import { Menu } from '../../components/Menu';
 import { Loader } from '../../components/Loader';
 import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
-import { examApiType, questionWithAnswersType } from './types';
+import { exerciseApiType, questionWithAnswersType } from './types';
 import { ExamTable } from './ExamTable';
 
-function ExamEdition() {
-    const params = useParams<{ examId: string }>();
+function ExamQuestionsEdition() {
+    const params = useParams<{ examId: string; exerciseId: string }>();
     const examId = params.examId as string;
-    const query = useQuery<examApiType>(['exams', examId], () => api.fetchExam(examId));
+    const exerciseId = Number(params.exerciseId);
+    const query = useQuery<exerciseApiType>(['exams', examId, 'exercises', exerciseId], () =>
+        api.fetchExercise({ examId, exerciseId }),
+    );
 
     const [currentQuestionModalStatus, setCurrentQuestionModalStatus] = useState<
         modalStatusType | undefined
@@ -37,17 +40,17 @@ function ExamEdition() {
         setCurrentQuestionModalStatus({ kind: 'editing', question });
     }
 
-    const questions: Array<questionWithAnswersType> = [];
-    for (const exercise of query.data.exercises) {
-        questions.push(...exercise.questions);
-    }
-
     return (
         <>
             <Menu buttons={menuButtons} />
-            <ExamTable questions={questions} examId={examId} openEditionModal={openEditionModal} />
+            <ExamTable
+                questions={query.data.questions}
+                examId={examId}
+                openEditionModal={openEditionModal}
+            />
             {!!currentQuestionModalStatus && (
                 <QuestionUpsertionModal
+                    exerciseId={exerciseId}
                     examId={examId}
                     modalStatus={currentQuestionModalStatus}
                     close={() => setCurrentQuestionModalStatus(undefined)}
@@ -57,4 +60,4 @@ function ExamEdition() {
     );
 }
 
-export { ExamEdition };
+export { ExamQuestionsEdition };

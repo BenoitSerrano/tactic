@@ -1,8 +1,8 @@
 import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Question } from './Question.entity';
-import { buildExamService } from '../exam';
 import { buildAttemptService } from '../attempt';
+import { Exercise, buildExerciseService } from '../exercise';
 
 export { buildQuestionService };
 
@@ -19,17 +19,17 @@ function buildQuestionService() {
     return questionService;
 
     async function createQuestion(
-        examId: string,
+        exerciseId: Exercise['id'],
         body: Pick<
             Question,
             'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
         >,
     ) {
-        const examService = buildExamService();
-        const exam = await examService.getExam(examId);
+        const exerciseService = buildExerciseService();
+        const exercise = await exerciseService.getExercise(exerciseId);
 
         const question = new Question();
-        const highestOrder = await getHighestQuestionOrder(examId);
+        const highestOrder = await getHighestQuestionOrder(exerciseId);
 
         question.acceptableAnswers = body.acceptableAnswers;
         question.rightAnswers = body.rightAnswers;
@@ -37,14 +37,14 @@ function buildQuestionService() {
         question.title = body.title;
         question.kind = body.kind;
         question.points = body.points;
-        question.exam = exam;
+        question.exercise = exercise;
         question.order = highestOrder + 1;
         return questionRepository.save(question);
     }
 
-    async function getHighestQuestionOrder(examId: string) {
+    async function getHighestQuestionOrder(exerciseId: Exercise['id']) {
         const questions = await questionRepository.find({
-            where: { exam: { id: examId } },
+            where: { exercise: { id: exerciseId } },
             select: { order: true, id: true },
             order: { order: 'DESC' },
             take: 1,
@@ -57,14 +57,14 @@ function buildQuestionService() {
     }
 
     async function updateQuestion(
-        criteria: { examId: string; questionId: Question['id'] },
+        criteria: { exerciseId: Exercise['id']; questionId: Question['id'] },
         body: Pick<
             Question,
             'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
         >,
     ) {
         const question = await questionRepository.findOneOrFail({
-            where: { exam: { id: criteria.examId }, id: criteria.questionId },
+            where: { id: criteria.questionId, exercise: { id: criteria.exerciseId } },
         });
 
         question.title = body.title;

@@ -14,6 +14,7 @@ function QuestionUpsertionModal(props: {
     close: () => void;
     modalStatus: modalStatusType;
     examId: string;
+    exerciseId: number;
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
@@ -27,7 +28,9 @@ function QuestionUpsertionModal(props: {
         onSuccess: () => {
             props.close();
             displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
-            queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
+            queryClient.invalidateQueries({
+                queryKey: ['exams', props.examId, 'exercises', props.exerciseId],
+            });
         },
     });
 
@@ -36,7 +39,9 @@ function QuestionUpsertionModal(props: {
         onSuccess: () => {
             props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
-            queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
+            queryClient.invalidateQueries({
+                queryKey: ['exams', props.examId, 'exercises', props.exerciseId],
+            });
         },
     });
 
@@ -150,12 +155,14 @@ function QuestionUpsertionModal(props: {
         if (props.modalStatus?.kind === 'editing') {
             updateQuestionMutation.mutate({
                 examId: props.examId,
+                exerciseId: props.exerciseId,
                 questionId: props.modalStatus.question.id,
                 ...newQuestion,
             });
         } else {
             createQuestionMutation.mutate({
                 examId: props.examId,
+                exerciseId: props.exerciseId,
                 ...newQuestion,
             });
         }
