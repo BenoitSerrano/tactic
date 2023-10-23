@@ -7,15 +7,14 @@ import { Menu } from '../../components/Menu';
 import { Loader } from '../../components/Loader';
 import { modalStatusType } from './utils';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal';
-import { questionWithAnswersType } from './types';
+import { examApiType, questionWithAnswersType } from './types';
 import { ExamTable } from './ExamTable';
+import { questionType } from '../../types';
 
 function ExamEdition() {
     const params = useParams<{ examId: string }>();
     const examId = params.examId as string;
-    const query = useQuery<{ questions: Array<questionWithAnswersType> }>(['exams', examId], () =>
-        api.fetchExam(examId),
-    );
+    const query = useQuery<examApiType>(['exams', examId], () => api.fetchExam(examId));
 
     const [currentQuestionModalStatus, setCurrentQuestionModalStatus] = useState<
         modalStatusType | undefined
@@ -39,14 +38,15 @@ function ExamEdition() {
         setCurrentQuestionModalStatus({ kind: 'editing', question });
     }
 
+    const questions: Array<questionWithAnswersType> = [];
+    for (const exercise of query.data.exercises) {
+        questions.push(...exercise.questions);
+    }
+
     return (
         <>
             <Menu buttons={menuButtons} />
-            <ExamTable
-                questions={query.data.questions}
-                examId={examId}
-                openEditionModal={openEditionModal}
-            />
+            <ExamTable questions={questions} examId={examId} openEditionModal={openEditionModal} />
             {!!currentQuestionModalStatus && (
                 <QuestionUpsertionModal
                     examId={examId}
