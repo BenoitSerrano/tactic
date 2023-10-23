@@ -18,7 +18,7 @@ export class AddExercise1698068723922 implements MigrationInterface {
         for (const exam of exams) {
             const examId = exam.id;
             const result: Array<{ id: number }> = await queryRunner.query(
-                `INSERT INTO "exercise" ("name", "instruction", "order", "examId") VALUES ('Exercise sans nom', '', 1, '${examId}') RETURNING id`,
+                `INSERT INTO "exercise" ("name", "instruction", "order", "examId") VALUES ('Exercice sans nom', '', 1, '${examId}') RETURNING id`,
             );
             const exerciseId = result[0].id;
             await queryRunner.query(

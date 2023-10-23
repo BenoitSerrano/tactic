@@ -27,11 +27,11 @@ const theme = createTheme({
         },
         h3: {
             fontSize: '1.5rem',
-            fontWeight: 'normal',
+            fontWeight: 'bold',
         },
         h4: {
             fontSize: '1.2rem',
-            fontWeight: 'normal',
+            fontWeight: 'bold',
         },
         h5: {
             fontSize: '1.1rem',

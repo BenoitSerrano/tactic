@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
-import { questionWithoutAnswer } from './types';
+import { exerciseType } from './types';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { QuestionAnswering } from './QuestionAnswering';
@@ -13,7 +13,7 @@ type questionAnswerType = Record<number, string>;
 function QuestionsAnswering(props: {
     attemptId: string;
     title: string;
-    questions: Array<questionWithoutAnswer>;
+    exercises: Array<exerciseType>;
     onExamDone: () => void;
 }) {
     const saveDraftMutation = useMutation({
@@ -38,9 +38,12 @@ function QuestionsAnswering(props: {
 
     const { displayAlert } = useAlert();
 
-    const initialCurrentAnswers = props.questions.reduce((acc, question) => {
-        return { ...acc, [question.id]: question.currentAnswer || '' };
-    }, {} as questionAnswerType);
+    const initialCurrentAnswers: questionAnswerType = {};
+    for (const exercise of props.exercises) {
+        for (const question of exercise.questions) {
+            initialCurrentAnswers[question.id] = question.currentAnswer;
+        }
+    }
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
 
@@ -66,17 +69,28 @@ function QuestionsAnswering(props: {
                     </LoadingButton>,
                 ]}
             >
-                {props.questions.map((question, index) => (
-                    <QuestionContainer key={`question-${question.id}`}>
-                        <QuestionAnswering
-                            currentAnswer={currentAnswers[question.id]}
-                            setCurrentAnswer={(newAnswer: string) =>
-                                setCurrentAnswers({ ...currentAnswers, [question.id]: newAnswer })
-                            }
-                            question={question}
-                            index={index + 1}
-                        />
-                    </QuestionContainer>
+                {props.exercises.map((exercise) => (
+                    <ExerciseContainer>
+                        <ExerciseTitleContainer>
+                            <Typography variant="h3">{exercise.name}</Typography>
+                            <Typography variant="h4">{exercise.instruction}</Typography>
+                        </ExerciseTitleContainer>
+                        {exercise.questions.map((question, index) => (
+                            <QuestionContainer key={`question-${question.id}`}>
+                                <QuestionAnswering
+                                    currentAnswer={currentAnswers[question.id]}
+                                    setCurrentAnswer={(newAnswer: string) =>
+                                        setCurrentAnswers({
+                                            ...currentAnswers,
+                                            [question.id]: newAnswer,
+                                        })
+                                    }
+                                    question={question}
+                                    index={index + 1}
+                                />
+                            </QuestionContainer>
+                        ))}
+                    </ExerciseContainer>
                 ))}
             </TestPageLayout>
         </>
@@ -99,6 +113,16 @@ function QuestionsAnswering(props: {
 
 const QuestionContainer = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+}));
+
+const ExerciseContainer = styled('div')(({ theme }) => ({
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    borderBottom: `1px solid ${theme.palette.common.black}`,
+}));
+
+const ExerciseTitleContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(3),
 }));
 

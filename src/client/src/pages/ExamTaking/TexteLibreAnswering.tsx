@@ -1,8 +1,8 @@
 import { TextField, Typography, styled } from '@mui/material';
-import { questionWithoutAnswer } from './types';
+import { questionWithoutAnswerType } from './types';
 
 function TexteLibreAnswering(props: {
-    question: questionWithoutAnswer;
+    question: questionWithoutAnswerType;
     index: number;
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;

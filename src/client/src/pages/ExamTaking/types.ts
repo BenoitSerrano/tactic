@@ -6,11 +6,18 @@ type attemptWithoutAnswersType = {
         duration: number;
         extraTime: number;
         name: string;
-        exercises: Array<{ id: number; questions: Array<questionWithoutAnswer> }>;
+        exercises: Array<exerciseType>;
     };
 };
 
-type questionWithoutAnswer = {
+type exerciseType = {
+    id: number;
+    name: string;
+    instruction: string;
+    questions: Array<questionWithoutAnswerType>;
+};
+
+type questionWithoutAnswerType = {
     id: number;
     kind: questionKindType;
     title: string;
@@ -19,4 +26,4 @@ type questionWithoutAnswer = {
     points: number;
 };
 
-export type { attemptWithoutAnswersType, questionWithoutAnswer };
+export type { attemptWithoutAnswersType, questionWithoutAnswerType, exerciseType };

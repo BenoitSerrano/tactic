@@ -7,7 +7,7 @@ import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
 import { api } from '../../lib/api';
 import { QuestionsAnswering } from './QuestionsAnswering';
-import { attemptWithoutAnswersType, questionWithoutAnswer } from './types';
+import { attemptWithoutAnswersType } from './types';
 
 function ExamTaking() {
     const params = useParams();
@@ -26,11 +26,6 @@ function ExamTaking() {
         );
     }
 
-    const questions: Array<questionWithoutAnswer> = [];
-    for (const exercise of query.data.exam.exercises) {
-        questions.push(...exercise.questions);
-    }
-
     const examDonePath = `/student/students/${studentId}/exam-done`;
 
     let remainingSeconds =
@@ -47,7 +42,7 @@ function ExamTaking() {
             <ExamPageContainer>
                 <QuestionsAnswering
                     title={query.data.exam.name}
-                    questions={questions}
+                    exercises={query.data.exam.exercises}
                     attemptId={attemptId}
                     onExamDone={onExamDone}
                 />
