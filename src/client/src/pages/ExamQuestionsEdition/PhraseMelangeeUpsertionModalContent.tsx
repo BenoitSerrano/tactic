@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import CheckIcon from '@mui/icons-material/Check';
 import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
@@ -132,10 +131,11 @@ function PhraseMelangeeUpsertionModalContent(props: {
             if (!newRightAnswer) {
                 return;
             }
-            setNewRightAnswer([...newRightAnswer, displayedWordsToPlace[index]]);
+            const updatedNewRightAnswer = [...newRightAnswer, displayedWordsToPlace[index]];
+            setNewRightAnswer(updatedNewRightAnswer);
 
             if (newRightAnswer.length + 1 === words.length) {
-                props.setRightAnswers([...props.rightAnswers, newRightAnswer.join(' ')]);
+                props.setRightAnswers([...props.rightAnswers, updatedNewRightAnswer.join(' ')]);
                 setNewRightAnswer(undefined);
             }
         };
