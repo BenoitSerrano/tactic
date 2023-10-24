@@ -143,13 +143,18 @@ function PhraseMelangeeUpsertionModalContent(props: {
 
     function shufflePhrase() {
         setOriginalPhrase(originalPhrase.trim());
+        const shuffledPhrase = computeShuffledPhrase(originalPhrase);
+        props.setTitle(shuffledPhrase);
+    }
+
+    function computeShuffledPhrase(originalPhrase: string) {
         const words = originalPhrase.trim().split(' ');
         const shuffledCombination = combinator.generate(words.length);
         const shuffledWords = [];
         for (let i = 0; i < shuffledCombination.length; i++) {
             shuffledWords.push(words[shuffledCombination[i]]);
         }
-        props.setTitle(shuffledWords.join(' '));
+        return shuffledWords.join(' ');
     }
 
     function buildDeleteRightAnswer(index: number) {
@@ -161,10 +166,12 @@ function PhraseMelangeeUpsertionModalContent(props: {
     }
 
     function onChangeOriginalPhrase(event: React.ChangeEvent<HTMLInputElement>) {
-        const originalPhrase = event.target.value;
-        setOriginalPhrase(originalPhrase);
-        props.setTitle(originalPhrase);
-        props.setRightAnswers([originalPhrase]);
+        const newOriginalPhrase = event.target.value;
+        setOriginalPhrase(newOriginalPhrase);
+        const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
+
+        props.setTitle(shuffledPhrase);
+        props.setRightAnswers([newOriginalPhrase.trim()]);
     }
 }
 
