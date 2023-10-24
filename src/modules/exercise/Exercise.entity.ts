@@ -13,6 +13,9 @@ export class Exercise {
     @Column()
     instruction: string;
 
+    @Column('float', { default: 1 })
+    defaultPoints: number;
+
     @Column('int')
     order: number;
 
