@@ -14,18 +14,15 @@ function PhraseMelangeeUpsertionModalContent(props: {
     acceptableAnswers: string[];
     setAcceptableAnswers: (acceptableAnswers: string[]) => void;
 }) {
+    const initialRightAnswers = props.rightAnswers[0] || '';
     const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
-    const [originalPhrase, setOriginalPhrase] = useState(props.rightAnswers[0] || '');
+    const [originalPhrase, setOriginalPhrase] = useState(initialRightAnswers);
+    const [displayedWordsToPlace, setDisplayedWordsToPlace] = useState(
+        initialRightAnswers.split(' '),
+    );
     const words = originalPhrase.split(' ');
 
     const isResetCombinationDisabled = newRightAnswer?.length === 0;
-    let displayedWordsToPlace = [...words];
-    if (newRightAnswer) {
-        for (const word of newRightAnswer) {
-            const wordIndex = displayedWordsToPlace.indexOf(word);
-            displayedWordsToPlace.splice(wordIndex, 1);
-        }
-    }
 
     return (
         <>
@@ -65,9 +62,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
                             {newRightAnswer === undefined && (
                                 <tr>
                                     <td>
-                                        <Button onClick={() => setNewRightAnswer([])}>
-                                            Ajouter
-                                        </Button>
+                                        <Button onClick={resetNewRightAnswer}>Ajouter</Button>
                                     </td>
                                     <td />
                                 </tr>
@@ -103,16 +98,13 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                         </CorrectPhraseCreationContainer>
                                     </td>
                                     <td>
-                                        <IconButton
-                                            color="error"
-                                            onClick={() => setNewRightAnswer(undefined)}
-                                        >
+                                        <IconButton color="error" onClick={deleteNewRightAnswer}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton
                                             disabled={isResetCombinationDisabled}
                                             color="warning"
-                                            onClick={() => setNewRightAnswer([])}
+                                            onClick={resetNewRightAnswer}
                                         >
                                             <RefreshIcon />
                                         </IconButton>
@@ -132,13 +124,29 @@ function PhraseMelangeeUpsertionModalContent(props: {
                 return;
             }
             const updatedNewRightAnswer = [...newRightAnswer, displayedWordsToPlace[index]];
-            setNewRightAnswer(updatedNewRightAnswer);
 
             if (newRightAnswer.length + 1 === words.length) {
                 props.setRightAnswers([...props.rightAnswers, updatedNewRightAnswer.join(' ')]);
                 setNewRightAnswer(undefined);
+                setDisplayedWordsToPlace(originalPhrase.split(' '));
+            } else {
+                setNewRightAnswer(updatedNewRightAnswer);
+                const newDisplayedWordsToPlace = [...displayedWordsToPlace];
+                newDisplayedWordsToPlace.splice(index, 1);
+
+                setDisplayedWordsToPlace(newDisplayedWordsToPlace);
             }
         };
+    }
+
+    function resetNewRightAnswer() {
+        setNewRightAnswer([]);
+        setDisplayedWordsToPlace(originalPhrase.split(' '));
+    }
+
+    function deleteNewRightAnswer() {
+        setNewRightAnswer(undefined);
+        setDisplayedWordsToPlace(originalPhrase.split(' '));
     }
 
     function shufflePhrase() {
