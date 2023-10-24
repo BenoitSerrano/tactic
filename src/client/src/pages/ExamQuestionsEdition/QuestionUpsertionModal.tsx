@@ -15,6 +15,7 @@ function QuestionUpsertionModal(props: {
     modalStatus: modalStatusType;
     examId: string;
     exerciseId: number;
+    defaultPoints: number;
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
@@ -45,13 +46,13 @@ function QuestionUpsertionModal(props: {
         },
     });
 
-    const { defaultPoints, QuestionUpsertionModalContentComponent } =
+    const { QuestionUpsertionModalContentComponent } =
         questionSpecicityMapping[currentQuestionKind];
 
     const [points, setPoints] = useState(
         props.modalStatus.kind === 'editing'
             ? `${props.modalStatus.question.points}`
-            : defaultPoints,
+            : props.defaultPoints,
     );
     const [title, setTitle] = useState(
         props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.title}` : '',
@@ -178,7 +179,6 @@ function QuestionUpsertionModal(props: {
         setRightAnswers([]);
         setAcceptableAnswers([]);
         setPossibleAnswers(['', '', '', '']);
-        setPoints(questionSpecicityMapping[newCurrentQuestionKind].defaultPoints);
         setCurrentQuestionKind(newCurrentQuestionKind);
     }
 }

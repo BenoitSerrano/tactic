@@ -12,7 +12,6 @@ import { TexteLibreUpsertionModalContent } from './TexteLibreUpsertionModalConte
 const questionSpecicityMapping: Record<
     questionKindType,
     {
-        defaultPoints: string;
         QuestionUpsertionModalContentComponent: ElementType;
         label: string;
         IconComponent: ElementType;
@@ -20,25 +19,21 @@ const questionSpecicityMapping: Record<
 > = {
     qcm: {
         label: 'QCM',
-        defaultPoints: '1.0',
         IconComponent: RadioButtonCheckedIcon,
         QuestionUpsertionModalContentComponent: QCMUpsertionModalContent,
     },
     questionTrou: {
         label: 'Texte à trou',
-        defaultPoints: '2.0',
         IconComponent: SaveAltIcon,
         QuestionUpsertionModalContentComponent: QuestionTrouUpsertionModalContent,
     },
     phraseMelangee: {
         label: 'Phrase à reconstituer',
-        defaultPoints: '3.0',
         IconComponent: LowPriorityIcon,
         QuestionUpsertionModalContentComponent: PhraseMelangeeUpsertionModalContent,
     },
     texteLibre: {
         label: 'Texte libre',
-        defaultPoints: '3.0',
         IconComponent: KeyboardIcon,
         QuestionUpsertionModalContentComponent: TexteLibreUpsertionModalContent,
     },

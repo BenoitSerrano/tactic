@@ -140,6 +140,7 @@ router.post(
         schema: Joi.object({
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
+            defaultPoints: Joi.number().required(),
         }),
     }),
 );
@@ -150,6 +151,7 @@ router.put(
         schema: Joi.object({
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
+            defaultPoints: Joi.number().required(),
         }),
     }),
 );

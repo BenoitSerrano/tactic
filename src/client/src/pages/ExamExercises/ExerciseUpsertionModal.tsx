@@ -5,6 +5,7 @@ import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { modalStatusType } from './types';
 import { TextField } from '@mui/material';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function ExerciseUpsertionModal(props: {
     close: () => void;
@@ -43,12 +44,16 @@ function ExerciseUpsertionModal(props: {
         props.modalStatus.kind === 'editing' ? props.modalStatus.exercise.instruction : '',
     );
 
+    const [defaultPoints, setDefaultPoints] = useState(
+        props.modalStatus.kind === 'editing' ? `${props.modalStatus.exercise.defaultPoints}` : '1',
+    );
+
     const isUpdating = updateExerciseMutation.isLoading;
     const isCreating = createExerciseMutation.isLoading;
 
     const confirmButtonLabel = props.modalStatus.kind === 'creating' ? 'Ajouter' : 'Modifier';
     const titlePrefix = props.modalStatus.kind === 'creating' ? 'Création' : 'Édition';
-    const isConfirmDisabled = !name;
+    const isConfirmDisabled = !name || !defaultPoints;
 
     return (
         <Modal
@@ -61,29 +66,45 @@ function ExerciseUpsertionModal(props: {
             title={`${titlePrefix} d'un exercice`}
             isConfirmDisabled={isConfirmDisabled}
         >
-            <TextField
-                name="name"
-                fullWidth
-                label="Nom de l'exercice"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-            />
-            <TextField
-                name="instruction"
-                label="Consigne"
-                multiline
-                fullWidth
-                minRows={2}
-                value={instruction}
-                onChange={(event) => setInstruction(event.target.value)}
-            />
+            <>
+                <TextField
+                    name="name"
+                    fullWidth
+                    label="Nom de l'exercice"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                />
+                <TextField
+                    name="instruction"
+                    label="Consigne"
+                    multiline
+                    fullWidth
+                    minRows={2}
+                    value={instruction}
+                    onChange={(event) => setInstruction(event.target.value)}
+                />
+                <TextField
+                    name="defaultPoints"
+                    label="Nombre de points par question par défaut"
+                    value={defaultPoints}
+                    onChange={onChangeDefaultPoints}
+                />
+            </>
         </Modal>
     );
+
+    function onChangeDefaultPoints(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(FLOATING_NUMBER_REGEX)) {
+            setDefaultPoints(value);
+        }
+    }
 
     function saveExercise() {
         const newExercise = {
             name,
             instruction,
+            defaultPoints: Number(defaultPoints),
         };
         if (props.modalStatus?.kind === 'editing') {
             updateExerciseMutation.mutate({

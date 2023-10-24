@@ -1,6 +1,11 @@
 import { questionKindType } from '../../types';
 
-type exerciseApiType = { id: number; name: string; questions: Array<questionWithAnswersType> };
+type exerciseApiType = {
+    id: number;
+    name: string;
+    defaultPoints: number;
+    questions: Array<questionWithAnswersType>;
+};
 
 type questionWithAnswersType = {
     id: number;

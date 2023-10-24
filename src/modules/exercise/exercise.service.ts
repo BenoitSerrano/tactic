@@ -17,7 +17,10 @@ function buildExerciseService() {
 
     return exerciseService;
 
-    async function createExercise(examId: Exam['id'], body: { name: string; instruction: string }) {
+    async function createExercise(
+        examId: Exam['id'],
+        body: { name: string; instruction: string; defaultPoints: number },
+    ) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
         const order = await getHighestExerciseOrder(examId);
@@ -25,6 +28,7 @@ function buildExerciseService() {
         const exercise = new Exercise();
         exercise.name = body.name;
         exercise.instruction = body.instruction;
+        exercise.defaultPoints = body.defaultPoints;
         exercise.exam = exam;
         exercise.order = order;
 
@@ -47,11 +51,11 @@ function buildExerciseService() {
 
     async function updateExercise(
         criteria: { examId: Exam['id']; exerciseId: Exercise['id'] },
-        body: { name: string; instruction: string },
+        body: { name: string; instruction: string; defaultPoints: number },
     ) {
         return exerciseRepository.update(
             { exam: { id: criteria.examId }, id: criteria.exerciseId },
-            { name: body.name, instruction: body.instruction },
+            { name: body.name, instruction: body.instruction, defaultPoints: body.defaultPoints },
         );
     }
 

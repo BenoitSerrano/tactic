@@ -21,14 +21,14 @@ function buildExerciseController() {
 
     function createExercise(params: {
         urlParams: { examId: string };
-        body: { name: string; instruction: string };
+        body: { name: string; instruction: string; defaultPoints: number };
     }) {
         return exerciseService.createExercise(params.urlParams.examId, params.body);
     }
 
     function updateExercise(params: {
         urlParams: { examId: string; exerciseId: string };
-        body: { name: string; instruction: string };
+        body: { name: string; instruction: string; defaultPoints: number };
     }) {
         return exerciseService.updateExercise(
             {

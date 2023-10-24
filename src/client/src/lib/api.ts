@@ -191,11 +191,17 @@ async function fetchExercise(params: { examId: string; exerciseId: number }) {
     return performApiCall(URL, 'GET');
 }
 
-async function createExercise(params: { examId: string; name: string; instruction: string }) {
+async function createExercise(params: {
+    examId: string;
+    name: string;
+    instruction: string;
+    defaultPoints: number;
+}) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises`;
     return performApiCall(URL, 'POST', {
         name: params.name,
         instruction: params.instruction,
+        defaultPoints: params.defaultPoints,
     });
 }
 
@@ -204,11 +210,13 @@ async function updateExercise(params: {
     exerciseId: number;
     name: string;
     instruction: string;
+    defaultPoints: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
     return performApiCall(URL, 'PUT', {
         name: params.name,
         instruction: params.instruction,
+        defaultPoints: params.defaultPoints,
     });
 }
 
