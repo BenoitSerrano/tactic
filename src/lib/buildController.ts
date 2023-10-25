@@ -16,7 +16,6 @@ function buildController<paramsT extends Record<string, string>, bodyT>(
 ) {
     return async (req: Request, res: Response) => {
         console.log(`${req.method} ${req.originalUrl}`);
-        res.setHeader('Expires', 0);
 
         let user: User | undefined;
         if (options?.checkAuthorization) {
