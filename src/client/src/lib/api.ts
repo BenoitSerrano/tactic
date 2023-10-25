@@ -47,13 +47,16 @@ async function performApiCall(
     if (method === 'GET' || method === 'DELETE') {
         response = await fetch(url, { method, headers: { Authorization: `Bearer ${token}` } });
     } else {
+        const headers: Record<string, string> = {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
         response = await fetch(url, {
             method,
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(body),
         });
     }
