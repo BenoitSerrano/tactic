@@ -1,4 +1,10 @@
-const questionKinds = ['qcm', 'questionTrou', 'phraseMelangee', 'texteLibre'] as const;
+const questionKinds = [
+    'qcm',
+    'questionTrou',
+    'phraseMelangee',
+    'texteLibre',
+    'texteATrous',
+] as const;
 type questionKindType = (typeof questionKinds)[number];
 
 export { questionKinds };

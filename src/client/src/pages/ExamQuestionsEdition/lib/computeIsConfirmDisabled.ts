@@ -35,6 +35,16 @@ function computeIsConfirmDisabled(
     if (questionKind === 'phraseMelangee' && params.title === params.rightAnswers[0]) {
         return true;
     }
+
+    if (questionKind === 'texteATrous') {
+        const blankCount = params.title.split(' ').filter((word) => word === '....').length;
+        if (blankCount === 0) {
+            return true;
+        }
+        if (blankCount !== params.rightAnswers.length) {
+            return true;
+        }
+    }
     return false;
 }
 

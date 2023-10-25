@@ -161,4 +161,55 @@ describe('computeIsConfirmDisabled', () => {
 
         expect(isConfirmDisabled).toBe(false);
     });
+
+    test('texteATrous with no .... = true', () => {
+        const questionKind = 'texteATrous';
+        const title = 'tu es la plus belle';
+        const possibleAnswers: string[] = [];
+        const rightAnswers: string[] = ['la'];
+        const acceptableAnswers: string[] = [];
+
+        const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
+            title,
+            possibleAnswers,
+            rightAnswers,
+            acceptableAnswers,
+        });
+
+        expect(isConfirmDisabled).toBe(true);
+    });
+
+    test('texteATrous with a .... difference between .... count and right answers length = true', () => {
+        const questionKind = 'texteATrous';
+        const title = 'tu es .... plus belle';
+        const possibleAnswers: string[] = [];
+        const rightAnswers: string[] = ['la', 'plus'];
+        const acceptableAnswers: string[] = [];
+
+        const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
+            title,
+            possibleAnswers,
+            rightAnswers,
+            acceptableAnswers,
+        });
+
+        expect(isConfirmDisabled).toBe(true);
+    });
+
+    test('texteATrous with right count of rightAnswers and .... = false', () => {
+        const questionKind = 'texteATrous';
+        const title = 'tu .... la .... belle';
+        const possibleAnswers: string[] = [];
+        const rightAnswers: string[] = ['la', 'plus'];
+        const acceptableAnswers: string[] = [];
+
+        const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
+            title,
+            possibleAnswers,
+            rightAnswers,
+            acceptableAnswers,
+        });
+
+        expect(isConfirmDisabled).toBe(false);
+    });
 });

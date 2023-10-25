@@ -4,6 +4,7 @@ import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering
 import { QuestionTrouAnswering } from './QuestionTrouAnswering';
 import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
 import { TexteLibreAnswering } from './TexteLibreAnswering';
+import { TexteATrousAnswering } from './TexteATrousAnswering';
 
 const questionSpecicityMapping: Record<
     questionKindType,
@@ -22,6 +23,9 @@ const questionSpecicityMapping: Record<
     },
     texteLibre: {
         QuestionAnsweringComponent: TexteLibreAnswering,
+    },
+    texteATrous: {
+        QuestionAnsweringComponent: TexteATrousAnswering,
     },
 };
 

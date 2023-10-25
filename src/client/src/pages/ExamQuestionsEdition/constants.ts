@@ -2,12 +2,14 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import LowPriorityIcon from '@mui/icons-material/LowPriority';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
+import PasswordIcon from '@mui/icons-material/Password';
 import { questionKindType } from '../../types';
 import { ElementType } from 'react';
 import { QCMUpsertionModalContent } from './QCMUpsertionModalContent';
 import { QuestionTrouUpsertionModalContent } from './QuestionTrouUpsertionModalContent';
 import { PhraseMelangeeUpsertionModalContent } from './PhraseMelangeeUpsertionModalContent';
 import { TexteLibreUpsertionModalContent } from './TexteLibreUpsertionModalContent';
+import { TexteATrousUpsertionModalContent } from './TexteATrousUpsertionModalContent';
 
 const questionSpecicityMapping: Record<
     questionKindType,
@@ -23,7 +25,7 @@ const questionSpecicityMapping: Record<
         QuestionUpsertionModalContentComponent: QCMUpsertionModalContent,
     },
     questionTrou: {
-        label: 'Texte à trou',
+        label: 'Question / réponse',
         IconComponent: SaveAltIcon,
         QuestionUpsertionModalContentComponent: QuestionTrouUpsertionModalContent,
     },
@@ -36,6 +38,11 @@ const questionSpecicityMapping: Record<
         label: 'Texte libre',
         IconComponent: KeyboardIcon,
         QuestionUpsertionModalContentComponent: TexteLibreUpsertionModalContent,
+    },
+    texteATrous: {
+        label: 'Texte à trous',
+        IconComponent: PasswordIcon,
+        QuestionUpsertionModalContentComponent: TexteATrousUpsertionModalContent,
     },
 };
 

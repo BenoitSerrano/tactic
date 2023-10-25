@@ -21,7 +21,7 @@ function QuestionUpsertionModal(props: {
     const { displayAlert } = useAlert();
 
     const [currentQuestionKind, setCurrentQuestionKind] = useState<questionKindType>(
-        props.modalStatus.kind === 'creating' ? 'qcm' : props.modalStatus.question.kind,
+        props.modalStatus.kind === 'creating' ? 'texteATrous' : props.modalStatus.question.kind,
     );
 
     const updateQuestionMutation = useMutation({
@@ -55,7 +55,9 @@ function QuestionUpsertionModal(props: {
             : props.defaultPoints,
     );
     const [title, setTitle] = useState(
-        props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.title}` : '',
+        props.modalStatus.kind === 'editing'
+            ? `${props.modalStatus.question.title}`
+            : 'tu es la plus belle de toutes',
     );
     const [rightAnswers, setRightAnswers] = useState(
         props.modalStatus.kind === 'editing' ? props.modalStatus.question.rightAnswers : [],
