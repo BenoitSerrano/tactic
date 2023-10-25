@@ -1,6 +1,6 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { Page } from '../components/Page';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
 import { localStorage } from '../lib/localStorage';
@@ -32,11 +32,12 @@ function SignIn(props: {
             });
         },
     });
+    console.log('HEIH');
 
     return (
         <Page>
             <Card width="40%">
-                <CardContent>
+                <CardContent onSubmit={handleSubmit}>
                     <TitleContainer>
                         <Typography variant="h2">{props.title}</Typography>
                     </TitleContainer>
@@ -64,11 +65,7 @@ function SignIn(props: {
                         </FieldContainer>
                     </FieldsContainer>
 
-                    <Button
-                        onClick={handleSubmit}
-                        variant="contained"
-                        disabled={!password || !email}
-                    >
+                    <Button type="submit" variant="contained" disabled={!password || !email}>
                         {props.title}
                     </Button>
                 </CardContent>
@@ -76,12 +73,13 @@ function SignIn(props: {
         </Page>
     );
 
-    async function handleSubmit() {
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
         mutation.mutate({ email, password });
+        event.preventDefault();
     }
 }
 
-const CardContent = styled('div')(({ theme }) => ({
+const CardContent = styled('form')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     paddingLeft: theme.spacing(3),

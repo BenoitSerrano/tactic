@@ -2,7 +2,7 @@ import { Button as MuiButton } from '@mui/material';
 
 function Button(props: {
     fullWidth?: boolean;
-    onClick: () => void;
+    onClick?: () => void;
     children: string;
     variant?: 'contained' | 'outlined' | 'text';
     disabled?: boolean;
