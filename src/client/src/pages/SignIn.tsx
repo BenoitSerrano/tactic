@@ -65,9 +65,8 @@ function SignIn(props: {
                     </FieldsContainer>
 
                     <Button
-                        type="submit"
+                        onClick={handleSubmit}
                         variant="contained"
-                        onClick={onSignInClick}
                         disabled={!password || !email}
                     >
                         {props.title}
@@ -77,12 +76,12 @@ function SignIn(props: {
         </Page>
     );
 
-    async function onSignInClick() {
+    async function handleSubmit() {
         mutation.mutate({ email, password });
     }
 }
 
-const CardContent = styled('form')(({ theme }) => ({
+const CardContent = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     paddingLeft: theme.spacing(3),
