@@ -68,6 +68,7 @@ function buildController<paramsT extends Record<string, string>, bodyT>(
                 },
                 user,
             );
+            res.setHeader('Content-Type', 'application/json');
             res.send(result);
         } catch (error) {
             console.error(error);
