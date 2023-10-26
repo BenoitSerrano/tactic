@@ -53,6 +53,7 @@ const ModalContent = styled('div')({
     minWidth: '40%',
     minHeight: '40%',
     maxHeight: '80%',
+    maxWidth: '40%',
     display: 'flex',
     flexDirection: 'column',
     padding: '20px',

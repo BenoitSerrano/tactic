@@ -198,6 +198,7 @@ const CorrectPhraseCreationContainer = styled('div')({
 const WordLineContainer = styled('div')({
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap',
 });
 const WordLinesContainer = styled('div')({
     display: 'flex',
