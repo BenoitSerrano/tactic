@@ -55,7 +55,7 @@ function buildExamService() {
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },
             order: {
-                exercises: { order: 'ASC' },
+                exercises: { order: 'ASC', questions: { order: 'ASC' } },
             },
             relations: ['exercises', 'exercises.questions'],
         });
