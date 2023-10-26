@@ -25,14 +25,14 @@ function buildExerciseService() {
     ) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
-        const order = await getHighestExerciseOrder(examId);
+        const highestOrder = await getHighestExerciseOrder(examId);
 
         const exercise = new Exercise();
         exercise.name = body.name;
         exercise.instruction = body.instruction;
         exercise.defaultPoints = body.defaultPoints;
         exercise.exam = exam;
-        exercise.order = order;
+        exercise.order = highestOrder + 1;
 
         return exerciseRepository.save(exercise);
     }
