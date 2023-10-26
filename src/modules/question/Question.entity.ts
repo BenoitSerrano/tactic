@@ -1,5 +1,4 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { Exam } from '../exam';
 import { questionKindType, questionKinds } from './types';
 import { Exercise } from '../exercise';
 

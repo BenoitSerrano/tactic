@@ -3,6 +3,8 @@ import { questionWithoutAnswerType } from './types';
 import { ChangeEvent } from 'react';
 import { converter } from './lib/converter';
 
+const WORD_WIDTH = 100;
+
 function TexteATrousAnswering(props: {
     question: questionWithoutAnswerType;
     index: number;
@@ -23,7 +25,7 @@ function TexteATrousAnswering(props: {
                     <WordsContainer>
                         {words.map((word, wordIndex) =>
                             word === '....' ? (
-                                <TextField
+                                <AnswerTextField
                                     value={
                                         textInputs[
                                             converter.convertWordIndexToAnswerIndex({
@@ -63,9 +65,11 @@ function TexteATrousAnswering(props: {
 }
 
 const TitleContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(2) }));
-const WordsContainer = styled('div')({ display: 'flex', flexWrap: 'wrap' });
+const WordsContainer = styled('div')({ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline' });
 const WordContainer = styled(Typography)(({ theme }) => ({
-    paddingRight: theme.spacing(1),
+    paddingRight: 4,
+    paddingLeft: 4,
 }));
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
+const AnswerTextField = styled(TextField)({ width: WORD_WIDTH });
 export { TexteATrousAnswering };

@@ -1,7 +1,7 @@
 import { encoder } from '../../lib/encoder';
 import { Question } from '../question';
 import { AttemptInterface } from './attempt.interface';
-import { computeQuestionAnswerStatus } from './computeQuestionAnswerStatus';
+import { computeMark } from './lib/computeMark';
 import { attemptAnswersType } from './types';
 
 const attemptUtils = {
@@ -63,22 +63,19 @@ function computeMarks(
     answers: attemptAnswersType,
 ) {
     const marks = Object.entries(questions).reduce((acc, [questionId, question]) => {
-        const answer = answers[Number(questionId)];
-        const status = computeQuestionAnswerStatus(
+        const answer: string = answers[Number(questionId)];
+
+        const mark = computeMark({
+            questionKind: question.kind,
+            acceptableAnswers: question.acceptableAnswers,
             answer,
-            question.rightAnswers,
-            question.acceptableAnswers,
-        );
-        switch (status) {
-            case 'right':
-                return { ...acc, [question.id]: question.points };
-            case 'acceptable':
-                return { ...acc, [question.id]: question.points / 2 };
-            case 'wrong':
-                return { ...acc, [question.id]: 0 };
-            case undefined:
-                return acc;
+            points: question.points,
+            rightAnswers: question.rightAnswers,
+        });
+        if (mark === undefined) {
+            return acc;
         }
+        return { ...acc, [question.id]: mark };
     }, {} as Record<Question['id'], number>);
     return encodeMarks(marks);
 }
