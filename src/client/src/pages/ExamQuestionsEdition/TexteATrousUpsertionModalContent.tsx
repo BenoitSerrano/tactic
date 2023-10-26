@@ -3,7 +3,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { useState } from 'react';
-import { TEXTE_A_TROU_REGEX } from '../../constants';
 import { computeTexteATrousState } from './lib/computeTexteATrousState';
 
 function TexteATrousUpsertionModalContent(props: {
@@ -12,7 +11,7 @@ function TexteATrousUpsertionModalContent(props: {
     rightAnswers: string[];
     setRightAnswers: (newRightAnswers: string[]) => void;
 }) {
-    const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(true);
+    const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(false);
     const words = props.title.split(' ');
 
     return (
@@ -85,7 +84,7 @@ const RowContainer = styled('div')(({ theme }) => ({
     width: '100%',
 }));
 
-const WordsContainer = styled('div')({ display: 'flex' });
+const WordsContainer = styled('div')({ display: 'flex', flexWrap: 'wrap' });
 const WordPickingContainer = styled('div')({});
 const WordContainer = styled(Typography)(({ theme }) => ({
     textDecorationLine: 'underline',
