@@ -135,4 +135,14 @@ describe('computeMark', () => {
 
         expect(mark).toBe(60);
     });
+
+    it('should return right for match modulo presence of period', () => {
+        const answer = "s'être levé.";
+        const questionKind = 'questionTrou';
+        const rightAnswers = ["s'être levé"];
+        const acceptableAnswers: string[] = [];
+        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+
+        expect(mark).toBe(60);
+    });
 });

@@ -66,5 +66,6 @@ function sanitizeString(value: string) {
         .replace(/ ?' ?/g, "'")
         .replace(/é/g, 'é')
         .replace(/ê/g, 'ê')
-        .replace(/’/g, "'");
+        .replace(/’/g, "'")
+        .replace(/\.$/, '');
 }
