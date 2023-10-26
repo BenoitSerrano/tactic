@@ -39,11 +39,13 @@ function StudentHome() {
             <ContentContainer>
                 <p>
                     <Typography>
-                        L'objectif de ce test est de trouver le cours le plus adapté à votre niveau.
-                        Vous vous engagez à n'utiliser aucun document et à ne faire aucune recherche
-                        en ligne. Attention : vous n'aurez pas plus de 60 minutes pour faire ce test
-                        (il y a un chronomètre). Si vous ne savez pas, pas de stress : laissez juste
-                        la question en blanc.
+                        Vous allez passer un examen de grammaire française niveau avancé (C1-C2).
+                        Vous disposez de 90 minutes pour répondre à toutes les questions. Une fois
+                        l'examen lancé,{' '}
+                        <strong>
+                            ne quittez pas la page avant d'avoir fini de répondre aux questions
+                        </strong>{' '}
+                        (la plateforme détectera si vous quittez la page et vous serez pénalisé.e).
                     </Typography>
                 </p>
 

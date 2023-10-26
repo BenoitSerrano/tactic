@@ -7,7 +7,7 @@ function ExamDone() {
             <MainContainer>
                 <Header>
                     <Typography variant="h4">
-                        Merci d'avoir répondu au test, vos réponses ont été enregistrées.
+                        Réponses enregistrées, merci. Vous pouvez quitter la page.
                     </Typography>
                 </Header>
             </MainContainer>
