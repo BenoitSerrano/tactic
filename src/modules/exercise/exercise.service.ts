@@ -2,6 +2,7 @@ import { Exercise } from './Exercise.entity';
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../exam';
 import { buildQuestionService } from '../question';
+import { buildAttemptService } from '../attempt';
 
 export { buildExerciseService };
 
@@ -13,6 +14,7 @@ function buildExerciseService() {
         getExercise,
         deleteExercise,
         swapExercises,
+        getExamId,
     };
 
     return exerciseService;
@@ -59,6 +61,15 @@ function buildExerciseService() {
         );
     }
 
+    async function getExamId(exerciseId: Exercise['id']) {
+        const exercise = await exerciseRepository.findOneOrFail({
+            where: { id: exerciseId },
+            select: { id: true, exam: { id: true } },
+            relations: ['exam'],
+        });
+        return exercise.exam.id;
+    }
+
     async function getExercise(exerciseId: Exercise['id']): Promise<Exercise> {
         const questionService = buildQuestionService();
         const exercise = await exerciseRepository.findOneOrFail({
@@ -85,7 +96,8 @@ function buildExerciseService() {
     }
 
     async function deleteExercise(exerciseId: Exercise['id']) {
-        const exerciseRepository = dataSource.getRepository(Exercise);
+        const attemptService = buildAttemptService();
+        await attemptService.deleteExerciseAnswers(exerciseId);
 
         const result = await exerciseRepository.delete({ id: exerciseId });
         return result.affected == 1;

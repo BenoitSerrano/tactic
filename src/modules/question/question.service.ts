@@ -17,6 +17,7 @@ function buildQuestionService() {
         swapQuestions,
         decodeQuestion,
         encodeQuestion,
+        getQuestionIds,
     };
 
     return questionService;
@@ -102,6 +103,15 @@ function buildQuestionService() {
         const attemptService = buildAttemptService();
         await attemptService.deleteQuestionAnswers(questionId);
         return questionRepository.delete({ id: questionId });
+    }
+
+    async function getQuestionIds(exerciseId: Exercise['id']) {
+        const questions = await questionRepository.find({
+            where: { exercise: { id: exerciseId } },
+            relations: ['exercise'],
+            select: { id: true, exercise: { id: true } },
+        });
+        return questions.map(({ id }) => id);
     }
 
     function decodeQuestion(question: Question): Question {

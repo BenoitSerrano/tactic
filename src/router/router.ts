@@ -156,6 +156,18 @@ router.put(
     }),
 );
 
+router.delete(
+    `/exams/:examId/exercises/:exerciseId`,
+    buildController(exerciseController.deleteExercise, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
+
 router.patch(
     `/exams/:examId/exercises/:exerciseId/questions/order/`,
     buildController(questionController.swapQuestions, {

@@ -1,6 +1,7 @@
 import { dataSource } from '../../dataSource';
 import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
+import { Exercise, buildExerciseService } from '../exercise';
 import { Question, buildQuestionService } from '../question';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
@@ -27,6 +28,7 @@ function buildAttemptService() {
         getAllAttempts,
         bulkInsertAttempts,
         deleteQuestionAnswers,
+        deleteExerciseAnswers,
         updateMarks,
     };
 
@@ -195,6 +197,7 @@ function buildAttemptService() {
     }
 
     async function deleteQuestionAnswers(questionId: Question['id']) {
+        //TODO ne pas récup tous les attempts, mais juste ceux lié à l'exam qui contient cette question
         const attempts = await attemptRepository.find({ select: { id: true, answers: true } });
         for (const attempt of attempts) {
             const parsedAnswers = attemptUtils.parseAnswers(attempt.answers);
@@ -204,5 +207,28 @@ function buildAttemptService() {
             const newAnswers = attemptUtils.stringifyAnswers(parsedAnswers);
             await attemptRepository.update({ id: attempt.id }, { answers: newAnswers });
         }
+    }
+
+    async function deleteExerciseAnswers(exerciseId: Exercise['id']) {
+        const questionService = buildQuestionService();
+        const questionIds = await questionService.getQuestionIds(exerciseId);
+
+        const exerciseService = buildExerciseService();
+        const examId = await exerciseService.getExamId(exerciseId);
+        const attempts = await attemptRepository.find({
+            where: { exam: { id: examId } },
+            select: { id: true, answers: true },
+        });
+        for (const attempt of attempts) {
+            const parsedAnswers = attemptUtils.parseAnswers(attempt.answers);
+            for (const questionId of questionIds) {
+                if (parsedAnswers[questionId] !== undefined) {
+                    delete parsedAnswers[questionId];
+                }
+            }
+            const newAnswers = attemptUtils.stringifyAnswers(parsedAnswers);
+            await attemptRepository.update({ id: attempt.id }, { answers: newAnswers });
+        }
+        //TODO envoyer event pour update les marks
     }
 }

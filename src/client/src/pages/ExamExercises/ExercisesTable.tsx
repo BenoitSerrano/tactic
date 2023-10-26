@@ -15,10 +15,12 @@ import {
     Droppable,
     OnDragEndResponder,
 } from 'react-beautiful-dnd';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import EditIcon from '@mui/icons-material/Edit';
-import { useMutation } from '@tanstack/react-query';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { exerciseType } from './types';
 import { tableHandler } from '../../lib/tableHandler';
@@ -31,6 +33,7 @@ function ExercisesTable(props: {
     openEditionModal: (exercise: exerciseType) => void;
 }) {
     const { displayAlert } = useAlert();
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [exercises, setExercises] = useState(props.exercises);
     const swapExercisesMutation = useMutation({
@@ -40,6 +43,13 @@ function ExercisesTable(props: {
                 variant: 'error',
                 text: "Votre dernière modification n'a pas pu être enregistrée. Veuillez recharger la page.",
             });
+        },
+    });
+    const deleteExerciseMutation = useMutation({
+        mutationFn: api.deleteExercise,
+        onSuccess: () => {
+            displayAlert({ variant: 'success', text: "L'exercice a été supprimé." });
+            queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });
 
@@ -52,7 +62,7 @@ function ExercisesTable(props: {
             <TableHead>
                 <TableRow>
                     <TableCell width={20}>N°</TableCell>
-                    <TableCell width={130}>Actions</TableCell>
+                    <TableCell width={160}>Actions</TableCell>
                     <TableCell>Nom</TableCell>
                     <TableCell>Consigne</TableCell>
                 </TableRow>
@@ -99,6 +109,15 @@ function ExercisesTable(props: {
                                                             <EditIcon />
                                                         </IconButton>
                                                     </Tooltip>
+                                                    <Tooltip title="Supprimer l'exercice">
+                                                        <IconButton
+                                                            onClick={buildDeleteExercise(
+                                                                exercise.id,
+                                                            )}
+                                                        >
+                                                            <DeleteForeverIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 </TableCell>
 
                                                 <TableCell>{exercise.name}</TableCell>
@@ -142,6 +161,18 @@ function ExercisesTable(props: {
 
         setExercises(newExercises);
         swapExercisesMutation.mutate({ examId: props.examId, exerciseId1, exerciseId2 });
+    }
+
+    function buildDeleteExercise(exerciseId: number) {
+        return () => {
+            // eslint-disable-next-line no-restricted-globals
+            const hasConfirmed = confirm(
+                'Souhaitez-vous réellement supprimer cet exercice ? Tous les résultats des élèves pour cet exercice seront supprimés.',
+            );
+            if (hasConfirmed) {
+                deleteExerciseMutation.mutate({ examId: props.examId, exerciseId });
+            }
+        };
     }
 }
 

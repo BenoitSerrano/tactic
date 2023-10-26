@@ -33,7 +33,10 @@ function QuestionsTable(props: {
     const deleteQuestionMutation = useMutation({
         mutationFn: api.deleteQuestion,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
+            queryClient.invalidateQueries({
+                queryKey: ['exams', props.examId, 'exercises', props.exerciseId],
+            });
+            displayAlert({ variant: 'success', text: 'La question a été supprimée.' });
         },
     });
     const swapQuestionsMutation = useMutation({

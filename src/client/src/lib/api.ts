@@ -27,6 +27,7 @@ const api = {
     fetchExercise,
     createExercise,
     updateExercise,
+    deleteExercise,
     updateQuestion,
     deleteQuestion,
     swapQuestions,
@@ -221,6 +222,11 @@ async function updateExercise(params: {
         instruction: params.instruction,
         defaultPoints: params.defaultPoints,
     });
+}
+
+async function deleteExercise(params: { examId: string; exerciseId: number }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
+    return performApiCall(URL, 'DELETE');
 }
 
 async function createQuestion(params: {
