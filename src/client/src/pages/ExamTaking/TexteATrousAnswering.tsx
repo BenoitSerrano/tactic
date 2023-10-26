@@ -37,7 +37,7 @@ function TexteATrousAnswering(props: {
                                         ]
                                     }
                                     onChange={buildSetWordAnswer(wordIndex)}
-                                    variant="standard"
+                                    variant="outlined"
                                 />
                             ) : (
                                 <WordContainer>{word}</WordContainer>

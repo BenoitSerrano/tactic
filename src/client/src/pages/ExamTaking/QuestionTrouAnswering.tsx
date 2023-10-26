@@ -21,7 +21,7 @@ function QuestionTrouAnswering(props: {
                 <IndexContainer>{props.index}</IndexContainer>. {beforeText}
             </Typography>
             <StyledTextField
-                variant="standard"
+                variant="outlined"
                 value={props.currentAnswer}
                 onChange={onChangeAnswer}
                 placeholder="..."
