@@ -21,11 +21,13 @@ function TexteATrousAnswering(props: {
         <>
             <TitleContainer>
                 <Typography>
-                    <IndexContainer>{props.index}</IndexContainer>.{' '}
+                    {/* <IndexContainer>{props.index}</IndexContainer>.{' '} */}
                     <WordsContainer>
+                        <IndexContainer>{props.index}.</IndexContainer>
                         {words.map((word, wordIndex) =>
                             word === '....' ? (
                                 <AnswerTextField
+                                    placeholder="..."
                                     value={
                                         textInputs[
                                             converter.convertWordIndexToAnswerIndex({

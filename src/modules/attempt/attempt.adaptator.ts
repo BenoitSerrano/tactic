@@ -39,6 +39,7 @@ function convertAttemptToAttemptWithoutAnswers(
                     kind: question.kind,
                     title: question.title,
                     possibleAnswers: question.possibleAnswers,
+                    points: question.points,
                     currentAnswer: attemptAnswers[question.id],
                 })),
             })),

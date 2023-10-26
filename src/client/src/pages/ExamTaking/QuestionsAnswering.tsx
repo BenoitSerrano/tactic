@@ -77,6 +77,9 @@ function QuestionsAnswering(props: {
                         </ExerciseTitleContainer>
                         {exercise.questions.map((question, index) => (
                             <QuestionContainer key={`question-${question.id}`}>
+                                <QuestionIndicatorsContainer>
+                                    <Typography>/ {question.points}</Typography>
+                                </QuestionIndicatorsContainer>
                                 <QuestionAnswering
                                     currentAnswer={currentAnswers[question.id]}
                                     setCurrentAnswer={(newAnswer: string) =>
@@ -111,9 +114,17 @@ function QuestionsAnswering(props: {
     }
 }
 
+const QuestionIndicatorsContainer = styled('div')({
+    minWidth: 80,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
+
 const QuestionContainer = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
+    display: 'flex',
 }));
 
 const ExerciseContainer = styled('div')(({ theme }) => ({

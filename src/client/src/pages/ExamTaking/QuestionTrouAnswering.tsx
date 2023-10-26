@@ -21,6 +21,7 @@ function QuestionTrouAnswering(props: {
                 <IndexContainer>{props.index}</IndexContainer>. {beforeText}
             </Typography>
             <StyledTextField
+                variant="standard"
                 value={props.currentAnswer}
                 onChange={onChangeAnswer}
                 placeholder="..."
