@@ -28,9 +28,7 @@ function QuestionsAnswering(props: {
 
     const finishExamMutation = useMutation({
         mutationFn: api.updateAttempt,
-        onSuccess: () => {
-            props.onExamDone();
-        },
+        onSuccess: () => {},
         onError: (error: any) => {
             console.error(error);
         },
@@ -107,10 +105,21 @@ function QuestionsAnswering(props: {
     }
 
     function finishExam() {
-        finishExamMutation.mutate({
+        saveDraftMutation.mutate({
             attemptId: props.attemptId,
             answers: currentAnswers,
         });
+
+        // eslint-disable-next-line no-restricted-globals
+        const hasConfirmed = confirm(
+            "Souhaitez-vous valider vos réponses et mettre fin à l'examen ? Vous ne pourrez plus revenir en arrière et modifier vos réponses.",
+        );
+        if (hasConfirmed) {
+            finishExamMutation.mutate({
+                attemptId: props.attemptId,
+                answers: currentAnswers,
+            });
+        }
     }
 }
 
