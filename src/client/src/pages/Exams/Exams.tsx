@@ -59,7 +59,7 @@ function Exams() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {query.data?.map((exam: any) => (
+                    {query.data?.map((exam) => (
                         <TableRow key={exam.id}>
                             <TableCell>
                                 <Tooltip title="Accéder à la liste des exercices">
