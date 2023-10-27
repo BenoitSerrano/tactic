@@ -14,7 +14,11 @@ function TexteLibreAnswering(props: {
                     <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
                 </Typography>
             </TitleContainer>
-            <StyledTextField value={props.currentAnswer} onChange={onChangeAnswer} />
+            <StyledTextField
+                placeholder="..."
+                value={props.currentAnswer}
+                onChange={onChangeAnswer}
+            />
         </Container>
     );
 
