@@ -11,6 +11,7 @@ function buildStudentController() {
         getStudentsWithAttempts,
         getStudentId,
         deleteStudent,
+        deleteAllStudents,
     };
 
     return studentController;
@@ -38,5 +39,9 @@ function buildStudentController() {
 
     async function deleteStudent(params: { urlParams: { studentId: string } }) {
         return studentService.deleteStudent(params.urlParams.studentId);
+    }
+
+    async function deleteAllStudents(_params: {}, user?: User) {
+        return studentService.deleteAllStudents(user?.id);
     }
 }

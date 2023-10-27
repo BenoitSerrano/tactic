@@ -20,6 +20,7 @@ function buildStudentService() {
         getStudentId,
         deleteStudent,
         bulkInsertStudents,
+        deleteAllStudents,
     };
 
     return studentService;
@@ -73,14 +74,20 @@ function buildStudentService() {
         return studentRepository.upsert(students, ['email', 'user']);
     }
 
-    async function patchStudent(studentId: string, { comment }: { comment: string }) {
+    async function patchStudent(studentId: Student['id'], { comment }: { comment: string }) {
         const result = await studentRepository.update({ id: studentId }, { comment });
         return result.affected == 1;
     }
 
-    async function deleteStudent(studentId: string) {
+    async function deleteStudent(studentId: Student['id']) {
         const result = await studentRepository.delete({ id: studentId });
         return result.affected == 1;
+    }
+    async function deleteAllStudents(userId: User['id'] | undefined) {
+        if (!userId) {
+            return;
+        }
+        return studentRepository.delete({ user: { id: userId } });
     }
 
     async function bulkInsertStudents(students: Array<Student>) {

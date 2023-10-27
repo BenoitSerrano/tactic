@@ -42,6 +42,12 @@ router.delete(
         ]),
     }),
 );
+// router.delete(
+//     '/students',
+//     buildController(studentController.deleteAllStudents, {
+//         checkAuthorization: accessControlBuilder.isLoggedIn(),
+//     }),
+// );
 router.get('/students/:email', buildController(studentController.getStudentId));
 
 router.post(
