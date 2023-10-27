@@ -8,8 +8,9 @@ const theme = createTheme({
             main: '#266cff',
         },
         secondary: {
-            main: '#eba636',
+            main: '#f5b44d',
         },
+        warning: { main: '#e87a00', light: '#f5b44d' },
         common: { black: '#313f60' },
         background: { default: '#fafdff' },
         divider: '#baddff',

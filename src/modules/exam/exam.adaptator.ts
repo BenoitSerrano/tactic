@@ -25,6 +25,7 @@ function convertExamWithAttemptsToResults(
             marksArray: attempt.marks,
             questions: Object.values(questions),
         });
+        const hasBeenGraded = Object.values(marks).every((mark) => mark !== undefined);
         const totalMark = Object.values(marks).reduce((sum, mark) => (sum || 0) + (mark || 0), 0);
 
         const result = {
@@ -34,6 +35,7 @@ function convertExamWithAttemptsToResults(
             duration,
             attemptId: attempt.id,
             mark: totalMark,
+            hasBeenGraded,
             roundTrips: attempt.roundTrips,
             timeSpentOutside: attempt.timeSpentOutside,
         };

@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import HistoryIcon from '@mui/icons-material/History';
 import { api } from '../lib/api';
 import {
@@ -25,6 +23,7 @@ type examResultApiType = {
     email: string;
     attemptId: string;
     startedAt: number;
+    hasBeenGraded: boolean;
     duration: number | undefined;
     mark: number;
     roundTrips: number;
@@ -119,8 +118,9 @@ function ExamResults() {
             </TableHead>
             <TableBody>
                 {sortedData.map((result, index) => {
+                    const TableRowComponent = result.hasBeenGraded ? TableRow : HighlightedTableRow;
                     return (
-                        <TableRow key={result.attemptId}>
+                        <TableRowComponent key={result.attemptId}>
                             <TableCell>{index + 1}</TableCell>
 
                             <TableCell>
@@ -146,7 +146,7 @@ function ExamResults() {
                             <TableCell>{result.duration}</TableCell>
                             <TableCell>{result.roundTrips}</TableCell>
                             <TableCell>{result.timeSpentOutside}</TableCell>
-                        </TableRow>
+                        </TableRowComponent>
                     );
                 })}
             </TableBody>
@@ -180,6 +180,7 @@ function ExamResults() {
                         ? time.formatToClock(result.duration, { hideHours: true })
                         : '-',
                 mark: result.mark,
+                hasBeenGraded: result.hasBeenGraded,
                 roundTrips: result.roundTrips,
                 timeSpentOutside: time.formatToClock(Math.floor(result.timeSpentOutside / 1000), {
                     hideHours: true,
@@ -216,5 +217,9 @@ function ExamResults() {
         });
     }
 }
+
+const HighlightedTableRow = styled(TableRow)(({ theme }) => ({
+    backgroundColor: theme.palette.warning.light,
+}));
 
 export { ExamResults };
