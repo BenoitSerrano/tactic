@@ -13,7 +13,6 @@ function buildAttemptController() {
         fetchAttemptWithAnswers,
         fetchAttemptWithoutAnswers,
         deleteAttempt,
-        updateAttemptTreatmentStatus,
         updateAttemptCheatingSummary,
         updateMarks,
     };
@@ -52,16 +51,6 @@ function buildAttemptController() {
         body: { marks: Record<Question['id'], number> };
     }) {
         return attemptService.updateMarks(params.urlParams.attemptId, params.body.marks);
-    }
-
-    async function updateAttemptTreatmentStatus(params: {
-        urlParams: { attemptId: string };
-        body: { hasBeenTreated: boolean };
-    }) {
-        return attemptService.updateAttemptTreatmentStatus(
-            params.urlParams.attemptId,
-            params.body.hasBeenTreated,
-        );
     }
 
     async function updateAttemptCheatingSummary(params: {

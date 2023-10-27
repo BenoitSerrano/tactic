@@ -12,7 +12,6 @@ function convertExamWithAttemptsToResults(
     students: Record<Student['id'], Pick<Student, 'id' | 'email'>>,
     questions: Record<Question['id'], Question>,
 ) {
-    const treatmentStatusSummary = attemptAdaptator.computeTreatmentStatusSummary(attempts);
     const examWithResults = attempts.map((attempt) => {
         const studentId = attempt.student.id;
         const student = students[studentId];
@@ -35,7 +34,6 @@ function convertExamWithAttemptsToResults(
             duration,
             attemptId: attempt.id,
             mark: totalMark,
-            hasBeenTreated: treatmentStatusSummary[attempt.id],
             roundTrips: attempt.roundTrips,
             timeSpentOutside: attempt.timeSpentOutside,
         };

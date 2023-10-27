@@ -22,9 +22,6 @@ export class Attempt implements AttemptInterface {
     @Column({ type: 'timestamptz', nullable: true })
     updatedAt: string;
 
-    @Column({ default: false })
-    hasBeenTreated: boolean;
-
     @ManyToOne('Student', { onDelete: 'CASCADE' })
     student: StudentInterface;
 

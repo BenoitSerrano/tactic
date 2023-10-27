@@ -5,18 +5,8 @@ import { attemptAnswersType } from './types';
 
 const attemptAdaptator = {
     convertAttemptToAttemptWithAnswers,
-    computeTreatmentStatusSummary,
     convertAttemptToAttemptWithoutAnswers,
 };
-
-function computeTreatmentStatusSummary(attempts: Attempt[]) {
-    const treatmentStatusSummary: Record<string, boolean> = {};
-    attempts.forEach((attempt) => {
-        treatmentStatusSummary[attempt.id] = attempt.hasBeenTreated;
-    });
-
-    return treatmentStatusSummary;
-}
 
 function convertAttemptToAttemptWithoutAnswers(
     attempt: Attempt,

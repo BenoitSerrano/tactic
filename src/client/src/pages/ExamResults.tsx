@@ -27,7 +27,6 @@ type examResultApiType = {
     startedAt: number;
     duration: number | undefined;
     mark: number;
-    hasBeenTreated: boolean;
     roundTrips: number;
     timeSpentOutside: number;
 };
@@ -49,13 +48,6 @@ function ExamResults() {
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
     const deleteAttemptMutation = useMutation({
         mutationFn: api.deleteAttempt,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['examResults'] });
-        },
-    });
-
-    const updateAttemptTreatementStatusMutation = useMutation({
-        mutationFn: api.updateAttemptTreatementStatus,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['examResults'] });
         },
@@ -127,12 +119,8 @@ function ExamResults() {
             </TableHead>
             <TableBody>
                 {sortedData.map((result, index) => {
-                    const isHighlighted = result.hasBeenTreated;
-                    const StyledRow = isHighlighted
-                        ? styled(TableRow)({ backgroundColor: '#ccffcc' })
-                        : TableRow;
                     return (
-                        <StyledRow key={result.attemptId}>
+                        <TableRow key={result.attemptId}>
                             <TableCell>{index + 1}</TableCell>
 
                             <TableCell>
@@ -141,26 +129,7 @@ function ExamResults() {
                                         <VisibilityIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip
-                                    title={
-                                        'Marquer comme' +
-                                        (result.hasBeenTreated ? ' non ' : ' ') +
-                                        'traité'
-                                    }
-                                >
-                                    <IconButton
-                                        onClick={buildUpdateTreatementStatus(
-                                            result.attemptId,
-                                            !result.hasBeenTreated,
-                                        )}
-                                    >
-                                        {result.hasBeenTreated ? (
-                                            <RemoveDoneIcon />
-                                        ) : (
-                                            <DoneAllIcon />
-                                        )}
-                                    </IconButton>
-                                </Tooltip>
+
                                 <Tooltip title="Réinitialiser">
                                     <IconButton onClick={buildDeleteAttempt(result.attemptId)}>
                                         <HistoryIcon />
@@ -177,7 +146,7 @@ function ExamResults() {
                             <TableCell>{result.duration}</TableCell>
                             <TableCell>{result.roundTrips}</TableCell>
                             <TableCell>{result.timeSpentOutside}</TableCell>
-                        </StyledRow>
+                        </TableRow>
                     );
                 })}
             </TableBody>
@@ -200,12 +169,6 @@ function ExamResults() {
         };
     }
 
-    function buildUpdateTreatementStatus(attemptId: string, hasBeenTreated: boolean) {
-        return () => {
-            updateAttemptTreatementStatusMutation.mutate({ attemptId, hasBeenTreated });
-        };
-    }
-
     function formatData(data: examResultsApiType['results']) {
         return data.map((result) => {
             return {
@@ -217,7 +180,6 @@ function ExamResults() {
                         ? time.formatToClock(result.duration, { hideHours: true })
                         : '-',
                 mark: result.mark,
-                hasBeenTreated: result.hasBeenTreated,
                 roundTrips: result.roundTrips,
                 timeSpentOutside: time.formatToClock(Math.floor(result.timeSpentOutside / 1000), {
                     hideHours: true,

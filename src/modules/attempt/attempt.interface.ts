@@ -7,7 +7,13 @@ export interface AttemptInterface {
 
     updatedAt: string;
 
-    hasBeenTreated: boolean;
-
     exam: Exam;
+
+    roundTrips: number;
+
+    timeSpentOutside: number;
+
+    answers: string[];
+
+    marks: string[];
 }

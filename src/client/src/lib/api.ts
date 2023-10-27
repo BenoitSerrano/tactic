@@ -11,7 +11,6 @@ const api = {
     fetchAttemptWithAnswers,
     fetchAttemptWithoutAnswers,
     updateAttempt,
-    updateAttemptTreatementStatus,
     updateAttemptCheatingSummary,
     deleteAttempt,
     fetchStudents,
@@ -114,17 +113,6 @@ async function updateAttempt({
 }) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
     return performApiCall(URL, 'PUT', answers);
-}
-
-async function updateAttemptTreatementStatus({
-    attemptId,
-    hasBeenTreated,
-}: {
-    attemptId: string;
-    hasBeenTreated: boolean;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/has-been-treated`;
-    return performApiCall(URL, 'PATCH', { hasBeenTreated });
 }
 
 async function updateAttemptCheatingSummary({

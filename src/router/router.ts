@@ -236,14 +236,6 @@ router.put(
     }),
 );
 
-// TODO: check user
-router.patch(
-    '/attempts/:attemptId/has-been-treated',
-    buildController(attemptController.updateAttemptTreatmentStatus, {
-        schema: Joi.object({ hasBeenTreated: Joi.boolean().required() }),
-    }),
-);
-
 router.patch(
     '/attempts/:attemptId/cheating-summary',
     buildController(attemptController.updateAttemptCheatingSummary, {

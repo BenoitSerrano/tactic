@@ -90,7 +90,6 @@ function buildExamService() {
                     startedAt: true,
                     updatedAt: true,
                     student: { id: true },
-                    hasBeenTreated: true,
                     roundTrips: true,
                     timeSpentOutside: true,
                     marks: true,

@@ -23,7 +23,6 @@ function buildAttemptService() {
         deleteAttempt,
         assertIsTimeLimitNotExceeded,
         updateAttemptDuration,
-        updateAttemptTreatmentStatus,
         updateAttemptCheatingSummary,
         getAllAttempts,
         bulkInsertAttempts,
@@ -149,11 +148,6 @@ function buildAttemptService() {
 
     async function deleteAttempt(attemptId: string) {
         const result = await attemptRepository.delete({ id: attemptId });
-        return result.affected == 1;
-    }
-
-    async function updateAttemptTreatmentStatus(attemptId: string, hasBeenTreated: boolean) {
-        const result = await attemptRepository.update({ id: attemptId }, { hasBeenTreated });
         return result.affected == 1;
     }
 
