@@ -26,11 +26,10 @@ function TexteLibreAnswering(props: {
 const TitleContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(2) }));
 const StyledTextField = styled(TextField)({ flex: 1 });
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
-const Container = styled('div')(({ theme }) => ({
+const Container = styled('div')({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    marginBottom: theme.spacing(2),
-}));
+});
 export { TexteLibreAnswering };

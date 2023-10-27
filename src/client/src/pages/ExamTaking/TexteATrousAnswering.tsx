@@ -19,33 +19,31 @@ function TexteATrousAnswering(props: {
     });
     return (
         <>
-            <TitleContainer>
-                <Typography>
-                    {/* <IndexContainer>{props.index}</IndexContainer>.{' '} */}
-                    <WordsContainer>
-                        <IndexContainer>{props.index}.</IndexContainer>
-                        {words.map((word, wordIndex) =>
-                            word === '....' ? (
-                                <AnswerTextField
-                                    placeholder="..."
-                                    value={
-                                        textInputs[
-                                            converter.convertWordIndexToAnswerIndex({
-                                                wordIndex,
-                                                title,
-                                            })
-                                        ]
-                                    }
-                                    onChange={buildSetWordAnswer(wordIndex)}
-                                    variant="outlined"
-                                />
-                            ) : (
-                                <WordContainer>{word}</WordContainer>
-                            ),
-                        )}
-                    </WordsContainer>
-                </Typography>
-            </TitleContainer>
+            <Typography>
+                {/* <IndexContainer>{props.index}</IndexContainer>.{' '} */}
+                <WordsContainer>
+                    <IndexContainer>{props.index}.</IndexContainer>
+                    {words.map((word, wordIndex) =>
+                        word === '....' ? (
+                            <AnswerTextField
+                                placeholder="..."
+                                value={
+                                    textInputs[
+                                        converter.convertWordIndexToAnswerIndex({
+                                            wordIndex,
+                                            title,
+                                        })
+                                    ]
+                                }
+                                onChange={buildSetWordAnswer(wordIndex)}
+                                variant="outlined"
+                            />
+                        ) : (
+                            <WordContainer>{word}</WordContainer>
+                        ),
+                    )}
+                </WordsContainer>
+            </Typography>
         </>
     );
 
@@ -66,7 +64,6 @@ function TexteATrousAnswering(props: {
     }
 }
 
-const TitleContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(2) }));
 const WordsContainer = styled('div')({ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline' });
 const WordContainer = styled(Typography)(({ theme }) => ({
     paddingRight: 4,
