@@ -22,9 +22,11 @@ import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
 import { ExamCreatedModal } from './ExamCreatedModal';
+import { examApiType } from './types';
+import { time } from '../../lib/time';
 
 function Exams() {
-    const query = useQuery({ queryKey: ['exams'], queryFn: api.fetchExams });
+    const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
@@ -53,6 +55,7 @@ function Exams() {
                     <TableRow>
                         <TableCell width={170}>Actions</TableCell>
                         <TableCell>Nom du test</TableCell>
+                        <TableCell>Durée</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -81,6 +84,7 @@ function Exams() {
                                 </Tooltip>
                             </TableCell>
                             <TableCell>{exam.name}</TableCell>
+                            <TableCell>{time.formatToClock(exam.duration * 60)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
