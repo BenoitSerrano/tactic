@@ -8,14 +8,14 @@ function TexteLibreAnswering(props: {
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
     return (
-        <>
+        <Container>
             <TitleContainer>
                 <Typography>
                     <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
                 </Typography>
             </TitleContainer>
-            <TextField multiline fullWidth value={props.currentAnswer} onChange={onChangeAnswer} />
-        </>
+            <StyledTextField value={props.currentAnswer} onChange={onChangeAnswer} />
+        </Container>
     );
 
     function onChangeAnswer(event: React.ChangeEvent<HTMLInputElement>) {
@@ -23,7 +23,14 @@ function TexteLibreAnswering(props: {
     }
 }
 
-const TitleContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(2) }));
-
+const TitleContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(2) }));
+const StyledTextField = styled(TextField)({ flex: 1 });
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
+const Container = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: theme.spacing(2),
+}));
 export { TexteLibreAnswering };
