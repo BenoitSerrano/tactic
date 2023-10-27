@@ -29,6 +29,7 @@ function buildAttemptService() {
         deleteQuestionAnswers,
         deleteExerciseAnswers,
         updateMarks,
+        updateAttemptEndedAt,
     };
 
     return studentService;
@@ -52,7 +53,7 @@ function buildAttemptService() {
         return attempt;
     }
 
-    async function updateAttempt(attemptId: string, attemptAnswers: attemptAnswersType) {
+    async function updateAttempt(attemptId: Attempt['id'], attemptAnswers: attemptAnswersType) {
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
@@ -79,7 +80,7 @@ function buildAttemptService() {
         return true;
     }
 
-    async function fetchAttemptWithAnswers(attemptId: string) {
+    async function fetchAttemptWithAnswers(attemptId: Attempt['id']) {
         const examService = buildExamService();
 
         const attempt = await attemptRepository.findOneOrFail({
@@ -106,7 +107,7 @@ function buildAttemptService() {
         return result;
     }
 
-    async function fetchAttemptWithoutAnswers(attemptId: string) {
+    async function fetchAttemptWithoutAnswers(attemptId: Attempt['id']) {
         const examService = buildExamService();
 
         const attempt = await attemptRepository.findOneOrFail({
@@ -115,6 +116,7 @@ function buildAttemptService() {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
+                endedAt: true,
                 answers: true,
             },
 
@@ -138,7 +140,7 @@ function buildAttemptService() {
         }
     }
 
-    async function updateAttemptDuration(attemptId: string) {
+    async function updateAttemptDuration(attemptId: Attempt['id']) {
         const result = await attemptRepository.update(
             { id: attemptId },
             { updatedAt: () => 'CURRENT_TIMESTAMP' },
@@ -146,13 +148,13 @@ function buildAttemptService() {
         return result.affected == 1;
     }
 
-    async function deleteAttempt(attemptId: string) {
+    async function deleteAttempt(attemptId: Attempt['id']) {
         const result = await attemptRepository.delete({ id: attemptId });
         return result.affected == 1;
     }
 
     async function updateAttemptCheatingSummary(
-        attemptId: string,
+        attemptId: Attempt['id'],
         body: { roundTrips: number; timeSpentOutside: number },
     ) {
         const result = await attemptRepository.update(
@@ -162,7 +164,7 @@ function buildAttemptService() {
         return result.affected == 1;
     }
 
-    async function updateMarks(attemptId: string, marks: Record<Question['id'], number>) {
+    async function updateMarks(attemptId: Attempt['id'], marks: Record<Question['id'], number>) {
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: { id: true, marks: true },
@@ -171,6 +173,11 @@ function buildAttemptService() {
         const previousMarks = attemptUtils.decodeMarks(attempt.marks);
         const newMarks = attemptUtils.encodeMarks({ ...previousMarks, ...marks });
         await attemptRepository.update({ id: attemptId }, { marks: newMarks });
+        return true;
+    }
+
+    async function updateAttemptEndedAt(attemptId: Attempt['id']) {
+        await attemptRepository.update({ id: attemptId }, { endedAt: () => 'CURRENT_TIMESTAMP' });
         return true;
     }
 

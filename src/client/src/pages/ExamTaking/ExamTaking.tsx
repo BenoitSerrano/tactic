@@ -30,7 +30,9 @@ function ExamTaking() {
 
     let remainingSeconds =
         query.data.exam.duration * 60 - time.computeElapsedTime(query.data.startedAt, new Date());
-    if (remainingSeconds + query.data.exam.extraTime * 60 < 0) {
+    const isTimeElapsed = remainingSeconds + query.data.exam.extraTime * 60 < 0;
+    const hasFinishedExam = !!query.data.endedAt;
+    if (isTimeElapsed || hasFinishedExam) {
         return <Navigate to={examDonePath} />;
     }
 

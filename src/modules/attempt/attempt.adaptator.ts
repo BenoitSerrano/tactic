@@ -16,7 +16,7 @@ function convertAttemptToAttemptWithoutAnswers(
     return {
         id: attempt.id,
         startedAt: attempt.startedAt,
-        updatedAt: attempt.updatedAt,
+        endedAt: attempt.startedAt,
         exam: {
             id: exam.id,
             name: exam.name,

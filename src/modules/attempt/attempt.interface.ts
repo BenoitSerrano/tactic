@@ -16,4 +16,6 @@ export interface AttemptInterface {
     answers: string[];
 
     marks: string[];
+
+    endedAt?: string;
 }

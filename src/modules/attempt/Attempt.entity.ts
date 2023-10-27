@@ -39,4 +39,7 @@ export class Attempt implements AttemptInterface {
 
     @Column('simple-array', { default: '' })
     marks: string[];
+
+    @Column({ type: 'timestamptz', nullable: true })
+    endedAt?: string;
 }

@@ -32,6 +32,7 @@ const api = {
     swapQuestions,
     updateMarks,
     swapExercises,
+    updateEndedAt,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -273,9 +274,14 @@ async function swapQuestions(params: {
 
 async function updateMarks(params: { attemptId: string; marks: Record<number, number> }) {
     const URL = `${BASE_URL}/attempts/${params.attemptId}/marks`;
-    return performApiCall(URL, 'PUT', {
+    return performApiCall(URL, 'PATCH', {
         marks: params.marks,
     });
+}
+
+async function updateEndedAt(params: { attemptId: string }) {
+    const URL = `${BASE_URL}/attempts/${params.attemptId}/endedAt`;
+    return performApiCall(URL, 'PATCH');
 }
 
 async function deleteQuestion(params: { examId: string; questionId: number }) {

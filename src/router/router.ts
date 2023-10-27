@@ -250,6 +250,10 @@ router.patch(
 router.delete('/attempts/:attemptId', buildController(attemptController.deleteAttempt));
 
 // TODO vérifier le format en entrée
-router.put('/attempts/:attemptId/marks', buildController(attemptController.updateMarks));
+router.patch('/attempts/:attemptId/marks', buildController(attemptController.updateMarks));
+router.patch(
+    '/attempts/:attemptId/endedAt',
+    buildController(attemptController.updateAttemptEndedAt),
+);
 
 export { router };

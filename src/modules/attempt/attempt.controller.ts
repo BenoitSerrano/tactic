@@ -15,6 +15,7 @@ function buildAttemptController() {
         deleteAttempt,
         updateAttemptCheatingSummary,
         updateMarks,
+        updateAttemptEndedAt,
     };
 
     return attemptController;
@@ -58,5 +59,9 @@ function buildAttemptController() {
         body: { roundTrips: number; timeSpentOutside: number };
     }) {
         return attemptService.updateAttemptCheatingSummary(params.urlParams.attemptId, params.body);
+    }
+
+    async function updateAttemptEndedAt(params: { urlParams: { attemptId: string } }) {
+        return attemptService.updateAttemptEndedAt(params.urlParams.attemptId);
     }
 }
