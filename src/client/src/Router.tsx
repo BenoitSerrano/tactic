@@ -9,7 +9,6 @@ import { ExamChecking } from './pages/ExamChecking';
 import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
 import { StudentHome } from './pages/StudentHome';
-import { EmptyAttemptCreated } from './pages/EmptyAttemptCreated';
 import { NotFound } from './pages/NotFound';
 import { AdminPage } from './components/AdminPage';
 import { SignIn } from './pages/SignIn';
@@ -40,7 +39,6 @@ function Router() {
                 element={<ExamTaking />}
             />
             <Route path="/student/students/:studentId/exam-done" element={<ExamDone />} />
-            <Route path="/student/empty-attempt-created" element={<EmptyAttemptCreated />} />
             <Route path="/*" element={<NotFound />} />
         </Routes>
     );

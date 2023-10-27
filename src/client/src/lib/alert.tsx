@@ -1,4 +1,4 @@
-import React, { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
 import { Alert, Slide, SlideProps, Snackbar } from '@mui/material';
 
 type alertHandlerType = { displayAlert: ({ text, variant }: alertType) => void };
