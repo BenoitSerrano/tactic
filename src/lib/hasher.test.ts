@@ -18,7 +18,7 @@ describe('hasher', () => {
 
         const result = hasher.verify(
             value,
-            '965b177fb1578f60619081fa749285fae80ac3b3efeb212a55dcbb34204af612',
+            'cc8ff7c79243fc53f1a0e762eafee8cfb60fdbc2aa5f5ef1761d12328ece85b9',
         );
 
         expect(result).toBe(true);

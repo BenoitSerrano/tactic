@@ -1,8 +1,8 @@
 import { questionKindType } from '../../question/types';
 
-export { computeMark };
+export { computeAutomaticMark };
 
-function computeMark({
+function computeAutomaticMark({
     questionKind,
     points,
     answer,
@@ -14,7 +14,7 @@ function computeMark({
     answer: string | undefined;
     rightAnswers: string[];
     acceptableAnswers: string[];
-}): number | undefined {
+}): number {
     if (!answer) {
         return 0;
     }
@@ -37,7 +37,7 @@ function computeMark({
         }, 0);
     }
     if (rightAnswers.length === 0) {
-        return undefined;
+        throw new Error(`Cannot compute automatic mark for rightAnswers=[]`);
     }
     if (answer === undefined) {
         return 0;

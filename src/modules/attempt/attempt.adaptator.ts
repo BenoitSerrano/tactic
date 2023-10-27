@@ -52,7 +52,12 @@ function convertAttemptToAttemptWithAnswers(
     exam: Exam,
     attemptAnswers: attemptAnswersType,
 ) {
-    const marks = attemptUtils.decodeMarks(attempt.marks);
+    const questions = exam.exercises.map((exercise) => exercise.questions).flat();
+    const marks = attemptUtils.aggregateMarks({
+        answers: attemptAnswers,
+        marksArray: attempt.marks,
+        questions,
+    });
 
     return {
         id: attempt.id,

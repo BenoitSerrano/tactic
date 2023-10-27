@@ -54,7 +54,6 @@ function buildAttemptService() {
     }
 
     async function updateAttempt(attemptId: string, attemptAnswers: attemptAnswersType) {
-        const questionService = buildQuestionService();
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: {
@@ -73,13 +72,11 @@ function buildAttemptService() {
         for (const exercise of attempt.exam.exercises) {
             questionIds.push(...exercise.questions.map((question) => question.id));
         }
-        const questions = await questionService.getQuestions(questionIds);
         await assertIsTimeLimitNotExceeded(attempt);
         await updateAttemptDuration(attempt.id);
 
         const answers = attemptUtils.stringifyAnswers(attemptAnswers);
-        const marks = attemptUtils.computeMarks(questions, attemptAnswers);
-        await attemptRepository.update({ id: attempt.id }, { answers, marks });
+        await attemptRepository.update({ id: attempt.id }, { answers });
         return true;
     }
 
@@ -229,6 +226,5 @@ function buildAttemptService() {
             const newAnswers = attemptUtils.stringifyAnswers(parsedAnswers);
             await attemptRepository.update({ id: attempt.id }, { answers: newAnswers });
         }
-        //TODO envoyer event pour update les marks
     }
 }

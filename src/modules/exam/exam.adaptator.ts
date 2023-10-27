@@ -1,6 +1,5 @@
 import { Attempt, attemptUtils } from '../attempt';
 import { attemptAdaptator } from '../attempt/attempt.adaptator';
-import { questionAnswerSummaryType } from '../attempt/types';
 import { Question } from '../question';
 import { Student } from '../student';
 
@@ -21,9 +20,13 @@ function convertExamWithAttemptsToResults(
         const duration = attempt.updatedAt
             ? Math.floor((new Date(attempt.updatedAt).getTime() - startedAtDate.getTime()) / 1000)
             : undefined;
-
-        const marks = attemptUtils.decodeMarks(attempt.marks);
-        const mark = Object.values(marks).reduce((sum, mark) => sum + mark, 0);
+        const answers = attemptUtils.parseAnswers(attempt.answers);
+        const marks = attemptUtils.aggregateMarks({
+            answers,
+            marksArray: attempt.marks,
+            questions: Object.values(questions),
+        });
+        const totalMark = Object.values(marks).reduce((sum, mark) => (sum || 0) + (mark || 0), 0);
 
         const result = {
             id: student.id,
@@ -31,7 +34,7 @@ function convertExamWithAttemptsToResults(
             startedAt: startedAtDate.getTime(),
             duration,
             attemptId: attempt.id,
-            mark,
+            mark: totalMark,
             hasBeenTreated: treatmentStatusSummary[attempt.id],
             roundTrips: attempt.roundTrips,
             timeSpentOutside: attempt.timeSpentOutside,

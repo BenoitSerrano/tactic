@@ -94,6 +94,7 @@ function buildExamService() {
                     roundTrips: true,
                     timeSpentOutside: true,
                     marks: true,
+                    answers: true,
                 },
             },
             relations: ['attempts', 'attempts.student'],

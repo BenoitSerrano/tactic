@@ -1,5 +1,4 @@
 import { Exam } from '../exam';
-import { Question } from '../question';
 import { Attempt } from './Attempt.entity';
 import { attemptUtils } from './attempt.utils';
 
@@ -71,13 +70,7 @@ describe('attemptsUtils', () => {
                 points: 11,
             },
         };
-        it('should convert to marks', () => {
-            const answers = { 1: '1', 2: 'es tu belle', 3: 'blanc' };
 
-            const marks = attemptUtils.computeMarks(questions, answers);
-
-            expect(marks).toEqual(['1:1', '2:3', '3:5.5']);
-        });
         describe('decodeMarks', () => {
             it('should decode marks', () => {
                 const str = ['131:1', '132:1', '133:3'];

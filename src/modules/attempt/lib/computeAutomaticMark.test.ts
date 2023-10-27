@@ -1,6 +1,6 @@
-import { computeMark } from './computeMark';
+import { computeAutomaticMark } from './computeAutomaticMark';
 
-describe('computeMark', () => {
+describe('computeAutomaticMark', () => {
     const points = 60;
 
     it('should return 1/4 points for 1/4 right answers', () => {
@@ -9,7 +9,13 @@ describe('computeMark', () => {
         const rightAnswers = ['truc', 'machin', 'bidule', 'lu'];
         const acceptableAnswers: string[] = [];
 
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(15);
     });
@@ -20,20 +26,32 @@ describe('computeMark', () => {
         const rightAnswers = ['le', 'machin', 'bidule', 'lu'];
         const acceptableAnswers: string[] = [];
 
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(15);
     });
 
-    it('should return undefined if no right answer provided', () => {
+    it('should throw error if no right answer provided', () => {
         const answer = 'truc';
         const questionKind = 'texteLibre';
         const rightAnswers: string[] = [];
         const acceptableAnswers = ['bidule', 'chouette'];
 
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
-
-        expect(mark).toBe(undefined);
+        expect(() =>
+            computeAutomaticMark({
+                questionKind,
+                points,
+                answer,
+                rightAnswers,
+                acceptableAnswers,
+            }),
+        ).toThrowError();
     });
 
     it('should return wrong for exact match', () => {
@@ -41,7 +59,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ['machin', 'chose'];
         const acceptableAnswers = ['bidule', 'chouette'];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(0);
     });
@@ -51,7 +75,13 @@ describe('computeMark', () => {
         const answer = 'chouette';
         const rightAnswers = ['machin', 'chose'];
         const acceptableAnswers = ['bidule', 'chouette'];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(30);
     });
@@ -61,7 +91,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ['machin', 'chose'];
         const acceptableAnswers = ['bidule', 'chouette'];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -71,7 +107,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ['machin', 'chose'];
         const acceptableAnswers = ['bidule', 'chouette'];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -81,7 +123,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ['machin', 'chose'];
         const acceptableAnswers = ['bidule', 'chouette'];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -91,7 +139,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ["c'est"];
         const acceptableAnswers: string[] = [];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -101,7 +155,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ["c'est"];
         const acceptableAnswers: string[] = [];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -111,7 +171,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ["s'être levé"];
         const acceptableAnswers: string[] = [];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -121,7 +187,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ['a sonné'];
         const acceptableAnswers: string[] = [];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -131,7 +203,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ["s'être levé"];
         const acceptableAnswers: string[] = [];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });
@@ -141,7 +219,13 @@ describe('computeMark', () => {
         const questionKind = 'questionTrou';
         const rightAnswers = ["s'être levé"];
         const acceptableAnswers: string[] = [];
-        const mark = computeMark({ questionKind, points, answer, rightAnswers, acceptableAnswers });
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
 
         expect(mark).toBe(60);
     });

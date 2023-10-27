@@ -32,7 +32,6 @@ function SignIn(props: {
             });
         },
     });
-    console.log('HEIH');
 
     return (
         <Page>

@@ -1,16 +1,17 @@
 import { encoder } from '../../lib/encoder';
 import { Question } from '../question';
+import { Attempt } from './Attempt.entity';
 import { AttemptInterface } from './attempt.interface';
-import { computeMark } from './lib/computeMark';
+import { computeAutomaticMark } from './lib/computeAutomaticMark';
 import { attemptAnswersType } from './types';
 
 const attemptUtils = {
     isTimeLimitExceeded,
     stringifyAnswers,
     parseAnswers,
-    computeMarks,
     encodeMarks,
     decodeMarks,
+    aggregateMarks,
 };
 
 function isTimeLimitExceeded(attempt: AttemptInterface, now: Date) {
@@ -46,38 +47,34 @@ function parseAnswers(answers: string[]): attemptAnswersType {
     return attemptAnswers;
 }
 
-function computeMarks(
-    questions: Record<
-        Question['id'],
-        Pick<
-            Question,
-            | 'id'
-            | 'kind'
-            | 'title'
-            | 'acceptableAnswers'
-            | 'rightAnswers'
-            | 'possibleAnswers'
-            | 'points'
-        >
-    >,
-    answers: attemptAnswersType,
-) {
-    const marks = Object.entries(questions).reduce((acc, [questionId, question]) => {
-        const answer: string = answers[Number(questionId)];
+function aggregateMarks({
+    answers,
+    marksArray,
+    questions,
+}: {
+    answers: attemptAnswersType;
+    questions: Question[];
+    marksArray: Attempt['marks'];
+}): Record<number, number | undefined> {
+    const manualMarks = attemptUtils.decodeMarks(marksArray);
 
-        const mark = computeMark({
-            questionKind: question.kind,
-            acceptableAnswers: question.acceptableAnswers,
-            answer,
-            points: question.points,
-            rightAnswers: question.rightAnswers,
-        });
-        if (mark === undefined) {
-            return acc;
+    const marks = questions.reduce((acc, question) => {
+        let mark = 0;
+
+        if (question.rightAnswers.length !== 0) {
+            mark = computeAutomaticMark({
+                questionKind: question.kind,
+                acceptableAnswers: question.acceptableAnswers,
+                answer: answers[question.id],
+                points: question.points,
+                rightAnswers: question.rightAnswers,
+            });
+        } else {
+            mark = manualMarks[question.id];
         }
         return { ...acc, [question.id]: mark };
-    }, {} as Record<Question['id'], number>);
-    return encodeMarks(marks);
+    }, {} as Record<number, number>);
+    return marks;
 }
 
 function encodeMarks(marks: Record<Question['id'], number>) {
