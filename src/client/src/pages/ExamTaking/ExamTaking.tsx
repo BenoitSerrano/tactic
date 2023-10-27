@@ -1,7 +1,6 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
-import { Countdown } from '../../components/Countdown';
 import { Page } from '../../components/Page';
 import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
@@ -38,9 +37,6 @@ function ExamTaking() {
 
     return (
         <Page>
-            <CountdownContainer>
-                <Countdown remainingSeconds={remainingSeconds} />
-            </CountdownContainer>
             <ExamPageContainer>
                 <QuestionsAnswering
                     title={query.data.exam.name}
