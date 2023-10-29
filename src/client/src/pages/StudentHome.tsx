@@ -1,5 +1,5 @@
 import { Typography, styled } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { NotLoggedInPage } from '../components/NotLoggedInPage';
@@ -12,7 +12,7 @@ function StudentHome() {
     const examId = params.examId as string;
     const navigate = useNavigate();
 
-    const query = useQuery(['exams', examId, 'students', studentId, 'attempts'], () =>
+    const attemptQuery = useQuery(['exams', examId, 'students', studentId, 'attempts'], () =>
         api.searchAttempt({ examId, studentId }),
     );
 
@@ -25,16 +25,17 @@ function StudentHome() {
         },
     });
 
-    if (!query.data) {
-        if (query.isLoading) {
+    if (!attemptQuery.data) {
+        if (attemptQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
     }
 
-    if (query.data.length > 0) {
-        navigate(`/student/students/${studentId}/attempts/${query.data[0].id}`);
-        return <div />;
+    if (attemptQuery.data.length > 0) {
+        return (
+            <Navigate to={`/student/students/${studentId}/attempts/${attemptQuery.data[0].id}`} />
+        );
     }
 
     return (
@@ -54,7 +55,7 @@ function StudentHome() {
                 </p>
 
                 <Button variant="contained" onClick={launchExam}>
-                    Passer le test
+                    Lancer le test
                 </Button>
             </ContentContainer>
         </NotLoggedInPage>
@@ -69,7 +70,9 @@ export { StudentHome };
 
 const ContentContainer = styled('div')({
     width: '50%',
-    // dislay: 'flex',
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    margin: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
 });
