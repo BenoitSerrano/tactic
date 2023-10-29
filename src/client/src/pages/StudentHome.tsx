@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Page } from '../components/Page';
 import { Button } from '../components/Button';
+import { Loader } from '../components/Loader';
 
 function StudentHome() {
     const params = useParams();
@@ -25,6 +26,9 @@ function StudentHome() {
     });
 
     if (!query.data) {
+        if (query.isLoading) {
+            return <Loader />;
+        }
         return <div />;
     }
 
@@ -35,8 +39,8 @@ function StudentHome() {
 
     return (
         <Page>
-            {examQuery.data && <Typography variant="h4">{examQuery.data.name}</Typography>}
             <ContentContainer>
+                {examQuery.data && <Typography variant="h4">{examQuery.data.name}</Typography>}
                 <p>
                     <Typography>
                         Vous allez passer un examen de grammaire française niveau avancé (C1-C2).
