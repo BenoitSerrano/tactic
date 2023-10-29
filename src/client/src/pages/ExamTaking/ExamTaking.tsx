@@ -1,12 +1,13 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { NotLoggedInPage } from '../../components/NotLoggedInPage';
 import { Loader } from '../../components/Loader';
 import { api } from '../../lib/api';
 import { QuestionsAnswering } from './QuestionsAnswering';
 import { attemptWithoutAnswersType } from './types';
 import { computeShouldNavigateToExamDone } from './lib/computeShouldNavigateToExamDone';
+import { computeOfficialEndTime } from './lib/computeOfficialEndTime';
 
 function ExamTaking() {
     const params = useParams();
@@ -38,8 +39,25 @@ function ExamTaking() {
         return <Navigate to={examDonePath} />;
     }
 
+    const officialEndTime = computeOfficialEndTime({
+        duration: query.data.exam.duration,
+        startedAt: query.data.startedAt,
+    });
+
+    const title = `Votre test se terminera à ${officialEndTime}.`;
+
     return (
-        <NotLoggedInPage>
+        <NotLoggedInPage
+            title={
+                <TitleContainer>
+                    <Typography variant="h3">{title}</Typography>
+                    <Typography variant="h6">
+                        Enregistrez vos réponses régulièrement. Passé cette heure, aucune soumission
+                        ne sera prise en compte.
+                    </Typography>
+                </TitleContainer>
+            }
+        >
             <ExamPageContainer>
                 <QuestionsAnswering
                     title={query.data.exam.name}
@@ -57,6 +75,11 @@ function ExamTaking() {
 }
 
 export { ExamTaking };
+
+const TitleContainer = styled('div')({
+    flexDirection: 'column',
+    textAlign: 'center',
+});
 
 const ExamPageContainer = styled('div')({
     marginTop: 10,

@@ -31,7 +31,7 @@ const Container = styled('div')(({ theme }) => ({
     backgroundColor: 'white',
     borderBottom: `${theme.palette.divider} 1px solid`,
 }));
-const TitleContainer = styled('div')({ display: 'flex', backgroundColor: 'red' });
+const TitleContainer = styled('div')({ display: 'flex' });
 
 const ButtonsContainer = styled('div')({ display: 'flex' });
 

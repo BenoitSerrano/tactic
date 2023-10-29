@@ -26,13 +26,12 @@ function formatToClock(seconds: number, options?: { hideHours: boolean }) {
     )}`;
 }
 
-function formatToReadableDatetime(timestamp: number) {
-    const date = new Date();
-    date.setTime(timestamp);
-    const hrDate = `${date.toLocaleDateString()}`;
-    const hrTime = `${formatToHumanReadable(date.getHours())}:${formatToHumanReadable(
-        date.getMinutes(),
-    )}:${formatToHumanReadable(date.getSeconds())}`;
+function formatToReadableDatetime(date: string) {
+    const parsedDate = new Date(date);
+    const hrDate = `${parsedDate.toLocaleDateString()}`;
+    const hrTime = `${formatToHumanReadable(parsedDate.getHours())}:${formatToHumanReadable(
+        parsedDate.getMinutes(),
+    )}:${formatToHumanReadable(parsedDate.getSeconds())}`;
     return `${hrDate} ${hrTime}`;
 }
 

@@ -1,5 +1,4 @@
 import { Attempt, attemptUtils } from '../attempt';
-import { attemptAdaptator } from '../attempt/attempt.adaptator';
 import { Question } from '../question';
 import { Student } from '../student';
 
@@ -31,7 +30,7 @@ function convertExamWithAttemptsToResults(
         const result = {
             id: student.id,
             email: student.email,
-            startedAt: startedAtDate.getTime(),
+            startedAt: attempt.startedAt,
             duration,
             attemptId: attempt.id,
             mark: totalMark,

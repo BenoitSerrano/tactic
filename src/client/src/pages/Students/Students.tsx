@@ -26,7 +26,7 @@ type studentsSummaryType = {
     students: Array<{
         id: string;
         email: string;
-        createdDate: number;
+        createdDate: string;
         examStatus: Record<string, examStatusType>;
     }>;
     exams: Record<string, string>;
@@ -164,7 +164,9 @@ function Students() {
                     result = resultA.email.localeCompare(resultB.email);
                     break;
                 case 'createdDate':
-                    result = resultA.createdDate - resultB.createdDate;
+                    result =
+                        new Date(resultA.createdDate).getTime() -
+                        new Date(resultB.createdDate).getTime();
                     break;
                 default:
                     result =

@@ -22,7 +22,7 @@ type examResultApiType = {
     id: string;
     email: string;
     attemptId: string;
-    startedAt: number;
+    startedAt: string;
     hasBeenGraded: boolean;
     duration: number | undefined;
     mark: number;
@@ -189,7 +189,7 @@ function ExamResults() {
         });
     }
 
-    function sortData<T extends { email: string; mark: number; startedAt: number }>(
+    function sortData<T extends { email: string; mark: number; startedAt: string }>(
         data: Array<T>,
         activeSort: sortColumnType,
         sortDirection: 'asc' | 'desc',
@@ -204,7 +204,9 @@ function ExamResults() {
                     result = resultA.mark - resultB.mark;
                     break;
                 case 'startedAt':
-                    result = resultA.startedAt - resultB.startedAt;
+                    result =
+                        new Date(resultA.startedAt).getTime() -
+                        new Date(resultB.startedAt).getTime();
             }
             if (sortDirection === 'asc') {
                 return result;

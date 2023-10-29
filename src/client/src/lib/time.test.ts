@@ -31,8 +31,8 @@ describe('time', () => {
 
     describe('formatToReadableDatetime', () => {
         it('19/06/2023 22:28:03', () => {
-            const date = new Date('2023-06-19T20:28:03.314Z');
-            expect(time.formatToReadableDatetime(date.getTime())).toBe('19/06/2023 22:28:03');
+            const date = '2023-06-19T20:28:03.314Z';
+            expect(time.formatToReadableDatetime(date)).toBe('19/06/2023 22:28:03');
         });
     });
 });

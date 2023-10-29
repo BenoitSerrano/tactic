@@ -22,7 +22,7 @@ function formatStudentsIntoStudentsSummary(studentsWithAttempts: Array<Student>)
         return {
             id: studentWithAttempts.id,
             email: studentWithAttempts.email,
-            createdDate: new Date(studentWithAttempts.createdDate).getTime(),
+            createdDate: studentWithAttempts.createdDate,
             examStatus: computeExamStatus(Object.keys(exams), studentWithAttempts.attempts),
         };
     });

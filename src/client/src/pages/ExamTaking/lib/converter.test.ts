@@ -121,7 +121,7 @@ describe('converter', () => {
         });
     });
 
-    describe.only('convertWordIndexToAnswerIndex', () => {
+    describe('convertWordIndexToAnswerIndex', () => {
         it('should return 0 for first word', () => {
             const wordIndex = 2;
 
