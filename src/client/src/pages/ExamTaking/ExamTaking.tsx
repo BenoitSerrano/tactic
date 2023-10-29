@@ -1,12 +1,12 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
-import { Page } from '../../components/Page';
-import { time } from '../../lib/time';
+import { NotLoggedInPage } from '../../components/NotLoggedInPage';
 import { Loader } from '../../components/Loader';
 import { api } from '../../lib/api';
 import { QuestionsAnswering } from './QuestionsAnswering';
 import { attemptWithoutAnswersType } from './types';
+import { computeShouldNavigateToExamDone } from './lib/computeShouldNavigateToExamDone';
 
 function ExamTaking() {
     const params = useParams();
@@ -19,24 +19,27 @@ function ExamTaking() {
 
     if (!query.data) {
         return (
-            <Page>
+            <NotLoggedInPage>
                 <Loader />
-            </Page>
+            </NotLoggedInPage>
         );
     }
 
     const examDonePath = `/student/students/${studentId}/exam-done`;
 
-    let remainingSeconds =
-        query.data.exam.duration * 60 - time.computeElapsedTime(query.data.startedAt, new Date());
-    const isTimeElapsed = remainingSeconds + query.data.exam.extraTime * 60 < 0;
-    const hasFinishedExam = !!query.data.endedAt;
-    if (isTimeElapsed || hasFinishedExam) {
+    const shouldNavigateToExamDone = computeShouldNavigateToExamDone(new Date(), {
+        duration: query.data.exam.duration,
+        endedAt: query.data.endedAt,
+        extraTime: query.data.exam.extraTime,
+        startedAt: query.data.startedAt,
+    });
+
+    if (shouldNavigateToExamDone) {
         return <Navigate to={examDonePath} />;
     }
 
     return (
-        <Page>
+        <NotLoggedInPage>
             <ExamPageContainer>
                 <QuestionsAnswering
                     title={query.data.exam.name}
@@ -45,7 +48,7 @@ function ExamTaking() {
                     onExamDone={onExamDone}
                 />
             </ExamPageContainer>
-        </Page>
+        </NotLoggedInPage>
     );
 
     function onExamDone() {
@@ -54,12 +57,6 @@ function ExamTaking() {
 }
 
 export { ExamTaking };
-
-const CountdownContainer = styled('div')({
-    position: 'fixed',
-    top: 0,
-    left: 0,
-});
 
 const ExamPageContainer = styled('div')({
     marginTop: 10,

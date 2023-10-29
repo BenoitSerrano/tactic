@@ -1,8 +1,9 @@
 import { styled } from '@mui/material';
-import { AdminHeader } from './AdminHeader';
 import { localStorage } from '../../lib/localStorage';
 import { Navigate } from 'react-router-dom';
 import { Breadcrumbs } from './Breadcrumbs';
+import { Header } from '../Header';
+import { LogoutButton } from './LogoutButton';
 
 function AdminPage(props: { children: React.ReactNode | null }) {
     const token = localStorage.jwtTokenHandler.get();
@@ -11,7 +12,7 @@ function AdminPage(props: { children: React.ReactNode | null }) {
     }
     return (
         <Container>
-            <AdminHeader />
+            <Header buttons={[<LogoutButton />]} logoLink="/teacher" />
             <Breadcrumbs />
             {props.children}
         </Container>

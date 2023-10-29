@@ -1,9 +1,9 @@
 import { Typography, styled } from '@mui/material';
-import { Page } from '../components/Page';
+import { NotLoggedInPage } from '../components/NotLoggedInPage';
 
 function ExamDone() {
     return (
-        <Page>
+        <NotLoggedInPage>
             <MainContainer>
                 <Header>
                     <Typography variant="h4">
@@ -11,7 +11,7 @@ function ExamDone() {
                     </Typography>
                 </Header>
             </MainContainer>
-        </Page>
+        </NotLoggedInPage>
     );
 }
 

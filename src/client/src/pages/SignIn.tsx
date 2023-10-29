@@ -1,5 +1,5 @@
 import { TextField, Typography, styled } from '@mui/material';
-import { Page } from '../components/Page';
+import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { FormEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
@@ -34,7 +34,7 @@ function SignIn(props: {
     });
 
     return (
-        <Page>
+        <NotLoggedInPage>
             <Card width="40%">
                 <CardContent onSubmit={handleSubmit}>
                     <TitleContainer>
@@ -69,7 +69,7 @@ function SignIn(props: {
                     </Button>
                 </CardContent>
             </Card>
-        </Page>
+        </NotLoggedInPage>
     );
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {

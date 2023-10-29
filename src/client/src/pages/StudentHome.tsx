@@ -2,7 +2,7 @@ import { Typography, styled } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
-import { Page } from '../components/Page';
+import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
 
@@ -38,7 +38,7 @@ function StudentHome() {
     }
 
     return (
-        <Page>
+        <NotLoggedInPage>
             <ContentContainer>
                 {examQuery.data && <Typography variant="h4">{examQuery.data.name}</Typography>}
                 <p>
@@ -57,7 +57,7 @@ function StudentHome() {
                     Passer le test
                 </Button>
             </ContentContainer>
-        </Page>
+        </NotLoggedInPage>
     );
 
     function launchExam() {

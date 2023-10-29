@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
 import { api } from '../lib/api';
-import { Page } from '../components/Page';
+import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { Loader } from '../components/Loader';
@@ -39,7 +39,7 @@ function StudentAuthentication() {
     }
 
     return (
-        <Page>
+        <NotLoggedInPage>
             <ContentContainer>
                 <Card>
                     <TitleContainer>
@@ -58,7 +58,7 @@ function StudentAuthentication() {
                     </Form>
                 </Card>
             </ContentContainer>
-        </Page>
+        </NotLoggedInPage>
     );
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {

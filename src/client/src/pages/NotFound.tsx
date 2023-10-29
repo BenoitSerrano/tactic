@@ -1,11 +1,11 @@
-import { Page } from '../components/Page';
+import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { Typography } from '@mui/material';
 
 function NotFound() {
     return (
-        <Page>
+        <NotLoggedInPage>
             <Typography variant="h1">La page que vous recherchez n'existe pas.</Typography>
-        </Page>
+        </NotLoggedInPage>
     );
 }
 
