@@ -6,30 +6,39 @@ const HEIGHT = 60;
 
 function Header(props: { logoLink?: string; buttons: Array<JSX.Element>; title?: JSX.Element }) {
     return (
-        <Container>
-            {props.logoLink ? (
-                <Link to={props.logoLink}>
+        <FixedContainer>
+            <ContentContainer>
+                {props.logoLink ? (
+                    <Link to={props.logoLink}>
+                        <Logo />
+                    </Link>
+                ) : (
                     <Logo />
-                </Link>
-            ) : (
-                <Logo />
-            )}
-            <TitleContainer>{props.title}</TitleContainer>
+                )}
+                <TitleContainer>{props.title}</TitleContainer>
 
-            <ButtonsContainer>{props.buttons}</ButtonsContainer>
-        </Container>
+                <ButtonsContainer>{props.buttons}</ButtonsContainer>
+            </ContentContainer>
+        </FixedContainer>
     );
 }
 
-const Container = styled('div')(({ theme }) => ({
+const FixedContainer = styled('div')(({ theme }) => ({
+    height: HEIGHT,
+    backgroundColor: 'white',
+    top: 0,
+    position: 'fixed',
+    width: '100vw',
+    zIndex: 1,
+    borderBottom: `${theme.palette.divider} 1px solid`,
+}));
+const ContentContainer = styled('div')(({ theme }) => ({
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(4),
     display: 'flex',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: HEIGHT,
-    backgroundColor: 'white',
-    borderBottom: `${theme.palette.divider} 1px solid`,
 }));
 const TitleContainer = styled('div')({ display: 'flex' });
 

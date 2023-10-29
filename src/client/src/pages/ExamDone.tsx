@@ -20,7 +20,7 @@ const MainContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    width: '50%',
+    height: '100vh',
 });
 
 const Header = styled('div')({
