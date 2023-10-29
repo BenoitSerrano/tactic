@@ -11,6 +11,7 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -18,11 +19,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import { config } from '../../config';
 import { Loader } from '../../components/Loader';
-import { ExamCreationModal } from './ExamCreationModal';
+import { ExamUpsertionModal } from './ExamUpsertionModal';
 import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
 import { ExamCreatedModal } from './ExamCreatedModal';
-import { examApiType } from './types';
+import { examApiType, modalStatusType } from './types';
 import { time } from '../../lib/time';
 
 function Exams() {
@@ -30,7 +31,9 @@ function Exams() {
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
-    const [isExamCreationModalOpen, setIsExamCreationModalOpen] = useState(false);
+    const [currentExamModalStatus, setCurrentExamModalStatus] = useState<
+        modalStatusType | undefined
+    >();
     const [isExamCreatedModalOpen, setIsExamCreatedModalOpen] = useState(false);
     const deleteExamMutation = useMutation({
         mutationFn: api.deleteExam,
@@ -44,7 +47,7 @@ function Exams() {
             <Menu
                 buttons={[
                     {
-                        onClick: () => setIsExamCreationModalOpen(true),
+                        onClick: openCreationModal,
                         IconComponent: PostAddIcon,
                         title: 'Créer',
                     },
@@ -53,7 +56,7 @@ function Exams() {
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
-                        <TableCell width={170}>Actions</TableCell>
+                        <TableCell width={200}>Actions</TableCell>
                         <TableCell>Nom du test</TableCell>
                         <TableCell>Durée</TableCell>
                     </TableRow>
@@ -65,6 +68,11 @@ function Exams() {
                                 <Tooltip title="Accéder à la liste des exercices">
                                     <IconButton onClick={buildNavigateToEdition(exam.id)}>
                                         <FormatListBulletedIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Modifier le test">
+                                    <IconButton onClick={buildEditExam(exam)}>
+                                        <EditIcon />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Voir les copies des étudiants">
@@ -90,11 +98,12 @@ function Exams() {
                 </TableBody>
             </Table>
             {!query.data && !!query.isLoading && <Loader />}
-            <ExamCreationModal
-                isOpen={isExamCreationModalOpen}
-                close={() => setIsExamCreationModalOpen(false)}
-                onExamCreated={buildOnCreateExam}
-            />
+            {!!currentExamModalStatus && (
+                <ExamUpsertionModal
+                    modalStatus={currentExamModalStatus}
+                    close={() => setCurrentExamModalStatus(undefined)}
+                />
+            )}
             <ExamCreatedModal
                 isOpen={isExamCreatedModalOpen}
                 close={() => setIsExamCreatedModalOpen(false)}
@@ -102,13 +111,23 @@ function Exams() {
         </>
     );
 
-    function buildOnCreateExam() {
+    function openCreationModal() {
+        setCurrentExamModalStatus({ kind: 'creating', onExamCreated });
+    }
+
+    function onExamCreated() {
         queryClient.invalidateQueries({ queryKey: ['exams'] });
         setIsExamCreatedModalOpen(true);
     }
 
     function buildNavigateToEdition(examId: string) {
         return () => navigate(`/teacher/exams/${examId}/exercises`);
+    }
+
+    function buildEditExam(exam: examApiType) {
+        return () => {
+            setCurrentExamModalStatus({ kind: 'editing', exam });
+        };
     }
 
     function buildNavigateToResults(examId: string) {

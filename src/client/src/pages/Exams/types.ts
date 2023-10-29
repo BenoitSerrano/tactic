@@ -1,3 +1,7 @@
 type examApiType = { id: string; name: string; duration: number };
 
-export type { examApiType };
+type modalStatusType =
+    | { kind: 'editing'; exam: examApiType }
+    | { kind: 'creating'; onExamCreated: () => void };
+
+export type { examApiType, modalStatusType };

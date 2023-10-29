@@ -12,6 +12,7 @@ function buildExamService() {
     const examRepository = dataSource.getRepository(Exam);
     const examService = {
         createExam,
+        updateExam,
         getExams,
         getAllExams,
         getExam,
@@ -29,6 +30,13 @@ function buildExamService() {
         exam.name = name;
         exam.duration = duration;
         exam.user = user;
+        return examRepository.save(exam);
+    }
+
+    async function updateExam(examId: Exam['id'], body: { name: string; duration: number }) {
+        const exam = await examRepository.findOneOrFail({ where: { id: examId } });
+        exam.name = body.name;
+        exam.duration = body.duration;
         return examRepository.save(exam);
     }
 

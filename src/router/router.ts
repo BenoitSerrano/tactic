@@ -100,6 +100,22 @@ router.post(
     }),
 );
 
+router.put(
+    '/exams/:examId',
+    buildController(examController.updateExam, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            name: Joi.string().required(),
+            duration: Joi.number().required(),
+        }),
+    }),
+);
+
 router.post(
     '/exams/:examId/exercises/:exerciseId/questions',
     buildController(questionController.createQuestion, {
