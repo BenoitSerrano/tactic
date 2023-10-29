@@ -1,8 +1,7 @@
 import { styled } from '@mui/material';
 import { Logo } from './Logo';
 import { Link } from './Link';
-
-const HEIGHT = 60;
+import { HEADER_HEIGHT } from '../constants';
 
 function Header(props: { logoLink?: string; buttons: Array<JSX.Element>; title?: JSX.Element }) {
     return (
@@ -24,7 +23,7 @@ function Header(props: { logoLink?: string; buttons: Array<JSX.Element>; title?:
 }
 
 const FixedContainer = styled('div')(({ theme }) => ({
-    height: HEIGHT,
+    height: HEADER_HEIGHT,
     backgroundColor: 'white',
     top: 0,
     position: 'fixed',

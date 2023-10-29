@@ -2,9 +2,9 @@ import { Typography, styled } from '@mui/material';
 import { questionKindType } from '../../types';
 
 const styledContainerMapping = {
-    right: styled('div')({ color: 'green' }),
-    acceptable: styled('div')({ color: 'orange' }),
-    wrong: styled('div')({ color: 'red' }),
+    right: styled('div')(({ theme }) => ({ color: theme.palette.success.main })),
+    acceptable: styled('div')(({ theme }) => ({ color: theme.palette.warning.main })),
+    wrong: styled('div')(({ theme }) => ({ color: theme.palette.error.main })),
 };
 
 function QuestionChecking(props: {

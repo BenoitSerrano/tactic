@@ -5,11 +5,11 @@ function ExamDone() {
     return (
         <NotLoggedInPage>
             <MainContainer>
-                <Header>
+                <TextContainer>
                     <Typography variant="h4">
                         Réponses enregistrées, merci. Vous pouvez quitter la page.
                     </Typography>
-                </Header>
+                </TextContainer>
             </MainContainer>
         </NotLoggedInPage>
     );
@@ -19,13 +19,11 @@ const MainContainer = styled('div')({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column',
-    height: '100vh',
+    flex: 1,
 });
 
-const Header = styled('div')({
+const TextContainer = styled('div')({
     textAlign: 'center',
-    marginBottom: '20px',
 });
 
 export { ExamDone };
