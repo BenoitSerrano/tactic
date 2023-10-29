@@ -17,9 +17,9 @@ import { questionWithAnswersType } from './types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { api } from '../../lib/api';
-import { questionSpecicityMapping } from './constants';
 import { tableHandler } from '../../lib/tableHandler';
 import { useAlert } from '../../lib/alert';
+import { questionSpecificityMapping } from '../../constants';
 
 function QuestionsTable(props: {
     examId: string;
@@ -97,7 +97,7 @@ function QuestionsTable(props: {
                         <TableBody ref={provided.innerRef} {...provided.droppableProps}>
                             {questions.map((question, index) => {
                                 const QuestionKindIconComponent =
-                                    questionSpecicityMapping[question.kind].IconComponent;
+                                    questionSpecificityMapping[question.kind].IconComponent;
                                 return (
                                     <Draggable
                                         key={'question-' + question.id}
@@ -137,31 +137,37 @@ function QuestionsTable(props: {
                                                     </Tooltip>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <QuestionTypeCellContent>
+                                                    <CenteredHorizontalCellContent>
                                                         <QuestionTypeIconContainer>
                                                             <QuestionKindIconComponent />
                                                         </QuestionTypeIconContainer>
                                                         {
-                                                            questionSpecicityMapping[question.kind]
-                                                                .label
+                                                            questionSpecificityMapping[
+                                                                question.kind
+                                                            ].label
                                                         }
-                                                    </QuestionTypeCellContent>
+                                                    </CenteredHorizontalCellContent>
                                                 </TableCell>
                                                 <TableCell>
-                                                    {question.title}
-                                                    {!!question.possibleAnswers && (
-                                                        <ul>
-                                                            {question.possibleAnswers.map(
-                                                                (possibleAnswer: string, index) => (
-                                                                    <li
-                                                                        key={`question-${question.id}-${index}`}
-                                                                    >
-                                                                        {possibleAnswer}
-                                                                    </li>
-                                                                ),
-                                                            )}
-                                                        </ul>
-                                                    )}
+                                                    <CenteredVerticalCellContent>
+                                                        {question.title}
+                                                        {!!question.possibleAnswers && (
+                                                            <ul>
+                                                                {question.possibleAnswers.map(
+                                                                    (
+                                                                        possibleAnswer: string,
+                                                                        index,
+                                                                    ) => (
+                                                                        <li
+                                                                            key={`question-${question.id}-${index}`}
+                                                                        >
+                                                                            {possibleAnswer}
+                                                                        </li>
+                                                                    ),
+                                                                )}
+                                                            </ul>
+                                                        )}
+                                                    </CenteredVerticalCellContent>
                                                 </TableCell>
                                                 <TableCell>
                                                     {question.kind === 'qcm' &&
@@ -246,9 +252,16 @@ function QuestionsTable(props: {
     }
 }
 
-const QuestionTypeCellContent = styled('div')({
+const CenteredVerticalCellContent = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+});
+
+const CenteredHorizontalCellContent = styled('div')({
     display: 'flex',
     alignItems: 'center',
+    flexDirection: 'row',
 });
 
 const QuestionTypeIconContainer = styled('div')(({ theme }) => ({

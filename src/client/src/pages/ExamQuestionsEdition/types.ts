@@ -4,6 +4,7 @@ type exerciseApiType = {
     id: number;
     name: string;
     defaultPoints: number;
+    defaultQuestionKind: questionKindType;
     questions: Array<questionWithAnswersType>;
 };
 

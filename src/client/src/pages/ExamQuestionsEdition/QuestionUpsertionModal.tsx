@@ -6,12 +6,13 @@ import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
 import { questionKindType, questionKinds } from '../../types';
-import { questionSpecicityMapping } from './constants';
+import { questionUpsertionModalContentComponentMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
-import { FLOATING_NUMBER_REGEX } from '../../constants';
+import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
 
 function QuestionUpsertionModal(props: {
     close: () => void;
+    defaultQuestionKind: questionKindType;
     modalStatus: modalStatusType;
     examId: string;
     exerciseId: number;
@@ -19,10 +20,6 @@ function QuestionUpsertionModal(props: {
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
-
-    const [currentQuestionKind, setCurrentQuestionKind] = useState<questionKindType>(
-        props.modalStatus.kind === 'creating' ? 'qcm' : props.modalStatus.question.kind,
-    );
 
     const updateQuestionMutation = useMutation({
         mutationFn: api.updateQuestion,
@@ -46,8 +43,8 @@ function QuestionUpsertionModal(props: {
         },
     });
 
-    const { QuestionUpsertionModalContentComponent } =
-        questionSpecicityMapping[currentQuestionKind];
+    const QuestionUpsertionModalContentComponent =
+        questionUpsertionModalContentComponentMapping[props.defaultQuestionKind];
 
     const [points, setPoints] = useState(
         props.modalStatus.kind === 'editing'
@@ -74,7 +71,7 @@ function QuestionUpsertionModal(props: {
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);
-    const isConfirmDisabled = computeIsConfirmDisabled(currentQuestionKind, {
+    const isConfirmDisabled = computeIsConfirmDisabled(props.defaultQuestionKind, {
         title,
         rightAnswers,
         possibleAnswers,
@@ -93,24 +90,6 @@ function QuestionUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
-                {props.modalStatus.kind === 'creating' && (
-                    <SelectContainer>
-                        <Select
-                            fullWidth
-                            labelId="select-question-kind-label"
-                            id="select-question-kind"
-                            value={currentQuestionKind}
-                            label="Type de question"
-                            onChange={handleQuestionKindChange}
-                        >
-                            {questionKinds.map((questionKind) => (
-                                <MenuItem value={questionKind}>
-                                    {questionSpecicityMapping[questionKind].label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </SelectContainer>
-                )}
                 <QuestionUpsertionModalContentComponent
                     title={title}
                     setTitle={setTitle}
@@ -145,9 +124,9 @@ function QuestionUpsertionModal(props: {
         const newQuestion = {
             points: Number(points),
             title,
-            kind: currentQuestionKind,
+            kind: props.defaultQuestionKind,
             possibleAnswers:
-                currentQuestionKind === 'qcm'
+                props.defaultQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
                     : [],
             rightAnswers: rightAnswers.map((rightAnswer) => rightAnswer.trim()),
@@ -168,19 +147,6 @@ function QuestionUpsertionModal(props: {
             });
         }
     }
-
-    function handleQuestionKindChange(event: SelectChangeEvent) {
-        const newCurrentQuestionKind = event.target.value as questionKindType;
-        if (newCurrentQuestionKind === 'questionTrou') {
-            setTitle('....');
-        } else {
-            setTitle('');
-        }
-        setRightAnswers([]);
-        setAcceptableAnswers([]);
-        setPossibleAnswers(['', '', '', '']);
-        setCurrentQuestionKind(newCurrentQuestionKind);
-    }
 }
 
 const RowContainer = styled('div')({
@@ -197,11 +163,5 @@ const PointsContainer = styled('div')({
     display: 'flex',
     justifyContent: 'flex-end',
 });
-
-const SelectContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
-    width: '100%',
-    marginBottom: theme.spacing(3),
-}));
 
 export { QuestionUpsertionModal };

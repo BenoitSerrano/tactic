@@ -203,12 +203,14 @@ async function createExercise(params: {
     name: string;
     instruction: string;
     defaultPoints: number;
+    defaultQuestionKind: questionKindType;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises`;
     return performApiCall(URL, 'POST', {
         name: params.name,
         instruction: params.instruction,
         defaultPoints: params.defaultPoints,
+        defaultQuestionKind: params.defaultQuestionKind,
     });
 }
 

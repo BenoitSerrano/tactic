@@ -7,6 +7,7 @@ import {
     TableHead,
     TableRow,
     Tooltip,
+    styled,
 } from '@mui/material';
 import {
     DragDropContext,
@@ -26,6 +27,7 @@ import { exerciseType } from './types';
 import { tableHandler } from '../../lib/tableHandler';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
+import { questionSpecificityMapping } from '../../constants';
 
 function ExercisesTable(props: {
     examId: string;
@@ -64,6 +66,7 @@ function ExercisesTable(props: {
                     <TableCell width={20}>N°</TableCell>
                     <TableCell width={160}>Actions</TableCell>
                     <TableCell>Nom</TableCell>
+                    <TableCell>Type de questions</TableCell>
                     <TableCell>Consigne</TableCell>
                 </TableRow>
             </TableHead>
@@ -72,6 +75,8 @@ function ExercisesTable(props: {
                     {(provided) => (
                         <TableBody ref={provided.innerRef} {...provided.droppableProps}>
                             {exercises.map((exercise, index) => {
+                                const { IconComponent: DefaultQuestionKindIconComponent } =
+                                    questionSpecificityMapping[exercise.defaultQuestionKind];
                                 return (
                                     <Draggable
                                         key={'exercise-' + exercise.id}
@@ -121,6 +126,18 @@ function ExercisesTable(props: {
                                                 </TableCell>
 
                                                 <TableCell>{exercise.name}</TableCell>
+                                                <TableCell>
+                                                    <QuestionKindCellContent>
+                                                        <QuestionKindIconContainer>
+                                                            <DefaultQuestionKindIconComponent />
+                                                        </QuestionKindIconContainer>
+                                                        {
+                                                            questionSpecificityMapping[
+                                                                exercise.defaultQuestionKind
+                                                            ].label
+                                                        }
+                                                    </QuestionKindCellContent>
+                                                </TableCell>
                                                 <TableCell>{exercise.instruction}</TableCell>
                                             </TableRow>
                                         )}
@@ -175,5 +192,16 @@ function ExercisesTable(props: {
         };
     }
 }
+
+const QuestionKindCellContent = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+});
+
+const QuestionKindIconContainer = styled('div')(({ theme }) => ({
+    marginRight: theme.spacing(1),
+    display: 'flex',
+    alignItems: 'center',
+}));
 
 export { ExercisesTable };

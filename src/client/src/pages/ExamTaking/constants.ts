@@ -6,27 +6,12 @@ import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
 import { TexteLibreAnswering } from './TexteLibreAnswering';
 import { TexteATrousAnswering } from './TexteATrousAnswering';
 
-const questionSpecicityMapping: Record<
-    questionKindType,
-    {
-        QuestionAnsweringComponent: ElementType;
-    }
-> = {
-    qcm: {
-        QuestionAnsweringComponent: QuestionChoixMultipleAnswering,
-    },
-    questionTrou: {
-        QuestionAnsweringComponent: QuestionTrouAnswering,
-    },
-    phraseMelangee: {
-        QuestionAnsweringComponent: PhraseMelangeeAnswering,
-    },
-    texteLibre: {
-        QuestionAnsweringComponent: TexteLibreAnswering,
-    },
-    texteATrous: {
-        QuestionAnsweringComponent: TexteATrousAnswering,
-    },
+const questionAnsweringComponentMapping: Record<questionKindType, ElementType> = {
+    qcm: QuestionChoixMultipleAnswering,
+    questionTrou: QuestionTrouAnswering,
+    phraseMelangee: PhraseMelangeeAnswering,
+    texteLibre: TexteLibreAnswering,
+    texteATrous: TexteATrousAnswering,
 };
 
-export { questionSpecicityMapping };
+export { questionAnsweringComponentMapping };

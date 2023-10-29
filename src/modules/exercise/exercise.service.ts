@@ -1,7 +1,7 @@
 import { Exercise } from './Exercise.entity';
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../exam';
-import { buildQuestionService } from '../question';
+import { Question, buildQuestionService } from '../question';
 import { buildAttemptService } from '../attempt';
 
 export { buildExerciseService };
@@ -21,7 +21,12 @@ function buildExerciseService() {
 
     async function createExercise(
         examId: Exam['id'],
-        body: { name: string; instruction: string; defaultPoints: number },
+        body: {
+            name: string;
+            instruction: string;
+            defaultPoints: number;
+            defaultQuestionKind: Question['kind'];
+        },
     ) {
         const examService = buildExamService();
         const exam = await examService.getExam(examId);
@@ -31,6 +36,7 @@ function buildExerciseService() {
         exercise.name = body.name;
         exercise.instruction = body.instruction;
         exercise.defaultPoints = body.defaultPoints;
+        exercise.defaultQuestionKind = body.defaultQuestionKind;
         exercise.exam = exam;
         exercise.order = highestOrder + 1;
 

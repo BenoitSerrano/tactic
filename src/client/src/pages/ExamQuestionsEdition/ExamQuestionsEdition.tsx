@@ -55,6 +55,7 @@ function ExamQuestionsEdition() {
             />
             {!!currentQuestionModalStatus && (
                 <QuestionUpsertionModal
+                    defaultQuestionKind={query.data.defaultQuestionKind}
                     defaultPoints={query.data.defaultPoints}
                     exerciseId={exerciseId}
                     examId={examId}

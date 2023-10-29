@@ -163,6 +163,7 @@ router.post(
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
             defaultPoints: Joi.number().required(),
+            defaultQuestionKind: Joi.string().valid(...questionKinds),
         }),
     }),
 );

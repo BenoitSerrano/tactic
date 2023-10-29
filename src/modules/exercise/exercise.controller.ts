@@ -1,3 +1,4 @@
+import { Question } from '../question';
 import { Exercise } from './Exercise.entity';
 import { buildExerciseService } from './exercise.service';
 
@@ -21,7 +22,12 @@ function buildExerciseController() {
 
     function createExercise(params: {
         urlParams: { examId: string };
-        body: { name: string; instruction: string; defaultPoints: number };
+        body: {
+            name: string;
+            instruction: string;
+            defaultPoints: number;
+            defaultQuestionKind: Question['kind'];
+        };
     }) {
         return exerciseService.createExercise(params.urlParams.examId, params.body);
     }

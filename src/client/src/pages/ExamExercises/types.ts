@@ -1,3 +1,5 @@
+import { questionKindType } from '../../types';
+
 type examApiType = {
     id: string;
     name: string;
@@ -10,6 +12,7 @@ type exerciseType = {
     id: number;
     name: string;
     instruction: string;
+    defaultQuestionKind: questionKindType;
     defaultPoints: number;
     order: number;
 };

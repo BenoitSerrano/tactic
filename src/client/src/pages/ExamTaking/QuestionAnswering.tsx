@@ -1,5 +1,5 @@
 import { questionWithoutAnswerType } from './types';
-import { questionSpecicityMapping } from './constants';
+import { questionAnsweringComponentMapping } from './constants';
 
 function QuestionAnswering(props: {
     question: questionWithoutAnswerType;
@@ -7,7 +7,7 @@ function QuestionAnswering(props: {
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;
 }): JSX.Element {
-    const { QuestionAnsweringComponent } = questionSpecicityMapping[props.question.kind];
+    const QuestionAnsweringComponent = questionAnsweringComponentMapping[props.question.kind];
 
     return (
         <QuestionAnsweringComponent

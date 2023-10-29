@@ -4,8 +4,9 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { modalStatusType } from './types';
-import { TextField } from '@mui/material';
-import { FLOATING_NUMBER_REGEX } from '../../constants';
+import { MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
+import { questionKindType, questionKinds } from '../../types';
 
 function ExerciseUpsertionModal(props: {
     close: () => void;
@@ -14,6 +15,8 @@ function ExerciseUpsertionModal(props: {
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
+
+    const [defaultQuestionKind, setDefaultQuestionKind] = useState<questionKindType>('qcm');
 
     const updateExerciseMutation = useMutation({
         mutationFn: api.updateExercise,
@@ -67,6 +70,23 @@ function ExerciseUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
+                {props.modalStatus.kind === 'creating' && (
+                    <Select
+                        fullWidth
+                        labelId="select-default-question-kind-label"
+                        id="select-default-question-kind"
+                        value={defaultQuestionKind}
+                        label="Type de question"
+                        onChange={handleQuestionKindChange}
+                    >
+                        {questionKinds.map((questionKind) => (
+                            <MenuItem value={questionKind}>
+                                {questionSpecificityMapping[questionKind].label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                )}
+
                 <TextField
                     name="name"
                     fullWidth
@@ -100,6 +120,11 @@ function ExerciseUpsertionModal(props: {
         }
     }
 
+    function handleQuestionKindChange(event: SelectChangeEvent) {
+        const newDefaultQuestionKind = event.target.value as questionKindType;
+        setDefaultQuestionKind(newDefaultQuestionKind);
+    }
+
     function saveExercise() {
         const newExercise = {
             name,
@@ -115,6 +140,7 @@ function ExerciseUpsertionModal(props: {
         } else {
             createExerciseMutation.mutate({
                 examId: props.examId,
+                defaultQuestionKind,
                 ...newExercise,
             });
         }
