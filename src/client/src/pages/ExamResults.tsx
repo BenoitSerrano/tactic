@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import HistoryIcon from '@mui/icons-material/History';
 import { api } from '../lib/api';
 import {
@@ -112,6 +114,8 @@ function ExamResults() {
                             Note (/ {query.data.totalPoints})
                         </TableSortLabel>
                     </TableCell>
+                    <TableCell width={80}>Correction terminée</TableCell>
+
                     <TableCell width={50}>Durée</TableCell>
                     <TableCell width={50}>Sorties de test</TableCell>
                     <TableCell width={50}>Temps total hors test</TableCell>
@@ -119,9 +123,9 @@ function ExamResults() {
             </TableHead>
             <TableBody>
                 {sortedData.map((result, index) => {
-                    const TableRowComponent = result.hasBeenGraded ? TableRow : HighlightedTableRow;
+                    const GradedStatusIcon = result.hasBeenGraded ? GradedIcon : NotGradedIcon;
                     return (
-                        <TableRowComponent key={result.attemptId}>
+                        <TableRow key={result.attemptId}>
                             <TableCell>{index + 1}</TableCell>
 
                             <TableCell>
@@ -144,10 +148,13 @@ function ExamResults() {
                                 </Link>
                             </TableCell>
                             <TableCell>{result.mark}</TableCell>
+                            <TableCell>
+                                <GradedStatusIcon />
+                            </TableCell>
                             <TableCell>{result.duration}</TableCell>
                             <TableCell>{result.roundTrips}</TableCell>
                             <TableCell>{result.timeSpentOutside}</TableCell>
-                        </TableRowComponent>
+                        </TableRow>
                     );
                 })}
             </TableBody>
@@ -227,8 +234,10 @@ function ExamResults() {
     }
 }
 
-const HighlightedTableRow = styled(TableRow)(({ theme }) => ({
-    backgroundColor: theme.palette.warning.light,
+const GradedIcon = styled(CheckCircleOutlineIcon)(({ theme }) => ({
+    color: theme.palette.success.main,
 }));
-
+const NotGradedIcon = styled(AssignmentLateIcon)(({ theme }) => ({
+    color: theme.palette.warning.main,
+}));
 export { ExamResults };
