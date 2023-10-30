@@ -114,7 +114,7 @@ function ExamResults() {
                             Note (/ {query.data.totalPoints})
                         </TableSortLabel>
                     </TableCell>
-                    <TableCell width={80}>Correction terminée</TableCell>
+                    <TableCell width={80}>Correction terminée ?</TableCell>
 
                     <TableCell width={50}>Durée</TableCell>
                     <TableCell width={50}>Sorties de test</TableCell>
