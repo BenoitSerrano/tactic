@@ -12,7 +12,7 @@ const theme = createTheme({
         },
         warning: { main: '#e87a00', light: '#f5b44d' },
         common: { black: '#003228' },
-        background: { default: '#daf8f5' },
+        background: { default: '#eaf8f7' },
         divider: '#a1ece4',
     },
     spacing: (value: number) => value * 8,
