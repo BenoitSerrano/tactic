@@ -3,6 +3,7 @@ import { questionKindType } from '../../types';
 type attemptWithoutAnswersType = {
     startedAt: string;
     endedAt: string | undefined;
+    studentEmail: string;
     exam: {
         duration: number;
         extraTime: number;

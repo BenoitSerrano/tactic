@@ -91,17 +91,20 @@ function buildAttemptService() {
                 startedAt: true,
                 answers: true,
                 marks: true,
+                student: { id: true, email: true },
             },
 
-            relations: ['exam'],
+            relations: ['exam', 'student'],
         });
         const exam = await examService.getExamQuestions(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
+        const studentEmail = attempt.student.email;
 
         const result = attemptAdaptator.convertAttemptToAttemptWithAnswers(
             attempt,
             exam,
             attemptAnswers,
+            studentEmail,
         );
 
         return result;
@@ -118,17 +121,20 @@ function buildAttemptService() {
                 startedAt: true,
                 endedAt: true,
                 answers: true,
+                student: { id: true, email: true },
             },
 
-            relations: ['exam'],
+            relations: ['exam', 'student'],
         });
         const exam = await examService.getExamQuestions(attempt.exam.id);
         const attemptAnswers = attemptUtils.parseAnswers(attempt.answers);
+        const studentEmail = attempt.student.email;
 
         const result = attemptAdaptator.convertAttemptToAttemptWithoutAnswers(
             attempt,
             exam,
             attemptAnswers,
+            studentEmail,
         );
 
         return result;

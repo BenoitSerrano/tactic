@@ -13,6 +13,7 @@ type questionAnswerType = Record<number, string>;
 function QuestionsAnswering(props: {
     attemptId: string;
     title: string;
+    studentEmail: string;
     exercises: Array<exerciseType>;
     onExamDone: () => void;
 }) {
@@ -53,6 +54,7 @@ function QuestionsAnswering(props: {
     return (
         <>
             <TestPageLayout
+                studentEmail={props.studentEmail}
                 title={props.title}
                 buttons={[
                     <LoadingButton

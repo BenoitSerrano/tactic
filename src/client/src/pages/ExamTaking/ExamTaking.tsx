@@ -60,6 +60,7 @@ function ExamTaking() {
         >
             <ExamPageContainer>
                 <QuestionsAnswering
+                    studentEmail={query.data.studentEmail}
                     title={query.data.exam.name}
                     exercises={query.data.exam.exercises}
                     attemptId={attemptId}

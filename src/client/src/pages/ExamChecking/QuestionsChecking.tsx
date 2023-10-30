@@ -14,6 +14,7 @@ type marksType = Record<number, string>;
 function QuestionsChecking(props: {
     questions: Array<questionType>;
     examName: string;
+    studentEmail: string;
     attemptId: string;
 }) {
     const initialMarks = props.questions.reduce(
@@ -42,6 +43,7 @@ function QuestionsChecking(props: {
 
     return (
         <TestPageLayout
+            studentEmail={props.studentEmail}
             title={props.examName}
             buttons={[
                 <LoadingButton

@@ -28,6 +28,7 @@ function ExamChecking() {
     return (
         <MainContainer>
             <QuestionsChecking
+                studentEmail={query.data.studentEmail}
                 attemptId={attemptId}
                 examName={query.data.exam.name}
                 questions={questions}

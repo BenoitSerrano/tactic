@@ -1,4 +1,5 @@
 import { Exam } from '../exam';
+import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptUtils } from './attempt.utils';
 import { attemptAnswersType } from './types';
@@ -12,11 +13,13 @@ function convertAttemptToAttemptWithoutAnswers(
     attempt: Attempt,
     exam: Exam,
     attemptAnswers: attemptAnswersType,
+    studentEmail: Student['email'],
 ) {
     return {
         id: attempt.id,
         startedAt: attempt.startedAt,
         endedAt: attempt.endedAt,
+        studentEmail,
         exam: {
             id: exam.id,
             name: exam.name,
@@ -41,6 +44,7 @@ function convertAttemptToAttemptWithAnswers(
     attempt: Attempt,
     exam: Exam,
     attemptAnswers: attemptAnswersType,
+    studentEmail: Student['email'],
 ) {
     const questions = exam.exercises.map((exercise) => exercise.questions).flat();
     const marks = attemptUtils.aggregateMarks({
@@ -53,6 +57,7 @@ function convertAttemptToAttemptWithAnswers(
         id: attempt.id,
         startedAt: attempt.startedAt,
         updatedAt: attempt.updatedAt,
+        studentEmail,
         exam: {
             id: exam.id,
             name: exam.name,
