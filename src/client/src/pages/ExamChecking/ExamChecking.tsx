@@ -17,6 +17,7 @@ function ExamChecking() {
         ['attempts', attemptId],
         () => api.fetchAttemptWithAnswers(attemptId),
     );
+
     const attemptIdsQuery = useQuery<attemptIdsApiType>(['exams', examId, 'attemptIds'], () =>
         api.fetchAttemptIds(examId),
     );

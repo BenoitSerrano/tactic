@@ -13,7 +13,7 @@ function AdminPage(props: { children: React.ReactNode | null }) {
     }
     return (
         <Container>
-            <Header buttons={[<LogoutButton />]} logoLink="/teacher" />
+            <Header buttons={[<LogoutButton key="logout-button" />]} logoLink="/teacher" />
 
             <ContentContainer>
                 <Breadcrumbs />

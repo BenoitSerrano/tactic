@@ -100,6 +100,7 @@ function QuestionsChecking(props: {
             title={props.examName}
             buttons={[
                 <LoadingButton
+                    key="save-marks-button"
                     loading={saveMarksMutation.isLoading}
                     variant="contained"
                     onClick={saveMarks}
@@ -109,7 +110,7 @@ function QuestionsChecking(props: {
             ]}
         >
             {props.exercises.map((exercise) => (
-                <ExerciseContainer>
+                <ExerciseContainer key={exercise.id}>
                     <ExerciseTitleContainer>
                         <Typography variant="h3">{exercise.name}</Typography>
                         <Typography variant="h4">{exercise.instruction}</Typography>

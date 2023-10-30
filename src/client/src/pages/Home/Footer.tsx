@@ -23,6 +23,6 @@ const Container = styled('div')(({ theme }) => ({
     borderTop: `${theme.palette.divider} 1px solid`,
 }));
 
-const InnerContainer = styled('div')();
+const InnerContainer = styled('div')({});
 
 export { Footer };
