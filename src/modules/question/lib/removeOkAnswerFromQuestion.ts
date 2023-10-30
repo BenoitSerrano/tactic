@@ -4,7 +4,6 @@ import { questionEncoder } from './questionEncoder';
 
 function removeOkAnswerFromQuestion(question: Question, okAnswer: string) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
-    console.log('OkAnswer', okAnswer);
     const sanitizedOkAnswer = sanitizer.sanitizeString(okAnswer);
 
     const acceptableAnswerIndex = decodedQuestion.acceptableAnswers.findIndex(
@@ -15,14 +14,15 @@ function removeOkAnswerFromQuestion(question: Question, okAnswer: string) {
         acceptableAnswers.splice(acceptableAnswerIndex, 1);
         decodedQuestion.acceptableAnswers = acceptableAnswers;
     }
-
-    const rightAnswerIndex = decodedQuestion.rightAnswers.findIndex(
-        (rightAnswer) => sanitizer.sanitizeString(rightAnswer) === sanitizedOkAnswer,
-    );
-    if (rightAnswerIndex !== -1) {
-        const rightAnswers = [...decodedQuestion.rightAnswers];
-        rightAnswers.splice(rightAnswerIndex, 1);
-        decodedQuestion.rightAnswers = rightAnswers;
+    if (decodedQuestion.rightAnswers.length > 1) {
+        const rightAnswerIndex = decodedQuestion.rightAnswers.findIndex(
+            (rightAnswer) => sanitizer.sanitizeString(rightAnswer) === sanitizedOkAnswer,
+        );
+        if (rightAnswerIndex !== -1) {
+            const rightAnswers = [...decodedQuestion.rightAnswers];
+            rightAnswers.splice(rightAnswerIndex, 1);
+            decodedQuestion.rightAnswers = rightAnswers;
+        }
     }
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

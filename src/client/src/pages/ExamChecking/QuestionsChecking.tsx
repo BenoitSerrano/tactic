@@ -164,7 +164,10 @@ function QuestionsChecking(props: {
                                                 <IconButton
                                                     size="small"
                                                     color="error"
-                                                    disabled={answerStatus === 'wrong'}
+                                                    disabled={
+                                                        answerStatus === 'wrong' ||
+                                                        question.rightAnswers.length <= 1
+                                                    }
                                                     onClick={buildOnRemoveOkAnswer(
                                                         question.id,
                                                         question.answer,
