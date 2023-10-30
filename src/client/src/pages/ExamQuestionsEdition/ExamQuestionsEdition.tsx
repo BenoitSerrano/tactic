@@ -15,9 +15,10 @@ function ExamQuestionsEdition() {
     const params = useParams<{ examId: string; exerciseId: string }>();
     const examId = params.examId as string;
     const exerciseId = Number(params.exerciseId);
-    const query = useQuery<exerciseApiType>(['exams', examId, 'exercises', exerciseId], () =>
-        api.fetchExercise({ examId, exerciseId }),
-    );
+    const query = useQuery<exerciseApiType>({
+        queryKey: ['exams', examId, 'exercises', exerciseId],
+        queryFn: () => api.fetchExercise({ examId, exerciseId }),
+    });
 
     const [currentQuestionModalStatus, setCurrentQuestionModalStatus] = useState<
         modalStatusType | undefined

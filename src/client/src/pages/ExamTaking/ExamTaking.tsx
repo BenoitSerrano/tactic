@@ -14,9 +14,10 @@ function ExamTaking() {
     const attemptId = params.attemptId as string;
     const studentId = params.studentId as string;
     const navigate = useNavigate();
-    const query = useQuery<attemptWithoutAnswersType>(['attempts-without-answers', attemptId], () =>
-        api.fetchAttemptWithoutAnswers(attemptId),
-    );
+    const query = useQuery<attemptWithoutAnswersType>({
+        queryKey: ['attempts-without-answers', attemptId],
+        queryFn: () => api.fetchAttemptWithoutAnswers(attemptId),
+    });
 
     if (!query.data) {
         return (

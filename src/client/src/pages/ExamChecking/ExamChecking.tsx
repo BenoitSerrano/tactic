@@ -13,14 +13,15 @@ function ExamChecking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
     const examId = params.examId as string;
-    const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>(
-        ['attempts', attemptId],
-        () => api.fetchAttemptWithAnswers(attemptId),
-    );
+    const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
+        queryKey: ['attempts', attemptId],
+        queryFn: () => api.fetchAttemptWithAnswers(attemptId),
+    });
 
-    const attemptIdsQuery = useQuery<attemptIdsApiType>(['exams', examId, 'attemptIds'], () =>
-        api.fetchAttemptIds(examId),
-    );
+    const attemptIdsQuery = useQuery<attemptIdsApiType>({
+        queryKey: ['exams', examId, 'attemptIds'],
+        queryFn: () => api.fetchAttemptIds(examId),
+    });
     const navigate = useNavigate();
 
     if (!attemptWithAnswersQuery.data || !attemptIdsQuery.data) {
@@ -40,6 +41,7 @@ function ExamChecking() {
                 </IconButton>
             </LeftArrowContainer>
             <QuestionsChecking
+                onEditAnswers={attemptWithAnswersQuery.refetch}
                 studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}
                 examId={examId}

@@ -41,8 +41,8 @@ function ExamUpsertionModal(props: { close: () => void; modalStatus: modalStatus
     });
 
     const isConfirmDisabled = computeIsConfirmDisabled({ name, duration });
-    const isCreating = createExamMutation.isLoading;
-    const isUpdating = updateExamMutation.isLoading;
+    const isCreating = createExamMutation.isPending;
+    const isUpdating = updateExamMutation.isPending;
     const confirmButtonLabel = props.modalStatus.kind === 'creating' ? 'Créer' : 'Modifier';
     const titlePrefix = props.modalStatus.kind === 'creating' ? 'Création' : 'Édition';
 

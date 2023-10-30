@@ -17,7 +17,10 @@ function ExamExercises() {
         modalStatusType | undefined
     >();
     const examId = params.examId as string;
-    const query = useQuery<examApiType>(['exams', examId], () => api.fetchExam(examId));
+    const query = useQuery<examApiType>({
+        queryKey: ['exams', examId],
+        queryFn: () => api.fetchExam(examId),
+    });
     if (!query.data) {
         if (query.isLoading) {
             return <Loader />;

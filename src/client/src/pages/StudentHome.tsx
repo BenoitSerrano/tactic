@@ -12,11 +12,15 @@ function StudentHome() {
     const examId = params.examId as string;
     const navigate = useNavigate();
 
-    const attemptQuery = useQuery(['exams', examId, 'students', studentId, 'attempts'], () =>
-        api.searchAttempt({ examId, studentId }),
-    );
+    const attemptQuery = useQuery({
+        queryKey: ['exams', examId, 'students', studentId, 'attempts'],
+        queryFn: () => api.searchAttempt({ examId, studentId }),
+    });
 
-    const examQuery = useQuery(['exams', examId], () => api.fetchExam(examId));
+    const examQuery = useQuery({
+        queryKey: ['exams', examId],
+        queryFn: () => api.fetchExam(examId),
+    });
 
     const createAttemptMutation = useMutation({
         mutationFn: api.createAttempt,

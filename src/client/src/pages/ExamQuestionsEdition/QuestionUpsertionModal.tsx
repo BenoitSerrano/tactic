@@ -66,8 +66,8 @@ function QuestionUpsertionModal(props: {
             : ['', '', '', ''],
     );
 
-    const isUpdating = updateQuestionMutation.isLoading;
-    const isCreating = createQuestionMutation.isLoading;
+    const isUpdating = updateQuestionMutation.isPending;
+    const isCreating = createQuestionMutation.isPending;
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);

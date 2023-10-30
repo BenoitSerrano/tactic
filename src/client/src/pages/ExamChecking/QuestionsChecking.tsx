@@ -1,5 +1,6 @@
 import { IconButton, TextField, Tooltip, Typography, styled } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
@@ -7,7 +8,6 @@ import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../../components/TestPageLayout';
 import { LoadingButton } from '@mui/lab';
-import { QueryClient, useMutation } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { exerciseType, questionType } from './types';
@@ -16,13 +16,13 @@ import { computeAnswerStatus } from './lib/computeAnswerStatus';
 type marksType = Record<number, string>;
 
 function QuestionsChecking(props: {
+    onEditAnswers: () => void;
     exercises: Array<exerciseType>;
     examName: string;
     examId: string;
     studentEmail: string;
     attemptId: string;
 }) {
-    const queryClient = new QueryClient();
     const questions: Array<questionType> = [];
     for (const exercise of props.exercises) {
         questions.push(...exercise.questions);
@@ -55,7 +55,7 @@ function QuestionsChecking(props: {
     const addRightAnswerMutation = useMutation({
         mutationFn: api.addQuestionRightAnswer,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            props.onEditAnswers();
         },
         onError: (error) => {
             console.error(error);
@@ -69,7 +69,7 @@ function QuestionsChecking(props: {
     const removeOkAnswerMutation = useMutation({
         mutationFn: api.removeOkAnswer,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            props.onEditAnswers();
         },
         onError: (error) => {
             console.error(error);
@@ -83,7 +83,7 @@ function QuestionsChecking(props: {
     const addAcceptableAnswerMutation = useMutation({
         mutationFn: api.addQuestionAcceptableAnswer,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            props.onEditAnswers();
         },
         onError: (error) => {
             console.error(error);
@@ -101,7 +101,7 @@ function QuestionsChecking(props: {
             buttons={[
                 <LoadingButton
                     key="save-marks-button"
-                    loading={saveMarksMutation.isLoading}
+                    loading={saveMarksMutation.isPending}
                     variant="contained"
                     onClick={saveMarks}
                 >
@@ -152,7 +152,11 @@ function QuestionsChecking(props: {
                                                 <IconButton
                                                     size="small"
                                                     color="warning"
-                                                    disabled={answerStatus === 'acceptable'}
+                                                    disabled={
+                                                        answerStatus === 'acceptable' ||
+                                                        (answerStatus === 'right' &&
+                                                            question.rightAnswers.length <= 1)
+                                                    }
                                                     onClick={buildOnAddToAcceptableAnswers(
                                                         question.id,
                                                         question.answer,

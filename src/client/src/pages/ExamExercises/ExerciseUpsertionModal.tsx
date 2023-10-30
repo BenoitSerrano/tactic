@@ -51,8 +51,8 @@ function ExerciseUpsertionModal(props: {
         props.modalStatus.kind === 'editing' ? `${props.modalStatus.exercise.defaultPoints}` : '1',
     );
 
-    const isUpdating = updateExerciseMutation.isLoading;
-    const isCreating = createExerciseMutation.isLoading;
+    const isUpdating = updateExerciseMutation.isPending;
+    const isCreating = createExerciseMutation.isPending;
 
     const confirmButtonLabel = props.modalStatus.kind === 'creating' ? 'Ajouter' : 'Modifier';
     const titlePrefix = props.modalStatus.kind === 'creating' ? 'Création' : 'Édition';

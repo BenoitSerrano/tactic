@@ -12,7 +12,7 @@ import { useAlert } from '../lib/alert';
 function StudentAuthentication() {
     const params = useParams();
     const examId = params.examId as string;
-    const query = useQuery(['exams', examId], () => api.fetchExam(examId));
+    const query = useQuery({ queryKey: ['exams', examId], queryFn: () => api.fetchExam(examId) });
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
 
