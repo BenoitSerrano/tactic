@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { IconButton, styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -6,11 +6,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
-import { attemptIdsApiType, attemptWithAnswersApiType } from './types';
+import { attemptWithAnswersApiType } from './types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 
 function ExamChecking() {
     const params = useParams();
+    const [searchParams] = useSearchParams();
     const attemptId = params.attemptId as string;
     const examId = params.examId as string;
     const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
@@ -18,20 +19,19 @@ function ExamChecking() {
         queryFn: () => api.fetchAttemptWithAnswers(attemptId),
     });
 
-    const attemptIdsQuery = useQuery<attemptIdsApiType>({
-        queryKey: ['exams', examId, 'attemptIds'],
-        queryFn: () => api.fetchAttemptIds(examId),
-    });
     const navigate = useNavigate();
 
-    if (!attemptWithAnswersQuery.data || !attemptIdsQuery.data) {
-        if (attemptWithAnswersQuery.isLoading || attemptIdsQuery.isLoading) {
+    if (!attemptWithAnswersQuery.data) {
+        if (attemptWithAnswersQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
     }
 
-    const { next, previous } = computeAttemptIdNeighbours(attemptId, attemptIdsQuery.data);
+    const { next, previous } = computeAttemptIdNeighbours(
+        attemptId,
+        searchParams.get('attemptIds'),
+    );
 
     return (
         <MainContainer>
@@ -66,7 +66,11 @@ function ExamChecking() {
     }
 
     function navigateToNewAttempt(newAttemptId: string) {
-        navigate(`/teacher/exams/${examId}/results/${newAttemptId}`);
+        navigate(
+            `/teacher/exams/${examId}/results/${newAttemptId}?attemptIds=${searchParams.get(
+                'attemptIds',
+            )}`,
+        );
     }
 }
 

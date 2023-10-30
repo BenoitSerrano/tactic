@@ -62,6 +62,7 @@ function ExamResults() {
     const formattedData = formatData(query.data.results);
 
     const sortedData = sortData(formattedData, activeSort, sortDirection);
+    const sortedAttemptIds = sortedData.map(({ attemptId }) => attemptId);
 
     return (
         <Table stickyHeader>
@@ -138,7 +139,7 @@ function ExamResults() {
                             </TableCell>
                             <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
                             <TableCell>
-                                <Link to={`/teacher/exams/${examId}/results/${result.attemptId}`}>
+                                <Link to={computeAttemptRoute(result.attemptId)}>
                                     {result.email}
                                 </Link>
                             </TableCell>
@@ -163,9 +164,15 @@ function ExamResults() {
         };
     }
 
+    function computeAttemptRoute(attemptId: string) {
+        return `/teacher/exams/${examId}/results/${attemptId}?attemptIds=${sortedAttemptIds.join(
+            ',',
+        )}`;
+    }
+
     function buildGoToAttempt(attemptId: string) {
         return () => {
-            navigate(`/teacher/exams/${examId}/results/${attemptId}`);
+            navigate(computeAttemptRoute(attemptId));
         };
     }
 

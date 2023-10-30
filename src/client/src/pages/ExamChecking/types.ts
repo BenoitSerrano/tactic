@@ -18,8 +18,6 @@ type exerciseType = {
     questions: Array<questionType>;
 };
 
-type attemptIdsApiType = Array<string>;
-
 type questionType = {
     id: number;
     title: string;
@@ -34,10 +32,4 @@ type questionType = {
 
 type answerStatusType = 'wrong' | 'acceptable' | 'right';
 
-export type {
-    attemptWithAnswersApiType,
-    exerciseType,
-    questionType,
-    attemptIdsApiType,
-    answerStatusType,
-};
+export type { attemptWithAnswersApiType, exerciseType, questionType, answerStatusType };

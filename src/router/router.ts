@@ -267,8 +267,6 @@ router.get(
     buildController(attemptController.searchAttempts),
 );
 
-router.get('/exams/:examId/attempts', buildController(attemptController.fetchAttemptIds));
-
 router.post(
     '/exams/:examId/students/:studentId/attempts',
     buildController(attemptController.createAttempt),

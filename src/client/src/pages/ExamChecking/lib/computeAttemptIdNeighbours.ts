@@ -1,6 +1,11 @@
-function computeAttemptIdNeighbours(attemptId: string, attemptIds: string[]) {
+function computeAttemptIdNeighbours(attemptId: string, searchAttemptIds: string | null) {
     let previous: string | undefined = undefined;
     let next: string | undefined = undefined;
+    if (!searchAttemptIds) {
+        return { previous, next };
+    }
+
+    const attemptIds = searchAttemptIds.split(',');
     const attemptIndex = attemptIds.indexOf(attemptId);
     if (attemptIndex === -1) {
         return { previous, next };

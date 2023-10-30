@@ -6,7 +6,6 @@ const api = {
     login,
     createUser,
     patchComment,
-    fetchAttemptIds,
     searchAttempt,
     createAttempt,
     fetchAttemptWithAnswers,
@@ -92,11 +91,6 @@ async function patchComment(studentId: string, comment: string) {
 
 async function searchAttempt({ examId, studentId }: { examId: string; studentId: string }) {
     const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
-    return performApiCall(URL, 'GET');
-}
-
-async function fetchAttemptIds(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/attempts`;
     return performApiCall(URL, 'GET');
 }
 
