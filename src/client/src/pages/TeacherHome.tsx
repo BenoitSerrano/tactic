@@ -28,6 +28,7 @@ function TeacherHome() {
 
 const Container = styled('div')({
     display: 'flex',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
