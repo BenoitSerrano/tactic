@@ -10,21 +10,25 @@ import { LoadingButton } from '@mui/lab';
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
-import { questionType } from './types';
+import { exerciseType, questionType } from './types';
 import { computeAnswerStatus } from './lib/computeAnswerStatus';
 
 type marksType = Record<number, string>;
 
 function QuestionsChecking(props: {
-    questions: Array<questionType>;
+    exercises: Array<exerciseType>;
     examName: string;
     examId: string;
     studentEmail: string;
     attemptId: string;
 }) {
     const queryClient = new QueryClient();
+    const questions: Array<questionType> = [];
+    for (const exercise of props.exercises) {
+        questions.push(...exercise.questions);
+    }
 
-    const initialMarks = props.questions.reduce(
+    const initialMarks = questions.reduce(
         (acc, question) => ({
             ...acc,
             [question.id]: question.mark === undefined ? '' : `${question.mark}`,
@@ -104,77 +108,85 @@ function QuestionsChecking(props: {
                 </LoadingButton>,
             ]}
         >
-            {props.questions.map((question, index: number) => {
-                const answerStatus = computeAnswerStatus(question.mark, question.points);
-                return (
-                    <QuestionCheckingContainer key={question.id}>
-                        <QuestionIndicatorsContainer>
-                            <QuestionIndicatorContainer>
-                                {question.rightAnswers.length === 0 ? (
-                                    <MarkTextField
-                                        onChange={buildOnMarkChange(question.id)}
-                                        value={marks[question.id] || ''}
-                                        variant="standard"
-                                    />
-                                ) : (
-                                    <Typography>{question.mark || 0}</Typography>
-                                )}
-                                <Typography> / {question.points}</Typography>
-                            </QuestionIndicatorContainer>
+            {props.exercises.map((exercise) => (
+                <ExerciseContainer>
+                    <ExerciseTitleContainer>
+                        <Typography variant="h3">{exercise.name}</Typography>
+                        <Typography variant="h4">{exercise.instruction}</Typography>
+                    </ExerciseTitleContainer>
+                    {exercise.questions.map((question, index: number) => {
+                        const answerStatus = computeAnswerStatus(question.mark, question.points);
+                        return (
+                            <QuestionCheckingContainer key={question.id}>
+                                <QuestionIndicatorsContainer>
+                                    <QuestionIndicatorContainer>
+                                        {question.rightAnswers.length === 0 ? (
+                                            <MarkTextField
+                                                onChange={buildOnMarkChange(question.id)}
+                                                value={marks[question.id] || ''}
+                                                variant="standard"
+                                            />
+                                        ) : (
+                                            <Typography>{question.mark || 0}</Typography>
+                                        )}
+                                        <Typography> / {question.points}</Typography>
+                                    </QuestionIndicatorContainer>
 
-                            {question.kind === 'questionTrou' && (
-                                <UpdateAnswersButtonContainer>
-                                    <Tooltip title="Marquer la réponse comme correcte">
-                                        <IconButton
-                                            size="small"
-                                            color="success"
-                                            disabled={answerStatus === 'right'}
-                                            onClick={buildOnAddToRightAnswers(
-                                                question.id,
-                                                question.answer,
-                                            )}
-                                        >
-                                            <CheckIcon fontSize="small" />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Marquer la réponse comme acceptable">
-                                        <IconButton
-                                            size="small"
-                                            color="warning"
-                                            disabled={answerStatus === 'acceptable'}
-                                            onClick={buildOnAddToAcceptableAnswers(
-                                                question.id,
-                                                question.answer,
-                                            )}
-                                        >
-                                            <SentimentNeutralIcon fontSize="small" />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Marquer la réponse comme incorrecte">
-                                        <IconButton
-                                            size="small"
-                                            color="error"
-                                            disabled={answerStatus === 'wrong'}
-                                            onClick={buildOnRemoveOkAnswer(
-                                                question.id,
-                                                question.answer,
-                                            )}
-                                        >
-                                            <ClearIcon fontSize="small" />
-                                        </IconButton>
-                                    </Tooltip>
-                                </UpdateAnswersButtonContainer>
-                            )}
-                        </QuestionIndicatorsContainer>
-                        <QuestionChecking
-                            key={'question' + question.id}
-                            index={index + 1}
-                            question={question}
-                            answerStatus={answerStatus}
-                        />
-                    </QuestionCheckingContainer>
-                );
-            })}
+                                    {question.kind === 'questionTrou' && (
+                                        <UpdateAnswersButtonContainer>
+                                            <Tooltip title="Marquer la réponse comme correcte">
+                                                <IconButton
+                                                    size="small"
+                                                    color="success"
+                                                    disabled={answerStatus === 'right'}
+                                                    onClick={buildOnAddToRightAnswers(
+                                                        question.id,
+                                                        question.answer,
+                                                    )}
+                                                >
+                                                    <CheckIcon fontSize="small" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Marquer la réponse comme acceptable">
+                                                <IconButton
+                                                    size="small"
+                                                    color="warning"
+                                                    disabled={answerStatus === 'acceptable'}
+                                                    onClick={buildOnAddToAcceptableAnswers(
+                                                        question.id,
+                                                        question.answer,
+                                                    )}
+                                                >
+                                                    <SentimentNeutralIcon fontSize="small" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Marquer la réponse comme incorrecte">
+                                                <IconButton
+                                                    size="small"
+                                                    color="error"
+                                                    disabled={answerStatus === 'wrong'}
+                                                    onClick={buildOnRemoveOkAnswer(
+                                                        question.id,
+                                                        question.answer,
+                                                    )}
+                                                >
+                                                    <ClearIcon fontSize="small" />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </UpdateAnswersButtonContainer>
+                                    )}
+                                </QuestionIndicatorsContainer>
+                                <QuestionChecking
+                                    key={'question' + question.id}
+                                    index={index + 1}
+                                    question={question}
+                                    answerStatus={answerStatus}
+                                />
+                            </QuestionCheckingContainer>
+                        );
+                    })}
+                </ExerciseContainer>
+            ))}
         </TestPageLayout>
     );
 
@@ -248,6 +260,16 @@ const QuestionIndicatorContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'baseline',
 });
+
+const ExerciseContainer = styled('div')(({ theme }) => ({
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    borderBottom: `1px solid ${theme.palette.common.black}`,
+}));
+
+const ExerciseTitleContainer = styled('div')(({ theme }) => ({
+    marginBottom: theme.spacing(3),
+}));
 
 const QuestionIndicatorsContainer = styled('div')({});
 

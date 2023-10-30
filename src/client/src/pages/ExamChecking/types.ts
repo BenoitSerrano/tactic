@@ -8,7 +8,14 @@ type attemptWithAnswersApiType = {
 type examType = {
     id: string;
     name: string;
-    exercises: Array<{ id: number; questions: Array<questionType> }>;
+    exercises: Array<exerciseType>;
+};
+
+type exerciseType = {
+    id: number;
+    name: string;
+    instruction: string;
+    questions: Array<questionType>;
 };
 
 type attemptIdsApiType = Array<string>;
@@ -27,4 +34,10 @@ type questionType = {
 
 type answerStatusType = 'wrong' | 'acceptable' | 'right';
 
-export type { attemptWithAnswersApiType, questionType, attemptIdsApiType, answerStatusType };
+export type {
+    attemptWithAnswersApiType,
+    exerciseType,
+    questionType,
+    attemptIdsApiType,
+    answerStatusType,
+};

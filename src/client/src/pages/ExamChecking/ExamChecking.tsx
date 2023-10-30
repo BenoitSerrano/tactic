@@ -6,7 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
-import { attemptIdsApiType, attemptWithAnswersApiType, questionType } from './types';
+import { attemptIdsApiType, attemptWithAnswersApiType } from './types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 
 function ExamChecking() {
@@ -31,11 +31,6 @@ function ExamChecking() {
 
     const { next, previous } = computeAttemptIdNeighbours(attemptId, attemptIdsQuery.data);
 
-    const questions: Array<questionType> = [];
-    for (const exercise of attemptWithAnswersQuery.data.exam.exercises) {
-        questions.push(...exercise.questions);
-    }
-
     return (
         <MainContainer>
             <LeftArrowContainer>
@@ -47,8 +42,8 @@ function ExamChecking() {
                 studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}
                 examId={examId}
+                exercises={attemptWithAnswersQuery.data.exam.exercises}
                 examName={attemptWithAnswersQuery.data.exam.name}
-                questions={questions}
             />
             <RightArrowContainer>
                 <IconButton disabled={!next} onClick={buildOnArrowClick(next)}>
