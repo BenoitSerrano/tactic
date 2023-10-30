@@ -1,50 +1,34 @@
-import { Exam } from '../exam';
-import { Attempt } from './Attempt.entity';
 import { attemptUtils } from './attempt.utils';
 
 describe('attemptsUtils', () => {
     describe('computeIsTimeLimitExceeded', () => {
-        const exam = new Exam();
-        exam.name = 'exam';
-        exam.duration = 15;
-        exam.extraTime = 2;
+        const duration = 15;
+        const extraTime = 2;
 
         it('is in white zone', () => {
-            const attempt = new Attempt();
-            attempt.exam = exam;
-            attempt.startedAt = '2023-06-19T19:00:00.858Z';
+            const startedAt = '2023-06-19T19:00:00.858Z';
+            const now = new Date('2023-06-19T19:06:00.858Z');
 
             expect(
-                attemptUtils.computeIsTimeLimitExceeded(
-                    attempt,
-                    new Date('2023-06-19T19:06:00.858Z'),
-                ),
+                attemptUtils.computeIsTimeLimitExceeded({ duration, extraTime, startedAt, now }),
             ).toBe(false);
         });
 
         it('is in gray zone', () => {
-            const attempt = new Attempt();
-            attempt.exam = exam;
-            attempt.startedAt = '2023-06-19T19:00:00.858Z';
+            const startedAt = '2023-06-19T19:00:00.858Z';
+            const now = new Date('2023-06-19T19:16:00.858Z');
 
             expect(
-                attemptUtils.computeIsTimeLimitExceeded(
-                    attempt,
-                    new Date('2023-06-19T19:16:00.858Z'),
-                ),
+                attemptUtils.computeIsTimeLimitExceeded({ duration, extraTime, startedAt, now }),
             ).toBe(false);
         });
 
         it('is exceeded', () => {
-            const attempt = new Attempt();
-            attempt.exam = exam;
-            attempt.startedAt = '2023-06-19T19:00:00.858Z';
+            const startedAt = '2023-06-19T19:00:00.858Z';
+            const now = new Date('2023-06-19T19:18:00.858Z');
 
             expect(
-                attemptUtils.computeIsTimeLimitExceeded(
-                    attempt,
-                    new Date('2023-06-19T19:18:00.858Z'),
-                ),
+                attemptUtils.computeIsTimeLimitExceeded({ duration, extraTime, startedAt, now }),
             ).toBe(true);
         });
     });
