@@ -5,6 +5,7 @@ import { User } from '../user';
 import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
+import { In } from 'typeorm';
 
 export { buildExamService };
 
@@ -18,6 +19,7 @@ function buildExamService() {
         getExam,
         getExamExercises,
         getExamQuestions,
+        getExamsByIds,
         deleteExam,
         getExamResults,
         bulkInsertExams,
@@ -56,6 +58,15 @@ function buildExamService() {
             },
             relations: ['exercises'],
         });
+    }
+
+    async function getExamsByIds(examIds: Array<Exam['id']>) {
+        const exams = await examRepository.find({
+            where: { id: In(examIds) },
+            select: { id: true, name: true, duration: true, extraTime: true },
+        });
+
+        return mapEntities(exams);
     }
 
     async function getExamQuestions(examId: string): Promise<Exam> {

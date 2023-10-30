@@ -135,7 +135,16 @@ function buildAttemptService() {
     }
 
     async function assertIsTimeLimitNotExceeded(attempt: Attempt) {
-        if (attemptUtils.isTimeLimitExceeded(attempt, new Date())) {
+        const { startedAt, exam } = attempt;
+        const now = new Date();
+        if (
+            attemptUtils.computeIsTimeLimitExceeded({
+                now,
+                startedAt,
+                duration: exam.duration,
+                extraTime: exam.extraTime,
+            })
+        ) {
             throw new Error(`The time limit is exceeded!`);
         }
     }

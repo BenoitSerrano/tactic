@@ -16,11 +16,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
-import { iconLib } from '../../lib/icons';
 import { time } from '../../lib/time';
+import { examStatusType } from './types';
+import { computeIconColor } from './lib/computeIconColor';
 
 type sortColumnType = 'email' | 'createdDate' | string;
-type examStatusType = 'blank' | 'pending' | 'done';
 
 type studentsSummaryType = {
     students: Array<{
@@ -29,7 +29,7 @@ type studentsSummaryType = {
         createdDate: string;
         examStatus: Record<string, examStatusType>;
     }>;
-    exams: Record<string, string>;
+    examNames: Record<string, string>;
 };
 
 function Students() {
@@ -103,7 +103,7 @@ function Students() {
                                 Date d'ajout
                             </TableSortLabel>
                         </TableCell>
-                        {Object.entries(query.data.exams).map(([examId, examName]) => (
+                        {Object.entries(query.data.examNames).map(([examId, examName]) => (
                             <TableCell key={'label-' + examId}>
                                 <TableSortLabel
                                     active={activeSort === examId}
@@ -136,9 +136,9 @@ function Students() {
                             <TableCell>
                                 {time.formatToReadableDatetime(student.createdDate)}
                             </TableCell>
-                            {Object.keys(query.data.exams).map((examId) => (
+                            {Object.keys(query.data.examNames).map((examId) => (
                                 <TableCell key={'examStatus-' + examId}>
-                                    {iconLib.computeIconColor(student.examStatus[examId])}
+                                    {computeIconColor(student.examStatus[examId])}
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -200,11 +200,13 @@ function Students() {
 
 function convertExamStatusToValue(status: examStatusType): number {
     switch (status) {
-        case 'done':
+        case 'finished':
+            return 1;
+        case 'expired':
             return 1;
         case 'pending':
             return 0;
-        case 'blank':
+        case 'notStarted':
             return -1;
     }
 }

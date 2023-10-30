@@ -1,4 +1,5 @@
 import { encoder } from '../../lib/encoder';
+import { Exam } from '../exam';
 import { Question } from '../question';
 import { Attempt } from './Attempt.entity';
 import { AttemptInterface } from './attempt.interface';
@@ -6,7 +7,7 @@ import { computeAutomaticMark } from './lib/computeAutomaticMark';
 import { attemptAnswersType } from './types';
 
 const attemptUtils = {
-    isTimeLimitExceeded,
+    computeIsTimeLimitExceeded,
     stringifyAnswers,
     parseAnswers,
     encodeMarks,
@@ -14,11 +15,21 @@ const attemptUtils = {
     aggregateMarks,
 };
 
-function isTimeLimitExceeded(attempt: AttemptInterface, now: Date) {
-    const attemptStartedDate = new Date(attempt.startedAt);
+function computeIsTimeLimitExceeded({
+    startedAt,
+    duration,
+    extraTime,
+    now,
+}: {
+    startedAt: Attempt['startedAt'];
+    duration: Exam['duration'];
+    extraTime: Exam['extraTime'];
+    now: Date;
+}) {
+    const attemptStartedDate = new Date(startedAt);
 
     const elapsedSeconds = Math.floor((now.getTime() - attemptStartedDate.getTime()) / 1000);
-    const extendedAllowedTime = (attempt.exam.duration + attempt.exam.extraTime) * 60;
+    const extendedAllowedTime = (duration + extraTime) * 60;
 
     return elapsedSeconds > extendedAllowedTime;
 }

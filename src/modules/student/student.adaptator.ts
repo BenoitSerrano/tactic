@@ -1,45 +1,31 @@
-import { attemptUtils } from '../attempt';
-import { AttemptInterface } from '../attempt/attempt.interface';
 import { Exam } from '../exam';
 import { Student } from './Student.entity';
+import { computeExamStatus } from './lib/computeExamStatus';
 
 const studentAdaptator = {
     formatStudentsIntoStudentsSummary,
 };
 
-function formatStudentsIntoStudentsSummary(studentsWithAttempts: Array<Student>) {
-    const exams: Record<Exam['id'], Exam['name']> = {};
-
-    studentsWithAttempts.forEach((studentWithAttempts) => {
-        studentWithAttempts.attempts.forEach((attempt) => {
-            if (!Object.keys(exams).includes(attempt.exam.id)) {
-                exams[attempt.exam.id] = attempt.exam.name;
-            }
+function formatStudentsIntoStudentsSummary(
+    studentsWithAttempts: Array<Student>,
+    exams: Record<Exam['id'], Pick<Exam, 'id' | 'name' | 'duration' | 'extraTime'>>,
+) {
+    const students = studentsWithAttempts
+        .filter((student) => student.email === 'hehe')
+        .map((studentWithAttempts) => {
+            return {
+                id: studentWithAttempts.id,
+                email: studentWithAttempts.email,
+                createdDate: studentWithAttempts.createdDate,
+                examStatus: computeExamStatus(exams, studentWithAttempts.attempts, new Date()),
+            };
         });
+    const examNames: Record<Exam['id'], Exam['name']> = {};
+    Object.keys(exams).forEach((examId) => {
+        examNames[examId] = exams[examId].name;
     });
 
-    const students = studentsWithAttempts.map((studentWithAttempts) => {
-        return {
-            id: studentWithAttempts.id,
-            email: studentWithAttempts.email,
-            createdDate: studentWithAttempts.createdDate,
-            examStatus: computeExamStatus(Object.keys(exams), studentWithAttempts.attempts),
-        };
-    });
-
-    return { exams, students };
-}
-
-function computeExamStatus(examIds: string[], attempts: AttemptInterface[]) {
-    const examStatus: Record<string, 'blank' | 'pending' | 'done'> = {};
-    examIds.forEach((examId) => {
-        examStatus[examId] = 'blank';
-    });
-    attempts.forEach((attempt) => {
-        const status = attemptUtils.isTimeLimitExceeded(attempt, new Date()) ? 'done' : 'pending';
-        examStatus[attempt.exam.id] = status;
-    });
-    return examStatus;
+    return { examNames, students };
 }
 
 export { studentAdaptator };

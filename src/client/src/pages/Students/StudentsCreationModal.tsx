@@ -4,7 +4,7 @@ import { api } from '../../lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
 import { useAlert } from '../../lib/alert';
-import { extractEmailsFromEmailList } from './utils';
+import { extractEmailsFromEmailList } from './lib/extractEmailsFromEmailList';
 
 function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
     const [emailList, setEmailList] = useState('');

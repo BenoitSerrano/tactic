@@ -5,6 +5,7 @@ import { Student } from './Student.entity';
 import { studentAdaptator } from './student.adaptator';
 import { mapEntities } from '../../lib/mapEntities';
 import { hasher } from '../../lib/hasher';
+import { Exam, buildExamService } from '../exam';
 
 export { buildStudentService };
 
@@ -28,11 +29,23 @@ function buildStudentService() {
     async function getStudentsWithAttempts(user?: User) {
         const studentsWithAttempts = await studentRepository.find({
             where: { user },
-            select: { attempts: { id: true, exam: { id: true, name: true } } },
+            select: { attempts: { id: true, startedAt: true, endedAt: true, exam: { id: true } } },
             relations: ['attempts', 'attempts.exam'],
         });
-        const studentsSummary =
-            studentAdaptator.formatStudentsIntoStudentsSummary(studentsWithAttempts);
+        const examIds: Array<Exam['id']> = [];
+        for (const student of studentsWithAttempts) {
+            for (const attempt of student.attempts) {
+                if (!examIds.includes(attempt.exam.id)) {
+                    examIds.push(attempt.exam.id);
+                }
+            }
+        }
+        const examService = buildExamService();
+        const exams = await examService.getExamsByIds(examIds);
+        const studentsSummary = studentAdaptator.formatStudentsIntoStudentsSummary(
+            studentsWithAttempts,
+            exams,
+        );
         return studentsSummary;
     }
 

@@ -1,23 +1,21 @@
 import DoneIcon from '@mui/icons-material/Done';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { Typography } from '@mui/material';
+import { examStatusType } from '../types';
 
-const iconLib = {
-    computeIconColor,
-};
-
-function computeIconColor(status: 'blank' | 'pending' | 'done') {
+function computeIconColor(status: examStatusType) {
     switch (status) {
-        case 'done':
+        case 'finished':
+            return <DoneIcon color="success" />;
+        case 'expired':
             return <DoneIcon color="success" />;
         case 'pending':
             return <PendingActionsIcon color="warning" />;
-
-        case 'blank':
+        case 'notStarted':
             return <Typography color="error">-</Typography>;
         default:
             return <Typography color="error">-</Typography>;
     }
 }
 
-export { iconLib };
+export { computeIconColor };
