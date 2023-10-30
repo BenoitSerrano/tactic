@@ -52,7 +52,7 @@ function StudentAuthentication() {
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                         />
-                        <Button variant="contained" disabled={!email}>
+                        <Button variant="contained" type="submit" disabled={!email}>
                             Se connecter
                         </Button>
                     </Form>
