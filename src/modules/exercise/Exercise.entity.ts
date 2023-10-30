@@ -1,9 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Exam } from '../exam';
 import { Question } from '../question';
 import { questionKindType, questionKinds } from '../question/types';
 
 @Entity()
+@Unique('Order is unique for each exercise of an exam', ['order', 'exam'])
 export class Exercise {
     @PrimaryGeneratedColumn()
     id: number;
