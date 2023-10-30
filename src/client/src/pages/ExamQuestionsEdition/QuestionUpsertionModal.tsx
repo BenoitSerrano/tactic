@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MenuItem, Select, SelectChangeEvent, TextField, styled } from '@mui/material';
+import { TextField, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
-import { questionKindType, questionKinds } from '../../types';
+import { questionKindType } from '../../types';
 import { questionUpsertionModalContentComponentMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
-import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function QuestionUpsertionModal(props: {
     close: () => void;
