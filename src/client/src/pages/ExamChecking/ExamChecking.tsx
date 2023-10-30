@@ -1,46 +1,106 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { styled } from '@mui/material';
+import { IconButton, styled } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
-import { attemptWithAnswersApiType, questionType } from './types';
+import { attemptIdsApiType, attemptWithAnswersApiType, questionType } from './types';
+import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 
 function ExamChecking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
-    const query = useQuery<attemptWithAnswersApiType>(['attempts', attemptId], () =>
-        api.fetchAttemptWithAnswers(attemptId),
+    const examId = params.examId as string;
+    const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>(
+        ['attempts', attemptId],
+        () => api.fetchAttemptWithAnswers(attemptId),
     );
+    const attemptIdsQuery = useQuery<attemptIdsApiType>(['exams', examId, 'attemptIds'], () =>
+        api.fetchAttemptIds(examId),
+    );
+    const navigate = useNavigate();
 
-    if (!query.data) {
-        if (query.isLoading) {
+    if (!attemptWithAnswersQuery.data || !attemptIdsQuery.data) {
+        if (attemptWithAnswersQuery.isLoading || attemptIdsQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
     }
 
+    const { next, previous } = computeAttemptIdNeighbours(attemptId, attemptIdsQuery.data);
+
     const questions: Array<questionType> = [];
-    for (const exercise of query.data.exam.exercises) {
+    for (const exercise of attemptWithAnswersQuery.data.exam.exercises) {
         questions.push(...exercise.questions);
     }
 
     return (
         <MainContainer>
+            <LeftArrowContainer>
+                <IconButton disabled={!previous} onClick={buildOnArrowClick(previous)}>
+                    <ArrowBackIcon fontSize="large" />
+                </IconButton>
+            </LeftArrowContainer>
             <QuestionsChecking
-                studentEmail={query.data.studentEmail}
+                studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}
-                examName={query.data.exam.name}
+                examName={attemptWithAnswersQuery.data.exam.name}
                 questions={questions}
             />
+            <RightArrowContainer>
+                <IconButton disabled={!next} onClick={buildOnArrowClick(next)}>
+                    <ArrowForwardIcon fontSize="large" />
+                </IconButton>
+            </RightArrowContainer>
         </MainContainer>
     );
+
+    function buildOnArrowClick(attemptIdToNavigateTo: string | undefined) {
+        return () => {
+            if (!attemptIdToNavigateTo) {
+                return;
+            }
+            navigateToNewAttempt(attemptIdToNavigateTo);
+        };
+    }
+
+    function navigateToNewAttempt(newAttemptId: string) {
+        navigate(`/teacher/exams/${examId}/results/${newAttemptId}`);
+    }
 }
 
 const MainContainer = styled('div')({
     display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
 });
+
+const ARROW_CONTAINER_SIZE = 100;
+
+const LeftArrowContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'fixed',
+    left: theme.spacing(4),
+    top: `calc(100vh / 2 - ${ARROW_CONTAINER_SIZE / 2}px)`,
+    width: ARROW_CONTAINER_SIZE,
+    height: ARROW_CONTAINER_SIZE,
+}));
+
+const RightArrowContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'fixed',
+    right: theme.spacing(4),
+    top: `calc(100vh / 2 - ${ARROW_CONTAINER_SIZE / 2}px)`,
+    width: ARROW_CONTAINER_SIZE,
+    height: ARROW_CONTAINER_SIZE,
+}));
 
 export { ExamChecking };

@@ -18,6 +18,7 @@ function buildAttemptService() {
         searchAttempts,
         createAttempt,
         updateAttempt,
+        fetchAttemptIds,
         fetchAttemptWithAnswers,
         fetchAttemptWithoutAnswers,
         deleteAttempt,
@@ -39,6 +40,15 @@ function buildAttemptService() {
             where: { exam: { id: examId }, student: { id: studentId } },
         });
         return attempt;
+    }
+
+    async function fetchAttemptIds(examId: Exam['id']) {
+        const attempts = await attemptRepository.find({
+            where: { exam: { id: examId } },
+            select: { id: true },
+        });
+
+        return attempts.map((attempt) => attempt.id);
     }
 
     async function createAttempt(examId: string, studentId: string) {

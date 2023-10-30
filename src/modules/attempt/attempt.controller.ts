@@ -10,6 +10,7 @@ function buildAttemptController() {
         createAttempt,
         updateAttempt,
         searchAttempts,
+        fetchAttemptIds,
         fetchAttemptWithAnswers,
         fetchAttemptWithoutAnswers,
         deleteAttempt,
@@ -22,6 +23,10 @@ function buildAttemptController() {
 
     async function searchAttempts(params: { urlParams: { examId: string; studentId: string } }) {
         return attemptService.searchAttempts(params.urlParams.examId, params.urlParams.studentId);
+    }
+
+    async function fetchAttemptIds(params: { urlParams: { examId: string } }) {
+        return attemptService.fetchAttemptIds(params.urlParams.examId);
     }
 
     async function updateAttempt(params: {
