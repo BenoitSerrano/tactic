@@ -1,3 +1,4 @@
+import { sanitizer } from '../../../lib/sanitizer';
 import { questionKindType } from '../../question/types';
 
 export { computeAutomaticMark };
@@ -29,7 +30,7 @@ function computeAutomaticMark({
         }
         const pointPerAnswer = points / words.length;
         return answer.split(' ').reduce((mark, word, index) => {
-            if (sanitizeString(word) === sanitizeString(rightAnswers[index])) {
+            if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(rightAnswers[index])) {
                 return mark + pointPerAnswer;
             } else {
                 return mark;
@@ -43,29 +44,20 @@ function computeAutomaticMark({
         return 0;
     }
     if (
-        rightAnswers.some((rightAnswer) => sanitizeString(rightAnswer) === sanitizeString(answer))
+        rightAnswers.some(
+            (rightAnswer) =>
+                sanitizer.sanitizeString(rightAnswer) === sanitizer.sanitizeString(answer),
+        )
     ) {
         return points;
     } else if (
         acceptableAnswers.some(
-            (acceptableAnswer) => sanitizeString(acceptableAnswer) === sanitizeString(answer),
+            (acceptableAnswer) =>
+                sanitizer.sanitizeString(acceptableAnswer) === sanitizer.sanitizeString(answer),
         )
     ) {
         return points / 2;
     } else {
         return 0;
     }
-}
-
-function sanitizeString(value: string) {
-    return value
-        .split(' ')
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase()
-        .replace(/ ?' ?/g, "'")
-        .replace(/é/g, 'é')
-        .replace(/ê/g, 'ê')
-        .replace(/’/g, "'")
-        .replace(/\.$/, '');
 }

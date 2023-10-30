@@ -30,6 +30,9 @@ const api = {
     updateExercise,
     deleteExercise,
     updateQuestion,
+    addQuestionRightAnswer,
+    addQuestionAcceptableAnswer,
+    removeOkAnswer,
     deleteQuestion,
     swapQuestions,
     updateMarks,
@@ -47,7 +50,7 @@ async function performApiCall(
     let response: Response;
     const token = localStorage.jwtTokenHandler.get();
 
-    if (method === 'GET' || method === 'DELETE') {
+    if (method === 'GET') {
         response = await fetch(url, { method, headers: { Authorization: `Bearer ${token}` } });
     } else {
         const headers: Record<string, string> = {
@@ -110,6 +113,48 @@ async function fetchAttemptWithAnswers(attemptId: string) {
 async function fetchAttemptWithoutAnswers(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}/without-answers`;
     return performApiCall(URL, 'GET');
+}
+
+// TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
+async function addQuestionRightAnswer({
+    examId,
+    questionId,
+    rightAnswer,
+}: {
+    examId: string;
+    questionId: number;
+    rightAnswer: string;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/right-answers`;
+    return performApiCall(URL, 'POST', { rightAnswer });
+}
+
+// TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
+async function addQuestionAcceptableAnswer({
+    examId,
+    questionId,
+    acceptableAnswer,
+}: {
+    examId: string;
+    questionId: number;
+    acceptableAnswer: string;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/acceptable-answers`;
+    return performApiCall(URL, 'POST', { acceptableAnswer });
+}
+
+// TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
+async function removeOkAnswer({
+    examId,
+    questionId,
+    okAnswer,
+}: {
+    examId: string;
+    questionId: number;
+    okAnswer: string;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/ok-answers`;
+    return performApiCall(URL, 'DELETE', { okAnswer });
 }
 
 async function updateAttempt({

@@ -46,6 +46,7 @@ function ExamChecking() {
             <QuestionsChecking
                 studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}
+                examId={examId}
                 examName={attemptWithAnswersQuery.data.exam.name}
                 questions={questions}
             />

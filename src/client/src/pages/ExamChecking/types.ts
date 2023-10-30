@@ -1,10 +1,30 @@
+import { questionKindType } from '../../types';
+
 type attemptWithAnswersApiType = {
     studentEmail: string;
-    exam: { name: string; exercises: Array<{ id: number; questions: Array<questionType> }> };
+    exam: examType;
+};
+
+type examType = {
+    id: string;
+    name: string;
+    exercises: Array<{ id: number; questions: Array<questionType> }>;
 };
 
 type attemptIdsApiType = Array<string>;
 
-type questionType = { id: number; mark: number };
+type questionType = {
+    id: number;
+    title: string;
+    kind: questionKindType;
+    rightAnswers: string[];
+    acceptableAnswers: string[];
+    possibleAnswers: string[];
+    answer: string | undefined;
+    mark: number;
+    points: number;
+};
 
-export type { attemptWithAnswersApiType, questionType, attemptIdsApiType };
+type answerStatusType = 'wrong' | 'acceptable' | 'right';
+
+export type { attemptWithAnswersApiType, questionType, attemptIdsApiType, answerStatusType };

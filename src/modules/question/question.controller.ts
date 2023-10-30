@@ -1,3 +1,4 @@
+import { Exam } from '../exam';
 import { Question } from './Question.entity';
 import { buildQuestionService } from './question.service';
 
@@ -8,6 +9,9 @@ function buildQuestionController() {
     const questionController = {
         createQuestion,
         updateQuestion,
+        addQuestionRightAnswer,
+        addQuestionAcceptableAnswer,
+        removeOkAnswer,
         deleteQuestion,
         swapQuestions,
     };
@@ -43,6 +47,42 @@ function buildQuestionController() {
                 rightAnswers: params.body.rightAnswers,
                 points: params.body.points,
             },
+        );
+    }
+
+    async function addQuestionRightAnswer(params: {
+        urlParams: { questionId: string };
+        body: { rightAnswer: string };
+    }) {
+        return questionService.addQuestionRightAnswer(
+            {
+                questionId: Number(params.urlParams.questionId),
+            },
+            params.body.rightAnswer,
+        );
+    }
+
+    async function addQuestionAcceptableAnswer(params: {
+        urlParams: { questionId: string };
+        body: { acceptableAnswer: string };
+    }) {
+        return questionService.addQuestionAcceptableAnswer(
+            {
+                questionId: Number(params.urlParams.questionId),
+            },
+            params.body.acceptableAnswer,
+        );
+    }
+
+    async function removeOkAnswer(params: {
+        urlParams: { questionId: string };
+        body: { okAnswer: string };
+    }) {
+        return questionService.removeOkAnswer(
+            {
+                questionId: Number(params.urlParams.questionId),
+            },
+            params.body.okAnswer,
         );
     }
 

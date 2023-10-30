@@ -117,6 +117,45 @@ router.put(
 );
 
 router.post(
+    '/exams/:examId/questions/:questionId/right-answers',
+    buildController(questionController.addQuestionRightAnswer, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({ rightAnswer: Joi.string() }),
+    }),
+);
+
+router.post(
+    '/exams/:examId/questions/:questionId/acceptable-answers',
+    buildController(questionController.addQuestionAcceptableAnswer, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({ acceptableAnswer: Joi.string() }),
+    }),
+);
+
+router.delete(
+    '/exams/:examId/questions/:questionId/ok-answers',
+    buildController(questionController.removeOkAnswer, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({ okAnswer: Joi.string() }),
+    }),
+);
+
+router.post(
     '/exams/:examId/exercises/:exerciseId/questions',
     buildController(questionController.createQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([

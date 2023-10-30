@@ -3,7 +3,10 @@ import { dataSource } from '../../dataSource';
 import { Question } from './Question.entity';
 import { buildAttemptService } from '../attempt';
 import { Exercise, buildExerciseService } from '../exercise';
-import { encoder } from '../../lib/encoder';
+import { questionEncoder } from './lib/questionEncoder';
+import { addRightAnswerToQuestion } from './lib/addRightAnswerToQuestion';
+import { addAcceptableAnswerToQuestion } from './lib/addAcceptableAnswerToQuestion';
+import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
 
 export { buildQuestionService };
 
@@ -12,11 +15,14 @@ function buildQuestionService() {
     const questionService = {
         createQuestion,
         updateQuestion,
+        addQuestionRightAnswer,
+        addQuestionAcceptableAnswer,
+        removeOkAnswer,
         getQuestions,
         deleteQuestion,
         swapQuestions,
-        decodeQuestion,
-        encodeQuestion,
+        decodeQuestion: questionEncoder.decodeQuestion,
+        encodeQuestion: questionEncoder.encodeQuestion,
         getQuestionIds,
     };
 
@@ -43,7 +49,7 @@ function buildQuestionService() {
         question.points = body.points;
         question.exercise = exercise;
         question.order = highestOrder + 1;
-        return questionRepository.save(encodeQuestion(question));
+        return questionRepository.save(questionEncoder.encodeQuestion(question));
     }
 
     async function getHighestQuestionOrder(exerciseId: Exercise['id']) {
@@ -76,9 +82,50 @@ function buildQuestionService() {
         question.rightAnswers = body.rightAnswers;
         question.acceptableAnswers = body.acceptableAnswers;
         question.points = body.points;
-        // TODO: envoyer un évènement ici pour changer les points de tout le monde
 
-        return questionRepository.save(encodeQuestion(question));
+        return questionRepository.save(questionEncoder.encodeQuestion(question));
+    }
+
+    async function addQuestionRightAnswer(
+        criteria: {
+            questionId: Question['id'];
+        },
+        rightAnswer: string,
+    ) {
+        const question = await questionRepository.findOneOrFail({
+            where: { id: criteria.questionId },
+        });
+        const updatedQuestion = addRightAnswerToQuestion(question, rightAnswer);
+        await questionRepository.save(updatedQuestion);
+        return true;
+    }
+
+    async function addQuestionAcceptableAnswer(
+        criteria: {
+            questionId: Question['id'];
+        },
+        acceptableAnswer: string,
+    ) {
+        const question = await questionRepository.findOneOrFail({
+            where: { id: criteria.questionId },
+        });
+        const updatedQuestion = addAcceptableAnswerToQuestion(question, acceptableAnswer);
+        await questionRepository.save(updatedQuestion);
+        return true;
+    }
+
+    async function removeOkAnswer(
+        criteria: {
+            questionId: Question['id'];
+        },
+        okAnswer: string,
+    ) {
+        const question = await questionRepository.findOneOrFail({
+            where: { id: criteria.questionId },
+        });
+        const updatedQuestion = removeOkAnswerFromQuestion(question, okAnswer);
+        await questionRepository.save(updatedQuestion);
+        return true;
     }
 
     async function getQuestions(questionIds: Question['id'][]) {
@@ -86,7 +133,7 @@ function buildQuestionService() {
             where: { id: In(questionIds) },
         });
         return questions.reduce((acc, question) => {
-            return { ...acc, [question.id]: decodeQuestion(question) };
+            return { ...acc, [question.id]: questionEncoder.decodeQuestion(question) };
         }, {} as Record<Question['id'], Question>);
     }
 
@@ -112,31 +159,5 @@ function buildQuestionService() {
             select: { id: true, exercise: { id: true } },
         });
         return questions.map(({ id }) => id);
-    }
-
-    function decodeQuestion(question: Question): Question {
-        return {
-            ...question,
-            possibleAnswers: question.possibleAnswers.map((answer) =>
-                encoder.base64ToString(answer),
-            ),
-            rightAnswers: question.rightAnswers.map((answer) => encoder.base64ToString(answer)),
-            acceptableAnswers: question.acceptableAnswers.map((answer) =>
-                encoder.base64ToString(answer),
-            ),
-        };
-    }
-
-    function encodeQuestion(question: Question): Question {
-        return {
-            ...question,
-            possibleAnswers: question.possibleAnswers.map((answer) =>
-                encoder.stringToBase64(answer),
-            ),
-            rightAnswers: question.rightAnswers.map((answer) => encoder.stringToBase64(answer)),
-            acceptableAnswers: question.acceptableAnswers.map((answer) =>
-                encoder.stringToBase64(answer),
-            ),
-        };
     }
 }

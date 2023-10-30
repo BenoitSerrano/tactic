@@ -1,5 +1,6 @@
 import { Typography, styled } from '@mui/material';
-import { questionKindType } from '../../types';
+import { answerStatusType, questionType } from './types';
+import { computeAnswerStatus } from './lib/computeAnswerStatus';
 
 const styledContainerMapping = {
     right: styled('div')(({ theme }) => ({ color: theme.palette.success.main })),
@@ -8,18 +9,11 @@ const styledContainerMapping = {
 };
 
 function QuestionChecking(props: {
-    question: {
-        id: number;
-        title: string;
-        kind: questionKindType;
-        possibleAnswers: string[];
-        answer: string | undefined;
-        mark: number;
-        points: number;
-    };
+    question: questionType;
     index: number;
+    answerStatus: answerStatusType;
 }) {
-    const status = computeStatus(props.question.mark, props.question.points);
+    const status = computeAnswerStatus(props.question.mark, props.question.points);
     const StyledContainer = styledContainerMapping[status];
     let answer = '';
     if (props.question.answer !== undefined && props.question.answer !== '') {
@@ -48,16 +42,6 @@ function QuestionChecking(props: {
             <Typography>Réponse : {answer}</Typography>
         </StyledContainer>
     );
-
-    function computeStatus(mark: number, points: number) {
-        if (!mark) {
-            return 'wrong';
-        }
-        if (mark === points) {
-            return 'right';
-        }
-        return 'acceptable';
-    }
 }
 
 const Title = styled(Typography)(({ theme }) => ({ fontWeight: 'bold' }));
