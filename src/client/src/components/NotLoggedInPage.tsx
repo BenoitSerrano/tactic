@@ -8,7 +8,7 @@ function NotLoggedInPage(props: {
 }) {
     return (
         <Container>
-            <Header buttons={[]} title={props.title} />
+            <Header logoLink="/" buttons={[]} title={props.title} />
             <ChildrenContainer>{props.children}</ChildrenContainer>
         </Container>
     );
