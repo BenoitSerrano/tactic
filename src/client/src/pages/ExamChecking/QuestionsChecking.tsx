@@ -10,6 +10,7 @@ import { useAlert } from '../../lib/alert';
 import { exerciseType, questionType } from './types';
 import { computeAnswerStatus } from './lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
+import { questionKindType } from '../../types';
 
 type marksType = Record<number, string>;
 
@@ -50,6 +51,8 @@ function QuestionsChecking(props: {
         },
     });
 
+    const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
+
     return (
         <TestPageLayout
             studentEmail={props.studentEmail}
@@ -89,7 +92,7 @@ function QuestionsChecking(props: {
                                         <Typography> / {question.points}</Typography>
                                     </QuestionIndicatorContainer>
 
-                                    {question.kind === 'questionTrou' && (
+                                    {editableQuestionKindsAnswers.includes(question.kind) && (
                                         <UpdateAnswersButtons
                                             examId={props.examId}
                                             onEditAnswers={props.onEditAnswers}
