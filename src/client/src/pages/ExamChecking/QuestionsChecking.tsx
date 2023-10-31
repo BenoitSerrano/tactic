@@ -1,9 +1,6 @@
-import { IconButton, TextField, Tooltip, Typography, styled } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
-import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../../components/TestPageLayout';
@@ -12,6 +9,7 @@ import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { exerciseType, questionType } from './types';
 import { computeAnswerStatus } from './lib/computeAnswerStatus';
+import { UpdateAnswersButtons } from './UpdateAnswersButtons';
 
 type marksType = Record<number, string>;
 
@@ -48,48 +46,6 @@ function QuestionsChecking(props: {
             displayAlert({
                 variant: 'error',
                 text: "Une erreur est survenue. Vos notes n'ont pas pu être sauvegardées.",
-            });
-        },
-    });
-
-    const addRightAnswerMutation = useMutation({
-        mutationFn: api.addQuestionRightAnswer,
-        onSuccess: () => {
-            props.onEditAnswers();
-        },
-        onError: (error) => {
-            console.error(error);
-            displayAlert({
-                variant: 'error',
-                text: "Une erreur est survenue. Votre modification n'a pas pu être prise en compte",
-            });
-        },
-    });
-
-    const removeOkAnswerMutation = useMutation({
-        mutationFn: api.removeOkAnswer,
-        onSuccess: () => {
-            props.onEditAnswers();
-        },
-        onError: (error) => {
-            console.error(error);
-            displayAlert({
-                variant: 'error',
-                text: "Une erreur est survenue. Votre modification n'a pas pu être prise en compte",
-            });
-        },
-    });
-
-    const addAcceptableAnswerMutation = useMutation({
-        mutationFn: api.addQuestionAcceptableAnswer,
-        onSuccess: () => {
-            props.onEditAnswers();
-        },
-        onError: (error) => {
-            console.error(error);
-            displayAlert({
-                variant: 'error',
-                text: "Une erreur est survenue. Votre modification n'a pas pu être prise en compte",
             });
         },
     });
@@ -134,54 +90,11 @@ function QuestionsChecking(props: {
                                     </QuestionIndicatorContainer>
 
                                     {question.kind === 'questionTrou' && (
-                                        <UpdateAnswersButtonContainer>
-                                            <Tooltip title="Marquer la réponse comme correcte">
-                                                <IconButton
-                                                    size="small"
-                                                    color="success"
-                                                    disabled={answerStatus === 'right'}
-                                                    onClick={buildOnAddToRightAnswers(
-                                                        question.id,
-                                                        question.answer,
-                                                    )}
-                                                >
-                                                    <CheckIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title="Marquer la réponse comme acceptable">
-                                                <IconButton
-                                                    size="small"
-                                                    color="warning"
-                                                    disabled={
-                                                        answerStatus === 'acceptable' ||
-                                                        (answerStatus === 'right' &&
-                                                            question.rightAnswers.length <= 1)
-                                                    }
-                                                    onClick={buildOnAddToAcceptableAnswers(
-                                                        question.id,
-                                                        question.answer,
-                                                    )}
-                                                >
-                                                    <SentimentNeutralIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title="Marquer la réponse comme incorrecte">
-                                                <IconButton
-                                                    size="small"
-                                                    color="error"
-                                                    disabled={
-                                                        answerStatus === 'wrong' ||
-                                                        question.rightAnswers.length <= 1
-                                                    }
-                                                    onClick={buildOnRemoveOkAnswer(
-                                                        question.id,
-                                                        question.answer,
-                                                    )}
-                                                >
-                                                    <ClearIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </UpdateAnswersButtonContainer>
+                                        <UpdateAnswersButtons
+                                            examId={props.examId}
+                                            onEditAnswers={props.onEditAnswers}
+                                            question={question}
+                                        />
                                     )}
                                 </QuestionIndicatorsContainer>
                                 <QuestionChecking
@@ -206,45 +119,6 @@ function QuestionsChecking(props: {
         saveMarksMutation.mutate({ attemptId: props.attemptId, marks: formattedMarks });
     }
 
-    function buildOnAddToRightAnswers(questionId: number, currentAnswer: string | undefined) {
-        return () => {
-            if (currentAnswer === undefined) {
-                return;
-            }
-            addRightAnswerMutation.mutate({
-                examId: props.examId,
-                questionId,
-                rightAnswer: currentAnswer,
-            });
-        };
-    }
-
-    function buildOnRemoveOkAnswer(questionId: number, currentAnswer: string | undefined) {
-        return () => {
-            if (currentAnswer === undefined) {
-                return;
-            }
-            removeOkAnswerMutation.mutate({
-                examId: props.examId,
-                questionId,
-                okAnswer: currentAnswer,
-            });
-        };
-    }
-
-    function buildOnAddToAcceptableAnswers(questionId: number, currentAnswer: string | undefined) {
-        return () => {
-            if (currentAnswer === undefined) {
-                return;
-            }
-            addAcceptableAnswerMutation.mutate({
-                examId: props.examId,
-                questionId,
-                acceptableAnswer: currentAnswer,
-            });
-        };
-    }
-
     function buildOnMarkChange(questionId: number) {
         return (event: ChangeEvent<HTMLInputElement>) => {
             const mark = event.target.value;
@@ -261,7 +135,6 @@ const QuestionCheckingContainer = styled('div')(({ theme }) => ({
     display: 'flex',
 }));
 
-const UpdateAnswersButtonContainer = styled('div')(({ theme }) => ({}));
 const QuestionIndicatorContainer = styled('div')({
     minWidth: 100,
     display: 'flex',
