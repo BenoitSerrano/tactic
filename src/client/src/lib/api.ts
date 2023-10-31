@@ -37,6 +37,9 @@ const api = {
     updateMarks,
     swapExercises,
     updateEndedAt,
+    createResetPasswordRequest,
+    fetchResetPasswordRequestUser,
+    resetPassword,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -277,6 +280,29 @@ async function updateExercise(params: {
 async function deleteExercise(params: { examId: string; exerciseId: number }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
     return performApiCall(URL, 'DELETE');
+}
+
+async function createResetPasswordRequest(email: string) {
+    const URL = `${BASE_URL}/reset-password-requests`;
+    return performApiCall(URL, 'POST', {
+        email,
+    });
+}
+
+async function fetchResetPasswordRequestUser(resetPasswordRequestId: string) {
+    const URL = `${BASE_URL}/reset-password-requests/${resetPasswordRequestId}/user`;
+    return performApiCall(URL, 'GET');
+}
+
+async function resetPassword({
+    password,
+    resetPasswordRequestId,
+}: {
+    password: string;
+    resetPasswordRequestId: string;
+}) {
+    const URL = `${BASE_URL}/reset-password-requests/${resetPasswordRequestId}/user/password`;
+    return performApiCall(URL, 'PATCH', { password });
 }
 
 async function createQuestion(params: {

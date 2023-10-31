@@ -8,6 +8,7 @@ import { buildQuestionController, questionKinds } from '../modules/question';
 import { buildUserController } from '../modules/user';
 import { accessControlBuilder } from '../lib/accessControlBuilder';
 import { buildExerciseController } from '../modules/exercise';
+import { buildResetPasswordRequestController } from '../modules/resetPasswordRequest';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -16,6 +17,7 @@ const studentController = buildStudentController();
 const questionController = buildQuestionController();
 const attemptController = buildAttemptController();
 const exerciseController = buildExerciseController();
+const resetPasswordRequestController = buildResetPasswordRequestController();
 
 router.post('/users', buildController(userController.createUser));
 router.post('/login', buildController(userController.login));
@@ -312,6 +314,25 @@ router.patch('/attempts/:attemptId/marks', buildController(attemptController.upd
 router.patch(
     '/attempts/:attemptId/endedAt',
     buildController(attemptController.updateAttemptEndedAt),
+);
+
+router.post(
+    '/reset-password-requests',
+    buildController(resetPasswordRequestController.createResetPasswordRequest, {
+        schema: Joi.object({ email: Joi.string().required() }),
+    }),
+);
+
+router.get(
+    '/reset-password-requests/:resetPasswordRequestId/user',
+    buildController(resetPasswordRequestController.fetchResetPasswordRequestUser),
+);
+
+router.patch(
+    '/reset-password-requests/:resetPasswordRequestId/user/password',
+    buildController(resetPasswordRequestController.resetPassword, {
+        schema: Joi.object({ password: Joi.string().required() }),
+    }),
 );
 
 export { router };

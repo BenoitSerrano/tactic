@@ -11,9 +11,11 @@ function buildUserService() {
 
     const userService = {
         createUser,
+        findUserByEmail,
         login,
         getAllAnonymizedUsers,
         bulkInsertUsers,
+        changePassword,
     };
 
     return userService;
@@ -31,6 +33,10 @@ function buildUserService() {
         }
         const token = signer.sign({ userId: result.identifiers[0].id });
         return { token };
+    }
+
+    async function findUserByEmail(email: User['email']) {
+        return userRepository.findOneBy({ email });
     }
 
     async function login(email: string, password: string) {
@@ -54,5 +60,11 @@ function buildUserService() {
 
     async function bulkInsertUsers(users: Array<User>) {
         return userRepository.insert(users);
+    }
+
+    async function changePassword(user: User, newPassword: string) {
+        const hashedPassword = hasher.hash(newPassword);
+        const result = await userRepository.update({ id: user.id }, { hashedPassword });
+        return result.affected === 1;
     }
 }

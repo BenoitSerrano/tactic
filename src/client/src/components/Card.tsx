@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-function Card(props: { children: JSX.Element[] | JSX.Element; width?: string }) {
+function Card(props: { children: React.ReactNode; width?: string }) {
     return <Container width={props.width}>{props.children}</Container>;
 }
 const Container = styled('div')<{ width?: string }>(({ theme, width }) => ({

@@ -1,36 +1,25 @@
-import { TextField, Typography, styled } from '@mui/material';
+import { Button, TextField, Typography, styled } from '@mui/material';
 import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { FormEvent, useState } from 'react';
+import { Card } from '../components/Card';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
-import { localStorage } from '../lib/localStorage';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import { Link } from '../components/Link';
+import { api } from '../lib/api';
 
-function SignIn(props: {
-    shouldDisplayResetPasswordLink?: boolean;
-    apiCall: (params: { email: string; password: string }) => Promise<{ token: string }>;
-    title: string;
-}) {
+function RequestResetPassword() {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
     const { displayAlert } = useAlert();
-
     const mutation = useMutation({
-        mutationFn: props.apiCall,
+        mutationFn: api.createResetPasswordRequest,
         onSuccess: (data) => {
-            const { token } = data;
-            localStorage.jwtTokenHandler.set(token);
-            navigate(`/teacher`);
+            navigate(`/reset-password-requested`);
         },
         onError: () => {
             displayAlert({
                 variant: 'error',
-                text: 'Une erreur est survenue.',
+                text: 'Une erreur est survenue lors de la demande de réinitialisation de votre mot de passe. Veuillez patienter une dizaine de minutes et réessayer.',
             });
         },
     });
@@ -41,7 +30,9 @@ function SignIn(props: {
                 <Card width="40%">
                     <CardContent onSubmit={handleSubmit}>
                         <TitleContainer>
-                            <Typography variant="h2">{props.title}</Typography>
+                            <Typography variant="h2">
+                                Demande de réinitialisation de mot de passe
+                            </Typography>
                         </TitleContainer>
 
                         <FieldsContainer>
@@ -55,27 +46,10 @@ function SignIn(props: {
                                     onChange={(event) => setEmail(event.target.value)}
                                 />
                             </FieldContainer>
-                            <FieldContainer>
-                                <TextField
-                                    fullWidth
-                                    name="password"
-                                    type="password"
-                                    label="Mot de passe"
-                                    value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                />
-                            </FieldContainer>
-                            {!!props.shouldDisplayResetPasswordLink && (
-                                <DisplayPasswordLinkContainer>
-                                    <Link to="/request-reset-password">
-                                        <Typography>Mot de passe oublié ?</Typography>
-                                    </Link>
-                                </DisplayPasswordLinkContainer>
-                            )}
                         </FieldsContainer>
 
-                        <Button type="submit" variant="contained" disabled={!password || !email}>
-                            {props.title}
+                        <Button type="submit" variant="contained" disabled={!email}>
+                            Demander un nouveau mot de passe
                         </Button>
                     </CardContent>
                 </Card>
@@ -84,41 +58,31 @@ function SignIn(props: {
     );
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        mutation.mutate({ email, password });
+        mutation.mutate(email);
         event.preventDefault();
     }
 }
-
 const ContentContainer = styled('div')({
     display: 'flex',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
 });
-
-const DisplayPasswordLinkContainer = styled('div')({
-    display: 'flex',
-    textDecorationLine: 'underline',
-    alignItems: 'center',
-    justifyContent: 'center',
-});
-
 const CardContent = styled('form')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
 }));
-
+const FieldContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(2) }));
 const FieldsContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(2),
 }));
-const FieldContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(2) }));
 const TitleContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(6),
     textAlign: 'center',
 }));
 
-export { SignIn };
+export { RequestResetPassword };

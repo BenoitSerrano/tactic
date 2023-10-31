@@ -15,6 +15,11 @@ import { SignIn } from './pages/SignIn';
 import { Home } from './pages/Home';
 import { api } from './lib/api';
 import { ExamExercises } from './pages/ExamExercises';
+import { RequestResetPassword } from './pages/RequestResetPassword';
+import { ResetPasswordRequested } from './pages/ResetPasswordRequested';
+import { ResetPassword } from './pages/ResetPassword';
+import { ResetPasswordSuccess } from './pages/ResetPasswordSuccess';
+import { ResetPasswordFailure } from './pages/ResetPasswordFailure';
 
 function Router() {
     return (
@@ -31,7 +36,21 @@ function Router() {
                 path="/sign-up"
                 element={<SignIn apiCall={api.createUser} title="Créer un compte" />}
             />
-            <Route path="/sign-in" element={<SignIn apiCall={api.login} title="Se connecter" />} />
+            <Route
+                path="/sign-in"
+                element={
+                    <SignIn
+                        shouldDisplayResetPasswordLink
+                        apiCall={api.login}
+                        title="Se connecter"
+                    />
+                }
+            />
+            <Route path="/request-reset-password" element={<RequestResetPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/reset-password-requested" element={<ResetPasswordRequested />} />
+            <Route path="/reset-password-success" element={<ResetPasswordSuccess />} />
+            <Route path="/reset-password-failure" element={<ResetPasswordFailure />} />
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route
