@@ -67,6 +67,8 @@ router.get(
     }),
 );
 
+router.get('/all-exams', buildController(examController.getAllExams));
+
 router.delete(
     '/exams/:examId',
     buildController(examController.deleteExam, {

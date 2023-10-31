@@ -11,6 +11,7 @@ function buildExamController() {
         updateExam,
         getExams,
         getExam,
+        getAllExams,
         getExamResults,
         deleteExam,
     };
@@ -46,6 +47,10 @@ function buildExamController() {
 
     async function getExamResults(params: { urlParams: { examId: string } }) {
         return examService.getExamResults(params.urlParams.examId);
+    }
+
+    async function getAllExams() {
+        return examService.getAllExams();
     }
 
     async function deleteExam(params: { urlParams: { examId: string } }) {

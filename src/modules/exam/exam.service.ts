@@ -144,7 +144,9 @@ function buildExamService() {
     }
 
     async function getAllExams() {
-        const exams = await examRepository.find();
+        const exams = await examRepository.find({
+            relations: ['exercises', 'exercises.questions'],
+        });
 
         return mapEntities(exams);
     }
