@@ -16,6 +16,7 @@ import { questionKindType } from '../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { computeMarks, marksType } from './lib/computeMarks';
+import { computeHasEditedMarks } from './lib/computeHasEditedMarks';
 
 function QuestionsChecking(props: {
     onEditAnswers: () => void;
@@ -47,6 +48,9 @@ function QuestionsChecking(props: {
         },
     });
 
+    const hasEditedMarks = computeHasEditedMarks(initialMarks, marks);
+    const isSaveButtonDisabled = !hasEditedMarks;
+
     useEffect(() => {
         const marks = computeMarks(props.exercises);
         setMarks(marks);
@@ -69,6 +73,7 @@ function QuestionsChecking(props: {
                     loading={saveMarksMutation.isPending}
                     variant="contained"
                     onClick={saveMarks}
+                    disabled={isSaveButtonDisabled}
                 >
                     Sauvegarder
                 </LoadingButton>,
@@ -157,7 +162,9 @@ function QuestionsChecking(props: {
             if (!attemptIdToNavigateTo) {
                 return;
             }
-            saveMarks();
+            if (hasEditedMarks) {
+                saveMarks();
+            }
             navigateToNewAttempt(attemptIdToNavigateTo);
         };
     }
