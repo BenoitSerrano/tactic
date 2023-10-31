@@ -24,7 +24,7 @@ export class Exercise {
     @Column('enum', { enum: questionKinds })
     defaultQuestionKind: questionKindType;
 
-    @ManyToOne(() => Exam, (exam) => exam.exercises, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Exam, (exam) => exam.exercises, { onDelete: 'CASCADE', nullable: false })
     exam: Exam;
 
     @OneToMany(() => Question, (question) => question.exercise)

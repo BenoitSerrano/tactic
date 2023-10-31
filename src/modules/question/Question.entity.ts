@@ -29,6 +29,6 @@ export class Question {
     @Column('simple-array', { default: '' })
     possibleAnswers: string[];
 
-    @ManyToOne(() => Exercise, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Exercise, { onDelete: 'CASCADE', nullable: false })
     exercise: Exercise;
 }

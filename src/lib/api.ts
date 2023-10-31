@@ -1,13 +1,14 @@
+import { Exam } from '../modules/exam';
+
 const api = {
-    fetchAnonymizedData,
+    fetchAllExams,
 };
 
-async function fetchAnonymizedData() {
-    const URL = `https://test-de-langue.osc-fr1.scalingo.io/api/anonymized-data`;
-    // const URL = `http://localhost:3001/api/anonymized-data`;
+async function fetchAllExams(): Promise<Exam[]> {
+    const URL = `https://tactic-app.fr/api/all-exams`;
 
-    const anonymizedData = await fetch(URL);
-    const parsedData = await anonymizedData.json();
+    const response = await fetch(URL);
+    const parsedData = await response.json();
     return parsedData;
 }
 
