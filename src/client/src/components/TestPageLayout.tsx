@@ -3,7 +3,7 @@ import { Typography, styled } from '@mui/material';
 function TestPageLayout(props: {
     title: string;
     studentEmail: string;
-    children: JSX.Element[];
+    children: JSX.Element[] | JSX.Element;
     buttons: JSX.Element[];
 }) {
     return (

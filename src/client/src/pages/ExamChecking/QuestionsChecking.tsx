@@ -1,4 +1,6 @@
-import { TextField, Typography, styled } from '@mui/material';
+import { IconButton, TextField, Typography, styled } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ChangeEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
@@ -11,6 +13,8 @@ import { exerciseType, questionType } from './types';
 import { computeAnswerStatus } from './lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
 import { questionKindType } from '../../types';
+import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type marksType = Record<number, string>;
 
@@ -22,6 +26,10 @@ function QuestionsChecking(props: {
     studentEmail: string;
     attemptId: string;
 }) {
+    const navigate = useNavigate();
+
+    const [searchParams] = useSearchParams();
+
     const questions: Array<questionType> = [];
     for (const exercise of props.exercises) {
         questions.push(...exercise.questions);
@@ -51,6 +59,11 @@ function QuestionsChecking(props: {
         },
     });
 
+    const { next, previous } = computeAttemptIdNeighbours(
+        props.attemptId,
+        searchParams.get('attemptIds'),
+    );
+
     const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
 
     return (
@@ -68,49 +81,64 @@ function QuestionsChecking(props: {
                 </LoadingButton>,
             ]}
         >
-            {props.exercises.map((exercise) => (
-                <ExerciseContainer key={exercise.id}>
-                    <ExerciseTitleContainer>
-                        <Typography variant="h3">{exercise.name}</Typography>
-                        <Typography variant="h4">{exercise.instruction}</Typography>
-                    </ExerciseTitleContainer>
-                    {exercise.questions.map((question, index: number) => {
-                        const answerStatus = computeAnswerStatus(question.mark, question.points);
-                        return (
-                            <QuestionCheckingContainer key={question.id}>
-                                <QuestionIndicatorsContainer>
-                                    <QuestionIndicatorContainer>
-                                        {question.rightAnswers.length === 0 ? (
-                                            <MarkTextField
-                                                onChange={buildOnMarkChange(question.id)}
-                                                value={marks[question.id] || ''}
-                                                variant="standard"
-                                            />
-                                        ) : (
-                                            <Typography>{question.mark || 0}</Typography>
-                                        )}
-                                        <Typography> / {question.points}</Typography>
-                                    </QuestionIndicatorContainer>
+            <>
+                <LeftArrowContainer>
+                    <IconButton disabled={!previous} onClick={buildOnArrowClick(previous)}>
+                        <ArrowBackIcon fontSize="large" />
+                    </IconButton>
+                </LeftArrowContainer>
+                {props.exercises.map((exercise) => (
+                    <ExerciseContainer key={exercise.id}>
+                        <ExerciseTitleContainer>
+                            <Typography variant="h3">{exercise.name}</Typography>
+                            <Typography variant="h4">{exercise.instruction}</Typography>
+                        </ExerciseTitleContainer>
+                        {exercise.questions.map((question, index: number) => {
+                            const answerStatus = computeAnswerStatus(
+                                question.mark,
+                                question.points,
+                            );
+                            return (
+                                <QuestionCheckingContainer key={question.id}>
+                                    <QuestionIndicatorsContainer>
+                                        <QuestionIndicatorContainer>
+                                            {question.rightAnswers.length === 0 ? (
+                                                <MarkTextField
+                                                    onChange={buildOnMarkChange(question.id)}
+                                                    value={marks[question.id] || ''}
+                                                    variant="standard"
+                                                />
+                                            ) : (
+                                                <Typography>{question.mark || 0}</Typography>
+                                            )}
+                                            <Typography> / {question.points}</Typography>
+                                        </QuestionIndicatorContainer>
 
-                                    {editableQuestionKindsAnswers.includes(question.kind) && (
-                                        <UpdateAnswersButtons
-                                            examId={props.examId}
-                                            onEditAnswers={props.onEditAnswers}
-                                            question={question}
-                                        />
-                                    )}
-                                </QuestionIndicatorsContainer>
-                                <QuestionChecking
-                                    key={'question' + question.id}
-                                    index={index + 1}
-                                    question={question}
-                                    answerStatus={answerStatus}
-                                />
-                            </QuestionCheckingContainer>
-                        );
-                    })}
-                </ExerciseContainer>
-            ))}
+                                        {editableQuestionKindsAnswers.includes(question.kind) && (
+                                            <UpdateAnswersButtons
+                                                examId={props.examId}
+                                                onEditAnswers={props.onEditAnswers}
+                                                question={question}
+                                            />
+                                        )}
+                                    </QuestionIndicatorsContainer>
+                                    <QuestionChecking
+                                        key={'question' + question.id}
+                                        index={index + 1}
+                                        question={question}
+                                        answerStatus={answerStatus}
+                                    />
+                                </QuestionCheckingContainer>
+                            );
+                        })}
+                    </ExerciseContainer>
+                ))}
+                <RightArrowContainer>
+                    <IconButton disabled={!next} onClick={buildOnArrowClick(next)}>
+                        <ArrowForwardIcon fontSize="large" />
+                    </IconButton>
+                </RightArrowContainer>
+            </>
         </TestPageLayout>
     );
 
@@ -130,7 +158,47 @@ function QuestionsChecking(props: {
             }
         };
     }
+
+    function buildOnArrowClick(attemptIdToNavigateTo: string | undefined) {
+        return () => {
+            if (!attemptIdToNavigateTo) {
+                return;
+            }
+            navigateToNewAttempt(attemptIdToNavigateTo);
+        };
+    }
+
+    function navigateToNewAttempt(newAttemptId: string) {
+        navigate(
+            `/teacher/exams/${props.examId}/results/${newAttemptId}?attemptIds=${searchParams.get(
+                'attemptIds',
+            )}`,
+        );
+    }
 }
+const ARROW_CONTAINER_SIZE = 100;
+
+const LeftArrowContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'fixed',
+    left: theme.spacing(4),
+    top: `calc(100vh / 2 - ${ARROW_CONTAINER_SIZE / 2}px)`,
+    width: ARROW_CONTAINER_SIZE,
+    height: ARROW_CONTAINER_SIZE,
+}));
+
+const RightArrowContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'fixed',
+    right: theme.spacing(4),
+    top: `calc(100vh / 2 - ${ARROW_CONTAINER_SIZE / 2}px)`,
+    width: ARROW_CONTAINER_SIZE,
+    height: ARROW_CONTAINER_SIZE,
+}));
 
 const QuestionCheckingContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(1),
