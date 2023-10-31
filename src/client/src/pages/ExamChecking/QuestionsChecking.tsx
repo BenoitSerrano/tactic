@@ -1,7 +1,7 @@
 import { IconButton, TextField, Typography, styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { QuestionChecking } from './QuestionChecking';
@@ -9,14 +9,13 @@ import { TestPageLayout } from '../../components/TestPageLayout';
 import { LoadingButton } from '@mui/lab';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
-import { exerciseType, questionType } from './types';
+import { exerciseType } from './types';
 import { computeAnswerStatus } from './lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
 import { questionKindType } from '../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
-type marksType = Record<number, string>;
+import { computeMarks, marksType } from './lib/computeMarks';
 
 function QuestionsChecking(props: {
     onEditAnswers: () => void;
@@ -30,18 +29,7 @@ function QuestionsChecking(props: {
 
     const [searchParams] = useSearchParams();
 
-    const questions: Array<questionType> = [];
-    for (const exercise of props.exercises) {
-        questions.push(...exercise.questions);
-    }
-
-    const initialMarks = questions.reduce(
-        (acc, question) => ({
-            ...acc,
-            [question.id]: question.mark === undefined ? '' : `${question.mark}`,
-        }),
-        {} as marksType,
-    );
+    const initialMarks = computeMarks(props.exercises);
     const [marks, setMarks] = useState<marksType>(initialMarks);
     const { displayAlert } = useAlert();
 
@@ -58,6 +46,11 @@ function QuestionsChecking(props: {
             });
         },
     });
+
+    useEffect(() => {
+        const marks = computeMarks(props.exercises);
+        setMarks(marks);
+    }, [props.exercises]);
 
     const { next, previous } = computeAttemptIdNeighbours(
         props.attemptId,
@@ -164,6 +157,7 @@ function QuestionsChecking(props: {
             if (!attemptIdToNavigateTo) {
                 return;
             }
+            saveMarks();
             navigateToNewAttempt(attemptIdToNavigateTo);
         };
     }
