@@ -4,6 +4,7 @@ import { User, buildUserService } from '../user';
 import { ResetPasswordRequest } from './ResetPasswordRequest.entity';
 import { mailer } from '../../lib/mailer';
 import { assertIsResetPasswordRequestRecent } from './lib/assertIsResetPasswordRequestRecent';
+import { MINUTES_ALLOWED_FOR_RESET_PASSWORD_REQUEST } from './constants';
 
 export { buildResetPasswordRequestService };
 
@@ -58,11 +59,12 @@ function buildResetPasswordRequestService() {
 
     async function assertNoRecentResetPasswordRequest(user: User) {
         const now = new Date();
-        const TEN_MINUTES_IN_MILLISECONDS = 10 * 60 * 1000;
-        const TEN_MINUTES_AGO = new Date();
-        TEN_MINUTES_AGO.setTime(now.getTime() - TEN_MINUTES_IN_MILLISECONDS);
+        const PERIOD_ALLOWED_FOR_RESET_PASSWORD_REQUEST =
+            MINUTES_ALLOWED_FOR_RESET_PASSWORD_REQUEST * 60 * 1000;
+        const THRESHOLD_DATE = new Date();
+        THRESHOLD_DATE.setTime(now.getTime() - PERIOD_ALLOWED_FOR_RESET_PASSWORD_REQUEST);
         const resetPasswordRequests = await resetPasswordRequestRepository.find({
-            where: { user, createdAt: MoreThan(TEN_MINUTES_AGO.toISOString()) },
+            where: { user, createdAt: MoreThan(THRESHOLD_DATE.toISOString()) },
         });
 
         if (resetPasswordRequests.length > 0) {
