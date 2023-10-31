@@ -148,7 +148,7 @@ function buildExamService() {
             relations: ['exercises', 'exercises.questions'],
         });
 
-        return mapEntities(exams);
+        return exams;
     }
 
     async function bulkInsertExams(exams: Array<Exam>) {
