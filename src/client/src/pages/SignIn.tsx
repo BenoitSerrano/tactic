@@ -35,40 +35,42 @@ function SignIn(props: {
 
     return (
         <NotLoggedInPage>
-            <Card width="40%">
-                <CardContent onSubmit={handleSubmit}>
-                    <TitleContainer>
-                        <Typography variant="h2">{props.title}</Typography>
-                    </TitleContainer>
+            <ContentContainer>
+                <Card width="40%">
+                    <CardContent onSubmit={handleSubmit}>
+                        <TitleContainer>
+                            <Typography variant="h2">{props.title}</Typography>
+                        </TitleContainer>
 
-                    <FieldsContainer>
-                        <FieldContainer>
-                            <TextField
-                                fullWidth
-                                name="email"
-                                type="email"
-                                label="Adresse e-mail"
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                            />
-                        </FieldContainer>
-                        <FieldContainer>
-                            <TextField
-                                fullWidth
-                                name="password"
-                                type="password"
-                                label="Mot de passe"
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                            />
-                        </FieldContainer>
-                    </FieldsContainer>
+                        <FieldsContainer>
+                            <FieldContainer>
+                                <TextField
+                                    fullWidth
+                                    name="email"
+                                    type="email"
+                                    label="Adresse e-mail"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                />
+                            </FieldContainer>
+                            <FieldContainer>
+                                <TextField
+                                    fullWidth
+                                    name="password"
+                                    type="password"
+                                    label="Mot de passe"
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
+                                />
+                            </FieldContainer>
+                        </FieldsContainer>
 
-                    <Button type="submit" variant="contained" disabled={!password || !email}>
-                        {props.title}
-                    </Button>
-                </CardContent>
-            </Card>
+                        <Button type="submit" variant="contained" disabled={!password || !email}>
+                            {props.title}
+                        </Button>
+                    </CardContent>
+                </Card>
+            </ContentContainer>
         </NotLoggedInPage>
     );
 
@@ -77,6 +79,13 @@ function SignIn(props: {
         event.preventDefault();
     }
 }
+
+const ContentContainer = styled('div')({
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
 
 const CardContent = styled('form')(({ theme }) => ({
     display: 'flex',
