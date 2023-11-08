@@ -7,6 +7,7 @@ import { questionType } from './types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../lib/alert';
 import { api } from '../../lib/api';
+import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
 
 function UpdateAnswersButtons(props: {
     question: questionType;
@@ -58,14 +59,28 @@ function UpdateAnswersButtons(props: {
     });
 
     const answerStatus = computeAnswerStatus(props.question.mark, props.question.points);
-
+    const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeMarkedAs(
+        'acceptable',
+        answerStatus,
+        props.question,
+    );
+    const canAnswerBeMarkedAsRight = computeCanAnswerBeMarkedAs(
+        'right',
+        answerStatus,
+        props.question,
+    );
+    const canAnswerBeMarkedAsWrong = computeCanAnswerBeMarkedAs(
+        'wrong',
+        answerStatus,
+        props.question,
+    );
     return (
         <UpdateAnswersButtonContainer>
             <Tooltip title="Marquer la réponse comme correcte">
                 <IconButton
                     size="small"
                     color="success"
-                    disabled={answerStatus === 'right'}
+                    disabled={!canAnswerBeMarkedAsRight}
                     onClick={onAddToRightAnswers}
                 >
                     <CheckIcon fontSize="small" />
@@ -75,10 +90,7 @@ function UpdateAnswersButtons(props: {
                 <IconButton
                     size="small"
                     color="warning"
-                    disabled={
-                        answerStatus === 'acceptable' ||
-                        (answerStatus === 'right' && props.question.rightAnswers.length <= 1)
-                    }
+                    disabled={!canAnswerBeMarkedAsAcceptable}
                     onClick={onAddToAcceptableAnswers}
                 >
                     <SentimentNeutralIcon fontSize="small" />
@@ -88,7 +100,7 @@ function UpdateAnswersButtons(props: {
                 <IconButton
                     size="small"
                     color="error"
-                    disabled={answerStatus === 'wrong' || props.question.rightAnswers.length <= 1}
+                    disabled={!canAnswerBeMarkedAsWrong}
                     onClick={onRemoveOkAnswer}
                 >
                     <ClearIcon fontSize="small" />
