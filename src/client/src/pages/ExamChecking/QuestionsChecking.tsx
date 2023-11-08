@@ -19,7 +19,7 @@ import { computeMarks, marksType } from './lib/computeMarks';
 import { computeHasEditedMarks } from './lib/computeHasEditedMarks';
 
 function QuestionsChecking(props: {
-    onEditAnswers: () => void;
+    refetch: () => void;
     exercises: Array<exerciseType>;
     examName: string;
     examId: string;
@@ -37,6 +37,7 @@ function QuestionsChecking(props: {
     const saveMarksMutation = useMutation({
         mutationFn: api.updateMarks,
         onSuccess: () => {
+            props.refetch();
             displayAlert({ variant: 'success', text: 'Vos notes ont bien été sauvegardées' });
         },
         onError: (error) => {
@@ -115,7 +116,7 @@ function QuestionsChecking(props: {
                                         {editableQuestionKindsAnswers.includes(question.kind) && (
                                             <UpdateAnswersButtons
                                                 examId={props.examId}
-                                                onEditAnswers={props.onEditAnswers}
+                                                refetch={props.refetch}
                                                 question={question}
                                             />
                                         )}

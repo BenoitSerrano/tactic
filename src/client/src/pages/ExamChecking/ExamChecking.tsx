@@ -25,7 +25,7 @@ function ExamChecking() {
     return (
         <MainContainer>
             <QuestionsChecking
-                onEditAnswers={attemptWithAnswersQuery.refetch}
+                refetch={attemptWithAnswersQuery.refetch}
                 studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}
                 examId={examId}

@@ -11,7 +11,7 @@ import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
 
 function UpdateAnswersButtons(props: {
     question: questionType;
-    onEditAnswers: () => void;
+    refetch: () => void;
     examId: string;
 }) {
     const { displayAlert } = useAlert();
@@ -19,7 +19,7 @@ function UpdateAnswersButtons(props: {
     const addRightAnswerMutation = useMutation({
         mutationFn: api.addQuestionRightAnswer,
         onSuccess: () => {
-            props.onEditAnswers();
+            props.refetch();
         },
         onError: (error) => {
             console.error(error);
@@ -33,7 +33,7 @@ function UpdateAnswersButtons(props: {
     const removeOkAnswerMutation = useMutation({
         mutationFn: api.removeOkAnswer,
         onSuccess: () => {
-            props.onEditAnswers();
+            props.refetch();
         },
         onError: (error) => {
             console.error(error);
@@ -47,7 +47,7 @@ function UpdateAnswersButtons(props: {
     const addAcceptableAnswerMutation = useMutation({
         mutationFn: api.addQuestionAcceptableAnswer,
         onSuccess: () => {
-            props.onEditAnswers();
+            props.refetch();
         },
         onError: (error) => {
             console.error(error);
