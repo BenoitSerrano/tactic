@@ -3,6 +3,7 @@ import { Typography, styled } from '@mui/material';
 function TestPageLayout(props: {
     title: string;
     studentEmail: string;
+    result?: string;
     children: JSX.Element[] | JSX.Element;
     buttons: JSX.Element[];
 }) {
@@ -12,7 +13,8 @@ function TestPageLayout(props: {
                 <Typography variant="h1">{props.title}</Typography>
             </TitleContainer>
             <StudentInfoContainer>
-                <Typography>Adresse e-mail : {props.studentEmail}</Typography>
+                <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
+                {!!props.result && <Typography variant="caption">{props.result}</Typography>}
             </StudentInfoContainer>
             {props.children}
             {!!props.buttons.length && <ButtonContainer>{props.buttons}</ButtonContainer>}
@@ -36,6 +38,12 @@ const ButtonContainer = styled('div')({
 
 const StudentInfoContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+}));
+
+const StudentEmail = styled(Typography)(({ theme }) => ({
     fontStyle: 'italic',
 }));
 

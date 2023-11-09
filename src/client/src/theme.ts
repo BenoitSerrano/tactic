@@ -17,7 +17,7 @@ const theme = createTheme({
     },
     spacing: (value: number) => value * 8,
     typography: {
-        fontFamily: ['inter'].join(','),
+        fontFamily: ['inter', 'Allura'].join(','),
         h1: {
             fontSize: '3rem',
             fontWeight: 'normal',
@@ -41,6 +41,11 @@ const theme = createTheme({
         h6: {
             fontSize: '0.8rem',
             fontWeight: 'normal',
+        },
+        caption: {
+            fontFamily: 'Allura',
+            fontWeight: 'bold',
+            fontSize: '2rem',
         },
     },
 });

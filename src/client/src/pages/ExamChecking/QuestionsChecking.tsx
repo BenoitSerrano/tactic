@@ -15,6 +15,7 @@ import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { extractMarks, manualMarksType } from './lib/extractMarks';
 import { manualQuestionKinds } from '../../constants';
+import { computeResult } from './lib/computeResult';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -31,10 +32,13 @@ function QuestionsChecking(props: {
     const initialMarks = extractMarks(props.exercises);
     const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
+    const result = computeResult(props.exercises);
 
     const saveMarkMutation = useMutation({
         mutationFn: api.updateMark,
-        onSuccess: () => {},
+        onSuccess: () => {
+            props.refetch();
+        },
         onError: (error) => {
             console.error(error);
             displayAlert({
@@ -57,7 +61,12 @@ function QuestionsChecking(props: {
     const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
 
     return (
-        <TestPageLayout studentEmail={props.studentEmail} title={props.examName} buttons={[]}>
+        <TestPageLayout
+            studentEmail={props.studentEmail}
+            title={props.examName}
+            buttons={[]}
+            result={result}
+        >
             <>
                 <LeftArrowContainer>
                     <IconButton disabled={!previous} onClick={buildOnArrowClick(previous)}>
