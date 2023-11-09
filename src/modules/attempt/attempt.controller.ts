@@ -14,7 +14,7 @@ function buildAttemptController() {
         fetchAttemptWithoutAnswers,
         deleteAttempt,
         updateAttemptCheatingSummary,
-        updateMarks,
+        updateMark,
         updateAttemptEndedAt,
     };
 
@@ -47,11 +47,15 @@ function buildAttemptController() {
         return attemptService.deleteAttempt(params.urlParams.attemptId);
     }
 
-    async function updateMarks(params: {
-        urlParams: { attemptId: string };
-        body: { marks: Record<Question['id'], number> };
+    async function updateMark(params: {
+        urlParams: { attemptId: string; questionId: string };
+        body: { mark: number };
     }) {
-        return attemptService.updateMarks(params.urlParams.attemptId, params.body.marks);
+        return attemptService.updateMark(
+            params.urlParams.attemptId,
+            Number(params.urlParams.questionId),
+            params.body.mark,
+        );
     }
 
     async function updateAttemptCheatingSummary(params: {

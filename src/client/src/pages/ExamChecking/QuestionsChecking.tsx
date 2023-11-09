@@ -1,12 +1,10 @@
-import { IconButton, TextField, Typography, styled } from '@mui/material';
+import { IconButton, Slider, Typography, styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../../components/TestPageLayout';
-import { LoadingButton } from '@mui/lab';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { exerciseType } from './types';
@@ -15,8 +13,8 @@ import { UpdateAnswersButtons } from './UpdateAnswersButtons';
 import { questionKindType } from '../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { computeMarks, marksType } from './lib/computeMarks';
-import { computeHasEditedMarks } from './lib/computeHasEditedMarks';
+import { extractMarks, manualMarksType } from './lib/extractMarks';
+import { manualQuestionKinds } from '../../constants';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -30,31 +28,25 @@ function QuestionsChecking(props: {
 
     const [searchParams] = useSearchParams();
 
-    const initialMarks = computeMarks(props.exercises);
-    const [marks, setMarks] = useState<marksType>(initialMarks);
+    const initialMarks = extractMarks(props.exercises);
+    const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
 
-    const saveMarksMutation = useMutation({
-        mutationFn: api.updateMarks,
-        onSuccess: () => {
-            props.refetch();
-            displayAlert({ variant: 'success', text: 'Vos notes ont bien été sauvegardées' });
-        },
+    const saveMarkMutation = useMutation({
+        mutationFn: api.updateMark,
+        onSuccess: () => {},
         onError: (error) => {
             console.error(error);
             displayAlert({
                 variant: 'error',
-                text: "Une erreur est survenue. Vos notes n'ont pas pu être sauvegardées.",
+                text: "Une erreur est survenue. Votre dernière note n'a pas pu être sauvegardée.",
             });
         },
     });
 
-    const hasEditedMarks = computeHasEditedMarks(initialMarks, marks);
-    const isSaveButtonDisabled = !hasEditedMarks;
-
     useEffect(() => {
-        const marks = computeMarks(props.exercises);
-        setMarks(marks);
+        const marks = extractMarks(props.exercises);
+        setManualMarks(marks.manual);
     }, [props.exercises]);
 
     const { next, previous } = computeAttemptIdNeighbours(
@@ -65,21 +57,7 @@ function QuestionsChecking(props: {
     const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
 
     return (
-        <TestPageLayout
-            studentEmail={props.studentEmail}
-            title={props.examName}
-            buttons={[
-                <LoadingButton
-                    key="save-marks-button"
-                    loading={saveMarksMutation.isPending}
-                    variant="contained"
-                    onClick={saveMarks}
-                    disabled={isSaveButtonDisabled}
-                >
-                    Sauvegarder
-                </LoadingButton>,
-            ]}
-        >
+        <TestPageLayout studentEmail={props.studentEmail} title={props.examName} buttons={[]}>
             <>
                 <LeftArrowContainer>
                     <IconButton disabled={!previous} onClick={buildOnArrowClick(previous)}>
@@ -93,24 +71,42 @@ function QuestionsChecking(props: {
                             <Typography variant="h4">{exercise.instruction}</Typography>
                         </ExerciseTitleContainer>
                         {exercise.questions.map((question, index: number) => {
-                            const answerStatus = computeAnswerStatus(
-                                question.mark,
-                                question.points,
-                            );
+                            const mark = manualQuestionKinds.includes(question.kind)
+                                ? manualMarks[question.id]
+                                : question.mark;
+                            const answerStatus = computeAnswerStatus(mark, question.points);
                             return (
                                 <QuestionCheckingContainer key={question.id}>
                                     <QuestionIndicatorsContainer>
                                         <QuestionIndicatorContainer>
-                                            {question.rightAnswers.length === 0 ? (
-                                                <MarkTextField
-                                                    onChange={buildOnMarkChange(question.id)}
-                                                    value={marks[question.id] || ''}
-                                                    variant="standard"
-                                                />
+                                            {manualQuestionKinds.includes(question.kind) ? (
+                                                <MarkSliderContainer>
+                                                    <Slider
+                                                        onClick={buildOnClickSlider(question.id)}
+                                                        onChange={buildOnChangeSlider(question.id)}
+                                                        onChangeCommitted={buildOnChangeCommittedSlider(
+                                                            question.id,
+                                                        )}
+                                                        size="small"
+                                                        step={0.5}
+                                                        min={0}
+                                                        max={question.points}
+                                                        valueLabelDisplay="auto"
+                                                        marks
+                                                        value={manualMarks[question.id] || 0}
+                                                    />
+                                                    <Typography>
+                                                        {manualMarks[question.id] !== undefined
+                                                            ? manualMarks[question.id]
+                                                            : '...'}{' '}
+                                                        / {question.points}
+                                                    </Typography>
+                                                </MarkSliderContainer>
                                             ) : (
-                                                <Typography>{question.mark || 0}</Typography>
+                                                <Typography>
+                                                    {question.mark} / {question.points}
+                                                </Typography>
                                             )}
-                                            <Typography> / {question.points}</Typography>
                                         </QuestionIndicatorContainer>
 
                                         {editableQuestionKindsAnswers.includes(question.kind) && (
@@ -141,19 +137,24 @@ function QuestionsChecking(props: {
         </TestPageLayout>
     );
 
-    function saveMarks() {
-        const formattedMarks = Object.entries(marks).reduce(
-            (acc, [questionId, mark]) => ({ ...acc, [questionId]: Number(mark) }),
-            {} as Record<number, number>,
-        );
-        saveMarksMutation.mutate({ attemptId: props.attemptId, marks: formattedMarks });
+    function buildOnChangeSlider(questionId: number) {
+        return (event: Event, value: number | number[]) => {
+            if (typeof value !== 'object') {
+                setManualMarks({ ...manualMarks, [questionId]: value });
+            }
+        };
     }
 
-    function buildOnMarkChange(questionId: number) {
-        return (event: ChangeEvent<HTMLInputElement>) => {
-            const mark = event.target.value;
-            if (mark.match(FLOATING_NUMBER_REGEX)) {
-                setMarks({ ...marks, [questionId]: mark });
+    function buildOnClickSlider(questionId: number) {
+        return () => {
+            setManualMarks({ ...manualMarks, [questionId]: manualMarks[questionId] || 0 });
+        };
+    }
+
+    function buildOnChangeCommittedSlider(questionId: number) {
+        return (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => {
+            if (typeof value !== 'object') {
+                saveMarkMutation.mutate({ attemptId: props.attemptId, questionId, mark: value });
             }
         };
     }
@@ -163,9 +164,7 @@ function QuestionsChecking(props: {
             if (!attemptIdToNavigateTo) {
                 return;
             }
-            if (hasEditedMarks) {
-                saveMarks();
-            }
+
             navigateToNewAttempt(attemptIdToNavigateTo);
         };
     }
@@ -203,8 +202,8 @@ const RightArrowContainer = styled('div')(({ theme }) => ({
 }));
 
 const QuestionCheckingContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(1),
-    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(3),
     display: 'flex',
 }));
 
@@ -221,14 +220,16 @@ const ExerciseContainer = styled('div')(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.common.black}`,
 }));
 
+const MarkSliderContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    marginRight: theme.spacing(1),
+}));
 const ExerciseTitleContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(3),
 }));
 
 const QuestionIndicatorsContainer = styled('div')({});
-
-const MarkTextField = styled(TextField)({
-    width: 30,
-});
 
 export { QuestionsChecking };

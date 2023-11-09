@@ -26,7 +26,7 @@ type questionType = {
     acceptableAnswers: string[];
     possibleAnswers: string[];
     answer: string | undefined;
-    mark: number;
+    mark: number | undefined;
     points: number;
 };
 

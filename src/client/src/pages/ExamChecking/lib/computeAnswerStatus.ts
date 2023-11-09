@@ -1,6 +1,6 @@
 import { answerStatusType } from '../types';
 
-function computeAnswerStatus(mark: number, points: number): answerStatusType {
+function computeAnswerStatus(mark: number | undefined, points: number): answerStatusType {
     if (!mark) {
         return 'wrong';
     }

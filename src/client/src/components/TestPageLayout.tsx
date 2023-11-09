@@ -15,7 +15,7 @@ function TestPageLayout(props: {
                 <Typography>Adresse e-mail : {props.studentEmail}</Typography>
             </StudentInfoContainer>
             {props.children}
-            <ButtonContainer>{props.buttons}</ButtonContainer>
+            {!!props.buttons.length && <ButtonContainer>{props.buttons}</ButtonContainer>}
         </Container>
     );
 }

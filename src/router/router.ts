@@ -310,7 +310,10 @@ router.patch(
 router.delete('/attempts/:attemptId', buildController(attemptController.deleteAttempt));
 
 // TODO vérifier le format en entrée
-router.patch('/attempts/:attemptId/marks', buildController(attemptController.updateMarks));
+router.patch(
+    '/attempts/:attemptId/:questionId/mark',
+    buildController(attemptController.updateMark),
+);
 router.patch(
     '/attempts/:attemptId/endedAt',
     buildController(attemptController.updateAttemptEndedAt),

@@ -28,7 +28,7 @@ function buildAttemptService() {
         bulkInsertAttempts,
         deleteQuestionAnswers,
         deleteExerciseAnswers,
-        updateMarks,
+        updateMark,
         updateAttemptEndedAt,
     };
 
@@ -179,14 +179,14 @@ function buildAttemptService() {
         return result.affected == 1;
     }
 
-    async function updateMarks(attemptId: Attempt['id'], marks: Record<Question['id'], number>) {
+    async function updateMark(attemptId: Attempt['id'], questionId: Question['id'], mark: number) {
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: { id: true, marks: true },
         });
 
         const previousMarks = attemptUtils.decodeMarks(attempt.marks);
-        const newMarks = attemptUtils.encodeMarks({ ...previousMarks, ...marks });
+        const newMarks = attemptUtils.encodeMarks({ ...previousMarks, [questionId]: mark });
         await attemptRepository.update({ id: attemptId }, { marks: newMarks });
         return true;
     }

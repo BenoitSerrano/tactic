@@ -13,6 +13,8 @@ const QUESTION_TROU_REGEX = /^(.*)\.{4}(.*)$/;
 const TEXTE_A_TROU_REGEX = /(\.{4})/g;
 const HEADER_HEIGHT = 60;
 
+const manualQuestionKinds = ['texteLibre'];
+
 const questionSpecificityMapping: Record<
     questionKindType,
     {
@@ -49,4 +51,5 @@ export {
     QUESTION_TROU_REGEX,
     TEXTE_A_TROU_REGEX,
     HEADER_HEIGHT,
+    manualQuestionKinds,
 };

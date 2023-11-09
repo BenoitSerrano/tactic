@@ -34,7 +34,7 @@ const api = {
     removeOkAnswer,
     deleteQuestion,
     swapQuestions,
-    updateMarks,
+    updateMark,
     swapExercises,
     updateEndedAt,
     createResetPasswordRequest,
@@ -359,10 +359,10 @@ async function swapQuestions(params: {
     });
 }
 
-async function updateMarks(params: { attemptId: string; marks: Record<number, number> }) {
-    const URL = `${BASE_URL}/attempts/${params.attemptId}/marks`;
+async function updateMark(params: { attemptId: string; questionId: number; mark: number }) {
+    const URL = `${BASE_URL}/attempts/${params.attemptId}/${params.questionId}/mark`;
     return performApiCall(URL, 'PATCH', {
-        marks: params.marks,
+        mark: params.mark,
     });
 }
 
