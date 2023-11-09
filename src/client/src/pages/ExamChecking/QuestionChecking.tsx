@@ -12,7 +12,10 @@ function QuestionChecking(props: {
     index: number;
     answerStatus: answerStatusType;
 }) {
-    const StyledContainer = styledContainerMapping[props.answerStatus];
+    const StyledContainer =
+        props.answerStatus !== undefined
+            ? styledContainerMapping[props.answerStatus]
+            : NormalContainer;
     let answer = '';
     if (props.question.answer !== undefined && props.question.answer !== '') {
         if (props.question.kind === 'qcm' && props.question.possibleAnswers !== null) {
@@ -43,5 +46,7 @@ function QuestionChecking(props: {
 }
 
 const Title = styled(Typography)(({ theme }) => ({ fontWeight: 'bold' }));
+
+const NormalContainer = styled('div')({});
 
 export { QuestionChecking };

@@ -30,6 +30,6 @@ type questionType = {
     points: number;
 };
 
-type answerStatusType = 'wrong' | 'acceptable' | 'right';
+type answerStatusType = 'wrong' | 'acceptable' | 'right' | undefined;
 
 export type { attemptWithAnswersApiType, exerciseType, questionType, answerStatusType };

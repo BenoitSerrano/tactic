@@ -18,6 +18,8 @@ function computeCanAnswerBeMarkedAs(
                 currentAnswerStatus !== 'wrong' &&
                 (currentAnswerStatus !== 'right' || question.rightAnswers.length > 1)
             );
+        case undefined:
+            return false;
     }
 }
 
