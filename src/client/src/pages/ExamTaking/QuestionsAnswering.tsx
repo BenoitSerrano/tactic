@@ -141,6 +141,7 @@ const QuestionContainer = styled('div')(({ theme }) => ({
 }));
 
 const ExerciseContainer = styled('div')(({ theme }) => ({
+    userSelect: 'none',
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(2),
     borderBottom: `1px solid ${theme.palette.common.black}`,
