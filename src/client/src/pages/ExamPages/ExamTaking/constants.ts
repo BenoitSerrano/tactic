@@ -1,4 +1,4 @@
-import { questionKindType } from '../../types';
+import { questionKindType } from '../../../types';
 import { ElementType } from 'react';
 import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
 import { QuestionTrouAnswering } from './QuestionTrouAnswering';

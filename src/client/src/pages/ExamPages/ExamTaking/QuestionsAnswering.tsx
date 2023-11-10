@@ -3,10 +3,10 @@ import { Typography, styled } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
 import { exerciseType } from './types';
-import { api } from '../../lib/api';
-import { useAlert } from '../../lib/alert';
+import { api } from '../../../lib/api';
+import { useAlert } from '../../../lib/alert';
 import { QuestionAnswering } from './QuestionAnswering';
-import { TestPageLayout } from '../../components/TestPageLayout';
+import { TestPageLayout } from '../../../components/TestPageLayout';
 
 type questionAnswerType = Record<number, string>;
 

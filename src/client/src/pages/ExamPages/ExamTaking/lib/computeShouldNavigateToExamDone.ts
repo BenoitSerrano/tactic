@@ -1,4 +1,4 @@
-import { time } from '../../../lib/time';
+import { time } from '../../../../lib/time';
 
 function computeShouldNavigateToExamDone(
     now: Date,

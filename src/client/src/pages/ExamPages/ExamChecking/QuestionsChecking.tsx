@@ -4,17 +4,17 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { QuestionChecking } from './QuestionChecking';
-import { TestPageLayout } from '../../components/TestPageLayout';
-import { api } from '../../lib/api';
-import { useAlert } from '../../lib/alert';
+import { TestPageLayout } from '../../../components/TestPageLayout';
+import { api } from '../../../lib/api';
+import { useAlert } from '../../../lib/alert';
 import { exerciseType } from './types';
 import { computeAnswerStatus } from './lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
-import { questionKindType } from '../../types';
+import { questionKindType } from '../../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { extractMarks, manualMarksType } from './lib/extractMarks';
-import { manualQuestionKinds } from '../../constants';
+import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from './lib/computeResult';
 
 function QuestionsChecking(props: {

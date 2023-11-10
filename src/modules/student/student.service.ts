@@ -18,7 +18,7 @@ function buildStudentService() {
         getStudents,
         getAllAnonymizedStudents,
         getStudentsWithAttempts,
-        getStudentId,
+        fetchStudentByEmail,
         deleteStudent,
         bulkInsertStudents,
         deleteAllStudents,
@@ -70,10 +70,11 @@ function buildStudentService() {
         );
     }
 
-    async function getStudentId(email: string) {
+    async function fetchStudentByEmail(email: string) {
         return studentRepository.findOneOrFail({
             where: { email: email.trim().toLowerCase() },
-            select: ['id'],
+            select: { id: true, attempts: { id: true } },
+            relations: ['attempts'],
         });
     }
 

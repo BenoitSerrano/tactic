@@ -136,7 +136,7 @@ function Exams() {
 
     function buildCopyExamLinkToClipboard(examId: string) {
         return () => {
-            const url = `${config.HOST_URL}/student/exams/${examId}`;
+            const url = `${config.HOST_URL}/student/exams/${examId}?action=take`;
             navigator.clipboard.writeText(url);
             displayAlert({
                 text: 'Le lien a bien été copié dans le presse-papiers',

@@ -1,4 +1,4 @@
-import { useAlert } from '../../lib/alert';
+import { useAlert } from '../../../lib/alert';
 
 function useTimeoutAlert() {
     const { displayAlert } = useAlert();

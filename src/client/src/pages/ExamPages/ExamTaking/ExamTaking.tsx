@@ -1,9 +1,9 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Typography, styled } from '@mui/material';
-import { NotLoggedInPage } from '../../components/NotLoggedInPage';
-import { Loader } from '../../components/Loader';
-import { api } from '../../lib/api';
+import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
+import { Loader } from '../../../components/Loader';
+import { api } from '../../../lib/api';
 import { QuestionsAnswering } from './QuestionsAnswering';
 import { attemptWithoutAnswersType } from './types';
 import { computeShouldNavigateToExamDone } from './lib/computeShouldNavigateToExamDone';

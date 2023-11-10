@@ -14,7 +14,7 @@ const api = {
     updateAttemptCheatingSummary,
     deleteAttempt,
     fetchStudents,
-    fetchStudentId,
+    fetchStudentByEmail,
     createStudents,
     deleteStudent,
     createExam,
@@ -183,7 +183,7 @@ async function deleteAttempt(attemptId: string) {
     return performApiCall(URL, 'DELETE');
 }
 
-async function fetchStudentId(email: string) {
+async function fetchStudentByEmail(email: string) {
     const URL = `${BASE_URL}/students/${email}`;
     return performApiCall(URL, 'GET');
 }

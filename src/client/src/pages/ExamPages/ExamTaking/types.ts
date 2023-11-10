@@ -1,4 +1,4 @@
-import { questionKindType } from '../../types';
+import { questionKindType } from '../../../types';
 
 type attemptWithoutAnswersType = {
     startedAt: string;

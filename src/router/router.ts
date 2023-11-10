@@ -50,7 +50,7 @@ router.delete(
 //         checkAuthorization: accessControlBuilder.isLoggedIn(),
 //     }),
 // );
-router.get('/students/:email', buildController(studentController.getStudentId));
+router.get('/students/:email', buildController(studentController.fetchStudentByEmail));
 
 router.post(
     '/student-list',

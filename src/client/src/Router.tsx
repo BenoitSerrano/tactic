@@ -3,9 +3,9 @@ import { Exams } from './pages/Exams';
 import { ExamQuestionsEdition } from './pages/ExamQuestionsEdition';
 import { Students } from './pages/Students';
 import { StudentAuthentication } from './pages/StudentAuthentication';
-import { ExamTaking } from './pages/ExamTaking';
+import { ExamTaking } from './pages/ExamPages/ExamTaking';
 import { ExamResults } from './pages/ExamResults';
-import { ExamChecking } from './pages/ExamChecking';
+import { ExamChecking } from './pages/ExamPages/ExamChecking';
 import { TeacherHome } from './pages/TeacherHome';
 import { ExamDone } from './pages/ExamDone';
 import { StudentHome } from './pages/StudentHome';
@@ -20,6 +20,7 @@ import { ResetPasswordRequested } from './pages/ResetPasswordRequested';
 import { ResetPassword } from './pages/ResetPassword';
 import { ResetPasswordSuccess } from './pages/ResetPasswordSuccess';
 import { ResetPasswordFailure } from './pages/ResetPasswordFailure';
+import { ExamConsulting } from './pages/ExamPages/ExamConsulting';
 
 function Router() {
     return (
@@ -54,8 +55,12 @@ function Router() {
             <Route path="/student/exams/:examId" element={<StudentAuthentication />} />
             <Route path="/student/exams/:examId/students/:studentId" element={<StudentHome />} />
             <Route
-                path="/student/students/:studentId/attempts/:attemptId"
+                path="/student/students/:studentId/attempts/:attemptId/take"
                 element={<ExamTaking />}
+            />
+            <Route
+                path="/student/students/:studentId/attempts/:attemptId/consult"
+                element={<ExamConsulting />}
             />
             <Route path="/student/students/:studentId/exam-done" element={<ExamDone />} />
             <Route path="/*" element={<NotFound />} />

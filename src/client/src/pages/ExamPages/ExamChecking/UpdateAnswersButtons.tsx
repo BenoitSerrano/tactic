@@ -5,8 +5,8 @@ import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import { computeAnswerStatus } from './lib/computeAnswerStatus';
 import { questionType } from './types';
 import { useMutation } from '@tanstack/react-query';
-import { useAlert } from '../../lib/alert';
-import { api } from '../../lib/api';
+import { useAlert } from '../../../lib/alert';
+import { api } from '../../../lib/api';
 import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
 
 function UpdateAnswersButtons(props: {

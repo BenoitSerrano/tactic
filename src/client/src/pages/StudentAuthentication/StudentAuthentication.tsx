@@ -1,13 +1,19 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
-import { api } from '../lib/api';
-import { NotLoggedInPage } from '../components/NotLoggedInPage';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import { Loader } from '../components/Loader';
-import { useAlert } from '../lib/alert';
+import { api } from '../../lib/api';
+import { NotLoggedInPage } from '../../components/NotLoggedInPage';
+import { Card } from '../../components/Card';
+import { Loader } from '../../components/Loader';
+import { useAlert } from '../../lib/alert';
+import { extractActionFromSearchParams } from './lib/extractActionFromSearchParams';
+import { LoadingButton } from '@mui/lab';
+
+type studentType = {
+    id: string;
+    attempts: Array<{ id: string }>;
+};
 
 function StudentAuthentication() {
     const params = useParams();
@@ -15,13 +21,21 @@ function StudentAuthentication() {
     const query = useQuery({ queryKey: ['exams', examId], queryFn: () => api.fetchExam(examId) });
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const action = extractActionFromSearchParams(searchParams);
 
     const [email, setEmail] = useState('');
 
-    const getStudentIdMutation = useMutation({
-        mutationFn: api.fetchStudentId,
-        onSuccess: (student: { id: string }) => {
-            navigate(`/student/exams/${examId}/students/${student.id}`);
+    const fetchStudentByEmailMutation = useMutation({
+        mutationFn: api.fetchStudentByEmail,
+        onSuccess: (student: studentType) => {
+            if (student.attempts.length > 0) {
+                navigate(
+                    `/student/students/${student.id}/attempts/${student.attempts[0].id}/${action}`,
+                );
+            } else {
+                navigate(`/student/exams/${examId}/students/${student.id}`);
+            }
         },
         onError: (error) => {
             console.warn(error);
@@ -52,9 +66,14 @@ function StudentAuthentication() {
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                         />
-                        <Button variant="contained" type="submit" disabled={!email}>
+                        <LoadingButton
+                            loading={fetchStudentByEmailMutation.isPending}
+                            variant="contained"
+                            type="submit"
+                            disabled={!email}
+                        >
                             Se connecter
-                        </Button>
+                        </LoadingButton>
                     </Form>
                 </Card>
             </ContentContainer>
@@ -62,7 +81,7 @@ function StudentAuthentication() {
     );
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        getStudentIdMutation.mutate(email);
+        fetchStudentByEmailMutation.mutate(email);
         event.preventDefault();
     }
 }
