@@ -13,14 +13,10 @@ function QuestionChecking(props: {
     index: number;
     answerStatus: answerStatusType;
 }) {
-    const StyledContainer =
-        props.answerStatus !== undefined
-            ? styledContainerMapping[props.answerStatus]
-            : NormalContainer;
     const displayedAnswer = computeDisplayedAnswer(props.question, props.answerStatus);
 
     return (
-        <StyledContainer>
+        <Container>
             <Title>
                 {props.index}.{' '}
                 {displayedAnswer.title.map((chunk) => {
@@ -52,12 +48,12 @@ function QuestionChecking(props: {
                     })}
                 </Typography>
             )}
-        </StyledContainer>
+        </Container>
     );
 }
 
 const Title = styled(Typography)(({ theme }) => ({ fontWeight: 'bold' }));
 
-const NormalContainer = styled('div')({});
+const Container = styled('div')({ display: 'flex', flexDirection: 'column' });
 
 export { QuestionChecking };
