@@ -19,9 +19,17 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     {
+                        kind: 'text',
+                        value: 'Croyez-vous que John',
+                    },
+                    {
                         kind: 'coloredText',
-                        value: "Croyez-vous que John....(être) à l'origine de ces lettres anonymes ?",
+                        value: '....',
                         status: 'wrong',
+                    },
+                    {
+                        kind: 'text',
+                        value: "(être) à l'origine de ces lettres anonymes ?",
                     },
                 ],
                 answer: undefined,
@@ -69,11 +77,17 @@ describe('computeDisplayedAnswer', () => {
 
             expect(displayedAnswer).toEqual({
                 title: [
-                    {
-                        kind: 'coloredText',
-                        value: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
-                        status: 'wrong',
-                    },
+                    { kind: 'text', value: 'Portez-vous' },
+                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
+                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'text', value: 'personne, vous remarquez en premier :' },
+                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'text', value: 'yeux,' },
+                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'text', value: 'silhouette,' },
+                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
             });

@@ -16,18 +16,18 @@ function computeDisplayedAnswer(
             if (!QTRegexMatch) {
                 return { title: [{ kind: 'text', value: question.title }], answer: undefined };
             }
-            if (!question.answer) {
-                return {
-                    title: [
-                        {
-                            kind: 'coloredText',
-                            value: question.title,
-                            status: 'wrong',
-                        },
-                    ],
-                    answer: undefined,
-                };
-            }
+            // if (!question.answer) {
+            //     return {
+            //         title: [
+            //             {
+            //                 kind: 'coloredText',
+            //                 value: question.title,
+            //                 status: 'wrong',
+            //             },
+            //         ],
+            //         answer: undefined,
+            //     };
+            // }
             const [_, beforeText, afterText] = QTRegexMatch;
             return {
                 title: [
@@ -43,13 +43,10 @@ function computeDisplayedAnswer(
             if (!!value.done) {
                 return { title: [{ kind: 'text', value: question.title }], answer: undefined };
             }
-            if (!question.answer) {
-                return {
-                    title: [{ kind: 'coloredText', value: question.title, status: 'wrong' }],
-                    answer: undefined,
-                };
-            }
-            const answers = question.answer.split(' ');
+
+            const answers = question.answer
+                ? question.answer.split(' ')
+                : ' '.repeat(question.rightAnswers.length).split(' ');
             const title: Array<chunkType> = [];
             let lastIndexFound = 0;
             let answerIndex = 0;
