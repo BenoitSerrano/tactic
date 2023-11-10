@@ -6,7 +6,7 @@ import { exerciseType } from './types';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { QuestionAnswering } from './QuestionAnswering';
-import { TestPageLayout } from '../../../components/TestPageLayout';
+import { TestPageLayout } from '../components/TestPageLayout';
 
 type questionAnswerType = Record<number, string>;
 

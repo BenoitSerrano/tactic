@@ -4,7 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { QuestionChecking } from './QuestionChecking';
-import { TestPageLayout } from '../../../components/TestPageLayout';
+import { TestPageLayout } from '../components/TestPageLayout';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { exerciseType } from './types';
