@@ -3,9 +3,9 @@ import { answerStatusType, questionType } from '../types';
 import { computeDisplayedAnswer } from '../lib/computeDisplayedAnswer';
 
 const styledContainerMapping = {
-    right: styled('div')(({ theme }) => ({ color: theme.palette.success.main })),
-    acceptable: styled('div')(({ theme }) => ({ color: theme.palette.warning.main })),
-    wrong: styled('div')(({ theme }) => ({ color: theme.palette.error.main })),
+    right: styled('span')(({ theme }) => ({ color: theme.palette.success.main })),
+    acceptable: styled('span')(({ theme }) => ({ color: theme.palette.warning.main })),
+    wrong: styled('span')(({ theme }) => ({ color: theme.palette.error.main })),
 };
 
 function QuestionChecking(props: {
@@ -17,24 +17,41 @@ function QuestionChecking(props: {
         props.answerStatus !== undefined
             ? styledContainerMapping[props.answerStatus]
             : NormalContainer;
-    const answer = computeDisplayedAnswer(props.question);
+    const displayedAnswer = computeDisplayedAnswer(props.question, props.answerStatus);
 
     return (
         <StyledContainer>
             <Title>
-                {props.index}. {props.question.title}
+                {props.index}.{' '}
+                {displayedAnswer.title.map((chunk) => {
+                    switch (chunk.kind) {
+                        case 'text':
+                            return <span>{chunk.value}</span>;
+                        case 'coloredText':
+                            const StyledComponent = styledContainerMapping[chunk.status || 'wrong'];
+                            return <StyledComponent> {chunk.value} </StyledComponent>;
+                        default:
+                            return <span />;
+                    }
+                })}
             </Title>
-            {!!props.question.possibleAnswers.length && (
+            {!!displayedAnswer.answer && (
                 <Typography>
-                    Réponses proposées :
-                    <ul>
-                        {props.question.possibleAnswers.map((possibleAnswer) => (
-                            <li key={possibleAnswer}>{possibleAnswer}</li>
-                        ))}
-                    </ul>
+                    Réponse :{' '}
+                    {displayedAnswer.answer.map((chunk) => {
+                        switch (chunk.kind) {
+                            case 'text':
+                                return <span>{chunk.value}</span>;
+                            case 'coloredText':
+                                const StyledComponent =
+                                    styledContainerMapping[chunk.status || 'wrong'];
+                                return <StyledComponent> {chunk.value} </StyledComponent>;
+                            default:
+                                return <span />;
+                        }
+                    })}
                 </Typography>
             )}
-            <Typography>Réponse : {answer}</Typography>
         </StyledContainer>
     );
 }
