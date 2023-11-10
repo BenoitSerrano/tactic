@@ -1,5 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import { answerStatusType, questionType } from '../types';
+import { computeDisplayedAnswer } from '../lib/computeDisplayedAnswer';
 
 const styledContainerMapping = {
     right: styled('div')(({ theme }) => ({ color: theme.palette.success.main })),
@@ -16,14 +17,7 @@ function QuestionChecking(props: {
         props.answerStatus !== undefined
             ? styledContainerMapping[props.answerStatus]
             : NormalContainer;
-    let answer = '';
-    if (props.question.answer !== undefined && props.question.answer !== '') {
-        if (props.question.kind === 'qcm' && props.question.possibleAnswers !== null) {
-            answer = props.question.possibleAnswers[Number(props.question.answer)];
-        } else {
-            answer = props.question.answer;
-        }
-    }
+    const answer = computeDisplayedAnswer(props.question);
 
     return (
         <StyledContainer>

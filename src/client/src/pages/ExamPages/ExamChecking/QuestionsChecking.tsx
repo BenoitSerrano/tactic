@@ -3,7 +3,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { QuestionChecking } from './QuestionChecking';
+import { QuestionChecking } from '../components/QuestionChecking';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';

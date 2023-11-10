@@ -1,11 +1,11 @@
 import { Typography, styled } from '@mui/material';
-import { QuestionConsulting } from './QuestionConsulting';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { exerciseType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { extractMarks } from '../lib/extractMarks';
+import { QuestionChecking } from '../components/QuestionChecking';
 
 function QuestionsConsulting(props: {
     exercises: Array<exerciseType>;
@@ -45,7 +45,7 @@ function QuestionsConsulting(props: {
                                             </Typography>
                                         </QuestionIndicatorContainer>
                                     </QuestionIndicatorsContainer>
-                                    <QuestionConsulting
+                                    <QuestionChecking
                                         key={'question' + question.id}
                                         index={index + 1}
                                         question={question}
