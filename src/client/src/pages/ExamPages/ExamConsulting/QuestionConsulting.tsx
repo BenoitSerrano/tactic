@@ -7,7 +7,7 @@ const styledContainerMapping = {
     wrong: styled('div')(({ theme }) => ({ color: theme.palette.error.main })),
 };
 
-function QuestionChecking(props: {
+function QuestionConsulting(props: {
     question: questionType;
     index: number;
     answerStatus: answerStatusType;
@@ -49,4 +49,4 @@ const Title = styled(Typography)(({ theme }) => ({ fontWeight: 'bold' }));
 
 const NormalContainer = styled('div')({});
 
-export { QuestionChecking };
+export { QuestionConsulting };

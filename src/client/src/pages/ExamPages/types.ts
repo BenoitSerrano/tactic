@@ -1,4 +1,4 @@
-import { questionKindType } from '../../../types';
+import { questionKindType } from '../../types';
 
 type attemptWithAnswersApiType = {
     studentEmail: string;

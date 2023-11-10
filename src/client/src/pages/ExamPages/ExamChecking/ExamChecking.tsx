@@ -4,7 +4,7 @@ import { styled } from '@mui/material';
 import { api } from '../../../lib/api';
 import { Loader } from '../../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
-import { attemptWithAnswersApiType } from './types';
+import { attemptWithAnswersApiType } from '../types';
 
 function ExamChecking() {
     const params = useParams();

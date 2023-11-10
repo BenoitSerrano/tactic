@@ -1,4 +1,4 @@
-import { manualQuestionKinds } from '../../../../constants';
+import { manualQuestionKinds } from '../../../constants';
 import { exerciseType, questionType } from '../types';
 
 type marksType = { manual: manualMarksType; automatic: Record<number, number> };

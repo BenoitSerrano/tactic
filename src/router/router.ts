@@ -276,7 +276,6 @@ router.post(
     buildController(attemptController.createAttempt),
 );
 
-//TODO : add check user is allowed to access this route
 router.get(
     '/attempts/:attemptId/with-answers',
     buildController(attemptController.fetchAttemptWithAnswers),

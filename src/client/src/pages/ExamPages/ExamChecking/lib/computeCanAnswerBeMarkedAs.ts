@@ -1,4 +1,4 @@
-import { answerStatusType, questionType } from '../types';
+import { answerStatusType, questionType } from '../../types';
 
 function computeCanAnswerBeMarkedAs(
     newStatus: answerStatusType,
