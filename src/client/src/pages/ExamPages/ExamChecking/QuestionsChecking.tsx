@@ -3,11 +3,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { QuestionChecking } from '../components/QuestionChecking';
+import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
-import { exerciseType } from '../types';
+import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
 import { questionKindType } from '../../../types';
@@ -19,7 +19,7 @@ import { computeResult } from '../lib/computeResult';
 
 function QuestionsChecking(props: {
     refetch: () => void;
-    exercises: Array<exerciseType>;
+    exercises: Array<exerciseWithAnswersType>;
     examName: string;
     examId: string;
     studentEmail: string;

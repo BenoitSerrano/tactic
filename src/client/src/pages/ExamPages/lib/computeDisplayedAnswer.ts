@@ -1,5 +1,5 @@
 import { QUESTION_TROU_REGEX, TEXTE_A_TROU_REGEX } from '../../../constants';
-import { answerStatusType, questionType } from '../types';
+import { answerStatusType, questionWithAnswersType } from '../types';
 
 type chunkType =
     | { kind: 'text'; value: string }
@@ -7,7 +7,7 @@ type chunkType =
 type displayedAnswerType = { title: Array<chunkType>; answer: Array<chunkType> | undefined };
 
 function computeDisplayedAnswer(
-    question: questionType,
+    question: questionWithAnswersType,
     answerStatus: answerStatusType,
 ): displayedAnswerType {
     switch (question.kind) {
@@ -16,18 +16,7 @@ function computeDisplayedAnswer(
             if (!QTRegexMatch) {
                 return { title: [{ kind: 'text', value: question.title }], answer: undefined };
             }
-            // if (!question.answer) {
-            //     return {
-            //         title: [
-            //             {
-            //                 kind: 'coloredText',
-            //                 value: question.title,
-            //                 status: 'wrong',
-            //             },
-            //         ],
-            //         answer: undefined,
-            //     };
-            // }
+
             const [_, beforeText, afterText] = QTRegexMatch;
             return {
                 title: [

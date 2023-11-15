@@ -11,6 +11,7 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -56,7 +57,7 @@ function Exams() {
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
-                        <TableCell width={200}>Actions</TableCell>
+                        <TableCell width={250}>Actions</TableCell>
                         <TableCell>Nom du test</TableCell>
                         <TableCell>Durée</TableCell>
                     </TableRow>
@@ -65,6 +66,11 @@ function Exams() {
                     {query.data?.map((exam) => (
                         <TableRow key={exam.id}>
                             <TableCell>
+                                <Tooltip title="Prévisualiser l'examen">
+                                    <IconButton onClick={buildNavigateToPreview(exam.id)}>
+                                        <VisibilityIcon />
+                                    </IconButton>
+                                </Tooltip>
                                 <Tooltip title="Accéder à la liste des exercices">
                                     <IconButton onClick={buildNavigateToEdition(exam.id)}>
                                         <FormatListBulletedIcon />
@@ -118,6 +124,10 @@ function Exams() {
     function onExamCreated() {
         queryClient.invalidateQueries({ queryKey: ['exams'] });
         setIsExamCreatedModalOpen(true);
+    }
+
+    function buildNavigateToPreview(examId: string) {
+        return () => navigate(`/teacher/exams/${examId}/preview`);
     }
 
     function buildNavigateToEdition(examId: string) {

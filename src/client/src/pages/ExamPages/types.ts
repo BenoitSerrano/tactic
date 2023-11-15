@@ -2,23 +2,23 @@ import { questionKindType } from '../../types';
 
 type attemptWithAnswersApiType = {
     studentEmail: string;
-    exam: examType;
+    exam: examWithAnswersType;
 };
 
-type examType = {
+type examWithAnswersType = {
     id: string;
     name: string;
-    exercises: Array<exerciseType>;
+    exercises: Array<exerciseWithAnswersType>;
 };
 
-type exerciseType = {
+type exerciseWithAnswersType = {
     id: number;
     name: string;
     instruction: string;
-    questions: Array<questionType>;
+    questions: Array<questionWithAnswersType>;
 };
 
-type questionType = {
+type questionWithAnswersType = {
     id: number;
     title: string;
     kind: questionKindType;
@@ -30,6 +30,37 @@ type questionType = {
     points: number;
 };
 
+type examWithoutAnswersType = {
+    duration: number;
+    extraTime: number;
+    name: string;
+    exercises: Array<exerciseWithoutAnswersType>;
+};
+
+type exerciseWithoutAnswersType = {
+    id: number;
+    name: string;
+    instruction: string;
+    questions: Array<questionWithoutAnswerType>;
+};
+
+type questionWithoutAnswerType = {
+    id: number;
+    kind: questionKindType;
+    title: string;
+    possibleAnswers: string[];
+    currentAnswer: string;
+    points: number;
+};
+
 type answerStatusType = 'wrong' | 'acceptable' | 'right' | undefined;
 
-export type { attemptWithAnswersApiType, exerciseType, questionType, answerStatusType };
+export type {
+    attemptWithAnswersApiType,
+    exerciseWithAnswersType,
+    questionWithAnswersType,
+    answerStatusType,
+    examWithoutAnswersType,
+    exerciseWithoutAnswersType,
+    questionWithoutAnswerType,
+};

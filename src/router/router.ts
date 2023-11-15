@@ -81,6 +81,7 @@ router.delete(
 );
 
 router.get('/exams/:examId', buildController(examController.getExam));
+router.get('/exams/:examId/without-answers', buildController(examController.getExamWithoutAnswers));
 router.get(
     '/exams/:examId/results',
     buildController(examController.getExamResults, {

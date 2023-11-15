@@ -10,6 +10,7 @@ const api = {
     createAttempt,
     fetchAttemptWithAnswers,
     fetchAttemptWithoutAnswers,
+    fetchExamWithoutAnswers,
     updateAttempt,
     updateAttemptCheatingSummary,
     deleteAttempt,
@@ -104,6 +105,11 @@ async function createAttempt({ examId, studentId }: { examId: string; studentId:
 
 async function fetchAttemptWithAnswers(attemptId: string) {
     const URL = `${BASE_URL}/attempts/${attemptId}/with-answers`;
+    return performApiCall(URL, 'GET');
+}
+
+async function fetchExamWithoutAnswers(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/without-answers`;
     return performApiCall(URL, 'GET');
 }
 

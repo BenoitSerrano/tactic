@@ -1,10 +1,10 @@
 import { manualQuestionKinds } from '../../../constants';
-import { exerciseType, questionType } from '../types';
+import { exerciseWithAnswersType, questionWithAnswersType } from '../types';
 
 type marksType = { manual: manualMarksType; automatic: Record<number, number> };
 type manualMarksType = Record<number, number | undefined>;
-function extractMarks(exercises: Array<exerciseType>) {
-    const questions: Array<questionType> = [];
+function extractMarks(exercises: Array<exerciseWithAnswersType>) {
+    const questions: Array<questionWithAnswersType> = [];
     for (const exercise of exercises) {
         questions.push(...exercise.questions);
     }

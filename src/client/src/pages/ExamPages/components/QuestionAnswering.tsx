@@ -1,5 +1,5 @@
-import { questionWithoutAnswerType } from './types';
-import { questionAnsweringComponentMapping } from './constants';
+import { questionWithoutAnswerType } from '../types';
+import { questionAnsweringComponentMapping } from '../constants';
 
 function QuestionAnswering(props: {
     question: questionWithoutAnswerType;

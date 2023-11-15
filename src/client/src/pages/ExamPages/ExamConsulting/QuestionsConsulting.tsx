@@ -1,14 +1,14 @@
 import { Typography, styled } from '@mui/material';
 import { TestPageLayout } from '../components/TestPageLayout';
-import { exerciseType } from '../types';
+import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { extractMarks } from '../lib/extractMarks';
-import { QuestionChecking } from '../components/QuestionChecking';
+import { QuestionChecking } from '../ExamChecking/QuestionChecking';
 
 function QuestionsConsulting(props: {
-    exercises: Array<exerciseType>;
+    exercises: Array<exerciseWithAnswersType>;
     examName: string;
     examId: string;
     studentEmail: string;

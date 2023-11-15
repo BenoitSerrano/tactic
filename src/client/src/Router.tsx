@@ -21,6 +21,7 @@ import { ResetPassword } from './pages/ResetPassword';
 import { ResetPasswordSuccess } from './pages/ResetPasswordSuccess';
 import { ResetPasswordFailure } from './pages/ResetPasswordFailure';
 import { ExamConsulting } from './pages/ExamPages/ExamConsulting';
+import { ExamPreviewing } from './pages/ExamPages/ExamPreviewing';
 
 function Router() {
     return (
@@ -74,6 +75,7 @@ const adminRoutes = [
     { suffixPath: `exams/:examId/exercises`, element: <ExamExercises /> },
     { suffixPath: `exams/:examId/exercises/:exerciseId`, element: <ExamQuestionsEdition /> },
     { suffixPath: `exams/:examId/results`, element: <ExamResults /> },
+    { suffixPath: `exams/:examId/preview`, element: <ExamPreviewing /> },
     { suffixPath: `exams/:examId/results/:attemptId`, element: <ExamChecking /> },
     { suffixPath: ``, element: <TeacherHome /> },
 ];

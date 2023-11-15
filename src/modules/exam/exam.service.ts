@@ -18,6 +18,7 @@ function buildExamService() {
         getAllExams,
         getExam,
         getExamExercises,
+        getExamWithoutAnswers,
         getExamQuestions,
         getExamsByIds,
         deleteExam,
@@ -44,6 +45,24 @@ function buildExamService() {
 
     async function getExam(examId: Exam['id']) {
         return examRepository.findOneOrFail({ where: { id: examId } });
+    }
+
+    async function getExamWithoutAnswers(examId: Exam['id']) {
+        const exam = await getExamQuestions(examId);
+        return {
+            ...exam,
+            exercises: exam.exercises.map((exercise) => ({
+                ...exercise,
+                questions: exercise.questions.map((question) => ({
+                    id: question.id,
+                    kind: question.kind,
+                    title: question.title,
+                    possibleAnswers: question.possibleAnswers,
+                    points: question.points,
+                    currentAnswer: '',
+                })),
+            })),
+        };
     }
 
     async function getExams(user?: User) {

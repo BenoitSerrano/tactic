@@ -1,9 +1,9 @@
-import { answerStatusType, questionType } from '../../types';
+import { answerStatusType, questionWithAnswersType } from '../../types';
 
 function computeCanAnswerBeMarkedAs(
     newStatus: answerStatusType,
     currentAnswerStatus: answerStatusType,
-    question: questionType,
+    question: questionWithAnswersType,
 ) {
     switch (newStatus) {
         case 'right':

@@ -1,6 +1,6 @@
-import { exerciseType } from '../types';
+import { exerciseWithAnswersType } from '../types';
 
-function computeResult(exercises: exerciseType[]) {
+function computeResult(exercises: exerciseWithAnswersType[]) {
     let totalMark = 0;
     let totalPoints = 0;
     for (const exercise of exercises) {

@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Typography, styled } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
-import { exerciseType } from './types';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
-import { QuestionAnswering } from './QuestionAnswering';
+import { QuestionAnswering } from '../components/QuestionAnswering';
 import { TestPageLayout } from '../components/TestPageLayout';
+import { ExerciseTitle } from '../components/ExerciseTitle';
+import { exerciseWithoutAnswersType } from '../types';
 
 type questionAnswerType = Record<number, string>;
 
@@ -14,7 +15,7 @@ function QuestionsAnswering(props: {
     attemptId: string;
     title: string;
     studentEmail: string;
-    exercises: Array<exerciseType>;
+    exercises: Array<exerciseWithoutAnswersType>;
     onExamDone: () => void;
 }) {
     const saveDraftMutation = useMutation({
@@ -76,10 +77,7 @@ function QuestionsAnswering(props: {
             >
                 {props.exercises.map((exercise) => (
                     <ExerciseContainer>
-                        <ExerciseTitleContainer>
-                            <Typography variant="h3">{exercise.name}</Typography>
-                            <Typography variant="h4">{exercise.instruction}</Typography>
-                        </ExerciseTitleContainer>
+                        <ExerciseTitle exercise={exercise} />
                         {exercise.questions.map((question, index) => (
                             <QuestionContainer key={`question-${question.id}`}>
                                 <QuestionIndicatorsContainer>
@@ -145,10 +143,6 @@ const ExerciseContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(2),
     borderBottom: `1px solid ${theme.palette.common.black}`,
-}));
-
-const ExerciseTitleContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(3),
 }));
 
 export { QuestionsAnswering };

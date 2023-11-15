@@ -1,5 +1,5 @@
 import { Typography, styled } from '@mui/material';
-import { answerStatusType, questionType } from '../types';
+import { answerStatusType, questionWithAnswersType } from '../types';
 import { computeDisplayedAnswer } from '../lib/computeDisplayedAnswer';
 
 const styledContainerMapping = {
@@ -9,7 +9,7 @@ const styledContainerMapping = {
 };
 
 function QuestionChecking(props: {
-    question: questionType;
+    question: questionWithAnswersType;
     index: number;
     answerStatus: answerStatusType;
 }) {

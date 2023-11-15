@@ -1,7 +1,7 @@
 import { TextField, Typography, styled } from '@mui/material';
-import { questionWithoutAnswerType } from './types';
 import { ChangeEvent } from 'react';
-import { converter } from './lib/converter';
+import { questionWithoutAnswerType } from '../types';
+import { converter } from '../lib/converter';
 
 const WORD_WIDTH = 100;
 

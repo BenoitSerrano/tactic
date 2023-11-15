@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { IconButton, Tooltip, Typography, styled } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-
-import { questionWithoutAnswerType } from './types';
+import { questionWithoutAnswerType } from '../types';
 
 function PhraseMelangeeAnswering(props: {
     question: questionWithoutAnswerType;

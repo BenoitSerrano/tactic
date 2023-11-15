@@ -3,14 +3,14 @@ import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
-import { questionType } from '../types';
+import { questionWithAnswersType } from '../types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
 
 function UpdateAnswersButtons(props: {
-    question: questionType;
+    question: questionWithAnswersType;
     refetch: () => void;
     examId: string;
 }) {

@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, styled } from '@mui/material';
-import { questionWithoutAnswerType } from './types';
+import { questionWithoutAnswerType } from '../types';
 
 function QuestionChoixMultipleAnswering(props: {
     question: questionWithoutAnswerType;
