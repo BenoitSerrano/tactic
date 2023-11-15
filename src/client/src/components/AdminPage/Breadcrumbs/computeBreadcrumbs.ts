@@ -36,6 +36,12 @@ function computeBreadcrumbs(pathname: string): Array<{ label: string; href?: str
                 return breadcrumbs;
             }
             breadcrumbs.push({ label: 'Correction de copie' });
+        } else if (path[3] === 'preview') {
+            const examPreviewHref = path.length > 4 ? `/${path.slice(0, 4).join('/')}` : undefined;
+            breadcrumbs.push({ label: 'Prévisualisation', href: examPreviewHref });
+            if (path.length === 4) {
+                return breadcrumbs;
+            }
         }
     } else if (path[1] === 'students') {
         const studentsHref = path.length > 2 ? `/${path.slice(0, 2).join('/')}` : undefined;

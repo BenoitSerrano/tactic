@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
-import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
 import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
 import { QuestionsPreviewing } from './QuestionsPreviewing';
@@ -16,32 +15,29 @@ function ExamPreviewing() {
     });
 
     if (!query.data) {
-        return (
-            <NotLoggedInPage>
-                <Loader />
-            </NotLoggedInPage>
-        );
+        if (query.isLoading) {
+            return <Loader />;
+        }
+        return <div />;
     }
 
     return (
-        <NotLoggedInPage>
-            <ExamPageContainer>
-                <QuestionsPreviewing
-                    title={query.data.name}
-                    exercises={query.data.exercises}
-                    examId={examId}
-                />
-            </ExamPageContainer>
-        </NotLoggedInPage>
+        <MainContainer>
+            <QuestionsPreviewing
+                title={query.data.name}
+                exercises={query.data.exercises}
+                examId={examId}
+            />
+        </MainContainer>
     );
 }
 
-export { ExamPreviewing };
-
-const ExamPageContainer = styled('div')({
-    marginTop: 10,
-    width: '100%',
+const MainContainer = styled('div')({
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
 });
+
+export { ExamPreviewing };

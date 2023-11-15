@@ -57,6 +57,18 @@ describe('computeBreadcrumbs', () => {
         ]);
     });
 
+    it("returns exams preview when you're on exam preview page", () => {
+        const pathname = '/teacher/exams/examId/preview';
+
+        const breadcrumbs = computeBreadcrumbs(pathname);
+
+        expect(breadcrumbs).toEqual([
+            { label: 'Accueil', href: '/teacher' },
+            { label: 'Liste des examens', href: '/teacher/exams' },
+            { label: 'Prévisualisation' },
+        ]);
+    });
+
     it("returns exams details when you're on exam details page", () => {
         const pathname = '/teacher/exams/examId/results/attemptId';
 
