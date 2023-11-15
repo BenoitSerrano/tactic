@@ -16,6 +16,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { extractMarks, manualMarksType } from '../lib/extractMarks';
 import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
+import { ExerciseTitle } from '../components/ExerciseTitle';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -75,10 +76,7 @@ function QuestionsChecking(props: {
                 </LeftArrowContainer>
                 {props.exercises.map((exercise) => (
                     <ExerciseContainer key={exercise.id}>
-                        <ExerciseTitleContainer>
-                            <Typography variant="h3">{exercise.name}</Typography>
-                            <Typography variant="h4">{exercise.instruction}</Typography>
-                        </ExerciseTitleContainer>
+                        <ExerciseTitle exercise={exercise} />
                         {exercise.questions.map((question, index: number) => {
                             const mark = manualQuestionKinds.includes(question.kind)
                                 ? manualMarks[question.id]
