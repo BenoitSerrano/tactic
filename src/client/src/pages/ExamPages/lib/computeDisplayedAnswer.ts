@@ -1,6 +1,7 @@
 import { QUESTION_TROU_REGEX, TEXTE_A_TROU_REGEX } from '../../../constants';
 import { textSplitter } from '../../../lib/textSplitter';
 import { answerStatusType, questionWithAnswersType } from '../types';
+import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
 
 type chunkType =
     | { kind: 'text'; value: string }
@@ -35,8 +36,10 @@ function computeDisplayedAnswer(
             }
 
             const answers = question.answer
-                ? textSplitter.split(question.answer)
-                : textSplitter.split(' '.repeat(question.rightAnswers.length));
+                ? question.answer.split(SPLITTING_CHARACTER_FOR_TAT)
+                : SPLITTING_CHARACTER_FOR_TAT.repeat(question.rightAnswers.length).split(
+                      SPLITTING_CHARACTER_FOR_TAT,
+                  );
             const title: Array<chunkType> = [];
             let lastIndexFound = 0;
             let answerIndex = 0;

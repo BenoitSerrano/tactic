@@ -14,7 +14,6 @@ function TexteATrousUpsertionModalContent(props: {
 }) {
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(false);
     const words = textSplitter.split(props.title);
-    console.log(words);
 
     return (
         <>

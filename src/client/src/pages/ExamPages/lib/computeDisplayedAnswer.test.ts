@@ -101,7 +101,7 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: [],
                 rightAnswers: ['des', 'une', 'ses', 'sa', 'son'],
                 acceptableAnswers: [],
-                answer: 'des une ses sa son',
+                answer: 'des|une|ses|sa|son',
                 mark: 2,
                 points: 2,
             };
@@ -133,7 +133,7 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: [],
                 rightAnswers: ['des', 'une', 'ses', 'sa', 'son'],
                 acceptableAnswers: [],
-                answer: 'des truc ses sa son',
+                answer: 'des|truc|ses|sa|son',
                 mark: 2,
                 points: 2,
             };
@@ -165,7 +165,7 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: [],
                 rightAnswers: ['des', 'une', 'ses', 'sa', 'son'],
                 acceptableAnswers: [],
-                answer: 'des  ses sa son',
+                answer: 'des||ses|sa|son',
                 mark: 2,
                 points: 2,
             };

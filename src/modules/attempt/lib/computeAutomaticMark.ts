@@ -20,16 +20,16 @@ function computeAutomaticMark({
         return 0;
     }
     if (questionKind === 'texteATrous') {
-        const words = answer.split(' ');
+        const words = answer.split('|');
         if (words.length !== rightAnswers.length) {
             throw new Error(
                 `The answer "${answer}" does not have the same number of words as rightAnswers "${rightAnswers.join(
-                    ' ',
+                    '|',
                 )}"`,
             );
         }
         const pointPerAnswer = points / words.length;
-        return answer.split(' ').reduce((mark, word, index) => {
+        return words.reduce((mark, word, index) => {
             if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(rightAnswers[index])) {
                 return mark + pointPerAnswer;
             } else {

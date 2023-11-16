@@ -4,7 +4,7 @@ describe('computeAutomaticMark', () => {
     const points = 60;
 
     it('should return 1/4 points for 1/4 right answers', () => {
-        const answer = 'le la les lu';
+        const answer = 'le|la|les|lu';
         const questionKind = 'texteATrous';
         const rightAnswers = ['truc', 'machin', 'bidule', 'lu'];
         const acceptableAnswers: string[] = [];
@@ -21,7 +21,7 @@ describe('computeAutomaticMark', () => {
     });
 
     it('should return 1/4 points if only one answer has been saved', () => {
-        const answer = 'le   ';
+        const answer = 'le|||';
         const questionKind = 'texteATrous';
         const rightAnswers = ['le', 'machin', 'bidule', 'lu'];
         const acceptableAnswers: string[] = [];

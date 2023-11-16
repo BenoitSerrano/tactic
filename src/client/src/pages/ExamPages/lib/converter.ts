@@ -1,5 +1,7 @@
 import { textSplitter } from '../../../lib/textSplitter';
 
+const SPLITTING_CHARACTER_FOR_TAT = '|';
+
 const converter = {
     convertTextInputToAnswer,
     convertWordIndexToAnswerIndex,
@@ -20,14 +22,16 @@ function convertTextInputToAnswer({
     let newAnswer: string[];
     if (!currentAnswer) {
         const blankCount = computeBlankCount(title);
-        newAnswer = textSplitter.split(' '.repeat(blankCount - 1));
+        newAnswer = SPLITTING_CHARACTER_FOR_TAT.repeat(blankCount - 1).split(
+            SPLITTING_CHARACTER_FOR_TAT,
+        );
     } else {
-        newAnswer = textSplitter.split(currentAnswer);
+        newAnswer = currentAnswer.split(SPLITTING_CHARACTER_FOR_TAT);
     }
     const blankIndex = computeBlankIndex(wordIndex, title);
     newAnswer[blankIndex] = textInput;
 
-    return newAnswer.join(' ');
+    return newAnswer.join(SPLITTING_CHARACTER_FOR_TAT);
 }
 
 function computeBlankIndex(wordIndex: number, title: string) {
@@ -50,12 +54,11 @@ function convertAnswerToTextInputs({
 }) {
     const blankCount = computeBlankCount(title);
     if (!currentAnswer) {
-        return ' '
-            .repeat(blankCount)
+        return SPLITTING_CHARACTER_FOR_TAT.repeat(blankCount)
             .split('')
             .map(() => '');
     }
-    return textSplitter.split(currentAnswer);
+    return currentAnswer.split(SPLITTING_CHARACTER_FOR_TAT);
 }
 
 function convertWordIndexToAnswerIndex({ wordIndex, title }: { wordIndex: number; title: string }) {
@@ -79,4 +82,4 @@ function computeBlankCount(title: string) {
     return textSplitter.split(title).filter((word) => word === '....').length;
 }
 
-export { converter };
+export { converter, SPLITTING_CHARACTER_FOR_TAT };

@@ -1,8 +1,8 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent } from 'react';
-import { questionWithoutAnswerType } from '../types';
-import { converter } from '../lib/converter';
-import { textSplitter } from '../../../lib/textSplitter';
+import { questionWithoutAnswerType } from '../../types';
+import { SPLITTING_CHARACTER_FOR_TAT, converter } from '../../lib/converter';
+import { textSplitter } from '../../../../lib/textSplitter';
 
 const WORD_WIDTH = 100;
 
@@ -21,7 +21,6 @@ function TexteATrousAnswering(props: {
     return (
         <>
             <Typography>
-                {/* <IndexContainer>{props.index}</IndexContainer>.{' '} */}
                 <WordsContainer>
                     <IndexContainer>{props.index}.</IndexContainer>
                     {words.map((word, wordIndex) =>
@@ -51,7 +50,7 @@ function TexteATrousAnswering(props: {
     function buildSetWordAnswer(wordIndex: number) {
         return (event: ChangeEvent<HTMLInputElement>) => {
             const textInput = event.target.value;
-            if (textInput.includes(' ')) {
+            if (textInput.includes(SPLITTING_CHARACTER_FOR_TAT)) {
                 return;
             }
             const answer = converter.convertTextInputToAnswer({

@@ -15,7 +15,7 @@ describe('converter', () => {
                 title,
             });
 
-            expect(newCurrentAnswer).toBe('e  ');
+            expect(newCurrentAnswer).toBe('e||');
         });
 
         it('should convert when there was no character before, second word', () => {
@@ -30,11 +30,11 @@ describe('converter', () => {
                 title,
             });
 
-            expect(newCurrentAnswer).toBe(' e ');
+            expect(newCurrentAnswer).toBe('|e|');
         });
 
         it('should convert when there was an answer before, for the first word', () => {
-            const currentAnswer = 'le  ';
+            const currentAnswer = 'le||';
             const wordIndex = 4;
             const textInput = 'la';
 
@@ -45,11 +45,11 @@ describe('converter', () => {
                 title,
             });
 
-            expect(newCurrentAnswer).toBe('le la ');
+            expect(newCurrentAnswer).toBe('le|la|');
         });
 
         it('should convert when there was an answer before, for the second word', () => {
-            const currentAnswer = ' la ';
+            const currentAnswer = '|la|';
             const wordIndex = 2;
             const textInput = 'le';
 
@@ -60,7 +60,7 @@ describe('converter', () => {
                 title,
             });
 
-            expect(newCurrentAnswer).toBe('le la ');
+            expect(newCurrentAnswer).toBe('le|la|');
         });
     });
 
@@ -77,7 +77,7 @@ describe('converter', () => {
         });
 
         it('should convert when there is only one character, second word', () => {
-            const currentAnswer = ' e ';
+            const currentAnswer = '|e|';
 
             const textInputs = converter.convertAnswerToTextInputs({
                 currentAnswer,
@@ -88,7 +88,7 @@ describe('converter', () => {
         });
 
         it('should convert when there are two answers, first second words', () => {
-            const currentAnswer = 'le la ';
+            const currentAnswer = 'le|la|';
 
             const newCurrentAnswer = converter.convertAnswerToTextInputs({
                 currentAnswer,
@@ -99,7 +99,7 @@ describe('converter', () => {
         });
 
         it('should convert when there are two answers, last second words', () => {
-            const currentAnswer = ' la les';
+            const currentAnswer = '|la|les';
 
             const newCurrentAnswer = converter.convertAnswerToTextInputs({
                 currentAnswer,
@@ -110,7 +110,7 @@ describe('converter', () => {
         });
 
         it('should convert when there are three answers', () => {
-            const currentAnswer = 'le la les';
+            const currentAnswer = 'le|la|les';
 
             const newCurrentAnswer = converter.convertAnswerToTextInputs({
                 currentAnswer,
