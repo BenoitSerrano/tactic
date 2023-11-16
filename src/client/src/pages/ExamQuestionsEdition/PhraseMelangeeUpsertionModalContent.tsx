@@ -5,6 +5,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
+import { textSplitter } from '../../lib/textSplitter';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
@@ -18,9 +19,9 @@ function PhraseMelangeeUpsertionModalContent(props: {
     const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
     const [originalPhrase, setOriginalPhrase] = useState(initialRightAnswers);
     const [displayedWordsToPlace, setDisplayedWordsToPlace] = useState(
-        initialRightAnswers.split(' '),
+        textSplitter.split(initialRightAnswers),
     );
-    const words = originalPhrase.split(' ');
+    const words = textSplitter.split(originalPhrase);
 
     const isResetCombinationDisabled = newRightAnswer?.length === 0;
 
@@ -128,7 +129,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
             if (newRightAnswer.length + 1 === words.length) {
                 props.setRightAnswers([...props.rightAnswers, updatedNewRightAnswer.join(' ')]);
                 setNewRightAnswer(undefined);
-                setDisplayedWordsToPlace(originalPhrase.split(' '));
+                setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
             } else {
                 setNewRightAnswer(updatedNewRightAnswer);
                 const newDisplayedWordsToPlace = [...displayedWordsToPlace];
@@ -141,12 +142,12 @@ function PhraseMelangeeUpsertionModalContent(props: {
 
     function resetNewRightAnswer() {
         setNewRightAnswer([]);
-        setDisplayedWordsToPlace(originalPhrase.split(' '));
+        setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
     }
 
     function deleteNewRightAnswer() {
         setNewRightAnswer(undefined);
-        setDisplayedWordsToPlace(originalPhrase.split(' '));
+        setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
     }
 
     function shufflePhrase() {
@@ -156,7 +157,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
     }
 
     function computeShuffledPhrase(originalPhrase: string) {
-        const words = originalPhrase.trim().split(' ');
+        const words = textSplitter.split(originalPhrase.trim());
         const shuffledCombination = combinator.generate(words.length);
         const shuffledWords = [];
         for (let i = 0; i < shuffledCombination.length; i++) {

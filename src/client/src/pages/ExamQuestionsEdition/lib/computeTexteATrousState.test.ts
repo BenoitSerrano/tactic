@@ -16,6 +16,34 @@ describe('computeTexteATrousState', () => {
         expect(nextRightAnswers).toEqual(['es']);
     });
 
+    it('computes back for one missing word', () => {
+        const wordIndex = 1;
+        const prevTitle = 'tu .... vraiment la plus belle';
+        const prevRightAnswers: string[] = ['es'];
+
+        const { nextTitle, nextRightAnswers } = computeTexteATrousState(wordIndex, {
+            prevTitle,
+            prevRightAnswers,
+        });
+
+        expect(nextTitle).toBe('tu es vraiment la plus belle');
+        expect(nextRightAnswers).toEqual([]);
+    });
+
+    it('computes back for one missing word among three', () => {
+        const wordIndex = 3;
+        const prevTitle = 'tu .... vraiment .... plus ....';
+        const prevRightAnswers: string[] = ['es', 'la', 'belle'];
+
+        const { nextTitle, nextRightAnswers } = computeTexteATrousState(wordIndex, {
+            prevTitle,
+            prevRightAnswers,
+        });
+
+        expect(nextTitle).toBe('tu .... vraiment la plus ....');
+        expect(nextRightAnswers).toEqual(['es', 'belle']);
+    });
+
     it('computes for a state that has one missing word', () => {
         const wordIndex = 3;
         const prevTitle = 'tu .... vraiment la plus belle';

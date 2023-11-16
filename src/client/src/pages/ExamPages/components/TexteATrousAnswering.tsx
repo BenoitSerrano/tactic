@@ -2,6 +2,7 @@ import { TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent } from 'react';
 import { questionWithoutAnswerType } from '../types';
 import { converter } from '../lib/converter';
+import { textSplitter } from '../../../lib/textSplitter';
 
 const WORD_WIDTH = 100;
 
@@ -12,7 +13,7 @@ function TexteATrousAnswering(props: {
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
     const { title } = props.question;
-    const words = title.split(' ');
+    const words = textSplitter.split(title);
     const textInputs = converter.convertAnswerToTextInputs({
         currentAnswer: props.currentAnswer,
         title,

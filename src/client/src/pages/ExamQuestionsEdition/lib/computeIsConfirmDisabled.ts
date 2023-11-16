@@ -1,4 +1,5 @@
 import { QUESTION_TROU_REGEX } from '../../../constants';
+import { textSplitter } from '../../../lib/textSplitter';
 import { questionKindType } from '../../../types';
 
 function computeIsConfirmDisabled(
@@ -37,7 +38,9 @@ function computeIsConfirmDisabled(
     }
 
     if (questionKind === 'texteATrous') {
-        const blankCount = params.title.split(' ').filter((word) => word === '....').length;
+        const blankCount = textSplitter
+            .split(params.title)
+            .filter((word) => word === '....').length;
         if (blankCount === 0) {
             return true;
         }

@@ -1,3 +1,5 @@
+import { textSplitter } from '../../../lib/textSplitter';
+
 const converter = {
     convertTextInputToAnswer,
     convertWordIndexToAnswerIndex,
@@ -18,9 +20,9 @@ function convertTextInputToAnswer({
     let newAnswer: string[];
     if (!currentAnswer) {
         const blankCount = computeBlankCount(title);
-        newAnswer = ' '.repeat(blankCount - 1).split(' ');
+        newAnswer = textSplitter.split(' '.repeat(blankCount - 1));
     } else {
-        newAnswer = currentAnswer.split(' ');
+        newAnswer = textSplitter.split(currentAnswer);
     }
     const blankIndex = computeBlankIndex(wordIndex, title);
     newAnswer[blankIndex] = textInput;
@@ -29,7 +31,7 @@ function convertTextInputToAnswer({
 }
 
 function computeBlankIndex(wordIndex: number, title: string) {
-    const words = title.split(' ');
+    const words = textSplitter.split(title);
     let blankIndex = 0;
     for (let i = 0; i < wordIndex; i++) {
         const word = words[i];
@@ -53,11 +55,11 @@ function convertAnswerToTextInputs({
             .split('')
             .map(() => '');
     }
-    return currentAnswer.split(' ');
+    return textSplitter.split(currentAnswer);
 }
 
 function convertWordIndexToAnswerIndex({ wordIndex, title }: { wordIndex: number; title: string }) {
-    const words = title.split(' ');
+    const words = textSplitter.split(title);
     let answerIndex = 0;
     for (let i = 0, wordCount = words.length; i < wordCount; i++) {
         const word = words[i];
@@ -74,7 +76,7 @@ function convertWordIndexToAnswerIndex({ wordIndex, title }: { wordIndex: number
 }
 
 function computeBlankCount(title: string) {
-    return title.split(' ').filter((word) => word === '....').length;
+    return textSplitter.split(title).filter((word) => word === '....').length;
 }
 
 export { converter };

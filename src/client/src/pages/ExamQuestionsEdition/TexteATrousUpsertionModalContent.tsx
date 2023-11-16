@@ -4,6 +4,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { useState } from 'react';
 import { computeTexteATrousState } from './lib/computeTexteATrousState';
+import { textSplitter } from '../../lib/textSplitter';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
@@ -12,7 +13,8 @@ function TexteATrousUpsertionModalContent(props: {
     setRightAnswers: (newRightAnswers: string[]) => void;
 }) {
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(false);
-    const words = props.title.split(' ');
+    const words = textSplitter.split(props.title);
+    console.log(words);
 
     return (
         <>
@@ -82,6 +84,7 @@ const RowContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(1),
     flex: 1,
     width: '100%',
+    alignItems: 'center',
 }));
 
 const WordsContainer = styled('div')({ display: 'flex', flexWrap: 'wrap' });

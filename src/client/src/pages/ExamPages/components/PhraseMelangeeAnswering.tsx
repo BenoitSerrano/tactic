@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { IconButton, Tooltip, Typography, styled } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { questionWithoutAnswerType } from '../types';
+import { textSplitter } from '../../../lib/textSplitter';
 
 function PhraseMelangeeAnswering(props: {
     question: questionWithoutAnswerType;
@@ -10,9 +11,9 @@ function PhraseMelangeeAnswering(props: {
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
     const [pendingAnswer, setPendingAnswer] = useState<string[]>(
-        props.currentAnswer ? props.currentAnswer.split(' ') : [],
+        props.currentAnswer ? textSplitter.split(props.currentAnswer) : [],
     );
-    const shuffledWords = props.question.title.split(' ');
+    const shuffledWords = textSplitter.split(props.question.title);
 
     let displayedShuffleWords = [...shuffledWords];
     for (const word of pendingAnswer) {

@@ -1,4 +1,5 @@
 import { QUESTION_TROU_REGEX, TEXTE_A_TROU_REGEX } from '../../../constants';
+import { textSplitter } from '../../../lib/textSplitter';
 import { answerStatusType, questionWithAnswersType } from '../types';
 
 type chunkType =
@@ -34,8 +35,8 @@ function computeDisplayedAnswer(
             }
 
             const answers = question.answer
-                ? question.answer.split(' ')
-                : ' '.repeat(question.rightAnswers.length).split(' ');
+                ? textSplitter.split(question.answer)
+                : textSplitter.split(' '.repeat(question.rightAnswers.length));
             const title: Array<chunkType> = [];
             let lastIndexFound = 0;
             let answerIndex = 0;
