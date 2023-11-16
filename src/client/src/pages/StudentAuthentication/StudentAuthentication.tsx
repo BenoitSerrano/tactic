@@ -12,7 +12,7 @@ import { LoadingButton } from '@mui/lab';
 
 type studentType = {
     id: string;
-    attempts: Array<{ id: string }>;
+    attempts: Array<{ id: string; exam: { id: string } }>;
 };
 
 function StudentAuthentication() {
@@ -29,10 +29,9 @@ function StudentAuthentication() {
     const fetchStudentByEmailMutation = useMutation({
         mutationFn: api.fetchStudentByEmail,
         onSuccess: (student: studentType) => {
-            if (student.attempts.length > 0) {
-                navigate(
-                    `/student/students/${student.id}/attempts/${student.attempts[0].id}/${action}`,
-                );
+            const attempt = student.attempts.find((attempt) => attempt.exam.id === examId);
+            if (attempt) {
+                navigate(`/student/students/${student.id}/attempts/${attempt.id}/${action}`);
             } else {
                 navigate(`/student/exams/${examId}/students/${student.id}`);
             }

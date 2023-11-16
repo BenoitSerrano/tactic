@@ -73,8 +73,8 @@ function buildStudentService() {
     async function fetchStudentByEmail(email: string) {
         return studentRepository.findOneOrFail({
             where: { email: email.trim().toLowerCase() },
-            select: { id: true, attempts: { id: true } },
-            relations: ['attempts'],
+            select: { id: true, attempts: { id: true, exam: { id: true } } },
+            relations: ['attempts', 'attempts.exam'],
         });
     }
 
