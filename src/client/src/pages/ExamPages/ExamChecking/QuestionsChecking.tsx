@@ -111,7 +111,7 @@ function QuestionsChecking(props: {
                                                 </MarkSliderContainer>
                                             ) : (
                                                 <Typography>
-                                                    {question.mark} / {question.points}
+                                                    {question.mark?.toFixed(1)} / {question.points}
                                                 </Typography>
                                             )}
                                         </QuestionIndicatorContainer>

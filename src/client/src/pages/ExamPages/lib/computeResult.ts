@@ -10,7 +10,7 @@ function computeResult(exercises: exerciseWithAnswersType[]) {
         }
     }
 
-    return `${totalMark} / ${totalPoints}`;
+    return `${totalMark.toFixed(1)} / ${totalPoints}`;
 }
 
 export { computeResult };

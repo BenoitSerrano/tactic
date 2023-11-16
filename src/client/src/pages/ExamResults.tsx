@@ -147,7 +147,7 @@ function ExamResults() {
                                     {result.email}
                                 </Link>
                             </TableCell>
-                            <TableCell>{result.mark}</TableCell>
+                            <TableCell>{result.mark.toFixed(1)}</TableCell>
                             <TableCell>
                                 <GradedStatusIcon />
                             </TableCell>
