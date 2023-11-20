@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Editable, useEditor } from '@wysimark/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
@@ -14,6 +15,7 @@ function ExerciseUpsertionModal(props: {
     examId: string;
 }) {
     const queryClient = useQueryClient();
+    const editor = useEditor({});
     const { displayAlert } = useAlert();
 
     const [defaultQuestionKind, setDefaultQuestionKind] = useState<questionKindType>('qcm');
@@ -94,15 +96,8 @@ function ExerciseUpsertionModal(props: {
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                 />
-                <TextField
-                    name="instruction"
-                    label="Consigne"
-                    multiline
-                    fullWidth
-                    minRows={2}
-                    value={instruction}
-                    onChange={(event) => setInstruction(event.target.value)}
-                />
+                <Editable editor={editor} value={instruction} onChange={setInstruction} />
+
                 <TextField
                     name="defaultPoints"
                     label="Nombre de points par question par défaut"

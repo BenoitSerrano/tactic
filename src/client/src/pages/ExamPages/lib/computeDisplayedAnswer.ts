@@ -1,5 +1,4 @@
 import { QUESTION_TROU_REGEX, TEXTE_A_TROU_REGEX } from '../../../constants';
-import { textSplitter } from '../../../lib/textSplitter';
 import { answerStatusType, questionWithAnswersType } from '../types';
 import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
 

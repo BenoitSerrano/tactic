@@ -15,7 +15,7 @@ function QuestionsPreviewing(props: {
         <>
             <TestPageLayout studentEmail="-" title={props.title} buttons={[]}>
                 {props.exercises.map((exercise) => (
-                    <ExerciseContainer>
+                    <ExerciseContainer key={`exercise-${exercise.id}`}>
                         <ExerciseTitle exercise={exercise} />
                         {exercise.questions.map((question, index) => (
                             <QuestionContainer key={`question-${question.id}`}>

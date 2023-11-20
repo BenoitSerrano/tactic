@@ -14,7 +14,7 @@ function Modal(props: {
     title?: string;
 }) {
     return (
-        <MuiModal open={props.isOpen} onClose={props.close}>
+        <StyledModal open={props.isOpen} onClose={props.close}>
             <ModalContent>
                 {!!props.title && (
                     <ModalHeader>
@@ -34,7 +34,7 @@ function Modal(props: {
                     </LoadingButton>
                 </ModalFooter>
             </ModalContent>
-        </MuiModal>
+        </StyledModal>
     );
 
     function onConfirm() {
@@ -72,5 +72,7 @@ const ModalFooter = styled('div')({
     display: 'flex',
     justifyContent: 'flex-end',
 });
+
+const StyledModal = styled(MuiModal)({ zIndex: 999 });
 
 export { Modal };

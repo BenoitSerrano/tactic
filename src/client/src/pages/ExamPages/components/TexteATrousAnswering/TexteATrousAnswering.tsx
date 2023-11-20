@@ -26,6 +26,7 @@ function TexteATrousAnswering(props: {
                     {words.map((word, wordIndex) =>
                         word === '....' ? (
                             <AnswerTextField
+                                key={`tat-question-${props.question.id}-word-${wordIndex}-input`}
                                 placeholder="..."
                                 value={
                                     textInputs[
@@ -39,7 +40,11 @@ function TexteATrousAnswering(props: {
                                 variant="outlined"
                             />
                         ) : (
-                            <WordContainer>{word}</WordContainer>
+                            <WordContainer
+                                key={`tat-question-${props.question.id}-word-${wordIndex}-text`}
+                            >
+                                {word}
+                            </WordContainer>
                         ),
                     )}
                 </WordsContainer>
