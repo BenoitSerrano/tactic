@@ -67,7 +67,6 @@ function ExercisesTable(props: {
                     <TableCell width={160}>Actions</TableCell>
                     <TableCell>Nom</TableCell>
                     <TableCell>Type de questions</TableCell>
-                    <TableCell>Consigne</TableCell>
                 </TableRow>
             </TableHead>
             <DragDropContext onDragEnd={handleDragEnd}>
@@ -138,7 +137,6 @@ function ExercisesTable(props: {
                                                         }
                                                     </QuestionKindCellContent>
                                                 </TableCell>
-                                                <TableCell>{exercise.instruction}</TableCell>
                                             </TableRow>
                                         )}
                                     </Draggable>
