@@ -233,9 +233,6 @@ const MarkSliderContainer = styled('div')(({ theme }) => ({
     width: '100%',
     marginRight: theme.spacing(1),
 }));
-const ExerciseTitleContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(3),
-}));
 
 const QuestionIndicatorsContainer = styled('div')({});
 
