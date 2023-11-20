@@ -8,6 +8,7 @@ import { modalStatusType } from './types';
 import { MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
 import { questionKindType, questionKinds } from '../../types';
+import { config } from '../../config';
 
 function ExerciseUpsertionModal(props: {
     close: () => void;
@@ -15,7 +16,7 @@ function ExerciseUpsertionModal(props: {
     examId: string;
 }) {
     const queryClient = useQueryClient();
-    const editor = useEditor({});
+    const editor = useEditor({ authToken: config.PORTIVE_AUTH_TOKEN });
     const { displayAlert } = useAlert();
 
     const [defaultQuestionKind, setDefaultQuestionKind] = useState<questionKindType>('qcm');
