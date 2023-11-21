@@ -96,8 +96,9 @@ function buildExerciseService() {
         const exercise1 = await exerciseRepository.findOneOrFail({ where: { id: exerciseId1 } });
         const exercise2 = await exerciseRepository.findOneOrFail({ where: { id: exerciseId2 } });
 
-        await exerciseRepository.update({ id: exerciseId1 }, { order: exercise2.order });
+        await exerciseRepository.update({ id: exerciseId1 }, { order: -1 });
         await exerciseRepository.update({ id: exerciseId2 }, { order: exercise1.order });
+        await exerciseRepository.update({ id: exerciseId1 }, { order: exercise2.order });
         return true;
     }
 
