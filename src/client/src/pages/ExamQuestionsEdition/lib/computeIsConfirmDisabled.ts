@@ -24,7 +24,8 @@ function computeIsConfirmDisabled(
     }
     if (
         questionKind === 'qcm' &&
-        params.possibleAnswers.some((possibleAnswer) => !possibleAnswer)
+        (params.possibleAnswers.some((possibleAnswer) => !possibleAnswer) ||
+            params.possibleAnswers.length <= 1)
     ) {
         return true;
     }

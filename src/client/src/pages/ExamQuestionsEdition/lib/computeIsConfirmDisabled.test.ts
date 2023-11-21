@@ -17,6 +17,23 @@ describe('computeIsConfirmDisabled', () => {
 
         expect(isConfirmDisabled).toBe(true);
     });
+    test('qcm with one answer = true', () => {
+        const questionKind = 'qcm';
+        const title = 'title';
+        const possibleAnswers: string[] = ['a'];
+        const rightAnswers: string[] = ['0'];
+        const acceptableAnswers: string[] = [];
+
+        const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
+            title,
+            possibleAnswers,
+            rightAnswers,
+            acceptableAnswers,
+        });
+
+        expect(isConfirmDisabled).toBe(true);
+    });
+
     test('qcm rightly filled = false', () => {
         const questionKind = 'qcm';
         const title = 'title';
