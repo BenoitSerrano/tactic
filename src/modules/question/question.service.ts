@@ -141,8 +141,9 @@ function buildQuestionService() {
         const question1 = await questionRepository.findOneOrFail({ where: { id: questionId1 } });
         const question2 = await questionRepository.findOneOrFail({ where: { id: questionId2 } });
 
-        await questionRepository.update({ id: questionId1 }, { order: question2.order });
+        await questionRepository.update({ id: questionId1 }, { order: -1 });
         await questionRepository.update({ id: questionId2 }, { order: question1.order });
+        await questionRepository.update({ id: questionId1 }, { order: question2.order });
         return true;
     }
 
