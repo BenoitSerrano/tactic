@@ -4,6 +4,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableFooter,
     TableHead,
     TableRow,
     Tooltip,
@@ -54,6 +55,7 @@ function ExercisesTable(props: {
             queryClient.invalidateQueries({ queryKey: ['exams', props.examId] });
         },
     });
+    const totalPoints = props.exercises.reduce((sum, exercise) => sum + exercise.totalPoints, 0);
 
     useEffect(() => {
         setExercises(props.exercises);
@@ -67,6 +69,7 @@ function ExercisesTable(props: {
                     <TableCell width={160}>Actions</TableCell>
                     <TableCell>Nom</TableCell>
                     <TableCell>Type de questions</TableCell>
+                    <TableCell>Points</TableCell>
                 </TableRow>
             </TableHead>
             <DragDropContext onDragEnd={handleDragEnd}>
@@ -137,6 +140,7 @@ function ExercisesTable(props: {
                                                         }
                                                     </QuestionKindCellContent>
                                                 </TableCell>
+                                                <TableCell>{exercise.totalPoints}</TableCell>
                                             </TableRow>
                                         )}
                                     </Draggable>
@@ -147,6 +151,15 @@ function ExercisesTable(props: {
                     )}
                 </Droppable>
             </DragDropContext>
+            <TableFooter>
+                <TableRow>
+                    <TableCell>Total</TableCell>
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell>{totalPoints}</TableCell>
+                </TableRow>
+            </TableFooter>
         </Table>
     );
 

@@ -6,6 +6,7 @@ import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
 import { In } from 'typeorm';
+import { computeSumPoints } from './lib/computeSumPoints';
 
 export { buildExamService };
 
@@ -70,13 +71,38 @@ function buildExamService() {
     }
 
     async function getExamExercises(examId: Exam['id']) {
-        return examRepository.findOneOrFail({
+        const exam = await examRepository.findOneOrFail({
             where: { id: examId },
             order: {
                 exercises: { order: 'ASC' },
             },
-            relations: ['exercises'],
+            select: {
+                id: true,
+                name: true,
+                exercises: {
+                    id: true,
+                    name: true,
+                    instruction: true,
+                    defaultQuestionKind: true,
+                    defaultPoints: true,
+                    order: true,
+                    questions: { id: true, points: true },
+                },
+            },
+            relations: ['exercises', 'exercises.questions'],
         });
+        return {
+            ...exam,
+            exercises: exam.exercises.map((exercise) => ({
+                id: exercise.id,
+                name: exercise.name,
+                instruction: exercise.instruction,
+                defaultQuestionKind: exercise.defaultQuestionKind,
+                defaultPoints: exercise.defaultPoints,
+                order: exercise.order,
+                totalPoints: computeSumPoints(exercise.questions),
+            })),
+        };
     }
 
     async function getExamsByIds(examIds: Array<Exam['id']>) {

@@ -14,6 +14,7 @@ type exerciseType = {
     instruction: string;
     defaultQuestionKind: questionKindType;
     defaultPoints: number;
+    totalPoints: number;
     order: number;
 };
 
