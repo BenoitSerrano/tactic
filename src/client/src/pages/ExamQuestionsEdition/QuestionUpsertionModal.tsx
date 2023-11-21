@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TextField, styled } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent, TextField, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
-import { questionKindType } from '../../types';
+import { questionKindType, questionKinds } from '../../types';
 import { questionUpsertionModalContentComponentMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
-import { FLOATING_NUMBER_REGEX } from '../../constants';
+import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
 
 function QuestionUpsertionModal(props: {
     close: () => void;
@@ -20,6 +20,9 @@ function QuestionUpsertionModal(props: {
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
+    const [currentQuestionKind, setCurrentQuestionKind] = useState<questionKindType>(
+        props.defaultQuestionKind,
+    );
 
     const updateQuestionMutation = useMutation({
         mutationFn: api.updateQuestion,
@@ -44,7 +47,7 @@ function QuestionUpsertionModal(props: {
     });
 
     const QuestionUpsertionModalContentComponent =
-        questionUpsertionModalContentComponentMapping[props.defaultQuestionKind];
+        questionUpsertionModalContentComponentMapping[currentQuestionKind];
 
     const [points, setPoints] = useState(
         props.modalStatus.kind === 'editing'
@@ -90,6 +93,22 @@ function QuestionUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
+                {props.modalStatus.kind === 'creating' && (
+                    <Select
+                        fullWidth
+                        labelId="select-question-kind-label"
+                        id="select-question-kind"
+                        value={currentQuestionKind}
+                        label="Type de question"
+                        onChange={handleQuestionKindChange}
+                    >
+                        {questionKinds.map((questionKind) => (
+                            <MenuItem value={questionKind}>
+                                {questionSpecificityMapping[questionKind].label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                )}
                 <QuestionUpsertionModalContentComponent
                     title={title}
                     setTitle={setTitle}
@@ -112,6 +131,11 @@ function QuestionUpsertionModal(props: {
             </>
         </Modal>
     );
+
+    function handleQuestionKindChange(event: SelectChangeEvent) {
+        const newDefaultQuestionKind = event.target.value as questionKindType;
+        setCurrentQuestionKind(newDefaultQuestionKind);
+    }
 
     function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;

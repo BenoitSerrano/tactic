@@ -73,23 +73,6 @@ function ExerciseUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
-                {props.modalStatus.kind === 'creating' && (
-                    <Select
-                        fullWidth
-                        labelId="select-default-question-kind-label"
-                        id="select-default-question-kind"
-                        value={defaultQuestionKind}
-                        label="Type de question"
-                        onChange={handleQuestionKindChange}
-                    >
-                        {questionKinds.map((questionKind) => (
-                            <MenuItem value={questionKind}>
-                                {questionSpecificityMapping[questionKind].label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                )}
-
                 <TextField
                     name="name"
                     fullWidth
@@ -97,6 +80,20 @@ function ExerciseUpsertionModal(props: {
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                 />
+                <Select
+                    fullWidth
+                    labelId="select-default-question-kind-label"
+                    id="select-default-question-kind"
+                    value={defaultQuestionKind}
+                    label="Type de question"
+                    onChange={handleQuestionKindChange}
+                >
+                    {questionKinds.map((questionKind) => (
+                        <MenuItem value={questionKind}>
+                            {questionSpecificityMapping[questionKind].label}
+                        </MenuItem>
+                    ))}
+                </Select>
                 <Editable editor={editor} value={instruction} onChange={setInstruction} />
 
                 <TextField
