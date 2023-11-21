@@ -20,7 +20,7 @@ function buildQuestionService() {
         removeOkAnswer,
         getQuestions,
         deleteQuestion,
-        swapQuestions,
+        updateQuestionsOrder,
         decodeQuestion: questionEncoder.decodeQuestion,
         encodeQuestion: questionEncoder.encodeQuestion,
         getQuestionIds,
@@ -137,13 +137,13 @@ function buildQuestionService() {
         }, {} as Record<Question['id'], Question>);
     }
 
-    async function swapQuestions(questionId1: Question['id'], questionId2: Question['id']) {
-        const question1 = await questionRepository.findOneOrFail({ where: { id: questionId1 } });
-        const question2 = await questionRepository.findOneOrFail({ where: { id: questionId2 } });
-
-        await questionRepository.update({ id: questionId1 }, { order: -1 });
-        await questionRepository.update({ id: questionId2 }, { order: question1.order });
-        await questionRepository.update({ id: questionId1 }, { order: question2.order });
+    async function updateQuestionsOrder(orders: Array<{ id: Question['id']; order: number }>) {
+        for (const { id, order } of orders) {
+            const result = await questionRepository.update({ id }, { order });
+            if (result.affected !== 1) {
+                console.error(`Could not update question id ${id} order because it does not exist`);
+            }
+        }
         return true;
     }
 

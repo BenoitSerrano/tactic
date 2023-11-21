@@ -39,8 +39,8 @@ function ExercisesTable(props: {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [exercises, setExercises] = useState(props.exercises);
-    const swapExercisesMutation = useMutation({
-        mutationFn: api.swapExercises,
+    const updateExercisesOrderMutation = useMutation({
+        mutationFn: api.updateExercisesOrder,
         onError: () => {
             displayAlert({
                 variant: 'error',
@@ -179,16 +179,17 @@ function ExercisesTable(props: {
         if (!result.destination) {
             return;
         }
-        const exerciseId1 = exercises[result.source.index].id;
-        const exerciseId2 = exercises[result.destination.index].id;
-        const newExercises = tableHandler.swap(
+        if (result.destination.index === result.source.index) {
+            return;
+        }
+        const newExercises = tableHandler.shift(
             exercises,
             result.source.index,
             result.destination.index,
         );
-
         setExercises(newExercises);
-        swapExercisesMutation.mutate({ examId: props.examId, exerciseId1, exerciseId2 });
+        const orders = newExercises.map((exercise, index) => ({ id: exercise.id, order: index }));
+        updateExercisesOrderMutation.mutate({ examId: props.examId, orders });
     }
 
     function buildDeleteExercise(exerciseId: number) {

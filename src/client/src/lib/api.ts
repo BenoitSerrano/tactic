@@ -34,9 +34,9 @@ const api = {
     addQuestionAcceptableAnswer,
     removeOkAnswer,
     deleteQuestion,
-    swapQuestions,
+    updateQuestionsOrder,
     updateMark,
-    swapExercises,
+    updateExercisesOrder,
     updateEndedAt,
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
@@ -352,16 +352,14 @@ async function updateQuestion(params: {
     });
 }
 
-async function swapQuestions(params: {
+async function updateQuestionsOrder(params: {
     examId: string;
     exerciseId: number;
-    questionId1: number;
-    questionId2: number;
+    orders: Array<{ id: number; order: number }>;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/order`;
     return performApiCall(URL, 'PATCH', {
-        questionId1: params.questionId1,
-        questionId2: params.questionId2,
+        orders: params.orders,
     });
 }
 
@@ -382,11 +380,13 @@ async function deleteQuestion(params: { examId: string; questionId: number }) {
     return performApiCall(URL, 'DELETE');
 }
 
-async function swapExercises(params: { examId: string; exerciseId1: number; exerciseId2: number }) {
+async function updateExercisesOrder(params: {
+    examId: string;
+    orders: Array<{ id: number; order: number }>;
+}) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/order`;
     return performApiCall(URL, 'PATCH', {
-        exerciseId1: params.exerciseId1,
-        exerciseId2: params.exerciseId2,
+        orders: params.orders,
     });
 }
 

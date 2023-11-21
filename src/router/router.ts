@@ -195,8 +195,18 @@ router.delete(
 router.get(`/exams/:examId/exercises/:exerciseId`, buildController(exerciseController.getExercise));
 router.patch(
     `/exams/:examId/exercises/order`,
-    buildController(exerciseController.swapExercises, {
-        schema: Joi.object({ exerciseId1: Joi.number(), exerciseId2: Joi.number() }),
+    buildController(exerciseController.updateExercisesOrder, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            orders: Joi.array().items(
+                Joi.object({ id: Joi.number().required(), order: Joi.number().required() }),
+            ),
+        }),
     }),
 );
 
@@ -237,14 +247,18 @@ router.delete(
 
 router.patch(
     `/exams/:examId/exercises/:exerciseId/questions/order/`,
-    buildController(questionController.swapQuestions, {
+    buildController(questionController.updateQuestionsOrder, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
             },
         ]),
-        schema: Joi.object({ questionId1: Joi.number(), questionId2: Joi.number() }),
+        schema: Joi.object({
+            orders: Joi.array().items(
+                Joi.object({ id: Joi.number().required(), order: Joi.number().required() }),
+            ),
+        }),
     }),
 );
 

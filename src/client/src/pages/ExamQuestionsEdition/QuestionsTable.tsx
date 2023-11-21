@@ -39,8 +39,8 @@ function QuestionsTable(props: {
             displayAlert({ variant: 'success', text: 'La question a été supprimée.' });
         },
     });
-    const swapQuestionsMutation = useMutation({
-        mutationFn: api.swapQuestions,
+    const updateQuestionsOrderMutation = useMutation({
+        mutationFn: api.updateQuestionsOrder,
         onError: () => {
             displayAlert({
                 variant: 'error',
@@ -62,20 +62,21 @@ function QuestionsTable(props: {
         if (!result.destination) {
             return;
         }
-        const questionId1 = questions[result.source.index].id;
-        const questionId2 = questions[result.destination.index].id;
-        const newQuestions = tableHandler.swap(
+        if (result.destination.index === result.source.index) {
+            return;
+        }
+        const newQuestions = tableHandler.shift(
             questions,
             result.source.index,
             result.destination.index,
         );
-
         setQuestions(newQuestions);
-        swapQuestionsMutation.mutate({
+        const orders = newQuestions.map((question, index) => ({ id: question.id, order: index }));
+
+        updateQuestionsOrderMutation.mutate({
             examId: props.examId,
             exerciseId: props.exerciseId,
-            questionId1,
-            questionId2,
+            orders,
         });
     };
     return (

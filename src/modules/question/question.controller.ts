@@ -13,7 +13,7 @@ function buildQuestionController() {
         addQuestionAcceptableAnswer,
         removeOkAnswer,
         deleteQuestion,
-        swapQuestions,
+        updateQuestionsOrder,
     };
 
     return questionController;
@@ -90,9 +90,9 @@ function buildQuestionController() {
         return questionService.deleteQuestion(Number(params.urlParams.questionId));
     }
 
-    async function swapQuestions(params: {
-        body: { questionId1: Question['id']; questionId2: Question['id'] };
+    async function updateQuestionsOrder(params: {
+        body: { orders: Array<{ id: Question['id']; order: number }> };
     }) {
-        return questionService.swapQuestions(params.body.questionId1, params.body.questionId2);
+        return questionService.updateQuestionsOrder(params.body.orders);
     }
 }

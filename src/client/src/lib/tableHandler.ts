@@ -1,10 +1,12 @@
-const tableHandler = { swap };
+const tableHandler = { shift };
 
-function swap<T>(table: T[], index1: number, index2: number) {
+function shift<T>(table: T[], indexSource: number, indexDest: number) {
     const newTable = [...table];
-    const tmp = newTable[index1];
-    newTable[index1] = newTable[index2];
-    newTable[index2] = tmp;
+    const elementSource = newTable[indexSource];
+
+    newTable.splice(indexSource, 1);
+    newTable.splice(indexDest, 0, elementSource);
+
     return newTable;
 }
 
