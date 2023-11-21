@@ -63,7 +63,7 @@ function QuestionUpsertionModal(props: {
     const [possibleAnswers, setPossibleAnswers] = useState(
         props.modalStatus.kind === 'editing' && props.modalStatus.question.possibleAnswers
             ? props.modalStatus.question.possibleAnswers
-            : ['', '', '', ''],
+            : ['', ''],
     );
 
     const isUpdating = updateQuestionMutation.isPending;
