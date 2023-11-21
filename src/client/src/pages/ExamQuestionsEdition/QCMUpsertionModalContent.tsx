@@ -88,7 +88,7 @@ function QCMUpsertionModalContent(props: {
     );
 
     function computeCanRemovePossibleAnswer() {
-        return props.possibleAnswers.length > 1;
+        return props.possibleAnswers.length > 2;
     }
     function computeIsAddPossibleAnswerDisabled() {
         return props.possibleAnswers.length >= 10;
