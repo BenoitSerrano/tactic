@@ -161,6 +161,7 @@ function buildExamService() {
                     timeSpentOutside: true,
                     marks: true,
                     answers: true,
+                    endedAt: true,
                 },
             },
             relations: ['attempts', 'attempts.student'],

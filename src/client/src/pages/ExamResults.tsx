@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import HistoryIcon from '@mui/icons-material/History';
+import TimerOffIcon from '@mui/icons-material/TimerOff';
 import { api } from '../lib/api';
 import {
     IconButton,
@@ -18,6 +19,7 @@ import { time } from '../lib/time';
 import { Loader } from '../components/Loader';
 import { attemptStatusType } from '../types';
 import { computeAttemptStatusIcon } from '../lib/computeAttemptStatusIcon';
+import { useAlert } from '../lib/alert';
 
 type examResultApiType = {
     id: string;
@@ -46,10 +48,26 @@ function ExamResults() {
     });
     const [activeSort, setActiveSort] = useState<sortColumnType>('startedAt');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+    const { displayAlert } = useAlert();
     const deleteAttemptMutation = useMutation({
         mutationFn: api.deleteAttempt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['examResults'] });
+        },
+    });
+
+    const endAttemptMutation = useMutation({
+        mutationFn: api.updateEndedAt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['examResults'] });
+
+            displayAlert({
+                variant: 'success',
+                text: "L'examen a bien été terminé pour cet étudiant. Il ne pourra plus modifier sa copie",
+            });
+        },
+        onError: (error: any) => {
+            console.error(error);
         },
     });
 
@@ -133,6 +151,15 @@ function ExamResults() {
                                     </IconButton>
                                 </Tooltip>
 
+                                <Tooltip title="Terminer l'examen pour cet étudiant">
+                                    <IconButton
+                                        onClick={buildEndAttempt(result.attemptId)}
+                                        disabled={result.attemptStatus !== 'pending'}
+                                    >
+                                        <TimerOffIcon />
+                                    </IconButton>
+                                </Tooltip>
+
                                 <Tooltip title="Réinitialiser">
                                     <IconButton onClick={buildDeleteAttempt(result.attemptId)}>
                                         <HistoryIcon />
@@ -164,6 +191,12 @@ function ExamResults() {
             if (hasConfirmed) {
                 deleteAttemptMutation.mutate(attemptId);
             }
+        };
+    }
+
+    function buildEndAttempt(attemptId: string) {
+        return () => {
+            endAttemptMutation.mutate({ attemptId });
         };
     }
 
