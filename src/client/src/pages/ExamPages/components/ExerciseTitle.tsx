@@ -4,7 +4,6 @@ import Markdown from 'react-markdown';
 function ExerciseTitle<exerciseT extends { name: string; instruction: string }>(props: {
     exercise: exerciseT;
 }) {
-    console.log(props.exercise);
     return (
         <ExerciseTitleContainer>
             <Typography variant="h3">{props.exercise.name}</Typography>

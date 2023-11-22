@@ -99,7 +99,7 @@ function parseAnswers(answers: string[]): Record<number, string> {
     let attemptAnswers = answers.reduce((acc, answer) => {
         let regexMatch = answer.match(ANSWER_REGEX);
         if (!regexMatch) {
-            throw new Error(`answer ${answer} is wrongly formatted.`);
+            throw new Error(`answer "${answer}" is wrongly formatted.`);
         }
         const [_, questionId, encodedQuestionAnswer] = regexMatch;
         const questionAnswer = base64ToString(encodedQuestionAnswer);
