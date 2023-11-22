@@ -1,4 +1,4 @@
-import { Attempt } from '../../attempt';
+import { Attempt } from '../attempt';
 import { computeExamStatus } from './computeExamStatus';
 
 describe('computeExamStatus', () => {

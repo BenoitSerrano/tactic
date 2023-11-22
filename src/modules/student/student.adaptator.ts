@@ -1,6 +1,6 @@
 import { Exam } from '../exam';
 import { Student } from './Student.entity';
-import { computeExamStatus } from './lib/computeExamStatus';
+import { computeExamStatus } from '../lib/computeExamStatus';
 
 const studentAdaptator = {
     formatStudentsIntoStudentsSummary,

@@ -17,8 +17,8 @@ import { Loader } from '../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
 import { Menu } from '../../components/Menu';
 import { time } from '../../lib/time';
-import { examStatusType } from './types';
-import { computeIconColor } from './lib/computeIconColor';
+import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
+import { attemptStatusType } from '../../types';
 
 type sortColumnType = 'email' | 'createdDate' | string;
 
@@ -27,7 +27,7 @@ type studentsSummaryType = {
         id: string;
         email: string;
         createdDate: string;
-        examStatus: Record<string, examStatusType>;
+        examStatus: Record<string, attemptStatusType>;
     }>;
     examNames: Record<string, string>;
 };
@@ -138,7 +138,7 @@ function Students() {
                             </TableCell>
                             {Object.keys(query.data.examNames).map((examId) => (
                                 <TableCell key={'examStatus-' + examId}>
-                                    {computeIconColor(student.examStatus[examId])}
+                                    {computeAttemptStatusIcon(student.examStatus[examId])}
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -198,10 +198,12 @@ function Students() {
     }
 }
 
-function convertExamStatusToValue(status: examStatusType): number {
+function convertExamStatusToValue(status: attemptStatusType): number {
     switch (status) {
+        case 'corrected':
+            return 3;
         case 'finished':
-            return 1;
+            return 2;
         case 'expired':
             return 1;
         case 'pending':

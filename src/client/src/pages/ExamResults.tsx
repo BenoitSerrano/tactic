@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import HistoryIcon from '@mui/icons-material/History';
 import { api } from '../lib/api';
 import {
@@ -15,18 +13,19 @@ import {
     TableRow,
     TableSortLabel,
     Tooltip,
-    styled,
 } from '@mui/material';
 import { time } from '../lib/time';
 import { Loader } from '../components/Loader';
+import { attemptStatusType } from '../types';
+import { computeAttemptStatusIcon } from '../lib/computeAttemptStatusIcon';
 
 type examResultApiType = {
     id: string;
     email: string;
     attemptId: string;
     startedAt: string;
-    hasBeenGraded: boolean;
-    duration: number | undefined;
+    attemptStatus: attemptStatusType;
+    actualDuration: number | undefined;
     mark: number;
     roundTrips: number;
     timeSpentOutside: number;
@@ -114,8 +113,7 @@ function ExamResults() {
                             Note (/ {query.data.totalPoints})
                         </TableSortLabel>
                     </TableCell>
-                    <TableCell width={80}>Correction terminée ?</TableCell>
-
+                    <TableCell width={80}>Statut</TableCell>
                     <TableCell width={50}>Durée</TableCell>
                     <TableCell width={50}>Sorties de test</TableCell>
                     <TableCell width={50}>Temps total hors test</TableCell>
@@ -123,7 +121,7 @@ function ExamResults() {
             </TableHead>
             <TableBody>
                 {sortedData.map((result, index) => {
-                    const GradedStatusIcon = result.hasBeenGraded ? GradedIcon : NotGradedIcon;
+                    const AttemptStatusIcon = computeAttemptStatusIcon(result.attemptStatus);
                     return (
                         <TableRow key={result.attemptId}>
                             <TableCell>{index + 1}</TableCell>
@@ -148,10 +146,8 @@ function ExamResults() {
                                 </Link>
                             </TableCell>
                             <TableCell>{result.mark.toFixed(1)}</TableCell>
-                            <TableCell>
-                                <GradedStatusIcon />
-                            </TableCell>
-                            <TableCell>{result.duration}</TableCell>
+                            <TableCell>{AttemptStatusIcon}</TableCell>
+                            <TableCell>{result.actualDuration}</TableCell>
                             <TableCell>{result.roundTrips}</TableCell>
                             <TableCell>{result.timeSpentOutside}</TableCell>
                         </TableRow>
@@ -189,12 +185,12 @@ function ExamResults() {
                 email: result.email,
                 attemptId: result.attemptId,
                 startedAt: result.startedAt,
-                duration:
-                    result.duration !== undefined
-                        ? time.formatToClock(result.duration, { hideHours: true })
+                actualDuration:
+                    result.actualDuration !== undefined
+                        ? time.formatToClock(result.actualDuration, { hideHours: true })
                         : '-',
                 mark: result.mark,
-                hasBeenGraded: result.hasBeenGraded,
+                attemptStatus: result.attemptStatus,
                 roundTrips: result.roundTrips,
                 timeSpentOutside: time.formatToClock(Math.floor(result.timeSpentOutside / 1000), {
                     hideHours: true,
@@ -234,10 +230,4 @@ function ExamResults() {
     }
 }
 
-const GradedIcon = styled(CheckCircleOutlineIcon)(({ theme }) => ({
-    color: theme.palette.success.main,
-}));
-const NotGradedIcon = styled(AssignmentLateIcon)(({ theme }) => ({
-    color: theme.palette.warning.main,
-}));
 export { ExamResults };

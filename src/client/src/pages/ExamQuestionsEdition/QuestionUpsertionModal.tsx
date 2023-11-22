@@ -74,7 +74,7 @@ function QuestionUpsertionModal(props: {
 
     const confirmButtonLabel = computeConfirmButtonLabel(props.modalStatus);
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);
-    const isConfirmDisabled = computeIsConfirmDisabled(props.defaultQuestionKind, {
+    const isConfirmDisabled = computeIsConfirmDisabled(currentQuestionKind, {
         title,
         rightAnswers,
         possibleAnswers,
@@ -148,9 +148,9 @@ function QuestionUpsertionModal(props: {
         const newQuestion = {
             points: Number(points),
             title,
-            kind: props.defaultQuestionKind,
+            kind: currentQuestionKind,
             possibleAnswers:
-                props.defaultQuestionKind === 'qcm'
+                currentQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
                     : [],
             rightAnswers: rightAnswers.map((rightAnswer) => rightAnswer.trim()),

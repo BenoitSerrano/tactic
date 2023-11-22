@@ -142,6 +142,9 @@ function buildExamService() {
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },
             select: {
+                id: true,
+                duration: true,
+                extraTime: true,
                 exercises: { id: true, questions: { id: true } },
             },
             relations: ['exercises', 'exercises.questions'],
@@ -175,7 +178,7 @@ function buildExamService() {
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(
             examWithAttempts.attempts,
             students,
-            questions,
+            { duration: exam.duration, extraTime: exam.extraTime, questions },
         );
 
         return examWithResults;
