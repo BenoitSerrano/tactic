@@ -3,7 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import HistoryIcon from '@mui/icons-material/History';
-import TimerOffIcon from '@mui/icons-material/TimerOff';
+import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
+import LockIcon from '@mui/icons-material/Lock';
 import { api } from '../lib/api';
 import {
     IconButton,
@@ -54,19 +55,47 @@ function ExamResults() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['examResults'] });
         },
+        onError: (error: any) => {
+            displayAlert({
+                variant: 'error',
+                text: "L'opération a échoué.",
+            });
+            console.error(error);
+        },
     });
 
-    const endAttemptMutation = useMutation({
+    const lockAttemptMutation = useMutation({
         mutationFn: api.updateEndedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['examResults'] });
-
             displayAlert({
                 variant: 'success',
                 text: "L'examen a bien été terminé pour cet étudiant. Il ne pourra plus modifier sa copie",
             });
         },
         onError: (error: any) => {
+            displayAlert({
+                variant: 'error',
+                text: "L'opération a échoué.",
+            });
+            console.error(error);
+        },
+    });
+
+    const unlockAttemptMutation = useMutation({
+        mutationFn: api.deleteEndedAt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['examResults'] });
+            displayAlert({
+                variant: 'success',
+                text: "L'étudiant peut de nouveau accéder à sa copie, dans la limite du temps imparti.",
+            });
+        },
+        onError: (error: any) => {
+            displayAlert({
+                variant: 'error',
+                text: "L'opération a échoué.",
+            });
             console.error(error);
         },
     });
@@ -151,14 +180,21 @@ function ExamResults() {
                                     </IconButton>
                                 </Tooltip>
 
-                                <Tooltip title="Terminer l'examen pour cet étudiant">
-                                    <IconButton
-                                        onClick={buildEndAttempt(result.attemptId)}
-                                        disabled={result.attemptStatus !== 'pending'}
-                                    >
-                                        <TimerOffIcon />
-                                    </IconButton>
-                                </Tooltip>
+                                {result.attemptStatus === 'pending' && (
+                                    <Tooltip title="Terminer l'examen pour cet étudiant">
+                                        <IconButton onClick={buildLockAttempt(result.attemptId)}>
+                                            <LockIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+
+                                {result.attemptStatus === 'finished' && (
+                                    <Tooltip title="Permettre à l'étudiant de reprendre l'examen">
+                                        <IconButton onClick={buildUnlockAttempt(result.attemptId)}>
+                                            <NoEncryptionGmailerrorredIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
 
                                 <Tooltip title="Réinitialiser">
                                     <IconButton onClick={buildDeleteAttempt(result.attemptId)}>
@@ -194,9 +230,15 @@ function ExamResults() {
         };
     }
 
-    function buildEndAttempt(attemptId: string) {
+    function buildLockAttempt(attemptId: string) {
         return () => {
-            endAttemptMutation.mutate({ attemptId });
+            lockAttemptMutation.mutate({ attemptId });
+        };
+    }
+
+    function buildUnlockAttempt(attemptId: string) {
+        return () => {
+            unlockAttemptMutation.mutate({ attemptId, examId });
         };
     }
 

@@ -30,6 +30,7 @@ function buildAttemptService() {
         deleteExerciseAnswers,
         updateMark,
         updateAttemptEndedAt,
+        deleteAttemptEndedAt,
     };
 
     return studentService;
@@ -193,6 +194,11 @@ function buildAttemptService() {
 
     async function updateAttemptEndedAt(attemptId: Attempt['id']) {
         await attemptRepository.update({ id: attemptId }, { endedAt: () => 'CURRENT_TIMESTAMP' });
+        return true;
+    }
+
+    async function deleteAttemptEndedAt(attemptId: Attempt['id']) {
+        await attemptRepository.update({ id: attemptId }, { endedAt: null });
         return true;
     }
 

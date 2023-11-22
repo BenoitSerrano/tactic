@@ -333,6 +333,18 @@ router.patch(
     buildController(attemptController.updateAttemptEndedAt),
 );
 
+router.delete(
+    '/exams/:examId/attempts/:attemptId/endedAt',
+    buildController(attemptController.deleteAttemptEndedAt, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
+
 router.post(
     '/reset-password-requests',
     buildController(resetPasswordRequestController.createResetPasswordRequest, {

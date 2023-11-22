@@ -38,6 +38,7 @@ const api = {
     updateMark,
     updateExercisesOrder,
     updateEndedAt,
+    deleteEndedAt,
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
     resetPassword,
@@ -373,6 +374,11 @@ async function updateMark(params: { attemptId: string; questionId: number; mark:
 async function updateEndedAt(params: { attemptId: string }) {
     const URL = `${BASE_URL}/attempts/${params.attemptId}/endedAt`;
     return performApiCall(URL, 'PATCH');
+}
+
+async function deleteEndedAt(params: { attemptId: string; examId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/endedAt`;
+    return performApiCall(URL, 'DELETE');
 }
 
 async function deleteQuestion(params: { examId: string; questionId: number }) {

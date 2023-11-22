@@ -17,5 +17,5 @@ export interface AttemptInterface {
 
     marks: string[];
 
-    endedAt?: string;
+    endedAt: string | null;
 }

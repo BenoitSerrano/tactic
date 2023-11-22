@@ -41,5 +41,5 @@ export class Attempt implements AttemptInterface {
     marks: string[];
 
     @Column({ type: 'timestamptz', nullable: true })
-    endedAt?: string;
+    endedAt: string | null;
 }

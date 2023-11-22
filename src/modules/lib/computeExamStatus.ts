@@ -5,7 +5,7 @@ type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished';
 function computeExamStatus(
     exams: Record<Exam['id'], Pick<Exam, 'id' | 'name' | 'duration' | 'extraTime'>>,
     attempts: Array<{
-        endedAt?: Attempt['endedAt'];
+        endedAt: Attempt['endedAt'];
         startedAt: Attempt['startedAt'];
         exam: Pick<Exam, 'id'>;
     }>,
