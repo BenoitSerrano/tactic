@@ -47,18 +47,7 @@ function StudentHome() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                {examQuery.data && <Typography variant="h4">{examQuery.data.name}</Typography>}
-                <p>
-                    <Typography>
-                        Vous allez passer un examen de grammaire française niveau avancé (C1-C2).
-                        Vous disposez de 90 minutes pour répondre à toutes les questions. Une fois
-                        l'examen lancé,{' '}
-                        <strong>
-                            ne quittez pas la page avant d'avoir fini de répondre aux questions
-                        </strong>{' '}
-                        (la plateforme détectera si vous quittez la page et vous serez pénalisé.e).
-                    </Typography>
-                </p>
+                {examQuery.data && <Title variant="h4">{examQuery.data.name}</Title>}
 
                 <Button variant="contained" onClick={launchExam}>
                     Lancer le test
@@ -82,3 +71,5 @@ const ContentContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'center',
 });
+
+const Title = styled(Typography)(({ theme }) => ({ marginBottom: theme.spacing(3) }));
