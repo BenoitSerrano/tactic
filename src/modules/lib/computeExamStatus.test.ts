@@ -17,7 +17,7 @@ describe('computeExamStatus', () => {
 
     it('should return pending if the test has been started and not expired (white zone)', () => {
         const startedAt = '2023-07-24 06:45:20.429 +0200';
-        const attempt = { startedAt, exam: { id: 'exam1' } };
+        const attempt = { startedAt, endedAt: null, exam: { id: 'exam1' } };
 
         const attempts = [attempt];
 
@@ -28,7 +28,7 @@ describe('computeExamStatus', () => {
 
     it('should return pending if the test has been started and not expired (gray zone)', () => {
         const startedAt = '2023-07-24 06:35:20.429 +0200';
-        const attempt = { startedAt, exam: { id: 'exam1' } };
+        const attempt = { startedAt, endedAt: null, exam: { id: 'exam1' } };
 
         const attempts = [attempt];
 
@@ -39,7 +39,7 @@ describe('computeExamStatus', () => {
 
     it('should return expired if the test is expired and not finished', () => {
         const startedAt = '2023-07-24 06:10:20.429 +0200';
-        const attempt = { startedAt, exam: { id: 'exam1' } };
+        const attempt = { startedAt, endedAt: null, exam: { id: 'exam1' } };
 
         const attempts = [attempt];
 
