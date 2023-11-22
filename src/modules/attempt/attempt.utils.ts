@@ -2,7 +2,6 @@ import { encoder } from '../../lib/encoder';
 import { Exam } from '../exam';
 import { Question } from '../question';
 import { Attempt } from './Attempt.entity';
-import { AttemptInterface } from './attempt.interface';
 import { computeAutomaticMark } from './lib/computeAutomaticMark';
 import { attemptAnswersType } from './types';
 
