@@ -8,7 +8,7 @@ function ExerciseTitle<exerciseT extends { name: string; instruction: string }>(
         <ExerciseTitleContainer>
             <Typography variant="h3">{props.exercise.name}</Typography>
             <Typography>
-                <Markdown>{props.exercise.instruction}</Markdown>
+                <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
             </Typography>
         </ExerciseTitleContainer>
     );
