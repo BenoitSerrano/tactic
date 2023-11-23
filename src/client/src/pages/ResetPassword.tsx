@@ -8,6 +8,7 @@ import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
 import { LoadingButton } from '@mui/lab';
+import { pathHandler } from '../lib/pathHandler';
 
 type userApiType = { id: string; email: string };
 
@@ -26,7 +27,7 @@ function ResetPassword() {
     const resetPasswordMutation = useMutation({
         mutationFn: api.resetPassword,
         onSuccess: () => {
-            navigate(`/reset-password-success`);
+            navigate(pathHandler.getRoutePath('RESET_PASSWORD_SUCCESS'));
         },
         onError: () => {
             displayAlert({

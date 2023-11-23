@@ -28,6 +28,7 @@ import { exerciseType } from './types';
 import { tableHandler } from '../../lib/tableHandler';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
+import { pathHandler } from '../../lib/pathHandler';
 
 function ExercisesTable(props: {
     examId: string;
@@ -155,7 +156,11 @@ function ExercisesTable(props: {
 
     function buildNavigateToExerciseOnClick(exerciseId: number) {
         return () => {
-            navigate(`/teacher/exams/${props.examId}/exercises/${exerciseId}`);
+            const path = pathHandler.getRoutePath('EXAM_QUESTIONS_EDITION', {
+                examId: props.examId,
+                exerciseId: `${exerciseId}`,
+            });
+            navigate(path);
         };
     }
 

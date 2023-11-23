@@ -8,6 +8,7 @@ import { QuestionsAnswering } from './QuestionsAnswering';
 import { attemptWithoutAnswersType } from './types';
 import { computeShouldNavigateToExamDone } from './lib/computeShouldNavigateToExamDone';
 import { computeOfficialEndTime } from './lib/computeOfficialEndTime';
+import { pathHandler } from '../../../lib/pathHandler';
 
 function ExamTaking() {
     const params = useParams();
@@ -27,7 +28,7 @@ function ExamTaking() {
         );
     }
 
-    const examDonePath = `/student/students/${studentId}/exam-done`;
+    const examDonePath = pathHandler.getRoutePath('EXAM_DONE', { studentId });
 
     const shouldNavigateToExamDone = computeShouldNavigateToExamDone(new Date(), {
         duration: query.data.exam.duration,

@@ -26,6 +26,7 @@ import { useAlert } from '../../lib/alert';
 import { ExamCreatedModal } from './ExamCreatedModal';
 import { examApiType, modalStatusType } from './types';
 import { time } from '../../lib/time';
+import { pathHandler } from '../../lib/pathHandler';
 
 function Exams() {
     const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -127,11 +128,13 @@ function Exams() {
     }
 
     function buildNavigateToPreview(examId: string) {
-        return () => navigate(`/teacher/exams/${examId}/preview`);
+        const path = pathHandler.getRoutePath('EXAM_PREVIEWING', { examId });
+        return () => navigate(path);
     }
 
     function buildNavigateToEdition(examId: string) {
-        return () => navigate(`/teacher/exams/${examId}/exercises`);
+        const path = pathHandler.getRoutePath('EXAM_EXERCISES', { examId });
+        return () => navigate(path);
     }
 
     function buildEditExam(exam: examApiType) {
@@ -141,7 +144,9 @@ function Exams() {
     }
 
     function buildNavigateToResults(examId: string) {
-        return () => navigate(`/teacher/exams/${examId}/results`);
+        const path = pathHandler.getRoutePath('EXAM_RESULTS', { examId });
+
+        return () => navigate(path);
     }
 
     function buildCopyExamLinkToClipboard(examId: string) {

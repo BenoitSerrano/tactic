@@ -4,6 +4,7 @@ import { localStorage } from '../../lib/localStorage';
 import { Link } from '../../components/Link';
 import { Button } from '../../components/Button';
 import { Logo } from '../../components/Logo';
+import { pathHandler } from '../../lib/pathHandler';
 
 const HEIGHT = 60;
 
@@ -49,15 +50,15 @@ function Header() {
     );
 
     function onSignUpClick() {
-        navigate('/sign-up');
+        navigate(pathHandler.getRoutePath('SIGN_UP'));
     }
 
     function onSignInClick() {
-        navigate('/sign-in');
+        navigate(pathHandler.getRoutePath('SIGN_IN'));
     }
 
     function onGoToDashboardClick() {
-        navigate('/teacher');
+        navigate(pathHandler.getRoutePath('TEACHER_HOME'));
     }
 }
 

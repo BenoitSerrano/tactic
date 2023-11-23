@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
+import { pathHandler } from '../lib/pathHandler';
 
 function RequestResetPassword() {
     const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ function RequestResetPassword() {
     const mutation = useMutation({
         mutationFn: api.createResetPasswordRequest,
         onSuccess: (data) => {
-            navigate(`/reset-password-requested`);
+            navigate(pathHandler.getRoutePath('RESET_PASSWORD_REQUESTED'));
         },
         onError: () => {
             displayAlert({

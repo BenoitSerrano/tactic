@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { Link } from '../components/Link';
+import { pathHandler } from '../lib/pathHandler';
 
 function SignIn(props: {
     shouldDisplayResetPasswordLink?: boolean;
@@ -25,7 +26,7 @@ function SignIn(props: {
         onSuccess: (data) => {
             const { token } = data;
             localStorage.jwtTokenHandler.set(token);
-            navigate(`/teacher`);
+            navigate(pathHandler.getRoutePath('TEACHER_HOME'));
         },
         onError: () => {
             displayAlert({

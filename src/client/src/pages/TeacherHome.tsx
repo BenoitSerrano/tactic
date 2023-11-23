@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import SchoolIcon from '@mui/icons-material/School';
 import { Typography, styled } from '@mui/material';
+import { pathHandler } from '../lib/pathHandler';
 
 function TeacherHome() {
     return (
         <Container>
             <ItemContainer>
-                <Link to={`/teacher/students`}>
+                <Link to={pathHandler.getRoutePath('STUDENTS')}>
                     <LinkContent>
                         <Diversity3Icon fontSize="large" />
                         <Typography>Vos étudiants</Typography>
@@ -15,7 +16,7 @@ function TeacherHome() {
                 </Link>
             </ItemContainer>
             <ItemContainer>
-                <Link to={`/teacher/exams`}>
+                <Link to={pathHandler.getRoutePath('EXAMS')}>
                     <LinkContent>
                         <SchoolIcon fontSize="large" />
                         <Typography>Vos examens</Typography>

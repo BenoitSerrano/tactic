@@ -1,6 +1,35 @@
+import { ROUTES, ROUTE_KEYS } from '../routes';
+
 const pathHandler = {
     extractCurrentAttemptId,
+    getRoutePath,
 };
+
+function getRoutePath<paramsT extends Record<string, string>>(
+    routeKey: (typeof ROUTE_KEYS)[number],
+    parameters?: paramsT,
+    queryParameters?: Record<string, string>,
+) {
+    let path = ROUTES[routeKey].path;
+    if (parameters) {
+        Object.keys(parameters).forEach((key) => {
+            path = path.replace(new RegExp(':' + key), parameters[key]);
+        });
+    }
+    if (queryParameters) {
+        path = path + '?';
+        const queryParameterKeys = Object.keys(queryParameters);
+        for (let i = 0; i < queryParameterKeys.length; i++) {
+            const key = queryParameterKeys[i];
+            const value = queryParameters[key];
+            if (i > 0) {
+                path += '&';
+            }
+            path += `${key}=${value}`;
+        }
+    }
+    return path;
+}
 
 function extractCurrentAttemptId(pathname: string) {
     const PATH_REGEX =

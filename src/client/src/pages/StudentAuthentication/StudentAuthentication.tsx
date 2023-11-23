@@ -9,6 +9,7 @@ import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
 import { extractActionFromSearchParams } from './lib/extractActionFromSearchParams';
 import { LoadingButton } from '@mui/lab';
+import { pathHandler } from '../../lib/pathHandler';
 
 type studentType = {
     id: string;
@@ -31,9 +32,14 @@ function StudentAuthentication() {
         onSuccess: (student: studentType) => {
             const attempt = student.attempts.find((attempt) => attempt.exam.id === examId);
             if (attempt) {
+                //TODO
                 navigate(`/student/students/${student.id}/attempts/${attempt.id}/${action}`);
             } else {
-                navigate(`/student/exams/${examId}/students/${student.id}`);
+                const path = pathHandler.getRoutePath('STUDENT_HOME', {
+                    examId,
+                    studentId: student.id,
+                });
+                navigate(path);
             }
         },
         onError: (error) => {

@@ -1,6 +1,10 @@
 import { pathHandler } from './pathHandler';
 
 describe('pathHandler', () => {
+    describe('getRoutePath', () => {
+        it('should return the generic route path if no parameters provided', () => {});
+    });
+
     describe('extractCurrentAttemptId', () => {
         it('should return the attempt id', () => {
             const pathname =

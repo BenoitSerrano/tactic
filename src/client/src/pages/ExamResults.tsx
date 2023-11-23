@@ -21,6 +21,7 @@ import { Loader } from '../components/Loader';
 import { attemptStatusType } from '../types';
 import { computeAttemptStatusIcon } from '../lib/computeAttemptStatusIcon';
 import { useAlert } from '../lib/alert';
+import { pathHandler } from '../lib/pathHandler';
 
 type examResultApiType = {
     id: string;
@@ -243,9 +244,11 @@ function ExamResults() {
     }
 
     function computeAttemptRoute(attemptId: string) {
-        return `/teacher/exams/${examId}/results/${attemptId}?attemptIds=${sortedAttemptIds.join(
-            ',',
-        )}`;
+        return pathHandler.getRoutePath(
+            'EXAM_CHECKING',
+            { examId, attemptId },
+            { attemptIds: sortedAttemptIds.join(',') },
+        );
     }
 
     function buildGoToAttempt(attemptId: string) {

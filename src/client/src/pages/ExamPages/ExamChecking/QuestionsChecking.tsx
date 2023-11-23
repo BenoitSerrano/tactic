@@ -17,6 +17,7 @@ import { extractMarks, manualMarksType } from '../lib/extractMarks';
 import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { ExerciseTitle } from '../components/ExerciseTitle';
+import { pathHandler } from '../../../lib/pathHandler';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -34,6 +35,7 @@ function QuestionsChecking(props: {
     const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
     const result = computeResult(props.exercises);
+    const attemptIds = searchParams.get('attemptIds') || '';
 
     const saveMarkMutation = useMutation({
         mutationFn: api.updateMark,
@@ -54,10 +56,7 @@ function QuestionsChecking(props: {
         setManualMarks(marks.manual);
     }, [props.exercises]);
 
-    const { next, previous } = computeAttemptIdNeighbours(
-        props.attemptId,
-        searchParams.get('attemptIds'),
-    );
+    const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
 
     const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
 
@@ -177,11 +176,12 @@ function QuestionsChecking(props: {
     }
 
     function navigateToNewAttempt(newAttemptId: string) {
-        navigate(
-            `/teacher/exams/${props.examId}/results/${newAttemptId}?attemptIds=${searchParams.get(
-                'attemptIds',
-            )}`,
+        const path = pathHandler.getRoutePath(
+            'EXAM_CHECKING',
+            { examId: props.examId, attemptId: newAttemptId },
+            { attemptIds },
         );
+        navigate(path);
     }
 }
 const ARROW_CONTAINER_SIZE = 100;

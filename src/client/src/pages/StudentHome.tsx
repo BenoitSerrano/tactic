@@ -5,6 +5,7 @@ import { api } from '../lib/api';
 import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
+import { pathHandler } from '../lib/pathHandler';
 
 function StudentHome() {
     const params = useParams();
@@ -25,7 +26,11 @@ function StudentHome() {
     const createAttemptMutation = useMutation({
         mutationFn: api.createAttempt,
         onSuccess: (attempt: any) => {
-            navigate(`/student/students/${studentId}/attempts/${attempt.id}/take`);
+            const path = pathHandler.getRoutePath('EXAM_TAKING', {
+                studentId,
+                attemptId: attempt.id,
+            });
+            navigate(path);
         },
     });
 
@@ -37,11 +42,11 @@ function StudentHome() {
     }
 
     if (attemptQuery.data.length > 0) {
-        return (
-            <Navigate
-                to={`/student/students/${studentId}/attempts/${attemptQuery.data[0].id}/take`}
-            />
-        );
+        const path = pathHandler.getRoutePath('EXAM_TAKING', {
+            studentId,
+            attemptId: attemptQuery.data[0].id,
+        });
+        return <Navigate to={path} />;
     }
 
     return (

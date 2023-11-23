@@ -1,4 +1,4 @@
-function computeAttemptIdNeighbours(attemptId: string, searchAttemptIds: string | null) {
+function computeAttemptIdNeighbours(attemptId: string, searchAttemptIds: string) {
     let previous: string | undefined = undefined;
     let next: string | undefined = undefined;
     if (!searchAttemptIds) {
