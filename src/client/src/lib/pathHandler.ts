@@ -4,7 +4,7 @@ const pathHandler = {
 
 function extractCurrentAttemptId(pathname: string) {
     const PATH_REGEX =
-        /^\/student\/students\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\/attempts\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/;
+        /^\/student\/students\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\/attempts\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\/take/;
     const result = pathname.match(PATH_REGEX);
     if (!result) {
         return undefined;
