@@ -27,7 +27,7 @@ const questionSpecificityMapping: Record<
         IconComponent: RadioButtonCheckedIcon,
     },
     questionTrou: {
-        label: 'Question / réponse',
+        label: 'Phrase à trou',
         IconComponent: SaveAltIcon,
     },
     phraseMelangee: {
