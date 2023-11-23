@@ -32,7 +32,7 @@ const StyledTextField = styled(TextField)({ flex: 1 });
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
 const Container = styled('div')({
     display: 'flex',
-    alignItems: 'center',
+    flexDirection: 'column',
     justifyContent: 'center',
     width: '100%',
 });
