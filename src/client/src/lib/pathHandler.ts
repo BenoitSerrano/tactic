@@ -1,4 +1,5 @@
-import { ROUTES, ROUTE_KEYS } from '../routes';
+import { ROUTE_KEYS } from '../routes/routeKeys';
+import { ROUTE_PATHS } from '../routes/routePaths';
 
 const pathHandler = {
     extractCurrentAttemptId,
@@ -10,7 +11,7 @@ function getRoutePath<paramsT extends Record<string, string>>(
     parameters?: paramsT,
     queryParameters?: Record<string, string>,
 ) {
-    let path = ROUTES[routeKey].path;
+    let path = ROUTE_PATHS[routeKey].path;
     if (parameters) {
         Object.keys(parameters).forEach((key) => {
             path = path.replace(new RegExp(':' + key), parameters[key]);
