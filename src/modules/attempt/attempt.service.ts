@@ -2,6 +2,7 @@ import { dataSource } from '../../dataSource';
 import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
 import { Exercise, buildExerciseService } from '../exercise';
+import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Question, buildQuestionService } from '../question';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
@@ -14,7 +15,7 @@ export { buildAttemptService };
 function buildAttemptService() {
     const attemptRepository = dataSource.getRepository(Attempt);
 
-    const studentService = {
+    const attemptService = {
         searchAttempts,
         createAttempt,
         updateAttempt,
@@ -33,9 +34,10 @@ function buildAttemptService() {
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
         deleteAttemptCorrectedAt,
+        getAttemptsCountByCorrectionStatus,
     };
 
-    return studentService;
+    return attemptService;
 
     async function searchAttempts(examId: string, studentId: string) {
         const attempt = await attemptRepository.find({
@@ -265,5 +267,39 @@ function buildAttemptService() {
             const newAnswers = attemptUtils.stringifyAnswers(parsedAnswers);
             await attemptRepository.update({ id: attempt.id }, { answers: newAnswers });
         }
+    }
+
+    async function getAttemptsCountByCorrectionStatus(examId: Exam['id']) {
+        const attempts = await attemptRepository.find({
+            select: {
+                id: true,
+                endedAt: true,
+                startedAt: true,
+                correctedAt: true,
+                exam: { id: true, duration: true, extraTime: true },
+            },
+            where: { exam: { id: examId } },
+            relations: ['exam'],
+        });
+        const now = new Date();
+        let corrected = 0,
+            notCorrected = 0;
+
+        for (const attempt of attempts) {
+            const attemptStatus = computeAttemptStatus(
+                attempt,
+                {
+                    duration: attempt.exam.duration,
+                    extraTime: attempt.exam.extraTime,
+                },
+                now,
+            );
+            if (attemptStatus === 'corrected') {
+                corrected++;
+            } else {
+                notCorrected++;
+            }
+        }
+        return { corrected, notCorrected };
     }
 }

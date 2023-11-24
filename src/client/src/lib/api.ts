@@ -44,6 +44,7 @@ const api = {
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
     resetPassword,
+    getAttemptsCountByCorrectionStatus,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -406,6 +407,11 @@ async function updateExercisesOrder(params: {
     return performApiCall(URL, 'PATCH', {
         orders: params.orders,
     });
+}
+
+async function getAttemptsCountByCorrectionStatus(params: { examId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/count-by-correction-status`;
+    return performApiCall(URL, 'GET');
 }
 
 export { api };

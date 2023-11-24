@@ -5,6 +5,7 @@ import { api } from '../../../lib/api';
 import { Loader } from '../../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
 import { attemptWithAnswersApiType } from '../types';
+import { attemptsCountByAttemptStatusApiType } from './types';
 
 function ExamChecking() {
     const params = useParams();
@@ -14,9 +15,13 @@ function ExamChecking() {
         queryKey: ['attempts', attemptId],
         queryFn: () => api.fetchAttemptWithAnswers(attemptId),
     });
+    const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
+        queryFn: () => api.getAttemptsCountByCorrectionStatus({ examId }),
+        queryKey: ['attempts-count-by-attempt-status', examId],
+    });
 
-    if (!attemptWithAnswersQuery.data) {
-        if (attemptWithAnswersQuery.isLoading) {
+    if (!attemptWithAnswersQuery.data || !attemptsCountQuery.data) {
+        if (attemptWithAnswersQuery.isLoading || attemptsCountQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
@@ -29,6 +34,7 @@ function ExamChecking() {
                 studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}
                 examId={examId}
+                attemptsCountByAttemptStatus={attemptsCountQuery.data}
                 attemptStatus={attemptWithAnswersQuery.data.attemptStatus}
                 exercises={attemptWithAnswersQuery.data.exam.exercises}
                 examName={attemptWithAnswersQuery.data.exam.name}

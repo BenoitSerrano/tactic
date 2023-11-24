@@ -21,6 +21,8 @@ import { computeResult } from '../lib/computeResult';
 import { ExerciseTitle } from '../components/ExerciseTitle';
 import { pathHandler } from '../../../lib/pathHandler';
 import { LoadingButton } from '@mui/lab';
+import { attemptsCountByAttemptStatusApiType } from './types';
+import { AttemptsCount } from './AttemptsCount';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -28,6 +30,7 @@ function QuestionsChecking(props: {
     examName: string;
     examId: string;
     attemptStatus: attemptStatusType;
+    attemptsCountByAttemptStatus: attemptsCountByAttemptStatusApiType;
     studentEmail: string;
     attemptId: string;
 }) {
@@ -78,6 +81,9 @@ function QuestionsChecking(props: {
         mutationFn: api.updateCorrectedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            queryClient.invalidateQueries({
+                queryKey: ['attempts-count-by-attempt-status', props.examId],
+            });
             displayAlert({
                 variant: 'success',
                 text: "Vous avez marqué cette copie comme corrigé. Vous ne pouvez plus en modifier les notes, et l'étudiant pourra la consulter.",
@@ -96,6 +102,10 @@ function QuestionsChecking(props: {
         mutationFn: api.deleteCorrectedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            queryClient.invalidateQueries({
+                queryKey: ['attempts-count-by-attempt-status', props.examId],
+            });
+
             displayAlert({
                 variant: 'success',
                 text: 'Vous pouvez de nouveau modifier les notes de cette copie.',
@@ -138,6 +148,9 @@ function QuestionsChecking(props: {
                         <ArrowBackIcon fontSize="large" />
                     </IconButton>
                 </LeftArrowContainer>
+                <AttemptsCount
+                    attemptsCountByCorrectedStatus={props.attemptsCountByAttemptStatus}
+                />
                 {props.exercises.map((exercise) => (
                     <ExerciseContainer key={'exercise-' + exercise.id}>
                         <ExerciseTitle exercise={exercise} />

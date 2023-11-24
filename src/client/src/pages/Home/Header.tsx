@@ -5,8 +5,7 @@ import { Link } from '../../components/Link';
 import { Button } from '../../components/Button';
 import { Logo } from '../../components/Logo';
 import { pathHandler } from '../../lib/pathHandler';
-
-const HEIGHT = 60;
+import { HEADER_HEIGHT } from '../../constants';
 
 function Header() {
     const navigate = useNavigate();
@@ -68,7 +67,7 @@ const Container = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: HEIGHT,
+    height: HEADER_HEIGHT,
     backgroundColor: 'white',
     borderBottom: `${theme.palette.divider} 1px solid`,
 }));

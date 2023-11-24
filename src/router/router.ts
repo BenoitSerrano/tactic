@@ -277,6 +277,18 @@ router.put(
 );
 
 router.get(
+    '/exams/:examId/attempts/count-by-correction-status',
+    buildController(attemptController.getAttemptsCountByCorrectionStatus, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
+
+router.get(
     '/exams/:examId/students/:studentId/attempts',
     buildController(attemptController.searchAttempts),
 );
