@@ -17,6 +17,8 @@ function buildAttemptController() {
         updateMark,
         updateAttemptEndedAt,
         deleteAttemptEndedAt,
+        updateAttemptCorrectedAt,
+        deleteAttemptCorrectedAt,
     };
 
     return attemptController;
@@ -72,5 +74,13 @@ function buildAttemptController() {
 
     async function deleteAttemptEndedAt(params: { urlParams: { attemptId: string } }) {
         return attemptService.deleteAttemptEndedAt(params.urlParams.attemptId);
+    }
+
+    async function updateAttemptCorrectedAt(params: { urlParams: { attemptId: string } }) {
+        return attemptService.updateAttemptCorrectedAt(params.urlParams.attemptId);
+    }
+
+    async function deleteAttemptCorrectedAt(params: { urlParams: { attemptId: string } }) {
+        return attemptService.deleteAttemptCorrectedAt(params.urlParams.attemptId);
     }
 }

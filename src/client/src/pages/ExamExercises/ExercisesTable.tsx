@@ -8,7 +8,6 @@ import {
     TableHead,
     TableRow,
     Tooltip,
-    styled,
 } from '@mui/material';
 import {
     DragDropContext,
@@ -193,16 +192,5 @@ function ExercisesTable(props: {
         };
     }
 }
-
-const QuestionKindCellContent = styled('div')({
-    display: 'flex',
-    alignItems: 'center',
-});
-
-const QuestionKindIconContainer = styled('div')(({ theme }) => ({
-    marginRight: theme.spacing(1),
-    display: 'flex',
-    alignItems: 'center',
-}));
 
 export { ExercisesTable };

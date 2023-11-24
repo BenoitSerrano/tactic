@@ -18,4 +18,6 @@ export interface AttemptInterface {
     marks: string[];
 
     endedAt: string | null;
+
+    correctedAt: string | null;
 }

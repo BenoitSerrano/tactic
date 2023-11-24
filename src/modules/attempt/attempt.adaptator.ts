@@ -1,4 +1,5 @@
 import { Exam } from '../exam';
+import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptUtils } from './attempt.utils';
@@ -46,17 +47,27 @@ function convertAttemptToAttemptWithAnswers(
     attemptAnswers: attemptAnswersType,
     studentEmail: Student['email'],
 ) {
+    const now = new Date();
     const questions = exam.exercises.map((exercise) => exercise.questions).flat();
     const marks = attemptUtils.aggregateMarks({
         answers: attemptAnswers,
         marksArray: attempt.marks,
         questions,
     });
+    const attemptStatus = computeAttemptStatus(
+        attempt,
+        {
+            duration: exam.duration,
+            extraTime: exam.extraTime,
+        },
+        now,
+    );
 
     return {
         id: attempt.id,
         startedAt: attempt.startedAt,
         updatedAt: attempt.updatedAt,
+        attemptStatus,
         studentEmail,
         exam: {
             id: exam.id,

@@ -7,10 +7,12 @@ function Button(props: {
     variant?: 'contained' | 'outlined' | 'text';
     disabled?: boolean;
     type?: 'submit';
+    title?: string;
     startIcon?: JSX.Element;
 }) {
     return (
         <MuiButton
+            title={props.title}
             startIcon={props.startIcon}
             type={props.type}
             fullWidth={props.fullWidth}

@@ -10,6 +10,7 @@ import { api } from '../../../lib/api';
 import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
 
 function UpdateAnswersButtons(props: {
+    canCorrectAttempt: boolean;
     question: questionWithAnswersType;
     refetch: () => void;
     examId: string;
@@ -80,7 +81,7 @@ function UpdateAnswersButtons(props: {
                 <IconButton
                     size="small"
                     color="success"
-                    disabled={!canAnswerBeMarkedAsRight}
+                    disabled={!canAnswerBeMarkedAsRight || !props.canCorrectAttempt}
                     onClick={onAddToRightAnswers}
                 >
                     <CheckIcon fontSize="small" />
@@ -90,7 +91,7 @@ function UpdateAnswersButtons(props: {
                 <IconButton
                     size="small"
                     color="warning"
-                    disabled={!canAnswerBeMarkedAsAcceptable}
+                    disabled={!canAnswerBeMarkedAsAcceptable || !props.canCorrectAttempt}
                     onClick={onAddToAcceptableAnswers}
                 >
                     <SentimentNeutralIcon fontSize="small" />
@@ -100,7 +101,7 @@ function UpdateAnswersButtons(props: {
                 <IconButton
                     size="small"
                     color="error"
-                    disabled={!canAnswerBeMarkedAsWrong}
+                    disabled={!canAnswerBeMarkedAsWrong || !props.canCorrectAttempt}
                     onClick={onRemoveOkAnswer}
                 >
                     <ClearIcon fontSize="small" />

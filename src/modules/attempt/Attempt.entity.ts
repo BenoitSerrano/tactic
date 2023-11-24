@@ -42,4 +42,7 @@ export class Attempt implements AttemptInterface {
 
     @Column({ type: 'timestamptz', nullable: true })
     endedAt: string | null;
+
+    @Column({ type: 'timestamptz', nullable: true })
+    correctedAt: string | null;
 }

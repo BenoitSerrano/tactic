@@ -162,6 +162,7 @@ function buildExamService() {
                     marks: true,
                     answers: true,
                     endedAt: true,
+                    correctedAt: true,
                 },
             },
             relations: ['attempts', 'attempts.student'],

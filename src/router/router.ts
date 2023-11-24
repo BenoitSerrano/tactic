@@ -345,6 +345,30 @@ router.delete(
     }),
 );
 
+router.patch(
+    '/exams/:examId/attempts/:attemptId/correctedAt',
+    buildController(attemptController.updateAttemptCorrectedAt, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
+
+router.delete(
+    '/exams/:examId/attempts/:attemptId/correctedAt',
+    buildController(attemptController.deleteAttemptCorrectedAt, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
+
 router.post(
     '/reset-password-requests',
     buildController(resetPasswordRequestController.createResetPasswordRequest, {

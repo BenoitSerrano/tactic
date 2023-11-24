@@ -29,6 +29,7 @@ function ExamChecking() {
                 studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}
                 examId={examId}
+                attemptStatus={attemptWithAnswersQuery.data.attemptStatus}
                 exercises={attemptWithAnswersQuery.data.exam.exercises}
                 examName={attemptWithAnswersQuery.data.exam.name}
             />

@@ -31,6 +31,8 @@ function buildAttemptService() {
         updateMark,
         updateAttemptEndedAt,
         deleteAttemptEndedAt,
+        updateAttemptCorrectedAt,
+        deleteAttemptCorrectedAt,
     };
 
     return studentService;
@@ -90,6 +92,8 @@ function buildAttemptService() {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
+                correctedAt: true,
+                endedAt: true,
                 answers: true,
                 marks: true,
                 student: { id: true, email: true },
@@ -199,6 +203,19 @@ function buildAttemptService() {
 
     async function deleteAttemptEndedAt(attemptId: Attempt['id']) {
         await attemptRepository.update({ id: attemptId }, { endedAt: null });
+        return true;
+    }
+
+    async function updateAttemptCorrectedAt(attemptId: Attempt['id']) {
+        await attemptRepository.update(
+            { id: attemptId },
+            { correctedAt: () => 'CURRENT_TIMESTAMP' },
+        );
+        return true;
+    }
+
+    async function deleteAttemptCorrectedAt(attemptId: Attempt['id']) {
+        await attemptRepository.update({ id: attemptId }, { correctedAt: null });
         return true;
     }
 

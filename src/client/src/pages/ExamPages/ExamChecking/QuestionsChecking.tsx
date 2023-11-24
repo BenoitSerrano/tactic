@@ -1,8 +1,10 @@
 import { IconButton, Slider, Typography, styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import GradingIcon from '@mui/icons-material/Grading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import LockIcon from '@mui/icons-material/Lock';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { api } from '../../../lib/api';
@@ -10,7 +12,7 @@ import { useAlert } from '../../../lib/alert';
 import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
-import { questionKindType } from '../../../types';
+import { attemptStatusType, questionKindType } from '../../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { extractMarks, manualMarksType } from '../lib/extractMarks';
@@ -18,16 +20,19 @@ import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { ExerciseTitle } from '../components/ExerciseTitle';
 import { pathHandler } from '../../../lib/pathHandler';
+import { LoadingButton } from '@mui/lab';
 
 function QuestionsChecking(props: {
     refetch: () => void;
     exercises: Array<exerciseWithAnswersType>;
     examName: string;
     examId: string;
+    attemptStatus: attemptStatusType;
     studentEmail: string;
     attemptId: string;
 }) {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const [searchParams] = useSearchParams();
 
@@ -51,6 +56,60 @@ function QuestionsChecking(props: {
         },
     });
 
+    const lockAttemptMutation = useMutation({
+        mutationFn: api.updateEndedAt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['examResults'] });
+            displayAlert({
+                variant: 'success',
+                text: "L'examen a bien été terminé pour cet étudiant. Il ne pourra plus modifier sa copie, et vous pouvez maintenant la corriger",
+            });
+        },
+        onError: (error: any) => {
+            displayAlert({
+                variant: 'error',
+                text: "L'opération a échoué.",
+            });
+            console.error(error);
+        },
+    });
+
+    const markAsCorrectedMutation = useMutation({
+        mutationFn: api.updateCorrectedAt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            displayAlert({
+                variant: 'success',
+                text: "Vous avez marqué cette copie comme corrigé. Vous ne pouvez plus en modifier les notes, et l'étudiant pourra la consulter.",
+            });
+        },
+        onError: (error: any) => {
+            displayAlert({
+                variant: 'error',
+                text: "L'opération a échoué.",
+            });
+            console.error(error);
+        },
+    });
+
+    const markAsUncorrectedMutation = useMutation({
+        mutationFn: api.deleteCorrectedAt,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
+            displayAlert({
+                variant: 'success',
+                text: 'Vous pouvez de nouveau modifier les notes de cette copie.',
+            });
+        },
+        onError: (error: any) => {
+            displayAlert({
+                variant: 'error',
+                text: "L'opération a échoué.",
+            });
+            console.error(error);
+        },
+    });
+
     useEffect(() => {
         const marks = extractMarks(props.exercises);
         setManualMarks(marks.manual);
@@ -59,12 +118,15 @@ function QuestionsChecking(props: {
     const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
 
     const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
+    const canCorrectAttempt =
+        props.attemptStatus === 'finished' || props.attemptStatus === 'expired';
+    const UpdateCorrectedAtButton = renderUpdateCorrectedAtButton(props.attemptStatus);
 
     return (
         <TestPageLayout
             studentEmail={props.studentEmail}
             title={props.examName}
-            buttons={[]}
+            buttons={UpdateCorrectedAtButton ? [UpdateCorrectedAtButton] : []}
             result={result}
         >
             <>
@@ -74,7 +136,7 @@ function QuestionsChecking(props: {
                     </IconButton>
                 </LeftArrowContainer>
                 {props.exercises.map((exercise) => (
-                    <ExerciseContainer key={exercise.id}>
+                    <ExerciseContainer key={'exercise-' + exercise.id}>
                         <ExerciseTitle exercise={exercise} />
                         {exercise.questions.map((question, index: number) => {
                             const mark = manualQuestionKinds.includes(question.kind)
@@ -82,12 +144,13 @@ function QuestionsChecking(props: {
                                 : question.mark;
                             const answerStatus = computeAnswerStatus(mark, question.points);
                             return (
-                                <QuestionCheckingContainer key={question.id}>
+                                <QuestionCheckingContainer key={'question-' + question.id}>
                                     <QuestionIndicatorsContainer>
                                         <QuestionIndicatorContainer>
                                             {manualQuestionKinds.includes(question.kind) ? (
                                                 <MarkSliderContainer>
                                                     <Slider
+                                                        disabled={!canCorrectAttempt}
                                                         onClick={buildOnClickSlider(question.id)}
                                                         onChange={buildOnChangeSlider(question.id)}
                                                         onChangeCommitted={buildOnChangeCommittedSlider(
@@ -117,6 +180,7 @@ function QuestionsChecking(props: {
 
                                         {editableQuestionKindsAnswers.includes(question.kind) && (
                                             <UpdateAnswersButtons
+                                                canCorrectAttempt={canCorrectAttempt}
                                                 examId={props.examId}
                                                 refetch={props.refetch}
                                                 question={question}
@@ -142,6 +206,74 @@ function QuestionsChecking(props: {
             </>
         </TestPageLayout>
     );
+
+    function renderUpdateCorrectedAtButton(attemptStatus: attemptStatusType) {
+        switch (attemptStatus) {
+            case 'finished':
+                return (
+                    <LoadingButton
+                        loading={markAsCorrectedMutation.isPending}
+                        variant="contained"
+                        startIcon={<GradingIcon />}
+                        onClick={() =>
+                            markAsCorrectedMutation.mutate({
+                                attemptId: props.attemptId,
+                                examId: props.examId,
+                            })
+                        }
+                    >
+                        Marquer cette copie comme corrigée
+                    </LoadingButton>
+                );
+            case 'expired':
+                return (
+                    <LoadingButton
+                        loading={markAsCorrectedMutation.isPending}
+                        variant="contained"
+                        startIcon={<GradingIcon />}
+                        onClick={() =>
+                            markAsCorrectedMutation.mutate({
+                                attemptId: props.attemptId,
+                                examId: props.examId,
+                            })
+                        }
+                    >
+                        Marquer cette copie comme corrigée
+                    </LoadingButton>
+                );
+            case 'corrected':
+                return (
+                    <LoadingButton
+                        loading={markAsUncorrectedMutation.isPending}
+                        startIcon={<GradingIcon />}
+                        onClick={() =>
+                            markAsUncorrectedMutation.mutate({
+                                attemptId: props.attemptId,
+                                examId: props.examId,
+                            })
+                        }
+                    >
+                        Reprendre la correction de cette copie
+                    </LoadingButton>
+                );
+            case 'pending':
+                return (
+                    <LoadingButton
+                        loading={lockAttemptMutation.isPending}
+                        startIcon={<LockIcon />}
+                        onClick={() =>
+                            lockAttemptMutation.mutate({
+                                attemptId: props.attemptId,
+                            })
+                        }
+                    >
+                        Terminer l'examen pour cet étudiant
+                    </LoadingButton>
+                );
+            default:
+                return undefined;
+        }
+    }
 
     function buildOnChangeSlider(questionId: number) {
         return (event: Event, value: number | number[]) => {

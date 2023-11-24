@@ -1,12 +1,13 @@
 import { Attempt, attemptUtils } from '../attempt';
 import { Exam } from '../exam';
-type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished';
+type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'corrected';
 
 function computeExamStatus(
     exams: Record<Exam['id'], Pick<Exam, 'id' | 'name' | 'duration' | 'extraTime'>>,
     attempts: Array<{
         endedAt: Attempt['endedAt'];
         startedAt: Attempt['startedAt'];
+        correctedAt: Attempt['correctedAt'];
         exam: Pick<Exam, 'id'>;
     }>,
     now: Date,
@@ -24,13 +25,17 @@ function computeExamStatus(
 }
 
 function computeAttemptStatus(
-    attempt: Pick<Attempt, 'endedAt' | 'startedAt'>,
+    attempt: Pick<Attempt, 'endedAt' | 'startedAt' | 'correctedAt'>,
     exam: Pick<Exam, 'duration' | 'extraTime'>,
     now: Date,
 ) {
-    let status: attemptStatusType = 'notStarted';
+    console.log(attempt);
+    if (!!attempt.correctedAt) {
+        return 'corrected';
+    }
+
     if (!!attempt.endedAt) {
-        status = 'finished';
+        return 'finished';
     } else {
         const { duration, extraTime } = exam;
         const isTimeLimitExceeded = attemptUtils.computeIsTimeLimitExceeded({
@@ -40,12 +45,11 @@ function computeAttemptStatus(
             startedAt: attempt.startedAt,
         });
         if (isTimeLimitExceeded) {
-            status = 'expired';
+            return 'expired';
         } else {
-            status = 'pending';
+            return 'pending';
         }
     }
-    return status;
 }
 
 export { computeExamStatus, computeAttemptStatus };

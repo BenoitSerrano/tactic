@@ -1,8 +1,9 @@
-import { questionKindType } from '../../types';
+import { attemptStatusType, questionKindType } from '../../types';
 
 type attemptWithAnswersApiType = {
     studentEmail: string;
     exam: examWithAnswersType;
+    attemptStatus: attemptStatusType;
 };
 
 type examWithAnswersType = {
