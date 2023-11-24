@@ -21,7 +21,6 @@ function buildStudentService() {
         fetchStudentByEmail,
         deleteStudent,
         bulkInsertStudents,
-        deleteAllStudents,
     };
 
     return studentService;
@@ -96,12 +95,6 @@ function buildStudentService() {
     async function deleteStudent(studentId: Student['id']) {
         const result = await studentRepository.delete({ id: studentId });
         return result.affected == 1;
-    }
-    async function deleteAllStudents(userId: User['id'] | undefined) {
-        if (!userId) {
-            return;
-        }
-        return studentRepository.delete({ user: { id: userId } });
     }
 
     async function bulkInsertStudents(students: Array<Student>) {
