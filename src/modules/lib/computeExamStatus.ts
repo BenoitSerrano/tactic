@@ -29,7 +29,6 @@ function computeAttemptStatus(
     exam: Pick<Exam, 'duration' | 'extraTime'>,
     now: Date,
 ) {
-    console.log(attempt);
     if (!!attempt.correctedAt) {
         return 'corrected';
     }
