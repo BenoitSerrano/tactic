@@ -118,6 +118,9 @@ function QuestionsChecking(props: {
     const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
 
     const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
+    const areQuestionsNotCorrected = Object.values(manualMarks).some(
+        (manualMark) => manualMark === undefined,
+    );
     const canCorrectAttempt =
         props.attemptStatus === 'finished' || props.attemptStatus === 'expired';
     const UpdateCorrectedAtButton = renderUpdateCorrectedAtButton(props.attemptStatus);
@@ -215,12 +218,7 @@ function QuestionsChecking(props: {
                         loading={markAsCorrectedMutation.isPending}
                         variant="contained"
                         startIcon={<GradingIcon />}
-                        onClick={() =>
-                            markAsCorrectedMutation.mutate({
-                                attemptId: props.attemptId,
-                                examId: props.examId,
-                            })
-                        }
+                        onClick={markAsCorrected}
                     >
                         Marquer cette copie comme corrigée
                     </LoadingButton>
@@ -231,12 +229,7 @@ function QuestionsChecking(props: {
                         loading={markAsCorrectedMutation.isPending}
                         variant="contained"
                         startIcon={<GradingIcon />}
-                        onClick={() =>
-                            markAsCorrectedMutation.mutate({
-                                attemptId: props.attemptId,
-                                examId: props.examId,
-                            })
-                        }
+                        onClick={markAsCorrected}
                     >
                         Marquer cette copie comme corrigée
                     </LoadingButton>
@@ -272,6 +265,20 @@ function QuestionsChecking(props: {
                 );
             default:
                 return undefined;
+        }
+    }
+
+    function markAsCorrected() {
+        if (areQuestionsNotCorrected) {
+            displayAlert({
+                variant: 'error',
+                text: "Vous ne pouvez pas marquer cette copie comme corrigée. Certaines questions n'ont pas encore été notées.",
+            });
+        } else {
+            markAsCorrectedMutation.mutate({
+                attemptId: props.attemptId,
+                examId: props.examId,
+            });
         }
     }
 
