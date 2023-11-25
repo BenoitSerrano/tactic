@@ -16,8 +16,12 @@ const theme = createTheme({
         divider: '#a1ece4',
     },
     spacing: (value: number) => value * 8,
+    components: {
+        MuiDialogTitle: { styleOverrides: { root: { fontSize: '1.5rem', fontWeight: 'bold' } } },
+    },
     typography: {
         fontFamily: ['inter'].join(','),
+
         h1: {
             fontSize: '3rem',
             fontWeight: 'normal',

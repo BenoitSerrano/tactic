@@ -23,6 +23,8 @@ import { pathHandler } from '../../../lib/pathHandler';
 import { LoadingButton } from '@mui/lab';
 import { attemptsCountByAttemptStatusApiType } from './types';
 import { AttemptsCount } from './AttemptsCount';
+import { Dialog } from '../../../components/Dialog';
+import { Button } from '../../../components/Button';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -120,6 +122,11 @@ function QuestionsChecking(props: {
         },
     });
 
+    const [attemptIdToNavigateTo, setAttemptIdToNavigateTo] = useState<string | undefined>(
+        undefined,
+    );
+    const isConfirmAccessAnotherAttemptDialogOpen = !!attemptIdToNavigateTo;
+
     useEffect(() => {
         const marks = extractMarks(props.exercises);
         setManualMarks(marks.manual);
@@ -128,7 +135,7 @@ function QuestionsChecking(props: {
     const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
 
     const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
-    const areQuestionsNotCorrected = Object.values(manualMarks).some(
+    const areThereQuestionsNotCorrected = Object.values(manualMarks).some(
         (manualMark) => manualMark === undefined,
     );
     const canCorrectAttempt =
@@ -150,6 +157,34 @@ function QuestionsChecking(props: {
                 </LeftArrowContainer>
                 <AttemptsCount
                     attemptsCountByCorrectedStatus={props.attemptsCountByAttemptStatus}
+                />
+                <Dialog
+                    buttons={[
+                        <Button
+                            onClick={() => {
+                                if (attemptIdToNavigateTo) {
+                                    setAttemptIdToNavigateTo(undefined);
+                                    navigateToNewAttempt(attemptIdToNavigateTo);
+                                }
+                            }}
+                        >
+                            Non
+                        </Button>,
+                        <Button
+                            variant="contained"
+                            onClick={() =>
+                                attemptIdToNavigateTo &&
+                                markAsCorrectedAndNavigate(attemptIdToNavigateTo)
+                            }
+                            autoFocus
+                        >
+                            Oui, marquer cette copie comme corrigée
+                        </Button>,
+                    ]}
+                    isOpen={isConfirmAccessAnotherAttemptDialogOpen}
+                    onClose={() => setAttemptIdToNavigateTo(undefined)}
+                    title="La copie actuelle n'est pas marquée comme corrigée"
+                    text="Souhaitez-vous la marquer comme corrigée avant d'accéder à la copie suivante ?"
                 />
                 {props.exercises.map((exercise) => (
                     <ExerciseContainer key={'exercise-' + exercise.id}>
@@ -282,7 +317,7 @@ function QuestionsChecking(props: {
     }
 
     function markAsCorrected() {
-        if (areQuestionsNotCorrected) {
+        if (areThereQuestionsNotCorrected) {
             displayAlert({
                 variant: 'error',
                 text: "Vous ne pouvez pas marquer cette copie comme corrigée. Certaines questions n'ont pas encore été notées.",
@@ -293,6 +328,15 @@ function QuestionsChecking(props: {
                 examId: props.examId,
             });
         }
+    }
+
+    function markAsCorrectedAndNavigate(attemptIdToNavigateTo: string) {
+        setAttemptIdToNavigateTo(undefined);
+        markAsCorrectedMutation.mutate({
+            attemptId: props.attemptId,
+            examId: props.examId,
+        });
+        navigateToNewAttempt(attemptIdToNavigateTo);
     }
 
     function buildOnChangeSlider(questionId: number) {
@@ -322,8 +366,11 @@ function QuestionsChecking(props: {
             if (!attemptIdToNavigateTo) {
                 return;
             }
-
-            navigateToNewAttempt(attemptIdToNavigateTo);
+            if (props.attemptStatus !== 'corrected' && !areThereQuestionsNotCorrected) {
+                setAttemptIdToNavigateTo(attemptIdToNavigateTo);
+            } else {
+                navigateToNewAttempt(attemptIdToNavigateTo);
+            }
         };
     }
 

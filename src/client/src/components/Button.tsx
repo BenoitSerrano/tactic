@@ -9,9 +9,11 @@ function Button(props: {
     type?: 'submit';
     title?: string;
     startIcon?: JSX.Element;
+    autoFocus?: boolean;
 }) {
     return (
         <MuiButton
+            autoFocus={props.autoFocus}
             title={props.title}
             startIcon={props.startIcon}
             type={props.type}
