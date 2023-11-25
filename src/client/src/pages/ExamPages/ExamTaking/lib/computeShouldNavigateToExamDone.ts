@@ -1,4 +1,4 @@
-import { time } from '../../../../lib/time';
+import { computeIsExamTimeElapsed } from '../../../../lib/computeIsExamTimeElapsed';
 
 function computeShouldNavigateToExamDone(
     now: Date,
@@ -14,10 +14,9 @@ function computeShouldNavigateToExamDone(
         extraTime: number;
     },
 ) {
-    let remainingSeconds = duration * 60 - time.computeElapsedTime(startedAt, now);
-    const isTimeElapsed = remainingSeconds + extraTime * 60 < 0;
+    const isExamTimeElapsed = computeIsExamTimeElapsed(now, { duration, startedAt, extraTime });
     const hasFinishedExam = !!endedAt;
-    return isTimeElapsed || hasFinishedExam;
+    return isExamTimeElapsed || hasFinishedExam;
 }
 
 export { computeShouldNavigateToExamDone };

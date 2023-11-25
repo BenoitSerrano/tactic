@@ -33,6 +33,12 @@ function convertExamWithAttemptsToResults(
         });
         const { extraTime, duration } = exam;
         const totalMark = Object.values(marks).reduce((sum, mark) => (sum || 0) + (mark || 0), 0);
+        const isTimeLimitExceeded = attemptUtils.computeIsTimeLimitExceeded({
+            startedAt: attempt.startedAt,
+            extraTime,
+            duration,
+            now,
+        });
         const attemptStatus = computeAttemptStatus(attempt, { extraTime, duration }, now);
         const result = {
             id: student.id,
@@ -41,6 +47,7 @@ function convertExamWithAttemptsToResults(
             actualDuration,
             attemptId: attempt.id,
             mark: totalMark,
+            isTimeLimitExceeded,
             attemptStatus,
             roundTrips: attempt.roundTrips,
             timeSpentOutside: attempt.timeSpentOutside,

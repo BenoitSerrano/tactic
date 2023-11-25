@@ -5,7 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import HistoryIcon from '@mui/icons-material/History';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
-import { api } from '../lib/api';
+import { api } from '../../lib/api';
 import {
     IconButton,
     Table,
@@ -16,18 +16,21 @@ import {
     TableSortLabel,
     Tooltip,
 } from '@mui/material';
-import { time } from '../lib/time';
-import { Loader } from '../components/Loader';
-import { attemptStatusType } from '../types';
-import { computeAttemptStatusIcon } from '../lib/computeAttemptStatusIcon';
-import { useAlert } from '../lib/alert';
-import { pathHandler } from '../lib/pathHandler';
+import { time } from '../../lib/time';
+import { Loader } from '../../components/Loader';
+import { attemptStatusType } from '../../types';
+import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
+import { useAlert } from '../../lib/alert';
+import { pathHandler } from '../../lib/pathHandler';
+import { computeCanLockAttempt } from './lib/computeCanLockAttempt';
+import { computeCanUnlockAttempt } from './lib/computeCanUnlockAttempt';
 
 type examResultApiType = {
     id: string;
     email: string;
     attemptId: string;
     startedAt: string;
+    isTimeLimitExceeded: boolean;
     attemptStatus: attemptStatusType;
     actualDuration: number | undefined;
     mark: number;
@@ -169,6 +172,11 @@ function ExamResults() {
             </TableHead>
             <TableBody>
                 {sortedData.map((result, index) => {
+                    const canLockAttempt = computeCanLockAttempt(result.attemptStatus);
+                    const canUnlockAttempt = computeCanUnlockAttempt(
+                        result.attemptStatus,
+                        result.isTimeLimitExceeded,
+                    );
                     const AttemptStatusIcon = computeAttemptStatusIcon(result.attemptStatus);
                     return (
                         <TableRow key={result.attemptId}>
@@ -181,7 +189,7 @@ function ExamResults() {
                                     </IconButton>
                                 </Tooltip>
 
-                                {result.attemptStatus === 'pending' && (
+                                {canLockAttempt && (
                                     <Tooltip title="Terminer l'examen pour cet étudiant">
                                         <IconButton onClick={buildLockAttempt(result.attemptId)}>
                                             <LockIcon />
@@ -189,7 +197,7 @@ function ExamResults() {
                                     </Tooltip>
                                 )}
 
-                                {result.attemptStatus === 'finished' && (
+                                {canUnlockAttempt && (
                                     <Tooltip title="Permettre à l'étudiant de reprendre l'examen">
                                         <IconButton onClick={buildUnlockAttempt(result.attemptId)}>
                                             <NoEncryptionGmailerrorredIcon />
@@ -263,6 +271,7 @@ function ExamResults() {
                 email: result.email,
                 attemptId: result.attemptId,
                 startedAt: result.startedAt,
+                isTimeLimitExceeded: result.isTimeLimitExceeded,
                 actualDuration:
                     result.actualDuration !== undefined
                         ? time.formatToClock(result.actualDuration, { hideHours: true })
