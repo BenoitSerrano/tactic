@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ExercisesTable } from './ExercisesTable';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { examApiType, exerciseType, modalStatusType } from './types';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
@@ -31,7 +31,7 @@ function ExamExercises() {
         {
             title: 'Ajouter un exercice',
             onClick: () => setCurrentExerciseModalStatus({ kind: 'creating' }),
-            IconComponent: PlaylistAddIcon,
+            IconComponent: AddCircleOutlineOutlinedIcon,
         },
     ];
     return (

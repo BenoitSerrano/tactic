@@ -61,7 +61,7 @@ function ExercisesTable(props: {
     }, [props.exercises]);
 
     return (
-        <Table stickyHeader>
+        <Table>
             <TableHead>
                 <TableRow>
                     <TableCell width={20}>N°</TableCell>

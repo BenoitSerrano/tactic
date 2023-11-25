@@ -51,11 +51,11 @@ function Exams() {
                     {
                         onClick: openCreationModal,
                         IconComponent: PostAddIcon,
-                        title: 'Créer',
+                        title: 'Créer un examen',
                     },
                 ]}
             />
-            <Table stickyHeader>
+            <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell width={250}>Actions</TableCell>

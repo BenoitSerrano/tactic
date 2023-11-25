@@ -80,7 +80,7 @@ function QuestionsTable(props: {
         });
     };
     return (
-        <Table stickyHeader>
+        <Table>
             <TableHead>
                 <TableRow>
                     <TableCell width={20}>N°</TableCell>

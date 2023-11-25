@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import QuizIcon from '@mui/icons-material/Quiz';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { api } from '../../lib/api';
 import { Menu } from '../../components/Menu';
 import { Loader } from '../../components/Loader';
@@ -35,7 +35,7 @@ function ExamQuestionsEdition() {
         {
             title: 'Ajouter une question',
             onClick: () => setCurrentQuestionModalStatus({ kind: 'creating' }),
-            IconComponent: QuizIcon,
+            IconComponent: AddCircleOutlineOutlinedIcon,
         },
     ];
     function openEditionModal(question: questionWithAnswersType) {

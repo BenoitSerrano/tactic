@@ -70,7 +70,7 @@ function Students() {
     return (
         <>
             <Menu buttons={buttons} />
-            <Table stickyHeader>
+            <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell width={20}>N°</TableCell>
