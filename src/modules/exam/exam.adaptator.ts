@@ -12,6 +12,7 @@ function convertExamWithAttemptsToResults(
     attempts: Attempt[],
     students: Record<Student['id'], Pick<Student, 'id' | 'email'>>,
     exam: {
+        name: Exam['name'];
         duration: Exam['duration'];
         extraTime: Exam['extraTime'];
         questions: Record<Question['id'], Question>;
@@ -59,7 +60,7 @@ function convertExamWithAttemptsToResults(
         (sum, question) => sum + question.points,
         0,
     );
-    return { totalPoints, results: examWithResults };
+    return { totalPoints, results: examWithResults, examName: exam.name };
 }
 
 export { examAdaptator };

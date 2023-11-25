@@ -14,13 +14,8 @@ function Menu(props: { buttons: Array<buttonType> }) {
             {props.buttons.map((button, index) => {
                 const { IconComponent, onClick, title } = button;
                 return (
-                    <ButtonContainer>
-                        <Button
-                            key={index}
-                            variant="contained"
-                            startIcon={<IconComponent />}
-                            onClick={onClick}
-                        >
+                    <ButtonContainer key={index}>
+                        <Button variant="contained" startIcon={<IconComponent />} onClick={onClick}>
                             {title}
                         </Button>
                     </ButtonContainer>

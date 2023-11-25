@@ -143,6 +143,7 @@ function buildExamService() {
             where: { id: examId },
             select: {
                 id: true,
+                name: true,
                 duration: true,
                 extraTime: true,
                 exercises: { id: true, questions: { id: true } },
@@ -180,7 +181,7 @@ function buildExamService() {
         const examWithResults = examAdaptator.convertExamWithAttemptsToResults(
             examWithAttempts.attempts,
             students,
-            { duration: exam.duration, extraTime: exam.extraTime, questions },
+            { name: exam.name, duration: exam.duration, extraTime: exam.extraTime, questions },
         );
 
         return examWithResults;

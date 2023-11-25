@@ -15,6 +15,8 @@ import {
     TableRow,
     TableSortLabel,
     Tooltip,
+    Typography,
+    styled,
 } from '@mui/material';
 import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
@@ -38,7 +40,11 @@ type examResultApiType = {
     timeSpentOutside: number;
 };
 
-type examResultsApiType = { results: Array<examResultApiType>; totalPoints: number };
+type examResultsApiType = {
+    results: Array<examResultApiType>;
+    totalPoints: number;
+    examName: string;
+};
 
 type sortColumnType = 'email' | 'mark' | 'startedAt';
 
@@ -117,116 +123,127 @@ function ExamResults() {
     const sortedAttemptIds = sortedData.map(({ attemptId }) => attemptId);
 
     return (
-        <Table stickyHeader>
-            <TableHead>
-                <TableRow>
-                    <TableCell width={20}>N°</TableCell>
-                    <TableCell width={120}>Actions</TableCell>
-                    <TableCell width={120}>
-                        <TableSortLabel
-                            active={activeSort === 'startedAt'}
-                            direction={sortDirection}
-                            onClick={() => {
-                                if (activeSort !== 'startedAt') {
-                                    setActiveSort('startedAt');
-                                }
-                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                            }}
-                        >
-                            Heure de début
-                        </TableSortLabel>
-                    </TableCell>
-                    <TableCell sortDirection={sortDirection}>
-                        <TableSortLabel
-                            active={activeSort === 'email'}
-                            direction={sortDirection}
-                            onClick={() => {
-                                if (activeSort !== 'email') {
-                                    setActiveSort('email');
-                                }
-                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                            }}
-                        >
-                            Adresse e-mail
-                        </TableSortLabel>
-                    </TableCell>
-                    <TableCell width={80}>
-                        <TableSortLabel
-                            active={activeSort === 'mark'}
-                            direction={sortDirection}
-                            onClick={() => {
-                                if (activeSort !== 'mark') {
-                                    setActiveSort('mark');
-                                }
-                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                            }}
-                        >
-                            Note (/ {query.data.totalPoints})
-                        </TableSortLabel>
-                    </TableCell>
-                    <TableCell width={80}>Statut</TableCell>
-                    <TableCell width={50}>Durée</TableCell>
-                    <TableCell width={50}>Sorties de test</TableCell>
-                    <TableCell width={50}>Temps total hors test</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {sortedData.map((result, index) => {
-                    const canLockAttempt = computeCanLockAttempt(result.attemptStatus);
-                    const canUnlockAttempt = computeCanUnlockAttempt(
-                        result.attemptStatus,
-                        result.isTimeLimitExceeded,
-                    );
-                    const AttemptStatusIcon = computeAttemptStatusIcon(result.attemptStatus);
-                    return (
-                        <TableRow key={result.attemptId}>
-                            <TableCell>{index + 1}</TableCell>
+        <>
+            <TitleContainer>
+                <Typography variant="h3">{query.data.examName}</Typography>
+            </TitleContainer>
+            <Table stickyHeader>
+                <TableHead>
+                    <TableRow>
+                        <TableCell width={20}>N°</TableCell>
+                        <TableCell width={120}>Actions</TableCell>
+                        <TableCell width={120}>
+                            <TableSortLabel
+                                active={activeSort === 'startedAt'}
+                                direction={sortDirection}
+                                onClick={() => {
+                                    if (activeSort !== 'startedAt') {
+                                        setActiveSort('startedAt');
+                                    }
+                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                }}
+                            >
+                                Heure de début
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell sortDirection={sortDirection}>
+                            <TableSortLabel
+                                active={activeSort === 'email'}
+                                direction={sortDirection}
+                                onClick={() => {
+                                    if (activeSort !== 'email') {
+                                        setActiveSort('email');
+                                    }
+                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                }}
+                            >
+                                Adresse e-mail
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell width={80}>
+                            <TableSortLabel
+                                active={activeSort === 'mark'}
+                                direction={sortDirection}
+                                onClick={() => {
+                                    if (activeSort !== 'mark') {
+                                        setActiveSort('mark');
+                                    }
+                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                }}
+                            >
+                                Note (/ {query.data.totalPoints})
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell width={80}>Statut</TableCell>
+                        <TableCell width={50}>Durée</TableCell>
+                        <TableCell width={50}>Sorties de test</TableCell>
+                        <TableCell width={50}>Temps total hors test</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {sortedData.map((result, index) => {
+                        const canLockAttempt = computeCanLockAttempt(result.attemptStatus);
+                        const canUnlockAttempt = computeCanUnlockAttempt(
+                            result.attemptStatus,
+                            result.isTimeLimitExceeded,
+                        );
+                        const AttemptStatusIcon = computeAttemptStatusIcon(result.attemptStatus);
+                        return (
+                            <TableRow key={result.attemptId}>
+                                <TableCell>{index + 1}</TableCell>
 
-                            <TableCell>
-                                <Tooltip title="Voir la copie">
-                                    <IconButton onClick={buildGoToAttempt(result.attemptId)}>
-                                        <VisibilityIcon />
-                                    </IconButton>
-                                </Tooltip>
-
-                                {canLockAttempt && (
-                                    <Tooltip title="Terminer l'examen pour cet étudiant">
-                                        <IconButton onClick={buildLockAttempt(result.attemptId)}>
-                                            <LockIcon />
+                                <TableCell>
+                                    <Tooltip title="Voir la copie">
+                                        <IconButton onClick={buildGoToAttempt(result.attemptId)}>
+                                            <VisibilityIcon />
                                         </IconButton>
                                     </Tooltip>
-                                )}
 
-                                {canUnlockAttempt && (
-                                    <Tooltip title="Permettre à l'étudiant de reprendre l'examen">
-                                        <IconButton onClick={buildUnlockAttempt(result.attemptId)}>
-                                            <NoEncryptionGmailerrorredIcon />
+                                    {canLockAttempt && (
+                                        <Tooltip title="Terminer l'examen pour cet étudiant">
+                                            <IconButton
+                                                onClick={buildLockAttempt(result.attemptId)}
+                                            >
+                                                <LockIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+
+                                    {canUnlockAttempt && (
+                                        <Tooltip title="Permettre à l'étudiant de reprendre l'examen">
+                                            <IconButton
+                                                onClick={buildUnlockAttempt(result.attemptId)}
+                                            >
+                                                <NoEncryptionGmailerrorredIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+
+                                    <Tooltip title="Réinitialiser">
+                                        <IconButton onClick={buildDeleteAttempt(result.attemptId)}>
+                                            <HistoryIcon />
                                         </IconButton>
                                     </Tooltip>
-                                )}
-
-                                <Tooltip title="Réinitialiser">
-                                    <IconButton onClick={buildDeleteAttempt(result.attemptId)}>
-                                        <HistoryIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </TableCell>
-                            <TableCell>{time.formatToReadableDatetime(result.startedAt)}</TableCell>
-                            <TableCell>
-                                <Link to={computeAttemptRoute(result.attemptId)}>
-                                    {result.email}
-                                </Link>
-                            </TableCell>
-                            <TableCell>{result.mark.toFixed(1)}</TableCell>
-                            <TableCell>{AttemptStatusIcon}</TableCell>
-                            <TableCell>{result.actualDuration}</TableCell>
-                            <TableCell>{result.roundTrips}</TableCell>
-                            <TableCell>{result.timeSpentOutside}</TableCell>
-                        </TableRow>
-                    );
-                })}
-            </TableBody>
-        </Table>
+                                </TableCell>
+                                <TableCell>
+                                    {time.formatToReadableDatetime(result.startedAt)}
+                                </TableCell>
+                                <TableCell>
+                                    <Link to={computeAttemptRoute(result.attemptId)}>
+                                        {result.email}
+                                    </Link>
+                                </TableCell>
+                                <TableCell>{result.mark.toFixed(1)}</TableCell>
+                                <TableCell>{AttemptStatusIcon}</TableCell>
+                                <TableCell>{result.actualDuration}</TableCell>
+                                <TableCell>{result.roundTrips}</TableCell>
+                                <TableCell>{result.timeSpentOutside}</TableCell>
+                            </TableRow>
+                        );
+                    })}
+                </TableBody>
+            </Table>
+        </>
     );
 
     function buildDeleteAttempt(attemptId: string) {
@@ -316,5 +333,9 @@ function ExamResults() {
         });
     }
 }
+
+const TitleContainer = styled('div')(({ theme }) => ({
+    textAlign: 'center',
+}));
 
 export { ExamResults };
