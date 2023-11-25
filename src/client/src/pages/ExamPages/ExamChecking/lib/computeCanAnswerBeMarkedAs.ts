@@ -7,10 +7,11 @@ function computeCanAnswerBeMarkedAs(
 ) {
     switch (newStatus) {
         case 'right':
-            return currentAnswerStatus !== 'right';
+            return currentAnswerStatus !== 'right' && !!question.answer;
         case 'acceptable':
             return (
                 currentAnswerStatus !== 'acceptable' &&
+                !!question.answer &&
                 (currentAnswerStatus !== 'right' || question.rightAnswers.length > 1)
             );
         case 'wrong':

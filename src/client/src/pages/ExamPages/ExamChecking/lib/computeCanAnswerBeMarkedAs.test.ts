@@ -31,6 +31,27 @@ describe('computeCanAnswerBeMarkedAs', () => {
             expect(canAnswerBeMarkedAsAcceptable).toBe(true);
         });
 
+        it('should return false for acceptable if answer is empty', () => {
+            const newStatus = 'acceptable';
+            const currentAnswerStatus = 'wrong';
+            const rightAnswers: string[] = ['truc'];
+            const acceptableAnswers: string[] = ['bidule'];
+            const question = {
+                ...baseQuestion,
+                answer: undefined,
+                rightAnswers,
+                acceptableAnswers,
+            };
+
+            const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeMarkedAs(
+                newStatus,
+                currentAnswerStatus,
+                question,
+            );
+
+            expect(canAnswerBeMarkedAsAcceptable).toBe(false);
+        });
+
         it('should return false for acceptable if answer status is acceptable', () => {
             const newStatus = 'acceptable';
             const currentAnswerStatus = 'acceptable';
@@ -192,6 +213,27 @@ describe('computeCanAnswerBeMarkedAs', () => {
             );
 
             expect(canAnswerBeMarkedAsAcceptable).toBe(true);
+        });
+
+        it('should return false for right if answer status is wrong but answer is empty', () => {
+            const newStatus = 'right';
+            const currentAnswerStatus = 'wrong';
+            const rightAnswers: string[] = ['truc'];
+            const acceptableAnswers: string[] = ['bidule'];
+            const question = {
+                ...baseQuestion,
+                answer: undefined,
+                rightAnswers,
+                acceptableAnswers,
+            };
+
+            const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeMarkedAs(
+                newStatus,
+                currentAnswerStatus,
+                question,
+            );
+
+            expect(canAnswerBeMarkedAsAcceptable).toBe(false);
         });
 
         it('should return true for right if answer status is acceptable', () => {
