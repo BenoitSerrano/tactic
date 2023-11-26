@@ -79,6 +79,7 @@ function QuestionsAnswering(props: {
                     <ExerciseContainer
                         key={`exercise-${exercise.id}`}
                         exercise={exercise}
+                        hideMark
                         isLastItem={exerciseIndex === props.exercises.length - 1}
                     >
                         {exercise.questions.map((question, index) => (

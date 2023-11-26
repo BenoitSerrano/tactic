@@ -1,19 +1,25 @@
 import { Typography, styled } from '@mui/material';
 import { ReactNode } from 'react';
 import Markdown from 'react-markdown';
+import { computeExerciseResult } from '../lib/computeExerciseResult';
 
 function ExerciseContainer<
-    exerciseT extends { id: number; name: string; instruction: string },
->(props: { exercise: exerciseT; children: ReactNode; isLastItem: boolean }) {
+    questionT extends { points: number; mark?: number | undefined },
+    exerciseT extends { id: number; name: string; instruction: string; questions: questionT[] },
+>(props: { exercise: exerciseT; children: ReactNode; isLastItem: boolean; hideMark?: boolean }) {
+    const exerciseResult = computeExerciseResult(props.exercise, { hideMark: props.hideMark });
     const Container = props.isLastItem ? LastContainer : DefaultContainer;
     return (
         <Container key={'exercise-' + props.exercise.id}>
-            <TitleContainer>
-                <Typography variant="h3">{props.exercise.name}</Typography>
+            <ExerciseHeaderContainer>
+                <TitleContainer>
+                    <Typography variant="h3">{props.exercise.name}</Typography>
+                    <Typography variant="h4">{exerciseResult}</Typography>
+                </TitleContainer>
                 <Typography>
                     <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
                 </Typography>
-            </TitleContainer>
+            </ExerciseHeaderContainer>
             {props.children}
         </Container>
     );
@@ -34,5 +40,11 @@ const LastContainer = styled('div')(({ theme }) => ({
 }));
 
 const TitleContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(3),
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+}));
+
+const ExerciseHeaderContainer = styled('div')(({ theme }) => ({
+    flex: 1,
 }));
