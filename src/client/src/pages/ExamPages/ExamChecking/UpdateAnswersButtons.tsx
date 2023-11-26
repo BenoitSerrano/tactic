@@ -17,17 +17,16 @@ function UpdateAnswersButtons(props: {
     examId: string;
 }) {
     const { displayAlert } = useAlert();
-    const { setIsGloballyLoading } = useGlobalLoading();
+    const { updateGlobalLoading } = useGlobalLoading();
 
     const addRightAnswerMutation = useMutation({
         mutationFn: api.addQuestionRightAnswer,
         onSuccess: () => {
-            setIsGloballyLoading(false);
+            updateGlobalLoading('add-right-answer', false);
             props.refetch();
         },
         onError: (error) => {
-            setIsGloballyLoading(false);
-
+            updateGlobalLoading('add-right-answer', false);
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -39,12 +38,12 @@ function UpdateAnswersButtons(props: {
     const removeOkAnswerMutation = useMutation({
         mutationFn: api.removeOkAnswer,
         onSuccess: () => {
-            setIsGloballyLoading(false);
+            updateGlobalLoading('remove-ok-answer', false);
 
             props.refetch();
         },
         onError: (error) => {
-            setIsGloballyLoading(false);
+            updateGlobalLoading('remove-ok-answer', false);
 
             console.error(error);
             displayAlert({
@@ -57,12 +56,12 @@ function UpdateAnswersButtons(props: {
     const addAcceptableAnswerMutation = useMutation({
         mutationFn: api.addQuestionAcceptableAnswer,
         onSuccess: () => {
-            setIsGloballyLoading(false);
+            updateGlobalLoading('add-acceptable-answer', false);
 
             props.refetch();
         },
         onError: (error) => {
-            setIsGloballyLoading(false);
+            updateGlobalLoading('add-acceptable-answer', false);
 
             console.error(error);
             displayAlert({
@@ -127,7 +126,7 @@ function UpdateAnswersButtons(props: {
         if (props.question.answer === undefined) {
             return;
         }
-        setIsGloballyLoading(true);
+        updateGlobalLoading('add-right-answer', true);
 
         addRightAnswerMutation.mutate({
             examId: props.examId,
@@ -140,7 +139,7 @@ function UpdateAnswersButtons(props: {
         if (props.question.answer === undefined) {
             return;
         }
-        setIsGloballyLoading(true);
+        updateGlobalLoading('remove-ok-answer', true);
 
         removeOkAnswerMutation.mutate({
             examId: props.examId,
@@ -153,7 +152,7 @@ function UpdateAnswersButtons(props: {
         if (props.question.answer === undefined) {
             return;
         }
-        setIsGloballyLoading(true);
+        updateGlobalLoading('add-acceptable-answer', true);
 
         addAcceptableAnswerMutation.mutate({
             examId: props.examId,

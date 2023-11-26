@@ -1,20 +1,22 @@
 import { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
 
 type globalLoadingHandlerType = {
-    isGloballyLoading: boolean;
-    setIsGloballyLoading: (isGloballyLoading: boolean) => void;
+    getIsGloballyLoading: () => boolean;
+    updateGlobalLoading: (key: string, value: boolean) => void;
 };
 
+type globalLoadingType = Record<string, boolean | undefined>;
+
 const GlobalLoadingContext = createContext<globalLoadingHandlerType>({
-    isGloballyLoading: false,
-    setIsGloballyLoading: (isGloballyLoading: boolean) => null,
+    getIsGloballyLoading: () => false,
+    updateGlobalLoading: (key: string, value: boolean) => null,
 });
 
 function GlobalLoadingContextProvider(props: { children: ReactNode }): ReactElement {
-    const [isGloballyLoading, setIsGloballyLoading] = useState<boolean>(false);
+    const [globalLoading, setGlobalLoading] = useState<globalLoadingType>({});
     const globalLoadingHandler = {
-        isGloballyLoading,
-        setIsGloballyLoading,
+        getIsGloballyLoading,
+        updateGlobalLoading,
     };
 
     return (
@@ -22,6 +24,14 @@ function GlobalLoadingContextProvider(props: { children: ReactNode }): ReactElem
             {props.children}
         </GlobalLoadingContext.Provider>
     );
+
+    function getIsGloballyLoading() {
+        return Object.values(globalLoading).some((isLoading) => !!isLoading);
+    }
+
+    function updateGlobalLoading(key: string, value: boolean) {
+        setGlobalLoading({ ...globalLoading, [key]: value });
+    }
 }
 
 function useGlobalLoading() {

@@ -46,17 +46,18 @@ function QuestionsChecking(props: {
     const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
     const result = computeResult(props.exercises);
-    const { isGloballyLoading, setIsGloballyLoading } = useGlobalLoading();
+    const { getIsGloballyLoading, updateGlobalLoading } = useGlobalLoading();
+    const isGloballyLoading = getIsGloballyLoading();
     const attemptIds = searchParams.get('attemptIds') || '';
 
     const saveMarkMutation = useMutation({
         mutationFn: api.updateMark,
         onSuccess: () => {
-            setIsGloballyLoading(false);
+            updateGlobalLoading('save-mark', false);
             props.refetch();
         },
         onError: (error) => {
-            setIsGloballyLoading(false);
+            updateGlobalLoading('save-mark', false);
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -361,7 +362,7 @@ function QuestionsChecking(props: {
     function buildOnChangeCommittedSlider(questionId: number) {
         return (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => {
             if (typeof value !== 'object') {
-                setIsGloballyLoading(true);
+                updateGlobalLoading('save-mark', true);
                 saveMarkMutation.mutate({ attemptId: props.attemptId, questionId, mark: value });
             }
         };
