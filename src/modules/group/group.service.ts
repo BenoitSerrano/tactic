@@ -10,12 +10,14 @@ function buildGroupService() {
     const groupService = {
         fetchGroups,
         getGroup,
+        createGroup,
     };
 
     return groupService;
 
     async function fetchGroups(user: User | undefined) {
         if (!user) {
+            //TODO
             return [];
         }
         const groups = await groupRepository.find({
@@ -29,5 +31,18 @@ function buildGroupService() {
             where: { id: groupId },
         });
         return group;
+    }
+
+    async function createGroup(
+        criteria: { user: User | undefined },
+        params: { name: Group['name'] },
+    ) {
+        const { user } = criteria;
+        if (!user) {
+            //TODO
+            return;
+        }
+        await groupRepository.insert({ user, name: params.name });
+        return true;
     }
 }

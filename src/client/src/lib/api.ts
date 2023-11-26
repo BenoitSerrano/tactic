@@ -46,6 +46,7 @@ const api = {
     resetPassword,
     fetchAttemptsCountByCorrectionStatus,
     fetchGroups,
+    createGroup,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -418,6 +419,11 @@ async function fetchAttemptsCountByCorrectionStatus(params: { examId: string }) 
 async function fetchGroups() {
     const URL = `${BASE_URL}/groups`;
     return performApiCall(URL, 'GET');
+}
+
+async function createGroup(params: { name: string }) {
+    const URL = `${BASE_URL}/groups`;
+    return performApiCall(URL, 'POST', { name: params.name });
 }
 
 export { api };

@@ -9,7 +9,6 @@ function TestPageLayout(props: {
     children: JSX.Element[] | JSX.Element;
     buttons: JSX.Element[];
 }) {
-    console.log(props.isLoading);
     return (
         <Container>
             <TitleContainer>

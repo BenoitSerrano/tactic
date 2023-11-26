@@ -29,6 +29,7 @@ function buildStudentService() {
 
     async function getStudentsWithAttempts(groupId: Group['id'], user?: User) {
         if (!user) {
+            // TODO
             return [];
         }
         const studentsWithAttempts = await studentRepository.find({
@@ -96,6 +97,8 @@ function buildStudentService() {
     ) {
         const { user, groupId } = criteria;
         if (!user) {
+            // TODO
+
             return;
         }
         const groupService = buildGroupService();

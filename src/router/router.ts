@@ -408,8 +408,9 @@ router.get(
 
 router.post(
     '/groups',
-    buildController(groupController.fetchGroups, {
+    buildController(groupController.createGroup, {
         checkAuthorization: accessControlBuilder.isLoggedIn(),
+        schema: Joi.object({ name: Joi.string().required() }),
     }),
 );
 
