@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../../lib/api';
+import { api } from '../../../lib/api';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {
@@ -11,17 +11,13 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
-import { Loader } from '../../components/Loader';
+import { Loader } from '../../../components/Loader';
 import { useNavigate } from 'react-router-dom';
-import { pathHandler } from '../../lib/pathHandler';
+import { pathHandler } from '../../../lib/pathHandler';
 import { GroupCreationModal } from './GroupCreationModal';
 import { useState } from 'react';
-import { Menu } from '../../components/Menu';
-
-type groupApiType = {
-    id: string;
-    name: string;
-};
+import { Menu } from '../../../components/Menu';
+import { groupApiType } from '../types';
 
 function Groups() {
     const query = useQuery<groupApiType[]>({

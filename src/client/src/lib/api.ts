@@ -47,6 +47,7 @@ const api = {
     fetchAttemptsCountByCorrectionStatus,
     fetchGroups,
     createGroup,
+    changeGroup,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -424,6 +425,11 @@ async function fetchGroups() {
 async function createGroup(params: { name: string }) {
     const URL = `${BASE_URL}/groups`;
     return performApiCall(URL, 'POST', { name: params.name });
+}
+
+async function changeGroup(params: { groupId: string; studentId: string; newGroupId: string }) {
+    const URL = `${BASE_URL}/groups/${params.groupId}/students/${params.studentId}/new-group/${params.newGroupId}`;
+    return performApiCall(URL, 'PATCH');
 }
 
 export { api };

@@ -414,4 +414,12 @@ router.post(
     }),
 );
 
+//TODO
+router.patch(
+    '/groups/:groupId/students/:studentId/new-group/:newGroupId',
+    buildController(studentController.changeGroup, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
+    }),
+);
+
 export { router };

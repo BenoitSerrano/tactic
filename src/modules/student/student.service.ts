@@ -23,6 +23,7 @@ function buildStudentService() {
         fetchStudentByEmail,
         deleteStudent,
         bulkInsertStudents,
+        changeGroup,
     };
 
     return studentService;
@@ -125,5 +126,15 @@ function buildStudentService() {
 
     async function bulkInsertStudents(students: Array<Student>) {
         return studentRepository.insert(students);
+    }
+
+    async function changeGroup(
+        criteria: { studentId: Student['id'] },
+        body: { newGroupId: Group['id'] },
+    ) {
+        const groupService = buildGroupService();
+        const group = await groupService.getGroup(body.newGroupId);
+        const result = await studentRepository.update({ id: criteria.studentId }, { group });
+        return result.affected === 1;
     }
 }

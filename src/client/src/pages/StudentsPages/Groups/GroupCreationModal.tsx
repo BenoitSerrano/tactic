@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Modal } from '../../components/Modal';
-import { api } from '../../lib/api';
+import { Modal } from '../../../components/Modal';
+import { api } from '../../../lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField } from '@mui/material';
-import { useAlert } from '../../lib/alert';
+import { useAlert } from '../../../lib/alert';
 
 function GroupCreationModal(props: { close: () => void; isOpen: boolean }) {
     const queryClient = useQueryClient();

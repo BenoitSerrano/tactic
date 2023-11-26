@@ -11,6 +11,7 @@ function buildStudentController() {
         getStudentsWithAttempts,
         fetchStudentByEmail,
         deleteStudent,
+        changeGroup,
     };
 
     return studentController;
@@ -47,5 +48,12 @@ function buildStudentController() {
 
     async function deleteStudent(params: { urlParams: { studentId: string } }) {
         return studentService.deleteStudent(params.urlParams.studentId);
+    }
+
+    async function changeGroup(params: { urlParams: { studentId: string; newGroupId: string } }) {
+        return studentService.changeGroup(
+            { studentId: params.urlParams.studentId },
+            { newGroupId: params.urlParams.newGroupId },
+        );
     }
 }

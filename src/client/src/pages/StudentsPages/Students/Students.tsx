@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../lib/api';
+import { api } from '../../../lib/api';
 import {
     IconButton,
     Table,
@@ -12,14 +12,17 @@ import {
     Tooltip,
 } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import MoveDownIcon from '@mui/icons-material/MoveDown';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Loader } from '../../components/Loader';
+import { Loader } from '../../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
-import { Menu } from '../../components/Menu';
-import { time } from '../../lib/time';
-import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
-import { attemptStatusType } from '../../types';
+import { Menu } from '../../../components/Menu';
+import { time } from '../../../lib/time';
+import { computeAttemptStatusIcon } from '../../../lib/computeAttemptStatusIcon';
+import { attemptStatusType } from '../../../types';
 import { useParams } from 'react-router-dom';
+import { groupApiType } from '../types';
+import { ChangeGroupModal } from './ChangeGroupModal';
 
 type sortColumnType = 'email' | 'createdDate' | string;
 
@@ -39,9 +42,14 @@ function Students() {
     const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
 
-    const query = useQuery<studentsSummaryType>({
+    const studentsQuery = useQuery<studentsSummaryType>({
         queryKey: ['groups', groupId, 'students'],
         queryFn: () => api.fetchStudents({ groupId }),
+    });
+
+    const groupsQuery = useQuery<groupApiType[]>({
+        queryKey: ['groups'],
+        queryFn: api.fetchGroups,
     });
 
     const deleteStudentMutation = useMutation({
@@ -50,11 +58,14 @@ function Students() {
             queryClient.invalidateQueries({ queryKey: ['groups', groupId, 'students'] });
         },
     });
+    const [studentIdToChangeGroup, setStudentIdToChangeGroup] = useState<string | undefined>(
+        undefined,
+    );
     const [activeSort, setActiveSort] = useState<sortColumnType>('email');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-    if (!query.data) {
-        if (query.isLoading) {
+    if (!studentsQuery.data || !groupsQuery.data) {
+        if (studentsQuery.isLoading || groupsQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
@@ -68,11 +79,18 @@ function Students() {
         },
     ];
 
-    const sortedData = sortData(query.data.students, activeSort, sortDirection);
-
+    const sortedData = sortData(studentsQuery.data.students, activeSort, sortDirection);
+    const groupsDifferentFromCurrent = groupsQuery.data.filter((group) => group.id !== groupId);
     return (
         <>
             <Menu buttons={buttons} />
+            <ChangeGroupModal
+                groupId={groupId}
+                studentId={studentIdToChangeGroup}
+                isOpen={!!studentIdToChangeGroup}
+                groups={groupsDifferentFromCurrent}
+                close={closeGroupCreationModal}
+            />
             <Table>
                 <TableHead>
                     <TableRow>
@@ -106,7 +124,7 @@ function Students() {
                                 Date d'ajout
                             </TableSortLabel>
                         </TableCell>
-                        {Object.entries(query.data.examNames).map(([examId, examName]) => (
+                        {Object.entries(studentsQuery.data.examNames).map(([examId, examName]) => (
                             <TableCell key={'label-' + examId}>
                                 <TableSortLabel
                                     active={activeSort === examId}
@@ -129,6 +147,11 @@ function Students() {
                         <TableRow key={student.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>
+                                <Tooltip title="Changer de groupe">
+                                    <IconButton onClick={buildChangeGroupStudent(student.id)}>
+                                        <MoveDownIcon />
+                                    </IconButton>
+                                </Tooltip>
                                 <Tooltip title="Supprimer">
                                     <IconButton onClick={buildDeleteStudent(student.id)}>
                                         <DeleteForeverIcon />
@@ -139,7 +162,7 @@ function Students() {
                             <TableCell>
                                 {time.formatToReadableDatetime(student.createdDate)}
                             </TableCell>
-                            {Object.keys(query.data.examNames).map((examId) => (
+                            {Object.keys(studentsQuery.data.examNames).map((examId) => (
                                 <TableCell key={'examStatus-' + examId}>
                                     {computeAttemptStatusIcon(student.examStatus[examId])}
                                 </TableCell>
@@ -155,6 +178,12 @@ function Students() {
             />
         </>
     );
+
+    function buildChangeGroupStudent(studentId: string) {
+        return () => {
+            setStudentIdToChangeGroup(studentId);
+        };
+    }
 
     function sortData(
         data: studentsSummaryType['students'],
@@ -199,6 +228,10 @@ function Students() {
                 deleteStudentMutation.mutate(studentId);
             }
         };
+    }
+
+    function closeGroupCreationModal() {
+        setStudentIdToChangeGroup(undefined);
     }
 }
 

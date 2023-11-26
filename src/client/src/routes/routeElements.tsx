@@ -8,7 +8,7 @@ import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamQuestionsEdition } from '../pages/ExamQuestionsEdition';
 import { ExamResults } from '../pages/ExamResults';
 import { Exams } from '../pages/Exams';
-import { Groups } from '../pages/Groups';
+import { Groups } from '../pages/StudentsPages/Groups';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
 import { ResetPassword } from '../pages/ResetPassword';
@@ -18,7 +18,7 @@ import { ResetPasswordSuccess } from '../pages/ResetPasswordSuccess';
 import { SignIn } from '../pages/SignIn';
 import { StudentAuthentication } from '../pages/StudentAuthentication';
 import { StudentHome } from '../pages/StudentHome';
-import { Students } from '../pages/Students';
+import { Students } from '../pages/StudentsPages/Students';
 import { TeacherHome } from '../pages/TeacherHome';
 import { ROUTE_KEYS } from './routeKeys';
 
