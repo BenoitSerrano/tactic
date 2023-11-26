@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
+import { useGlobalLoading } from '../../../lib/globalLoading';
 
 function UpdateAnswersButtons(props: {
     canCorrectAttempt: boolean;
@@ -16,13 +17,17 @@ function UpdateAnswersButtons(props: {
     examId: string;
 }) {
     const { displayAlert } = useAlert();
+    const { setIsGloballyLoading } = useGlobalLoading();
 
     const addRightAnswerMutation = useMutation({
         mutationFn: api.addQuestionRightAnswer,
         onSuccess: () => {
+            setIsGloballyLoading(false);
             props.refetch();
         },
         onError: (error) => {
+            setIsGloballyLoading(false);
+
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -34,9 +39,13 @@ function UpdateAnswersButtons(props: {
     const removeOkAnswerMutation = useMutation({
         mutationFn: api.removeOkAnswer,
         onSuccess: () => {
+            setIsGloballyLoading(false);
+
             props.refetch();
         },
         onError: (error) => {
+            setIsGloballyLoading(false);
+
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -48,9 +57,13 @@ function UpdateAnswersButtons(props: {
     const addAcceptableAnswerMutation = useMutation({
         mutationFn: api.addQuestionAcceptableAnswer,
         onSuccess: () => {
+            setIsGloballyLoading(false);
+
             props.refetch();
         },
         onError: (error) => {
+            setIsGloballyLoading(false);
+
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -114,6 +127,8 @@ function UpdateAnswersButtons(props: {
         if (props.question.answer === undefined) {
             return;
         }
+        setIsGloballyLoading(true);
+
         addRightAnswerMutation.mutate({
             examId: props.examId,
             questionId: props.question.id,
@@ -125,6 +140,8 @@ function UpdateAnswersButtons(props: {
         if (props.question.answer === undefined) {
             return;
         }
+        setIsGloballyLoading(true);
+
         removeOkAnswerMutation.mutate({
             examId: props.examId,
             questionId: props.question.id,
@@ -136,6 +153,8 @@ function UpdateAnswersButtons(props: {
         if (props.question.answer === undefined) {
             return;
         }
+        setIsGloballyLoading(true);
+
         addAcceptableAnswerMutation.mutate({
             examId: props.examId,
             questionId: props.question.id,

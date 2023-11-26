@@ -25,6 +25,7 @@ import { attemptsCountByAttemptStatusApiType } from './types';
 import { AttemptsCount } from './AttemptsCount';
 import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';
+import { useGlobalLoading } from '../../../lib/globalLoading';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -45,14 +46,17 @@ function QuestionsChecking(props: {
     const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
     const result = computeResult(props.exercises);
+    const { isGloballyLoading, setIsGloballyLoading } = useGlobalLoading();
     const attemptIds = searchParams.get('attemptIds') || '';
 
     const saveMarkMutation = useMutation({
         mutationFn: api.updateMark,
         onSuccess: () => {
+            setIsGloballyLoading(false);
             props.refetch();
         },
         onError: (error) => {
+            setIsGloballyLoading(false);
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -148,6 +152,7 @@ function QuestionsChecking(props: {
             title={props.examName}
             buttons={UpdateCorrectedAtButton ? [UpdateCorrectedAtButton] : []}
             result={result}
+            isLoading={isGloballyLoading}
         >
             <>
                 <LeftArrowContainer>
@@ -356,6 +361,7 @@ function QuestionsChecking(props: {
     function buildOnChangeCommittedSlider(questionId: number) {
         return (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => {
             if (typeof value !== 'object') {
+                setIsGloballyLoading(true);
                 saveMarkMutation.mutate({ attemptId: props.attemptId, questionId, mark: value });
             }
         };

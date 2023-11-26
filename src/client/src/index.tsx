@@ -14,6 +14,7 @@ import { AlertHandlerContextProvider } from './lib/alert';
 import { eventHandler } from './lib/eventHandler';
 import { cheatingHandler } from './lib/cheatingHandler';
 import { pathHandler } from './lib/pathHandler';
+import { GlobalLoadingContextProvider } from './lib/globalLoading';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const queryClient = new QueryClient();
@@ -24,9 +25,11 @@ root.render(
         <StyledBody>
             <QueryClientProvider client={queryClient}>
                 <AlertHandlerContextProvider>
-                    <BrowserRouter>
-                        <Router />
-                    </BrowserRouter>
+                    <GlobalLoadingContextProvider>
+                        <BrowserRouter>
+                            <Router />
+                        </BrowserRouter>
+                    </GlobalLoadingContextProvider>
                 </AlertHandlerContextProvider>
             </QueryClientProvider>
         </StyledBody>
