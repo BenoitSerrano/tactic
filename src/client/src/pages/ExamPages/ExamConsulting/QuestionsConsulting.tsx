@@ -26,8 +26,12 @@ function QuestionsConsulting(props: {
             result={result}
         >
             <>
-                {props.exercises.map((exercise) => (
-                    <ExerciseContainer key={`exercise-${exercise.id}`} exercise={exercise}>
+                {props.exercises.map((exercise, exerciseIndex) => (
+                    <ExerciseContainer
+                        key={`exercise-${exercise.id}`}
+                        exercise={exercise}
+                        isLastItem={exerciseIndex === props.exercises.length - 1}
+                    >
                         {exercise.questions.map((question, index: number) => {
                             const mark = manualQuestionKinds.includes(question.kind)
                                 ? marks.manual[question.id]

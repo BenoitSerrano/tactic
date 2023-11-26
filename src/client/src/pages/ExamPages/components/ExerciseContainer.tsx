@@ -4,7 +4,8 @@ import Markdown from 'react-markdown';
 
 function ExerciseContainer<
     exerciseT extends { id: number; name: string; instruction: string },
->(props: { exercise: exerciseT; children: ReactNode }) {
+>(props: { exercise: exerciseT; children: ReactNode; isLastItem: boolean }) {
+    const Container = props.isLastItem ? LastContainer : DefaultContainer;
     return (
         <Container key={'exercise-' + props.exercise.id}>
             <TitleContainer>
@@ -20,11 +21,16 @@ function ExerciseContainer<
 
 export { ExerciseContainer };
 
-const Container = styled('div')(({ theme }) => ({
+const DefaultContainer = styled('div')(({ theme }) => ({
     userSelect: 'none',
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(2),
     borderBottom: `1px solid ${theme.palette.common.black}`,
+}));
+
+const LastContainer = styled('div')(({ theme }) => ({
+    userSelect: 'none',
+    marginTop: theme.spacing(2),
 }));
 
 const TitleContainer = styled('div')(({ theme }) => ({

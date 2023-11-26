@@ -192,8 +192,12 @@ function QuestionsChecking(props: {
                     title="La copie actuelle n'est pas marquée comme corrigée"
                     text="Souhaitez-vous la marquer comme corrigée avant d'accéder à la copie suivante ?"
                 />
-                {props.exercises.map((exercise) => (
-                    <ExerciseContainer key={'exercise-' + exercise.id} exercise={exercise}>
+                {props.exercises.map((exercise, exerciseIndex) => (
+                    <ExerciseContainer
+                        key={'exercise-' + exercise.id}
+                        exercise={exercise}
+                        isLastItem={exerciseIndex === props.exercises.length - 1}
+                    >
                         {exercise.questions.map((question, index: number) => {
                             const mark = manualQuestionKinds.includes(question.kind)
                                 ? manualMarks[question.id]
