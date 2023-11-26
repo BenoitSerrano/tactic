@@ -6,6 +6,8 @@ import { studentAdaptator } from './student.adaptator';
 import { mapEntities } from '../../lib/mapEntities';
 import { hasher } from '../../lib/hasher';
 import { Exam, buildExamService } from '../exam';
+import { Group } from '../group';
+import { buildGroupService } from '../group/group.service';
 
 export { buildStudentService };
 
@@ -25,11 +27,22 @@ function buildStudentService() {
 
     return studentService;
 
-    async function getStudentsWithAttempts(user?: User) {
+    async function getStudentsWithAttempts(groupId: Group['id'], user?: User) {
+        if (!user) {
+            return [];
+        }
         const studentsWithAttempts = await studentRepository.find({
-            where: { user },
-            select: { attempts: { id: true, startedAt: true, endedAt: true, exam: { id: true } } },
-            relations: ['attempts', 'attempts.exam'],
+            where: { user, group: { id: groupId } },
+            select: {
+                attempts: {
+                    id: true,
+                    startedAt: true,
+                    endedAt: true,
+                    exam: { id: true },
+                },
+                group: { id: true },
+            },
+            relations: ['attempts', 'attempts.exam', 'group'],
         });
         const examIds: Array<Exam['id']> = [];
         for (const student of studentsWithAttempts) {
@@ -77,14 +90,21 @@ function buildStudentService() {
         });
     }
 
-    async function createStudents(emails: string[], user?: User) {
+    async function createStudents(
+        criteria: { user?: User; groupId: Group['id'] },
+        emails: string[],
+    ) {
+        const { user, groupId } = criteria;
         if (!user) {
             return;
         }
+        const groupService = buildGroupService();
+        const group = await groupService.getGroup(groupId);
         const students = emails.map((email) => {
             const student = new Student();
             student.email = email.trim().toLowerCase();
             student.user = user;
+            student.group = group;
             return student;
         });
         return studentRepository.upsert(students, ['email', 'user']);

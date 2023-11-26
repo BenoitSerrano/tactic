@@ -44,7 +44,8 @@ const api = {
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
     resetPassword,
-    getAttemptsCountByCorrectionStatus,
+    fetchAttemptsCountByCorrectionStatus,
+    fetchGroups,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -203,14 +204,14 @@ async function deleteStudent(studentId: string) {
     return performApiCall(URL, 'DELETE');
 }
 
-async function fetchStudents() {
-    const URL = `${BASE_URL}/students`;
+async function fetchStudents(params: { groupId: string }) {
+    const URL = `${BASE_URL}/groups/${params.groupId}/students`;
     return performApiCall(URL, 'GET');
 }
 
-async function createStudents(emails: string[]) {
-    const URL = `${BASE_URL}/student-list`;
-    return performApiCall(URL, 'POST', { emails });
+async function createStudents(params: { emails: string[]; groupId: string }) {
+    const URL = `${BASE_URL}/groups/${params.groupId}/students`;
+    return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
 async function fetchExams() {
@@ -409,8 +410,13 @@ async function updateExercisesOrder(params: {
     });
 }
 
-async function getAttemptsCountByCorrectionStatus(params: { examId: string }) {
+async function fetchAttemptsCountByCorrectionStatus(params: { examId: string }) {
     const URL = `${BASE_URL}/exams/${params.examId}/attempts/count-by-correction-status`;
+    return performApiCall(URL, 'GET');
+}
+
+async function fetchGroups() {
+    const URL = `${BASE_URL}/groups`;
     return performApiCall(URL, 'GET');
 }
 

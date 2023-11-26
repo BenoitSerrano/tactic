@@ -19,6 +19,7 @@ import { Menu } from '../../components/Menu';
 import { time } from '../../lib/time';
 import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
 import { attemptStatusType } from '../../types';
+import { useParams } from 'react-router-dom';
 
 type sortColumnType = 'email' | 'createdDate' | string;
 
@@ -33,18 +34,20 @@ type studentsSummaryType = {
 };
 
 function Students() {
+    const params = useParams();
+    const groupId = params.groupId as string;
     const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const query = useQuery<studentsSummaryType>({
-        queryKey: ['students'],
-        queryFn: api.fetchStudents,
+        queryKey: ['groups', groupId, 'students'],
+        queryFn: () => api.fetchStudents({ groupId }),
     });
 
     const deleteStudentMutation = useMutation({
         mutationFn: api.deleteStudent,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['students'] });
+            queryClient.invalidateQueries({ queryKey: ['groups', groupId, 'students'] });
         },
     });
     const [activeSort, setActiveSort] = useState<sortColumnType>('email');
@@ -146,6 +149,7 @@ function Students() {
                 </TableBody>
             </Table>
             <StudentsCreationModal
+                groupId={groupId}
                 isOpen={isStudentsCreationModalOpen}
                 close={() => setIsStudentsCreationModalOpen(false)}
             />

@@ -6,7 +6,7 @@ import { TextField, Typography, styled } from '@mui/material';
 import { useAlert } from '../../lib/alert';
 import { extractEmailsFromEmailList } from './lib/extractEmailsFromEmailList';
 
-function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
+function StudentsCreationModal(props: { close: () => void; isOpen: boolean; groupId: string }) {
     const [emailList, setEmailList] = useState('');
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
@@ -16,7 +16,7 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
         mutationFn: api.createStudents,
         onSuccess: () => {
             setEmailList('');
-            queryClient.invalidateQueries({ queryKey: ['students'] });
+            queryClient.invalidateQueries({ queryKey: ['groups', props.groupId, 'students'] });
             displayAlert({
                 text: `Les ${emails.length} élèves ont bien été importés`,
                 variant: 'success',
@@ -50,7 +50,7 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean }) {
     );
 
     async function importStudentEmails() {
-        createStudentsMutation.mutate(emails);
+        createStudentsMutation.mutate({ groupId: props.groupId, emails });
     }
 }
 const HintContainer = styled('div')(({ theme }) => ({

@@ -8,7 +8,7 @@ function TeacherHome() {
     return (
         <Container>
             <ItemContainer>
-                <Link to={pathHandler.getRoutePath('STUDENTS')}>
+                <Link to={pathHandler.getRoutePath('GROUPS')}>
                     <LinkContent>
                         <Diversity3Icon fontSize="large" />
                         <Typography>Vos étudiants</Typography>

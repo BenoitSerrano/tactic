@@ -16,7 +16,7 @@ function ExamChecking() {
         queryFn: () => api.fetchAttemptWithAnswers(attemptId),
     });
     const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
-        queryFn: () => api.getAttemptsCountByCorrectionStatus({ examId }),
+        queryFn: () => api.fetchAttemptsCountByCorrectionStatus({ examId }),
         queryKey: ['attempts-count-by-attempt-status', examId],
     });
 

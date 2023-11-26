@@ -9,6 +9,7 @@ import { buildUserController } from '../modules/user';
 import { accessControlBuilder } from '../lib/accessControlBuilder';
 import { buildExerciseController } from '../modules/exercise';
 import { buildResetPasswordRequestController } from '../modules/resetPasswordRequest';
+import { buildGroupController } from '../modules/group/group.controller';
 
 const router = Express.Router();
 const examController = buildExamController();
@@ -18,12 +19,14 @@ const questionController = buildQuestionController();
 const attemptController = buildAttemptController();
 const exerciseController = buildExerciseController();
 const resetPasswordRequestController = buildResetPasswordRequestController();
+const groupController = buildGroupController();
 
 router.post('/users', buildController(userController.createUser));
 router.post('/login', buildController(userController.login));
 
+//TODO vérifier que le user a accès à ce groupe
 router.get(
-    '/students',
+    '/groups/:groupId/students',
     buildController(studentController.getStudentsWithAttempts, {
         checkAuthorization: accessControlBuilder.isLoggedIn(),
     }),
@@ -47,8 +50,9 @@ router.delete(
 
 router.get('/students/:email', buildController(studentController.fetchStudentByEmail));
 
+// TODO: vérifier que le user a accès à ce groupe
 router.post(
-    '/student-list',
+    '/groups/:groupId/students',
     buildController(studentController.createStudents, {
         checkAuthorization: accessControlBuilder.isLoggedIn(),
         schema: Joi.object({
@@ -278,7 +282,7 @@ router.put(
 
 router.get(
     '/exams/:examId/attempts/count-by-correction-status',
-    buildController(attemptController.getAttemptsCountByCorrectionStatus, {
+    buildController(attemptController.fetchAttemptsCountByCorrectionStatus, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -392,6 +396,13 @@ router.patch(
     '/reset-password-requests/:resetPasswordRequestId/user/password',
     buildController(resetPasswordRequestController.resetPassword, {
         schema: Joi.object({ password: Joi.string().required() }),
+    }),
+);
+
+router.get(
+    '/groups',
+    buildController(groupController.getGroups, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
     }),
 );
 

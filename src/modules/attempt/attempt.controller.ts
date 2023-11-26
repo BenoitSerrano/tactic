@@ -19,7 +19,7 @@ function buildAttemptController() {
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
         deleteAttemptCorrectedAt,
-        getAttemptsCountByCorrectionStatus,
+        fetchAttemptsCountByCorrectionStatus,
     };
 
     return attemptController;
@@ -85,7 +85,7 @@ function buildAttemptController() {
         return attemptService.deleteAttemptCorrectedAt(params.urlParams.attemptId);
     }
 
-    async function getAttemptsCountByCorrectionStatus(params: { urlParams: { examId: string } }) {
-        return attemptService.getAttemptsCountByCorrectionStatus(params.urlParams.examId);
+    async function fetchAttemptsCountByCorrectionStatus(params: { urlParams: { examId: string } }) {
+        return attemptService.fetchAttemptsCountByCorrectionStatus(params.urlParams.examId);
     }
 }

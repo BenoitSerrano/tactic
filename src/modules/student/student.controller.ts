@@ -15,8 +15,14 @@ function buildStudentController() {
 
     return studentController;
 
-    async function createStudents(params: { body: { emails: string[] } }, user?: User) {
-        return studentService.createStudents(params.body.emails, user);
+    async function createStudents(
+        params: { urlParams: { groupId: string }; body: { emails: string[] } },
+        user?: User,
+    ) {
+        return studentService.createStudents(
+            { user, groupId: params.urlParams.groupId },
+            params.body.emails,
+        );
     }
 
     async function patchStudent(params: {
@@ -28,8 +34,11 @@ function buildStudentController() {
         });
     }
 
-    async function getStudentsWithAttempts(_params: {}, user?: User) {
-        return studentService.getStudentsWithAttempts(user);
+    async function getStudentsWithAttempts(
+        params: { urlParams: { groupId: string } },
+        user?: User,
+    ) {
+        return studentService.getStudentsWithAttempts(params.urlParams.groupId, user);
     }
 
     async function fetchStudentByEmail(params: { urlParams: { email: string } }) {

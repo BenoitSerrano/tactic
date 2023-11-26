@@ -8,6 +8,7 @@ import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamQuestionsEdition } from '../pages/ExamQuestionsEdition';
 import { ExamResults } from '../pages/ExamResults';
 import { Exams } from '../pages/Exams';
+import { Groups } from '../pages/Groups';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
 import { ResetPassword } from '../pages/ResetPassword';
@@ -92,6 +93,7 @@ const ROUTE_ELEMENTS: Record<
         element: <ExamChecking />,
     },
     TEACHER_HOME: { isAdmin: true, element: <TeacherHome /> },
+    GROUPS: { isAdmin: true, element: <Groups /> },
 };
 
 export { ROUTE_ELEMENTS };

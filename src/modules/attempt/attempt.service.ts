@@ -34,7 +34,7 @@ function buildAttemptService() {
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
         deleteAttemptCorrectedAt,
-        getAttemptsCountByCorrectionStatus,
+        fetchAttemptsCountByCorrectionStatus,
     };
 
     return attemptService;
@@ -269,7 +269,7 @@ function buildAttemptService() {
         }
     }
 
-    async function getAttemptsCountByCorrectionStatus(examId: Exam['id']) {
+    async function fetchAttemptsCountByCorrectionStatus(examId: Exam['id']) {
         const attempts = await attemptRepository.find({
             select: {
                 id: true,
