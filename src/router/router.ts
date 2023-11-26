@@ -401,7 +401,14 @@ router.patch(
 
 router.get(
     '/groups',
-    buildController(groupController.getGroups, {
+    buildController(groupController.fetchGroups, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
+    }),
+);
+
+router.post(
+    '/groups',
+    buildController(groupController.fetchGroups, {
         checkAuthorization: accessControlBuilder.isLoggedIn(),
     }),
 );

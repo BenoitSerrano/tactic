@@ -6,12 +6,12 @@ export { buildGroupController };
 function buildGroupController() {
     const groupService = buildGroupService();
     const groupController = {
-        getGroups,
+        fetchGroups,
     };
 
     return groupController;
 
-    async function getGroups(_params: {}, user?: User) {
-        return groupService.getGroups(user);
+    async function fetchGroups(_params: {}, user?: User) {
+        return groupService.fetchGroups(user);
     }
 }

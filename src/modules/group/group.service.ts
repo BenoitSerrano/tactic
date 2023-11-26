@@ -8,13 +8,13 @@ function buildGroupService() {
     const groupRepository = dataSource.getRepository(Group);
 
     const groupService = {
-        getGroups,
+        fetchGroups,
         getGroup,
     };
 
     return groupService;
 
-    async function getGroups(user: User | undefined) {
+    async function fetchGroups(user: User | undefined) {
         if (!user) {
             return [];
         }
