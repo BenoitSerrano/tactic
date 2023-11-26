@@ -18,7 +18,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { extractMarks, manualMarksType } from '../lib/extractMarks';
 import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
-import { ExerciseTitle } from '../components/ExerciseTitle';
 import { pathHandler } from '../../../lib/pathHandler';
 import { LoadingButton } from '@mui/lab';
 import { attemptsCountByAttemptStatusApiType } from './types';
@@ -26,6 +25,7 @@ import { AttemptsCount } from './AttemptsCount';
 import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';
 import { useGlobalLoading } from '../../../lib/globalLoading';
+import { ExerciseContainer } from '../components/ExerciseContainer';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -193,8 +193,7 @@ function QuestionsChecking(props: {
                     text="Souhaitez-vous la marquer comme corrigée avant d'accéder à la copie suivante ?"
                 />
                 {props.exercises.map((exercise) => (
-                    <ExerciseContainer key={'exercise-' + exercise.id}>
-                        <ExerciseTitle exercise={exercise} />
+                    <ExerciseContainer key={'exercise-' + exercise.id} exercise={exercise}>
                         {exercise.questions.map((question, index: number) => {
                             const mark = manualQuestionKinds.includes(question.kind)
                                 ? manualMarks[question.id]
@@ -426,12 +425,6 @@ const QuestionIndicatorContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'baseline',
 });
-
-const ExerciseContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(2),
-    borderBottom: `1px solid ${theme.palette.common.black}`,
-}));
 
 const MarkSliderContainer = styled('div')(({ theme }) => ({
     display: 'flex',

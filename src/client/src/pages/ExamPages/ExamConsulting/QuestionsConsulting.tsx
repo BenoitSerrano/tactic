@@ -6,7 +6,7 @@ import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { extractMarks } from '../lib/extractMarks';
 import { QuestionChecking } from '../ExamChecking/QuestionChecking';
-import { ExerciseTitle } from '../components/ExerciseTitle';
+import { ExerciseContainer } from '../components/ExerciseContainer';
 
 function QuestionsConsulting(props: {
     exercises: Array<exerciseWithAnswersType>;
@@ -27,8 +27,7 @@ function QuestionsConsulting(props: {
         >
             <>
                 {props.exercises.map((exercise) => (
-                    <ExerciseContainer key={exercise.id}>
-                        <ExerciseTitle exercise={exercise} />
+                    <ExerciseContainer key={`exercise-${exercise.id}`} exercise={exercise}>
                         {exercise.questions.map((question, index: number) => {
                             const mark = manualQuestionKinds.includes(question.kind)
                                 ? marks.manual[question.id]
@@ -71,12 +70,6 @@ const QuestionIndicatorContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'baseline',
 });
-
-const ExerciseContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(2),
-    borderBottom: `1px solid ${theme.palette.common.black}`,
-}));
 
 const QuestionIndicatorsContainer = styled('div')({});
 

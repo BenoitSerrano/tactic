@@ -1,9 +1,9 @@
 import { Typography, styled } from '@mui/material';
 import { TestPageLayout } from '../components/TestPageLayout';
-import { ExerciseTitle } from '../components/ExerciseTitle';
 import { useState } from 'react';
 import { QuestionAnswering } from '../components/QuestionAnswering';
 import { exerciseWithoutAnswersType } from '../types';
+import { ExerciseContainer } from '../components/ExerciseContainer';
 
 function QuestionsPreviewing(props: {
     title: string;
@@ -15,8 +15,7 @@ function QuestionsPreviewing(props: {
         <>
             <TestPageLayout studentEmail="-" title={props.title} buttons={[]}>
                 {props.exercises.map((exercise) => (
-                    <ExerciseContainer key={`exercise-${exercise.id}`}>
-                        <ExerciseTitle exercise={exercise} />
+                    <ExerciseContainer key={`exercise-${exercise.id}`} exercise={exercise}>
                         {exercise.questions.map((question, index) => (
                             <QuestionContainer key={`question-${question.id}`}>
                                 <QuestionIndicatorsContainer>
@@ -53,13 +52,6 @@ const QuestionContainer = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
     display: 'flex',
-}));
-
-const ExerciseContainer = styled('div')(({ theme }) => ({
-    userSelect: 'none',
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(2),
-    borderBottom: `1px solid ${theme.palette.common.black}`,
 }));
 
 export { QuestionsPreviewing };
