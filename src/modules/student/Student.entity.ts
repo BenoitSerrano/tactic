@@ -10,6 +10,7 @@ import {
 import { StudentInterface } from './student.interface';
 import { AttemptInterface } from '../attempt/attempt.interface';
 import { User } from '../user';
+import { Group } from '../group';
 
 @Entity()
 @Unique('Students are unique by teacher', ['email', 'user'])
@@ -26,8 +27,11 @@ export class Student implements StudentInterface {
     @OneToMany('Attempt', 'student')
     attempts: AttemptInterface[];
 
-    @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
-    user?: User;
+    @ManyToOne(() => User, { onDelete: 'CASCADE' })
+    user: User;
+
+    @ManyToOne(() => Group, { onDelete: 'CASCADE', nullable: false })
+    group: Group;
 
     @CreateDateColumn()
     createdDate: string;

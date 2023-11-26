@@ -78,6 +78,9 @@ function buildStudentService() {
     }
 
     async function createStudents(emails: string[], user?: User) {
+        if (!user) {
+            return;
+        }
         const students = emails.map((email) => {
             const student = new Student();
             student.email = email.trim().toLowerCase();
