@@ -49,7 +49,7 @@ function Groups() {
                     <TableRow key={group.id}>
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
-                            <Tooltip title="Accéder à la liste des questions">
+                            <Tooltip title="Accéder à la liste des étudiants">
                                 <IconButton onClick={buildNavigateToStudents(group.id)}>
                                     <FormatListBulletedIcon />
                                 </IconButton>
