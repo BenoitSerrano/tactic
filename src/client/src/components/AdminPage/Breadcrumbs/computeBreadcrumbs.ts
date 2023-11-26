@@ -43,9 +43,16 @@ function computeBreadcrumbs(pathname: string): Array<{ label: string; href?: str
                 return breadcrumbs;
             }
         }
-    } else if (path[1] === 'students') {
-        const studentsHref = path.length > 2 ? `/${path.slice(0, 2).join('/')}` : undefined;
-        breadcrumbs.push({ label: 'Liste des étudiants', href: studentsHref });
+    } else if (path[1] === 'groups') {
+        const groupsHref = path.length > 2 ? `/${path.slice(0, 2).join('/')}` : undefined;
+        breadcrumbs.push({ label: 'Mes groupes', href: groupsHref });
+        if (path.length <= 3) {
+            return breadcrumbs;
+        }
+        if (path[3] === 'students') {
+            breadcrumbs.push({ label: 'Liste des étudiants' });
+            return breadcrumbs;
+        }
     }
 
     return breadcrumbs;
