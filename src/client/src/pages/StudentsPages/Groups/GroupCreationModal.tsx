@@ -13,6 +13,7 @@ function GroupCreationModal(props: { close: () => void; isOpen: boolean }) {
     const createGroupMutation = useMutation({
         mutationFn: api.createGroup,
         onSuccess: () => {
+            setName('');
             queryClient.invalidateQueries({ queryKey: ['groups'] });
             displayAlert({
                 text: `Le groupe "${name}" a bien été créé`,
