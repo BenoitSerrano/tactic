@@ -166,6 +166,9 @@ function QuestionsChecking(props: {
                 />
                 <Dialog
                     buttons={[
+                        <Button onClick={() => setAttemptIdToNavigateTo(undefined)}>
+                            Non, rester
+                        </Button>,
                         <Button
                             onClick={() => {
                                 if (attemptIdToNavigateTo) {
@@ -174,7 +177,7 @@ function QuestionsChecking(props: {
                                 }
                             }}
                         >
-                            Non
+                            Non, copie suivante
                         </Button>,
                         <Button
                             variant="contained"
@@ -184,13 +187,13 @@ function QuestionsChecking(props: {
                             }
                             autoFocus
                         >
-                            Oui, marquer cette copie comme corrigée
+                            Oui, marquer comme corrigée
                         </Button>,
                     ]}
                     isOpen={isConfirmAccessAnotherAttemptDialogOpen}
                     onClose={() => setAttemptIdToNavigateTo(undefined)}
                     title="La copie actuelle n'est pas marquée comme corrigée"
-                    text="Souhaitez-vous la marquer comme corrigée avant d'accéder à la copie suivante ?"
+                    text="Souhaitez-vous la marquer comme corrigée avant d'aller à la copie suivante ?"
                 />
                 {props.exercises.map((exercise, exerciseIndex) => (
                     <ExerciseContainer
