@@ -147,11 +147,13 @@ function Students() {
                         <TableRow key={student.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>
-                                <Tooltip title="Changer de groupe">
-                                    <IconButton onClick={buildChangeGroupStudent(student.id)}>
-                                        <MoveDownIcon />
-                                    </IconButton>
-                                </Tooltip>
+                                {groupsDifferentFromCurrent.length > 0 && (
+                                    <Tooltip title="Changer de groupe">
+                                        <IconButton onClick={buildChangeGroupStudent(student.id)}>
+                                            <MoveDownIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
                                 <Tooltip title="Supprimer">
                                     <IconButton onClick={buildDeleteStudent(student.id)}>
                                         <DeleteForeverIcon />
