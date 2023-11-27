@@ -11,6 +11,7 @@ function buildGroupService() {
         fetchGroups,
         getGroup,
         createGroup,
+        deleteGroup,
     };
 
     return groupService;
@@ -44,5 +45,10 @@ function buildGroupService() {
         }
         await groupRepository.insert({ user, name: params.name });
         return true;
+    }
+
+    async function deleteGroup(criteria: { groupId: Group['id'] }) {
+        const result = await groupRepository.delete({ id: criteria.groupId });
+        return result.affected == 1;
     }
 }

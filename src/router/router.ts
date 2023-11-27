@@ -414,10 +414,18 @@ router.post(
     }),
 );
 
-//TODO
+// TODO
 router.patch(
     '/groups/:groupId/students/:studentId/new-group/:newGroupId',
     buildController(studentController.changeGroup, {
+        checkAuthorization: accessControlBuilder.isLoggedIn(),
+    }),
+);
+
+// TODO
+router.delete(
+    '/groups/:groupId',
+    buildController(groupController.deleteGroup, {
         checkAuthorization: accessControlBuilder.isLoggedIn(),
     }),
 );

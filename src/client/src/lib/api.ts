@@ -47,6 +47,7 @@ const api = {
     fetchAttemptsCountByCorrectionStatus,
     fetchGroups,
     createGroup,
+    deleteGroup,
     changeGroup,
 };
 
@@ -425,6 +426,11 @@ async function fetchGroups() {
 async function createGroup(params: { name: string }) {
     const URL = `${BASE_URL}/groups`;
     return performApiCall(URL, 'POST', { name: params.name });
+}
+
+async function deleteGroup(params: { groupId: string }) {
+    const URL = `${BASE_URL}/groups/${params.groupId}`;
+    return performApiCall(URL, 'DELETE');
 }
 
 async function changeGroup(params: { groupId: string; studentId: string; newGroupId: string }) {

@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../lib/api';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {
     IconButton,
@@ -18,14 +19,30 @@ import { GroupCreationModal } from './GroupCreationModal';
 import { useState } from 'react';
 import { Menu } from '../../../components/Menu';
 import { groupApiType } from '../types';
+import { useAlert } from '../../../lib/alert';
 
 function Groups() {
     const query = useQuery<groupApiType[]>({
         queryKey: ['groups'],
         queryFn: api.fetchGroups,
     });
+    const { displayAlert } = useAlert();
+    const queryClient = useQueryClient();
     const [isGroupCreationModalOpen, setIsGroupCreationModalOpen] = useState(false);
-
+    const deleteGroupMutation = useMutation({
+        mutationFn: api.deleteGroup,
+        onSuccess: () => {
+            displayAlert({ variant: 'success', text: 'Le groupe a été supprimé.' });
+            queryClient.invalidateQueries({ queryKey: ['groups'] });
+        },
+        onError: (error) => {
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. Le groupe n'a pas pu être supprimé.",
+            });
+        },
+    });
     const navigate = useNavigate();
 
     if (!query.data) {
@@ -48,7 +65,6 @@ function Groups() {
         <>
             <GroupCreationModal isOpen={isGroupCreationModalOpen} close={closeGroupCreationModal} />
             <Menu buttons={buttons} />
-
             <Table>
                 <TableHead>
                     <TableRow>
@@ -65,6 +81,11 @@ function Groups() {
                                 <Tooltip title="Accéder à la liste des étudiants">
                                     <IconButton onClick={buildNavigateToStudents(group.id)}>
                                         <FormatListBulletedIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Supprimer le groupe">
+                                    <IconButton onClick={buildDeleteGroup(group.id)}>
+                                        <DeleteForeverIcon />
                                     </IconButton>
                                 </Tooltip>
                             </TableCell>
@@ -87,6 +108,18 @@ function Groups() {
     function buildNavigateToStudents(groupId: string) {
         return () => {
             navigate(pathHandler.getRoutePath('STUDENTS', { groupId }));
+        };
+    }
+
+    function buildDeleteGroup(groupId: string) {
+        return () => {
+            // eslint-disable-next-line no-restricted-globals
+            const hasConfirmed = confirm(
+                'Souhaitez-vous réellement supprimer ce groupe ? Les étudiants et leurs résultats aux examens seront supprimés.',
+            );
+            if (hasConfirmed) {
+                deleteGroupMutation.mutate({ groupId });
+            }
         };
     }
 }
