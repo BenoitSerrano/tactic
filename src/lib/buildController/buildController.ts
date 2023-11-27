@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import Joi from 'joi';
-import { User } from '../modules/user';
-import { signer } from './signer';
-import { dataSource } from '../dataSource';
+import { User } from '../../modules/user';
+import { signer } from '../signer';
+import { dataSource } from '../../dataSource';
 
 export { buildController };
 
