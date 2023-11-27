@@ -432,6 +432,7 @@ router.patch(
     buildAuthenticatedController(studentController.changeGroup, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'group', key: 'groupId' },
+            { entity: 'group', key: 'newGroupId' },
         ]),
     }),
 );
