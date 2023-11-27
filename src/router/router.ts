@@ -347,10 +347,16 @@ router.delete(
 );
 
 // TODO vérifier le format en entrée
-// TODO s'assurer que l'user a bien accès à cette ressource
 router.patch(
-    '/attempts/:attemptId/:questionId/mark',
-    buildAuthenticatedController(attemptController.updateMark),
+    '/exams/:examId/attempts/:attemptId/questions/:questionId/mark',
+    buildAuthenticatedController(attemptController.updateMark, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
 );
 router.patch(
     '/attempts/:attemptId/endedAt',

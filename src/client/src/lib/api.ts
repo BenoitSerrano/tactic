@@ -365,8 +365,13 @@ async function updateQuestionsOrder(params: {
     });
 }
 
-async function updateMark(params: { attemptId: string; questionId: number; mark: number }) {
-    const URL = `${BASE_URL}/attempts/${params.attemptId}/${params.questionId}/mark`;
+async function updateMark(params: {
+    examId: string;
+    attemptId: string;
+    questionId: number;
+    mark: number;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/mark`;
     return performApiCall(URL, 'PATCH', {
         mark: params.mark,
     });

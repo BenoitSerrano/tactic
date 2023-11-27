@@ -69,7 +69,7 @@ function QuestionsChecking(props: {
     const lockAttemptMutation = useMutation({
         mutationFn: api.updateEndedAt,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['examResults'] });
+            queryClient.invalidateQueries({ queryKey: ['exam-results'] });
             displayAlert({
                 variant: 'success',
                 text: "L'examen a bien été terminé pour cet étudiant. Il ne pourra plus modifier sa copie, et vous pouvez maintenant la corriger",
@@ -369,7 +369,12 @@ function QuestionsChecking(props: {
         return (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => {
             if (typeof value !== 'object') {
                 updateGlobalLoading('save-mark', true);
-                saveMarkMutation.mutate({ attemptId: props.attemptId, questionId, mark: value });
+                saveMarkMutation.mutate({
+                    examId: props.examId,
+                    attemptId: props.attemptId,
+                    questionId,
+                    mark: value,
+                });
             }
         };
     }
