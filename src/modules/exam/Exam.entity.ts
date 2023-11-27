@@ -11,8 +11,8 @@ export class Exam {
     @Column()
     name: string;
 
-    @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
-    user?: User;
+    @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: false })
+    user: User;
 
     @OneToMany(() => Exercise, (exercise) => exercise.exam)
     exercises: Exercise[];

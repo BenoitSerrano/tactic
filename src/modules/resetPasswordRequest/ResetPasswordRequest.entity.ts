@@ -6,7 +6,7 @@ export class ResetPasswordRequest {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @ManyToOne(() => User, { onDelete: 'CASCADE' })
+    @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: false })
     user: User;
 
     @CreateDateColumn({ type: 'timestamptz' })

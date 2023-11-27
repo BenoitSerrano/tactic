@@ -22,10 +22,10 @@ export class Attempt implements AttemptInterface {
     @Column({ type: 'timestamptz', nullable: true })
     updatedAt: string;
 
-    @ManyToOne('Student', { onDelete: 'CASCADE' })
+    @ManyToOne('Student', { onDelete: 'CASCADE', nullable: false })
     student: StudentInterface;
 
-    @ManyToOne(() => Exam, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Exam, { onDelete: 'CASCADE', nullable: false })
     exam: Exam;
 
     @Column({ default: 0 })
