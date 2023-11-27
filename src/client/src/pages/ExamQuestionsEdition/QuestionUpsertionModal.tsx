@@ -9,6 +9,7 @@ import { questionKindType, questionKinds } from '../../types';
 import { questionUpsertionModalContentComponentMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
+import { computeInitialModalQuestionKind } from './lib/computeInitialModalQuestionKind';
 
 function QuestionUpsertionModal(props: {
     close: () => void;
@@ -20,9 +21,12 @@ function QuestionUpsertionModal(props: {
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
-    const [currentQuestionKind, setCurrentQuestionKind] = useState<questionKindType>(
+    const initialQuestionKind = computeInitialModalQuestionKind(
+        props.modalStatus,
         props.defaultQuestionKind,
     );
+    const [currentQuestionKind, setCurrentQuestionKind] =
+        useState<questionKindType>(initialQuestionKind);
 
     const updateQuestionMutation = useMutation({
         mutationFn: api.updateQuestion,
