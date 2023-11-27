@@ -105,8 +105,8 @@ async function createAttempt({ examId, studentId }: { examId: string; studentId:
     return performApiCall(URL, 'POST', {});
 }
 
-async function fetchAttemptWithAnswers(attemptId: string) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/with-answers`;
+async function fetchAttemptWithAnswers(params: { examId: string; attemptId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/with-answers`;
     return performApiCall(URL, 'GET');
 }
 
@@ -186,8 +186,8 @@ async function updateAttemptCheatingSummary({
     return performApiCall(URL, 'PATCH', { roundTrips, timeSpentOutside });
 }
 
-async function deleteAttempt(attemptId: string) {
-    const URL = `${BASE_URL}/attempts/${attemptId}`;
+async function deleteAttempt(params: { attemptId: string; examId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}`;
     return performApiCall(URL, 'DELETE');
 }
 

@@ -294,10 +294,16 @@ router.post(
     buildController(attemptController.createAttempt),
 );
 
-//TODO
 router.get(
-    '/attempts/:attemptId/with-answers',
-    buildController(attemptController.fetchAttemptWithAnswers),
+    '/exams/:examId/attempts/:attemptId/with-answers',
+    buildController(attemptController.fetchAttemptWithAnswers, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
 );
 router.get(
     '/attempts/:attemptId/without-answers',
@@ -324,8 +330,17 @@ router.patch(
     }),
 );
 
-// TODO: check user
-router.delete('/attempts/:attemptId', buildController(attemptController.deleteAttempt));
+router.delete(
+    '/exams/:examId/attempts/:attemptId',
+    buildController(attemptController.deleteAttempt, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    }),
+);
 
 // TODO vérifier le format en entrée
 router.patch(

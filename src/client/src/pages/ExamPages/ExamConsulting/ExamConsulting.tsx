@@ -13,7 +13,7 @@ function ExamConsulting() {
     const examId = params.examId as string;
     const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
         queryKey: ['attempts', attemptId],
-        queryFn: () => api.fetchAttemptWithAnswers(attemptId),
+        queryFn: () => api.fetchAttemptWithAnswers({ examId, attemptId }),
     });
 
     if (!attemptWithAnswersQuery.data) {

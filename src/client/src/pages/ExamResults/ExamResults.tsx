@@ -251,7 +251,7 @@ function ExamResults() {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm('Souhaitez-vous réellement réinitialiser ce test ?');
             if (hasConfirmed) {
-                deleteAttemptMutation.mutate(attemptId);
+                deleteAttemptMutation.mutate({ attemptId, examId });
             }
         };
     }
