@@ -15,9 +15,9 @@ function hasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: 
                         where: { id: examId },
                         relations: ['user'],
                     });
-                    if (exam.user?.id !== user.id) {
+                    if (exam.user.id !== user.id) {
                         throw new Error(
-                            `exam.user.id "${exam.user?.id}" does not match user.id ${user.id}`,
+                            `exam.user.id "${exam.user.id}" does not match user.id ${user.id}`,
                         );
                     }
                     break;
