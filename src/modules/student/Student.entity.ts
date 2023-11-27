@@ -9,11 +9,10 @@ import {
 } from 'typeorm';
 import { StudentInterface } from './student.interface';
 import { AttemptInterface } from '../attempt/attempt.interface';
-import { User } from '../user';
 import { Group } from '../group';
 
 @Entity()
-@Unique('Students are unique by teacher', ['email', 'user'])
+@Unique('Students are unique by teacher', ['email', 'group'])
 export class Student implements StudentInterface {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -21,14 +20,8 @@ export class Student implements StudentInterface {
     @Column({ default: '' })
     email: string;
 
-    @Column({ nullable: true })
-    comment?: string;
-
     @OneToMany('Attempt', 'student')
     attempts: AttemptInterface[];
-
-    @ManyToOne(() => User, { onDelete: 'CASCADE' })
-    user: User;
 
     @ManyToOne(() => Group, { onDelete: 'CASCADE', nullable: false })
     group: Group;

@@ -227,7 +227,7 @@ function Students() {
                 'Souhaitez-vous réellement supprimer cet élève ? Tous ses résultats aux tests seront également supprimés.',
             );
             if (hasConfirmed) {
-                deleteStudentMutation.mutate(studentId);
+                deleteStudentMutation.mutate({ studentId, groupId });
             }
         };
     }

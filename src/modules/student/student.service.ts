@@ -15,10 +15,8 @@ function buildStudentService() {
     const studentRepository = dataSource.getRepository(Student);
 
     const studentService = {
-        patchStudent,
         createStudents,
         getStudents,
-        getAllAnonymizedStudents,
         getStudentsWithAttempts,
         fetchStudentByEmail,
         deleteStudent,
@@ -34,7 +32,7 @@ function buildStudentService() {
             return [];
         }
         const studentsWithAttempts = await studentRepository.find({
-            where: { user, group: { id: groupId } },
+            where: { group: { id: groupId } },
             select: {
                 attempts: {
                     id: true,
@@ -73,17 +71,6 @@ function buildStudentService() {
         }, {} as Record<string, Student>);
     }
 
-    async function getAllAnonymizedStudents() {
-        const students = await studentRepository.find({
-            relations: ['user'],
-            select: { user: { id: true } },
-        });
-
-        return mapEntities(
-            students.map((student) => ({ ...student, email: hasher.hash(student.email) })),
-        );
-    }
-
     async function fetchStudentByEmail(email: string) {
         return studentRepository.findOneOrFail({
             where: { email: email.trim().toLowerCase() },
@@ -99,7 +86,6 @@ function buildStudentService() {
         const { user, groupId } = criteria;
         if (!user) {
             // TODO
-
             return;
         }
         const groupService = buildGroupService();
@@ -107,16 +93,10 @@ function buildStudentService() {
         const students = emails.map((email) => {
             const student = new Student();
             student.email = email.trim().toLowerCase();
-            student.user = user;
             student.group = group;
             return student;
         });
         return studentRepository.upsert(students, ['email', 'user']);
-    }
-
-    async function patchStudent(studentId: Student['id'], { comment }: { comment: string }) {
-        const result = await studentRepository.update({ id: studentId }, { comment });
-        return result.affected == 1;
     }
 
     async function deleteStudent(studentId: Student['id']) {

@@ -1,9 +1,9 @@
 import { dataSource } from '../dataSource';
 import { Exam } from '../modules/exam';
-import { Student } from '../modules/student';
+import { Group } from '../modules/group';
 import { User } from '../modules/user';
 
-function hasAccessToResources(resources: Array<{ entity: 'exam' | 'student'; key: string }>) {
+function hasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: string }>) {
     return async (params: Record<string, string>, user: User) => {
         for (const resource of resources) {
             const { entity, key } = resource;
@@ -21,16 +21,16 @@ function hasAccessToResources(resources: Array<{ entity: 'exam' | 'student'; key
                         );
                     }
                     break;
-                case 'student':
-                    const studentId = params[key];
-                    const studentRepository = dataSource.getRepository(Student);
-                    const student = await studentRepository.findOneOrFail({
-                        where: { id: studentId },
+                case 'group':
+                    const groupId = params[key];
+                    const groupRepository = dataSource.getRepository(Group);
+                    const group = await groupRepository.findOneOrFail({
+                        where: { id: groupId },
                         relations: ['user'],
                     });
-                    if (student.user?.id !== user.id) {
+                    if (group.user.id !== user.id) {
                         throw new Error(
-                            `student.user.id "${student.user?.id}" does not match user.id ${user.id}`,
+                            `group.user.id "${group.user.id}" does not match user.id ${user.id}`,
                         );
                     }
                     break;

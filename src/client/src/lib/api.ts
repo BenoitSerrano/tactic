@@ -5,7 +5,6 @@ import { localStorage } from './localStorage';
 const api = {
     login,
     createUser,
-    patchComment,
     searchAttempt,
     createAttempt,
     fetchAttemptWithAnswers,
@@ -94,11 +93,6 @@ async function createUser(params: { email: string; password: string }) {
 async function login(params: { email: string; password: string }) {
     const URL = `${BASE_URL}/login`;
     return performApiCall(URL, 'POST', { email: params.email, password: params.password });
-}
-
-async function patchComment(studentId: string, comment: string) {
-    const URL = `${BASE_URL}/students/${studentId}`;
-    return performApiCall(URL, 'PATCH', { comment });
 }
 
 async function searchAttempt({ examId, studentId }: { examId: string; studentId: string }) {
@@ -202,8 +196,8 @@ async function fetchStudentByEmail(email: string) {
     return performApiCall(URL, 'GET');
 }
 
-async function deleteStudent(studentId: string) {
-    const URL = `${BASE_URL}/students/${studentId}`;
+async function deleteStudent(params: { studentId: string; groupId: string }) {
+    const URL = `${BASE_URL}/groups/${params.groupId}/students/${params.studentId}`;
     return performApiCall(URL, 'DELETE');
 }
 

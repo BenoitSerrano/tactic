@@ -24,37 +24,32 @@ const groupController = buildGroupController();
 router.post('/users', buildController(userController.createUser));
 router.post('/login', buildController(userController.login));
 
-//TODO vérifier que le user a accès à ce groupe
 router.get(
     '/groups/:groupId/students',
     buildController(studentController.getStudentsWithAttempts, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'group', key: 'groupId' },
+        ]),
     }),
 );
-router.patch(
-    '/students/:studentId',
-    buildController(studentController.patchStudent, {
-        schema: Joi.object({
-            comment: Joi.string().required(),
-        }),
-    }),
-);
+
 router.delete(
-    '/students/:studentId',
+    '/groups/:groupId/students/:studentId',
     buildController(studentController.deleteStudent, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
-            { entity: 'student', key: 'studentId' },
+            { entity: 'group', key: 'groupId' },
         ]),
     }),
 );
 
 router.get('/students/:email', buildController(studentController.fetchStudentByEmail));
 
-// TODO: vérifier que le user a accès à ce groupe
 router.post(
     '/groups/:groupId/students',
     buildController(studentController.createStudents, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'group', key: 'groupId' },
+        ]),
         schema: Joi.object({
             emails: Joi.array().items(Joi.string()),
         }),
@@ -212,6 +207,9 @@ router.patch(
 router.post(
     `/exams/:examId/exercises`,
     buildController(exerciseController.createExercise, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'exam', key: 'examId' },
+        ]),
         schema: Joi.object({
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
@@ -224,6 +222,9 @@ router.post(
 router.put(
     `/exams/:examId/exercises/:exerciseId`,
     buildController(exerciseController.updateExercise, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'exam', key: 'examId' },
+        ]),
         schema: Joi.object({
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
@@ -236,22 +237,16 @@ router.delete(
     `/exams/:examId/exercises/:exerciseId`,
     buildController(exerciseController.deleteExercise, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
+            { entity: 'exam', key: 'examId' },
         ]),
     }),
 );
 
 router.patch(
-    `/exams/:examId/exercises/:exerciseId/questions/order/`,
+    `/exams/:examId/exercises/:exerciseId/questions/order`,
     buildController(questionController.updateQuestionsOrder, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
+            { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
             orders: Joi.array().items(
@@ -262,13 +257,10 @@ router.patch(
 );
 
 router.put(
-    '/exams/:examId/exercises/:exerciseId/questions/:questionId/',
+    '/exams/:examId/exercises/:exerciseId/questions/:questionId',
     buildController(questionController.updateQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
+            { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
             title: Joi.string(),
@@ -302,6 +294,7 @@ router.post(
     buildController(attemptController.createAttempt),
 );
 
+//TODO
 router.get(
     '/attempts/:attemptId/with-answers',
     buildController(attemptController.fetchAttemptWithAnswers),
@@ -414,19 +407,21 @@ router.post(
     }),
 );
 
-// TODO
 router.patch(
     '/groups/:groupId/students/:studentId/new-group/:newGroupId',
     buildController(studentController.changeGroup, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'group', key: 'groupId' },
+        ]),
     }),
 );
 
-// TODO
 router.delete(
     '/groups/:groupId',
     buildController(groupController.deleteGroup, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'group', key: 'groupId' },
+        ]),
     }),
 );
 
