@@ -39,13 +39,8 @@ function hasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: 
     };
 }
 
-function isLoggedIn() {
-    return () => {};
-}
-
 const accessControlBuilder = {
     hasAccessToResources,
-    isLoggedIn,
 };
 
 export { accessControlBuilder };

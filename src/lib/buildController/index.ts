@@ -1,3 +1,4 @@
-import { buildController } from './buildController';
+import { buildAnonymousController } from './buildAnonymousController';
+import { buildAuthenticatedController } from './buildAuthenticatedController';
 
-export { buildController };
+export { buildAnonymousController, buildAuthenticatedController };

@@ -1,4 +1,3 @@
-import { Exam } from '../exam';
 import { Question } from './Question.entity';
 import { buildQuestionService } from './question.service';
 

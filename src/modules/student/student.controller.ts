@@ -15,21 +15,18 @@ function buildStudentController() {
 
     return studentController;
 
-    async function createStudents(
-        params: { urlParams: { groupId: string }; body: { emails: string[] } },
-        user?: User,
-    ) {
+    async function createStudents(params: {
+        urlParams: { groupId: string };
+        body: { emails: string[] };
+    }) {
         return studentService.createStudents(
-            { user, groupId: params.urlParams.groupId },
+            { groupId: params.urlParams.groupId },
             params.body.emails,
         );
     }
 
-    async function getStudentsWithAttempts(
-        params: { urlParams: { groupId: string } },
-        user?: User,
-    ) {
-        return studentService.getStudentsWithAttempts(params.urlParams.groupId, user);
+    async function getStudentsWithAttempts(params: { urlParams: { groupId: string } }) {
+        return studentService.getStudentsWithAttempts(params.urlParams.groupId);
     }
 
     async function fetchStudentByEmail(params: { urlParams: { email: string } }) {

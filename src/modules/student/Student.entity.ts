@@ -12,7 +12,7 @@ import { AttemptInterface } from '../attempt/attempt.interface';
 import { Group } from '../group';
 
 @Entity()
-@Unique('Students are unique by teacher', ['email', 'group'])
+@Unique('Students are unique by group', ['email', 'group'])
 export class Student implements StudentInterface {
     @PrimaryGeneratedColumn('uuid')
     id: string;

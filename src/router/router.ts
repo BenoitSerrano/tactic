@@ -1,6 +1,6 @@
 import Express from 'express';
 import Joi from 'joi';
-import { buildController } from '../lib/buildController';
+import { buildAnonymousController, buildAuthenticatedController } from '../lib/buildController';
 import { buildExamController } from '../modules/exam';
 import { buildStudentController } from '../modules/student';
 import { buildAttemptController } from '../modules/attempt';
@@ -21,12 +21,12 @@ const exerciseController = buildExerciseController();
 const resetPasswordRequestController = buildResetPasswordRequestController();
 const groupController = buildGroupController();
 
-router.post('/users', buildController(userController.createUser));
-router.post('/login', buildController(userController.login));
+router.post('/users', buildAnonymousController(userController.createUser));
+router.post('/login', buildAnonymousController(userController.login));
 
 router.get(
     '/groups/:groupId/students',
-    buildController(studentController.getStudentsWithAttempts, {
+    buildAuthenticatedController(studentController.getStudentsWithAttempts, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
@@ -35,18 +35,18 @@ router.get(
 
 router.delete(
     '/groups/:groupId/students/:studentId',
-    buildController(studentController.deleteStudent, {
+    buildAuthenticatedController(studentController.deleteStudent, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
     }),
 );
 
-router.get('/students/:email', buildController(studentController.fetchStudentByEmail));
+router.get('/students/:email', buildAnonymousController(studentController.fetchStudentByEmail));
 
 router.post(
     '/groups/:groupId/students',
-    buildController(studentController.createStudents, {
+    buildAuthenticatedController(studentController.createStudents, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
@@ -56,29 +56,27 @@ router.post(
     }),
 );
 
-router.get(
-    '/exams',
-    buildController(examController.getExams, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
-    }),
-);
+router.get('/exams', buildAuthenticatedController(examController.getExams));
 
-router.get('/all-exams', buildController(examController.getAllExams));
+router.get('/all-exams', buildAnonymousController(examController.getAllExams));
 
 router.delete(
     '/exams/:examId',
-    buildController(examController.deleteExam, {
+    buildAuthenticatedController(examController.deleteExam, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
     }),
 );
 
-router.get('/exams/:examId', buildController(examController.getExam));
-router.get('/exams/:examId/without-answers', buildController(examController.getExamWithoutAnswers));
+router.get('/exams/:examId', buildAnonymousController(examController.getExam));
+router.get(
+    '/exams/:examId/without-answers',
+    buildAnonymousController(examController.getExamWithoutAnswers),
+);
 router.get(
     '/exams/:examId/results',
-    buildController(examController.getExamResults, {
+    buildAuthenticatedController(examController.getExamResults, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -90,8 +88,7 @@ router.get(
 
 router.post(
     '/exams',
-    buildController(examController.createExam, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
+    buildAuthenticatedController(examController.createExam, {
         schema: Joi.object({
             name: Joi.string().required(),
             duration: Joi.number().required(),
@@ -101,7 +98,7 @@ router.post(
 
 router.put(
     '/exams/:examId',
-    buildController(examController.updateExam, {
+    buildAuthenticatedController(examController.updateExam, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -117,7 +114,7 @@ router.put(
 
 router.post(
     '/exams/:examId/questions/:questionId/right-answers',
-    buildController(questionController.addQuestionRightAnswer, {
+    buildAuthenticatedController(questionController.addQuestionRightAnswer, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -130,7 +127,7 @@ router.post(
 
 router.post(
     '/exams/:examId/questions/:questionId/acceptable-answers',
-    buildController(questionController.addQuestionAcceptableAnswer, {
+    buildAuthenticatedController(questionController.addQuestionAcceptableAnswer, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -143,7 +140,7 @@ router.post(
 
 router.delete(
     '/exams/:examId/questions/:questionId/ok-answers',
-    buildController(questionController.removeOkAnswer, {
+    buildAuthenticatedController(questionController.removeOkAnswer, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -156,7 +153,7 @@ router.delete(
 
 router.post(
     '/exams/:examId/exercises/:exerciseId/questions',
-    buildController(questionController.createQuestion, {
+    buildAuthenticatedController(questionController.createQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -176,7 +173,7 @@ router.post(
 
 router.delete(
     `/exams/:examId/questions/:questionId`,
-    buildController(questionController.deleteQuestion, {
+    buildAuthenticatedController(questionController.deleteQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -186,10 +183,17 @@ router.delete(
     }),
 );
 
-router.get(`/exams/:examId/exercises/:exerciseId`, buildController(exerciseController.getExercise));
+router.get(
+    `/exams/:examId/exercises/:exerciseId`,
+    buildAuthenticatedController(exerciseController.getExercise, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'exam', key: 'examId' },
+        ]),
+    }),
+);
 router.patch(
     `/exams/:examId/exercises/order`,
-    buildController(exerciseController.updateExercisesOrder, {
+    buildAuthenticatedController(exerciseController.updateExercisesOrder, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -206,7 +210,7 @@ router.patch(
 
 router.post(
     `/exams/:examId/exercises`,
-    buildController(exerciseController.createExercise, {
+    buildAuthenticatedController(exerciseController.createExercise, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
@@ -221,7 +225,7 @@ router.post(
 
 router.put(
     `/exams/:examId/exercises/:exerciseId`,
-    buildController(exerciseController.updateExercise, {
+    buildAuthenticatedController(exerciseController.updateExercise, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
@@ -235,7 +239,7 @@ router.put(
 
 router.delete(
     `/exams/:examId/exercises/:exerciseId`,
-    buildController(exerciseController.deleteExercise, {
+    buildAuthenticatedController(exerciseController.deleteExercise, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
@@ -244,7 +248,7 @@ router.delete(
 
 router.patch(
     `/exams/:examId/exercises/:exerciseId/questions/order`,
-    buildController(questionController.updateQuestionsOrder, {
+    buildAuthenticatedController(questionController.updateQuestionsOrder, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
@@ -258,7 +262,7 @@ router.patch(
 
 router.put(
     '/exams/:examId/exercises/:exerciseId/questions/:questionId',
-    buildController(questionController.updateQuestion, {
+    buildAuthenticatedController(questionController.updateQuestion, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
@@ -274,7 +278,7 @@ router.put(
 
 router.get(
     '/exams/:examId/attempts/count-by-correction-status',
-    buildController(attemptController.fetchAttemptsCountByCorrectionStatus, {
+    buildAuthenticatedController(attemptController.fetchAttemptsCountByCorrectionStatus, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -286,17 +290,17 @@ router.get(
 
 router.get(
     '/exams/:examId/students/:studentId/attempts',
-    buildController(attemptController.searchAttempts),
+    buildAnonymousController(attemptController.searchAttempts),
 );
 
 router.post(
     '/exams/:examId/students/:studentId/attempts',
-    buildController(attemptController.createAttempt),
+    buildAnonymousController(attemptController.createAttempt),
 );
 
 router.get(
     '/exams/:examId/attempts/:attemptId/with-answers',
-    buildController(attemptController.fetchAttemptWithAnswers, {
+    buildAuthenticatedController(attemptController.fetchAttemptWithAnswers, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -307,12 +311,12 @@ router.get(
 );
 router.get(
     '/attempts/:attemptId/without-answers',
-    buildController(attemptController.fetchAttemptWithoutAnswers),
+    buildAnonymousController(attemptController.fetchAttemptWithoutAnswers),
 );
 
 router.put(
     '/attempts/:attemptId',
-    buildController(attemptController.updateAttempt, {
+    buildAnonymousController(attemptController.updateAttempt, {
         schema: Joi.object<Record<string, string>>({}).pattern(
             Joi.string().allow(''),
             Joi.string().allow(''),
@@ -322,7 +326,7 @@ router.put(
 
 router.patch(
     '/attempts/:attemptId/cheating-summary',
-    buildController(attemptController.updateAttemptCheatingSummary, {
+    buildAnonymousController(attemptController.updateAttemptCheatingSummary, {
         schema: Joi.object({
             roundTrips: Joi.number().required(),
             timeSpentOutside: Joi.number().required(),
@@ -332,7 +336,7 @@ router.patch(
 
 router.delete(
     '/exams/:examId/attempts/:attemptId',
-    buildController(attemptController.deleteAttempt, {
+    buildAuthenticatedController(attemptController.deleteAttempt, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -343,18 +347,19 @@ router.delete(
 );
 
 // TODO vérifier le format en entrée
+// TODO s'assurer que l'user a bien accès à cette ressource
 router.patch(
     '/attempts/:attemptId/:questionId/mark',
-    buildController(attemptController.updateMark),
+    buildAuthenticatedController(attemptController.updateMark),
 );
 router.patch(
     '/attempts/:attemptId/endedAt',
-    buildController(attemptController.updateAttemptEndedAt),
+    buildAnonymousController(attemptController.updateAttemptEndedAt),
 );
 
 router.delete(
     '/exams/:examId/attempts/:attemptId/endedAt',
-    buildController(attemptController.deleteAttemptEndedAt, {
+    buildAuthenticatedController(attemptController.deleteAttemptEndedAt, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -366,7 +371,7 @@ router.delete(
 
 router.patch(
     '/exams/:examId/attempts/:attemptId/correctedAt',
-    buildController(attemptController.updateAttemptCorrectedAt, {
+    buildAuthenticatedController(attemptController.updateAttemptCorrectedAt, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -378,7 +383,7 @@ router.patch(
 
 router.delete(
     '/exams/:examId/attempts/:attemptId/correctedAt',
-    buildController(attemptController.deleteAttemptCorrectedAt, {
+    buildAuthenticatedController(attemptController.deleteAttemptCorrectedAt, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -390,41 +395,35 @@ router.delete(
 
 router.post(
     '/reset-password-requests',
-    buildController(resetPasswordRequestController.createResetPasswordRequest, {
+    buildAnonymousController(resetPasswordRequestController.createResetPasswordRequest, {
         schema: Joi.object({ email: Joi.string().required() }),
     }),
 );
 
 router.get(
     '/reset-password-requests/:resetPasswordRequestId/user',
-    buildController(resetPasswordRequestController.fetchResetPasswordRequestUser),
+    buildAnonymousController(resetPasswordRequestController.fetchResetPasswordRequestUser),
 );
 
 router.patch(
     '/reset-password-requests/:resetPasswordRequestId/user/password',
-    buildController(resetPasswordRequestController.resetPassword, {
+    buildAnonymousController(resetPasswordRequestController.resetPassword, {
         schema: Joi.object({ password: Joi.string().required() }),
     }),
 );
 
-router.get(
-    '/groups',
-    buildController(groupController.fetchGroups, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
-    }),
-);
+router.get('/groups', buildAuthenticatedController(groupController.fetchGroups));
 
 router.post(
     '/groups',
-    buildController(groupController.createGroup, {
-        checkAuthorization: accessControlBuilder.isLoggedIn(),
+    buildAuthenticatedController(groupController.createGroup, {
         schema: Joi.object({ name: Joi.string().required() }),
     }),
 );
 
 router.patch(
     '/groups/:groupId/students/:studentId/new-group/:newGroupId',
-    buildController(studentController.changeGroup, {
+    buildAuthenticatedController(studentController.changeGroup, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
@@ -433,7 +432,7 @@ router.patch(
 
 router.delete(
     '/groups/:groupId',
-    buildController(groupController.deleteGroup, {
+    buildAuthenticatedController(groupController.deleteGroup, {
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),

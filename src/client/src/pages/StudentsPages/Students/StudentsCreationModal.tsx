@@ -18,10 +18,16 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean; grou
             setEmailList('');
             queryClient.invalidateQueries({ queryKey: ['groups', props.groupId, 'students'] });
             displayAlert({
-                text: `Les ${emails.length} élèves ont bien été importés`,
+                text: `Les ${emails.length} étudiants ont bien été importés`,
                 variant: 'success',
             });
             props.close();
+        },
+        onError: () => {
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. Les étudiants n'ont pas pu être importés.",
+            });
         },
     });
     return (

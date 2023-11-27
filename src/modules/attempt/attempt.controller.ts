@@ -1,4 +1,3 @@
-import { Question } from '../question';
 import { buildAttemptService } from './attempt.service';
 import { attemptAnswersType } from './types';
 

@@ -26,11 +26,7 @@ function buildStudentService() {
 
     return studentService;
 
-    async function getStudentsWithAttempts(groupId: Group['id'], user?: User) {
-        if (!user) {
-            // TODO
-            return [];
-        }
+    async function getStudentsWithAttempts(groupId: Group['id']) {
         const studentsWithAttempts = await studentRepository.find({
             where: { group: { id: groupId } },
             select: {
@@ -79,15 +75,9 @@ function buildStudentService() {
         });
     }
 
-    async function createStudents(
-        criteria: { user?: User; groupId: Group['id'] },
-        emails: string[],
-    ) {
-        const { user, groupId } = criteria;
-        if (!user) {
-            // TODO
-            return;
-        }
+    async function createStudents(criteria: { groupId: Group['id'] }, emails: string[]) {
+        const { groupId } = criteria;
+
         const groupService = buildGroupService();
         const group = await groupService.getGroup(groupId);
         const students = emails.map((email) => {
@@ -96,7 +86,7 @@ function buildStudentService() {
             student.group = group;
             return student;
         });
-        return studentRepository.upsert(students, ['email', 'user']);
+        return studentRepository.upsert(students, ['email', 'group']);
     }
 
     async function deleteStudent(studentId: Student['id']) {

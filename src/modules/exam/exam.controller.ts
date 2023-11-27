@@ -23,7 +23,7 @@ function buildExamController() {
         params: {
             body: { name: string; duration: number; extraTime: number };
         },
-        user?: User,
+        user: User,
     ) {
         return examService.createExam(params.body.name, params.body.duration, user);
     }
@@ -38,7 +38,7 @@ function buildExamController() {
         });
     }
 
-    async function getExams(_params: {}, user?: User) {
+    async function getExams(_params: {}, user: User) {
         return examService.getExams(user);
     }
 

@@ -13,11 +13,11 @@ function buildGroupController() {
 
     return groupController;
 
-    async function fetchGroups(_params: {}, user?: User) {
+    async function fetchGroups(_params: {}, user: User) {
         return groupService.fetchGroups(user);
     }
 
-    async function createGroup(params: { body: { name: string } }, user?: User) {
+    async function createGroup(params: { body: { name: string } }, user: User) {
         return groupService.createGroup({ user }, { name: params.body.name });
     }
 
