@@ -12,11 +12,12 @@ function extractMarks(exercises: Array<exerciseWithAnswersType>) {
     return questions.reduce(
         (acc, question) => {
             if (manualQuestionKinds.includes(question.kind)) {
+                const mark = !!question.answer ? question.mark : question.mark || 0;
                 return {
                     ...acc,
                     manual: {
                         ...acc.manual,
-                        [question.id]: question.mark || 0,
+                        [question.id]: mark,
                     },
                 };
             } else {
