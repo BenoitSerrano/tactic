@@ -3,6 +3,7 @@ import { exerciseWithAnswersType, questionWithAnswersType } from '../types';
 
 type marksType = { manual: manualMarksType; automatic: Record<number, number> };
 type manualMarksType = Record<number, number | undefined>;
+
 function extractMarks(exercises: Array<exerciseWithAnswersType>) {
     const questions: Array<questionWithAnswersType> = [];
     for (const exercise of exercises) {
@@ -15,7 +16,7 @@ function extractMarks(exercises: Array<exerciseWithAnswersType>) {
                     ...acc,
                     manual: {
                         ...acc.manual,
-                        [question.id]: question.mark,
+                        [question.id]: question.mark || 0,
                     },
                 };
             } else {
