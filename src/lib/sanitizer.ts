@@ -8,10 +8,10 @@ function sanitizeString(value: string) {
         .filter(Boolean)
         .join(' ')
         .toLowerCase()
+        .replace(/’/g, "'")
         .replace(/ ?' ?/g, "'")
         .replace(/é/g, 'é')
         .replace(/ê/g, 'ê')
-        .replace(/’/g, "'")
         .replace(/\.$/, '');
 }
 

@@ -229,4 +229,20 @@ describe('computeAutomaticMark', () => {
 
         expect(mark).toBe(60);
     });
+
+    it('should return right for match modulo apostrophe and space before', () => {
+        const answer = 'it ’s still nice you can get on with an ex if boyfriend';
+        const questionKind = 'questionTrou';
+        const rightAnswers = ["it 's still nice you can get on with an ex if boyfriend"];
+        const acceptableAnswers: string[] = [];
+        const mark = computeAutomaticMark({
+            questionKind,
+            points,
+            answer,
+            rightAnswers,
+            acceptableAnswers,
+        });
+
+        expect(mark).toBe(60);
+    });
 });
