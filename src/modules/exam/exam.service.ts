@@ -7,6 +7,7 @@ import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
 import { In } from 'typeorm';
 import { computeSumPoints } from './lib/computeSumPoints';
+import { buildExerciseService } from '../exercise';
 
 export { buildExamService };
 
@@ -24,7 +25,7 @@ function buildExamService() {
         getExamsByIds,
         deleteExam,
         getExamResults,
-        bulkInsertExams,
+        duplicateExam,
     };
 
     return examService;
@@ -202,7 +203,21 @@ function buildExamService() {
         return exams;
     }
 
-    async function bulkInsertExams(exams: Array<Exam>) {
-        return examRepository.insert(exams);
+    async function duplicateExam(criteria: { examId: Exam['id']; user: User }) {
+        const exerciseService = buildExerciseService();
+        const { id, exercises, attempts, ...partialExam } = await examRepository.findOneOrFail({
+            where: { id: criteria.examId, user: criteria.user },
+            relations: ['exercises', 'exercises.questions', 'user'],
+        });
+
+        const result = await examRepository.insert({
+            ...partialExam,
+            name: `Copie de ${partialExam.name}`,
+        });
+        const newExamId = result.identifiers[0].id;
+        const newExam = await examRepository.findOneOrFail({ where: { id: newExamId } });
+        await exerciseService.duplicateExercises(newExam, exercises);
+
+        return newExam;
     }
 }

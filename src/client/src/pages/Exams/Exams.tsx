@@ -44,6 +44,23 @@ function Exams() {
             queryClient.invalidateQueries({ queryKey: ['exams'] });
         },
     });
+    const duplicateExamMutation = useMutation({
+        mutationFn: api.duplicateExam,
+        onSuccess: (exam) => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen "${exam.name}" a bien été dupliqué`,
+            });
+            queryClient.invalidateQueries({ queryKey: ['exams'] });
+        },
+        onError: (error) => {
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. L'examen n'a pas pu être dupliqué",
+            });
+        },
+    });
 
     return (
         <>
@@ -94,7 +111,7 @@ function Exams() {
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Dupliquer l'examen">
-                                    <IconButton onClick={() => {}}>
+                                    <IconButton onClick={buildDuplicateExam(exam.id)}>
                                         <ScannerIcon />
                                     </IconButton>
                                 </Tooltip>
@@ -163,6 +180,12 @@ function Exams() {
                 text: 'Le lien a bien été copié dans le presse-papiers',
                 variant: 'success',
             });
+        };
+    }
+
+    function buildDuplicateExam(examId: string) {
+        return () => {
+            duplicateExamMutation.mutate({ examId });
         };
     }
 

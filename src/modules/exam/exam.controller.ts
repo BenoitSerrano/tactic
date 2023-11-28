@@ -15,6 +15,7 @@ function buildExamController() {
         getAllExams,
         getExamResults,
         deleteExam,
+        duplicateExam,
     };
 
     return examController;
@@ -60,5 +61,9 @@ function buildExamController() {
 
     async function deleteExam(params: { urlParams: { examId: string } }) {
         return examService.deleteExam(params.urlParams.examId);
+    }
+
+    async function duplicateExam(params: { urlParams: { examId: string } }, user: User) {
+        return examService.duplicateExam({ examId: params.urlParams.examId, user });
     }
 }

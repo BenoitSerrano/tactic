@@ -48,6 +48,7 @@ const api = {
     createGroup,
     deleteGroup,
     changeGroup,
+    duplicateExam,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -435,6 +436,11 @@ async function deleteGroup(params: { groupId: string }) {
 async function changeGroup(params: { groupId: string; studentId: string; newGroupId: string }) {
     const URL = `${BASE_URL}/groups/${params.groupId}/students/${params.studentId}/new-group/${params.newGroupId}`;
     return performApiCall(URL, 'PATCH');
+}
+
+async function duplicateExam(params: { examId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/duplicate`;
+    return performApiCall(URL, 'POST');
 }
 
 export { api };

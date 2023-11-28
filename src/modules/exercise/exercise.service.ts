@@ -15,6 +15,7 @@ function buildExerciseService() {
         deleteExercise,
         updateExercisesOrder,
         getExamId,
+        duplicateExercises,
     };
 
     return exerciseService;
@@ -108,5 +109,21 @@ function buildExerciseService() {
 
         const result = await exerciseRepository.delete({ id: exerciseId });
         return result.affected == 1;
+    }
+
+    async function duplicateExercises(newExam: Exam, exercises: Exercise[]) {
+        const questionService = buildQuestionService();
+        const newExercises = exercises.map((exercise) => ({
+            ...exercise,
+            exam: newExam,
+        }));
+        for (const newExercise of newExercises) {
+            const result = await exerciseRepository.insert(newExercise);
+            const newExerciseId = result.identifiers[0].id;
+            await questionService.duplicateQuestions(
+                { ...newExercise, id: newExerciseId },
+                newExercise.questions,
+            );
+        }
     }
 }
