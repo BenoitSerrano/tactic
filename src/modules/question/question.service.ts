@@ -24,6 +24,7 @@ function buildQuestionService() {
         decodeQuestion: questionEncoder.decodeQuestion,
         encodeQuestion: questionEncoder.encodeQuestion,
         getQuestionIds,
+        duplicateQuestions,
     };
 
     return questionService;
@@ -160,5 +161,13 @@ function buildQuestionService() {
             select: { id: true, exercise: { id: true } },
         });
         return questions.map(({ id }) => id);
+    }
+
+    async function duplicateQuestions(newExercise: Exercise, questions: Question[]) {
+        const newQuestions = questions.map((question) => ({
+            ...question,
+            exercise: newExercise,
+        }));
+        return questionRepository.insert(newQuestions);
     }
 }

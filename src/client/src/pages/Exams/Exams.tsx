@@ -11,6 +11,7 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
+import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
@@ -43,6 +44,23 @@ function Exams() {
             queryClient.invalidateQueries({ queryKey: ['exams'] });
         },
     });
+    const duplicateExamMutation = useMutation({
+        mutationFn: api.duplicateExam,
+        onSuccess: (exam) => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen "${exam.name}" a bien été dupliqué`,
+            });
+            queryClient.invalidateQueries({ queryKey: ['exams'] });
+        },
+        onError: (error) => {
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. L'examen n'a pas pu être dupliqué",
+            });
+        },
+    });
 
     return (
         <>
@@ -58,7 +76,7 @@ function Exams() {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell width={250}>Actions</TableCell>
+                        <TableCell width={290}>Actions</TableCell>
                         <TableCell>Nom du test</TableCell>
                         <TableCell>Durée</TableCell>
                     </TableRow>
@@ -92,7 +110,12 @@ function Exams() {
                                         <ContentCopyIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Supprimer le test">
+                                <Tooltip title="Dupliquer l'examen">
+                                    <IconButton onClick={buildDuplicateExam(exam.id)}>
+                                        <ScannerIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Supprimer l'examen">
                                     <IconButton onClick={buildDeleteExam(exam.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
@@ -157,6 +180,12 @@ function Exams() {
                 text: 'Le lien a bien été copié dans le presse-papiers',
                 variant: 'success',
             });
+        };
+    }
+
+    function buildDuplicateExam(examId: string) {
+        return () => {
+            duplicateExamMutation.mutate({ examId });
         };
     }
 

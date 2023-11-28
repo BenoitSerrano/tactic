@@ -446,4 +446,13 @@ router.delete(
     }),
 );
 
+router.post(
+    '/exams/:examId/duplicate',
+    buildAuthenticatedController(examController.duplicateExam, {
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            { entity: 'exam', key: 'examId' },
+        ]),
+    }),
+);
+
 export { router };
