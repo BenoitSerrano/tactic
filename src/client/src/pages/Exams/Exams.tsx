@@ -11,6 +11,7 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
+import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
@@ -58,7 +59,7 @@ function Exams() {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell width={250}>Actions</TableCell>
+                        <TableCell width={290}>Actions</TableCell>
                         <TableCell>Nom du test</TableCell>
                         <TableCell>Durée</TableCell>
                     </TableRow>
@@ -92,7 +93,12 @@ function Exams() {
                                         <ContentCopyIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Supprimer le test">
+                                <Tooltip title="Dupliquer l'examen">
+                                    <IconButton onClick={() => {}}>
+                                        <ScannerIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Supprimer l'examen">
                                     <IconButton onClick={buildDeleteExam(exam.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
