@@ -5,7 +5,7 @@ import { api } from '../../../lib/api';
 import { Loader } from '../../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
 import { attemptWithAnswersApiType } from '../types';
-import { attemptsCountByAttemptStatusApiType } from './types';
+import { attemptsCountByAttemptStatusApiType } from '../../../types';
 
 function ExamChecking() {
     const params = useParams();

@@ -7,8 +7,13 @@ const questionKinds = [
 ] as const;
 type questionKindType = (typeof questionKinds)[number];
 
+type attemptsCountByAttemptStatusApiType = {
+    corrected: number;
+    notCorrected: number;
+};
+
 type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'corrected';
 
 export { questionKinds };
 
-export type { questionKindType, attemptStatusType };
+export type { questionKindType, attemptStatusType, attemptsCountByAttemptStatusApiType };
