@@ -22,7 +22,12 @@ const resetPasswordRequestController = buildResetPasswordRequestController();
 const groupController = buildGroupController();
 
 router.post('/users', buildAnonymousController(userController.createUser));
-router.post('/login', buildAnonymousController(userController.login));
+router.post(
+    '/login',
+    buildAnonymousController(userController.login, {
+        schema: Joi.object({ email: Joi.string().required(), password: Joi.string().required() }),
+    }),
+);
 
 router.get(
     '/groups/:groupId/students',
@@ -267,11 +272,11 @@ router.put(
             { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
-            title: Joi.string(),
-            rightAnswers: Joi.array().items(Joi.string().allow('')),
-            possibleAnswers: Joi.array().items(Joi.string().allow('')),
-            acceptableAnswers: Joi.array().items(Joi.string().allow('')),
-            points: Joi.number(),
+            title: Joi.string().required(),
+            rightAnswers: Joi.array().items(Joi.string().allow('')).required(),
+            possibleAnswers: Joi.array().items(Joi.string().allow('')).required(),
+            acceptableAnswers: Joi.array().items(Joi.string().allow('')).required(),
+            points: Joi.number().required(),
         }),
     }),
 );
@@ -339,7 +344,6 @@ router.delete(
     }),
 );
 
-// TODO vérifier le format en entrée
 router.patch(
     '/exams/:examId/attempts/:attemptId/questions/:questionId/mark',
     buildAuthenticatedController(attemptController.updateMark, {
@@ -349,6 +353,7 @@ router.patch(
                 key: 'examId',
             },
         ]),
+        schema: Joi.object({ mark: Joi.number().required() }),
     }),
 );
 router.patch(
