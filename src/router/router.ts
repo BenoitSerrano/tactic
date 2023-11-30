@@ -299,15 +299,8 @@ router.post(
 );
 
 router.get(
-    '/exams/:examId/attempts/:attemptId/with-answers',
-    buildAuthenticatedController(attemptController.fetchAttemptWithAnswers, {
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-    }),
+    '/attempts/:attemptId/with-answers',
+    buildAnonymousController(attemptController.fetchAttemptWithAnswers),
 );
 router.get(
     '/attempts/:attemptId/without-answers',

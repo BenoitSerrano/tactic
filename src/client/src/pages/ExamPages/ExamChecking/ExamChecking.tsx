@@ -13,7 +13,7 @@ function ExamChecking() {
     const examId = params.examId as string;
     const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
         queryKey: ['attempts', attemptId],
-        queryFn: () => api.fetchAttemptWithAnswers({ examId, attemptId }),
+        queryFn: () => api.fetchAttemptWithAnswers({ attemptId }),
     });
     const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
         queryFn: () => api.fetchAttemptsCountByCorrectionStatus({ examId }),

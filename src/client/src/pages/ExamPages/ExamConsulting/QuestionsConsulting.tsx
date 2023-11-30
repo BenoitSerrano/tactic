@@ -11,7 +11,6 @@ import { ExerciseContainer } from '../components/ExerciseContainer';
 function QuestionsConsulting(props: {
     exercises: Array<exerciseWithAnswersType>;
     examName: string;
-    examId: string;
     studentEmail: string;
     attemptId: string;
 }) {

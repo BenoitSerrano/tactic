@@ -10,10 +10,9 @@ import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
 function ExamConsulting() {
     const params = useParams();
     const attemptId = params.attemptId as string;
-    const examId = params.examId as string;
     const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
         queryKey: ['attempts', attemptId],
-        queryFn: () => api.fetchAttemptWithAnswers({ examId, attemptId }),
+        queryFn: () => api.fetchAttemptWithAnswers({ attemptId }),
     });
 
     if (!attemptWithAnswersQuery.data) {
@@ -29,7 +28,6 @@ function ExamConsulting() {
                 <QuestionsConsulting
                     studentEmail={attemptWithAnswersQuery.data.studentEmail}
                     attemptId={attemptId}
-                    examId={examId}
                     exercises={attemptWithAnswersQuery.data.exam.exercises}
                     examName={attemptWithAnswersQuery.data.exam.name}
                 />

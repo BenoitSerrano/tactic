@@ -106,8 +106,8 @@ async function createAttempt({ examId, studentId }: { examId: string; studentId:
     return performApiCall(URL, 'POST', {});
 }
 
-async function fetchAttemptWithAnswers(params: { examId: string; attemptId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/with-answers`;
+async function fetchAttemptWithAnswers(params: { attemptId: string }) {
+    const URL = `${BASE_URL}/attempts/${params.attemptId}/with-answers`;
     return performApiCall(URL, 'GET');
 }
 
