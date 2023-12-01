@@ -14,7 +14,7 @@ async function runApp() {
 
     const app = Express();
 
-    app.use('/api', cors({ origin: config.ALLOWED_ORIGIN }), bodyParser.json(), router);
+    app.use('/api', cors({ origin: config.CLIENT_URL }), bodyParser.json(), router);
 
     app.use(Express.static(path.join(__dirname, '..', '..', 'src', 'client', 'build')));
 

@@ -33,11 +33,6 @@ function buildRouter() {
         }
     }
 
-    router.get('/test', async (req, res) => {
-        const account = await mailer.getAccount();
-        res.send(account);
-    });
-
     return router;
 }
 
