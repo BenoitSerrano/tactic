@@ -1,5 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { hasher } from '../../lib/hasher';
+import { mailer } from '../../lib/mailer';
 import { mapEntities } from '../../lib/mapEntities';
 import { signer } from '../../lib/signer';
 import { User } from './User.entity';
@@ -31,6 +32,8 @@ function buildUserService() {
                 `Something wrong happened. ${result.identifiers.length} users were created.`,
             );
         }
+
+        await mailer.registerContact(email);
         const token = signer.sign({ userId: result.identifiers[0].id });
         return { token };
     }

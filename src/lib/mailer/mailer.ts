@@ -10,13 +10,28 @@ function buildMailer() {
     const defaultClient = Brevo.ApiClient.instance;
     const apiKey = defaultClient.authentications['api-key'];
     apiKey.apiKey = config.BREVO_API_KEY;
-    const transactionalEmailsApi = new Brevo.TransactionalEmailsApi();
 
     const mailer = {
         sendResetPasswordMail,
+        registerContact,
     };
 
+    async function registerContact(email: string) {
+        const contactsApi = new Brevo.ContactsApi();
+        const createContact = new Brevo.CreateContact();
+        createContact.email = email;
+        try {
+            await contactsApi.createContact(createContact);
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }
+
     async function sendResetPasswordMail(email: string, resetPasswordRequestId: string) {
+        const transactionalEmailsApi = new Brevo.TransactionalEmailsApi();
+
         const sender = new Brevo.SendSmtpEmailSender();
         sender.email = 'benoit.serrano10@gmail.com';
         const templateId = EMAIL_TEMPLATE_MAPPING.RESET_PASSWORD;
@@ -35,8 +50,8 @@ function buildMailer() {
         try {
             await transactionalEmailsApi.sendTransacEmail(sendSmtpEmail);
             return true;
-        } catch (error: any) {
-            console.error(error.response.text);
+        } catch (error) {
+            console.error(error);
             return false;
         }
     }
