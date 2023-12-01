@@ -12,7 +12,11 @@ import { useAlert } from '../../../lib/alert';
 import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
-import { attemptStatusType, questionKindType } from '../../../types';
+import {
+    attemptStatusType,
+    attemptsCountByAttemptStatusApiType,
+    questionKindType,
+} from '../../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { extractMarks, manualMarksType } from '../lib/extractMarks';
@@ -20,7 +24,6 @@ import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { pathHandler } from '../../../lib/pathHandler';
 import { LoadingButton } from '@mui/lab';
-import { attemptsCountByAttemptStatusApiType } from './types';
 import { AttemptsCount } from './AttemptsCount';
 import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';

@@ -1,6 +1,6 @@
 import { LinearProgress, Typography, styled } from '@mui/material';
-import { attemptsCountByAttemptStatusApiType } from './types';
 import { HEADER_HEIGHT } from '../../../constants';
+import { attemptsCountByAttemptStatusApiType } from '../../../types';
 
 function AttemptsCount(props: {
     attemptsCountByCorrectedStatus: attemptsCountByAttemptStatusApiType;

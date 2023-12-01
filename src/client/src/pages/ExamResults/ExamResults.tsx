@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
-import { attemptStatusType } from '../../types';
+import { attemptStatusType, attemptsCountByAttemptStatusApiType } from '../../types';
 import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
 import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
@@ -53,10 +53,16 @@ function ExamResults() {
     const queryClient = useQueryClient();
     const params = useParams();
     const examId = params.examId as string;
-    const query = useQuery<examResultsApiType>({
+    const resultsQuery = useQuery<examResultsApiType>({
         queryKey: ['exam-results', examId],
         queryFn: () => api.fetchExamResults(examId),
     });
+
+    const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
+        queryFn: () => api.fetchAttemptsCountByCorrectionStatus({ examId }),
+        queryKey: ['attempts-count-by-attempt-status', examId],
+    });
+
     const [activeSort, setActiveSort] = useState<sortColumnType>('startedAt');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
     const { displayAlert } = useAlert();
@@ -110,22 +116,25 @@ function ExamResults() {
         },
     });
 
-    if (!query.data) {
-        if (query.isLoading) {
+    if (!resultsQuery.data || !attemptsCountQuery.data) {
+        if (resultsQuery.isLoading || !attemptsCountQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
     }
 
-    const formattedData = formatData(query.data.results);
+    const formattedData = formatData(resultsQuery.data.results);
 
     const sortedData = sortData(formattedData, activeSort, sortDirection);
     const sortedAttemptIds = sortedData.map(({ attemptId }) => attemptId);
+    const title = resultsQuery.data.examName;
+    const subtite = computeSubtitle(attemptsCountQuery.data);
 
     return (
         <>
             <TitleContainer>
-                <Typography variant="h3">{query.data.examName}</Typography>
+                <Typography variant="h3">{title}</Typography>
+                <Typography variant="h4">{subtite}</Typography>
             </TitleContainer>
             <Table stickyHeader>
                 <TableHead>
@@ -171,7 +180,7 @@ function ExamResults() {
                                     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                 }}
                             >
-                                Note (/ {query.data.totalPoints})
+                                Note (/ {resultsQuery.data.totalPoints})
                             </TableSortLabel>
                         </TableCell>
                         <TableCell width={80}>Statut</TableCell>
@@ -245,6 +254,11 @@ function ExamResults() {
             </Table>
         </>
     );
+
+    function computeSubtitle(attemptsCountByAttemptStatus: attemptsCountByAttemptStatusApiType) {
+        const { corrected, notCorrected } = attemptsCountByAttemptStatus;
+        return `Copies corrigées : ${corrected}/${notCorrected + corrected}`;
+    }
 
     function buildDeleteAttempt(attemptId: string) {
         return () => {
