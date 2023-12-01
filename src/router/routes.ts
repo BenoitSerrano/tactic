@@ -3,6 +3,7 @@ import { examRoutes } from './examRoutes';
 import { exerciseRoutes } from './exerciseRoutes';
 import { groupRoutes } from './groupRoutes';
 import { questionRoutes } from './questionRoutes';
+import { resetPasswordRequestRoutes } from './resetPasswordRequestRoutes';
 import { studentRoutes } from './studentRoutes';
 import { routeType } from './types';
 import { userRoutes } from './userRoutes';
@@ -18,6 +19,7 @@ function buildRoutes() {
     routes.push(...questionRoutes);
     routes.push(...attemptRoutes);
     routes.push(...exerciseRoutes);
+    routes.push(...resetPasswordRequestRoutes);
     return routes;
 }
 

@@ -1,6 +1,7 @@
 import Express from 'express';
 import { buildAnonymousController, buildAuthenticatedController } from '../lib/buildController';
 import { routes } from './routes';
+import { mailer } from '../lib/mailer';
 
 const router = buildRouter();
 
@@ -31,6 +32,7 @@ function buildRouter() {
                 break;
         }
     }
+
     return router;
 }
 
