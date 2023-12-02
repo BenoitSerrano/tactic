@@ -5,10 +5,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
 import { localStorage } from '../lib/localStorage';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { Link } from '../components/Link';
 import { pathHandler } from '../lib/pathHandler';
+import { LoadingButton } from '@mui/lab';
 
 function SignIn(props: {
     shouldDisplayResetPasswordLink?: boolean;
@@ -75,9 +75,14 @@ function SignIn(props: {
                             )}
                         </FieldsContainer>
 
-                        <Button type="submit" variant="contained" disabled={!password || !email}>
+                        <LoadingButton
+                            loading={mutation.isPending}
+                            type="submit"
+                            variant="contained"
+                            disabled={!password || !email}
+                        >
                             {props.title}
-                        </Button>
+                        </LoadingButton>
                     </CardContent>
                 </Card>
             </ContentContainer>
