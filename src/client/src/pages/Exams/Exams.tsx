@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -25,7 +24,7 @@ import { ExamUpsertionModal } from './ExamUpsertionModal';
 import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
 import { ExamCreatedModal } from './ExamCreatedModal';
-import { examApiType, modalStatusType } from './types';
+import { examApiType } from './types';
 import { pathHandler } from '../../lib/pathHandler';
 import { EditableText } from './EditableText';
 import { EditableTime } from './EditableTime';
@@ -35,9 +34,8 @@ function Exams() {
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
-    const [currentExamModalStatus, setCurrentExamModalStatus] = useState<
-        modalStatusType | undefined
-    >();
+
+    const [isCreateExamModalOpen, setIsCreateExamModalOpen] = useState(false);
     const [isExamCreatedModalOpen, setIsExamCreatedModalOpen] = useState(false);
     const deleteExamMutation = useMutation({
         mutationFn: api.deleteExam,
@@ -131,11 +129,7 @@ function Exams() {
                                         <FormatListBulletedIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Modifier le test">
-                                    <IconButton onClick={buildEditExam(exam)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                </Tooltip>
+
                                 <Tooltip title="Voir les copies des étudiants">
                                     <IconButton onClick={buildNavigateToResults(exam.id)}>
                                         <RateReviewIcon />
@@ -173,12 +167,12 @@ function Exams() {
                     ))}
                 </TableBody>
             </Table>
-            {!!currentExamModalStatus && (
-                <ExamUpsertionModal
-                    modalStatus={currentExamModalStatus}
-                    close={() => setCurrentExamModalStatus(undefined)}
-                />
-            )}
+
+            <ExamUpsertionModal
+                isOpen={isCreateExamModalOpen}
+                onExamCreated={onExamCreated}
+                close={() => setIsCreateExamModalOpen(false)}
+            />
             <ExamCreatedModal
                 isOpen={isExamCreatedModalOpen}
                 close={() => setIsExamCreatedModalOpen(false)}
@@ -187,7 +181,7 @@ function Exams() {
     );
 
     function openCreationModal() {
-        setCurrentExamModalStatus({ kind: 'creating', onExamCreated });
+        setIsCreateExamModalOpen(true);
     }
 
     function onExamCreated() {
@@ -203,12 +197,6 @@ function Exams() {
     function buildNavigateToEdition(examId: string) {
         const path = pathHandler.getRoutePath('EXAM_EXERCISES', { examId });
         return () => navigate(path);
-    }
-
-    function buildEditExam(exam: examApiType) {
-        return () => {
-            setCurrentExamModalStatus({ kind: 'editing', exam });
-        };
     }
 
     function buildEditExamName(examId: string) {
