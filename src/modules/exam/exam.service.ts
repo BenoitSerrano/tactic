@@ -46,7 +46,8 @@ function buildExamService() {
         if (body.duration) {
             exam.duration = body.duration;
         }
-        return examRepository.save(exam);
+        const newExam = await examRepository.save(exam);
+        return newExam;
     }
 
     async function getExam(examId: Exam['id']) {

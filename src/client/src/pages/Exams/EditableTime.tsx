@@ -2,27 +2,30 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import { IconButton, TextField, styled } from '@mui/material';
 import { useState } from 'react';
+import { time } from '../../lib/time';
+import { INTEGER_NUMBER_REGEX } from '../../constants';
 
-function EditableText(props: { initialText: string; changeText: (newText: string) => void }) {
-    const [text, setText] = useState(props.initialText);
+function EditableTime(props: { initialValue: number; changeValue: (newValue: number) => void }) {
+    const [value, setValue] = useState(props.initialValue);
     const [isEditing, setIsEditing] = useState(false);
+    const displayedValue = time.formatToClock(value * 60);
     return isEditing ? (
         <Container>
-            <TextField
+            <StyledTextField
                 autoFocus
                 onBlur={confirmChanges}
                 variant="standard"
-                value={text}
-                fullWidth
+                value={value}
                 onChange={onChange}
             />
+            minutes
             <IconButton onClick={confirmChanges}>
                 <CheckIcon />
             </IconButton>
         </Container>
     ) : (
         <Container>
-            <span>{text}</span>
+            <span>{displayedValue}</span>
             <IconButton onClick={activateEditing}>
                 <EditIcon />
             </IconButton>
@@ -30,12 +33,15 @@ function EditableText(props: { initialText: string; changeText: (newText: string
     );
 
     function confirmChanges() {
-        props.changeText(text);
+        props.changeValue(value);
         setIsEditing(false);
     }
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setText(event.target.value);
+        const newDuration = event.target.value;
+        if (newDuration.match(INTEGER_NUMBER_REGEX)) {
+            setValue(Number(newDuration));
+        }
     }
 
     function activateEditing() {
@@ -48,4 +54,6 @@ const Container = styled('div')(({ theme }) => ({
     alignItems: 'center',
 }));
 
-export { EditableText };
+const StyledTextField = styled(TextField)({ width: 40 });
+
+export { EditableTime };

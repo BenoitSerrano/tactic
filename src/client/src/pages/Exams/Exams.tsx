@@ -26,9 +26,9 @@ import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
 import { ExamCreatedModal } from './ExamCreatedModal';
 import { examApiType, modalStatusType } from './types';
-import { time } from '../../lib/time';
 import { pathHandler } from '../../lib/pathHandler';
 import { EditableText } from './EditableText';
+import { EditableTime } from './EditableTime';
 
 function Exams() {
     const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -42,7 +42,17 @@ function Exams() {
     const deleteExamMutation = useMutation({
         mutationFn: api.deleteExam,
         onSuccess: () => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen a bien été supprimé.`,
+            });
             queryClient.invalidateQueries({ queryKey: ['exams'] });
+        },
+        onError: () => {
+            displayAlert({
+                variant: 'error',
+                text: `Une erreur est survenue. L'examen n'a pas pu être supprimé`,
+            });
         },
     });
     const duplicateExamMutation = useMutation({
@@ -65,8 +75,19 @@ function Exams() {
 
     const updateExamMutation = useMutation({
         mutationFn: api.updateExam,
-        onSuccess: () => {
+        onSuccess: (exam) => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen "${exam.name}" a bien été modifié`,
+            });
             queryClient.invalidateQueries({ queryKey: ['exams'] });
+        },
+        onError: (error) => {
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. Les modifications n'ont pas pu être enregistrées.",
+            });
         },
     });
 
@@ -93,7 +114,7 @@ function Exams() {
                     <TableRow>
                         <TableCell width={290}>Actions</TableCell>
                         <TableCell>Nom du test</TableCell>
-                        <TableCell>Durée</TableCell>
+                        <TableCell width={150}>Durée</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -140,10 +161,14 @@ function Exams() {
                                 <EditableText
                                     initialText={exam.name}
                                     changeText={buildEditExamName(exam.id)}
-                                    isLoading={updateExamMutation.isPending}
                                 />
                             </TableCell>
-                            <TableCell>{time.formatToClock(exam.duration * 60)}</TableCell>
+                            <TableCell>
+                                <EditableTime
+                                    initialValue={exam.duration}
+                                    changeValue={buildEditExamDuration(exam.id)}
+                                />
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
@@ -189,6 +214,11 @@ function Exams() {
     function buildEditExamName(examId: string) {
         return (name: string) => {
             updateExamMutation.mutate({ examId, name });
+        };
+    }
+    function buildEditExamDuration(examId: string) {
+        return (duration: number) => {
+            updateExamMutation.mutate({ examId, duration });
         };
     }
 
