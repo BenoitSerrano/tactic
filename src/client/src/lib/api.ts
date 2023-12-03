@@ -243,11 +243,11 @@ async function updateExam({
     duration,
 }: {
     examId: string;
-    name: string;
-    duration: number;
+    name?: string;
+    duration?: number;
 }) {
     const URL = `${BASE_URL}/exams/${examId}`;
-    return performApiCall(URL, 'PUT', { name, duration });
+    return performApiCall(URL, 'PATCH', { name, duration });
 }
 
 async function fetchExercise(params: { examId: string; exerciseId: number }) {

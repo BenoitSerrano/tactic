@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Attempt } from '../attempt';
 import { User } from '../user';
 import { Exercise } from '../exercise';
@@ -25,4 +32,7 @@ export class Exam {
 
     @Column({ default: 2 })
     extraTime: number;
+
+    @CreateDateColumn({ type: 'timestamptz' })
+    createdAt: string;
 }

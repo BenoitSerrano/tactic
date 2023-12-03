@@ -28,6 +28,7 @@ import { ExamCreatedModal } from './ExamCreatedModal';
 import { examApiType, modalStatusType } from './types';
 import { time } from '../../lib/time';
 import { pathHandler } from '../../lib/pathHandler';
+import { EditableText } from './EditableText';
 
 function Exams() {
     const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -62,6 +63,20 @@ function Exams() {
         },
     });
 
+    const updateExamMutation = useMutation({
+        mutationFn: api.updateExam,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['exams'] });
+        },
+    });
+
+    if (!query.data) {
+        if (query.isLoading) {
+            return <Loader />;
+        }
+        return <div />;
+    }
+
     return (
         <>
             <Menu
@@ -82,7 +97,7 @@ function Exams() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {query.data?.map((exam) => (
+                    {query.data.map((exam) => (
                         <TableRow key={exam.id}>
                             <TableCell>
                                 <Tooltip title="Prévisualiser l'examen">
@@ -121,13 +136,18 @@ function Exams() {
                                     </IconButton>
                                 </Tooltip>
                             </TableCell>
-                            <TableCell>{exam.name}</TableCell>
+                            <TableCell>
+                                <EditableText
+                                    initialText={exam.name}
+                                    changeText={buildEditExamName(exam.id)}
+                                    isLoading={updateExamMutation.isPending}
+                                />
+                            </TableCell>
                             <TableCell>{time.formatToClock(exam.duration * 60)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            {!query.data && !!query.isLoading && <Loader />}
             {!!currentExamModalStatus && (
                 <ExamUpsertionModal
                     modalStatus={currentExamModalStatus}
@@ -163,6 +183,12 @@ function Exams() {
     function buildEditExam(exam: examApiType) {
         return () => {
             setCurrentExamModalStatus({ kind: 'editing', exam });
+        };
+    }
+
+    function buildEditExamName(examId: string) {
+        return (name: string) => {
+            updateExamMutation.mutate({ examId, name });
         };
     }
 

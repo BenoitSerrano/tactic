@@ -62,7 +62,7 @@ const examRoutes: Array<routeType<any, any>> = [
         ]),
     },
     {
-        method: 'PUT',
+        method: 'PATCH',
         path: '/exams/:examId',
         isAuthenticated: true,
         controller: examController.updateExam,
@@ -73,8 +73,8 @@ const examRoutes: Array<routeType<any, any>> = [
             },
         ]),
         schema: Joi.object({
-            name: Joi.string().required(),
-            duration: Joi.number().required(),
+            name: Joi.string(),
+            duration: Joi.number(),
         }),
     },
 

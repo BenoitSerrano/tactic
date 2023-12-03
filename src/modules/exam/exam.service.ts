@@ -38,10 +38,14 @@ function buildExamService() {
         return examRepository.save(exam);
     }
 
-    async function updateExam(examId: Exam['id'], body: { name: string; duration: number }) {
+    async function updateExam(examId: Exam['id'], body: { name?: string; duration?: number }) {
         const exam = await examRepository.findOneOrFail({ where: { id: examId } });
-        exam.name = body.name;
-        exam.duration = body.duration;
+        if (body.name) {
+            exam.name = body.name;
+        }
+        if (body.duration) {
+            exam.duration = body.duration;
+        }
         return examRepository.save(exam);
     }
 
@@ -67,8 +71,8 @@ function buildExamService() {
         };
     }
 
-    async function getExams(user?: User) {
-        return examRepository.find({ where: { user } });
+    async function getExams(user: User) {
+        return examRepository.find({ where: { user }, order: { createdAt: 'ASC' } });
     }
 
     async function getExamExercises(examId: Exam['id']) {

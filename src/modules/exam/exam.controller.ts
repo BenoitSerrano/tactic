@@ -31,7 +31,7 @@ function buildExamController() {
 
     async function updateExam(params: {
         urlParams: { examId: Exam['id'] };
-        body: { name: string; duration: number; extraTime: number };
+        body: { name?: string; duration?: number };
     }) {
         return examService.updateExam(params.urlParams.examId, {
             name: params.body.name,
