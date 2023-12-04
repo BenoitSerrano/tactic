@@ -30,7 +30,9 @@ function EditableText(props: { initialText: string; changeText: (newText: string
     );
 
     function confirmChanges() {
-        props.changeText(text);
+        if (props.initialText !== text) {
+            props.changeText(text);
+        }
         setIsEditing(false);
     }
 
