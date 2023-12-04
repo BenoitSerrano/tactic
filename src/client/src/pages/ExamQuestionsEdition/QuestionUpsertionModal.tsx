@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     IconButton,
-    MenuItem,
-    Select,
     SelectChangeEvent,
     Step,
     StepLabel,
@@ -17,12 +15,13 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
-import { questionKindType, questionKinds } from '../../types';
+import { questionKindType } from '../../types';
 import { questionUpsertionModalContentComponentMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
-import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { computeInitialModalQuestionKind } from './lib/computeInitialModalQuestionKind';
 import { computeSteps, stepIds } from './lib/computeSteps';
+import { QuestionKindSelect } from './QuestionKindSelect';
 
 function QuestionUpsertionModal(props: {
     close: () => void;
@@ -154,22 +153,10 @@ function QuestionUpsertionModal(props: {
         switch (stepIds[activeStep]) {
             case 'SELECT_QUESTION_KIND':
                 return (
-                    <>
-                        <Select
-                            fullWidth
-                            labelId="select-question-kind-label"
-                            id="select-question-kind"
-                            value={currentQuestionKind}
-                            label="Type de question"
-                            onChange={handleQuestionKindChange}
-                        >
-                            {questionKinds.map((questionKind) => (
-                                <MenuItem value={questionKind}>
-                                    {questionSpecificityMapping[questionKind].label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </>
+                    <QuestionKindSelect
+                        currentQuestionKind={currentQuestionKind}
+                        onSelect={onSelectQuestionKind}
+                    />
                 );
             case 'EDIT_QUESTION_CONTENT':
                 return (
@@ -197,6 +184,11 @@ function QuestionUpsertionModal(props: {
                     </RowContainer>
                 );
         }
+    }
+
+    function onSelectQuestionKind(questionKind: questionKindType) {
+        setCurrentQuestionKind(questionKind);
+        setTimeout(handleNextClick, 100);
     }
 
     function computeIsNextButtonDisabled() {
