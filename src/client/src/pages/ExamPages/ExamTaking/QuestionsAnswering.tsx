@@ -6,10 +6,9 @@ import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { QuestionAnswering } from '../components/QuestionAnswering';
 import { TestPageLayout } from '../components/TestPageLayout';
-import { exerciseWithoutAnswersType } from '../types';
+import { exerciseWithoutAnswersType, attemptAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
-
-type questionAnswerType = Record<number, string>;
+import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 
 function QuestionsAnswering(props: {
     attemptId: string;
@@ -43,12 +42,15 @@ function QuestionsAnswering(props: {
 
     const { displayAlert } = useAlert();
 
-    const initialCurrentAnswers: questionAnswerType = {};
+    const initialCurrentAnswers: attemptAnswersType = {};
     for (const exercise of props.exercises) {
         for (const question of exercise.questions) {
             initialCurrentAnswers[question.id] = question.currentAnswer;
         }
     }
+    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
+        undefined,
+    );
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
 
@@ -75,36 +77,52 @@ function QuestionsAnswering(props: {
                     </LoadingButton>,
                 ]}
             >
-                {props.exercises.map((exercise, exerciseIndex) => (
-                    <ExerciseContainer
-                        key={`exercise-${exercise.id}`}
-                        exercise={exercise}
-                        hideMark
-                        isLastItem={exerciseIndex === props.exercises.length - 1}
-                    >
-                        {exercise.questions.map((question, index) => (
-                            <QuestionContainer key={`question-${question.id}`}>
-                                <QuestionIndicatorsContainer>
-                                    <Typography>/ {question.points}</Typography>
-                                </QuestionIndicatorsContainer>
-                                <QuestionAnswering
-                                    currentAnswer={currentAnswers[question.id]}
-                                    setCurrentAnswer={(newAnswer: string) =>
-                                        setCurrentAnswers({
-                                            ...currentAnswers,
-                                            [question.id]: newAnswer,
-                                        })
-                                    }
-                                    question={question}
-                                    index={index + 1}
-                                />
-                            </QuestionContainer>
-                        ))}
-                    </ExerciseContainer>
-                ))}
+                {props.exercises.map((exercise, exerciseIndex) => {
+                    const progress = computeExerciseProgress(exercise.questions, currentAnswers);
+                    const exerciseIndication = {
+                        progress,
+                        hideMark: true,
+                    };
+
+                    return (
+                        <ExerciseContainer
+                            isExpanded={currentExerciseExpanded === exercise.id}
+                            onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
+                            key={`exercise-${exercise.id}`}
+                            exercise={exercise}
+                            indication={exerciseIndication}
+                            isLastItem={exerciseIndex === props.exercises.length - 1}
+                        >
+                            {exercise.questions.map((question, index) => (
+                                <QuestionContainer key={`question-${question.id}`}>
+                                    <QuestionIndicatorsContainer>
+                                        <Typography>/ {question.points}</Typography>
+                                    </QuestionIndicatorsContainer>
+                                    <QuestionAnswering
+                                        currentAnswer={currentAnswers[question.id]}
+                                        setCurrentAnswer={(newAnswer: string) =>
+                                            setCurrentAnswers({
+                                                ...currentAnswers,
+                                                [question.id]: newAnswer,
+                                            })
+                                        }
+                                        question={question}
+                                        index={index + 1}
+                                    />
+                                </QuestionContainer>
+                            ))}
+                        </ExerciseContainer>
+                    );
+                })}
             </TestPageLayout>
         </>
     );
+
+    function buildOnExerciseExpandedChange(exerciseId: number) {
+        return (_: any, isExpanded: boolean) => {
+            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
+        };
+    }
 
     function saveDraft() {
         saveDraftMutation.mutate({
