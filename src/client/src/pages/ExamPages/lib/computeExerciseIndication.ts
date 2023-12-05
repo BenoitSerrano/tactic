@@ -3,8 +3,12 @@ type exerciseIndicationType = { hideMark?: boolean; progress?: number };
 function computeExerciseIndication<
     questionT extends { mark?: number | undefined; points: number },
     exerciseT extends { questions: questionT[] },
->(exercise: exerciseT, indication?: exerciseIndicationType) {
+>(
+    exercise: exerciseT,
+    indication?: exerciseIndicationType,
+): { result: string; progress: number | undefined } {
     let result = '';
+    let progress: number | undefined;
     let totalMark = 0;
     let totalPoints = 0;
     for (const question of exercise.questions) {
@@ -17,10 +21,9 @@ function computeExerciseIndication<
         result = `${totalMark} / ${totalPoints}`;
     }
     if (indication?.progress !== undefined) {
-        const progress = Math.floor(indication.progress * 100);
-        result = result + ` (${progress}% complétés)`;
+        progress = Math.floor(indication.progress * 100);
     }
-    return result;
+    return { result, progress };
 }
 
 export { computeExerciseIndication };

@@ -18,7 +18,7 @@ function ExerciseContainer<
     onChangeExpanded: (_: any, isExpanded: boolean) => void;
     indication?: exerciseIndicationType;
 }) {
-    const exerciseResult = computeExerciseIndication(props.exercise, props.indication);
+    const { result, progress } = computeExerciseIndication(props.exercise, props.indication);
     const Container = props.isLastItem ? LastContainer : DefaultContainer;
     return (
         <Container
@@ -34,8 +34,12 @@ function ExerciseContainer<
         >
             <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />}>
                 <TitleContainer>
-                    <Typography variant="h3">{props.exercise.name}</Typography>
-                    <Typography variant="h4">{exerciseResult}</Typography>
+                    <Typography variant="h3">
+                        ( {result}) {props.exercise.name}
+                    </Typography>
+                    {progress !== undefined && (
+                        <Typography variant="h4">{progress}% complétés</Typography>
+                    )}
                 </TitleContainer>
             </AccordionSummary>
             <AccordionDetails>
