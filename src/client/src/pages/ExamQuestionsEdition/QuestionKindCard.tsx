@@ -8,17 +8,11 @@ function QuestionKindCard(props: {
 }) {
     const CardComponent = props.isSelected ? SelectedCardComponent : NotSelectedCardComponent;
     return (
-        <CardComponent elevation={2} onClick={selectQuestionKind}>
+        <CardComponent elevation={2} onClick={props.onSelect}>
             <Typography variant="h5">{props.title}</Typography>
             <Typography variant="h6">{props.subtitle}</Typography>
         </CardComponent>
     );
-
-    function selectQuestionKind() {
-        if (!props.isSelected) {
-            props.onSelect();
-        }
-    }
 }
 
 const SelectedCardComponent = styled(Card)(({ theme }) => ({
@@ -26,6 +20,7 @@ const SelectedCardComponent = styled(Card)(({ theme }) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
+    cursor: 'pointer',
 }));
 
 const NotSelectedCardComponent = styled(Card)(({ theme }) => ({

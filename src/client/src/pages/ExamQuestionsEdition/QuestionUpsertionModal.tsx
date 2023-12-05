@@ -195,8 +195,11 @@ function QuestionUpsertionModal(props: {
     }
 
     function onSelectQuestionKind(questionKind: questionKindType) {
-        resetQuestionContent();
-        setCurrentQuestionKind(questionKind);
+        if (questionKind !== currentQuestionKind) {
+            resetQuestionContent();
+            setCurrentQuestionKind(questionKind);
+            handleNextClick();
+        }
         setTimeout(handleNextClick, 100);
     }
 
