@@ -1,14 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-    IconButton,
-    SelectChangeEvent,
-    Step,
-    StepLabel,
-    Stepper,
-    TextField,
-    styled,
-} from '@mui/material';
+import { IconButton, Step, StepLabel, Stepper, TextField, styled } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Modal } from '../../components/Modal';
@@ -22,6 +14,8 @@ import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { computeInitialModalQuestionKind } from './lib/computeInitialModalQuestionKind';
 import { computeSteps, stepIds } from './lib/computeSteps';
 import { QuestionKindSelect } from './QuestionKindSelect';
+
+const DEFAULT_POSSIBLE_ANSWERS = ['', ''];
 
 function QuestionUpsertionModal(props: {
     close: () => void;
@@ -62,7 +56,10 @@ function QuestionUpsertionModal(props: {
         },
     });
 
-    const [activeStep, setActiveStep] = useState(0);
+    const minimumStep = props.modalStatus.kind === 'creating' ? 0 : 1;
+    const maximumStep = stepIds.length - 1;
+
+    const [activeStep, setActiveStep] = useState(minimumStep);
 
     const steps = computeSteps();
 
@@ -86,7 +83,7 @@ function QuestionUpsertionModal(props: {
     const [possibleAnswers, setPossibleAnswers] = useState(
         props.modalStatus.kind === 'editing' && props.modalStatus.question.possibleAnswers
             ? props.modalStatus.question.possibleAnswers
-            : ['', ''],
+            : DEFAULT_POSSIBLE_ANSWERS,
     );
 
     const isUpdating = updateQuestionMutation.isPending;
@@ -173,34 +170,40 @@ function QuestionUpsertionModal(props: {
                 );
             case 'EDIT_QUESTION_POINTS':
                 return (
-                    <RowContainer>
-                        <PointsContainer>
-                            <TextField
-                                value={points}
-                                onChange={onChangePoint}
-                                label="Point(s) pour la question"
-                            />
-                        </PointsContainer>
-                    </RowContainer>
+                    <PointsContainer>
+                        <TextField
+                            value={points}
+                            onChange={onChangePoint}
+                            label="Point(s) pour la question"
+                        />
+                    </PointsContainer>
                 );
         }
     }
 
     function onSelectQuestionKind(questionKind: questionKindType) {
+        resetQuestionContent();
         setCurrentQuestionKind(questionKind);
         setTimeout(handleNextClick, 100);
     }
 
     function computeIsNextButtonDisabled() {
-        if (activeStep === stepIds.length - 1) {
+        if (activeStep >= maximumStep) {
             return true;
         }
 
         return false;
     }
 
+    function resetQuestionContent() {
+        setAcceptableAnswers([]);
+        setRightAnswers([]);
+        setPossibleAnswers(DEFAULT_POSSIBLE_ANSWERS);
+        setTitle('');
+    }
+
     function computeIsPreviousButtonDisabled() {
-        if (activeStep === 0) {
+        if (activeStep <= minimumStep) {
             return true;
         }
         return false;
@@ -212,11 +215,6 @@ function QuestionUpsertionModal(props: {
 
     function handlePreviousClick() {
         setActiveStep(activeStep - 1);
-    }
-
-    function handleQuestionKindChange(event: SelectChangeEvent) {
-        const newDefaultQuestionKind = event.target.value as questionKindType;
-        setCurrentQuestionKind(newDefaultQuestionKind);
     }
 
     function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
@@ -255,15 +253,6 @@ function QuestionUpsertionModal(props: {
     }
 }
 
-const RowContainer = styled('div')({
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 4,
-    marginBottom: 4,
-    flex: 1,
-    width: '100%',
-});
-
 const ModalContentContainer = styled('div')({
     display: 'flex',
     width: '100%',
@@ -290,9 +279,8 @@ const ArrowContainer = styled('div')({
     justifyContent: 'center',
 });
 const PointsContainer = styled('div')({
-    width: '100%',
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
 });
 
 export { QuestionUpsertionModal };

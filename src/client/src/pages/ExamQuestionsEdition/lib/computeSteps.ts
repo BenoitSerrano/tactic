@@ -1,4 +1,4 @@
-const stepIds = ['SELECT_QUESTION_KIND', 'EDIT_QUESTION_CONTENT', 'EDIT_QUESTION_POINTS'] as const;
+const stepIds = ['SELECT_QUESTION_KIND', 'EDIT_QUESTION_POINTS', 'EDIT_QUESTION_CONTENT'] as const;
 type stepIdType = (typeof stepIds)[number];
 
 function computeSteps(): Record<stepIdType, { label: string }> {

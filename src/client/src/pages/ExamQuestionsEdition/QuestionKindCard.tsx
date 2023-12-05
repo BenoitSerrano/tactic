@@ -8,7 +8,7 @@ function QuestionKindCard(props: {
 }) {
     const CardComponent = props.isSelected ? SelectedCardComponent : NotSelectedCardComponent;
     return (
-        <CardComponent onClick={selectQuestionKind}>
+        <CardComponent elevation={2} onClick={selectQuestionKind}>
             <Typography variant="h5">{props.title}</Typography>
             <Typography variant="h6">{props.subtitle}</Typography>
         </CardComponent>
