@@ -48,6 +48,9 @@ function QuestionsAnswering(props: {
             initialCurrentAnswers[question.id] = question.currentAnswer;
         }
     }
+    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
+        undefined,
+    );
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
 
@@ -83,6 +86,8 @@ function QuestionsAnswering(props: {
 
                     return (
                         <ExerciseContainer
+                            isExpanded={currentExerciseExpanded === exercise.id}
+                            onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
                             key={`exercise-${exercise.id}`}
                             exercise={exercise}
                             indication={exerciseIndication}
@@ -112,6 +117,12 @@ function QuestionsAnswering(props: {
             </TestPageLayout>
         </>
     );
+
+    function buildOnExerciseExpandedChange(exerciseId: number) {
+        return (_: any, isExpanded: boolean) => {
+            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
+        };
+    }
 
     function saveDraft() {
         saveDraftMutation.mutate({

@@ -14,12 +14,16 @@ function ExerciseContainer<
     exercise: exerciseT;
     children: ReactNode;
     isLastItem: boolean;
+    isExpanded: boolean;
+    onChangeExpanded: (_: any, isExpanded: boolean) => void;
     indication?: exerciseIndicationType;
 }) {
     const exerciseResult = computeExerciseIndication(props.exercise, props.indication);
     const Container = props.isLastItem ? LastContainer : DefaultContainer;
     return (
         <Container
+            onChange={props.onChangeExpanded}
+            expanded={props.isExpanded}
             disableGutters
             key={'exercise-' + props.exercise.id}
             sx={{

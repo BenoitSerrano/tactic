@@ -129,6 +129,9 @@ function QuestionsChecking(props: {
             console.error(error);
         },
     });
+    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
+        undefined,
+    );
 
     const [attemptIdToNavigateTo, setAttemptIdToNavigateTo] = useState<string | undefined>(
         undefined,
@@ -199,6 +202,8 @@ function QuestionsChecking(props: {
                 />
                 {props.exercises.map((exercise, exerciseIndex) => (
                     <ExerciseContainer
+                        isExpanded={currentExerciseExpanded === exercise.id}
+                        onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
                         key={'exercise-' + exercise.id}
                         exercise={exercise}
                         isLastItem={exerciseIndex === props.exercises.length - 1}
@@ -342,6 +347,12 @@ function QuestionsChecking(props: {
                 examId: props.examId,
             });
         }
+    }
+
+    function buildOnExerciseExpandedChange(exerciseId: number) {
+        return (_: any, isExpanded: boolean) => {
+            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
+        };
     }
 
     function markAsCorrectedAndNavigate(attemptIdToNavigateTo: string) {

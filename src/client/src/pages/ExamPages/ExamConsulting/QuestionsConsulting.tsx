@@ -7,6 +7,7 @@ import { computeResult } from '../lib/computeResult';
 import { extractMarks } from '../lib/extractMarks';
 import { QuestionChecking } from '../ExamChecking/QuestionChecking';
 import { ExerciseContainer } from '../components/ExerciseContainer';
+import { useState } from 'react';
 
 function QuestionsConsulting(props: {
     exercises: Array<exerciseWithAnswersType>;
@@ -14,6 +15,9 @@ function QuestionsConsulting(props: {
     studentEmail: string;
     attemptId: string;
 }) {
+    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
+        undefined,
+    );
     const result = computeResult(props.exercises);
     const marks = extractMarks(props.exercises);
 
@@ -27,6 +31,8 @@ function QuestionsConsulting(props: {
             <>
                 {props.exercises.map((exercise, exerciseIndex) => (
                     <ExerciseContainer
+                        isExpanded={currentExerciseExpanded === exercise.id}
+                        onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
                         key={`exercise-${exercise.id}`}
                         exercise={exercise}
                         isLastItem={exerciseIndex === props.exercises.length - 1}
@@ -59,6 +65,12 @@ function QuestionsConsulting(props: {
             </>
         </TestPageLayout>
     );
+
+    function buildOnExerciseExpandedChange(exerciseId: number) {
+        return (_: any, isExpanded: boolean) => {
+            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
+        };
+    }
 }
 
 const QuestionConsultingContainer = styled('div')(({ theme }) => ({
