@@ -138,7 +138,11 @@ function QuestionUpsertionModal(props: {
         return (
             <Stepper activeStep={activeStep}>
                 {stepIds.map((stepId, index) => (
-                    <Step key={`step-${stepId}`} active={activeStep === index}>
+                    <Step
+                        key={`step-${stepId}`}
+                        active={activeStep === index}
+                        disabled={computeIsStepDisabled(index)}
+                    >
                         <StepLabel>{steps[stepId].label}</StepLabel>
                     </Step>
                 ))}
@@ -179,6 +183,10 @@ function QuestionUpsertionModal(props: {
                     </PointsContainer>
                 );
         }
+    }
+
+    function computeIsStepDisabled(index: number) {
+        return index === 0 && props.modalStatus.kind === 'editing';
     }
 
     function onSelectQuestionKind(questionKind: questionKindType) {
