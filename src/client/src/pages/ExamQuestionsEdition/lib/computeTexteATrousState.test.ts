@@ -1,4 +1,8 @@
-import { computeRightAnswerIndex, computeTexteATrousState } from './computeTexteATrousState';
+import {
+    mergeAdjacentBlanks,
+    computeRightAnswerIndex,
+    computeTexteATrousState,
+} from './computeTexteATrousState';
 
 describe('computeTexteATrousState', () => {
     // "tu es vraiment la plus belle"
@@ -7,13 +11,13 @@ describe('computeTexteATrousState', () => {
         const prevTitle = 'tu es vraiment la plus belle';
         const prevRightAnswers: string[] = [];
 
-        const { nextTitle, nextRightAnswers } = computeTexteATrousState(wordIndex, {
-            prevTitle,
-            prevRightAnswers,
+        const nextState = computeTexteATrousState(wordIndex, {
+            title: prevTitle,
+            rightAnswers: prevRightAnswers,
         });
 
-        expect(nextTitle).toBe('tu .... vraiment la plus belle');
-        expect(nextRightAnswers).toEqual(['es']);
+        expect(nextState.title).toBe('tu .... vraiment la plus belle');
+        expect(nextState.rightAnswers).toEqual(['es']);
     });
 
     it('computes back for one missing word', () => {
@@ -21,13 +25,13 @@ describe('computeTexteATrousState', () => {
         const prevTitle = 'tu .... vraiment la plus belle';
         const prevRightAnswers: string[] = ['es'];
 
-        const { nextTitle, nextRightAnswers } = computeTexteATrousState(wordIndex, {
-            prevTitle,
-            prevRightAnswers,
+        const nextState = computeTexteATrousState(wordIndex, {
+            title: prevTitle,
+            rightAnswers: prevRightAnswers,
         });
 
-        expect(nextTitle).toBe('tu es vraiment la plus belle');
-        expect(nextRightAnswers).toEqual([]);
+        expect(nextState.title).toBe('tu es vraiment la plus belle');
+        expect(nextState.rightAnswers).toEqual([]);
     });
 
     it('computes back for one missing word among three', () => {
@@ -35,13 +39,13 @@ describe('computeTexteATrousState', () => {
         const prevTitle = 'tu .... vraiment .... plus ....';
         const prevRightAnswers: string[] = ['es', 'la', 'belle'];
 
-        const { nextTitle, nextRightAnswers } = computeTexteATrousState(wordIndex, {
-            prevTitle,
-            prevRightAnswers,
+        const nextState = computeTexteATrousState(wordIndex, {
+            title: prevTitle,
+            rightAnswers: prevRightAnswers,
         });
 
-        expect(nextTitle).toBe('tu .... vraiment la plus ....');
-        expect(nextRightAnswers).toEqual(['es', 'belle']);
+        expect(nextState.title).toBe('tu .... vraiment la plus ....');
+        expect(nextState.rightAnswers).toEqual(['es', 'belle']);
     });
 
     it('computes for a state that has one missing word', () => {
@@ -49,13 +53,13 @@ describe('computeTexteATrousState', () => {
         const prevTitle = 'tu .... vraiment la plus belle';
         const prevRightAnswers: string[] = ['es'];
 
-        const { nextTitle, nextRightAnswers } = computeTexteATrousState(wordIndex, {
-            prevTitle,
-            prevRightAnswers,
+        const nextState = computeTexteATrousState(wordIndex, {
+            title: prevTitle,
+            rightAnswers: prevRightAnswers,
         });
 
-        expect(nextTitle).toBe('tu .... vraiment .... plus belle');
-        expect(nextRightAnswers).toEqual(['es', 'la']);
+        expect(nextState.title).toBe('tu .... vraiment .... plus belle');
+        expect(nextState.rightAnswers).toEqual(['es', 'la']);
     });
 
     it('computes for a state that has two missing words', () => {
@@ -63,13 +67,27 @@ describe('computeTexteATrousState', () => {
         const prevTitle = 'tu .... vraiment .... plus belle';
         const prevRightAnswers: string[] = ['es', 'la'];
 
-        const { nextTitle, nextRightAnswers } = computeTexteATrousState(wordIndex, {
-            prevTitle,
-            prevRightAnswers,
+        const nextState = computeTexteATrousState(wordIndex, {
+            title: prevTitle,
+            rightAnswers: prevRightAnswers,
         });
 
-        expect(nextTitle).toBe('tu .... .... .... plus belle');
-        expect(nextRightAnswers).toEqual(['es', 'vraiment', 'la']);
+        expect(nextState.title).toBe('tu .... plus belle');
+        expect(nextState.rightAnswers).toEqual(['es vraiment la']);
+    });
+
+    it('computes for one missing word adjacent', () => {
+        const wordIndex = 2;
+        const prevTitle = 'tu .... vraiment la plus belle';
+        const prevRightAnswers: string[] = ['es'];
+
+        const nextState = computeTexteATrousState(wordIndex, {
+            title: prevTitle,
+            rightAnswers: prevRightAnswers,
+        });
+
+        expect(nextState.title).toBe('tu .... la plus belle');
+        expect(nextState.rightAnswers).toEqual(['es vraiment']);
     });
 
     describe('computeRightAnswerIndex', () => {
@@ -107,6 +125,35 @@ describe('computeTexteATrousState', () => {
             const rightAnswerIndex = computeRightAnswerIndex(wordIndex, prevTitle);
 
             expect(rightAnswerIndex).toBe(2);
+        });
+    });
+    describe('mergeAdjacentBlanks', () => {
+        it('should return same state if no adjacent blanks', () => {
+            const title = 'tu .... vraiment .... plus belle';
+            const rightAnswers = ['es', 'la'];
+
+            const nextState = mergeAdjacentBlanks({ title, rightAnswers });
+
+            expect(nextState.title).toBe(title);
+            expect(nextState.rightAnswers).toEqual(rightAnswers);
+        });
+        it('should return merged state if one adjacent blank', () => {
+            const title = 'tu .... .... la plus belle';
+            const rightAnswers = ['es', 'vraiment'];
+
+            const nextState = mergeAdjacentBlanks({ title, rightAnswers });
+
+            expect(nextState.title).toBe('tu .... la plus belle');
+            expect(nextState.rightAnswers).toEqual(['es vraiment']);
+        });
+        it('should return merged state if two adjacent blanks at the end', () => {
+            const title = 'tu est vraiment la .... ....';
+            const rightAnswers = ['plus', 'belle'];
+
+            const nextState = mergeAdjacentBlanks({ title, rightAnswers });
+
+            expect(nextState.title).toBe('tu est vraiment la ....');
+            expect(nextState.rightAnswers).toEqual(['plus belle']);
         });
     });
 });

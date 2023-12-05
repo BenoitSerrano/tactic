@@ -67,12 +67,12 @@ function TexteATrousUpsertionModalContent(props: {
 
     function buildOnClickOnWord(wordIndex: number) {
         return () => {
-            const { nextRightAnswers, nextTitle } = computeTexteATrousState(wordIndex, {
-                prevTitle: props.title,
-                prevRightAnswers: props.rightAnswers,
+            const nextState = computeTexteATrousState(wordIndex, {
+                title: props.title,
+                rightAnswers: props.rightAnswers,
             });
-            props.setTitle(nextTitle);
-            props.setRightAnswers(nextRightAnswers);
+            props.setTitle(nextState.title);
+            props.setRightAnswers(nextState.rightAnswers);
         };
     }
 }

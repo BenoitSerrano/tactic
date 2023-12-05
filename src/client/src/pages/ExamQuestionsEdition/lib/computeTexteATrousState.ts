@@ -1,24 +1,20 @@
 import { textSplitter } from '../../../lib/textSplitter';
 
+type texteATrousStateType = { title: string; rightAnswers: string[] };
+
 function computeTexteATrousState(
     wordIndex: number,
-    {
-        prevTitle,
-        prevRightAnswers,
-    }: {
-        prevTitle: string;
-        prevRightAnswers: string[];
-    },
-): { nextTitle: string; nextRightAnswers: string[] } {
-    const prevWords = textSplitter.split(prevTitle);
+    prevState: texteATrousStateType,
+): texteATrousStateType {
+    const prevWords = textSplitter.split(prevState.title);
     const replacedWord = prevWords[wordIndex];
 
     const nextWords = [...prevWords];
-    const nextRightAnswers = [...prevRightAnswers];
+    const nextRightAnswers = [...prevState.rightAnswers];
 
-    const rightAnswerIndex = computeRightAnswerIndex(wordIndex, prevTitle);
+    const rightAnswerIndex = computeRightAnswerIndex(wordIndex, prevState.title);
     if (replacedWord === '....') {
-        nextWords[wordIndex] = prevRightAnswers[rightAnswerIndex];
+        nextWords[wordIndex] = prevState.rightAnswers[rightAnswerIndex];
         nextRightAnswers.splice(rightAnswerIndex, 1);
     } else {
         nextWords[wordIndex] = '....';
@@ -26,7 +22,11 @@ function computeTexteATrousState(
     }
     const nextTitle = nextWords.join(' ');
 
-    return { nextTitle, nextRightAnswers };
+    const nextState = { title: nextTitle, rightAnswers: nextRightAnswers };
+
+    const mergedState = mergeAdjacentBlanks(nextState);
+
+    return mergedState;
 }
 
 function computeRightAnswerIndex(wordIndex: number, title: string) {
@@ -41,4 +41,36 @@ function computeRightAnswerIndex(wordIndex: number, title: string) {
     return rightAnswerIndex;
 }
 
-export { computeTexteATrousState, computeRightAnswerIndex };
+function mergeAdjacentBlanks(prevState: texteATrousStateType): texteATrousStateType {
+    const splittedText = textSplitter.split(prevState.title);
+
+    let startedRightAnswer: string[] = [];
+    let rightAnswerIndex = -1;
+    const nextRightAnswers: string[] = [];
+    let nextTitleChunks: string[] = [];
+    for (let i = 0; i < splittedText.length; i++) {
+        const word = splittedText[i];
+        if (word === '....') {
+            if (startedRightAnswer.length === 0) {
+                nextTitleChunks.push('....');
+            }
+            rightAnswerIndex++;
+            const currentRightAnswer = prevState.rightAnswers[rightAnswerIndex];
+            startedRightAnswer.push(currentRightAnswer);
+        } else {
+            if (startedRightAnswer.length > 0) {
+                nextRightAnswers.push(startedRightAnswer.join(' '));
+                startedRightAnswer = [];
+            }
+            nextTitleChunks.push(word);
+        }
+    }
+    if (startedRightAnswer.length > 0) {
+        nextRightAnswers.push(startedRightAnswer.join(' '));
+        startedRightAnswer = [];
+    }
+
+    return { title: nextTitleChunks.join(' '), rightAnswers: nextRightAnswers };
+}
+
+export { computeTexteATrousState, computeRightAnswerIndex, mergeAdjacentBlanks };
