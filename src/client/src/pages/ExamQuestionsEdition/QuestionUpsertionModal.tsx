@@ -117,16 +117,21 @@ function QuestionUpsertionModal(props: {
                 <StepContainer>
                     <ArrowContainer>
                         <IconButton
+                            size="large"
                             onClick={handlePreviousClick}
                             disabled={isPreviousButtonDisabled}
                         >
-                            <ArrowBackIcon />
+                            <ArrowBackIcon fontSize="large" />
                         </IconButton>
                     </ArrowContainer>
                     <StepContentContainer>{renderStepContent()}</StepContentContainer>
                     <ArrowContainer>
-                        <IconButton onClick={handleNextClick} disabled={isNextButtonDisabled}>
-                            <ArrowForwardIcon />
+                        <IconButton
+                            onClick={handleNextClick}
+                            disabled={isNextButtonDisabled}
+                            size="large"
+                        >
+                            <ArrowForwardIcon fontSize="large" />
                         </IconButton>
                     </ArrowContainer>
                 </StepContainer>
@@ -281,11 +286,12 @@ const StepContainer = styled('div')({
     width: '100%',
 });
 
-const ArrowContainer = styled('div')({
+const ArrowContainer = styled('div')(({ theme }) => ({
     display: 'flex',
+    padding: theme.spacing(1),
     alignItems: 'center',
     justifyContent: 'center',
-});
+}));
 const PointsContainer = styled('div')({
     display: 'flex',
     justifyContent: 'center',
