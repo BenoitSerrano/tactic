@@ -149,7 +149,6 @@ function QuestionsChecking(props: {
     const canCorrectAttempt =
         props.attemptStatus === 'finished' || props.attemptStatus === 'expired';
     const UpdateCorrectedAtButton = renderUpdateCorrectedAtButton(props.attemptStatus);
-
     return (
         <TestPageLayout
             studentEmail={props.studentEmail}

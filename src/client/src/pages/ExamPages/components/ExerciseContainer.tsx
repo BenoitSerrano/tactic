@@ -1,50 +1,71 @@
-import { Typography, styled } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, styled } from '@mui/material';
 import { ReactNode } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Markdown from 'react-markdown';
-import { computeExerciseResult } from '../lib/computeExerciseResult';
+import {
+    computeExerciseIndication,
+    exerciseIndicationType,
+} from '../lib/computeExerciseIndication';
 
 function ExerciseContainer<
     questionT extends { points: number; mark?: number | undefined },
     exerciseT extends { id: number; name: string; instruction: string; questions: questionT[] },
->(props: { exercise: exerciseT; children: ReactNode; isLastItem: boolean; hideMark?: boolean }) {
-    const exerciseResult = computeExerciseResult(props.exercise, { hideMark: props.hideMark });
+>(props: {
+    exercise: exerciseT;
+    children: ReactNode;
+    isLastItem: boolean;
+    indication?: exerciseIndicationType;
+}) {
+    const exerciseResult = computeExerciseIndication(props.exercise, props.indication);
     const Container = props.isLastItem ? LastContainer : DefaultContainer;
     return (
-        <Container key={'exercise-' + props.exercise.id}>
-            <ExerciseHeaderContainer>
+        <Container
+            disableGutters
+            key={'exercise-' + props.exercise.id}
+            sx={{
+                '&:before': {
+                    display: 'none',
+                },
+            }}
+        >
+            <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />}>
                 <TitleContainer>
                     <Typography variant="h3">{props.exercise.name}</Typography>
                     <Typography variant="h4">{exerciseResult}</Typography>
                 </TitleContainer>
+            </AccordionSummary>
+            <AccordionDetails>
                 <Typography>
                     <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
                 </Typography>
-            </ExerciseHeaderContainer>
-            {props.children}
+                {props.children}
+            </AccordionDetails>
         </Container>
     );
 }
 
 export { ExerciseContainer };
 
-const DefaultContainer = styled('div')(({ theme }) => ({
-    userSelect: 'none',
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(2),
-    borderBottom: `1px solid ${theme.palette.common.black}`,
-}));
+const mainContainerProperties = {
+    userSelect: 'none' as const,
+    boxShadow: 'none' as const,
+    elevation: 0,
+};
 
-const LastContainer = styled('div')(({ theme }) => ({
-    userSelect: 'none',
-    marginTop: theme.spacing(2),
-}));
-
-const TitleContainer = styled('div')(({ theme }) => ({
+const DefaultContainer = styled(Accordion)(({ theme }) => ({
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    flex: 1,
+    borderBottom: `1px solid ${theme.palette.common.black}`,
+    ...mainContainerProperties,
 }));
 
-const ExerciseHeaderContainer = styled('div')(({ theme }) => ({
+const LastContainer = styled(Accordion)(({ theme }) => ({ ...mainContainerProperties }));
+
+const TitleContainer = styled('div')({
+    display: 'flex',
     flex: 1,
-}));
+    alignItems: 'center',
+    justifyContent: 'space-between',
+});

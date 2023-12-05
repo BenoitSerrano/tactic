@@ -54,9 +54,12 @@ type questionWithoutAnswerType = {
     points: number;
 };
 
+type attemptAnswersType = Record<number, string>;
+
 type answerStatusType = 'wrong' | 'acceptable' | 'right' | undefined;
 
 export type {
+    attemptAnswersType,
     attemptWithAnswersApiType,
     exerciseWithAnswersType,
     questionWithAnswersType,
