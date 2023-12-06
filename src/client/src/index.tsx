@@ -11,9 +11,6 @@ import './index.css';
 import { ThemeProvider, styled } from '@mui/material';
 import { theme } from './theme';
 import { AlertHandlerContextProvider } from './lib/alert';
-import { eventHandler } from './lib/eventHandler';
-import { cheatingHandler } from './lib/cheatingHandler';
-import { pathHandler } from './lib/pathHandler';
 import { GlobalLoadingContextProvider } from './lib/globalLoading';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -36,22 +33,6 @@ root.render(
     </ThemeProvider>,
 );
 
-window.addEventListener('beforeunload', (event) => {
-    const pathname = (event.currentTarget as Window).location.pathname;
-    const attemptId = pathHandler.extractCurrentAttemptId(pathname);
-    if (!!attemptId) {
-        event.returnValue = null;
-    }
-});
-
-window.addEventListener(
-    'blur',
-    eventHandler.buildHandleWindowEvent(cheatingHandler.buildOnFocusChangeCallback('blur')),
-);
-window.addEventListener(
-    'focus',
-    eventHandler.buildHandleWindowEvent(cheatingHandler.buildOnFocusChangeCallback('focus')),
-);
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

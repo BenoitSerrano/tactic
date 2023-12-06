@@ -9,6 +9,9 @@ import { attemptWithoutAnswersType } from './types';
 import { computeShouldNavigateToExamDone } from './lib/computeShouldNavigateToExamDone';
 import { computeOfficialEndTime } from './lib/computeOfficialEndTime';
 import { pathHandler } from '../../../lib/pathHandler';
+import { useEffect } from 'react';
+import { cheatingHandler } from '../../../lib/cheatingHandler';
+import { eventHandler } from '../../../lib/eventHandler';
 
 function ExamTaking() {
     const params = useParams();
@@ -19,6 +22,34 @@ function ExamTaking() {
         queryKey: ['attempts-without-answers', attemptId],
         queryFn: () => api.fetchAttemptWithoutAnswers(attemptId),
     });
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            const pathname = (event.currentTarget as Window).location.pathname;
+            const attemptId = pathHandler.extractCurrentAttemptId(pathname);
+            if (!!attemptId) {
+                event.returnValue = null;
+            }
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        const handleBlur = eventHandler.buildHandleWindowEvent(
+            cheatingHandler.buildOnFocusChangeCallback('blur'),
+        );
+
+        window.addEventListener('blur', handleBlur);
+
+        const handleFocus = eventHandler.buildHandleWindowEvent(
+            cheatingHandler.buildOnFocusChangeCallback('focus'),
+        );
+        window.addEventListener('focus', handleFocus);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('blur', handleFocus);
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, []);
 
     if (!query.data) {
         return (
