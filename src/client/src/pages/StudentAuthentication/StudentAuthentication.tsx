@@ -60,7 +60,7 @@ function StudentAuthentication() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                <Card>
+                <Card width="30%">
                     <TitleContainer>
                         <Typography variant="h4">{query.data.name}</Typography>
                     </TitleContainer>
@@ -96,6 +96,7 @@ const TitleContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    textAlign: 'center',
     alignItems: 'center',
 }));
 
