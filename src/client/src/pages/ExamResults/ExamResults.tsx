@@ -5,6 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import HistoryIcon from '@mui/icons-material/History';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { api } from '../../lib/api';
 import {
     IconButton,
@@ -26,6 +27,7 @@ import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
 import { computeCanLockAttempt } from './lib/computeCanLockAttempt';
 import { computeCanUnlockAttempt } from './lib/computeCanUnlockAttempt';
+import { Menu } from '../../components/Menu';
 
 type examResultApiType = {
     id: string;
@@ -129,6 +131,14 @@ function ExamResults() {
     const sortedAttemptIds = sortedData.map(({ attemptId }) => attemptId);
     const title = resultsQuery.data.examName;
     const subtite = computeSubtitle(attemptsCountQuery.data);
+    const menuButtons = [
+        {
+            title: 'Rafraîchir',
+            onClick: resultsQuery.refetch,
+            IconComponent: RefreshIcon,
+            isLoading: resultsQuery.isLoading,
+        },
+    ];
 
     return (
         <>
@@ -136,7 +146,9 @@ function ExamResults() {
                 <Typography variant="h3">{title}</Typography>
                 <Typography variant="h4">{subtite}</Typography>
             </TitleContainer>
-            <Table stickyHeader>
+            <Menu buttons={menuButtons} />
+
+            <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell width={20}>N°</TableCell>

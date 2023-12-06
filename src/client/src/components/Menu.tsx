@@ -1,23 +1,29 @@
 import { styled } from '@mui/material';
-import { Button } from './Button';
 import { HEADER_HEIGHT } from '../constants';
+import { LoadingButton } from '@mui/lab';
 
 type buttonType = {
     IconComponent: React.ElementType;
     onClick: () => void;
     title: string;
+    isLoading?: boolean;
 };
 
 function Menu(props: { buttons: Array<buttonType> }) {
     return (
         <MenuContainer>
             {props.buttons.map((button, index) => {
-                const { IconComponent, onClick, title } = button;
+                const { IconComponent, onClick, title, isLoading } = button;
                 return (
                     <ButtonContainer key={index}>
-                        <Button variant="contained" startIcon={<IconComponent />} onClick={onClick}>
+                        <LoadingButton
+                            loading={isLoading}
+                            variant="contained"
+                            startIcon={<IconComponent />}
+                            onClick={onClick}
+                        >
                             {title}
-                        </Button>
+                        </LoadingButton>
                     </ButtonContainer>
                 );
             })}
