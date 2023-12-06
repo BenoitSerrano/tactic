@@ -12,6 +12,7 @@ import { pathHandler } from '../../../lib/pathHandler';
 import { useEffect } from 'react';
 import { cheatingHandler } from '../../../lib/cheatingHandler';
 import { eventHandler } from '../../../lib/eventHandler';
+import { useAlert } from '../../../lib/alert';
 
 function ExamTaking() {
     const params = useParams();
@@ -22,6 +23,7 @@ function ExamTaking() {
         queryKey: ['attempts-without-answers', attemptId],
         queryFn: () => api.fetchAttemptWithoutAnswers(attemptId),
     });
+    const { displayAlert } = useAlert();
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -34,13 +36,23 @@ function ExamTaking() {
         window.addEventListener('beforeunload', handleBeforeUnload);
 
         const handleBlur = eventHandler.buildHandleWindowEvent(
-            cheatingHandler.buildOnFocusChangeCallback('blur'),
+            cheatingHandler.buildOnFocusChangeCallback('blur', () =>
+                displayAlert({
+                    variant: 'warning',
+                    text: "Vous êtes sorti de la page. Veuillez revenir sur la page de l'examen.",
+                }),
+            ),
         );
 
         window.addEventListener('blur', handleBlur);
 
         const handleFocus = eventHandler.buildHandleWindowEvent(
-            cheatingHandler.buildOnFocusChangeCallback('focus'),
+            cheatingHandler.buildOnFocusChangeCallback('focus', () =>
+                displayAlert({
+                    variant: 'warning',
+                    text: "Vous êtes revenu sur la page. Sachez que votre professeur est informé des sorties d'examen.",
+                }),
+            ),
         );
         window.addEventListener('focus', handleFocus);
 

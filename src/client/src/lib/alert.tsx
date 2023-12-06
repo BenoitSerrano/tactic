@@ -4,7 +4,7 @@ import { Alert, Slide, SlideProps, Snackbar } from '@mui/material';
 type alertHandlerType = { displayAlert: ({ text, variant }: alertType) => void };
 
 type alertType = {
-    variant: 'error' | 'success';
+    variant: 'error' | 'success' | 'warning';
     text: string;
 };
 

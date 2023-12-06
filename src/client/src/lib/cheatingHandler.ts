@@ -15,10 +15,12 @@ const cheatingHandler = {
     computeCheatingSummary,
 };
 
-function buildOnFocusChangeCallback(kind: focusChangeEventType['kind']) {
+function buildOnFocusChangeCallback(kind: focusChangeEventType['kind'], displayAlert: () => void) {
     return (pathname: string) => {
         const currentAttemptId = pathHandler.extractCurrentAttemptId(pathname);
         if (!!currentAttemptId) {
+            displayAlert();
+
             const now = new Date();
             const previousFocusChangesEvents = localStorage.focusChanges.get(currentAttemptId);
             const nextFocusChangesEvent = { kind, timestamp: now.getTime() };
