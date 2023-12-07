@@ -15,6 +15,8 @@ const HEADER_HEIGHT = 60;
 
 const manualQuestionKinds = ['texteLibre'];
 
+const localeInfo = { locale: 'fr-FR', timeZone: 'Europe/Paris' };
+
 const questionSpecificityMapping: Record<
     questionKindType,
     {
@@ -62,5 +64,6 @@ export {
     QUESTION_TROU_REGEX,
     TEXTE_A_TROU_REGEX,
     HEADER_HEIGHT,
+    localeInfo,
     manualQuestionKinds,
 };
