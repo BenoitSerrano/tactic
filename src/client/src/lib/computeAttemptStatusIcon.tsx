@@ -2,7 +2,8 @@ import DoneIcon from '@mui/icons-material/Done';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import GradingIcon from '@mui/icons-material/Grading';
-import { Tooltip, Typography } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { Tooltip } from '@mui/material';
 import { attemptStatusType } from '../types';
 
 function computeAttemptStatusIcon(status: attemptStatusType) {
@@ -32,7 +33,11 @@ function computeAttemptStatusIcon(status: attemptStatusType) {
                 </Tooltip>
             );
         case 'notStarted':
-            return <Typography color="error">-</Typography>;
+            return (
+                <Tooltip title="Examen non passé">
+                    <ClearIcon color="error" />
+                </Tooltip>
+            );
     }
 }
 
