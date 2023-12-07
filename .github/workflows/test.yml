@@ -1,5 +1,8 @@
 name: Jest
 on: push
+env:
+    HASH_SECRET: ${{ secrets.HASH_SECRET }}
+    JWT_TOKEN_SECRET: ${{ secrets.JWT_TOKEN_SECRET }}
 jobs:
     test:
         runs-on: ubuntu-latest
