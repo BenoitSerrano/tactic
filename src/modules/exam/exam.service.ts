@@ -73,7 +73,7 @@ function buildExamService() {
     }
 
     async function getExams(user: User) {
-        return examRepository.find({ where: { user }, order: { createdAt: 'ASC' } });
+        return examRepository.find({ where: { user }, order: { createdAt: 'DESC' } });
     }
 
     async function getExamExercises(examId: Exam['id']) {
