@@ -12,7 +12,7 @@ describe('computeExerciseIndication', () => {
 
             const exerciseResult = computeExerciseIndication(exercise);
 
-            expect(exerciseResult).toBe('2 / 5');
+            expect(exerciseResult.result).toBe('2 / 5');
         });
 
         it('should display exercise result if question have no marks', () => {
@@ -22,7 +22,7 @@ describe('computeExerciseIndication', () => {
 
             const exerciseResult = computeExerciseIndication(exercise);
 
-            expect(exerciseResult).toBe('0 / 5');
+            expect(exerciseResult.result).toBe('0 / 5');
         });
 
         it('should not display exercise mark if hidden', () => {
@@ -34,7 +34,7 @@ describe('computeExerciseIndication', () => {
                 hideMark: true,
             });
 
-            expect(exerciseResult).toBe('/ 5');
+            expect(exerciseResult.result).toBe('/ 5');
         });
     });
 });
