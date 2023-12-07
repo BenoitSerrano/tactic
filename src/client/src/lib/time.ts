@@ -30,13 +30,7 @@ function formatToClock(seconds: number, options?: { hideHours: boolean }) {
 
 function formatToReadableDatetime(date: string) {
     const parsedDate = new Date(date);
-    const hrDate = `${parsedDate.toLocaleDateString(localeInfo.locale, {
-        timeZone: localeInfo.timeZone,
-    })}`;
-    const hrTime = `${formatToHumanReadable(parsedDate.getHours())}:${formatToHumanReadable(
-        parsedDate.getMinutes(),
-    )}:${formatToHumanReadable(parsedDate.getSeconds())}`;
-    return `${hrDate} ${hrTime}`;
+    return parsedDate.toLocaleString(localeInfo.locale, { timeZone: localeInfo.timeZone });
 }
 
 function formatToHumanReadable(value: number) {
