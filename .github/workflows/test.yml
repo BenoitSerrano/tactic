@@ -28,6 +28,9 @@ jobs:
             - name: Install Dependencies
               run: npm install
 
+            - name: Install client dependencies
+              run: cd src/client && npm install
+
             # Finally, run our tests
             - name: Run the tests
               run: npm test
