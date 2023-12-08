@@ -18,7 +18,7 @@ function QuestionsAnswering(props: {
     exercises: Array<exerciseWithoutAnswersType>;
     onExamDone: () => void;
 }) {
-    const [isConfirmFinishExamModalOpen, setIsConfirmFinishExamModalOpen] = useState(true);
+    const [isConfirmFinishExamModalOpen, setIsConfirmFinishExamModalOpen] = useState(false);
     const saveDraftMutation = useMutation({
         mutationFn: api.updateAttempt,
         onSuccess: () => {
