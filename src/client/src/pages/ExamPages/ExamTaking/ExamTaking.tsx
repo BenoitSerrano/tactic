@@ -50,7 +50,7 @@ function ExamTaking() {
             cheatingHandler.buildOnFocusChangeCallback('focus', () =>
                 displayAlert({
                     variant: 'warning',
-                    text: "Vous êtes revenu sur la page. Sachez que votre professeur est informé des sorties d'écran.",
+                    text: "Attention, vous êtes sorti·e de la page de l'examen. Votre professeur·e en a été alerté·e.",
                 }),
             ),
         );
