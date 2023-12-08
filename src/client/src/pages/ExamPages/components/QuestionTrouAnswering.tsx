@@ -21,6 +21,7 @@ function QuestionTrouAnswering(props: {
                 <IndexContainer>{props.index}</IndexContainer>. {beforeText}
             </Typography>
             <StyledTextField
+                fullWidth
                 variant="outlined"
                 value={props.currentAnswer}
                 onChange={onChangeAnswer}
@@ -37,14 +38,12 @@ function QuestionTrouAnswering(props: {
 
 const StyledContainer = styled('div')({
     display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
+    flexDirection: 'column',
+    width: '100%',
 });
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    marginTop: theme.spacing(1),
 }));
 
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
