@@ -5,6 +5,7 @@ import { QuestionAnswering } from '../components/QuestionAnswering';
 import { exerciseWithoutAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeExerciseProgress } from '../lib/computeExerciseProgress';
+import { computeTotalPoints } from '../lib/computeTotalPoints';
 
 function QuestionsPreviewing(props: {
     title: string;
@@ -15,9 +16,11 @@ function QuestionsPreviewing(props: {
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
         undefined,
     );
+    const totalPoints = computeTotalPoints(props.exercises);
+
     return (
         <>
-            <TestPageLayout studentEmail="-" title={props.title} buttons={[]}>
+            <TestPageLayout studentEmail="-" title={props.title} buttons={[]} result={totalPoints}>
                 {props.exercises.map((exercise, exerciseIndex) => {
                     const progress = computeExerciseProgress(exercise.questions, currentAnswers);
                     const exerciseIndication = {

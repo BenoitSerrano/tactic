@@ -10,6 +10,7 @@ import { exerciseWithoutAnswersType, attemptAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 import { Modal } from '../../../components/Modal';
+import { computeTotalPoints } from '../lib/computeTotalPoints';
 
 function QuestionsAnswering(props: {
     attemptId: string;
@@ -55,10 +56,12 @@ function QuestionsAnswering(props: {
     );
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
+    const totalPoints = computeTotalPoints(props.exercises);
 
     return (
         <>
             <TestPageLayout
+                result={totalPoints}
                 studentEmail={props.studentEmail}
                 title={props.title}
                 buttons={[

@@ -34,9 +34,12 @@ function ExerciseContainer<
         >
             <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />}>
                 <TitleContainer>
-                    <Typography variant="h3">
-                        ( {result}) {props.exercise.name}
-                    </Typography>
+                    <ExerciseHeaderContainer>
+                        <ExercisePointsContainer>
+                            <Typography variant="h4">( {result})</Typography>
+                        </ExercisePointsContainer>
+                        <Typography variant="h3">{props.exercise.name}</Typography>
+                    </ExerciseHeaderContainer>
                     {progress !== undefined && (
                         <Typography variant="h4">{progress}% complétés</Typography>
                     )}
@@ -77,3 +80,6 @@ const TitleContainer = styled('div')({
     alignItems: 'center',
     justifyContent: 'space-between',
 });
+
+const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center' });
+const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
