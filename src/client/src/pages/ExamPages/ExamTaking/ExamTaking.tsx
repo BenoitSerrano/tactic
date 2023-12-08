@@ -50,7 +50,7 @@ function ExamTaking() {
             cheatingHandler.buildOnFocusChangeCallback('focus', () =>
                 displayAlert({
                     variant: 'warning',
-                    text: "Vous êtes revenu sur la page. Sachez que votre professeur est informé des sorties d'examen.",
+                    text: "Vous êtes revenu sur la page. Sachez que votre professeur est informé des sorties d'écran.",
                 }),
             ),
         );
@@ -61,7 +61,7 @@ function ExamTaking() {
             window.removeEventListener('blur', handleFocus);
             window.removeEventListener('focus', handleFocus);
         };
-    }, []);
+    }, [displayAlert]);
 
     if (!query.data) {
         return (

@@ -9,6 +9,7 @@ import { TestPageLayout } from '../components/TestPageLayout';
 import { exerciseWithoutAnswersType, attemptAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeExerciseProgress } from '../lib/computeExerciseProgress';
+import { Modal } from '../../../components/Modal';
 
 function QuestionsAnswering(props: {
     attemptId: string;
@@ -17,6 +18,7 @@ function QuestionsAnswering(props: {
     exercises: Array<exerciseWithoutAnswersType>;
     onExamDone: () => void;
 }) {
+    const [isConfirmFinishExamModalOpen, setIsConfirmFinishExamModalOpen] = useState(true);
     const saveDraftMutation = useMutation({
         mutationFn: api.updateAttempt,
         onSuccess: () => {
@@ -69,9 +71,8 @@ function QuestionsAnswering(props: {
                     </LoadingButton>,
                     <LoadingButton
                         key="finish-exam-button"
-                        loading={finishExamMutation.isPending}
                         variant="contained"
-                        onClick={finishExam}
+                        onClick={openConfirmFinishExamModal}
                     >
                         Valider les réponses
                     </LoadingButton>,
@@ -115,13 +116,40 @@ function QuestionsAnswering(props: {
                     );
                 })}
             </TestPageLayout>
+            <Modal
+                isOpen={isConfirmFinishExamModalOpen}
+                close={closeConfirmFinishExamModal}
+                onConfirm={finishExam}
+                onCancel={cancelFinishExamModal}
+                isConfirmLoading={finishExamMutation.isPending}
+                title="Terminer l'examen ?"
+            >
+                <>
+                    <Typography>
+                        Souhaitez-vous valider vos réponses et mettre fin à l'examen ?
+                    </Typography>
+                    <Typography>
+                        Vous ne pourrez plus revenir en arrière et modifier vos réponses.
+                    </Typography>
+                </>
+            </Modal>
         </>
     );
 
-    function buildOnExerciseExpandedChange(exerciseId: number) {
-        return (_: any, isExpanded: boolean) => {
-            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
-        };
+    function closeConfirmFinishExamModal() {
+        setIsConfirmFinishExamModalOpen(false);
+    }
+    function openConfirmFinishExamModal() {
+        setIsConfirmFinishExamModalOpen(true);
+    }
+
+    function cancelFinishExamModal() {
+        closeConfirmFinishExamModal();
+        saveDraft();
+    }
+
+    function finishExam() {
+        finishExamMutation.mutate({ attemptId: props.attemptId });
     }
 
     function saveDraft() {
@@ -131,19 +159,10 @@ function QuestionsAnswering(props: {
         });
     }
 
-    function finishExam() {
-        // eslint-disable-next-line no-restricted-globals
-        const hasConfirmed = confirm(
-            "Souhaitez-vous valider vos réponses et mettre fin à l'examen ? Vous ne pourrez plus revenir en arrière et modifier vos réponses.",
-        );
-        if (hasConfirmed) {
-            finishExamMutation.mutate({ attemptId: props.attemptId });
-        } else {
-            saveDraftMutation.mutate({
-                attemptId: props.attemptId,
-                answers: currentAnswers,
-            });
-        }
+    function buildOnExerciseExpandedChange(exerciseId: number) {
+        return (_: any, isExpanded: boolean) => {
+            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
+        };
     }
 }
 

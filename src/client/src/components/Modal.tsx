@@ -8,6 +8,7 @@ function Modal(props: {
     isOpen: boolean;
     close: () => void;
     onConfirm: () => void;
+    onCancel?: () => void;
     confirmButtonLabel?: string;
     cancelButtonLabel?: string;
     isConfirmLoading?: boolean;
@@ -23,12 +24,12 @@ function Modal(props: {
                 )}
                 <ModalBody>{props.children}</ModalBody>
                 <ModalFooter>
-                    <Button onClick={props.close}>{props.cancelButtonLabel || 'Annuler'}</Button>
+                    <Button onClick={onCancel}>{props.cancelButtonLabel || 'Annuler'}</Button>
                     <LoadingButton
                         disabled={props.isConfirmDisabled}
                         loading={props.isConfirmLoading}
                         variant="contained"
-                        onClick={onConfirm}
+                        onClick={props.onConfirm}
                     >
                         {props.confirmButtonLabel || 'Confirmer'}
                     </LoadingButton>
@@ -37,8 +38,12 @@ function Modal(props: {
         </StyledModal>
     );
 
-    function onConfirm() {
-        props.onConfirm();
+    function onCancel() {
+        if (props.onCancel) {
+            props.onCancel();
+        } else {
+            props.close();
+        }
     }
 }
 
