@@ -8,7 +8,7 @@ function buildStudentController() {
     const studentController = {
         createStudents,
         getStudentsWithAttempts,
-        fetchStudentByEmail,
+        fetchStudentByEmailForExam,
         deleteStudent,
         changeGroup,
     };
@@ -29,8 +29,13 @@ function buildStudentController() {
         return studentService.getStudentsWithAttempts(params.urlParams.groupId);
     }
 
-    async function fetchStudentByEmail(params: { urlParams: { email: string } }) {
-        return studentService.fetchStudentByEmail(params.urlParams.email);
+    async function fetchStudentByEmailForExam(params: {
+        urlParams: { email: string; examId: string };
+    }) {
+        return studentService.fetchStudentByEmailForExam({
+            email: params.urlParams.email,
+            examId: params.urlParams.examId,
+        });
     }
 
     async function deleteStudent(params: { urlParams: { studentId: string } }) {
