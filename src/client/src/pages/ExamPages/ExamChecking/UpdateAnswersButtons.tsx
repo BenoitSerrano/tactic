@@ -19,22 +19,6 @@ function UpdateAnswersButtons(props: {
     const { displayAlert } = useAlert();
     const { updateGlobalLoading } = useGlobalLoading();
 
-    const addRightAnswerMutation = useMutation({
-        mutationFn: api.addQuestionRightAnswer,
-        onSuccess: () => {
-            updateGlobalLoading('add-right-answer', false);
-            props.refetch();
-        },
-        onError: (error) => {
-            updateGlobalLoading('add-right-answer', false);
-            console.error(error);
-            displayAlert({
-                variant: 'error',
-                text: "Une erreur est survenue. Votre modification n'a pas pu être prise en compte",
-            });
-        },
-    });
-
     const removeOkAnswerMutation = useMutation({
         mutationFn: api.removeOkAnswer,
         onSuccess: () => {
@@ -126,12 +110,14 @@ function UpdateAnswersButtons(props: {
         if (props.question.answer === undefined) {
             return;
         }
-        updateGlobalLoading('add-right-answer', true);
 
-        addRightAnswerMutation.mutate({
+        updateGlobalLoading('add-acceptable-answer', true);
+
+        addAcceptableAnswerMutation.mutate({
             examId: props.examId,
             questionId: props.question.id,
-            rightAnswer: props.question.answer,
+            acceptableAnswer: props.question.answer,
+            points: props.question.points,
         });
     }
 
@@ -158,6 +144,7 @@ function UpdateAnswersButtons(props: {
             examId: props.examId,
             questionId: props.question.id,
             acceptableAnswer: props.question.answer,
+            points: props.question.points / 2,
         });
     }
 }

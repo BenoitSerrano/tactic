@@ -29,7 +29,6 @@ const api = {
     updateExercise,
     deleteExercise,
     updateQuestion,
-    addQuestionRightAnswer,
     addQuestionAcceptableAnswer,
     removeOkAnswer,
     deleteQuestion,
@@ -122,31 +121,19 @@ async function fetchAttemptWithoutAnswers(attemptId: string) {
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
-async function addQuestionRightAnswer({
-    examId,
-    questionId,
-    rightAnswer,
-}: {
-    examId: string;
-    questionId: number;
-    rightAnswer: string;
-}) {
-    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/right-answers`;
-    return performApiCall(URL, 'POST', { rightAnswer });
-}
-
-// TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
 async function addQuestionAcceptableAnswer({
     examId,
     questionId,
     acceptableAnswer,
+    points,
 }: {
     examId: string;
     questionId: number;
     acceptableAnswer: string;
+    points: number;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/acceptable-answers`;
-    return performApiCall(URL, 'POST', { acceptableAnswer });
+    return performApiCall(URL, 'POST', { acceptableAnswer, points });
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
