@@ -8,7 +8,6 @@ function buildQuestionController() {
     const questionController = {
         createQuestion,
         updateQuestion,
-        addQuestionRightAnswer,
         addQuestionAcceptableAnswer,
         removeOkAnswer,
         deleteQuestion,
@@ -49,27 +48,15 @@ function buildQuestionController() {
         );
     }
 
-    async function addQuestionRightAnswer(params: {
-        urlParams: { questionId: string };
-        body: { rightAnswer: string };
-    }) {
-        return questionService.addQuestionRightAnswer(
-            {
-                questionId: Number(params.urlParams.questionId),
-            },
-            params.body.rightAnswer,
-        );
-    }
-
     async function addQuestionAcceptableAnswer(params: {
         urlParams: { questionId: string };
-        body: { acceptableAnswer: string };
+        body: { acceptableAnswer: string; points: number };
     }) {
         return questionService.addQuestionAcceptableAnswer(
             {
                 questionId: Number(params.urlParams.questionId),
             },
-            params.body.acceptableAnswer,
+            { acceptableAnswer: params.body.acceptableAnswer, points: params.body.points },
         );
     }
 

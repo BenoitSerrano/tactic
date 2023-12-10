@@ -38,19 +38,6 @@ const questionRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'POST',
-        path: '/exams/:examId/questions/:questionId/right-answers',
-        isAuthenticated: true,
-        controller: questionController.addQuestionRightAnswer,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({ rightAnswer: Joi.string() }),
-    },
-    {
-        method: 'POST',
         path: '/exams/:examId/questions/:questionId/acceptable-answers',
         isAuthenticated: true,
         controller: questionController.addQuestionAcceptableAnswer,
@@ -60,7 +47,10 @@ const questionRoutes: Array<routeType<any, any>> = [
                 key: 'examId',
             },
         ]),
-        schema: Joi.object({ acceptableAnswer: Joi.string() }),
+        schema: Joi.object({
+            acceptableAnswer: Joi.string().required(),
+            points: Joi.number().required(),
+        }),
     },
     {
         method: 'POST',

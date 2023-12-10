@@ -1,28 +1,22 @@
 import { sanitizer } from '../../../lib/sanitizer';
 import { Question } from '../Question.entity';
+import { acceptableAnswerParser } from './acceptableAnswerParser';
 import { questionEncoder } from './questionEncoder';
 
 function removeOkAnswerFromQuestion(question: Question, okAnswer: string) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedOkAnswer = sanitizer.sanitizeString(okAnswer);
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints.map(
+        (acceptableAnswer) => acceptableAnswerParser.parse(acceptableAnswer),
+    );
 
-    const acceptableAnswerIndex = decodedQuestion.acceptableAnswers.findIndex(
-        (acceptableAnswer) => sanitizer.sanitizeString(acceptableAnswer) === sanitizedOkAnswer,
+    const acceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
+        ({ answer }) => sanitizer.sanitizeString(answer) === sanitizedOkAnswer,
     );
     if (acceptableAnswerIndex !== -1) {
-        const acceptableAnswers = [...decodedQuestion.acceptableAnswers];
-        acceptableAnswers.splice(acceptableAnswerIndex, 1);
-        decodedQuestion.acceptableAnswers = acceptableAnswers;
-    }
-    if (decodedQuestion.rightAnswers.length > 1) {
-        const rightAnswerIndex = decodedQuestion.rightAnswers.findIndex(
-            (rightAnswer) => sanitizer.sanitizeString(rightAnswer) === sanitizedOkAnswer,
-        );
-        if (rightAnswerIndex !== -1) {
-            const rightAnswers = [...decodedQuestion.rightAnswers];
-            rightAnswers.splice(rightAnswerIndex, 1);
-            decodedQuestion.rightAnswers = rightAnswers;
-        }
+        const acceptableAnswersWithPoints = [...decodedQuestion.acceptableAnswersWithPoints];
+        acceptableAnswersWithPoints.splice(acceptableAnswerIndex, 1);
+        decodedQuestion.acceptableAnswersWithPoints = acceptableAnswersWithPoints;
     }
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

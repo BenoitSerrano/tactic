@@ -1,5 +1,6 @@
 import { encoder } from '../../../lib/encoder';
 import { Question } from '../Question.entity';
+import { acceptableAnswerParser } from './acceptableAnswerParser';
 
 const questionEncoder = {
     decodeQuestion,
@@ -14,6 +15,11 @@ function decodeQuestion(question: Question): Question {
         acceptableAnswers: question.acceptableAnswers.map((answer) =>
             encoder.base64ToString(answer),
         ),
+        acceptableAnswersWithPoints: question.acceptableAnswers.map((acceptableAnswer) => {
+            const { points, answer } = acceptableAnswerParser.parse(acceptableAnswer);
+            const decodedAnswer = encoder.base64ToString(answer);
+            return acceptableAnswerParser.stringify(points, decodedAnswer);
+        }),
     };
 }
 
@@ -25,6 +31,11 @@ function encodeQuestion(question: Question): Question {
         acceptableAnswers: question.acceptableAnswers.map((answer) =>
             encoder.stringToBase64(answer),
         ),
+        acceptableAnswersWithPoints: question.acceptableAnswers.map((acceptableAnswer) => {
+            const { points, answer } = acceptableAnswerParser.parse(acceptableAnswer);
+            const decodedAnswer = encoder.stringToBase64(answer);
+            return acceptableAnswerParser.stringify(points, decodedAnswer);
+        }),
     };
 }
 

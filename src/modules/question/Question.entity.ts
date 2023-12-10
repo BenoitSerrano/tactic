@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { questionKindType, questionKinds } from './types';
 import { Exercise } from '../exercise';
 
@@ -16,8 +16,13 @@ export class Question {
     @Column('float')
     points: number;
 
+    // Format décodé: [2:tu es la plus belle, 1.5:es-tu la plus belle]
     @Column('simple-array', { default: '' })
     acceptableAnswers: string[];
+
+    // Format décodé: [2:tu es la plus belle, 1.5:es-tu la plus belle]
+    @Column('simple-array', { default: '' })
+    acceptableAnswersWithPoints: string[];
 
     @Column('simple-array', { default: '' })
     rightAnswers: string[];

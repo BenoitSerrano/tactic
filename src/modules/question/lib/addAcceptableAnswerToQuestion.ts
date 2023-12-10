@@ -1,26 +1,35 @@
 import { sanitizer } from '../../../lib/sanitizer';
 import { Question } from '../Question.entity';
+import { acceptableAnswerParser } from './acceptableAnswerParser';
 import { questionEncoder } from './questionEncoder';
 
-function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: string) {
+function addAcceptableAnswerToQuestion(
+    question: Question,
+    acceptableAnswer: string,
+    points: number,
+) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswer);
-
-    const rightAnswerIndex = decodedQuestion.rightAnswers.findIndex(
-        (rightAnswer) => sanitizer.sanitizeString(rightAnswer) === sanitizedAcceptableAnswer,
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints.map(
+        (acceptableAnswer) => acceptableAnswerParser.parse(acceptableAnswer),
     );
-    if (rightAnswerIndex !== -1) {
-        if (decodedQuestion.rightAnswers.length <= 1) {
+
+    const alreadyPresentAcceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
+        ({ answer }) => answer === sanitizedAcceptableAnswer,
+    );
+    if (alreadyPresentAcceptableAnswerIndex !== -1) {
+        if (currentParsedAcceptableAnswers[alreadyPresentAcceptableAnswerIndex].points === points) {
             return question;
+        } else {
+            decodedQuestion.acceptableAnswersWithPoints[alreadyPresentAcceptableAnswerIndex] =
+                acceptableAnswerParser.stringify(points, sanitizedAcceptableAnswer);
+            return questionEncoder.encodeQuestion(decodedQuestion);
         }
-        const rightAnswers = [...decodedQuestion.rightAnswers];
-        rightAnswers.splice(rightAnswerIndex, 1);
-        decodedQuestion.rightAnswers = rightAnswers;
     }
 
-    decodedQuestion.acceptableAnswers = [
-        ...decodedQuestion.acceptableAnswers,
-        sanitizedAcceptableAnswer,
+    decodedQuestion.acceptableAnswersWithPoints = [
+        ...decodedQuestion.acceptableAnswersWithPoints,
+        acceptableAnswerParser.stringify(points, sanitizedAcceptableAnswer),
     ];
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

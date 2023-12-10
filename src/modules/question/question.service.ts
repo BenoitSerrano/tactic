@@ -15,7 +15,6 @@ function buildQuestionService() {
     const questionService = {
         createQuestion,
         updateQuestion,
-        addQuestionRightAnswer,
         addQuestionAcceptableAnswer,
         removeOkAnswer,
         getQuestions,
@@ -87,30 +86,20 @@ function buildQuestionService() {
         return questionRepository.save(questionEncoder.encodeQuestion(question));
     }
 
-    async function addQuestionRightAnswer(
-        criteria: {
-            questionId: Question['id'];
-        },
-        rightAnswer: string,
-    ) {
-        const question = await questionRepository.findOneOrFail({
-            where: { id: criteria.questionId },
-        });
-        const updatedQuestion = addRightAnswerToQuestion(question, rightAnswer);
-        await questionRepository.save(updatedQuestion);
-        return true;
-    }
-
     async function addQuestionAcceptableAnswer(
         criteria: {
             questionId: Question['id'];
         },
-        acceptableAnswer: string,
+        body: { acceptableAnswer: string; points: number },
     ) {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
-        const updatedQuestion = addAcceptableAnswerToQuestion(question, acceptableAnswer);
+        const updatedQuestion = addAcceptableAnswerToQuestion(
+            question,
+            body.acceptableAnswer,
+            body.points,
+        );
         await questionRepository.save(updatedQuestion);
         return true;
     }
