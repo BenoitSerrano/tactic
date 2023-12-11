@@ -120,7 +120,6 @@ function UpdateAnswersButtons(props: {
                 const { color, IconComponent, multiplier, name } = attributeMarkToAnswerAction;
                 const canAnswerBeAttributedMark = computeCanAnswerBeAttributed(
                     multiplier * props.question.points,
-                    props.question.mark || 0,
                     props.question,
                 );
                 return (

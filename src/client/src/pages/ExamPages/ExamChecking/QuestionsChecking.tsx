@@ -390,9 +390,9 @@ const RightArrowContainer = styled('div')(({ theme }) => ({
 
 const QuestionIndicatorsContainer = styled('div')({
     width: '150px',
+    minWidth: '150px',
     paddingRight: '20px',
     display: 'flex',
-    justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
 });
