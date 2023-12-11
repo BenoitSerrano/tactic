@@ -9,8 +9,7 @@ describe('extractMarks', () => {
     };
     const baseQuestion = {
         title: 'truc',
-        rightAnswers: [] as string[],
-        acceptableAnswers: [] as string[],
+        acceptableAnswersWithPoints: [] as string[],
         possibleAnswers: [] as string[],
         points: 10,
     };

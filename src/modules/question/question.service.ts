@@ -4,7 +4,6 @@ import { Question } from './Question.entity';
 import { buildAttemptService } from '../attempt';
 import { Exercise, buildExerciseService } from '../exercise';
 import { questionEncoder } from './lib/questionEncoder';
-import { addRightAnswerToQuestion } from './lib/addRightAnswerToQuestion';
 import { addAcceptableAnswerToQuestion } from './lib/addAcceptableAnswerToQuestion';
 import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
 
@@ -32,7 +31,7 @@ function buildQuestionService() {
         exerciseId: Exercise['id'],
         body: Pick<
             Question,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >,
     ) {
         const exerciseService = buildExerciseService();
@@ -41,8 +40,7 @@ function buildQuestionService() {
         const question = new Question();
         const highestOrder = await getHighestQuestionOrder(exerciseId);
 
-        question.acceptableAnswers = body.acceptableAnswers;
-        question.rightAnswers = body.rightAnswers;
+        question.acceptableAnswersWithPoints = body.acceptableAnswersWithPoints;
         question.possibleAnswers = body.possibleAnswers;
         question.title = body.title;
         question.kind = body.kind;
@@ -70,7 +68,7 @@ function buildQuestionService() {
         criteria: { exerciseId: Exercise['id']; questionId: Question['id'] },
         body: Pick<
             Question,
-            'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            'title' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >,
     ) {
         const question = await questionRepository.findOneOrFail({
@@ -79,8 +77,7 @@ function buildQuestionService() {
 
         question.title = body.title;
         question.possibleAnswers = body.possibleAnswers;
-        question.rightAnswers = body.rightAnswers;
-        question.acceptableAnswers = body.acceptableAnswers;
+        question.acceptableAnswersWithPoints = body.acceptableAnswersWithPoints;
         question.points = body.points;
 
         return questionRepository.save(questionEncoder.encodeQuestion(question));

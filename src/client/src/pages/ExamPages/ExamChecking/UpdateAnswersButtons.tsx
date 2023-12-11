@@ -2,12 +2,11 @@ import { IconButton, Tooltip, styled } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
-import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { questionWithAnswersType } from '../types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
-import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
+import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
 import { useGlobalLoading } from '../../../lib/globalLoading';
 
 function UpdateAnswersButtons(props: {
@@ -55,20 +54,19 @@ function UpdateAnswersButtons(props: {
         },
     });
 
-    const answerStatus = computeAnswerStatus(props.question.mark, props.question.points);
-    const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeMarkedAs(
-        'acceptable',
-        answerStatus,
+    const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(
+        props.question.points / 2,
+        props.question.mark || 0,
         props.question,
     );
-    const canAnswerBeMarkedAsRight = computeCanAnswerBeMarkedAs(
-        'right',
-        answerStatus,
+    const canAnswerBeMarkedAsRight = computeCanAnswerBeAttributed(
+        props.question.points,
+        props.question.mark || 0,
         props.question,
     );
-    const canAnswerBeMarkedAsWrong = computeCanAnswerBeMarkedAs(
-        'wrong',
-        answerStatus,
+    const canAnswerBeMarkedAsWrong = computeCanAnswerBeAttributed(
+        0,
+        props.question.mark || 0,
         props.question,
     );
     return (

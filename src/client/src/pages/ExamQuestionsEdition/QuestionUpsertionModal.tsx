@@ -249,8 +249,9 @@ function QuestionUpsertionModal(props: {
                 currentQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
                     : [],
-            rightAnswers: rightAnswers.map((rightAnswer) => rightAnswer.trim()),
-            acceptableAnswers: acceptableAnswers.map((acceptableAnswer) => acceptableAnswer.trim()),
+            acceptableAnswersWithPoints: rightAnswers.map(
+                (rightAnswer) => `${Number(points)}:${rightAnswer.trim()}`,
+            ),
         };
         if (props.modalStatus?.kind === 'editing') {
             updateQuestionMutation.mutate({

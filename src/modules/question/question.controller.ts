@@ -20,7 +20,7 @@ function buildQuestionController() {
         urlParams: { exerciseId: string };
         body: Pick<
             Question,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >;
     }) {
         return questionService.createQuestion(Number(params.urlParams.exerciseId), params.body);
@@ -30,7 +30,7 @@ function buildQuestionController() {
         urlParams: { exerciseId: string; questionId: string };
         body: Pick<
             Question,
-            'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            'title' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >;
     }) {
         return questionService.updateQuestion(
@@ -41,8 +41,7 @@ function buildQuestionController() {
             {
                 title: params.body.title,
                 possibleAnswers: params.body.possibleAnswers,
-                acceptableAnswers: params.body.acceptableAnswers,
-                rightAnswers: params.body.rightAnswers,
+                acceptableAnswersWithPoints: params.body.acceptableAnswersWithPoints,
                 points: params.body.points,
             },
         );

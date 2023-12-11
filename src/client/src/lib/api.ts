@@ -307,8 +307,7 @@ async function createQuestion(params: {
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: string[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
@@ -316,8 +315,7 @@ async function createQuestion(params: {
         title: params.title,
         kind: params.kind,
         possibleAnswers: params.possibleAnswers,
-        rightAnswers: params.rightAnswers,
-        acceptableAnswers: params.acceptableAnswers,
+        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
         points: params.points,
     });
 }
@@ -328,16 +326,14 @@ async function updateQuestion(params: {
     questionId: number;
     title: string;
     possibleAnswers: string[];
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: string[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;
     return performApiCall(URL, 'PUT', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
-        rightAnswers: params.rightAnswers,
-        acceptableAnswers: params.acceptableAnswers,
+        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
         points: params.points,
     });
 }

@@ -71,13 +71,11 @@ function aggregateMarks({
     const marks = questions.reduce((acc, question) => {
         let mark = 0;
 
-        if (question.rightAnswers.length !== 0) {
+        if (question.acceptableAnswersWithPoints.length !== 0) {
             mark = computeAutomaticMark({
                 questionKind: question.kind,
-                acceptableAnswers: question.acceptableAnswers,
+                acceptableAnswersWithPoints: question.acceptableAnswersWithPoints,
                 answer: answers[question.id],
-                points: question.points,
-                rightAnswers: question.rightAnswers,
             });
         } else {
             mark = manualMarks[question.id];

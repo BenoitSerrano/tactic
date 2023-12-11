@@ -16,9 +16,8 @@ const questionRoutes: Array<routeType<any, any>> = [
         ]),
         schema: Joi.object({
             title: Joi.string().required(),
-            rightAnswers: Joi.array().items(Joi.string().allow('')).required(),
             possibleAnswers: Joi.array().items(Joi.string().allow('')).required(),
-            acceptableAnswers: Joi.array().items(Joi.string().allow('')).required(),
+            acceptableAnswersWithPoints: Joi.array().items(Joi.string().allow('')).required(),
             points: Joi.number().required(),
         }),
     },
@@ -66,9 +65,8 @@ const questionRoutes: Array<routeType<any, any>> = [
         schema: Joi.object({
             title: Joi.string().allow(''),
             kind: Joi.string().valid(...questionKinds),
-            rightAnswers: Joi.array().items(Joi.string()),
             possibleAnswers: Joi.array().items(Joi.string()),
-            acceptableAnswers: Joi.array().items(Joi.string().allow('')),
+            acceptableAnswersWithPoints: Joi.array().items(Joi.string().allow('')),
             points: Joi.number(),
         }),
     },

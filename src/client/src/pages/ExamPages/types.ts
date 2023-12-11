@@ -23,8 +23,7 @@ type questionWithAnswersType = {
     id: number;
     title: string;
     kind: questionKindType;
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: string[];
     possibleAnswers: string[];
     answer: string | undefined;
     mark: number | undefined;
