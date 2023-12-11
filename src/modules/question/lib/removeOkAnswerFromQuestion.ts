@@ -6,9 +6,7 @@ import { questionEncoder } from './questionEncoder';
 function removeOkAnswerFromQuestion(question: Question, okAnswer: string) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedOkAnswer = sanitizer.sanitizeString(okAnswer);
-    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints.map(
-        (acceptableAnswer) => acceptableAnswerParser.parse(acceptableAnswer),
-    );
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints;
 
     const acceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
         ({ answer }) => sanitizer.sanitizeString(answer) === sanitizedOkAnswer,

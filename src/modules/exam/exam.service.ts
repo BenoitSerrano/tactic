@@ -120,7 +120,7 @@ function buildExamService() {
         return mapEntities(exams);
     }
 
-    async function getExamQuestions(examId: string): Promise<Exam> {
+    async function getExamQuestions(examId: string) {
         const questionService = buildQuestionService();
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },

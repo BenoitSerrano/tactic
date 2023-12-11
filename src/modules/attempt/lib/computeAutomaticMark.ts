@@ -1,6 +1,5 @@
 import { sanitizer } from '../../../lib/sanitizer';
-import { acceptableAnswerParser } from '../../question/lib/acceptableAnswerParser';
-import { questionKindType } from '../../question/types';
+import { acceptableAnswerWithPointsType, questionKindType } from '../../question/types';
 
 export { computeAutomaticMark };
 
@@ -11,14 +10,11 @@ function computeAutomaticMark({
 }: {
     questionKind: questionKindType;
     answer: string | undefined;
-    acceptableAnswersWithPoints: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
 }): number {
     if (!answer) {
         return 0;
     }
-    const parsedAcceptableAnswersWithPoints = acceptableAnswersWithPoints.map(
-        (acceptableAnswerWithPoints) => acceptableAnswerParser.parse(acceptableAnswerWithPoints),
-    );
     if (questionKind === 'texteATrous') {
         const chunks = answer.split('|');
 
@@ -30,7 +26,7 @@ function computeAutomaticMark({
             );
         }
         return chunks.reduce((mark, word, index) => {
-            const { points, answer } = parsedAcceptableAnswersWithPoints[index];
+            const { points, answer } = acceptableAnswersWithPoints[index];
 
             if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answer)) {
                 return mark + points;
@@ -45,9 +41,9 @@ function computeAutomaticMark({
     if (answer === undefined) {
         return 0;
     }
-    const matchingAcceptableAnswer = parsedAcceptableAnswersWithPoints.find(
-        (parsedAcceptableAnswerWithPoints) =>
-            sanitizer.sanitizeString(parsedAcceptableAnswerWithPoints.answer) ===
+    const matchingAcceptableAnswer = acceptableAnswersWithPoints.find(
+        (acceptableAnswerWithPoints) =>
+            sanitizer.sanitizeString(acceptableAnswerWithPoints.answer) ===
             sanitizer.sanitizeString(answer),
     );
     if (matchingAcceptableAnswer) {

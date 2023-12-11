@@ -17,7 +17,7 @@ describe('acceptableAnswerParser', () => {
             const points = 1.5;
             const answer = 'machin';
 
-            const acceptableAnswer = acceptableAnswerParser.stringify(points, answer);
+            const acceptableAnswer = acceptableAnswerParser.stringify({ points, answer });
 
             expect(acceptableAnswer).toBe('1.5:machin');
         });
