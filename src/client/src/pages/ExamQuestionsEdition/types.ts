@@ -1,4 +1,4 @@
-import { questionKindType } from '../../types';
+import { acceptableAnswerWithPointsType, questionKindType } from '../../types';
 
 type exerciseApiType = {
     id: number;
@@ -13,8 +13,7 @@ type questionWithAnswersType = {
     kind: questionKindType;
     title: string;
     points: number;
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     possibleAnswers: string[] | null;
 };
 

@@ -2,16 +2,21 @@ import { TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent } from 'react';
 import { QUESTION_TROU_REGEX } from '../../constants';
 import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
+import { acceptableAnswerWithPointsType } from '../../types';
 
 function QuestionTrouUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    rightAnswers: string[];
-    setRightAnswers: (rightAnswers: string[]) => void;
-    acceptableAnswers: string[];
-    setAcceptableAnswers: (acceptableAnswers: string[]) => void;
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    setAcceptableAnswersWithPoints: (
+        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
+    ) => void;
+    points: number;
 }) {
     const { beforeText, afterText } = computeTexts();
+    const rightAnswers = props.acceptableAnswersWithPoints
+        .map(({ answer }) => answer)
+        .join(SPLITTING_CHARACTER_FOR_ANSWERS);
     return (
         <>
             <FieldContainer>
@@ -27,12 +32,8 @@ function QuestionTrouUpsertionModalContent(props: {
                         variant="standard"
                         label="Bonnes réponses"
                         placeholder="s'envolent"
-                        value={props.rightAnswers.join(SPLITTING_CHARACTER_FOR_ANSWERS)}
-                        onChange={(event) =>
-                            props.setRightAnswers(
-                                event.target.value.split(SPLITTING_CHARACTER_FOR_ANSWERS),
-                            )
-                        }
+                        value={rightAnswers}
+                        onChange={onChangeRightAnswers}
                     />
                     <TextField
                         variant="standard"
@@ -44,25 +45,21 @@ function QuestionTrouUpsertionModalContent(props: {
                 </RowContainer>
             </FieldContainer>
             <FieldContainer>
-                <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Réponses acceptables"
-                    value={props.acceptableAnswers.join(SPLITTING_CHARACTER_FOR_ANSWERS)}
-                    onChange={(event) =>
-                        props.setAcceptableAnswers(
-                            event.target.value.split(SPLITTING_CHARACTER_FOR_ANSWERS),
-                        )
-                    }
-                />
                 <HintContainer>
                     <Typography variant="h6">
-                        Indiquez les réponses acceptables, séparées par des point-virgules (;)
+                        Indiquez les réponses correctes, séparées par des point-virgules (;)
                     </Typography>
                 </HintContainer>
             </FieldContainer>
         </>
     );
+
+    function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
+        const newAcceptableAnswerWithPoints = event.target.value
+            .split(SPLITTING_CHARACTER_FOR_ANSWERS)
+            .map((answer) => ({ answer, points: props.points }));
+        props.setAcceptableAnswersWithPoints(newAcceptableAnswerWithPoints);
+    }
 
     function computeTexts() {
         const match = props.title.match(QUESTION_TROU_REGEX);

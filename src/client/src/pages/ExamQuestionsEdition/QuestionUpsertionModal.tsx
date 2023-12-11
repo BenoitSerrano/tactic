@@ -74,12 +74,12 @@ function QuestionUpsertionModal(props: {
     const [title, setTitle] = useState(
         props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.title}` : '',
     );
-    const [rightAnswers, setRightAnswers] = useState(
-        props.modalStatus.kind === 'editing' ? props.modalStatus.question.rightAnswers : [],
+    const [acceptableAnswersWithPoints, setAcceptableAnswersWithPoints] = useState(
+        props.modalStatus.kind === 'editing'
+            ? props.modalStatus.question.acceptableAnswersWithPoints
+            : [],
     );
-    const [acceptableAnswers, setAcceptableAnswers] = useState(
-        props.modalStatus.kind === 'editing' ? props.modalStatus.question.acceptableAnswers : [],
-    );
+
     const [possibleAnswers, setPossibleAnswers] = useState(
         props.modalStatus.kind === 'editing' && props.modalStatus.question.possibleAnswers
             ? props.modalStatus.question.possibleAnswers
@@ -93,9 +93,8 @@ function QuestionUpsertionModal(props: {
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);
     const isConfirmDisabled = computeIsConfirmDisabled(currentQuestionKind, {
         title,
-        rightAnswers,
+        acceptableAnswersWithPoints,
         possibleAnswers,
-        acceptableAnswers,
     });
 
     const isNextButtonDisabled = computeIsNextButtonDisabled();
@@ -169,12 +168,11 @@ function QuestionUpsertionModal(props: {
                     <QuestionUpsertionModalContentComponent
                         title={title}
                         setTitle={setTitle}
-                        rightAnswers={rightAnswers}
-                        setRightAnswers={setRightAnswers}
-                        acceptableAnswers={acceptableAnswers}
-                        setAcceptableAnswers={setAcceptableAnswers}
+                        acceptableAnswersWithPoints={acceptableAnswersWithPoints}
+                        setAcceptableAnswersWithPoints={setAcceptableAnswersWithPoints}
                         possibleAnswers={possibleAnswers}
                         setPossibleAnswers={setPossibleAnswers}
+                        points={points}
                     />
                 );
             case 'EDIT_QUESTION_POINTS':
@@ -212,8 +210,7 @@ function QuestionUpsertionModal(props: {
     }
 
     function resetQuestionContent() {
-        setAcceptableAnswers([]);
-        setRightAnswers([]);
+        setAcceptableAnswersWithPoints([]);
         setPossibleAnswers(DEFAULT_POSSIBLE_ANSWERS);
         setTitle('');
     }
@@ -249,9 +246,7 @@ function QuestionUpsertionModal(props: {
                 currentQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
                     : [],
-            acceptableAnswersWithPoints: rightAnswers.map(
-                (rightAnswer) => `${Number(points)}:${rightAnswer.trim()}`,
-            ),
+            acceptableAnswersWithPoints,
         };
         if (props.modalStatus?.kind === 'editing') {
             updateQuestionMutation.mutate({

@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { questionKindType } from '../types';
+import { acceptableAnswerWithPointsType, questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -307,7 +307,7 @@ async function createQuestion(params: {
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
-    acceptableAnswersWithPoints: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
@@ -326,7 +326,7 @@ async function updateQuestion(params: {
     questionId: number;
     title: string;
     possibleAnswers: string[];
-    acceptableAnswersWithPoints: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;

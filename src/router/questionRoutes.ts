@@ -17,6 +17,7 @@ const questionRoutes: Array<routeType<any, any>> = [
         schema: Joi.object({
             title: Joi.string().required(),
             possibleAnswers: Joi.array().items(Joi.string().allow('')).required(),
+            //TODO
             acceptableAnswersWithPoints: Joi.array().items(Joi.string().allow('')).required(),
             points: Joi.number().required(),
         }),
@@ -66,6 +67,7 @@ const questionRoutes: Array<routeType<any, any>> = [
             title: Joi.string().allow(''),
             kind: Joi.string().valid(...questionKinds),
             possibleAnswers: Joi.array().items(Joi.string()),
+            //TODO
             acceptableAnswersWithPoints: Joi.array().items(Joi.string().allow('')),
             points: Joi.number(),
         }),

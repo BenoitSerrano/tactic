@@ -6,20 +6,22 @@ import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
 import { textSplitter } from '../../lib/textSplitter';
+import { acceptableAnswerWithPointsType } from '../../types';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    rightAnswers: string[];
-    setRightAnswers: (rightAnswers: string[]) => void;
-    acceptableAnswers: string[];
-    setAcceptableAnswers: (acceptableAnswers: string[]) => void;
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    setAcceptableAnswersWithPoints: (
+        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
+    ) => void;
+    points: number;
 }) {
-    const initialRightAnswers = props.rightAnswers[0] || '';
+    const initialAcceptableAnswers = props.acceptableAnswersWithPoints[0].answer || '';
     const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
-    const [originalPhrase, setOriginalPhrase] = useState(initialRightAnswers);
+    const [originalPhrase, setOriginalPhrase] = useState(initialAcceptableAnswers);
     const [displayedWordsToPlace, setDisplayedWordsToPlace] = useState(
-        textSplitter.split(initialRightAnswers),
+        textSplitter.split(initialAcceptableAnswers),
     );
     const words = textSplitter.split(originalPhrase);
 
@@ -45,10 +47,10 @@ function PhraseMelangeeUpsertionModalContent(props: {
                     <>
                         <Typography>Phrases correctes :</Typography>
                         <table>
-                            {props.rightAnswers.map((rightAnswer, index) => (
-                                <tr key={rightAnswer}>
+                            {props.acceptableAnswersWithPoints.map(({ answer }, index) => (
+                                <tr key={answer}>
                                     <td>
-                                        <Typography>{rightAnswer}</Typography>
+                                        <Typography>{answer}</Typography>
                                     </td>
                                     <td>
                                         <IconButton
@@ -127,7 +129,10 @@ function PhraseMelangeeUpsertionModalContent(props: {
             const updatedNewRightAnswer = [...newRightAnswer, displayedWordsToPlace[index]];
 
             if (newRightAnswer.length + 1 === words.length) {
-                props.setRightAnswers([...props.rightAnswers, updatedNewRightAnswer.join(' ')]);
+                props.setAcceptableAnswersWithPoints([
+                    ...props.acceptableAnswersWithPoints,
+                    { points: props.points, answer: updatedNewRightAnswer.join(' ') },
+                ]);
                 setNewRightAnswer(undefined);
                 setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
             } else {
@@ -168,9 +173,9 @@ function PhraseMelangeeUpsertionModalContent(props: {
 
     function buildDeleteRightAnswer(index: number) {
         return () => {
-            const newRightAnswers = [...props.rightAnswers];
-            newRightAnswers.splice(index, 1);
-            props.setRightAnswers(newRightAnswers);
+            const newAcceptableAnswerWithPoints = [...props.acceptableAnswersWithPoints];
+            newAcceptableAnswerWithPoints.splice(index, 1);
+            props.setAcceptableAnswersWithPoints(newAcceptableAnswerWithPoints);
         };
     }
 
@@ -180,7 +185,9 @@ function PhraseMelangeeUpsertionModalContent(props: {
         const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
 
         props.setTitle(shuffledPhrase);
-        props.setRightAnswers([newOriginalPhrase.trim()]);
+        props.setAcceptableAnswersWithPoints([
+            { points: props.points, answer: newOriginalPhrase.trim() },
+        ]);
     }
 }
 
