@@ -5,12 +5,16 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { useState } from 'react';
 import { computeTexteATrousState } from './lib/computeTexteATrousState';
 import { textSplitter } from '../../lib/textSplitter';
+import { acceptableAnswerWithPointsType } from '../../types';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    rightAnswers: string[];
-    setRightAnswers: (newRightAnswers: string[]) => void;
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    setAcceptableAnswersWithPoints: (
+        newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[],
+    ) => void;
+    points: number;
 }) {
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(false);
     const words = textSplitter.split(props.title);
@@ -62,17 +66,22 @@ function TexteATrousUpsertionModalContent(props: {
     function resetWholeSentence() {
         setIsWholeSentenceFrozen(false);
         props.setTitle('');
-        props.setRightAnswers([]);
+        props.setAcceptableAnswersWithPoints([]);
     }
 
     function buildOnClickOnWord(wordIndex: number) {
         return () => {
             const nextState = computeTexteATrousState(wordIndex, {
                 title: props.title,
-                rightAnswers: props.rightAnswers,
+                rightAnswers: props.acceptableAnswersWithPoints.map(({ answer }) => answer),
             });
             props.setTitle(nextState.title);
-            props.setRightAnswers(nextState.rightAnswers);
+            props.setAcceptableAnswersWithPoints(
+                nextState.rightAnswers.map((answer) => ({
+                    answer,
+                    points: props.points / nextState.rightAnswers.length,
+                })),
+            );
         };
     }
 }

@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { questionKindType } from '../types';
+import { acceptableAnswerWithPointsType, questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -14,7 +14,7 @@ const api = {
     updateAttemptCheatingSummary,
     deleteAttempt,
     fetchStudents,
-    fetchStudentByEmail,
+    fetchStudentByEmailForExam,
     createStudents,
     deleteStudent,
     createExam,
@@ -29,7 +29,6 @@ const api = {
     updateExercise,
     deleteExercise,
     updateQuestion,
-    addQuestionRightAnswer,
     addQuestionAcceptableAnswer,
     removeOkAnswer,
     deleteQuestion,
@@ -122,31 +121,17 @@ async function fetchAttemptWithoutAnswers(attemptId: string) {
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
-async function addQuestionRightAnswer({
-    examId,
-    questionId,
-    rightAnswer,
-}: {
-    examId: string;
-    questionId: number;
-    rightAnswer: string;
-}) {
-    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/right-answers`;
-    return performApiCall(URL, 'POST', { rightAnswer });
-}
-
-// TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
 async function addQuestionAcceptableAnswer({
     examId,
     questionId,
-    acceptableAnswer,
+    acceptableAnswerWithPoints,
 }: {
     examId: string;
     questionId: number;
-    acceptableAnswer: string;
+    acceptableAnswerWithPoints: acceptableAnswerWithPointsType;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/acceptable-answers`;
-    return performApiCall(URL, 'POST', { acceptableAnswer });
+    return performApiCall(URL, 'POST', { acceptableAnswerWithPoints });
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
@@ -192,8 +177,8 @@ async function deleteAttempt(params: { attemptId: string; examId: string }) {
     return performApiCall(URL, 'DELETE');
 }
 
-async function fetchStudentByEmail(email: string) {
-    const URL = `${BASE_URL}/students/${email}`;
+async function fetchStudentByEmailForExam(params: { email: string; examId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/students/${params.email}`;
     return performApiCall(URL, 'GET');
 }
 
@@ -320,8 +305,7 @@ async function createQuestion(params: {
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
@@ -329,8 +313,7 @@ async function createQuestion(params: {
         title: params.title,
         kind: params.kind,
         possibleAnswers: params.possibleAnswers,
-        rightAnswers: params.rightAnswers,
-        acceptableAnswers: params.acceptableAnswers,
+        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
         points: params.points,
     });
 }
@@ -341,16 +324,14 @@ async function updateQuestion(params: {
     questionId: number;
     title: string;
     possibleAnswers: string[];
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;
     return performApiCall(URL, 'PUT', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
-        rightAnswers: params.rightAnswers,
-        acceptableAnswers: params.acceptableAnswers,
+        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
         points: params.points,
     });
 }

@@ -4,9 +4,9 @@ import { Question } from './Question.entity';
 import { buildAttemptService } from '../attempt';
 import { Exercise, buildExerciseService } from '../exercise';
 import { questionEncoder } from './lib/questionEncoder';
-import { addRightAnswerToQuestion } from './lib/addRightAnswerToQuestion';
 import { addAcceptableAnswerToQuestion } from './lib/addAcceptableAnswerToQuestion';
 import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
+import { acceptableAnswerWithPointsType, questionDtoType } from './types';
 
 export { buildQuestionService };
 
@@ -15,7 +15,6 @@ function buildQuestionService() {
     const questionService = {
         createQuestion,
         updateQuestion,
-        addQuestionRightAnswer,
         addQuestionAcceptableAnswer,
         removeOkAnswer,
         getQuestions,
@@ -32,25 +31,29 @@ function buildQuestionService() {
     async function createQuestion(
         exerciseId: Exercise['id'],
         body: Pick<
-            Question,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            questionDtoType,
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >,
     ) {
         const exerciseService = buildExerciseService();
-        const exercise = await exerciseService.getExercise(exerciseId);
+        const exercise = await exerciseService.getExerciseWithoutQuestions(exerciseId);
 
         const question = new Question();
+
         const highestOrder = await getHighestQuestionOrder(exerciseId);
 
-        question.acceptableAnswers = body.acceptableAnswers;
-        question.rightAnswers = body.rightAnswers;
         question.possibleAnswers = body.possibleAnswers;
         question.title = body.title;
         question.kind = body.kind;
         question.points = body.points;
         question.exercise = exercise;
         question.order = highestOrder + 1;
-        return questionRepository.save(questionEncoder.encodeQuestion(question));
+        return questionRepository.save(
+            questionEncoder.encodeQuestion({
+                ...question,
+                acceptableAnswersWithPoints: body.acceptableAnswersWithPoints,
+            }),
+        );
     }
 
     async function getHighestQuestionOrder(exerciseId: Exercise['id']) {
@@ -70,8 +73,8 @@ function buildQuestionService() {
     async function updateQuestion(
         criteria: { exerciseId: Exercise['id']; questionId: Question['id'] },
         body: Pick<
-            Question,
-            'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            questionDtoType,
+            'title' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >,
     ) {
         const question = await questionRepository.findOneOrFail({
@@ -80,37 +83,29 @@ function buildQuestionService() {
 
         question.title = body.title;
         question.possibleAnswers = body.possibleAnswers;
-        question.rightAnswers = body.rightAnswers;
-        question.acceptableAnswers = body.acceptableAnswers;
         question.points = body.points;
 
-        return questionRepository.save(questionEncoder.encodeQuestion(question));
-    }
-
-    async function addQuestionRightAnswer(
-        criteria: {
-            questionId: Question['id'];
-        },
-        rightAnswer: string,
-    ) {
-        const question = await questionRepository.findOneOrFail({
-            where: { id: criteria.questionId },
-        });
-        const updatedQuestion = addRightAnswerToQuestion(question, rightAnswer);
-        await questionRepository.save(updatedQuestion);
-        return true;
+        return questionRepository.save(
+            questionEncoder.encodeQuestion({
+                ...question,
+                acceptableAnswersWithPoints: body.acceptableAnswersWithPoints,
+            }),
+        );
     }
 
     async function addQuestionAcceptableAnswer(
         criteria: {
             questionId: Question['id'];
         },
-        acceptableAnswer: string,
+        body: { acceptableAnswerWithPoints: acceptableAnswerWithPointsType },
     ) {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
-        const updatedQuestion = addAcceptableAnswerToQuestion(question, acceptableAnswer);
+        const updatedQuestion = addAcceptableAnswerToQuestion(
+            question,
+            body.acceptableAnswerWithPoints,
+        );
         await questionRepository.save(updatedQuestion);
         return true;
     }
@@ -135,7 +130,7 @@ function buildQuestionService() {
         });
         return questions.reduce((acc, question) => {
             return { ...acc, [question.id]: questionEncoder.decodeQuestion(question) };
-        }, {} as Record<Question['id'], Question>);
+        }, {} as Record<Question['id'], questionDtoType>);
     }
 
     async function updateQuestionsOrder(orders: Array<{ id: Question['id']; order: number }>) {

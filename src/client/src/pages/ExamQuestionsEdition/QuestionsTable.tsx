@@ -87,8 +87,7 @@ function QuestionsTable(props: {
                     <TableCell width={130}>Actions</TableCell>
                     <TableCell>Type</TableCell>
                     <TableCell>Intitulé</TableCell>
-                    <TableCell>Bonne(s) réponse(s)</TableCell>
-                    <TableCell>Réponse(s) acceptée(s)</TableCell>
+                    <TableCell>Réponses acceptées</TableCell>
                     <TableCell>Points</TableCell>
                 </TableRow>
             </TableHead>
@@ -174,41 +173,37 @@ function QuestionsTable(props: {
                                                     {question.kind === 'qcm' &&
                                                     question.possibleAnswers ? (
                                                         question.possibleAnswers[
-                                                            Number(question.rightAnswers[0])
+                                                            Number(
+                                                                question
+                                                                    .acceptableAnswersWithPoints[0]
+                                                                    .answer,
+                                                            )
                                                         ]
                                                     ) : (
                                                         <ul>
-                                                            {question.rightAnswers.map(
+                                                            {question.acceptableAnswersWithPoints.map(
                                                                 (
-                                                                    rightAnswer: string,
+                                                                    acceptableAnswerWithPoint,
                                                                     index: number,
                                                                 ) => (
                                                                     <li
                                                                         key={`question-right-answers-${question.id}-${index}`}
                                                                     >
-                                                                        {rightAnswer}
+                                                                        (
+                                                                        {
+                                                                            acceptableAnswerWithPoint.points
+                                                                        }
+                                                                        ) -{' '}
+                                                                        {
+                                                                            acceptableAnswerWithPoint.answer
+                                                                        }
                                                                     </li>
                                                                 ),
                                                             )}
                                                         </ul>
                                                     )}
                                                 </TableCell>
-                                                <TableCell>
-                                                    <ul>
-                                                        {question.acceptableAnswers.map(
-                                                            (
-                                                                rightAnswer: string,
-                                                                index: number,
-                                                            ) => (
-                                                                <li
-                                                                    key={`question-acceptable-answers-${question.id}-${index}`}
-                                                                >
-                                                                    {rightAnswer}
-                                                                </li>
-                                                            ),
-                                                        )}
-                                                    </ul>
-                                                </TableCell>
+
                                                 <TableCell>{question.points}</TableCell>
                                             </TableRow>
                                         )}

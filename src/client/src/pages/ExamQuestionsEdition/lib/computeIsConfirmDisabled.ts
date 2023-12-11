@@ -1,14 +1,13 @@
 import { QUESTION_TROU_REGEX } from '../../../constants';
 import { textSplitter } from '../../../lib/textSplitter';
-import { questionKindType } from '../../../types';
+import { acceptableAnswerWithPointsType, questionKindType } from '../../../types';
 
 function computeIsConfirmDisabled(
     questionKind: questionKindType,
     params: {
         title: string;
-        rightAnswers: string[];
         possibleAnswers: string[];
-        acceptableAnswers: string[];
+        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     },
 ) {
     if (!params.title) {
@@ -19,7 +18,7 @@ function computeIsConfirmDisabled(
         return false;
     }
 
-    if (params.rightAnswers.length === 0) {
+    if (params.acceptableAnswersWithPoints.length === 0) {
         return true;
     }
     if (
@@ -34,7 +33,10 @@ function computeIsConfirmDisabled(
         return true;
     }
 
-    if (questionKind === 'phraseMelangee' && params.title === params.rightAnswers[0]) {
+    if (
+        questionKind === 'phraseMelangee' &&
+        params.acceptableAnswersWithPoints[0].answer === params.title
+    ) {
         return true;
     }
 
@@ -45,7 +47,7 @@ function computeIsConfirmDisabled(
         if (blankCount === 0) {
             return true;
         }
-        if (blankCount !== params.rightAnswers.length) {
+        if (blankCount !== params.acceptableAnswersWithPoints.length) {
             return true;
         }
     }

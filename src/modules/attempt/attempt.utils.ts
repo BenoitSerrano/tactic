@@ -1,6 +1,7 @@
 import { encoder } from '../../lib/encoder';
 import { Exam } from '../exam';
 import { Question } from '../question';
+import { questionDtoType } from '../question/types';
 import { Attempt } from './Attempt.entity';
 import { computeAutomaticMark } from './lib/computeAutomaticMark';
 import { attemptAnswersType } from './types';
@@ -63,7 +64,7 @@ function aggregateMarks({
     questions,
 }: {
     answers: attemptAnswersType;
-    questions: Question[];
+    questions: questionDtoType[];
     marksArray: Attempt['marks'];
 }): Record<number, number | undefined> {
     const manualMarks = attemptUtils.decodeMarks(marksArray);
@@ -71,13 +72,11 @@ function aggregateMarks({
     const marks = questions.reduce((acc, question) => {
         let mark = 0;
 
-        if (question.rightAnswers.length !== 0) {
+        if (question.acceptableAnswersWithPoints.length !== 0) {
             mark = computeAutomaticMark({
                 questionKind: question.kind,
-                acceptableAnswers: question.acceptableAnswers,
+                acceptableAnswersWithPoints: question.acceptableAnswersWithPoints,
                 answer: answers[question.id],
-                points: question.points,
-                rightAnswers: question.rightAnswers,
             });
         } else {
             mark = manualMarks[question.id];

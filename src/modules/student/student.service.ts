@@ -18,7 +18,7 @@ function buildStudentService() {
         createStudents,
         getStudents,
         getStudentsWithAttempts,
-        fetchStudentByEmail,
+        fetchStudentByEmailForExam,
         deleteStudent,
         bulkInsertStudents,
         changeGroup,
@@ -67,9 +67,9 @@ function buildStudentService() {
         }, {} as Record<string, Student>);
     }
 
-    async function fetchStudentByEmail(email: string) {
+    async function fetchStudentByEmailForExam(criteria: { examId: Exam['id']; email: string }) {
         return studentRepository.findOneOrFail({
-            where: { email: email.trim().toLowerCase() },
+            where: { email: criteria.email.trim().toLowerCase() },
             select: { id: true, attempts: { id: true, exam: { id: true } } },
             relations: ['attempts', 'attempts.exam'],
         });

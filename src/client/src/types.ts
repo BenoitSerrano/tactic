@@ -12,8 +12,15 @@ type attemptsCountByAttemptStatusApiType = {
     notCorrected: number;
 };
 
+type acceptableAnswerWithPointsType = { points: number; answer: string };
+
 type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'corrected';
 
 export { questionKinds };
 
-export type { questionKindType, attemptStatusType, attemptsCountByAttemptStatusApiType };
+export type {
+    questionKindType,
+    attemptStatusType,
+    attemptsCountByAttemptStatusApiType,
+    acceptableAnswerWithPointsType,
+};

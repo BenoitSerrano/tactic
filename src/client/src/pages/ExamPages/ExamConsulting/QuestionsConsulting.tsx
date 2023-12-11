@@ -8,6 +8,7 @@ import { extractMarks } from '../lib/extractMarks';
 import { QuestionChecking } from '../ExamChecking/QuestionChecking';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { useState } from 'react';
+import { QuestionContainer } from '../components/QuestionContainer';
 
 function QuestionsConsulting(props: {
     exercises: Array<exerciseWithAnswersType>;
@@ -43,7 +44,10 @@ function QuestionsConsulting(props: {
                                 : question.mark;
                             const answerStatus = computeAnswerStatus(mark, question.points);
                             return (
-                                <QuestionConsultingContainer key={question.id}>
+                                <QuestionContainer
+                                    key={question.id}
+                                    isLastItem={index === exercise.questions.length - 1}
+                                >
                                     <QuestionIndicatorsContainer>
                                         <QuestionIndicatorContainer>
                                             <Typography>
@@ -57,7 +61,7 @@ function QuestionsConsulting(props: {
                                         question={question}
                                         answerStatus={answerStatus}
                                     />
-                                </QuestionConsultingContainer>
+                                </QuestionContainer>
                             );
                         })}
                     </ExerciseContainer>
@@ -72,12 +76,6 @@ function QuestionsConsulting(props: {
         };
     }
 }
-
-const QuestionConsultingContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(3),
-    marginTop: theme.spacing(3),
-    display: 'flex',
-}));
 
 const QuestionIndicatorContainer = styled('div')({
     minWidth: 100,

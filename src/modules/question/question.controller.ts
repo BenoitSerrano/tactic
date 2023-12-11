@@ -1,5 +1,6 @@
 import { Question } from './Question.entity';
 import { buildQuestionService } from './question.service';
+import { acceptableAnswerWithPointsType, questionDtoType } from './types';
 
 export { buildQuestionController };
 
@@ -8,7 +9,6 @@ function buildQuestionController() {
     const questionController = {
         createQuestion,
         updateQuestion,
-        addQuestionRightAnswer,
         addQuestionAcceptableAnswer,
         removeOkAnswer,
         deleteQuestion,
@@ -20,8 +20,8 @@ function buildQuestionController() {
     async function createQuestion(params: {
         urlParams: { exerciseId: string };
         body: Pick<
-            Question,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            questionDtoType,
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >;
     }) {
         return questionService.createQuestion(Number(params.urlParams.exerciseId), params.body);
@@ -30,8 +30,8 @@ function buildQuestionController() {
     async function updateQuestion(params: {
         urlParams: { exerciseId: string; questionId: string };
         body: Pick<
-            Question,
-            'title' | 'points' | 'possibleAnswers' | 'rightAnswers' | 'acceptableAnswers'
+            questionDtoType,
+            'title' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
         >;
     }) {
         return questionService.updateQuestion(
@@ -42,34 +42,23 @@ function buildQuestionController() {
             {
                 title: params.body.title,
                 possibleAnswers: params.body.possibleAnswers,
-                acceptableAnswers: params.body.acceptableAnswers,
-                rightAnswers: params.body.rightAnswers,
+                acceptableAnswersWithPoints: params.body.acceptableAnswersWithPoints,
                 points: params.body.points,
             },
         );
     }
 
-    async function addQuestionRightAnswer(params: {
-        urlParams: { questionId: string };
-        body: { rightAnswer: string };
-    }) {
-        return questionService.addQuestionRightAnswer(
-            {
-                questionId: Number(params.urlParams.questionId),
-            },
-            params.body.rightAnswer,
-        );
-    }
-
     async function addQuestionAcceptableAnswer(params: {
         urlParams: { questionId: string };
-        body: { acceptableAnswer: string };
+        body: { acceptableAnswerWithPoints: acceptableAnswerWithPointsType };
     }) {
         return questionService.addQuestionAcceptableAnswer(
             {
                 questionId: Number(params.urlParams.questionId),
             },
-            params.body.acceptableAnswer,
+            {
+                acceptableAnswerWithPoints: params.body.acceptableAnswerWithPoints,
+            },
         );
     }
 

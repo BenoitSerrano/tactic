@@ -1,6 +1,7 @@
 import { Attempt, attemptUtils } from '../attempt';
 import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Question } from '../question';
+import { questionDtoType } from '../question/types';
 import { Student } from '../student';
 import { Exam } from './Exam.entity';
 
@@ -15,7 +16,7 @@ function convertExamWithAttemptsToResults(
         name: Exam['name'];
         duration: Exam['duration'];
         extraTime: Exam['extraTime'];
-        questions: Record<Question['id'], Question>;
+        questions: Record<Question['id'], questionDtoType>;
     },
 ) {
     const now = new Date();

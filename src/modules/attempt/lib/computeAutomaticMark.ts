@@ -1,62 +1,53 @@
 import { sanitizer } from '../../../lib/sanitizer';
-import { questionKindType } from '../../question/types';
+import { acceptableAnswerWithPointsType, questionKindType } from '../../question/types';
 
 export { computeAutomaticMark };
 
 function computeAutomaticMark({
     questionKind,
-    points,
     answer,
-    rightAnswers,
-    acceptableAnswers,
+    acceptableAnswersWithPoints,
 }: {
     questionKind: questionKindType;
-    points: number;
     answer: string | undefined;
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
 }): number {
     if (!answer) {
         return 0;
     }
     if (questionKind === 'texteATrous') {
-        const words = answer.split('|');
-        if (words.length !== rightAnswers.length) {
+        const chunks = answer.split('|');
+
+        if (chunks.length !== acceptableAnswersWithPoints.length) {
             throw new Error(
-                `The answer "${answer}" does not have the same number of words as rightAnswers "${rightAnswers.join(
+                `The answer "${answer}" does not have the same number of chunks as acceptableAnswersWithPoints "${acceptableAnswersWithPoints.join(
                     '|',
                 )}"`,
             );
         }
-        const pointPerAnswer = points / words.length;
-        return words.reduce((mark, word, index) => {
-            if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(rightAnswers[index])) {
-                return mark + pointPerAnswer;
+        return chunks.reduce((mark, word, index) => {
+            const { points, answer } = acceptableAnswersWithPoints[index];
+
+            if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answer)) {
+                return mark + points;
             } else {
                 return mark;
             }
         }, 0);
     }
-    if (rightAnswers.length === 0) {
-        throw new Error(`Cannot compute automatic mark for rightAnswers=[]`);
+    if (acceptableAnswersWithPoints.length === 0) {
+        throw new Error(`Cannot compute automatic mark for acceptableAnswersWithPoints=[]`);
     }
     if (answer === undefined) {
         return 0;
     }
-    if (
-        rightAnswers.some(
-            (rightAnswer) =>
-                sanitizer.sanitizeString(rightAnswer) === sanitizer.sanitizeString(answer),
-        )
-    ) {
-        return points;
-    } else if (
-        acceptableAnswers.some(
-            (acceptableAnswer) =>
-                sanitizer.sanitizeString(acceptableAnswer) === sanitizer.sanitizeString(answer),
-        )
-    ) {
-        return points / 2;
+    const matchingAcceptableAnswer = acceptableAnswersWithPoints.find(
+        (acceptableAnswerWithPoints) =>
+            sanitizer.sanitizeString(acceptableAnswerWithPoints.answer) ===
+            sanitizer.sanitizeString(answer),
+    );
+    if (matchingAcceptableAnswer) {
+        return matchingAcceptableAnswer.points;
     } else {
         return 0;
     }

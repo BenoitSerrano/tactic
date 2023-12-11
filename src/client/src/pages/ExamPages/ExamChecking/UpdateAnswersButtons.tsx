@@ -1,49 +1,76 @@
 import { IconButton, Tooltip, styled } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
-import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
-import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { questionWithAnswersType } from '../types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
-import { computeCanAnswerBeMarkedAs } from './lib/computeCanAnswerBeMarkedAs';
+import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
 import { useGlobalLoading } from '../../../lib/globalLoading';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
+import { ElementType } from 'react';
+
+type attributeMarkToAnswerActionType = {
+    name: string;
+    multiplier: number;
+    IconComponent: ElementType;
+    color: 'success' | 'error' | 'warning';
+};
+const attributeMarkToAnswerActions: attributeMarkToAnswerActionType[] = [
+    {
+        name: 'fausse',
+        multiplier: 0,
+        IconComponent: ClearIcon,
+        color: 'error',
+    },
+    {
+        name: 'passable',
+        multiplier: 0.25,
+        IconComponent: SentimentVeryDissatisfiedIcon,
+        color: 'warning',
+    },
+    {
+        name: 'moyenne',
+        multiplier: 0.5,
+        IconComponent: SentimentNeutralIcon,
+        color: 'warning',
+    },
+    {
+        name: 'acceptable',
+        multiplier: 0.75,
+        IconComponent: SentimentSatisfiedAltIcon,
+        color: 'warning',
+    },
+    {
+        name: 'correcte',
+        multiplier: 1,
+        IconComponent: CheckIcon,
+        color: 'success',
+    },
+];
 
 function UpdateAnswersButtons(props: {
     canCorrectAttempt: boolean;
     question: questionWithAnswersType;
     refetch: () => void;
     examId: string;
+    attemptId: string;
+    isQuestionManuallyCorrected: boolean;
 }) {
     const { displayAlert } = useAlert();
     const { updateGlobalLoading } = useGlobalLoading();
 
-    const addRightAnswerMutation = useMutation({
-        mutationFn: api.addQuestionRightAnswer,
-        onSuccess: () => {
-            updateGlobalLoading('add-right-answer', false);
-            props.refetch();
-        },
-        onError: (error) => {
-            updateGlobalLoading('add-right-answer', false);
-            console.error(error);
-            displayAlert({
-                variant: 'error',
-                text: "Une erreur est survenue. Votre modification n'a pas pu être prise en compte",
-            });
-        },
-    });
-
     const removeOkAnswerMutation = useMutation({
         mutationFn: api.removeOkAnswer,
         onSuccess: () => {
-            updateGlobalLoading('remove-ok-answer', false);
+            updateGlobalLoading('attribute-mark-to-answer', false);
 
             props.refetch();
         },
         onError: (error) => {
-            updateGlobalLoading('remove-ok-answer', false);
+            updateGlobalLoading('attribute-mark-to-answer', false);
 
             console.error(error);
             displayAlert({
@@ -56,12 +83,12 @@ function UpdateAnswersButtons(props: {
     const addAcceptableAnswerMutation = useMutation({
         mutationFn: api.addQuestionAcceptableAnswer,
         onSuccess: () => {
-            updateGlobalLoading('add-acceptable-answer', false);
+            updateGlobalLoading('attribute-mark-to-answer', false);
 
             props.refetch();
         },
         onError: (error) => {
-            updateGlobalLoading('add-acceptable-answer', false);
+            updateGlobalLoading('attribute-mark-to-answer', false);
 
             console.error(error);
             displayAlert({
@@ -71,94 +98,80 @@ function UpdateAnswersButtons(props: {
         },
     });
 
-    const answerStatus = computeAnswerStatus(props.question.mark, props.question.points);
-    const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeMarkedAs(
-        'acceptable',
-        answerStatus,
-        props.question,
-    );
-    const canAnswerBeMarkedAsRight = computeCanAnswerBeMarkedAs(
-        'right',
-        answerStatus,
-        props.question,
-    );
-    const canAnswerBeMarkedAsWrong = computeCanAnswerBeMarkedAs(
-        'wrong',
-        answerStatus,
-        props.question,
-    );
+    const saveMarkMutation = useMutation({
+        mutationFn: api.updateMark,
+        onSuccess: () => {
+            updateGlobalLoading('save-mark', false);
+            props.refetch();
+        },
+        onError: (error) => {
+            updateGlobalLoading('save-mark', false);
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. Votre dernière note n'a pas pu être sauvegardée.",
+            });
+        },
+    });
+
     return (
         <UpdateAnswersButtonContainer>
-            <Tooltip title="Marquer la réponse comme correcte">
-                <IconButton
-                    size="small"
-                    color="success"
-                    disabled={!canAnswerBeMarkedAsRight || !props.canCorrectAttempt}
-                    onClick={onAddToRightAnswers}
-                >
-                    <CheckIcon fontSize="small" />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Marquer la réponse comme acceptable">
-                <IconButton
-                    size="small"
-                    color="warning"
-                    disabled={!canAnswerBeMarkedAsAcceptable || !props.canCorrectAttempt}
-                    onClick={onAddToAcceptableAnswers}
-                >
-                    <SentimentNeutralIcon fontSize="small" />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Marquer la réponse comme incorrecte">
-                <IconButton
-                    size="small"
-                    color="error"
-                    disabled={!canAnswerBeMarkedAsWrong || !props.canCorrectAttempt}
-                    onClick={onRemoveOkAnswer}
-                >
-                    <ClearIcon fontSize="small" />
-                </IconButton>
-            </Tooltip>
+            {attributeMarkToAnswerActions.map((attributeMarkToAnswerAction) => {
+                const { color, IconComponent, multiplier, name } = attributeMarkToAnswerAction;
+                const canAnswerBeAttributedMark = computeCanAnswerBeAttributed(
+                    multiplier * props.question.points,
+                    props.question,
+                );
+                return (
+                    <Tooltip key={name} title={`Marquer comme ${name}`}>
+                        <IconButton
+                            size="small"
+                            color={color}
+                            disabled={!canAnswerBeAttributedMark}
+                            onClick={buildOnAttributeMarkToAnswer(multiplier)}
+                        >
+                            <IconComponent fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                );
+            })}
         </UpdateAnswersButtonContainer>
     );
 
-    function onAddToRightAnswers() {
-        if (props.question.answer === undefined) {
-            return;
-        }
-        updateGlobalLoading('add-right-answer', true);
+    function buildOnAttributeMarkToAnswer(multiplier: number) {
+        return () => {
+            if (props.question.answer === undefined) {
+                return;
+            }
+            updateGlobalLoading('attribute-mark-to-answer', true);
 
-        addRightAnswerMutation.mutate({
-            examId: props.examId,
-            questionId: props.question.id,
-            rightAnswer: props.question.answer,
-        });
-    }
-
-    function onRemoveOkAnswer() {
-        if (props.question.answer === undefined) {
-            return;
-        }
-        updateGlobalLoading('remove-ok-answer', true);
-
-        removeOkAnswerMutation.mutate({
-            examId: props.examId,
-            questionId: props.question.id,
-            okAnswer: props.question.answer,
-        });
-    }
-
-    function onAddToAcceptableAnswers() {
-        if (props.question.answer === undefined) {
-            return;
-        }
-        updateGlobalLoading('add-acceptable-answer', true);
-
-        addAcceptableAnswerMutation.mutate({
-            examId: props.examId,
-            questionId: props.question.id,
-            acceptableAnswer: props.question.answer,
-        });
+            if (props.isQuestionManuallyCorrected) {
+                updateGlobalLoading('save-mark', true);
+                saveMarkMutation.mutate({
+                    examId: props.examId,
+                    attemptId: props.attemptId,
+                    questionId: props.question.id,
+                    mark: multiplier * props.question.points,
+                });
+            } else {
+                if (multiplier === 0) {
+                    removeOkAnswerMutation.mutate({
+                        examId: props.examId,
+                        questionId: props.question.id,
+                        okAnswer: props.question.answer,
+                    });
+                } else {
+                    addAcceptableAnswerMutation.mutate({
+                        examId: props.examId,
+                        questionId: props.question.id,
+                        acceptableAnswerWithPoints: {
+                            answer: props.question.answer,
+                            points: multiplier * props.question.points,
+                        },
+                    });
+                }
+            }
+        };
     }
 }
 

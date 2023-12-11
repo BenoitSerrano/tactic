@@ -1,4 +1,4 @@
-import { attemptStatusType, questionKindType } from '../../types';
+import { acceptableAnswerWithPointsType, attemptStatusType, questionKindType } from '../../types';
 
 type attemptWithAnswersApiType = {
     studentEmail: string;
@@ -23,8 +23,7 @@ type questionWithAnswersType = {
     id: number;
     title: string;
     kind: questionKindType;
-    rightAnswers: string[];
-    acceptableAnswers: string[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     possibleAnswers: string[];
     answer: string | undefined;
     mark: number | undefined;

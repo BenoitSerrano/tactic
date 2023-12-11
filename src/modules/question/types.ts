@@ -1,3 +1,5 @@
+import { Question } from './Question.entity';
+
 const questionKinds = [
     'qcm',
     'questionTrou',
@@ -7,5 +9,11 @@ const questionKinds = [
 ] as const;
 type questionKindType = (typeof questionKinds)[number];
 
+type acceptableAnswerWithPointsType = { points: number; answer: string };
+
+type questionDtoType = Omit<Question, 'acceptableAnswersWithPoints' | 'exercise'> & {
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+};
+
 export { questionKinds };
-export type { questionKindType };
+export type { questionKindType, questionDtoType, acceptableAnswerWithPointsType };

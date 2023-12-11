@@ -16,9 +16,12 @@ const questionRoutes: Array<routeType<any, any>> = [
         ]),
         schema: Joi.object({
             title: Joi.string().required(),
-            rightAnswers: Joi.array().items(Joi.string().allow('')).required(),
             possibleAnswers: Joi.array().items(Joi.string().allow('')).required(),
-            acceptableAnswers: Joi.array().items(Joi.string().allow('')).required(),
+            acceptableAnswersWithPoints: Joi.array()
+                .items(
+                    Joi.object({ answer: Joi.string().allow(''), points: Joi.number().required() }),
+                )
+                .required(),
             points: Joi.number().required(),
         }),
     },
@@ -38,19 +41,6 @@ const questionRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'POST',
-        path: '/exams/:examId/questions/:questionId/right-answers',
-        isAuthenticated: true,
-        controller: questionController.addQuestionRightAnswer,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({ rightAnswer: Joi.string() }),
-    },
-    {
-        method: 'POST',
         path: '/exams/:examId/questions/:questionId/acceptable-answers',
         isAuthenticated: true,
         controller: questionController.addQuestionAcceptableAnswer,
@@ -60,7 +50,12 @@ const questionRoutes: Array<routeType<any, any>> = [
                 key: 'examId',
             },
         ]),
-        schema: Joi.object({ acceptableAnswer: Joi.string() }),
+        schema: Joi.object({
+            acceptableAnswerWithPoints: Joi.object({
+                answer: Joi.string().required(),
+                points: Joi.number().required(),
+            }),
+        }),
     },
     {
         method: 'POST',
@@ -76,9 +71,12 @@ const questionRoutes: Array<routeType<any, any>> = [
         schema: Joi.object({
             title: Joi.string().allow(''),
             kind: Joi.string().valid(...questionKinds),
-            rightAnswers: Joi.array().items(Joi.string()),
             possibleAnswers: Joi.array().items(Joi.string()),
-            acceptableAnswers: Joi.array().items(Joi.string().allow('')),
+            acceptableAnswersWithPoints: Joi.array()
+                .items(
+                    Joi.object({ answer: Joi.string().allow(''), points: Joi.number().required() }),
+                )
+                .required(),
             points: Joi.number(),
         }),
     },

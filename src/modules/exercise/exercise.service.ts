@@ -12,6 +12,7 @@ function buildExerciseService() {
         createExercise,
         updateExercise,
         getExercise,
+        getExerciseWithoutQuestions,
         deleteExercise,
         updateExercisesOrder,
         getExamId,
@@ -77,7 +78,16 @@ function buildExerciseService() {
         return exercise.exam.id;
     }
 
-    async function getExercise(exerciseId: Exercise['id']): Promise<Exercise> {
+    async function getExerciseWithoutQuestions(exerciseId: Exercise['id']) {
+        const exercise = await exerciseRepository.findOneOrFail({
+            where: { id: exerciseId },
+            order: { order: 'ASC' },
+        });
+
+        return exercise;
+    }
+
+    async function getExercise(exerciseId: Exercise['id']) {
         const questionService = buildQuestionService();
         const exercise = await exerciseRepository.findOneOrFail({
             where: { id: exerciseId },

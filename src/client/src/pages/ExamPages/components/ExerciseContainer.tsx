@@ -45,12 +45,12 @@ function ExerciseContainer<
                     )}
                 </TitleContainer>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionContent>
                 <Typography>
                     <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
                 </Typography>
                 {props.children}
-            </AccordionDetails>
+            </AccordionContent>
         </Container>
     );
 }
@@ -71,6 +71,8 @@ const DefaultContainer = styled(Accordion)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.common.black}`,
     ...mainContainerProperties,
 }));
+
+const AccordionContent = styled(AccordionDetails)({ padding: 0 });
 
 const LastContainer = styled(Accordion)(({ theme }) => ({ ...mainContainerProperties }));
 

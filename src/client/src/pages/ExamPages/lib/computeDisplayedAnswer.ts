@@ -1,4 +1,5 @@
 import { QUESTION_TROU_REGEX, TEXTE_A_TROU_REGEX } from '../../../constants';
+import { sanitizer } from '../../../lib/sanitizer';
 import { answerStatusType, questionWithAnswersType } from '../types';
 import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
 
@@ -36,9 +37,9 @@ function computeDisplayedAnswer(
 
             const answers = question.answer
                 ? question.answer.split(SPLITTING_CHARACTER_FOR_TAT)
-                : SPLITTING_CHARACTER_FOR_TAT.repeat(question.rightAnswers.length).split(
-                      SPLITTING_CHARACTER_FOR_TAT,
-                  );
+                : SPLITTING_CHARACTER_FOR_TAT.repeat(
+                      question.acceptableAnswersWithPoints.length,
+                  ).split(SPLITTING_CHARACTER_FOR_TAT);
             const title: Array<chunkType> = [];
             let lastIndexFound = 0;
             let answerIndex = 0;
@@ -48,11 +49,13 @@ function computeDisplayedAnswer(
                     value: question.title.slice(lastIndexFound, value.value.index).trim(),
                 });
 
+                const acceptableAnswer = question.acceptableAnswersWithPoints[answerIndex];
+
                 title.push({
                     kind: 'coloredText',
                     value: answers[answerIndex] || '....',
                     status:
-                        answers[answerIndex] === question.rightAnswers[answerIndex]
+                        sanitizer.sanitizeString(answers[answerIndex]) === acceptableAnswer.answer
                             ? 'right'
                             : 'wrong',
                 });

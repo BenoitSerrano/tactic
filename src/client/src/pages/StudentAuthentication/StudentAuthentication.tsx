@@ -28,7 +28,7 @@ function StudentAuthentication() {
     const [email, setEmail] = useState('');
 
     const fetchStudentByEmailMutation = useMutation({
-        mutationFn: api.fetchStudentByEmail,
+        mutationFn: api.fetchStudentByEmailForExam,
         onSuccess: (student: studentType) => {
             const attempt = student.attempts.find((attempt) => attempt.exam.id === examId);
             if (attempt) {
@@ -86,7 +86,7 @@ function StudentAuthentication() {
     );
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        fetchStudentByEmailMutation.mutate(email);
+        fetchStudentByEmailMutation.mutate({ email, examId });
         event.preventDefault();
     }
 }

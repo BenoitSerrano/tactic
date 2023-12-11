@@ -1,4 +1,5 @@
 import { Exam } from '../exam';
+import { examDtoType } from '../exam/types';
 import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
@@ -12,7 +13,7 @@ const attemptAdaptator = {
 
 function convertAttemptToAttemptWithoutAnswers(
     attempt: Attempt,
-    exam: Exam,
+    exam: examDtoType,
     attemptAnswers: attemptAnswersType,
     studentEmail: Student['email'],
 ) {
@@ -43,7 +44,7 @@ function convertAttemptToAttemptWithoutAnswers(
 
 function convertAttemptToAttemptWithAnswers(
     attempt: Attempt,
-    exam: Exam,
+    exam: examDtoType,
     attemptAnswers: attemptAnswersType,
     studentEmail: Student['email'],
 ) {

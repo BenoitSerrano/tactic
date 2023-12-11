@@ -1,9 +1,9 @@
-import { IconButton, Slider, Typography, styled } from '@mui/material';
+import { IconButton, Typography, styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GradingIcon from '@mui/icons-material/Grading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LockIcon from '@mui/icons-material/Lock';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../components/TestPageLayout';
@@ -29,6 +29,8 @@ import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';
 import { useGlobalLoading } from '../../../lib/globalLoading';
 import { ExerciseContainer } from '../components/ExerciseContainer';
+import { QuestionContainer } from '../components/QuestionContainer';
+import { computeDisplayedMark } from './lib/computeDisplayedMark';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -49,25 +51,9 @@ function QuestionsChecking(props: {
     const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
     const result = computeResult(props.exercises);
-    const { getIsGloballyLoading, updateGlobalLoading } = useGlobalLoading();
+    const { getIsGloballyLoading } = useGlobalLoading();
     const isGloballyLoading = getIsGloballyLoading();
     const attemptIds = searchParams.get('attemptIds') || '';
-
-    const saveMarkMutation = useMutation({
-        mutationFn: api.updateMark,
-        onSuccess: () => {
-            updateGlobalLoading('save-mark', false);
-            props.refetch();
-        },
-        onError: (error) => {
-            updateGlobalLoading('save-mark', false);
-            console.error(error);
-            displayAlert({
-                variant: 'error',
-                text: "Une erreur est survenue. Votre dernière note n'a pas pu être sauvegardée.",
-            });
-        },
-    });
 
     const lockAttemptMutation = useMutation({
         mutationFn: api.updateEndedAt,
@@ -145,7 +131,11 @@ function QuestionsChecking(props: {
 
     const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
 
-    const editableQuestionKindsAnswers: questionKindType[] = ['phraseMelangee', 'questionTrou'];
+    const questionKindsWithAmendableMarks: questionKindType[] = [
+        'phraseMelangee',
+        'questionTrou',
+        'texteLibre',
+    ];
     const areThereQuestionsNotCorrected = Object.values(manualMarks).some(
         (manualMark) => manualMark === undefined,
     );
@@ -209,53 +199,41 @@ function QuestionsChecking(props: {
                         isLastItem={exerciseIndex === props.exercises.length - 1}
                     >
                         {exercise.questions.map((question, index: number) => {
-                            const mark = manualQuestionKinds.includes(question.kind)
+                            const isQuestionManuallyCorrected = manualQuestionKinds.includes(
+                                question.kind,
+                            );
+                            const mark = isQuestionManuallyCorrected
                                 ? manualMarks[question.id]
                                 : question.mark;
                             const answerStatus = computeAnswerStatus(mark, question.points);
+                            const isMarkAmendable = questionKindsWithAmendableMarks.includes(
+                                question.kind,
+                            );
+                            const displayedMark = computeDisplayedMark({
+                                answer: question.answer,
+                                isQuestionManuallyCorrected,
+                                mark,
+                                totalPoints: question.points,
+                            });
                             return (
-                                <QuestionCheckingContainer key={'question-' + question.id}>
+                                <QuestionContainer
+                                    key={'question-' + question.id}
+                                    isLastItem={index === exercise.questions.length - 1}
+                                >
                                     <QuestionIndicatorsContainer>
-                                        <QuestionIndicatorContainer>
-                                            {manualQuestionKinds.includes(question.kind) ? (
-                                                <MarkSliderContainer>
-                                                    <Slider
-                                                        disabled={!canCorrectAttempt}
-                                                        onClick={buildOnClickSlider(question.id)}
-                                                        onChange={buildOnChangeSlider(question.id)}
-                                                        onChangeCommitted={buildOnChangeCommittedSlider(
-                                                            question.id,
-                                                        )}
-                                                        size="small"
-                                                        step={0.5}
-                                                        min={0}
-                                                        max={question.points}
-                                                        valueLabelDisplay="auto"
-                                                        marks
-                                                        value={manualMarks[question.id] || 0}
-                                                    />
-                                                    <Typography>
-                                                        {manualMarks[question.id] !== undefined
-                                                            ? manualMarks[question.id]
-                                                            : '...'}{' '}
-                                                        / {question.points}
-                                                    </Typography>
-                                                </MarkSliderContainer>
-                                            ) : (
-                                                <Typography>
-                                                    {question.mark?.toFixed(1)} / {question.points}
-                                                </Typography>
-                                            )}
-                                        </QuestionIndicatorContainer>
-
-                                        {editableQuestionKindsAnswers.includes(question.kind) && (
+                                        {isMarkAmendable && (
                                             <UpdateAnswersButtons
                                                 canCorrectAttempt={canCorrectAttempt}
                                                 examId={props.examId}
+                                                attemptId={props.attemptId}
                                                 refetch={props.refetch}
                                                 question={question}
+                                                isQuestionManuallyCorrected={
+                                                    isQuestionManuallyCorrected
+                                                }
                                             />
                                         )}
+                                        <Typography>{displayedMark}</Typography>
                                     </QuestionIndicatorsContainer>
                                     <QuestionChecking
                                         key={'question' + question.id}
@@ -263,7 +241,7 @@ function QuestionsChecking(props: {
                                         question={question}
                                         answerStatus={answerStatus}
                                     />
-                                </QuestionCheckingContainer>
+                                </QuestionContainer>
                             );
                         })}
                     </ExerciseContainer>
@@ -364,34 +342,6 @@ function QuestionsChecking(props: {
         navigateToNewAttempt(attemptIdToNavigateTo);
     }
 
-    function buildOnChangeSlider(questionId: number) {
-        return (event: Event, value: number | number[]) => {
-            if (typeof value !== 'object') {
-                setManualMarks({ ...manualMarks, [questionId]: value });
-            }
-        };
-    }
-
-    function buildOnClickSlider(questionId: number) {
-        return () => {
-            setManualMarks({ ...manualMarks, [questionId]: manualMarks[questionId] || 0 });
-        };
-    }
-
-    function buildOnChangeCommittedSlider(questionId: number) {
-        return (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => {
-            if (typeof value !== 'object') {
-                updateGlobalLoading('save-mark', true);
-                saveMarkMutation.mutate({
-                    examId: props.examId,
-                    attemptId: props.attemptId,
-                    questionId,
-                    mark: value,
-                });
-            }
-        };
-    }
-
     function buildOnArrowClick(attemptIdToNavigateTo: string | undefined) {
         return () => {
             if (!attemptIdToNavigateTo) {
@@ -438,26 +388,13 @@ const RightArrowContainer = styled('div')(({ theme }) => ({
     height: ARROW_CONTAINER_SIZE,
 }));
 
-const QuestionCheckingContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(3),
-    marginTop: theme.spacing(3),
-    display: 'flex',
-}));
-
-const QuestionIndicatorContainer = styled('div')({
-    minWidth: 100,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'baseline',
-});
-
-const MarkSliderContainer = styled('div')(({ theme }) => ({
+const QuestionIndicatorsContainer = styled('div')({
+    width: '150px',
+    minWidth: '150px',
+    paddingRight: '20px',
     display: 'flex',
     flexDirection: 'column',
-    width: '100%',
-    marginRight: theme.spacing(1),
-}));
-
-const QuestionIndicatorsContainer = styled('div')({});
+    alignItems: 'center',
+});
 
 export { QuestionsChecking };
