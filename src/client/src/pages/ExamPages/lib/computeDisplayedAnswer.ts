@@ -1,5 +1,4 @@
 import { QUESTION_TROU_REGEX, TEXTE_A_TROU_REGEX } from '../../../constants';
-import { acceptableAnswerParser } from '../../../lib/acceptableAnswerParser';
 import { sanitizer } from '../../../lib/sanitizer';
 import { answerStatusType, questionWithAnswersType } from '../types';
 import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
@@ -50,9 +49,7 @@ function computeDisplayedAnswer(
                     value: question.title.slice(lastIndexFound, value.value.index).trim(),
                 });
 
-                const acceptableAnswer = acceptableAnswerParser.parse(
-                    question.acceptableAnswersWithPoints[answerIndex],
-                );
+                const acceptableAnswer = question.acceptableAnswersWithPoints[answerIndex];
 
                 title.push({
                     kind: 'coloredText',

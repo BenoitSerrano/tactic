@@ -1,7 +1,6 @@
 import { sanitizer } from '../../../lib/sanitizer';
 import { Question } from '../Question.entity';
 import { acceptableAnswerWithPointsType } from '../types';
-import { acceptableAnswerParser } from './acceptableAnswerParser';
 import { questionEncoder } from './questionEncoder';
 
 function addAcceptableAnswerToQuestion(

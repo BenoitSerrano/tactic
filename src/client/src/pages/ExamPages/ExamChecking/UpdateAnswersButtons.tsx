@@ -114,8 +114,10 @@ function UpdateAnswersButtons(props: {
         addAcceptableAnswerMutation.mutate({
             examId: props.examId,
             questionId: props.question.id,
-            acceptableAnswer: props.question.answer,
-            points: props.question.points,
+            acceptableAnswerWithPoints: {
+                answer: props.question.answer,
+                points: props.question.points,
+            },
         });
     }
 
@@ -141,8 +143,10 @@ function UpdateAnswersButtons(props: {
         addAcceptableAnswerMutation.mutate({
             examId: props.examId,
             questionId: props.question.id,
-            acceptableAnswer: props.question.answer,
-            points: props.question.points / 2,
+            acceptableAnswerWithPoints: {
+                answer: props.question.answer,
+                points: props.question.points / 2,
+            },
         });
     }
 }

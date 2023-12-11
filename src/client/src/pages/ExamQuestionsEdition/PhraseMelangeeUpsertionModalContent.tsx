@@ -17,7 +17,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
     ) => void;
     points: number;
 }) {
-    const initialAcceptableAnswers = props.acceptableAnswersWithPoints[0].answer || '';
+    const initialAcceptableAnswers = props.acceptableAnswersWithPoints[0]?.answer || '';
     const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
     const [originalPhrase, setOriginalPhrase] = useState(initialAcceptableAnswers);
     const [displayedWordsToPlace, setDisplayedWordsToPlace] = useState(

@@ -22,7 +22,7 @@ function QCMUpsertionModalContent(props: {
     setPossibleAnswers: (possibleAnswers: string[]) => void;
     points: number;
 }) {
-    const rightAnswer: string | undefined = props.acceptableAnswersWithPoints[0].answer;
+    const rightAnswer: string | undefined = props.acceptableAnswersWithPoints[0]?.answer;
     const canRemovePossibleAnswer = computeCanRemovePossibleAnswer();
     const isAddPossibleAnswerDisabled = computeIsAddPossibleAnswerDisabled();
     return (

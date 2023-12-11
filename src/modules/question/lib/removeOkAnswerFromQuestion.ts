@@ -1,6 +1,5 @@
 import { sanitizer } from '../../../lib/sanitizer';
 import { Question } from '../Question.entity';
-import { acceptableAnswerParser } from './acceptableAnswerParser';
 import { questionEncoder } from './questionEncoder';
 
 function removeOkAnswerFromQuestion(question: Question, okAnswer: string) {

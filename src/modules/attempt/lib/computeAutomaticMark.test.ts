@@ -1,3 +1,4 @@
+import { acceptableAnswerWithPointsType } from '../../question/types';
 import { computeAutomaticMark } from './computeAutomaticMark';
 
 describe(`computeAutomaticMark`, () => {
@@ -7,10 +8,10 @@ describe(`computeAutomaticMark`, () => {
         const answer = `le|la|les|lu`;
         const questionKind = `texteATrous`;
         const acceptableAnswersWithPoints = [
-            `${points / 4}:truc`,
-            `${points / 4}:machin`,
-            `${points / 4}:bidule`,
-            `${points / 4}:lu`,
+            { points: points / 4, answer: 'truc' },
+            { points: points / 4, answer: 'machin' },
+            { points: points / 4, answer: 'bidule' },
+            { points: points / 4, answer: 'lu' },
         ];
 
         const mark = computeAutomaticMark({
@@ -27,10 +28,10 @@ describe(`computeAutomaticMark`, () => {
         const answer = `le|||`;
         const questionKind = `texteATrous`;
         const acceptableAnswersWithPoints = [
-            `${points / 4}:le`,
-            `${points / 4}:machin`,
-            `${points / 4}:bidule`,
-            `${points / 4}:lu`,
+            { points: points / 4, answer: 'le' },
+            { points: points / 4, answer: 'machin' },
+            { points: points / 4, answer: 'bidule' },
+            { points: points / 4, answer: 'lu' },
         ];
 
         const mark = computeAutomaticMark({
@@ -46,7 +47,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should throw error if no right answer provided`, () => {
         const answer = `truc`;
         const questionKind = `questionTrou`;
-        const acceptableAnswersWithPoints: string[] = [];
+        const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [];
 
         expect(() =>
             computeAutomaticMark({
@@ -62,10 +63,10 @@ describe(`computeAutomaticMark`, () => {
         const answer = `truc`;
         const questionKind = `questionTrou`;
         const acceptableAnswersWithPoints = [
-            `${points}:machin`,
-            `${points}:chose`,
-            `${points / 2}:bidule`,
-            `${points / 2}:chouette`,
+            { points: points, answer: 'machin' },
+            { points: points, answer: 'chose' },
+            { points: points / 2, answer: 'bidule' },
+            { points: points / 2, answer: 'chouette' },
         ];
         const mark = computeAutomaticMark({
             questionKind,
@@ -81,10 +82,10 @@ describe(`computeAutomaticMark`, () => {
         const questionKind = `questionTrou`;
         const answer = `chouette`;
         const acceptableAnswersWithPoints = [
-            `${points}:machin`,
-            `${points}:chose`,
-            `${points / 2}:bidule`,
-            `${points / 2}:chouette`,
+            { points: points, answer: 'machin' },
+            { points: points, answer: 'chose' },
+            { points: points / 2, answer: 'bidule' },
+            { points: points / 2, answer: 'chouette' },
         ];
         const mark = computeAutomaticMark({
             questionKind,
@@ -100,10 +101,10 @@ describe(`computeAutomaticMark`, () => {
         const answer = `chose`;
         const questionKind = `questionTrou`;
         const acceptableAnswersWithPoints = [
-            `${points}:machin`,
-            `${points}:chose`,
-            `${points / 2}:bidule`,
-            `${points / 2}:chouette`,
+            { points: points, answer: 'machin' },
+            { points: points, answer: 'chose' },
+            { points: points / 2, answer: 'bidule' },
+            { points: points / 2, answer: 'chouette' },
         ];
         const mark = computeAutomaticMark({
             questionKind,
@@ -119,10 +120,10 @@ describe(`computeAutomaticMark`, () => {
         const answer = `cHoSe`;
         const questionKind = `questionTrou`;
         const acceptableAnswersWithPoints = [
-            `${points}:machin`,
-            `${points}:chose`,
-            `${points / 2}:bidule`,
-            `${points / 2}:chouette`,
+            { points: points, answer: 'machin' },
+            { points: points, answer: 'chose' },
+            { points: points / 2, answer: 'bidule' },
+            { points: points / 2, answer: 'chouette' },
         ];
         const mark = computeAutomaticMark({
             questionKind,
@@ -138,10 +139,10 @@ describe(`computeAutomaticMark`, () => {
         const answer = ` chose `;
         const questionKind = `questionTrou`;
         const acceptableAnswersWithPoints = [
-            `${points}:machin`,
-            `${points}:chose`,
-            `${points / 2}:bidule`,
-            `${points / 2}:chouette`,
+            { points: points, answer: 'machin' },
+            { points: points, answer: 'chose' },
+            { points: points / 2, answer: 'bidule' },
+            { points: points / 2, answer: 'chouette' },
         ];
         const mark = computeAutomaticMark({
             questionKind,
@@ -156,7 +157,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo space after apostrophe`, () => {
         const answer = "c' est";
         const questionKind = `questionTrou`;
-        const acceptableAnswersWithPoints = [points + ":c'est"];
+        const acceptableAnswersWithPoints = [{ points, answer: "c'est" }];
         const mark = computeAutomaticMark({
             questionKind,
 
@@ -170,7 +171,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo different apostrophe`, () => {
         const answer = `c’est`;
         const questionKind = `questionTrou`;
-        const acceptableAnswersWithPoints = [points + ":c'est"];
+        const acceptableAnswersWithPoints = [{ points, answer: "c'est" }];
         const mark = computeAutomaticMark({
             questionKind,
 
@@ -184,7 +185,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo multiple spaces in a row`, () => {
         const answer = "s'être  levé";
         const questionKind = `questionTrou`;
-        const acceptableAnswersWithPoints = [points + ":s'être levé"];
+        const acceptableAnswersWithPoints = [{ points, answer: "s'être levé" }];
         const mark = computeAutomaticMark({
             questionKind,
 
@@ -198,7 +199,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo same-looking accent é`, () => {
         const answer = `a sonné`;
         const questionKind = `questionTrou`;
-        const acceptableAnswersWithPoints = [`${points}:a sonné`];
+        const acceptableAnswersWithPoints = [{ points: points, answer: 'a sonné' }];
         const mark = computeAutomaticMark({
             questionKind,
 
@@ -212,7 +213,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo same-looking accent ê`, () => {
         const answer = `s’être levé`;
         const questionKind = `questionTrou`;
-        const acceptableAnswersWithPoints = [`${points}:s'être levé`];
+        const acceptableAnswersWithPoints = [{ points: points, answer: "s'être levé" }];
         const mark = computeAutomaticMark({
             questionKind,
 
@@ -226,7 +227,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo presence of period`, () => {
         const answer = "s'être levé.";
         const questionKind = `questionTrou`;
-        const acceptableAnswersWithPoints = [`${points}:s'être levé`];
+        const acceptableAnswersWithPoints = [{ points: points, answer: "s'être levé" }];
         const mark = computeAutomaticMark({
             questionKind,
 
@@ -241,7 +242,7 @@ describe(`computeAutomaticMark`, () => {
         const answer = `it ’s still nice you can get on with an ex if boyfriend`;
         const questionKind = `questionTrou`;
         const acceptableAnswersWithPoints = [
-            `${points}:it 's still nice you can get on with an ex if boyfriend`,
+            { points: points, answer: "it 's still nice you can get on with an ex if boyfriend" },
         ];
         const mark = computeAutomaticMark({
             questionKind,

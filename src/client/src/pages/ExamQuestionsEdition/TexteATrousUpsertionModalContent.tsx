@@ -10,7 +10,7 @@ import { acceptableAnswerWithPointsType } from '../../types';
 function TexteATrousUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerWithPointsType[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
     setAcceptableAnswersWithPoints: (
         newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[],
     ) => void;
@@ -73,11 +73,14 @@ function TexteATrousUpsertionModalContent(props: {
         return () => {
             const nextState = computeTexteATrousState(wordIndex, {
                 title: props.title,
-                rightAnswers: props.acceptableAnswers.map(({ answer }) => answer),
+                rightAnswers: props.acceptableAnswersWithPoints.map(({ answer }) => answer),
             });
             props.setTitle(nextState.title);
             props.setAcceptableAnswersWithPoints(
-                nextState.rightAnswers.map((answer) => ({ answer, points: props.points })),
+                nextState.rightAnswers.map((answer) => ({
+                    answer,
+                    points: props.points / nextState.rightAnswers.length,
+                })),
             );
         };
     }

@@ -175,7 +175,8 @@ function QuestionsTable(props: {
                                                         question.possibleAnswers[
                                                             Number(
                                                                 question
-                                                                    .acceptableAnswersWithPoints[0],
+                                                                    .acceptableAnswersWithPoints[0]
+                                                                    .answer,
                                                             )
                                                         ]
                                                     ) : (

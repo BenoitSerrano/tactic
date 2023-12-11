@@ -124,16 +124,14 @@ async function fetchAttemptWithoutAnswers(attemptId: string) {
 async function addQuestionAcceptableAnswer({
     examId,
     questionId,
-    acceptableAnswer,
-    points,
+    acceptableAnswerWithPoints,
 }: {
     examId: string;
     questionId: number;
-    acceptableAnswer: string;
-    points: number;
+    acceptableAnswerWithPoints: acceptableAnswerWithPointsType;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/acceptable-answers`;
-    return performApiCall(URL, 'POST', { acceptableAnswer, points });
+    return performApiCall(URL, 'POST', { acceptableAnswerWithPoints });
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
