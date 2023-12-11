@@ -2,8 +2,8 @@ const questionKinds = [
     'qcm',
     'questionTrou',
     'phraseMelangee',
-    'texteLibre',
     'texteATrous',
+    'texteLibre',
 ] as const;
 type questionKindType = (typeof questionKinds)[number];
 

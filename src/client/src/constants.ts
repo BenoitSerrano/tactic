@@ -31,12 +31,6 @@ const questionSpecificityMapping: Record<
             "L'étudiant devra choisir entre plusieurs réponses possibles. Une seule réponse correcte.",
         IconComponent: RadioButtonCheckedIcon,
     },
-    questionTrou: {
-        label: 'Phrase à trou',
-        description:
-            "L'étudiant devra combler le trou dans un texte. Plusieurs réponses correctes possibles.",
-        IconComponent: SaveAltIcon,
-    },
     texteATrous: {
         label: 'Texte à trous',
         description:
@@ -49,10 +43,16 @@ const questionSpecificityMapping: Record<
             "L'étudiant devra reformer une phrase à partir de mots mélangés. Plusieurs réponses correctes possibles.",
         IconComponent: LowPriorityIcon,
     },
+    questionTrou: {
+        label: 'Question / réponse',
+        description:
+            "L'étudiant devra répondre à une question. Plusieurs réponses correctes possibles.",
+        IconComponent: SaveAltIcon,
+    },
     texteLibre: {
         label: 'Texte libre',
         description:
-            "L'étudiant devra répondre à une question à partir d'un énoncé. Pas de correction automatique possible, vous devrez noter individuellement les copies.",
+            "L'étudiant devra répondre à une question. Pas de correction automatique possible, vous devrez noter individuellement les copies.",
         IconComponent: KeyboardIcon,
     },
 };
