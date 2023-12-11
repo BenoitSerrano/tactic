@@ -11,6 +11,7 @@ import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 import { Modal } from '../../../components/Modal';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
+import { QuestionContainer } from '../components/QuestionContainer';
 
 function QuestionsAnswering(props: {
     attemptId: string;
@@ -98,7 +99,10 @@ function QuestionsAnswering(props: {
                             isLastItem={exerciseIndex === props.exercises.length - 1}
                         >
                             {exercise.questions.map((question, index) => (
-                                <QuestionContainer key={`question-${question.id}`}>
+                                <QuestionContainer
+                                    key={`question-${question.id}`}
+                                    isLastItem={index === exercise.questions.length - 1}
+                                >
                                     <QuestionIndicatorsContainer>
                                         <Typography>/ {question.points}</Typography>
                                     </QuestionIndicatorsContainer>
@@ -175,11 +179,5 @@ const QuestionIndicatorsContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'center',
 });
-
-const QuestionContainer = styled('div')(({ theme }) => ({
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    display: 'flex',
-}));
 
 export { QuestionsAnswering };

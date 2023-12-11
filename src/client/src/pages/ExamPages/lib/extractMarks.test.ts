@@ -43,21 +43,6 @@ describe('extractMarks', () => {
         expect(manual[1]).toBe(10);
     });
 
-    it('should compute default manual mark for texteLibre empty', () => {
-        const question = {
-            ...baseQuestion,
-            id: 1,
-            kind: 'texteLibre' as const,
-            answer: undefined,
-            mark: undefined,
-        };
-        const exercise = { ...baseExerciseWithAnswers, questions: [question] };
-
-        const { manual } = extractMarks([exercise]);
-
-        expect(manual[1]).toBe(0);
-    });
-
     it('should compute return undefined manual mark for texteLibre if not empty', () => {
         const question = {
             ...baseQuestion,

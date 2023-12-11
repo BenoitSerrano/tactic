@@ -6,6 +6,7 @@ import { exerciseWithoutAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
+import { QuestionContainer } from '../components/QuestionContainer';
 
 function QuestionsPreviewing(props: {
     title: string;
@@ -38,7 +39,10 @@ function QuestionsPreviewing(props: {
                             isLastItem={exerciseIndex === props.exercises.length - 1}
                         >
                             {exercise.questions.map((question, index) => (
-                                <QuestionContainer key={`question-${question.id}`}>
+                                <QuestionContainer
+                                    isLastItem={index === exercise.questions.length - 1}
+                                    key={`question-${question.id}`}
+                                >
                                     <QuestionIndicatorsContainer>
                                         <Typography>/ {question.points}</Typography>
                                     </QuestionIndicatorsContainer>
@@ -74,11 +78,5 @@ const QuestionIndicatorsContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'center',
 });
-
-const QuestionContainer = styled('div')(({ theme }) => ({
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    display: 'flex',
-}));
 
 export { QuestionsPreviewing };
