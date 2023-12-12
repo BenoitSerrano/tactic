@@ -7,7 +7,7 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { computeConfirmButtonLabel, computeModalTitlePrefix, modalStatusType } from './utils';
-import { questionKindType } from '../../types';
+import { acceptableAnswerWithPointsType, questionKindType } from '../../types';
 import { questionUpsertionModalContentComponentMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
@@ -69,6 +69,11 @@ function QuestionUpsertionModal(props: {
     const [points, setPoints] = useState(
         props.modalStatus.kind === 'editing'
             ? `${props.modalStatus.question.points}`
+            : props.defaultPoints,
+    );
+    const [pointsPerBlank, setPointsPerBlank] = useState(
+        props.modalStatus.kind === 'editing'
+            ? props.modalStatus.question.points
             : props.defaultPoints,
     );
     const [title, setTitle] = useState(
@@ -169,22 +174,52 @@ function QuestionUpsertionModal(props: {
                         title={title}
                         setTitle={setTitle}
                         acceptableAnswersWithPoints={acceptableAnswersWithPoints}
-                        setAcceptableAnswersWithPoints={setAcceptableAnswersWithPoints}
+                        setAcceptableAnswersWithPoints={onChangeAcceptableAnswerWithPoints}
                         possibleAnswers={possibleAnswers}
                         setPossibleAnswers={setPossibleAnswers}
                         points={points}
                     />
                 );
             case 'EDIT_QUESTION_POINTS':
-                return (
-                    <PointsContainer>
-                        <TextField
-                            value={points}
-                            onChange={onChangePoint}
-                            label="Point(s) pour la question"
-                        />
-                    </PointsContainer>
-                );
+                return <PointsContainer>{renderPointsInput(currentQuestionKind)}</PointsContainer>;
+        }
+    }
+
+    function renderPointsInput(questionKind: questionKindType) {
+        if (questionKind === 'texteATrous') {
+            return <TextField value={points} onChange={onChangePoint} label="Point(s) par trou" />;
+        } else {
+            return (
+                <TextField
+                    value={pointsPerBlank}
+                    onChange={onChangePointPerBlank}
+                    label="Point(s) pour la question"
+                />
+            );
+        }
+    }
+
+    function onChangeAcceptableAnswerWithPoints(
+        newAcceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
+    ) {
+        if (currentQuestionKind === 'texteATrous') {
+            setAcceptableAnswersWithPoints(
+                newAcceptableAnswersWithPoints.map(({ answer }) => ({
+                    answer,
+                    points: pointsPerBlank,
+                })),
+            );
+            setPoints(Number(pointsPerBlank) * acceptableAnswersWithPoints.length);
+        } else {
+            setAcceptableAnswersWithPoints(newAcceptableAnswersWithPoints);
+        }
+    }
+
+    function onChangePointPerBlank(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(FLOATING_NUMBER_REGEX)) {
+            setPointsPerBlank(Number(value));
+            setPoints(Number(value) * acceptableAnswersWithPoints.length);
         }
     }
 
@@ -213,6 +248,7 @@ function QuestionUpsertionModal(props: {
         setAcceptableAnswersWithPoints([]);
         setPossibleAnswers(DEFAULT_POSSIBLE_ANSWERS);
         setTitle('');
+        setPoints(props.defaultPoints);
     }
 
     function computeIsPreviousButtonDisabled() {
