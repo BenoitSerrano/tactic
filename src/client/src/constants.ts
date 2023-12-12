@@ -6,7 +6,7 @@ import KeyboardIcon from '@mui/icons-material/Keyboard';
 import PasswordIcon from '@mui/icons-material/Password';
 import { questionKindType } from './types';
 
-const FLOATING_NUMBER_REGEX = /^[0-9]?(\.)?([0-9]*)?$/;
+const FLOATING_NUMBER_REGEX = /^([0-9]+)?(\.)?([0-9]*)?$/;
 const INTEGER_NUMBER_REGEX = /^[0-9]*$/;
 
 const QUESTION_TROU_REGEX = /^(.*)\.{4}(.*)$/;
