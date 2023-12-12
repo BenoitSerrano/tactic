@@ -34,13 +34,10 @@ function ExamQuestionsEdition() {
     const menuButtons = [
         {
             title: 'Ajouter une question',
-            onClick: () => setCurrentQuestionModalStatus({ kind: 'creating' }),
+            onClick: openQuestionCreationModal,
             IconComponent: AddCircleOutlineOutlinedIcon,
         },
     ];
-    function openEditionModal(question: questionWithAnswersType) {
-        setCurrentQuestionModalStatus({ kind: 'editing', question });
-    }
 
     return (
         <>
@@ -61,11 +58,23 @@ function ExamQuestionsEdition() {
                     exerciseId={exerciseId}
                     examId={examId}
                     modalStatus={currentQuestionModalStatus}
-                    close={() => setCurrentQuestionModalStatus(undefined)}
+                    close={closeQuestionModal}
                 />
             )}
         </>
     );
+
+    function openEditionModal(question: questionWithAnswersType) {
+        setCurrentQuestionModalStatus({ kind: 'editing', question });
+    }
+
+    function openQuestionCreationModal() {
+        setCurrentQuestionModalStatus({ kind: 'creating' });
+    }
+
+    function closeQuestionModal() {
+        setCurrentQuestionModalStatus(undefined);
+    }
 }
 
 const TitleContainer = styled('div')(({ theme }) => ({
