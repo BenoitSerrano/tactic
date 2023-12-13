@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { computeTexteATrousState } from './lib/computeTexteATrousState';
 import { textSplitter } from '../../lib/textSplitter';
 import { acceptableAnswerWithPointsType } from '../../types';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
@@ -15,8 +16,13 @@ function TexteATrousUpsertionModalContent(props: {
         newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[],
     ) => void;
     points: number;
+    setPoints: (points: number) => void;
 }) {
-    const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(false);
+    const initialPointsPerBlank = props.acceptableAnswersWithPoints.length
+        ? props.points / props.acceptableAnswersWithPoints.length
+        : props.points;
+    const [pointsPerBlank, setPointsPerBlank] = useState(initialPointsPerBlank);
+    const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(!!props.title);
     const words = textSplitter.split(props.title);
 
     return (
@@ -60,13 +66,29 @@ function TexteATrousUpsertionModalContent(props: {
                     </WordPickingContainer>
                 </RowContainer>
             )}
+            <RowContainer>
+                <TextField
+                    value={pointsPerBlank}
+                    onChange={onChangePointPerBlank}
+                    label="Point(s) par trou"
+                />
+            </RowContainer>
         </>
     );
+
+    function onChangePointPerBlank(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(FLOATING_NUMBER_REGEX)) {
+            setPointsPerBlank(Number(value));
+            props.setPoints(Number(value) * props.acceptableAnswersWithPoints.length);
+        }
+    }
 
     function resetWholeSentence() {
         setIsWholeSentenceFrozen(false);
         props.setTitle('');
         props.setAcceptableAnswersWithPoints([]);
+        props.setPoints(0);
     }
 
     function buildOnClickOnWord(wordIndex: number) {
@@ -79,9 +101,10 @@ function TexteATrousUpsertionModalContent(props: {
             props.setAcceptableAnswersWithPoints(
                 nextState.rightAnswers.map((answer) => ({
                     answer,
-                    points: props.points / nextState.rightAnswers.length,
+                    points: pointsPerBlank,
                 })),
             );
+            props.setPoints(pointsPerBlank * nextState.rightAnswers.length);
         };
     }
 }

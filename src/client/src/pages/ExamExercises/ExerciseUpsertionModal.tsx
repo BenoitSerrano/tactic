@@ -82,12 +82,14 @@ function ExerciseUpsertionModal(props: {
                         onChange={(event) => setName(event.target.value)}
                     />
                 </RowContainer>
-                <RowContainer>
-                    <QuestionKindSelect
-                        currentQuestionKind={defaultQuestionKind}
-                        onSelect={setDefaultQuestionKind}
-                    />
-                </RowContainer>
+                {props.modalStatus.kind === 'creating' && (
+                    <RowContainer>
+                        <QuestionKindSelect
+                            currentQuestionKind={defaultQuestionKind}
+                            onSelect={setDefaultQuestionKind}
+                        />
+                    </RowContainer>
+                )}
                 <RowContainer>
                     <Editable editor={editor} value={instruction} onChange={setInstruction} />
                 </RowContainer>
