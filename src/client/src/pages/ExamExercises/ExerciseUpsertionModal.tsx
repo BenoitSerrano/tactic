@@ -5,7 +5,7 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { modalStatusType } from './types';
-import { TextField } from '@mui/material';
+import { TextField, styled } from '@mui/material';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { questionKindType } from '../../types';
 import { config } from '../../config';
@@ -74,25 +74,31 @@ function ExerciseUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
-                <TextField
-                    name="name"
-                    label="Nom de l'exercice"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                />
-                <QuestionKindSelect
-                    currentQuestionKind={defaultQuestionKind}
-                    onSelect={setDefaultQuestionKind}
-                />
-
-                <Editable editor={editor} value={instruction} onChange={setInstruction} />
-
-                <TextField
-                    name="defaultPoints"
-                    label="Nombre de points par question par défaut"
-                    value={defaultPoints}
-                    onChange={onChangeDefaultPoints}
-                />
+                <RowContainer>
+                    <TextField
+                        name="name"
+                        label="Nom de l'exercice"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <QuestionKindSelect
+                        currentQuestionKind={defaultQuestionKind}
+                        onSelect={setDefaultQuestionKind}
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <Editable editor={editor} value={instruction} onChange={setInstruction} />
+                </RowContainer>
+                <RowContainer>
+                    <TextField
+                        name="defaultPoints"
+                        label="Nombre de points par question par défaut"
+                        value={defaultPoints}
+                        onChange={onChangeDefaultPoints}
+                    />
+                </RowContainer>
             </>
         </Modal>
     );
@@ -125,5 +131,11 @@ function ExerciseUpsertionModal(props: {
         }
     }
 }
+
+const RowContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+}));
 
 export { ExerciseUpsertionModal };
