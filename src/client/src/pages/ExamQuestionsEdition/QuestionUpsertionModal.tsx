@@ -187,12 +187,18 @@ function QuestionUpsertionModal(props: {
 
     function renderPointsInput(questionKind: questionKindType) {
         if (questionKind === 'texteATrous') {
-            return <TextField value={points} onChange={onChangePoint} label="Point(s) par trou" />;
-        } else {
             return (
                 <TextField
                     value={pointsPerBlank}
                     onChange={onChangePointPerBlank}
+                    label="Point(s) par trou"
+                />
+            );
+        } else {
+            return (
+                <TextField
+                    value={points}
+                    onChange={onChangePoint}
                     label="Point(s) pour la question"
                 />
             );
