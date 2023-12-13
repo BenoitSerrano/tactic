@@ -8,26 +8,27 @@ function QuestionKindCard(props: {
 }) {
     const CardComponent = props.isSelected ? SelectedCardComponent : NotSelectedCardComponent;
     return (
-        <CardComponent elevation={2} onClick={props.onSelect}>
-            <Typography variant="h5">{props.title}</Typography>
-            <Typography variant="h6">{props.subtitle}</Typography>
-        </CardComponent>
+        <Container>
+            <CardComponent elevation={2} onClick={props.onSelect}>
+                <Typography variant="h5">{props.title}</Typography>
+                <Typography variant="h6">{props.subtitle}</Typography>
+            </CardComponent>
+        </Container>
     );
 }
 
 const SelectedCardComponent = styled(Card)(({ theme }) => ({
     backgroundColor: theme.palette.primary.light,
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
+    flex: 1,
     cursor: 'pointer',
 }));
 
 const NotSelectedCardComponent = styled(Card)(({ theme }) => ({
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
     cursor: 'pointer',
 }));
+
+const Container = styled('div')({ height: '100%', display: 'flex' });
 
 export { QuestionKindCard };

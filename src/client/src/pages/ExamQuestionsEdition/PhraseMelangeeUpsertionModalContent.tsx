@@ -7,6 +7,7 @@ import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
 import { textSplitter } from '../../lib/textSplitter';
 import { acceptableAnswerWithPointsType } from '../../types';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
@@ -16,6 +17,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
         acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
     ) => void;
     points: number;
+    setPoints: (points: number) => void;
 }) {
     const initialAcceptableAnswers = props.acceptableAnswersWithPoints[0]?.answer || '';
     const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
@@ -118,6 +120,11 @@ function PhraseMelangeeUpsertionModalContent(props: {
                     </>
                 </MainContainer>
             )}
+            <TextField
+                value={props.points}
+                onChange={onChangePoint}
+                label="Point(s) pour la question"
+            />
         </>
     );
 
@@ -143,6 +150,13 @@ function PhraseMelangeeUpsertionModalContent(props: {
                 setDisplayedWordsToPlace(newDisplayedWordsToPlace);
             }
         };
+    }
+
+    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(FLOATING_NUMBER_REGEX)) {
+            props.setPoints(Number(value));
+        }
     }
 
     function resetNewRightAnswer() {

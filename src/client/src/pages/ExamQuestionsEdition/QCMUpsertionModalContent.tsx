@@ -10,6 +10,7 @@ import {
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { acceptableAnswerWithPointsType } from '../../types';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function QCMUpsertionModalContent(props: {
     title: string;
@@ -21,6 +22,7 @@ function QCMUpsertionModalContent(props: {
     possibleAnswers: string[];
     setPossibleAnswers: (possibleAnswers: string[]) => void;
     points: number;
+    setPoints: (points: number) => void;
 }) {
     const rightAnswer: string | undefined = props.acceptableAnswersWithPoints[0]?.answer;
     const canRemovePossibleAnswer = computeCanRemovePossibleAnswer();
@@ -90,6 +92,11 @@ function QCMUpsertionModalContent(props: {
                     Ajouter
                 </Button>
             </ButtonAddPossibleAnswerContainer>
+            <TextField
+                value={props.points}
+                onChange={onChangePoint}
+                label="Point(s) pour la question"
+            />
         </ModalContent>
     );
 
@@ -115,6 +122,13 @@ function QCMUpsertionModalContent(props: {
                 }
             }
         };
+    }
+
+    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(FLOATING_NUMBER_REGEX)) {
+            props.setPoints(Number(value));
+        }
     }
 
     function addPossibleAnswer() {

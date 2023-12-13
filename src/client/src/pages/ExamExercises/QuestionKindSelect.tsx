@@ -12,12 +12,14 @@ function QuestionKindSelect(props: {
             {questionKinds.map((questionKind) => {
                 const { label, description } = questionSpecificityMapping[questionKind];
                 return (
-                    <QuestionKindCard
-                        onSelect={buildSelectQuestionKind(questionKind)}
-                        isSelected={questionKind === props.currentQuestionKind}
-                        title={label}
-                        subtitle={description}
-                    />
+                    <QuestionKindContainer>
+                        <QuestionKindCard
+                            onSelect={buildSelectQuestionKind(questionKind)}
+                            isSelected={questionKind === props.currentQuestionKind}
+                            title={label}
+                            subtitle={description}
+                        />
+                    </QuestionKindContainer>
                 );
             })}
         </Container>
@@ -28,6 +30,14 @@ function QuestionKindSelect(props: {
     }
 }
 
-const Container = styled('div')({});
+const Container = styled('div')({
+    display: 'flex',
+});
+
+const QuestionKindContainer = styled('div')(({ theme }) => ({
+    flex: 1,
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+}));
 
 export { QuestionKindSelect };

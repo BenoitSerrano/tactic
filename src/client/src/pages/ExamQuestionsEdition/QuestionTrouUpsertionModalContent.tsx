@@ -1,6 +1,6 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent } from 'react';
-import { QUESTION_TROU_REGEX } from '../../constants';
+import { FLOATING_NUMBER_REGEX, QUESTION_TROU_REGEX } from '../../constants';
 import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
 import { acceptableAnswerWithPointsType } from '../../types';
 
@@ -12,6 +12,7 @@ function QuestionTrouUpsertionModalContent(props: {
         acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
     ) => void;
     points: number;
+    setPoints: (points: number) => void;
 }) {
     const { beforeText, afterText } = computeTexts();
     const rightAnswers = props.acceptableAnswersWithPoints
@@ -51,8 +52,22 @@ function QuestionTrouUpsertionModalContent(props: {
                     </Typography>
                 </HintContainer>
             </FieldContainer>
+            <RowContainer>
+                <TextField
+                    value={props.points}
+                    onChange={onChangePoint}
+                    label="Point(s) pour la question"
+                />
+            </RowContainer>
         </>
     );
+
+    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = event.target.value;
+        if (value.match(FLOATING_NUMBER_REGEX)) {
+            props.setPoints(Number(value));
+        }
+    }
 
     function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
         const newAcceptableAnswerWithPoints = event.target.value
