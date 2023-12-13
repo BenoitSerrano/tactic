@@ -5,10 +5,11 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { modalStatusType } from './types';
-import { MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
-import { FLOATING_NUMBER_REGEX, questionSpecificityMapping } from '../../constants';
-import { questionKindType, questionKinds } from '../../types';
+import { TextField } from '@mui/material';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
+import { questionKindType } from '../../types';
 import { config } from '../../config';
+import { QuestionKindSelect } from './QuestionKindSelect';
 
 function ExerciseUpsertionModal(props: {
     close: () => void;
@@ -75,25 +76,15 @@ function ExerciseUpsertionModal(props: {
             <>
                 <TextField
                     name="name"
-                    fullWidth
                     label="Nom de l'exercice"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                 />
-                <Select
-                    fullWidth
-                    labelId="select-default-question-kind-label"
-                    id="select-default-question-kind"
-                    value={defaultQuestionKind}
-                    label="Type de question"
-                    onChange={handleQuestionKindChange}
-                >
-                    {questionKinds.map((questionKind) => (
-                        <MenuItem value={questionKind}>
-                            {questionSpecificityMapping[questionKind].label}
-                        </MenuItem>
-                    ))}
-                </Select>
+                <QuestionKindSelect
+                    currentQuestionKind={defaultQuestionKind}
+                    onSelect={setDefaultQuestionKind}
+                />
+
                 <Editable editor={editor} value={instruction} onChange={setInstruction} />
 
                 <TextField
@@ -111,11 +102,6 @@ function ExerciseUpsertionModal(props: {
         if (value.match(FLOATING_NUMBER_REGEX)) {
             setDefaultPoints(value);
         }
-    }
-
-    function handleQuestionKindChange(event: SelectChangeEvent) {
-        const newDefaultQuestionKind = event.target.value as questionKindType;
-        setDefaultQuestionKind(newDefaultQuestionKind);
     }
 
     function saveExercise() {

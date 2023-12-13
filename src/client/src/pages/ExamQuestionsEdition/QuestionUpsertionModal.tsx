@@ -13,7 +13,7 @@ import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { computeInitialModalQuestionKind } from './lib/computeInitialModalQuestionKind';
 import { computeSteps, stepIds } from './lib/computeSteps';
-import { QuestionKindSelect } from './QuestionKindSelect';
+import { QuestionKindSelect } from '../ExamExercises/QuestionKindSelect';
 
 const DEFAULT_POSSIBLE_ANSWERS = ['', ''];
 
