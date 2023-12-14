@@ -15,13 +15,13 @@ function TexteATrousUpsertionModalContent(props: {
     setAcceptableAnswersWithPoints: (
         newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[],
     ) => void;
-    points: number;
-    setPoints: (points: number) => void;
+    points: string;
+    setPoints: (points: string) => void;
 }) {
     const initialPointsPerBlank = props.acceptableAnswersWithPoints.length
-        ? props.points / props.acceptableAnswersWithPoints.length
-        : props.points;
-    const [pointsPerBlank, setPointsPerBlank] = useState(initialPointsPerBlank);
+        ? Number(props.points) / props.acceptableAnswersWithPoints.length
+        : Number(props.points);
+    const [pointsPerBlank, setPointsPerBlank] = useState(`${initialPointsPerBlank}`);
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(!!props.title);
     const words = textSplitter.split(props.title);
 
@@ -79,8 +79,15 @@ function TexteATrousUpsertionModalContent(props: {
     function onChangePointPerBlank(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
         if (value.match(FLOATING_NUMBER_REGEX)) {
-            setPointsPerBlank(Number(value));
-            props.setPoints(Number(value) * props.acceptableAnswersWithPoints.length);
+            setPointsPerBlank(value);
+            const newPointsPerBlank = Number(value);
+            props.setAcceptableAnswersWithPoints(
+                props.acceptableAnswersWithPoints.map(({ answer }) => ({
+                    answer,
+                    points: newPointsPerBlank,
+                })),
+            );
+            props.setPoints(`${Number(value) * props.acceptableAnswersWithPoints.length}`);
         }
     }
 
@@ -88,7 +95,7 @@ function TexteATrousUpsertionModalContent(props: {
         setIsWholeSentenceFrozen(false);
         props.setTitle('');
         props.setAcceptableAnswersWithPoints([]);
-        props.setPoints(0);
+        props.setPoints('0');
     }
 
     function buildOnClickOnWord(wordIndex: number) {
@@ -101,10 +108,10 @@ function TexteATrousUpsertionModalContent(props: {
             props.setAcceptableAnswersWithPoints(
                 nextState.rightAnswers.map((answer) => ({
                     answer,
-                    points: pointsPerBlank,
+                    points: Number(pointsPerBlank),
                 })),
             );
-            props.setPoints(pointsPerBlank * nextState.rightAnswers.length);
+            props.setPoints(`${Number(pointsPerBlank) * nextState.rightAnswers.length}`);
         };
     }
 }

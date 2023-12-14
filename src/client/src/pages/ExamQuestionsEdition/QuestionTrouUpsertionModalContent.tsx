@@ -1,6 +1,6 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { ChangeEvent } from 'react';
-import { FLOATING_NUMBER_REGEX, QUESTION_TROU_REGEX } from '../../constants';
+import { QUESTION_TROU_REGEX } from '../../constants';
 import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
 import { acceptableAnswerWithPointsType } from '../../types';
 
@@ -11,8 +11,8 @@ function QuestionTrouUpsertionModalContent(props: {
     setAcceptableAnswersWithPoints: (
         acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
     ) => void;
-    points: number;
-    setPoints: (points: number) => void;
+    points: string;
+    setPoints: (points: string) => void;
 }) {
     const { beforeText, afterText } = computeTexts();
     const rightAnswers = props.acceptableAnswersWithPoints
@@ -55,24 +55,17 @@ function QuestionTrouUpsertionModalContent(props: {
             <RowContainer>
                 <TextField
                     value={props.points}
-                    onChange={onChangePoint}
+                    onChange={(event) => props.setPoints(event.target.value)}
                     label="Point(s) pour la question"
                 />
             </RowContainer>
         </>
     );
 
-    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
-        const value = event.target.value;
-        if (value.match(FLOATING_NUMBER_REGEX)) {
-            props.setPoints(Number(value));
-        }
-    }
-
     function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
         const newAcceptableAnswerWithPoints = event.target.value
             .split(SPLITTING_CHARACTER_FOR_ANSWERS)
-            .map((answer) => ({ answer, points: props.points }));
+            .map((answer) => ({ answer, points: Number(props.points) }));
         props.setAcceptableAnswersWithPoints(newAcceptableAnswerWithPoints);
     }
 

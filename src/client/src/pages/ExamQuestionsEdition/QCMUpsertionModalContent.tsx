@@ -10,7 +10,6 @@ import {
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { acceptableAnswerWithPointsType } from '../../types';
-import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function QCMUpsertionModalContent(props: {
     title: string;
@@ -21,8 +20,8 @@ function QCMUpsertionModalContent(props: {
     ) => void;
     possibleAnswers: string[];
     setPossibleAnswers: (possibleAnswers: string[]) => void;
-    points: number;
-    setPoints: (points: number) => void;
+    points: string;
+    setPoints: (points: string) => void;
 }) {
     const rightAnswer: string | undefined = props.acceptableAnswersWithPoints[0]?.answer;
     const canRemovePossibleAnswer = computeCanRemovePossibleAnswer();
@@ -46,7 +45,7 @@ function QCMUpsertionModalContent(props: {
                 value={rightAnswer}
                 onChange={(event) =>
                     props.setAcceptableAnswersWithPoints([
-                        { answer: event.target.value, points: props.points },
+                        { answer: event.target.value, points: Number(props.points) },
                     ])
                 }
             >
@@ -94,7 +93,7 @@ function QCMUpsertionModalContent(props: {
             </ButtonAddPossibleAnswerContainer>
             <TextField
                 value={props.points}
-                onChange={onChangePoint}
+                onChange={(event) => props.setPoints(event.target.value)}
                 label="Point(s) pour la question"
             />
         </ModalContent>
@@ -117,18 +116,11 @@ function QCMUpsertionModalContent(props: {
                     props.setAcceptableAnswersWithPoints([]);
                 } else if (index < Number(rightAnswer)) {
                     props.setAcceptableAnswersWithPoints([
-                        { answer: `${Number(rightAnswer) - 1}`, points: props.points },
+                        { answer: `${Number(rightAnswer) - 1}`, points: Number(props.points) },
                     ]);
                 }
             }
         };
-    }
-
-    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
-        const value = event.target.value;
-        if (value.match(FLOATING_NUMBER_REGEX)) {
-            props.setPoints(Number(value));
-        }
     }
 
     function addPossibleAnswer() {

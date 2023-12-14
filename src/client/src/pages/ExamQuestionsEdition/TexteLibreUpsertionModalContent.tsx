@@ -1,11 +1,10 @@
 import { TextField, styled } from '@mui/material';
-import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 function TexteLibreUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    points: number;
-    setPoints: (points: number) => void;
+    points: string;
+    setPoints: (points: string) => void;
 }) {
     return (
         <>
@@ -21,19 +20,12 @@ function TexteLibreUpsertionModalContent(props: {
             <RowContainer>
                 <TextField
                     value={props.points}
-                    onChange={onChangePoint}
+                    onChange={(event) => props.setPoints(event.target.value)}
                     label="Point(s) pour la question"
                 />
             </RowContainer>
         </>
     );
-
-    function onChangePoint(event: React.ChangeEvent<HTMLInputElement>) {
-        const value = event.target.value;
-        if (value.match(FLOATING_NUMBER_REGEX)) {
-            props.setPoints(Number(value));
-        }
-    }
 }
 
 const RowContainer = styled('div')(({ theme }) => ({

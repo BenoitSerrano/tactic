@@ -10,6 +10,7 @@ import { questionUpsertionModalContentComponentMapping } from './constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { computeInitialModalQuestionKind } from './lib/computeInitialModalQuestionKind';
 import { QuestionKindSelect } from '../ExamExercises/QuestionKindSelect';
+import { FLOATING_NUMBER_REGEX } from '../../constants';
 
 const DEFAULT_POSSIBLE_ANSWERS = ['', ''];
 
@@ -58,7 +59,7 @@ function QuestionUpsertionModal(props: {
     const [points, setPoints] = useState(
         props.modalStatus.kind === 'editing'
             ? `${props.modalStatus.question.points}`
-            : props.defaultPoints,
+            : `${props.defaultPoints}`,
     );
 
     const [title, setTitle] = useState(
@@ -111,7 +112,7 @@ function QuestionUpsertionModal(props: {
                     possibleAnswers={possibleAnswers}
                     setPossibleAnswers={setPossibleAnswers}
                     points={points}
-                    setPoints={setPoints}
+                    setPoints={onChangePoints}
                 />
             </ModalContentContainer>
         </Modal>
@@ -124,11 +125,17 @@ function QuestionUpsertionModal(props: {
         }
     }
 
+    function onChangePoints(points: string) {
+        if (points.match(FLOATING_NUMBER_REGEX)) {
+            setPoints(points);
+        }
+    }
+
     function resetQuestionContent() {
         setAcceptableAnswersWithPoints([]);
         setPossibleAnswers(DEFAULT_POSSIBLE_ANSWERS);
         setTitle('');
-        setPoints(props.defaultPoints);
+        setPoints(`${props.defaultPoints}`);
     }
 
     function saveQuestion() {
