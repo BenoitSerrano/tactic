@@ -2,6 +2,8 @@ import { Modal as MuiModal, Typography, styled } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Button } from './Button';
 
+type modalSizeType = 'small' | 'large';
+
 function Modal(props: {
     isConfirmDisabled?: boolean;
     children: React.ReactElement | Array<React.ReactElement | boolean>;
@@ -13,10 +15,12 @@ function Modal(props: {
     cancelButtonLabel?: string;
     isConfirmLoading?: boolean;
     title?: string;
+    size?: 'small' | 'large';
 }) {
+    const ModalComponent = modalComponentMapping[props.size || 'large'];
     return (
         <StyledModal open={props.isOpen} onClose={props.close}>
-            <ModalContent>
+            <ModalComponent>
                 {!!props.title && (
                     <ModalHeader>
                         <Typography variant="h2">{props.title}</Typography>
@@ -34,7 +38,7 @@ function Modal(props: {
                         {props.confirmButtonLabel || 'Confirmer'}
                     </LoadingButton>
                 </ModalFooter>
-            </ModalContent>
+            </ModalComponent>
         </StyledModal>
     );
 
@@ -49,22 +53,52 @@ function Modal(props: {
 
 const ModalHeader = styled('div')({ marginBottom: 8 });
 
-const ModalContent = styled('div')({
+const modalDefaultProperties = {
     borderRadius: '2px',
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    padding: '20px',
+    overflow: 'auto',
+    backgroundColor: 'white',
+};
+
+// const LargeModalContent = styled('div')({
+//     borderRadius: '2px',
+//     position: 'absolute' as 'absolute',
+//     top: '50%',
+//     left: '50%',
+//     transform: 'translate(-50%, -50%)',
+//     display: 'flex',
+//     flexDirection: 'column',
+//     padding: '20px',
+//     overflow: 'auto',
+//     backgroundColor: 'white',
+// });
+
+const SmallModalContent = styled('div')({
+    ...modalDefaultProperties,
+    minWidth: '40%',
+    minHeight: '40%',
+    maxHeight: '40%',
+    maxWidth: '40%',
+});
+
+const LargeModalContent = styled('div')({
+    ...modalDefaultProperties,
     minWidth: '80%',
     minHeight: '80%',
     maxHeight: '80%',
     maxWidth: '80%',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '20px',
-    overflow: 'auto',
-    backgroundColor: 'white',
 });
+
+const modalComponentMapping: Record<modalSizeType, any> = {
+    small: SmallModalContent,
+    large: LargeModalContent,
+};
 
 const ModalBody = styled('div')({
     flex: 1,

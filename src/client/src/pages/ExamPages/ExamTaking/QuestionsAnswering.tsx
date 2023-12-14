@@ -124,6 +124,7 @@ function QuestionsAnswering(props: {
                 })}
             </TestPageLayout>
             <Modal
+                size="small"
                 isOpen={isConfirmFinishExamModalOpen}
                 close={closeConfirmFinishExamModal}
                 onConfirm={finishExam}
