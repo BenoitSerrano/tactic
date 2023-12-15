@@ -9,6 +9,8 @@
         "@mui/icons-material": "^5.11.16",
         "@mui/lab": "^5.0.0-alpha.136",
         "@mui/material": "^5.13.5",
+        "@sentry/cli": "^2.23.0",
+        "@sentry/react": "^7.88.0",
         "@tanstack/react-query": "^5.4.3",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
@@ -31,9 +33,10 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "react-scripts build && npm run sentry:sourcemaps",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "sentry:sourcemaps": "sentry-cli sourcemaps inject --org tactic-id --project javascript-react ./build && sentry-cli sourcemaps upload --org tactic-id --project javascript-react ./build --log-level=debug"
     },
     "eslintConfig": {
         "extends": [
