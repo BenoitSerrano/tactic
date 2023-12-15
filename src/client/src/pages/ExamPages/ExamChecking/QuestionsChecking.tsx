@@ -31,6 +31,7 @@ import { useGlobalLoading } from '../../../lib/globalLoading';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { computeDisplayedMark } from './lib/computeDisplayedMark';
+import { computeAreThereQuestionsNotCorrected } from './lib/computeAreThereQuestionsNotCorrected';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -136,8 +137,9 @@ function QuestionsChecking(props: {
         'questionTrou',
         'texteLibre',
     ];
-    const areThereQuestionsNotCorrected = Object.values(manualMarks).some(
-        (manualMark) => manualMark === undefined,
+    const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(
+        props.exercises,
+        manualMarks,
     );
     const canCorrectAttempt =
         props.attemptStatus === 'finished' || props.attemptStatus === 'expired';
