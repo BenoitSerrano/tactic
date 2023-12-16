@@ -31,6 +31,7 @@ function ExamUpsertionModal(props: {
 
     return (
         <Modal
+            size="small"
             isOpen={props.isOpen}
             close={props.close}
             onConfirm={saveExam}
