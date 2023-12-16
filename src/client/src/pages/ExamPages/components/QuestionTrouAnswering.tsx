@@ -1,24 +1,16 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { questionWithoutAnswerType } from '../types';
 
-const questionTrouTitleRegex = /(.*)\.{4}(.*)/;
-
 function QuestionTrouAnswering(props: {
     question: questionWithoutAnswerType;
     index: number;
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
-    const regexMatch = props.question.title.match(questionTrouTitleRegex);
-    if (!regexMatch) {
-        console.warn(`questionTrou.title "${props.question.title}" does not match regex`);
-        return <div />;
-    }
-    const [_, beforeText, afterText] = regexMatch;
     return (
         <StyledContainer>
             <Typography>
-                <IndexContainer>{props.index}</IndexContainer>. {beforeText}
+                <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
             </Typography>
             <StyledTextField
                 fullWidth
@@ -27,7 +19,6 @@ function QuestionTrouAnswering(props: {
                 onChange={onChangeAnswer}
                 placeholder="..."
             />
-            <Typography>{afterText}</Typography>
         </StyledContainer>
     );
 

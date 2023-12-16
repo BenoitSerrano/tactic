@@ -1,4 +1,3 @@
-import { QUESTION_TROU_REGEX } from '../../../constants';
 import { textSplitter } from '../../../lib/textSplitter';
 import { acceptableAnswerWithPointsType, questionKindType } from '../../../types';
 
@@ -26,10 +25,6 @@ function computeIsConfirmDisabled(
         (params.possibleAnswers.some((possibleAnswer) => !possibleAnswer) ||
             params.possibleAnswers.length <= 1)
     ) {
-        return true;
-    }
-
-    if (questionKind === 'questionTrou' && !params.title.match(QUESTION_TROU_REGEX)) {
         return true;
     }
 

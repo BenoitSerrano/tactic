@@ -1,8 +1,8 @@
-import { TextField, Typography, styled } from '@mui/material';
+import { TextField, styled } from '@mui/material';
 import { ChangeEvent } from 'react';
-import { QUESTION_TROU_REGEX } from '../../constants';
 import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
 import { acceptableAnswerWithPointsType } from '../../types';
+import { QuestionInputContainer } from './QuestionInputContainer';
 
 function QuestionTrouUpsertionModalContent(props: {
     title: string;
@@ -14,53 +14,49 @@ function QuestionTrouUpsertionModalContent(props: {
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const { beforeText, afterText } = computeTexts();
     const rightAnswers = props.acceptableAnswersWithPoints
         .map(({ answer }) => answer)
         .join(SPLITTING_CHARACTER_FOR_ANSWERS);
+
     return (
         <>
-            <FieldContainer>
-                <RowContainer>
+            <RowContainer>
+                <QuestionInputContainer title="Question à laquelle doit répondre l'élève :">
                     <TextField
-                        variant="standard"
-                        label="Début de la question..."
-                        value={beforeText}
-                        onChange={onChangeBeforeText}
-                        placeholder="Les paroles"
+                        fullWidth
+                        label="Intitulé"
+                        value={props.title}
+                        onChange={onChangeTitle}
                     />
+                </QuestionInputContainer>
+            </RowContainer>
+            <RowContainer>
+                <QuestionInputContainer
+                    title="Réponses correctes :"
+                    subtitle="Indiquez les réponses correctes, séparées par des point-virgules (;)"
+                >
                     <TextField
-                        variant="standard"
-                        label="Bonnes réponses"
-                        placeholder="s'envolent"
+                        label="Réponses correctes"
                         value={rightAnswers}
                         onChange={onChangeRightAnswers}
                     />
-                    <TextField
-                        variant="standard"
-                        label="... suite de la question"
-                        value={afterText}
-                        onChange={onChangeAfterText}
-                        placeholder=", les écrits restent."
-                    />
-                </RowContainer>
-            </FieldContainer>
-            <FieldContainer>
-                <HintContainer>
-                    <Typography variant="h6">
-                        Indiquez les réponses correctes, séparées par des point-virgules (;)
-                    </Typography>
-                </HintContainer>
-            </FieldContainer>
-            <RowContainer>
-                <TextField
-                    value={props.points}
-                    onChange={(event) => props.setPoints(event.target.value)}
-                    label="Point(s) pour la question"
-                />
+                </QuestionInputContainer>
             </RowContainer>
+            <LastRowContainer>
+                <QuestionInputContainer title="Nombre de points attribués à la question :">
+                    <TextField
+                        value={props.points}
+                        onChange={(event) => props.setPoints(event.target.value)}
+                        label="Point(s)"
+                    />
+                </QuestionInputContainer>
+            </LastRowContainer>
         </>
     );
+
+    function onChangeTitle(event: ChangeEvent<HTMLInputElement>) {
+        props.setTitle(event.target.value);
+    }
 
     function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
         const newAcceptableAnswerWithPoints = event.target.value
@@ -68,41 +64,18 @@ function QuestionTrouUpsertionModalContent(props: {
             .map((answer) => ({ answer, points: Number(props.points) }));
         props.setAcceptableAnswersWithPoints(newAcceptableAnswerWithPoints);
     }
-
-    function computeTexts() {
-        const match = props.title.match(QUESTION_TROU_REGEX);
-        if (!match) {
-            console.error(`Title wrongly formatted: "${props.title}"`);
-            return { beforeText: '', afterText: '' };
-        }
-        const beforeText = match[1];
-        const afterText = match[2];
-        return { beforeText, afterText };
-    }
-
-    function onChangeBeforeText(event: ChangeEvent<HTMLInputElement>) {
-        const beforeText = event.target.value;
-        const title = `${beforeText}....${afterText}`;
-        props.setTitle(title);
-    }
-    function onChangeAfterText(event: ChangeEvent<HTMLInputElement>) {
-        const afterText = event.target.value;
-        const title = `${beforeText}....${afterText}`;
-        props.setTitle(title);
-    }
 }
 
-const FieldContainer = styled('div')(({ theme }) => ({
+const RowContainer = styled('div')(({ theme }) => ({
     display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-    flex: 1,
-    width: '100%',
+    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    borderBottom: `1px solid ${theme.palette.grey[200]}`,
 }));
 
-const RowContainer = styled('div')({ display: 'flex' });
-
-const HintContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(2) }));
+const LastRowContainer = styled('div')(({ theme }) => ({
+    paddingTop: theme.spacing(2),
+    display: 'flex',
+}));
 
 export { QuestionTrouUpsertionModalContent };
