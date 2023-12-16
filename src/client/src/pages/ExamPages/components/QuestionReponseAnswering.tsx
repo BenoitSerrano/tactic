@@ -1,7 +1,7 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { questionWithoutAnswerType } from '../types';
 
-function QuestionTrouAnswering(props: {
+function QuestionReponseAnswering(props: {
     question: questionWithoutAnswerType;
     index: number;
     currentAnswer: string;
@@ -38,4 +38,4 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
-export { QuestionTrouAnswering };
+export { QuestionReponseAnswering };

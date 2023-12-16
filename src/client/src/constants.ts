@@ -42,7 +42,7 @@ const questionSpecificityMapping: Record<
             "L'étudiant devra reformer une phrase à partir de mots mélangés. Plusieurs réponses correctes possibles.",
         IconComponent: LowPriorityIcon,
     },
-    questionTrou: {
+    questionReponse: {
         label: 'Question / réponse',
         description:
             "L'étudiant devra répondre à une question. Plusieurs réponses correctes possibles.",

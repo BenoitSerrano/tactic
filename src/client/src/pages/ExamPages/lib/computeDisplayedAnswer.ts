@@ -13,7 +13,7 @@ function computeDisplayedAnswer(
     answerStatus: answerStatusType,
 ): displayedAnswerType {
     switch (question.kind) {
-        case 'questionTrou':
+        case 'questionReponse':
             return {
                 title: [{ kind: 'text', value: question.title }],
                 answer: [

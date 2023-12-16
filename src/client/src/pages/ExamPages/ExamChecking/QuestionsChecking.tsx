@@ -131,7 +131,7 @@ function QuestionsChecking(props: {
 
     const questionKindsWithAmendableMarks: questionKindType[] = [
         'phraseMelangee',
-        'questionTrou',
+        'questionReponse',
         'texteLibre',
     ];
     const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(

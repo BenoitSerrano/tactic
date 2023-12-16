@@ -1,6 +1,6 @@
 const questionKinds = [
     'qcm',
-    'questionTrou',
+    'questionReponse',
     'phraseMelangee',
     'texteATrous',
     'texteLibre',

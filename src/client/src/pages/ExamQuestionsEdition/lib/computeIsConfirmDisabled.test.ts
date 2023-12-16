@@ -50,8 +50,8 @@ describe('computeIsConfirmDisabled', () => {
 
         expect(isConfirmDisabled).toBe(false);
     });
-    test('questionTrou with no right answer = true', () => {
-        const questionKind = 'questionTrou';
+    test('questionReponse with no right answer = true', () => {
+        const questionKind = 'questionReponse';
         const title = 'ceci est une question';
         const possibleAnswers: string[] = [];
         const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [];
@@ -65,8 +65,8 @@ describe('computeIsConfirmDisabled', () => {
         expect(isConfirmDisabled).toBe(true);
     });
 
-    test('questionTrou rightly filled = false', () => {
-        const questionKind = 'questionTrou';
+    test('questionReponse rightly filled = false', () => {
+        const questionKind = 'questionReponse';
         const title = 'ceci est une question';
         const possibleAnswers: string[] = [];
         const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [

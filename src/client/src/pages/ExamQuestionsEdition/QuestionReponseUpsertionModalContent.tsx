@@ -4,7 +4,7 @@ import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
 import { acceptableAnswerWithPointsType } from '../../types';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
-function QuestionTrouUpsertionModalContent(props: {
+function QuestionReponseUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
     acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
@@ -78,4 +78,4 @@ const LastRowContainer = styled('div')(({ theme }) => ({
     display: 'flex',
 }));
 
-export { QuestionTrouUpsertionModalContent };
+export { QuestionReponseUpsertionModalContent };

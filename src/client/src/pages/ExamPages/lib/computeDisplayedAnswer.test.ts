@@ -1,12 +1,12 @@
 import { computeDisplayedAnswer } from './computeDisplayedAnswer';
 
 describe('computeDisplayedAnswer', () => {
-    describe('questionTrou', () => {
+    describe('questionReponse', () => {
         it('should return the completed title with "" if no answer', () => {
             const question = {
                 id: 2,
                 title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
-                kind: 'questionTrou' as const,
+                kind: 'questionReponse' as const,
                 possibleAnswers: [],
                 acceptableAnswersWithPoints: [{ points: 2, answer: 'Non, pas vraiment' }],
                 answer: '',
@@ -29,7 +29,7 @@ describe('computeDisplayedAnswer', () => {
             const question = {
                 id: 2,
                 title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
-                kind: 'questionTrou' as const,
+                kind: 'questionReponse' as const,
                 possibleAnswers: [],
                 acceptableAnswersWithPoints: [{ points: 2, answer: 'Oui !' }],
                 acceptableAnswers: [],
