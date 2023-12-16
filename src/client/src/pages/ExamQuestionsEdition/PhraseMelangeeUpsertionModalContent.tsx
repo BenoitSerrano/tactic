@@ -7,6 +7,7 @@ import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
 import { textSplitter } from '../../lib/textSplitter';
 import { acceptableAnswerWithPointsType } from '../../types';
+import { QuestionInputContainer } from './QuestionInputContainer';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
@@ -30,23 +31,32 @@ function PhraseMelangeeUpsertionModalContent(props: {
 
     return (
         <>
-            <TextField
-                fullWidth
-                label="Phrase originale"
-                placeholder="..."
-                value={originalPhrase}
-                onChange={onChangeOriginalPhrase}
-            />
+            <QuestionInputContainer title="Phrase originale">
+                <TextField
+                    fullWidth
+                    label="Phrase originale"
+                    placeholder="..."
+                    value={originalPhrase}
+                    onChange={onChangeOriginalPhrase}
+                />
+            </QuestionInputContainer>
             {!!originalPhrase && (
                 <MainContainer>
-                    <RowContainer>
-                        <Typography>
-                            Phrase mélangée : <strong>{props.title}</strong>
-                        </Typography>
-                        <Button onClick={shufflePhrase}>Mélanger</Button>
-                    </RowContainer>
-                    <>
-                        <Typography>Phrases correctes :</Typography>
+                    <QuestionInputContainer
+                        title="Phrase mélangée"
+                        subtitle={`Cliquez sur le bouton "Mélanger" pour changer l'ordre des mots à afficher à l'élève`}
+                    >
+                        <RowContainer>
+                            <Typography>
+                                <strong>{props.title}</strong>
+                            </Typography>
+                            <Button onClick={shufflePhrase}>Mélanger</Button>
+                        </RowContainer>
+                    </QuestionInputContainer>
+                    <QuestionInputContainer
+                        title="Phrases correctes"
+                        subtitle={`Cliquez sur le bouton "Ajouter" pour ajouter des phrases correctes`}
+                    >
                         <table>
                             {props.acceptableAnswersWithPoints.map(({ answer }, index) => (
                                 <tr key={answer}>
@@ -116,14 +126,16 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                 </tr>
                             )}
                         </table>
-                    </>
+                    </QuestionInputContainer>
                 </MainContainer>
             )}
-            <TextField
-                value={props.points}
-                onChange={(event) => props.setPoints(event.target.value)}
-                label="Point(s) pour la question"
-            />
+            <QuestionInputContainer isLastItem title="Nombre de points attribués à la question">
+                <TextField
+                    value={props.points}
+                    onChange={(event) => props.setPoints(event.target.value)}
+                    label="Point(s)"
+                />
+            </QuestionInputContainer>
         </>
     );
 
@@ -202,7 +214,6 @@ const MainContainer = styled('div')({ width: '100%' });
 const RowContainer = styled('div')({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
 });
 
 const CorrectPhraseCreationContainer = styled('div')({
