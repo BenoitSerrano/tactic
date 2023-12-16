@@ -9,7 +9,6 @@ import { questionKindType } from './types';
 const FLOATING_NUMBER_REGEX = /^([0-9]+)?(\.)?([0-9]*)?$/;
 const INTEGER_NUMBER_REGEX = /^[0-9]*$/;
 
-const QUESTION_TROU_REGEX = /^(.*)\.{4}(.*)$/;
 const TEXTE_A_TROU_REGEX = /(\.{4})/g;
 const HEADER_HEIGHT = 60;
 
@@ -43,7 +42,7 @@ const questionSpecificityMapping: Record<
             "L'étudiant devra reformer une phrase à partir de mots mélangés. Plusieurs réponses correctes possibles.",
         IconComponent: LowPriorityIcon,
     },
-    questionTrou: {
+    questionReponse: {
         label: 'Question / réponse',
         description:
             "L'étudiant devra répondre à une question. Plusieurs réponses correctes possibles.",
@@ -61,7 +60,6 @@ export {
     questionSpecificityMapping,
     FLOATING_NUMBER_REGEX,
     INTEGER_NUMBER_REGEX,
-    QUESTION_TROU_REGEX,
     TEXTE_A_TROU_REGEX,
     HEADER_HEIGHT,
     localeInfo,

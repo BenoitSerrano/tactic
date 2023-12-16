@@ -1,14 +1,14 @@
 import { computeDisplayedAnswer } from './computeDisplayedAnswer';
 
 describe('computeDisplayedAnswer', () => {
-    describe('questionTrou', () => {
-        it('should return the completed title with .... if no answer', () => {
+    describe('questionReponse', () => {
+        it('should return the completed title with "" if no answer', () => {
             const question = {
                 id: 2,
-                title: "Croyez-vous que John....(être) à l'origine de ces lettres anonymes ?",
-                kind: 'questionTrou' as const,
+                title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
+                kind: 'questionReponse' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'soit' }],
+                acceptableAnswersWithPoints: [{ points: 2, answer: 'Non, pas vraiment' }],
                 answer: '',
                 mark: 2,
                 points: 2,
@@ -19,30 +19,21 @@ describe('computeDisplayedAnswer', () => {
                 title: [
                     {
                         kind: 'text',
-                        value: 'Croyez-vous que John',
-                    },
-                    {
-                        kind: 'coloredText',
-                        value: '....',
-                        status: 'wrong',
-                    },
-                    {
-                        kind: 'text',
-                        value: "(être) à l'origine de ces lettres anonymes ?",
+                        value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                     },
                 ],
-                answer: undefined,
+                answer: [{ kind: 'coloredText', value: '', status: 'wrong' }],
             });
         });
         it('should return the completed title with color', () => {
             const question = {
                 id: 2,
-                title: "Croyez-vous que John....(être) à l'origine de ces lettres anonymes ?",
-                kind: 'questionTrou' as const,
+                title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
+                kind: 'questionReponse' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'soit' }],
+                acceptableAnswersWithPoints: [{ points: 2, answer: 'Oui !' }],
                 acceptableAnswers: [],
-                answer: 'soit',
+                answer: 'Oui !',
                 mark: 2,
                 points: 2,
             };
@@ -50,11 +41,12 @@ describe('computeDisplayedAnswer', () => {
 
             expect(displayedAnswer).toEqual({
                 title: [
-                    { kind: 'text', value: 'Croyez-vous que John' },
-                    { kind: 'coloredText', value: 'soit', status: 'right' },
-                    { kind: 'text', value: "(être) à l'origine de ces lettres anonymes ?" },
+                    {
+                        kind: 'text',
+                        value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
+                    },
                 ],
-                answer: undefined,
+                answer: [{ kind: 'coloredText', value: 'Oui !', status: 'right' }],
             });
         });
     });

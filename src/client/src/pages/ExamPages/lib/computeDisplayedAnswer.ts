@@ -1,4 +1,4 @@
-import { QUESTION_TROU_REGEX, TEXTE_A_TROU_REGEX } from '../../../constants';
+import { TEXTE_A_TROU_REGEX } from '../../../constants';
 import { sanitizer } from '../../../lib/sanitizer';
 import { answerStatusType, questionWithAnswersType } from '../types';
 import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
@@ -13,20 +13,12 @@ function computeDisplayedAnswer(
     answerStatus: answerStatusType,
 ): displayedAnswerType {
     switch (question.kind) {
-        case 'questionTrou':
-            const QTRegexMatch = question.title.match(QUESTION_TROU_REGEX);
-            if (!QTRegexMatch) {
-                return { title: [{ kind: 'text', value: question.title }], answer: undefined };
-            }
-
-            const [_, beforeText, afterText] = QTRegexMatch;
+        case 'questionReponse':
             return {
-                title: [
-                    { kind: 'text', value: beforeText },
-                    { kind: 'coloredText', value: question.answer || '....', status: answerStatus },
-                    { kind: 'text', value: afterText },
+                title: [{ kind: 'text', value: question.title }],
+                answer: [
+                    { kind: 'coloredText', value: question.answer || '', status: answerStatus },
                 ],
-                answer: undefined,
             };
         case 'texteATrous':
             const tATRegexMatch = question.title.matchAll(TEXTE_A_TROU_REGEX);

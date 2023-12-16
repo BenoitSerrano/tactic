@@ -2,7 +2,7 @@ import { Question } from './Question.entity';
 
 const questionKinds = [
     'qcm',
-    'questionTrou',
+    'questionReponse',
     'phraseMelangee',
     'texteLibre',
     'texteATrous',

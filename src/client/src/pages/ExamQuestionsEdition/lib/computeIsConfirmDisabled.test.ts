@@ -50,9 +50,9 @@ describe('computeIsConfirmDisabled', () => {
 
         expect(isConfirmDisabled).toBe(false);
     });
-    test('questionTrou with no right answer = true', () => {
-        const questionKind = 'questionTrou';
-        const title = 'ceci est .... phrase';
+    test('questionReponse with no right answer = true', () => {
+        const questionKind = 'questionReponse';
+        const title = 'ceci est une question';
         const possibleAnswers: string[] = [];
         const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [];
 
@@ -64,25 +64,10 @@ describe('computeIsConfirmDisabled', () => {
 
         expect(isConfirmDisabled).toBe(true);
     });
-    test('questionTrou with no .... = true', () => {
-        const questionKind = 'questionTrou';
-        const title = 'title';
-        const possibleAnswers: string[] = [];
-        const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [
-            { points, answer: 'rightAnswer' },
-        ];
 
-        const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
-            title,
-            possibleAnswers,
-            acceptableAnswersWithPoints,
-        });
-
-        expect(isConfirmDisabled).toBe(true);
-    });
-    test('questionTrou rightly filled = false', () => {
-        const questionKind = 'questionTrou';
-        const title = 'title .... and end';
+    test('questionReponse rightly filled = false', () => {
+        const questionKind = 'questionReponse';
+        const title = 'ceci est une question';
         const possibleAnswers: string[] = [];
         const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [
             { points, answer: 'rightAnswer' },
