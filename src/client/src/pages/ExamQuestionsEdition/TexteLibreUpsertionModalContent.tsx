@@ -1,4 +1,5 @@
-import { TextField, styled } from '@mui/material';
+import { TextField } from '@mui/material';
+import { QuestionInputContainer } from './QuestionInputContainer';
 
 function TexteLibreUpsertionModalContent(props: {
     title: string;
@@ -8,33 +9,24 @@ function TexteLibreUpsertionModalContent(props: {
 }) {
     return (
         <>
-            <RowContainer>
+            <QuestionInputContainer title="Question à laquelle doit répondre l'élève">
                 <TextField
                     fullWidth
-                    label="Intitulé de la question"
+                    label="Intitulé"
                     value={props.title}
                     onChange={(event) => props.setTitle(event.target.value)}
                     placeholder="Serions-nous plus libres sans l'État ?"
                 />
-            </RowContainer>
-            <RowContainer>
+            </QuestionInputContainer>
+            <QuestionInputContainer isLastItem title="Nombre de points attribués à la question">
                 <TextField
                     value={props.points}
                     onChange={(event) => props.setPoints(event.target.value)}
-                    label="Point(s) pour la question"
+                    label="Point(s)"
                 />
-            </RowContainer>
+            </QuestionInputContainer>
         </>
     );
 }
-
-const RowContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-    flex: 1,
-    width: '100%',
-}));
 
 export { TexteLibreUpsertionModalContent };

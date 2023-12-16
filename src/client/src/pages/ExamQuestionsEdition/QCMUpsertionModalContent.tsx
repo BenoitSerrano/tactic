@@ -1,15 +1,8 @@
-import {
-    Button,
-    FormControlLabel,
-    Radio,
-    RadioGroup,
-    TextField,
-    Typography,
-    styled,
-} from '@mui/material';
+import { Button, FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { acceptableAnswerWithPointsType } from '../../types';
+import { QuestionInputContainer } from './QuestionInputContainer';
 
 function QCMUpsertionModalContent(props: {
     title: string;
@@ -28,74 +21,83 @@ function QCMUpsertionModalContent(props: {
     const isAddPossibleAnswerDisabled = computeIsAddPossibleAnswerDisabled();
     return (
         <ModalContent>
-            <InputContainer>
+            {/* <InputContainer> */}
+            <QuestionInputContainer title="Question à laquelle doit répondre l'élève">
                 <TextField
                     fullWidth
                     value={props.title}
                     label="Intitulé"
                     onChange={(event) => props.setTitle(event.target.value)}
                 />
-            </InputContainer>
-            <HintContainer>
+            </QuestionInputContainer>
+            {/* </InputContainer> */}
+            {/* <HintContainer>
                 <Typography variant="h6">
                     Indiquez les réponses possibles, et sélectionnez la bonne réponse :
                 </Typography>
-            </HintContainer>
-            <RadioGroup
-                value={rightAnswer}
-                onChange={(event) =>
-                    props.setAcceptableAnswersWithPoints([
-                        { answer: event.target.value, points: Number(props.points) },
-                    ])
-                }
+            </HintContainer> */}
+            <QuestionInputContainer
+                title="Réponses possibles"
+                subtitle="Indiquez les réponses possibles, et sélectionnez la bonne réponse"
             >
-                {props.possibleAnswers.map(
-                    (possibleAnswer: string, possibleAnswerIndex: number) => {
-                        return (
-                            <InputContainer key={'possibleAnswer-' + possibleAnswerIndex}>
-                                <FormControlLabel
-                                    value={`${possibleAnswerIndex}`}
-                                    control={<Radio />}
-                                    label={
-                                        <TextField
-                                            label={`Réponse n°${possibleAnswerIndex + 1}`}
-                                            fullWidth
-                                            value={possibleAnswer}
-                                            onChange={buildOnChangePossibleAnswer(
-                                                possibleAnswerIndex,
-                                            )}
-                                        />
-                                    }
-                                />
-                                <Button
-                                    onClick={buildRemovePossibleAnswer(possibleAnswerIndex)}
-                                    variant="outlined"
-                                    color="error"
-                                    startIcon={<RemoveCircleOutlineIcon />}
-                                    disabled={!canRemovePossibleAnswer}
-                                >
-                                    Retirer
-                                </Button>
-                            </InputContainer>
-                        );
-                    },
-                )}
-            </RadioGroup>
-            <ButtonAddPossibleAnswerContainer>
-                <Button
-                    onClick={addPossibleAnswer}
-                    variant="outlined"
-                    startIcon={<AddCircleOutlineIcon />}
-                    disabled={isAddPossibleAnswerDisabled}
+                <RadioGroup
+                    value={rightAnswer}
+                    onChange={(event) =>
+                        props.setAcceptableAnswersWithPoints([
+                            { answer: event.target.value, points: Number(props.points) },
+                        ])
+                    }
                 >
-                    Ajouter
-                </Button>
-            </ButtonAddPossibleAnswerContainer>
-            <TextField
-                value={props.points}
-                onChange={(event) => props.setPoints(event.target.value)}
-                label="Point(s) pour la question"
-            />
+                    {props.possibleAnswers.map(
+                        (possibleAnswer: string, possibleAnswerIndex: number) => {
+                            return (
+                                <InputContainer key={'possibleAnswer-' + possibleAnswerIndex}>
+                                    <FormControlLabel
+                                        value={`${possibleAnswerIndex}`}
+                                        control={<Radio />}
+                                        label={
+                                            <TextField
+                                                label={`Réponse n°${possibleAnswerIndex + 1}`}
+                                                fullWidth
+                                                value={possibleAnswer}
+                                                onChange={buildOnChangePossibleAnswer(
+                                                    possibleAnswerIndex,
+                                                )}
+                                            />
+                                        }
+                                    />
+                                    <Button
+                                        onClick={buildRemovePossibleAnswer(possibleAnswerIndex)}
+                                        variant="outlined"
+                                        color="error"
+                                        startIcon={<RemoveCircleOutlineIcon />}
+                                        disabled={!canRemovePossibleAnswer}
+                                    >
+                                        Retirer
+                                    </Button>
+                                </InputContainer>
+                            );
+                        },
+                    )}
+                </RadioGroup>
+                <ButtonAddPossibleAnswerContainer>
+                    <Button
+                        onClick={addPossibleAnswer}
+                        variant="outlined"
+                        startIcon={<AddCircleOutlineIcon />}
+                        disabled={isAddPossibleAnswerDisabled}
+                    >
+                        Ajouter
+                    </Button>
+                </ButtonAddPossibleAnswerContainer>
+            </QuestionInputContainer>
+            <QuestionInputContainer isLastItem title="Nombre de points attribués à la question">
+                <TextField
+                    value={props.points}
+                    onChange={(event) => props.setPoints(event.target.value)}
+                    label="Point(s)"
+                />
+            </QuestionInputContainer>
         </ModalContent>
     );
 
@@ -150,6 +152,5 @@ const InputContainer = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
 }));
-const HintContainer = styled('div')(({ theme }) => ({ marginTop: theme.spacing(2) }));
 
 export { QCMUpsertionModalContent };

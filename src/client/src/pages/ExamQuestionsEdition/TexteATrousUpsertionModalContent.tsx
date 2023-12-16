@@ -7,6 +7,7 @@ import { computeTexteATrousState } from './lib/computeTexteATrousState';
 import { textSplitter } from '../../lib/textSplitter';
 import { acceptableAnswerWithPointsType } from '../../types';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
+import { QuestionInputContainer } from './QuestionInputContainer';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
@@ -27,35 +28,37 @@ function TexteATrousUpsertionModalContent(props: {
 
     return (
         <>
-            <RowContainer>
-                <TextField
-                    disabled={isWholeSentenceFrozen}
-                    fullWidth
-                    multiline
-                    label="Phrase complète"
-                    value={props.title}
-                    onChange={(event) => props.setTitle(event.target.value)}
-                />
-                {isWholeSentenceFrozen ? (
-                    <IconButton color="warning" onClick={resetWholeSentence}>
-                        <RefreshIcon />
-                    </IconButton>
-                ) : (
-                    <IconButton
-                        color="success"
-                        disabled={!props.title}
-                        onClick={() => setIsWholeSentenceFrozen(true)}
-                    >
-                        <CheckIcon />
-                    </IconButton>
-                )}
-            </RowContainer>
-            {isWholeSentenceFrozen && (
+            <QuestionInputContainer title="Texte complet">
                 <RowContainer>
+                    <TextField
+                        disabled={isWholeSentenceFrozen}
+                        fullWidth
+                        multiline
+                        label="Texte complet"
+                        value={props.title}
+                        onChange={(event) => props.setTitle(event.target.value)}
+                    />
+                    {isWholeSentenceFrozen ? (
+                        <IconButton color="warning" onClick={resetWholeSentence}>
+                            <RefreshIcon />
+                        </IconButton>
+                    ) : (
+                        <IconButton
+                            color="success"
+                            disabled={!props.title}
+                            onClick={() => setIsWholeSentenceFrozen(true)}
+                        >
+                            <CheckIcon />
+                        </IconButton>
+                    )}
+                </RowContainer>
+            </QuestionInputContainer>
+            {isWholeSentenceFrozen && (
+                <QuestionInputContainer
+                    title="Texte à trous"
+                    subtitle="Cliquez sur les mots à cacher dans le texte ci-dessous"
+                >
                     <WordPickingContainer>
-                        <Typography>
-                            Sélectionnez les mots à cacher dans la phrase ci-dessous :
-                        </Typography>
                         <WordsContainer>
                             {words.map((word, index) => (
                                 <WordContainer onClick={buildOnClickOnWord(index)}>
@@ -64,15 +67,15 @@ function TexteATrousUpsertionModalContent(props: {
                             ))}
                         </WordsContainer>
                     </WordPickingContainer>
-                </RowContainer>
+                </QuestionInputContainer>
             )}
-            <RowContainer>
+            <QuestionInputContainer isLastItem title="Nombre de points attribués à chaque trou">
                 <TextField
                     value={pointsPerBlank}
                     onChange={onChangePointPerBlank}
                     label="Point(s) par trou"
                 />
-            </RowContainer>
+            </QuestionInputContainer>
         </>
     );
 
@@ -118,10 +121,6 @@ function TexteATrousUpsertionModalContent(props: {
 
 const RowContainer = styled('div')(({ theme }) => ({
     display: 'flex',
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-    flex: 1,
-    width: '100%',
     alignItems: 'center',
 }));
 
