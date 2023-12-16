@@ -1,9 +1,18 @@
 import { CircularProgress, styled } from '@mui/material';
 
-function Loader() {
+type sizeType = 'small' | 'medium' | 'large';
+
+const sizeMapping: Record<sizeType, number> = {
+    small: 20,
+    medium: 25,
+    large: 40,
+};
+
+function Loader(props: { size?: sizeType }) {
+    const size = props.size || 'large';
     return (
         <Container>
-            <CircularProgress />
+            <CircularProgress size={sizeMapping[size]} />
         </Container>
     );
 }

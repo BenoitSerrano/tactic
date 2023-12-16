@@ -1,9 +1,7 @@
 import { Typography, styled } from '@mui/material';
-import { Loader } from '../../../components/Loader';
 
 function TestPageLayout(props: {
     title: string;
-    isLoading?: boolean;
     studentEmail: string;
     result?: string;
     children: JSX.Element[] | JSX.Element;
@@ -19,16 +17,7 @@ function TestPageLayout(props: {
                 {!!props.result && <Typography variant="caption">{props.result}</Typography>}
             </StudentInfoContainer>
             {props.children}
-            {!!props.buttons.length && (
-                <FooterContainer>
-                    {props.buttons}
-                    {props.isLoading && (
-                        <LoaderContainer>
-                            <Loader />
-                        </LoaderContainer>
-                    )}
-                </FooterContainer>
-            )}
+            {!!props.buttons.length && <FooterContainer>{props.buttons}</FooterContainer>}
         </Container>
     );
 }
@@ -52,15 +41,6 @@ const StudentInfoContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-}));
-const LoaderContainer = styled('div')(({ theme }) => ({
-    right: 0,
-    position: 'absolute',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: FOOTER_HEIGHT,
-    width: FOOTER_HEIGHT,
 }));
 
 const StudentEmail = styled(Typography)(({ theme }) => ({

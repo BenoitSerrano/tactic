@@ -6,11 +6,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
-import { useGlobalLoading } from '../../../lib/globalLoading';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import { ElementType } from 'react';
+import { Loader } from '../../../components/Loader';
+import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerButtonLoading';
 
 type attributeMarkToAnswerActionType = {
     name: string;
@@ -60,18 +61,13 @@ function UpdateAnswersButtons(props: {
     isQuestionManuallyCorrected: boolean;
 }) {
     const { displayAlert } = useAlert();
-    const { updateGlobalLoading } = useGlobalLoading();
 
     const removeOkAnswerMutation = useMutation({
         mutationFn: api.removeOkAnswer,
         onSuccess: () => {
-            updateGlobalLoading('attribute-mark-to-answer', false);
-
             props.refetch();
         },
         onError: (error) => {
-            updateGlobalLoading('attribute-mark-to-answer', false);
-
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -83,13 +79,9 @@ function UpdateAnswersButtons(props: {
     const addAcceptableAnswerMutation = useMutation({
         mutationFn: api.addQuestionAcceptableAnswer,
         onSuccess: () => {
-            updateGlobalLoading('attribute-mark-to-answer', false);
-
             props.refetch();
         },
         onError: (error) => {
-            updateGlobalLoading('attribute-mark-to-answer', false);
-
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -101,11 +93,9 @@ function UpdateAnswersButtons(props: {
     const saveMarkMutation = useMutation({
         mutationFn: api.updateMark,
         onSuccess: () => {
-            updateGlobalLoading('save-mark', false);
             props.refetch();
         },
         onError: (error) => {
-            updateGlobalLoading('save-mark', false);
             console.error(error);
             displayAlert({
                 variant: 'error',
@@ -122,15 +112,41 @@ function UpdateAnswersButtons(props: {
                     multiplier * props.question.points,
                     props.question,
                 );
+
+                const addAcceptableAnswerLoadingInfo =
+                    addAcceptableAnswerMutation.isPending &&
+                    addAcceptableAnswerMutation.variables.acceptableAnswerWithPoints
+                        ? addAcceptableAnswerMutation.variables.acceptableAnswerWithPoints.points /
+                          props.question.points
+                        : undefined;
+
+                const saveMarkLoadingInfo = saveMarkMutation.isPending
+                    ? saveMarkMutation.variables.mark / props.question.points
+                    : undefined;
+
+                const isLoading = computeIsUpdateAnswerButtonLoading(
+                    multiplier,
+                    props.isQuestionManuallyCorrected,
+                    {
+                        removeOkAnswer: removeOkAnswerMutation.isPending,
+                        addAcceptableAnswer: addAcceptableAnswerLoadingInfo,
+                        saveMark: saveMarkLoadingInfo,
+                    },
+                );
+
                 return (
-                    <Tooltip key={name} title={`Marquer comme ${name}`}>
+                    <Tooltip key={`button-mark-as-${name}`} title={`Marquer comme ${name}`}>
                         <IconButton
                             size="small"
                             color={color}
-                            disabled={!canAnswerBeAttributedMark}
+                            disabled={!canAnswerBeAttributedMark || isLoading}
                             onClick={buildOnAttributeMarkToAnswer(multiplier)}
                         >
-                            <IconComponent fontSize="small" />
+                            {isLoading ? (
+                                <Loader size="small" />
+                            ) : (
+                                <IconComponent fontSize="small" />
+                            )}
                         </IconButton>
                     </Tooltip>
                 );
@@ -143,10 +159,8 @@ function UpdateAnswersButtons(props: {
             if (props.question.answer === undefined) {
                 return;
             }
-            updateGlobalLoading('attribute-mark-to-answer', true);
 
             if (props.isQuestionManuallyCorrected) {
-                updateGlobalLoading('save-mark', true);
                 saveMarkMutation.mutate({
                     examId: props.examId,
                     attemptId: props.attemptId,
@@ -175,6 +189,8 @@ function UpdateAnswersButtons(props: {
     }
 }
 
-const UpdateAnswersButtonContainer = styled('div')(({ theme }) => ({}));
+const UpdateAnswersButtonContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+}));
 
 export { UpdateAnswersButtons };

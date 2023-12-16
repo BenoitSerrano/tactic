@@ -27,7 +27,6 @@ import { LoadingButton } from '@mui/lab';
 import { AttemptsCount } from './AttemptsCount';
 import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';
-import { useGlobalLoading } from '../../../lib/globalLoading';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { computeDisplayedMark } from './lib/computeDisplayedMark';
@@ -52,8 +51,6 @@ function QuestionsChecking(props: {
     const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
     const result = computeResult(props.exercises);
-    const { getIsGloballyLoading } = useGlobalLoading();
-    const isGloballyLoading = getIsGloballyLoading();
     const attemptIds = searchParams.get('attemptIds') || '';
 
     const lockAttemptMutation = useMutation({
@@ -150,7 +147,6 @@ function QuestionsChecking(props: {
             title={props.examName}
             buttons={UpdateCorrectedAtButton ? [UpdateCorrectedAtButton] : []}
             result={result}
-            isLoading={isGloballyLoading}
         >
             <>
                 <LeftArrowContainer>

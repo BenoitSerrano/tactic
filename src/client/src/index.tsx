@@ -11,7 +11,6 @@ import './index.css';
 import { ThemeProvider, styled } from '@mui/material';
 import { theme } from './theme';
 import { AlertHandlerContextProvider } from './lib/alert';
-import { GlobalLoadingContextProvider } from './lib/globalLoading';
 import * as Sentry from '@sentry/react';
 import { config } from './config';
 
@@ -40,11 +39,9 @@ root.render(
         <StyledBody>
             <QueryClientProvider client={queryClient}>
                 <AlertHandlerContextProvider>
-                    <GlobalLoadingContextProvider>
-                        <BrowserRouter>
-                            <Router />
-                        </BrowserRouter>
-                    </GlobalLoadingContextProvider>
+                    <BrowserRouter>
+                        <Router />
+                    </BrowserRouter>
                 </AlertHandlerContextProvider>
             </QueryClientProvider>
         </StyledBody>
