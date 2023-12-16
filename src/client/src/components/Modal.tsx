@@ -51,7 +51,23 @@ function Modal(props: {
     }
 }
 
-const ModalHeader = styled('div')({ marginBottom: 8 });
+const ModalHeader = styled('div')(({ theme }) => ({
+    position: 'sticky',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    backgroundColor: 'white',
+    top: 0,
+}));
+
+const ModalFooter = styled('div')(({ theme }) => ({
+    position: 'sticky',
+    bottom: 0,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    backgroundColor: 'white',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+}));
 
 const modalDefaultProperties = {
     borderRadius: '2px',
@@ -61,23 +77,12 @@ const modalDefaultProperties = {
     transform: 'translate(-50%, -50%)',
     display: 'flex',
     flexDirection: 'column' as const,
-    padding: '20px',
+    paddingLeft: '16px',
+    paddingRight: '16px',
     overflow: 'auto',
+
     backgroundColor: 'white',
 };
-
-// const LargeModalContent = styled('div')({
-//     borderRadius: '2px',
-//     position: 'absolute' as 'absolute',
-//     top: '50%',
-//     left: '50%',
-//     transform: 'translate(-50%, -50%)',
-//     display: 'flex',
-//     flexDirection: 'column',
-//     padding: '20px',
-//     overflow: 'auto',
-//     backgroundColor: 'white',
-// });
 
 const SmallModalContent = styled('div')({
     ...modalDefaultProperties,
@@ -100,17 +105,14 @@ const modalComponentMapping: Record<modalSizeType, any> = {
     large: LargeModalContent,
 };
 
-const ModalBody = styled('div')({
-    flex: 1,
+const ModalBody = styled('div')(({ theme }) => ({
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-});
-const ModalFooter = styled('div')({
-    display: 'flex',
-    justifyContent: 'flex-end',
-});
+}));
 
 const StyledModal = styled(MuiModal)({ zIndex: 999 });
 
