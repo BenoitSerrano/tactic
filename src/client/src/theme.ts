@@ -3,17 +3,17 @@ import { createTheme } from '@mui/material';
 const theme = createTheme({
     palette: {
         primary: {
-            light: '#67ded1',
-            dark: '#00937d',
-            main: '#00c0ac',
+            light: '#ece592',
+            dark: '#d06a00',
+            main: '#d8a916',
         },
         secondary: {
-            main: '#f35d6a',
+            main: '#1647d8',
         },
         warning: { main: '#e87a00', light: '#f5b44d' },
         common: { black: '#003228' },
-        background: { default: '#eaf8f7' },
-        divider: '#a1ece4',
+        background: { default: '#fcf7e9' },
+        divider: '#ece592',
     },
     spacing: (value: number) => value * 8,
     components: {
