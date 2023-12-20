@@ -11,7 +11,7 @@ const theme = createTheme({
             main: '#1647d8',
         },
         warning: { main: '#e87a00', light: '#f5b44d' },
-        common: { black: '#003228' },
+        common: { black: '#302505' },
         background: { default: '#fcf7e9' },
         divider: '#ece592',
     },
