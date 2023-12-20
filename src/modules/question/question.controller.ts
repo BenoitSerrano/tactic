@@ -9,6 +9,7 @@ function buildQuestionController() {
     const questionController = {
         createQuestion,
         updateQuestion,
+        duplicateQuestion,
         addQuestionAcceptableAnswer,
         removeOkAnswer,
         deleteQuestion,
@@ -82,5 +83,14 @@ function buildQuestionController() {
         body: { orders: Array<{ id: Question['id']; order: number }> };
     }) {
         return questionService.updateQuestionsOrder(params.body.orders);
+    }
+
+    async function duplicateQuestion(params: {
+        urlParams: { questionId: string; exerciseId: number };
+    }) {
+        return questionService.duplicateQuestion(
+            params.urlParams.exerciseId,
+            Number(params.urlParams.questionId),
+        );
     }
 }

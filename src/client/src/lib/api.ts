@@ -32,6 +32,7 @@ const api = {
     addQuestionAcceptableAnswer,
     removeOkAnswer,
     deleteQuestion,
+    duplicateQuestion,
     updateQuestionsOrder,
     updateMark,
     updateExercisesOrder,
@@ -382,6 +383,15 @@ async function deleteCorrectedAt(params: { attemptId: string; examId: string }) 
 async function deleteQuestion(params: { examId: string; questionId: number }) {
     const URL = `${BASE_URL}/exams/${params.examId}/questions/${params.questionId}`;
     return performApiCall(URL, 'DELETE');
+}
+
+async function duplicateQuestion(params: {
+    examId: string;
+    questionId: number;
+    exerciseId: number;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}/duplicate`;
+    return performApiCall(URL, 'POST');
 }
 
 async function updateExercisesOrder(params: {
