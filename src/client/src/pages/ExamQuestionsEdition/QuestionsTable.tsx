@@ -11,6 +11,7 @@ import {
     styled,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from 'react-beautiful-dnd';
 import { questionWithAnswersType } from './types';
@@ -37,6 +38,15 @@ function QuestionsTable(props: {
                 queryKey: ['exams', props.examId, 'exercises', props.exerciseId],
             });
             displayAlert({ variant: 'success', text: 'La question a été supprimée.' });
+        },
+    });
+    const duplicateQuestionMutation = useMutation({
+        mutationFn: api.duplicateQuestion,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['exams', props.examId, 'exercises', props.exerciseId],
+            });
+            displayAlert({ variant: 'success', text: 'La question a été dupliquée.' });
         },
     });
     const updateQuestionsOrderMutation = useMutation({
@@ -84,7 +94,7 @@ function QuestionsTable(props: {
             <TableHead>
                 <TableRow>
                     <TableCell width={20}>N°</TableCell>
-                    <TableCell width={130}>Actions</TableCell>
+                    <TableCell width={160}>Actions</TableCell>
                     <TableCell>Type</TableCell>
                     <TableCell>Intitulé</TableCell>
                     <TableCell>Réponses acceptées</TableCell>
@@ -124,6 +134,15 @@ function QuestionsTable(props: {
                                                             )}
                                                         >
                                                             <EditIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Dupliquer la question">
+                                                        <IconButton
+                                                            onClick={buildDuplicateQuestionOnClick(
+                                                                question,
+                                                            )}
+                                                        >
+                                                            <ContentCopyIcon />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Supprimer la question">
@@ -232,6 +251,16 @@ function QuestionsTable(props: {
     function buildEditQuestionOnClick(question: questionWithAnswersType) {
         return () => {
             props.openEditionModal(question);
+        };
+    }
+
+    function buildDuplicateQuestionOnClick(question: questionWithAnswersType) {
+        return () => {
+            duplicateQuestionMutation.mutate({
+                examId: props.examId,
+                questionId: question.id,
+                exerciseId: props.exerciseId,
+            });
         };
     }
 

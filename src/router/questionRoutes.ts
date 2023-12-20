@@ -81,6 +81,18 @@ const questionRoutes: Array<routeType<any, any>> = [
         }),
     },
     {
+        method: 'POST',
+        path: '/exams/:examId/exercises/:exerciseId/questions/:questionId/duplicate',
+        isAuthenticated: true,
+        controller: questionController.duplicateQuestion,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    },
+    {
         method: 'DELETE',
         path: '/exams/:examId/questions/:questionId/ok-answers',
         isAuthenticated: true,

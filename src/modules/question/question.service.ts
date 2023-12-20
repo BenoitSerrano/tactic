@@ -24,6 +24,7 @@ function buildQuestionService() {
         encodeQuestion: questionEncoder.encodeQuestion,
         getQuestionIds,
         duplicateQuestions,
+        duplicateQuestion,
     };
 
     return questionService;
@@ -164,5 +165,17 @@ function buildQuestionService() {
             exercise: newExercise,
         }));
         return questionRepository.insert(newQuestions);
+    }
+
+    async function duplicateQuestion(exerciseId: Exercise['id'], questionId: Question['id']) {
+        const { id, ...otherFields } = await questionRepository.findOneOrFail({
+            where: { id: questionId },
+        });
+        const newOrder = await getHighestQuestionOrder(exerciseId);
+        return questionRepository.insert({
+            ...otherFields,
+            order: newOrder + 1,
+            exercise: { id: exerciseId },
+        });
     }
 }
