@@ -12,7 +12,7 @@ type questionKindType = (typeof questionKinds)[number];
 type acceptableAnswerWithPointsType = { points: number; answer: string };
 
 type questionDtoType = Omit<Question, 'acceptableAnswersWithPoints' | 'exercise'> & {
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[][];
 };
 
 export { questionKinds };
