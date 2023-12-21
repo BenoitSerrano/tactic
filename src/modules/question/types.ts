@@ -11,9 +11,26 @@ type questionKindType = (typeof questionKinds)[number];
 
 type acceptableAnswerWithPointsType = { points: number; answer: string };
 
-type questionDtoType = Omit<Question, 'acceptableAnswersWithPoints' | 'exercise'> & {
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[][];
-};
+type questionDtoType = Omit<
+    Question,
+    'acceptableAnswersWithPoints' | 'exercise' | 'kind' | 'possibleAnswers'
+> &
+    (
+        | {
+              kind: 'texteATrous';
+              acceptableAnswersWithPoints: acceptableAnswerWithPointsType[][];
+          }
+        | {
+              kind: 'qcm';
+              possibleAnswers: string[];
+              rightAnswer: string;
+          }
+        | {
+              kind: 'questionReponse' | 'phraseMelangee' | 'texteLibre';
+              possibleAnswers: string[];
+              acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+          }
+    );
 
 export { questionKinds };
 export type { questionKindType, questionDtoType, acceptableAnswerWithPointsType };

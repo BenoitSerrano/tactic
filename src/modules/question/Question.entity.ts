@@ -17,7 +17,7 @@ export class Question {
     points: number;
 
     // Nouveau format décodé tàt : [[2:tu es|t'es, 1.5:tou es], [2:la, 0.5: là]]
-    // Nouveau format décodé autres : [2:tu es la plus belle|t'es la plus belle, 1.5:es-tu la plus belle]
+    // Nouveau format décodé autres : [2:tu es la plus belle, 2:|t'es la plus belle, 1.5:es-tu la plus belle]
     // nouveau format parsed Tàt :
 
     @Column('simple-array', { default: '' })

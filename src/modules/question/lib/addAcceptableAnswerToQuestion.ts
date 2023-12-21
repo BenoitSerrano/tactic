@@ -9,7 +9,7 @@ function addAcceptableAnswerToQuestion(
 ) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswerWithPoints.answer);
-    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints;
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints[0];
 
     const alreadyPresentAcceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
         ({ answer }) => answer === sanitizedAcceptableAnswer,
@@ -21,7 +21,7 @@ function addAcceptableAnswerToQuestion(
         ) {
             return question;
         } else {
-            decodedQuestion.acceptableAnswersWithPoints[alreadyPresentAcceptableAnswerIndex] = {
+            decodedQuestion.acceptableAnswersWithPoints[0][alreadyPresentAcceptableAnswerIndex] = {
                 points: acceptableAnswerWithPoints.points,
                 answer: sanitizedAcceptableAnswer,
             };
@@ -30,8 +30,10 @@ function addAcceptableAnswerToQuestion(
     }
 
     decodedQuestion.acceptableAnswersWithPoints = [
-        ...decodedQuestion.acceptableAnswersWithPoints,
-        { points: acceptableAnswerWithPoints.points, answer: sanitizedAcceptableAnswer },
+        [
+            ...decodedQuestion.acceptableAnswersWithPoints[0],
+            { points: acceptableAnswerWithPoints.points, answer: sanitizedAcceptableAnswer },
+        ],
     ];
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

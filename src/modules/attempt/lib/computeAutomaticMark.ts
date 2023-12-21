@@ -10,7 +10,7 @@ function computeAutomaticMark({
 }: {
     questionKind: questionKindType;
     answer: string | undefined;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[][];
 }): number {
     if (!answer) {
         return 0;
@@ -25,23 +25,27 @@ function computeAutomaticMark({
                 )}"`,
             );
         }
-        return chunks.reduce((mark, word, index) => {
-            const { points, answer } = acceptableAnswersWithPoints[index];
+        return chunks.reduce((mark, chunk, index) => {
+            const acceptableAnswers = acceptableAnswersWithPoints[index];
+            const matchingAcceptableAnswer = acceptableAnswers.find(
+                ({ answer, points }) =>
+                    sanitizer.sanitizeString(answer) === sanitizer.sanitizeString(chunk),
+            );
 
-            if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answer)) {
-                return mark + points;
+            if (matchingAcceptableAnswer) {
+                return mark + matchingAcceptableAnswer.points;
             } else {
                 return mark;
             }
         }, 0);
     }
-    if (acceptableAnswersWithPoints.length === 0) {
+    if (acceptableAnswersWithPoints.length === 0 || acceptableAnswersWithPoints[0].length === 0) {
         throw new Error(`Cannot compute automatic mark for acceptableAnswersWithPoints=[]`);
     }
     if (answer === undefined) {
         return 0;
     }
-    const matchingAcceptableAnswer = acceptableAnswersWithPoints.find(
+    const matchingAcceptableAnswer = acceptableAnswersWithPoints[0].find(
         (acceptableAnswerWithPoints) =>
             sanitizer.sanitizeString(acceptableAnswerWithPoints.answer) ===
             sanitizer.sanitizeString(answer),
