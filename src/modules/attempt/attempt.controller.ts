@@ -6,6 +6,7 @@ export { buildAttemptController };
 function buildAttemptController() {
     const attemptService = buildAttemptService();
     const attemptController = {
+        getAllAttempts,
         createAttempt,
         updateAttempt,
         searchAttempts,
@@ -22,6 +23,10 @@ function buildAttemptController() {
     };
 
     return attemptController;
+
+    async function getAllAttempts() {
+        return attemptService.getAllAttempts();
+    }
 
     async function searchAttempts(params: { urlParams: { examId: string; studentId: string } }) {
         return attemptService.searchAttempts(params.urlParams.examId, params.urlParams.studentId);

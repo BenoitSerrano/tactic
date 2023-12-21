@@ -9,9 +9,14 @@ function buildGroupController() {
         fetchGroups,
         createGroup,
         deleteGroup,
+        getAllGroups,
     };
 
     return groupController;
+
+    async function getAllGroups() {
+        return groupService.getAllGroups();
+    }
 
     async function fetchGroups(_params: {}, user: User) {
         return groupService.fetchGroups(user);

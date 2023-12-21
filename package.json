@@ -9,7 +9,7 @@
         "start": "node dist",
         "startDev": "nodemon",
         "test": "jest",
-        "script:importAllExams": "npm run buildServer && node dist/src/scripts/importAllExams.js",
+        "script:importDb": "npm run buildServer && node dist/src/scripts/importDb.js",
         "migration:generate": "npm run buildServer && typeorm migration:generate -d dist/src/dataSource.js src/migrations/$npm_config_name",
         "migration:run": "npm run buildServer && typeorm migration:run -d dist/src/dataSource.js",
         "migration:create": " typeorm migration:create src/migrations/$npm_config_name",
