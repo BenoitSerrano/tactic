@@ -8,6 +8,7 @@ function buildGroupService() {
     const groupRepository = dataSource.getRepository(Group);
 
     const groupService = {
+        getAllGroups,
         fetchGroups,
         getGroup,
         createGroup,
@@ -15,6 +16,12 @@ function buildGroupService() {
     };
 
     return groupService;
+
+    async function getAllGroups() {
+        const groups = await groupRepository.find({});
+
+        return groups;
+    }
 
     async function fetchGroups(user: User) {
         const groups = await groupRepository.find({

@@ -11,9 +11,14 @@ function buildStudentController() {
         fetchStudentByEmailForExam,
         deleteStudent,
         changeGroup,
+        getAllStudents,
     };
 
     return studentController;
+
+    async function getAllStudents() {
+        return studentService.getAllStudents();
+    }
 
     async function createStudents(params: {
         urlParams: { groupId: string };

@@ -8,6 +8,12 @@ const attemptController = buildAttemptController();
 const attemptRoutes: Array<routeType<any, any>> = [
     {
         method: 'GET',
+        path: '/all-attempts',
+        isAuthenticated: false,
+        controller: attemptController.getAllAttempts,
+    },
+    {
+        method: 'GET',
         path: '/exams/:examId/attempts/count-by-correction-status',
         isAuthenticated: true,
         controller: attemptController.fetchAttemptsCountByCorrectionStatus,

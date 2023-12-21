@@ -17,6 +17,12 @@ const studentRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'GET',
+        path: '/all-students',
+        isAuthenticated: false,
+        controller: studentController.getAllStudents,
+    },
+    {
+        method: 'GET',
         path: '/exams/:examId/students/:email',
         isAuthenticated: false,
         controller: studentController.fetchStudentByEmailForExam,

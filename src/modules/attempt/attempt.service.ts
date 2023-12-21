@@ -227,7 +227,7 @@ function buildAttemptService() {
             select: { student: { id: true }, exam: { id: true } },
         });
 
-        return mapEntities(attempts);
+        return attempts;
     }
 
     async function bulkInsertAttempts(attempts: Array<Attempt>) {

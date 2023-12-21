@@ -8,6 +8,12 @@ const groupController = buildGroupController();
 const groupRoutes: Array<routeType<any, any>> = [
     {
         method: 'GET',
+        path: '/all-groups',
+        isAuthenticated: false,
+        controller: groupController.getAllGroups,
+    },
+    {
+        method: 'GET',
         path: '/groups',
         isAuthenticated: true,
         controller: groupController.fetchGroups,

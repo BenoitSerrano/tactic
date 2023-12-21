@@ -15,6 +15,7 @@ function buildStudentService() {
     const studentRepository = dataSource.getRepository(Student);
 
     const studentService = {
+        getAllStudents,
         createStudents,
         getStudents,
         getStudentsWithAttempts,
@@ -25,6 +26,14 @@ function buildStudentService() {
     };
 
     return studentService;
+
+    async function getAllStudents() {
+        const students = await studentRepository.find({
+            relations: ['group'],
+            select: { group: { id: true } },
+        });
+        return students;
+    }
 
     async function getStudentsWithAttempts(groupId: Group['id']) {
         const studentsWithAttempts = await studentRepository.find({
