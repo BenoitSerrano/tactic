@@ -36,8 +36,8 @@ function computeIsTimeLimitExceeded({
 
 function stringifyAnswers(attemptAnswers: attemptAnswersType) {
     let answers: string[] = [];
-    for (const [questionId, encodedQuestionAnswer] of Object.entries(attemptAnswers)) {
-        const answer = `${questionId}:${encoder.stringToBase64(`${encodedQuestionAnswer}`)}`;
+    for (const [questionId, decodedQuestionAnswer] of Object.entries(attemptAnswers)) {
+        const answer = `${questionId}:${encoder.stringToBase64(`${decodedQuestionAnswer}`)}`;
         answers.push(answer);
     }
     return answers;
@@ -51,9 +51,9 @@ function parseAnswers(answers: string[]): attemptAnswersType {
             throw new Error(`answer "${answer}" is wrongly formatted.`);
         }
         const [_, questionId, encodedQuestionAnswer] = regexMatch;
-        const questionAnswer = encoder.base64ToString(encodedQuestionAnswer);
+        const decodedQuestionAnswer = encoder.base64ToString(encodedQuestionAnswer);
 
-        return { ...acc, [questionId]: questionAnswer };
+        return { ...acc, [questionId]: decodedQuestionAnswer };
     }, {} as attemptAnswersType);
     return attemptAnswers;
 }
