@@ -6,7 +6,7 @@ function computeIsConfirmDisabled(
     params: {
         title: string;
         possibleAnswers: string[];
-        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+        acceptableAnswers: acceptableAnswerWithPointsType[];
     },
 ) {
     if (!params.title) {
@@ -17,7 +17,7 @@ function computeIsConfirmDisabled(
         return false;
     }
 
-    if (params.acceptableAnswersWithPoints.length === 0) {
+    if (params.acceptableAnswers.length === 0) {
         return true;
     }
     if (
@@ -28,10 +28,7 @@ function computeIsConfirmDisabled(
         return true;
     }
 
-    if (
-        questionKind === 'phraseMelangee' &&
-        params.acceptableAnswersWithPoints[0].answer === params.title
-    ) {
+    if (questionKind === 'phraseMelangee' && params.acceptableAnswers[0].answer === params.title) {
         return true;
     }
 
@@ -42,7 +39,7 @@ function computeIsConfirmDisabled(
         if (blankCount === 0) {
             return true;
         }
-        if (blankCount !== params.acceptableAnswersWithPoints.length) {
+        if (blankCount !== params.acceptableAnswers.length) {
             return true;
         }
     }

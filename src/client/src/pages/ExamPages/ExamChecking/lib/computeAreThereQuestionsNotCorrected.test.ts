@@ -9,7 +9,7 @@ describe('computeAreThereQuestionsNotCorrected', () => {
         title: '',
         possibleAnswers: [],
         points: 6,
-        acceptableAnswersWithPoints: [],
+        acceptableAnswers: [],
     };
     it('should return false if there is no manual marks', () => {
         const manualMarks: manualMarksType = {};

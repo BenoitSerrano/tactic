@@ -22,7 +22,7 @@ function buildQuestionController() {
         urlParams: { exerciseId: string };
         body: Pick<
             questionDtoType,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswers'
         >;
     }) {
         return questionService.createQuestion(Number(params.urlParams.exerciseId), params.body);
@@ -30,10 +30,7 @@ function buildQuestionController() {
 
     async function updateQuestion(params: {
         urlParams: { exerciseId: string; questionId: string };
-        body: Pick<
-            questionDtoType,
-            'title' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
-        >;
+        body: Pick<questionDtoType, 'title' | 'points' | 'possibleAnswers' | 'acceptableAnswers'>;
     }) {
         return questionService.updateQuestion(
             {
@@ -43,7 +40,7 @@ function buildQuestionController() {
             {
                 title: params.body.title,
                 possibleAnswers: params.body.possibleAnswers,
-                acceptableAnswersWithPoints: params.body.acceptableAnswersWithPoints,
+                acceptableAnswers: params.body.acceptableAnswers,
                 points: params.body.points,
             },
         );
@@ -51,14 +48,14 @@ function buildQuestionController() {
 
     async function addQuestionAcceptableAnswer(params: {
         urlParams: { questionId: string };
-        body: { acceptableAnswerWithPoints: acceptableAnswerWithPointsType };
+        body: { acceptableAnswer: acceptableAnswerWithPointsType };
     }) {
         return questionService.addQuestionAcceptableAnswer(
             {
                 questionId: Number(params.urlParams.questionId),
             },
             {
-                acceptableAnswerWithPoints: params.body.acceptableAnswerWithPoints,
+                acceptableAnswer: params.body.acceptableAnswer,
             },
         );
     }

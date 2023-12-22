@@ -20,8 +20,8 @@ function computeCanAnswerBeAttributed(newMark: number, question: questionWithAns
 
     if (newMark !== question.points && question.mark === question.points) {
         const isThereMoreThanOneRightAnswer =
-            question.acceptableAnswersWithPoints.filter(({ points }) => points === question.points)
-                .length > 1;
+            question.acceptableAnswers.filter(({ points }) => points === question.points).length >
+            1;
 
         if (!isThereMoreThanOneRightAnswer) {
             return false;

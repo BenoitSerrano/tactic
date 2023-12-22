@@ -14,14 +14,14 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return true for acceptable if answer status is wrong', () => {
             const newMark = 1;
             const mark = 0;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 1, answer: 'bidule' },
             ];
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -32,7 +32,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for acceptable if answer is empty', () => {
             const newMark = 1;
             const mark = 0;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 1, answer: 'bidule' },
             ];
@@ -41,7 +41,7 @@ describe('computeCanAnswerBeAttributed', () => {
                 ...baseQuestion,
                 answer: undefined,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -52,7 +52,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for acceptable if answer status is acceptable', () => {
             const newMark = 1;
             const mark = 1;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 1, answer: 'bidule' },
             ];
@@ -60,7 +60,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -71,7 +71,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for acceptable if answer status is right but it is the only right answer', () => {
             const newMark = 1;
             const mark = 2;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'chouette' },
                 { points: 1, answer: 'bidule' },
             ];
@@ -79,7 +79,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -90,7 +90,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return true for acceptable if answer status is right and it has several right answers', () => {
             const newMark = 1;
             const mark = 2;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 2, answer: 'chouette' },
                 { points: 1, answer: 'bidule' },
@@ -99,7 +99,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -111,7 +111,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return true for wrong if answer status is acceptable', () => {
             const newMark = 0;
             const mark = 1;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 1, answer: 'chouette' },
             ];
@@ -119,7 +119,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -130,12 +130,12 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for wrong if answer status is wrong', () => {
             const newMark = 0;
             const mark = 0;
-            const acceptableAnswersWithPoints = [{ points: 2, answer: 'truc' }];
+            const acceptableAnswers = [{ points: 2, answer: 'truc' }];
 
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -147,13 +147,13 @@ describe('computeCanAnswerBeAttributed', () => {
         //     const newMark = 0;
         //     const mark = undefined;
         //     const answer = undefined;
-        //     const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [];
+        //     const acceptableAnswers: acceptableAnswerWithPointsType[] = [];
 
         //     const question = {
         //         ...baseQuestion,
         //         answer,
         //         mark,
-        //         acceptableAnswersWithPoints,
+        //         acceptableAnswers,
         //     };
 
         //     const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -165,7 +165,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const newMark = 0;
             const mark = 0;
             const answer = '';
-            const acceptableAnswersWithPoints: acceptableAnswerWithPointsType[] = [
+            const acceptableAnswers: acceptableAnswerWithPointsType[] = [
                 { points: 2, answer: 'truc' },
             ];
 
@@ -173,7 +173,7 @@ describe('computeCanAnswerBeAttributed', () => {
                 ...baseQuestion,
                 mark,
                 answer,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -183,7 +183,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for wrong if answer status is right but it is the only right answer', () => {
             const newMark = 0;
             const mark = 2;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'chouette' },
                 { points: 1, answer: 'bidule' },
             ];
@@ -191,7 +191,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -202,7 +202,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return true for wrong if answer status is right and it has several right answers', () => {
             const newMark = 0;
             const mark = 2;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 2, answer: 'chouette' },
                 { points: 1, answer: 'bidule' },
@@ -211,7 +211,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -224,7 +224,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return true for right if answer status is wrong', () => {
             const newMark = 2;
             const mark = 0;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 1, answer: 'bidule' },
             ];
@@ -232,7 +232,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -243,7 +243,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for right if answer status is wrong but answer is empty', () => {
             const newMark = 2;
             const mark = 0;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 1, answer: 'bidule' },
             ];
@@ -252,7 +252,7 @@ describe('computeCanAnswerBeAttributed', () => {
                 ...baseQuestion,
                 answer: undefined,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -263,7 +263,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return true for right if answer status is acceptable', () => {
             const newMark = 2;
             const mark = 1;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'truc' },
                 { points: 1, answer: 'chouette' },
             ];
@@ -271,7 +271,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);
@@ -282,7 +282,7 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for right if answer status is right', () => {
             const newMark = 2;
             const mark = 2;
-            const acceptableAnswersWithPoints = [
+            const acceptableAnswers = [
                 { points: 2, answer: 'chouette' },
                 { points: 1, answer: 'machin' },
             ];
@@ -290,7 +290,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const question = {
                 ...baseQuestion,
                 mark,
-                acceptableAnswersWithPoints,
+                acceptableAnswers,
             };
 
             const canAnswerBeMarkedAsAcceptable = computeCanAnswerBeAttributed(newMark, question);

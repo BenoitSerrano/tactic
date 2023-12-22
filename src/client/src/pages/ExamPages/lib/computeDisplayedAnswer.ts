@@ -29,9 +29,9 @@ function computeDisplayedAnswer(
 
             const answers = question.answer
                 ? question.answer.split(SPLITTING_CHARACTER_FOR_TAT)
-                : SPLITTING_CHARACTER_FOR_TAT.repeat(
-                      question.acceptableAnswersWithPoints.length,
-                  ).split(SPLITTING_CHARACTER_FOR_TAT);
+                : SPLITTING_CHARACTER_FOR_TAT.repeat(question.acceptableAnswers.length).split(
+                      SPLITTING_CHARACTER_FOR_TAT,
+                  );
             const title: Array<chunkType> = [];
             let lastIndexFound = 0;
             let answerIndex = 0;
@@ -41,7 +41,7 @@ function computeDisplayedAnswer(
                     value: question.title.slice(lastIndexFound, value.value.index).trim(),
                 });
 
-                const acceptableAnswer = question.acceptableAnswersWithPoints[answerIndex];
+                const acceptableAnswer = question.acceptableAnswers[answerIndex];
 
                 title.push({
                     kind: 'coloredText',

@@ -193,29 +193,22 @@ function QuestionsTable(props: {
                                                     question.possibleAnswers ? (
                                                         question.possibleAnswers[
                                                             Number(
-                                                                question
-                                                                    .acceptableAnswersWithPoints[0]
+                                                                question.acceptableAnswers[0]
                                                                     .answer,
                                                             )
                                                         ]
                                                     ) : (
                                                         <ul>
-                                                            {question.acceptableAnswersWithPoints.map(
+                                                            {question.acceptableAnswers.map(
                                                                 (
-                                                                    acceptableAnswerWithPoint,
+                                                                    acceptableAnswer,
                                                                     index: number,
                                                                 ) => (
                                                                     <li
                                                                         key={`question-right-answers-${question.id}-${index}`}
                                                                     >
-                                                                        (
-                                                                        {
-                                                                            acceptableAnswerWithPoint.points
-                                                                        }
-                                                                        ) -{' '}
-                                                                        {
-                                                                            acceptableAnswerWithPoint.answer
-                                                                        }
+                                                                        ({acceptableAnswer.points})
+                                                                        - {acceptableAnswer.answer}
                                                                     </li>
                                                                 ),
                                                             )}

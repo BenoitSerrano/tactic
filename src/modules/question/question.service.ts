@@ -33,7 +33,7 @@ function buildQuestionService() {
         exerciseId: Exercise['id'],
         body: Pick<
             questionDtoType,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswers'
         >,
     ) {
         const exerciseService = buildExerciseService();
@@ -52,7 +52,7 @@ function buildQuestionService() {
         return questionRepository.save(
             questionEncoder.encodeQuestion({
                 ...question,
-                acceptableAnswersWithPoints: body.acceptableAnswersWithPoints,
+                acceptableAnswers: body.acceptableAnswers,
             }),
         );
     }
@@ -73,10 +73,7 @@ function buildQuestionService() {
 
     async function updateQuestion(
         criteria: { exerciseId: Exercise['id']; questionId: Question['id'] },
-        body: Pick<
-            questionDtoType,
-            'title' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
-        >,
+        body: Pick<questionDtoType, 'title' | 'points' | 'possibleAnswers' | 'acceptableAnswers'>,
     ) {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId, exercise: { id: criteria.exerciseId } },
@@ -89,7 +86,7 @@ function buildQuestionService() {
         return questionRepository.save(
             questionEncoder.encodeQuestion({
                 ...question,
-                acceptableAnswersWithPoints: body.acceptableAnswersWithPoints,
+                acceptableAnswers: body.acceptableAnswers,
             }),
         );
     }
@@ -98,15 +95,12 @@ function buildQuestionService() {
         criteria: {
             questionId: Question['id'];
         },
-        body: { acceptableAnswerWithPoints: acceptableAnswerWithPointsType },
+        body: { acceptableAnswer: acceptableAnswerWithPointsType },
     ) {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
-        const updatedQuestion = addAcceptableAnswerToQuestion(
-            question,
-            body.acceptableAnswerWithPoints,
-        );
+        const updatedQuestion = addAcceptableAnswerToQuestion(question, body.acceptableAnswer);
         await questionRepository.save(updatedQuestion);
         return true;
     }

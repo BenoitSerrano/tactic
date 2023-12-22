@@ -125,14 +125,14 @@ async function fetchAttemptWithoutAnswers(attemptId: string) {
 async function addQuestionAcceptableAnswer({
     examId,
     questionId,
-    acceptableAnswerWithPoints,
+    acceptableAnswer,
 }: {
     examId: string;
     questionId: number;
-    acceptableAnswerWithPoints: acceptableAnswerWithPointsType;
+    acceptableAnswer: acceptableAnswerWithPointsType;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/acceptable-answers`;
-    return performApiCall(URL, 'POST', { acceptableAnswerWithPoints });
+    return performApiCall(URL, 'POST', { acceptableAnswer });
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
@@ -306,7 +306,7 @@ async function createQuestion(params: {
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerWithPointsType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
@@ -314,7 +314,7 @@ async function createQuestion(params: {
         title: params.title,
         kind: params.kind,
         possibleAnswers: params.possibleAnswers,
-        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
+        acceptableAnswers: params.acceptableAnswers,
         points: params.points,
     });
 }
@@ -325,14 +325,14 @@ async function updateQuestion(params: {
     questionId: number;
     title: string;
     possibleAnswers: string[];
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerWithPointsType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;
     return performApiCall(URL, 'PUT', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
-        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
+        acceptableAnswers: params.acceptableAnswers,
         points: params.points,
     });
 }

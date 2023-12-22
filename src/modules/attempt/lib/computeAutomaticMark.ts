@@ -6,11 +6,11 @@ export { computeAutomaticMark };
 function computeAutomaticMark({
     questionKind,
     answer,
-    acceptableAnswersWithPoints,
+    acceptableAnswers,
 }: {
     questionKind: questionKindType;
     answer: string | undefined;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerWithPointsType[];
 }): number {
     if (!answer) {
         return 0;
@@ -18,15 +18,15 @@ function computeAutomaticMark({
     if (questionKind === 'texteATrous') {
         const chunks = answer.split('|');
 
-        if (chunks.length !== acceptableAnswersWithPoints.length) {
+        if (chunks.length !== acceptableAnswers.length) {
             throw new Error(
-                `The answer "${answer}" does not have the same number of chunks as acceptableAnswersWithPoints "${acceptableAnswersWithPoints.join(
+                `The answer "${answer}" does not have the same number of chunks as acceptableAnswers "${acceptableAnswers.join(
                     '|',
                 )}"`,
             );
         }
         return chunks.reduce((mark, word, index) => {
-            const { points, answer } = acceptableAnswersWithPoints[index];
+            const { points, answer } = acceptableAnswers[index];
 
             if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answer)) {
                 return mark + points;
@@ -35,16 +35,15 @@ function computeAutomaticMark({
             }
         }, 0);
     }
-    if (acceptableAnswersWithPoints.length === 0) {
-        throw new Error(`Cannot compute automatic mark for acceptableAnswersWithPoints=[]`);
+    if (acceptableAnswers.length === 0) {
+        throw new Error(`Cannot compute automatic mark for acceptableAnswers=[]`);
     }
     if (answer === undefined) {
         return 0;
     }
-    const matchingAcceptableAnswer = acceptableAnswersWithPoints.find(
-        (acceptableAnswerWithPoints) =>
-            sanitizer.sanitizeString(acceptableAnswerWithPoints.answer) ===
-            sanitizer.sanitizeString(answer),
+    const matchingAcceptableAnswer = acceptableAnswers.find(
+        (acceptableAnswer) =>
+            sanitizer.sanitizeString(acceptableAnswer.answer) === sanitizer.sanitizeString(answer),
     );
     if (matchingAcceptableAnswer) {
         return matchingAcceptableAnswer.points;

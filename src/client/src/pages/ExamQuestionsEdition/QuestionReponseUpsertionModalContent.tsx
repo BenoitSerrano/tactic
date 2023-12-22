@@ -7,14 +7,12 @@ import { QuestionInputContainer } from './QuestionInputContainer';
 function QuestionReponseUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
-    setAcceptableAnswersWithPoints: (
-        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
-    ) => void;
+    acceptableAnswers: acceptableAnswerWithPointsType[];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerWithPointsType[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const rightAnswers = props.acceptableAnswersWithPoints
+    const rightAnswers = props.acceptableAnswers
         .map(({ answer }) => answer)
         .join(SPLITTING_CHARACTER_FOR_ANSWERS);
 
@@ -56,7 +54,7 @@ function QuestionReponseUpsertionModalContent(props: {
         const newAcceptableAnswerWithPoints = event.target.value
             .split(SPLITTING_CHARACTER_FOR_ANSWERS)
             .map((answer) => ({ answer, points: Number(props.points) }));
-        props.setAcceptableAnswersWithPoints(newAcceptableAnswerWithPoints);
+        props.setAcceptableAnswers(newAcceptableAnswerWithPoints);
     }
 }
 

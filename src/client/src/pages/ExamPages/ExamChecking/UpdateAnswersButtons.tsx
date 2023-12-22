@@ -115,8 +115,8 @@ function UpdateAnswersButtons(props: {
 
                 const addAcceptableAnswerLoadingInfo =
                     addAcceptableAnswerMutation.isPending &&
-                    addAcceptableAnswerMutation.variables.acceptableAnswerWithPoints
-                        ? addAcceptableAnswerMutation.variables.acceptableAnswerWithPoints.points /
+                    addAcceptableAnswerMutation.variables.acceptableAnswer
+                        ? addAcceptableAnswerMutation.variables.acceptableAnswer.points /
                           props.question.points
                         : undefined;
 
@@ -178,7 +178,7 @@ function UpdateAnswersButtons(props: {
                     addAcceptableAnswerMutation.mutate({
                         examId: props.examId,
                         questionId: props.question.id,
-                        acceptableAnswerWithPoints: {
+                        acceptableAnswer: {
                             answer: props.question.answer,
                             points: multiplier * props.question.points,
                         },

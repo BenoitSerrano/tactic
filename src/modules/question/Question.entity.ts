@@ -18,7 +18,7 @@ export class Question {
 
     // Format décodé: [2:tu es la plus belle, 1.5:es-tu la plus belle]
     @Column('simple-array', { default: '' })
-    acceptableAnswersWithPoints: string[];
+    acceptableAnswers: string[];
 
     @Column('int')
     order: number;

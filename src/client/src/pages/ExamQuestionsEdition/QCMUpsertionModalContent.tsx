@@ -7,16 +7,14 @@ import { QuestionInputContainer } from './QuestionInputContainer';
 function QCMUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
-    setAcceptableAnswersWithPoints: (
-        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
-    ) => void;
+    acceptableAnswers: acceptableAnswerWithPointsType[];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerWithPointsType[]) => void;
     possibleAnswers: string[];
     setPossibleAnswers: (possibleAnswers: string[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const rightAnswer: string | undefined = props.acceptableAnswersWithPoints[0]?.answer;
+    const rightAnswer: string | undefined = props.acceptableAnswers[0]?.answer;
     const canRemovePossibleAnswer = computeCanRemovePossibleAnswer();
     const isAddPossibleAnswerDisabled = computeIsAddPossibleAnswerDisabled();
     return (
@@ -43,7 +41,7 @@ function QCMUpsertionModalContent(props: {
                 <RadioGroup
                     value={rightAnswer}
                     onChange={(event) =>
-                        props.setAcceptableAnswersWithPoints([
+                        props.setAcceptableAnswers([
                             { answer: event.target.value, points: Number(props.points) },
                         ])
                     }
@@ -115,9 +113,9 @@ function QCMUpsertionModalContent(props: {
             props.setPossibleAnswers(newPossibleAnswers);
             if (rightAnswer !== undefined) {
                 if (index === Number(rightAnswer)) {
-                    props.setAcceptableAnswersWithPoints([]);
+                    props.setAcceptableAnswers([]);
                 } else if (index < Number(rightAnswer)) {
-                    props.setAcceptableAnswersWithPoints([
+                    props.setAcceptableAnswers([
                         { answer: `${Number(rightAnswer) - 1}`, points: Number(props.points) },
                     ]);
                 }

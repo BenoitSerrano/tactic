@@ -12,15 +12,13 @@ import { QuestionInputContainer } from './QuestionInputContainer';
 function TexteATrousUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
-    setAcceptableAnswersWithPoints: (
-        newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[],
-    ) => void;
+    acceptableAnswers: acceptableAnswerWithPointsType[];
+    setAcceptableAnswers: (newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const initialPointsPerBlank = props.acceptableAnswersWithPoints.length
-        ? Number(props.points) / props.acceptableAnswersWithPoints.length
+    const initialPointsPerBlank = props.acceptableAnswers.length
+        ? Number(props.points) / props.acceptableAnswers.length
         : Number(props.points);
     const [pointsPerBlank, setPointsPerBlank] = useState(`${initialPointsPerBlank}`);
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(!!props.title);
@@ -84,20 +82,20 @@ function TexteATrousUpsertionModalContent(props: {
         if (value.match(FLOATING_NUMBER_REGEX)) {
             setPointsPerBlank(value);
             const newPointsPerBlank = Number(value);
-            props.setAcceptableAnswersWithPoints(
-                props.acceptableAnswersWithPoints.map(({ answer }) => ({
+            props.setAcceptableAnswers(
+                props.acceptableAnswers.map(({ answer }) => ({
                     answer,
                     points: newPointsPerBlank,
                 })),
             );
-            props.setPoints(`${Number(value) * props.acceptableAnswersWithPoints.length}`);
+            props.setPoints(`${Number(value) * props.acceptableAnswers.length}`);
         }
     }
 
     function resetWholeSentence() {
         setIsWholeSentenceFrozen(false);
         props.setTitle('');
-        props.setAcceptableAnswersWithPoints([]);
+        props.setAcceptableAnswers([]);
         props.setPoints('0');
     }
 
@@ -105,10 +103,10 @@ function TexteATrousUpsertionModalContent(props: {
         return () => {
             const nextState = computeTexteATrousState(wordIndex, {
                 title: props.title,
-                rightAnswers: props.acceptableAnswersWithPoints.map(({ answer }) => answer),
+                rightAnswers: props.acceptableAnswers.map(({ answer }) => answer),
             });
             props.setTitle(nextState.title);
-            props.setAcceptableAnswersWithPoints(
+            props.setAcceptableAnswers(
                 nextState.rightAnswers.map((answer) => ({
                     answer,
                     points: Number(pointsPerBlank),

@@ -5,15 +5,15 @@ import { questionEncoder } from './questionEncoder';
 function removeOkAnswerFromQuestion(question: Question, okAnswer: string) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedOkAnswer = sanitizer.sanitizeString(okAnswer);
-    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints;
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswers;
 
     const acceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
         ({ answer }) => sanitizer.sanitizeString(answer) === sanitizedOkAnswer,
     );
     if (acceptableAnswerIndex !== -1) {
-        const acceptableAnswersWithPoints = [...decodedQuestion.acceptableAnswersWithPoints];
-        acceptableAnswersWithPoints.splice(acceptableAnswerIndex, 1);
-        decodedQuestion.acceptableAnswersWithPoints = acceptableAnswersWithPoints;
+        const acceptableAnswers = [...decodedQuestion.acceptableAnswers];
+        acceptableAnswers.splice(acceptableAnswerIndex, 1);
+        decodedQuestion.acceptableAnswers = acceptableAnswers;
     }
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

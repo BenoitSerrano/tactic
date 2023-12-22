@@ -5,11 +5,11 @@ import { questionEncoder } from './questionEncoder';
 
 function addAcceptableAnswerToQuestion(
     question: Question,
-    acceptableAnswerWithPoints: acceptableAnswerWithPointsType,
+    acceptableAnswer: acceptableAnswerWithPointsType,
 ) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
-    const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswerWithPoints.answer);
-    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints;
+    const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswer.answer);
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswers;
 
     const alreadyPresentAcceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
         ({ answer }) => answer === sanitizedAcceptableAnswer,
@@ -17,21 +17,21 @@ function addAcceptableAnswerToQuestion(
     if (alreadyPresentAcceptableAnswerIndex !== -1) {
         if (
             currentParsedAcceptableAnswers[alreadyPresentAcceptableAnswerIndex].points ===
-            acceptableAnswerWithPoints.points
+            acceptableAnswer.points
         ) {
             return question;
         } else {
-            decodedQuestion.acceptableAnswersWithPoints[alreadyPresentAcceptableAnswerIndex] = {
-                points: acceptableAnswerWithPoints.points,
+            decodedQuestion.acceptableAnswers[alreadyPresentAcceptableAnswerIndex] = {
+                points: acceptableAnswer.points,
                 answer: sanitizedAcceptableAnswer,
             };
             return questionEncoder.encodeQuestion(decodedQuestion);
         }
     }
 
-    decodedQuestion.acceptableAnswersWithPoints = [
-        ...decodedQuestion.acceptableAnswersWithPoints,
-        { points: acceptableAnswerWithPoints.points, answer: sanitizedAcceptableAnswer },
+    decodedQuestion.acceptableAnswers = [
+        ...decodedQuestion.acceptableAnswers,
+        { points: acceptableAnswer.points, answer: sanitizedAcceptableAnswer },
     ];
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

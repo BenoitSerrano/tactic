@@ -72,10 +72,10 @@ function aggregateMarks({
     const marks = questions.reduce((acc, question) => {
         let mark = 0;
 
-        if (question.acceptableAnswersWithPoints.length !== 0) {
+        if (question.acceptableAnswers.length !== 0) {
             mark = computeAutomaticMark({
                 questionKind: question.kind,
-                acceptableAnswersWithPoints: question.acceptableAnswersWithPoints,
+                acceptableAnswers: question.acceptableAnswers,
                 answer: answers[question.id],
             });
         } else {

@@ -65,10 +65,8 @@ function QuestionUpsertionModal(props: {
     const [title, setTitle] = useState(
         props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.title}` : '',
     );
-    const [acceptableAnswersWithPoints, setAcceptableAnswersWithPoints] = useState(
-        props.modalStatus.kind === 'editing'
-            ? props.modalStatus.question.acceptableAnswersWithPoints
-            : [],
+    const [acceptableAnswers, setAcceptableAnswers] = useState(
+        props.modalStatus.kind === 'editing' ? props.modalStatus.question.acceptableAnswers : [],
     );
 
     const [possibleAnswers, setPossibleAnswers] = useState(
@@ -84,7 +82,7 @@ function QuestionUpsertionModal(props: {
     const titlePrefix = computeModalTitlePrefix(props.modalStatus);
     const isConfirmDisabled = computeIsConfirmDisabled(currentQuestionKind, {
         title,
-        acceptableAnswersWithPoints,
+        acceptableAnswers,
         possibleAnswers,
     });
 
@@ -107,8 +105,8 @@ function QuestionUpsertionModal(props: {
                 <QuestionUpsertionModalContentComponent
                     title={title}
                     setTitle={setTitle}
-                    acceptableAnswersWithPoints={acceptableAnswersWithPoints}
-                    setAcceptableAnswersWithPoints={setAcceptableAnswersWithPoints}
+                    acceptableAnswers={acceptableAnswers}
+                    setAcceptableAnswers={setAcceptableAnswers}
                     possibleAnswers={possibleAnswers}
                     setPossibleAnswers={setPossibleAnswers}
                     points={points}
@@ -132,7 +130,7 @@ function QuestionUpsertionModal(props: {
     }
 
     function resetQuestionContent() {
-        setAcceptableAnswersWithPoints([]);
+        setAcceptableAnswers([]);
         setPossibleAnswers(DEFAULT_POSSIBLE_ANSWERS);
         setTitle('');
         setPoints(`${props.defaultPoints}`);
@@ -147,7 +145,7 @@ function QuestionUpsertionModal(props: {
                 currentQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
                     : [],
-            acceptableAnswersWithPoints,
+            acceptableAnswers,
         };
         if (props.modalStatus?.kind === 'editing') {
             updateQuestionMutation.mutate({
