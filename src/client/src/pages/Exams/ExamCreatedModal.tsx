@@ -4,6 +4,7 @@ import { Typography } from '@mui/material';
 function ExamCreatedModal(props: { isOpen: boolean; close: () => void }) {
     return (
         <Modal
+            size="small"
             isOpen={props.isOpen}
             close={props.close}
             cancelButtonLabel="Fermer"
