@@ -31,6 +31,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
         <>
             <QuestionInputContainer title="Phrase originale">
                 <TextField
+                    autoFocus
                     fullWidth
                     label="Phrase originale"
                     placeholder="..."

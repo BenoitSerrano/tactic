@@ -48,6 +48,7 @@ function SignIn(props: {
                         <FieldsContainer>
                             <FieldContainer>
                                 <TextField
+                                    autoFocus
                                     fullWidth
                                     name="email"
                                     type="email"

@@ -29,6 +29,7 @@ function TexteATrousUpsertionModalContent(props: {
             <QuestionInputContainer title="Texte complet">
                 <RowContainer>
                     <TextField
+                        autoFocus
                         disabled={isWholeSentenceFrozen}
                         fullWidth
                         multiline

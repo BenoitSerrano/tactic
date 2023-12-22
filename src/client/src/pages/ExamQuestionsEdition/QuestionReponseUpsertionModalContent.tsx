@@ -20,6 +20,7 @@ function QuestionReponseUpsertionModalContent(props: {
         <>
             <QuestionInputContainer title="Question à laquelle doit répondre l'élève">
                 <TextField
+                    autoFocus
                     fullWidth
                     label="Intitulé"
                     value={props.title}

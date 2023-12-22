@@ -21,6 +21,7 @@ function QCMUpsertionModalContent(props: {
         <ModalContent>
             <QuestionInputContainer title="Question à laquelle doit répondre l'élève">
                 <TextField
+                    autoFocus
                     fullWidth
                     value={props.title}
                     label="Intitulé"

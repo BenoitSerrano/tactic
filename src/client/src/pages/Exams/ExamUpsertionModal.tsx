@@ -44,6 +44,7 @@ function ExamUpsertionModal(props: {
             <>
                 <FieldContainer>
                     <TextField
+                        autoFocus
                         label="Nom du test"
                         fullWidth
                         value={name}

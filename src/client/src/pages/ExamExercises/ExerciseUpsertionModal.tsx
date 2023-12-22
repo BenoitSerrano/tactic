@@ -76,6 +76,7 @@ function ExerciseUpsertionModal(props: {
             <>
                 <RowContainer>
                     <TextField
+                        autoFocus
                         name="name"
                         label="Nom de l'exercice"
                         value={name}

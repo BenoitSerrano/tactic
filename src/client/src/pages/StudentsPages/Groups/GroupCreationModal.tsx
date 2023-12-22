@@ -31,6 +31,7 @@ function GroupCreationModal(props: { close: () => void; isOpen: boolean }) {
     });
     return (
         <Modal
+            size="small"
             onConfirm={createGroup}
             isOpen={props.isOpen}
             title="Créer un groupe"
@@ -38,6 +39,7 @@ function GroupCreationModal(props: { close: () => void; isOpen: boolean }) {
             confirmButtonLabel="Créer"
         >
             <TextField
+                autoFocus
                 label="Nom du groupe"
                 fullWidth
                 name="group-name"

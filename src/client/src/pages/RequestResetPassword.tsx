@@ -39,6 +39,7 @@ function RequestResetPassword() {
                         <FieldsContainer>
                             <FieldContainer>
                                 <TextField
+                                    autoFocus
                                     fullWidth
                                     name="email"
                                     type="email"

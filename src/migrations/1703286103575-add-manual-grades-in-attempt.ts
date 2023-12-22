@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+type gradeType = 'A' | 'B' | 'C' | 'D' | 'E';
 
 export class AddManualGradesInAttempt1703286103575 implements MigrationInterface {
     name = 'AddManualGradesInAttempt1703286103575';
@@ -32,7 +33,7 @@ export class AddManualGradesInAttempt1703286103575 implements MigrationInterface
                 if (totalPoints === undefined) {
                     throw new Error(`No points defined for questionId ${questionId}`);
                 }
-                const grade = convertMarkToGrade(Number(mark), totalPoints);
+                const grade = roundToClosestGrade(Number(mark) / totalPoints);
                 grades[Number(questionId)] = grade;
             }
             const manualGrades = Object.entries(grades).map(([questionId, grade]) => {
@@ -51,18 +52,19 @@ export class AddManualGradesInAttempt1703286103575 implements MigrationInterface
     }
 }
 
-function convertMarkToGrade(mark: number, totalPoints: number) {
-    switch (mark / totalPoints) {
-        case 1:
-            return 'A';
-        case 0.75:
-            return 'B';
-        case 0.5:
-            return 'C';
-        case 0.25:
-            return 'D';
-        case 0:
-            return 'E';
+function roundToClosestGrade(ratio: number): gradeType {
+    const gradeMappings: Array<{ grade: gradeType; ratio: number }> = [
+        { grade: 'A', ratio: 1 },
+        { grade: 'B', ratio: 0.75 },
+        { grade: 'C', ratio: 0.5 },
+        { grade: 'D', ratio: 0.25 },
+        { grade: 'E', ratio: 0 },
+    ];
+    for (let i = 0; i < gradeMappings.length - 1; i++) {
+        const medianRatio = (gradeMappings[i].ratio + gradeMappings[i + 1].ratio) / 2;
+        if (ratio >= medianRatio) {
+            return gradeMappings[i].grade;
+        }
     }
-    throw new Error(`Cannot compute grade for ${mark}/${totalPoints}`);
+    return 'E';
 }

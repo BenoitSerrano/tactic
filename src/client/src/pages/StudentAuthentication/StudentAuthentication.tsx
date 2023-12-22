@@ -66,6 +66,7 @@ function StudentAuthentication() {
                     </TitleContainer>
                     <Form onSubmit={handleSubmit}>
                         <EmailTextField
+                            autoFocus
                             label="Adresse e-mail"
                             name="email"
                             value={email}
