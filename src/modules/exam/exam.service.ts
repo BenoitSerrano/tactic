@@ -166,7 +166,7 @@ function buildExamService() {
                     student: { id: true },
                     roundTrips: true,
                     timeSpentOutside: true,
-                    marks: true,
+                    manualGrades: true,
                     answers: true,
                     endedAt: true,
                     correctedAt: true,

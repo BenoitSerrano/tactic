@@ -72,6 +72,7 @@ async function importDb() {
 
     for (const attempt of allAttempts) {
         const translatedAnswers = replaceQuestionIdInAnswers(attempt.answers, questionIdMapping);
+        //TODO: faire la même chose avec les marks / grades
         await attemptRepository.insert({ ...attempt, answers: translatedAnswers });
     }
     console.log('Done!');

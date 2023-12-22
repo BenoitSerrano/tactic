@@ -32,7 +32,7 @@ function convertExamWithAttemptsToResults(
             .map((question) => {
                 const { mark } = attemptUtils.computeNotationInfo({
                     answers,
-                    marksArray: attempt.marks,
+                    gradesArray: attempt.manualGrades,
                     question,
                 });
                 return mark || 0;

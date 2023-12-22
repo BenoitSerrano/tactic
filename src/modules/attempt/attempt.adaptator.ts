@@ -75,7 +75,7 @@ function convertAttemptToAttemptWithAnswers(
                     ...question,
                     ...attemptUtils.computeNotationInfo({
                         answers: attemptAnswers,
-                        marksArray: attempt.marks,
+                        gradesArray: attempt.manualGrades,
                         question,
                     }),
                     answer: attemptAnswers[question.id],
@@ -84,11 +84,5 @@ function convertAttemptToAttemptWithAnswers(
         },
     };
 }
-
-// QCM: grade
-// texteATrous: mark
-// questionReponse: grade
-// texteLibre : grade
-// phraseMelange: grade
 
 export { attemptAdaptator };
