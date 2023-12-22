@@ -1,6 +1,6 @@
 import { Question } from './Question.entity';
 import { buildQuestionService } from './question.service';
-import { acceptableAnswerWithPointsType, questionDtoType } from './types';
+import { acceptableAnswerType, questionDtoType } from './types';
 
 export { buildQuestionController };
 
@@ -48,7 +48,7 @@ function buildQuestionController() {
 
     async function addQuestionAcceptableAnswer(params: {
         urlParams: { questionId: string };
-        body: { acceptableAnswer: acceptableAnswerWithPointsType };
+        body: { acceptableAnswer: acceptableAnswerType };
     }) {
         return questionService.addQuestionAcceptableAnswer(
             {

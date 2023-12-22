@@ -1,4 +1,4 @@
-import { acceptableAnswerWithPointsType, attemptStatusType, questionKindType } from '../../types';
+import { acceptableAnswerType, attemptStatusType, gradeType, questionKindType } from '../../types';
 
 type attemptWithAnswersApiType = {
     studentEmail: string;
@@ -19,14 +19,51 @@ type exerciseWithAnswersType = {
     questions: Array<questionWithAnswersType>;
 };
 
-type questionWithAnswersType = {
+type questionWithAnswersType =
+    | texteATrousWithAnswersType
+    | qcmWithAnswersType
+    | texteLibreWithAnswersType
+    | otherQuestionKindAnswersType;
+
+type amendableQuestionWithAnswersType = texteLibreWithAnswersType | otherQuestionKindAnswersType;
+
+type texteATrousWithAnswersType = {
     id: number;
     title: string;
-    kind: questionKindType;
-    acceptableAnswers: acceptableAnswerWithPointsType[];
-    possibleAnswers: string[];
+    kind: 'texteATrous';
+    acceptableAnswers: acceptableAnswerType[];
     answer: string | undefined;
     mark: number | undefined;
+    points: number;
+};
+
+type qcmWithAnswersType = {
+    id: number;
+    title: string;
+    kind: 'qcm';
+    acceptableAnswers: acceptableAnswerType[];
+    possibleAnswers: string[];
+    answer: string | undefined;
+    grade: gradeType;
+    points: number;
+};
+
+type texteLibreWithAnswersType = {
+    id: number;
+    title: string;
+    kind: 'texteLibre';
+    answer: string | undefined;
+    grade: gradeType | undefined;
+    points: number;
+};
+
+type otherQuestionKindAnswersType = {
+    id: number;
+    title: string;
+    kind: 'phraseMelangee' | 'questionReponse';
+    acceptableAnswers: acceptableAnswerType[];
+    answer: string | undefined;
+    grade: gradeType;
     points: number;
 };
 
@@ -66,4 +103,5 @@ export type {
     examWithoutAnswersType,
     exerciseWithoutAnswersType,
     questionWithoutAnswerType,
+    amendableQuestionWithAnswersType,
 };

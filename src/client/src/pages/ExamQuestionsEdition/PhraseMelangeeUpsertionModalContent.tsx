@@ -6,14 +6,14 @@ import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
 import { textSplitter } from '../../lib/textSplitter';
-import { acceptableAnswerWithPointsType } from '../../types';
+import { acceptableAnswerType } from '../../types';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerWithPointsType[];
-    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerWithPointsType[]) => void;
+    acceptableAnswers: acceptableAnswerType[];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
@@ -147,7 +147,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
             if (newRightAnswer.length + 1 === words.length) {
                 props.setAcceptableAnswers([
                     ...props.acceptableAnswers,
-                    { points: Number(props.points), answer: updatedNewRightAnswer.join(' ') },
+                    { grade: 'A', answer: updatedNewRightAnswer.join(' ') },
                 ]);
                 setNewRightAnswer(undefined);
                 setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
@@ -201,9 +201,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
         const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
 
         props.setTitle(shuffledPhrase);
-        props.setAcceptableAnswers([
-            { points: Number(props.points), answer: newOriginalPhrase.trim() },
-        ]);
+        props.setAcceptableAnswers([{ grade: 'A', answer: newOriginalPhrase.trim() }]);
     }
 }
 

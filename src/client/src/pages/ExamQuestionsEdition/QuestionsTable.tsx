@@ -207,8 +207,8 @@ function QuestionsTable(props: {
                                                                     <li
                                                                         key={`question-right-answers-${question.id}-${index}`}
                                                                     >
-                                                                        ({acceptableAnswer.points})
-                                                                        - {acceptableAnswer.answer}
+                                                                        ({acceptableAnswer.grade}) -{' '}
+                                                                        {acceptableAnswer.answer}
                                                                     </li>
                                                                 ),
                                                             )}

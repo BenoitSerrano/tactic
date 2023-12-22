@@ -5,15 +5,15 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { useState } from 'react';
 import { computeTexteATrousState } from './lib/computeTexteATrousState';
 import { textSplitter } from '../../lib/textSplitter';
-import { acceptableAnswerWithPointsType } from '../../types';
+import { acceptableAnswerType } from '../../types';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerWithPointsType[];
-    setAcceptableAnswers: (newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[]) => void;
+    acceptableAnswers: acceptableAnswerType[];
+    setAcceptableAnswers: (newAcceptableAnswerWithPoints: acceptableAnswerType[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
@@ -81,13 +81,6 @@ function TexteATrousUpsertionModalContent(props: {
         const value = event.target.value;
         if (value.match(FLOATING_NUMBER_REGEX)) {
             setPointsPerBlank(value);
-            const newPointsPerBlank = Number(value);
-            props.setAcceptableAnswers(
-                props.acceptableAnswers.map(({ answer }) => ({
-                    answer,
-                    points: newPointsPerBlank,
-                })),
-            );
             props.setPoints(`${Number(value) * props.acceptableAnswers.length}`);
         }
     }
@@ -109,7 +102,7 @@ function TexteATrousUpsertionModalContent(props: {
             props.setAcceptableAnswers(
                 nextState.rightAnswers.map((answer) => ({
                     answer,
-                    points: Number(pointsPerBlank),
+                    grade: 'A',
                 })),
             );
             props.setPoints(`${Number(pointsPerBlank) * nextState.rightAnswers.length}`);

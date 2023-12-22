@@ -3,23 +3,23 @@ import { acceptableAnswerParser } from './acceptableAnswerParser';
 describe('acceptableAnswerParser', () => {
     describe('parse', () => {
         it('should parse an acceptableAnswer', () => {
-            const acceptableAnswer = '1.5:machin';
+            const acceptableAnswer = 'B:machin';
 
-            const { points, answer } = acceptableAnswerParser.parse(acceptableAnswer);
+            const { grade, answer } = acceptableAnswerParser.parse(acceptableAnswer);
 
-            expect(points).toBe(1.5);
+            expect(grade).toBe('B');
             expect(answer).toBe('machin');
         });
     });
 
     describe('stringify', () => {
         it('should stringify an acceptableAnswer', () => {
-            const points = 1.5;
+            const grade = 'B';
             const answer = 'machin';
 
-            const acceptableAnswer = acceptableAnswerParser.stringify({ points, answer });
+            const acceptableAnswer = acceptableAnswerParser.stringify({ grade, answer });
 
-            expect(acceptableAnswer).toBe('1.5:machin');
+            expect(acceptableAnswer).toBe('B:machin');
         });
     });
 });

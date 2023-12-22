@@ -1,17 +1,18 @@
+import { gradeType } from '../../../../types';
 import { computeIsUpdateAnswerButtonLoading } from './computeIsUpdateAnswerButtonLoading';
 
 describe('computeIsUpdateAnswerButtonLoading', () => {
     it('should return true if remove ok answer', () => {
-        const currentMultiplier = 0;
+        const currentGrade = 'E';
         const isQuestionManuallyCorrected = false;
         const loadingInfo = {
             removeOkAnswer: true,
             addAcceptableAnswer: undefined,
-            saveMark: undefined,
+            updateGrade: undefined,
         };
 
         const isUpdateAnswerButtonLoading = computeIsUpdateAnswerButtonLoading(
-            currentMultiplier,
+            currentGrade,
             isQuestionManuallyCorrected,
             loadingInfo,
         );
@@ -19,17 +20,17 @@ describe('computeIsUpdateAnswerButtonLoading', () => {
         expect(isUpdateAnswerButtonLoading).toBe(true);
     });
 
-    it('should return true if add acceptable answer for right currentMultiplier', () => {
-        const currentMultiplier = 0.5;
+    it('should return true if add acceptable answer for right currentGrade', () => {
+        const currentGrade = 'C';
         const isQuestionManuallyCorrected = false;
         const loadingInfo = {
             removeOkAnswer: true,
-            addAcceptableAnswer: 0.5,
-            saveMark: undefined,
+            addAcceptableAnswer: 'C' as gradeType,
+            updateGrade: undefined,
         };
 
         const isUpdateAnswerButtonLoading = computeIsUpdateAnswerButtonLoading(
-            currentMultiplier,
+            currentGrade,
             isQuestionManuallyCorrected,
             loadingInfo,
         );
@@ -37,17 +38,17 @@ describe('computeIsUpdateAnswerButtonLoading', () => {
         expect(isUpdateAnswerButtonLoading).toBe(true);
     });
 
-    it('should return false if add acceptable answer for wrong currentMultiplier', () => {
-        const currentMultiplier = 0.5;
+    it('should return false if add acceptable answer for wrong currentGrade', () => {
+        const currentGrade = 'C';
         const isQuestionManuallyCorrected = false;
         const loadingInfo = {
             removeOkAnswer: true,
-            addAcceptableAnswer: 0.25,
-            saveMark: undefined,
+            addAcceptableAnswer: 'D' as gradeType,
+            updateGrade: undefined,
         };
 
         const isUpdateAnswerButtonLoading = computeIsUpdateAnswerButtonLoading(
-            currentMultiplier,
+            currentGrade,
             isQuestionManuallyCorrected,
             loadingInfo,
         );
@@ -56,16 +57,16 @@ describe('computeIsUpdateAnswerButtonLoading', () => {
     });
 
     it('should return true if save mark and correct multiplier', () => {
-        const currentMultiplier = 0.5;
+        const currentGrade = 'C';
         const isQuestionManuallyCorrected = true;
         const loadingInfo = {
             removeOkAnswer: false,
             addAcceptableAnswer: undefined,
-            saveMark: 0.5,
+            updateGrade: 'C' as gradeType,
         };
 
         const isUpdateAnswerButtonLoading = computeIsUpdateAnswerButtonLoading(
-            currentMultiplier,
+            currentGrade,
             isQuestionManuallyCorrected,
             loadingInfo,
         );
@@ -74,16 +75,16 @@ describe('computeIsUpdateAnswerButtonLoading', () => {
     });
 
     it('should return false if save mark and wrong multiplier', () => {
-        const currentMultiplier = 0.5;
+        const currentGrade = 'C';
         const isQuestionManuallyCorrected = true;
         const loadingInfo = {
             removeOkAnswer: false,
             addAcceptableAnswer: undefined,
-            saveMark: 0.25,
+            updateGrade: 'D' as gradeType,
         };
 
         const isUpdateAnswerButtonLoading = computeIsUpdateAnswerButtonLoading(
-            currentMultiplier,
+            currentGrade,
             isQuestionManuallyCorrected,
             loadingInfo,
         );

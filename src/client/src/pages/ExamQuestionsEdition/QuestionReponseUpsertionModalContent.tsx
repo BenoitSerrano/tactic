@@ -1,14 +1,14 @@
 import { TextField } from '@mui/material';
 import { ChangeEvent } from 'react';
 import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
-import { acceptableAnswerWithPointsType } from '../../types';
+import { acceptableAnswerType } from '../../types';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
 function QuestionReponseUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerWithPointsType[];
-    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerWithPointsType[]) => void;
+    acceptableAnswers: acceptableAnswerType[];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
@@ -53,7 +53,7 @@ function QuestionReponseUpsertionModalContent(props: {
     function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
         const newAcceptableAnswerWithPoints = event.target.value
             .split(SPLITTING_CHARACTER_FOR_ANSWERS)
-            .map((answer) => ({ answer, points: Number(props.points) }));
+            .map((answer) => ({ answer, grade: 'A' as const }));
         props.setAcceptableAnswers(newAcceptableAnswerWithPoints);
     }
 }

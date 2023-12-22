@@ -1,53 +1,56 @@
 import { sanitizer } from '../../../lib/sanitizer';
-import { acceptableAnswerWithPointsType, questionKindType } from '../../question/types';
+import { computeBlankCount } from '../../question/lib/computeBlankCount';
+import { convertGradeToMark } from '../../question/lib/convertGradeToMark';
+import { gradeType, questionDtoType } from '../../question/types';
 
 export { computeAutomaticMark };
 
 function computeAutomaticMark({
-    questionKind,
+    questionDto,
     answer,
-    acceptableAnswers,
 }: {
-    questionKind: questionKindType;
+    questionDto: questionDtoType;
     answer: string | undefined;
-    acceptableAnswers: acceptableAnswerWithPointsType[];
-}): number {
+}): { mark: number; grade?: gradeType } {
     if (!answer) {
-        return 0;
+        return { mark: 0, grade: 'E' };
     }
-    if (questionKind === 'texteATrous') {
+    if (questionDto.kind === 'texteATrous') {
         const chunks = answer.split('|');
+        const blankCount = computeBlankCount(questionDto.title);
 
-        if (chunks.length !== acceptableAnswers.length) {
+        if (chunks.length !== questionDto.acceptableAnswers.length) {
             throw new Error(
-                `The answer "${answer}" does not have the same number of chunks as acceptableAnswers "${acceptableAnswers.join(
-                    '|',
-                )}"`,
+                `The answer "${answer}" for questionId ${questionDto.id} does not have the same number of chunks (${chunks.length}) as acceptableAnswers (${questionDto.acceptableAnswers.length})`,
             );
         }
-        return chunks.reduce((mark, word, index) => {
-            const { points, answer } = acceptableAnswers[index];
+        const mark = chunks.reduce((totalMark, word, index) => {
+            const { grade, answer: answerForBlank } = questionDto.acceptableAnswers[index];
+            const totalPointsPerBlank = questionDto.points / blankCount;
+            const markForBlank = convertGradeToMark(grade, totalPointsPerBlank);
 
-            if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answer)) {
-                return mark + points;
+            if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answerForBlank)) {
+                return totalMark + markForBlank;
             } else {
-                return mark;
+                return totalMark;
             }
         }, 0);
+        return { mark };
     }
-    if (acceptableAnswers.length === 0) {
+    if (questionDto.acceptableAnswers.length === 0) {
         throw new Error(`Cannot compute automatic mark for acceptableAnswers=[]`);
     }
     if (answer === undefined) {
-        return 0;
+        return { mark: 0, grade: 'E' };
     }
-    const matchingAcceptableAnswer = acceptableAnswers.find(
+    const matchingAcceptableAnswer = questionDto.acceptableAnswers.find(
         (acceptableAnswer) =>
             sanitizer.sanitizeString(acceptableAnswer.answer) === sanitizer.sanitizeString(answer),
     );
     if (matchingAcceptableAnswer) {
-        return matchingAcceptableAnswer.points;
+        const mark = convertGradeToMark(matchingAcceptableAnswer.grade, questionDto.points);
+        return { grade: matchingAcceptableAnswer.grade, mark };
     } else {
-        return 0;
+        return { mark: 0, grade: 'E' };
     }
 }

@@ -6,7 +6,7 @@ import { Exercise, buildExerciseService } from '../exercise';
 import { questionEncoder } from './lib/questionEncoder';
 import { addAcceptableAnswerToQuestion } from './lib/addAcceptableAnswerToQuestion';
 import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
-import { acceptableAnswerWithPointsType, questionDtoType } from './types';
+import { acceptableAnswerType, questionDtoType } from './types';
 
 export { buildQuestionService };
 
@@ -95,7 +95,7 @@ function buildQuestionService() {
         criteria: {
             questionId: Question['id'];
         },
-        body: { acceptableAnswer: acceptableAnswerWithPointsType },
+        body: { acceptableAnswer: acceptableAnswerType },
     ) {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },

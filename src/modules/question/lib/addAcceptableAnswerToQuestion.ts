@@ -1,12 +1,9 @@
 import { sanitizer } from '../../../lib/sanitizer';
 import { Question } from '../Question.entity';
-import { acceptableAnswerWithPointsType } from '../types';
+import { acceptableAnswerType } from '../types';
 import { questionEncoder } from './questionEncoder';
 
-function addAcceptableAnswerToQuestion(
-    question: Question,
-    acceptableAnswer: acceptableAnswerWithPointsType,
-) {
+function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: acceptableAnswerType) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswer.answer);
     const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswers;
@@ -16,22 +13,25 @@ function addAcceptableAnswerToQuestion(
     );
     if (alreadyPresentAcceptableAnswerIndex !== -1) {
         if (
-            currentParsedAcceptableAnswers[alreadyPresentAcceptableAnswerIndex].points ===
-            acceptableAnswer.points
+            currentParsedAcceptableAnswers[alreadyPresentAcceptableAnswerIndex].grade ===
+            acceptableAnswer.grade
         ) {
-            return question;
+            throw new Error(
+                `This answer ${sanitizedAcceptableAnswer} already exists for this grade (${acceptableAnswer.grade})`,
+            );
         } else {
             decodedQuestion.acceptableAnswers[alreadyPresentAcceptableAnswerIndex] = {
-                points: acceptableAnswer.points,
+                grade: acceptableAnswer.grade,
                 answer: sanitizedAcceptableAnswer,
             };
-            return questionEncoder.encodeQuestion(decodedQuestion);
+            const encodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);
+            return encodedQuestion;
         }
     }
 
     decodedQuestion.acceptableAnswers = [
         ...decodedQuestion.acceptableAnswers,
-        { points: acceptableAnswer.points, answer: sanitizedAcceptableAnswer },
+        { grade: acceptableAnswer.grade, answer: sanitizedAcceptableAnswer },
     ];
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

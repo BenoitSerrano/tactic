@@ -1,22 +1,25 @@
+import { convertGradeToMark } from '../../../../lib/convertGradeToMark';
+import { gradeType } from '../../../../types';
+
 function computeDisplayedMark(props: {
-    mark: number | undefined;
+    grade: gradeType | undefined;
     answer: string | undefined;
     totalPoints: number;
     isQuestionManuallyCorrected: boolean;
 }): string {
     let displayedMark;
     if (props.isQuestionManuallyCorrected) {
-        if (props.mark !== undefined) {
-            displayedMark = props.mark;
+        if (props.grade !== undefined) {
+            displayedMark = convertGradeToMark(props.grade, props.totalPoints);
         } else {
             if (props.answer) {
                 displayedMark = '...';
             } else {
-                displayedMark = `${0}`;
+                displayedMark = 0;
             }
         }
     } else {
-        displayedMark = `${props.mark}`;
+        displayedMark = convertGradeToMark(props.grade || 'E', props.totalPoints);
     }
     return `${displayedMark} / ${props.totalPoints}`;
 }

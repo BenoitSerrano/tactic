@@ -1,12 +1,12 @@
 import { textSplitter } from '../../../lib/textSplitter';
-import { acceptableAnswerWithPointsType, questionKindType } from '../../../types';
+import { acceptableAnswerType, questionKindType } from '../../../types';
 
 function computeIsConfirmDisabled(
     questionKind: questionKindType,
     params: {
         title: string;
         possibleAnswers: string[];
-        acceptableAnswers: acceptableAnswerWithPointsType[];
+        acceptableAnswers: acceptableAnswerType[];
     },
 ) {
     if (!params.title) {

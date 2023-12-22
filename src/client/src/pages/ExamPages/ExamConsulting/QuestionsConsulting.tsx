@@ -4,11 +4,11 @@ import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
-import { extractMarks } from '../lib/extractMarks';
 import { QuestionChecking } from '../ExamChecking/QuestionChecking';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { useState } from 'react';
 import { QuestionContainer } from '../components/QuestionContainer';
+import { computeDisplayedMark } from '../ExamChecking/lib/computeDisplayedMark';
 
 function QuestionsConsulting(props: {
     exercises: Array<exerciseWithAnswersType>;
@@ -20,7 +20,6 @@ function QuestionsConsulting(props: {
         undefined,
     );
     const result = computeResult(props.exercises);
-    const marks = extractMarks(props.exercises);
 
     return (
         <TestPageLayout
@@ -39,10 +38,18 @@ function QuestionsConsulting(props: {
                         isLastItem={exerciseIndex === props.exercises.length - 1}
                     >
                         {exercise.questions.map((question, index: number) => {
-                            const mark = manualQuestionKinds.includes(question.kind)
-                                ? marks.manual[question.id]
-                                : question.mark;
-                            const answerStatus = computeAnswerStatus(mark, question.points);
+                            const isQuestionManuallyCorrected = manualQuestionKinds.includes(
+                                question.kind,
+                            );
+                            const grade =
+                                question.kind === 'texteATrous' ? undefined : question.grade;
+                            const answerStatus = computeAnswerStatus(grade);
+                            const displayedMark = computeDisplayedMark({
+                                answer: question.answer,
+                                isQuestionManuallyCorrected,
+                                grade,
+                                totalPoints: question.points,
+                            });
                             return (
                                 <QuestionContainer
                                     key={question.id}
@@ -50,9 +57,7 @@ function QuestionsConsulting(props: {
                                 >
                                     <QuestionIndicatorsContainer>
                                         <QuestionIndicatorContainer>
-                                            <Typography>
-                                                {question.mark} / {question.points}
-                                            </Typography>
+                                            <Typography>{displayedMark}</Typography>
                                         </QuestionIndicatorContainer>
                                     </QuestionIndicatorsContainer>
                                     <QuestionChecking

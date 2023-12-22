@@ -7,20 +7,20 @@ describe('questionEncoder', () => {
         it('should decode a regular question', () => {
             const question: Omit<Question, 'exercise'> = {
                 id: 1,
-                kind: 'qcm',
+                kind: 'questionReponse',
                 points: 2,
                 title: 'title',
                 order: 1,
-                possibleAnswers: ['A', 'B', 'C', 'D'],
-                acceptableAnswers: ['2:c3VyZQ==', '2:Y2VydGFpbmU=', '1.5:Ym9m'],
+                possibleAnswers: [],
+                acceptableAnswers: ['A:c3VyZQ==', 'A:Y2VydGFpbmU=', 'B:Ym9m'],
             };
 
             const decodedQuestion = questionEncoder.decodeQuestion(question);
 
             expect(decodedQuestion.acceptableAnswers).toEqual([
-                { points: 2, answer: 'sure' },
-                { points: 2, answer: 'certaine' },
-                { points: 1.5, answer: 'bof' },
+                { grade: 'A', answer: 'sure' },
+                { grade: 'A', answer: 'certaine' },
+                { grade: 'B', answer: 'bof' },
             ]);
         });
 
@@ -60,18 +60,18 @@ describe('questionEncoder', () => {
                 order: 1,
                 possibleAnswers: ['A', 'B', 'C', 'D'],
                 acceptableAnswers: [
-                    { points: 2, answer: 'sure' },
-                    { points: 2, answer: 'certaine' },
-                    { points: 1.5, answer: 'bof' },
+                    { grade: 'A', answer: 'sure' },
+                    { grade: 'A', answer: 'certaine' },
+                    { grade: 'B', answer: 'bof' },
                 ],
             };
 
             const decodedQuestion = questionEncoder.encodeQuestion(question);
 
             expect(decodedQuestion.acceptableAnswers).toEqual([
-                '2:c3VyZQ==',
-                '2:Y2VydGFpbmU=',
-                '1.5:Ym9m',
+                'A:c3VyZQ==',
+                'A:Y2VydGFpbmU=',
+                'B:Ym9m',
             ]);
         });
 

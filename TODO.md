@@ -1,6 +1,6 @@
 -   Refacto : ne plus stocker le nombre de points, mais une lettre (A, B, C ou D) dans les réponses acceptables
--   [ ] créer migration
--   [ ] dans migration, passer sur chaque question : attribuer A, B, C ou D selon la valeur. Si aucune valeur ne correspond à 1/4, 2/4, 3/4 ou 4/4, et n'est pas non plus A, B, C ou D, console.log et itérer
+-   [x] créer migration
+-   [x] dans migration, passer sur chaque question : attribuer A, B, C ou D selon la valeur. Si aucune valeur ne correspond à 1/4, 2/4, 3/4 ou 4/4, et n'est pas non plus A, B, C ou D, console.log et itérer
         - [ ] changer type points: number dans acceptableAnswersWithPoints en grade: "A"|"B"|"C"|"D"
 -   [ ] changer test encoder
 -   [ ] changer encoder et decoder

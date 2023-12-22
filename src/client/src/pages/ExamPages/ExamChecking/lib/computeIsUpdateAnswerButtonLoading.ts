@@ -1,19 +1,21 @@
+import { gradeType } from '../../../../types';
+
 function computeIsUpdateAnswerButtonLoading(
-    currentMultiplier: number,
+    currentGrade: gradeType,
     isQuestionManuallyCorrected: boolean,
     loadingInfo: {
         removeOkAnswer: boolean;
-        addAcceptableAnswer: number | undefined;
-        saveMark: number | undefined;
+        addAcceptableAnswer: gradeType | undefined;
+        updateGrade: gradeType | undefined;
     },
 ) {
     if (isQuestionManuallyCorrected) {
-        return currentMultiplier === loadingInfo.saveMark;
+        return currentGrade === loadingInfo.updateGrade;
     }
-    if (currentMultiplier === 0) {
+    if (currentGrade === 'E') {
         return loadingInfo.removeOkAnswer;
     }
-    return currentMultiplier === loadingInfo.addAcceptableAnswer;
+    return currentGrade === loadingInfo.addAcceptableAnswer;
 }
 
 export { computeIsUpdateAnswerButtonLoading };

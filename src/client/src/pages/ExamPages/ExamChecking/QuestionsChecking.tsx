@@ -3,7 +3,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GradingIcon from '@mui/icons-material/Grading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LockIcon from '@mui/icons-material/Lock';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../components/TestPageLayout';
@@ -12,14 +12,9 @@ import { useAlert } from '../../../lib/alert';
 import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
-import {
-    attemptStatusType,
-    attemptsCountByAttemptStatusApiType,
-    questionKindType,
-} from '../../../types';
+import { attemptStatusType, attemptsCountByAttemptStatusApiType } from '../../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { extractMarks, manualMarksType } from '../lib/extractMarks';
 import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { pathHandler } from '../../../lib/pathHandler';
@@ -47,8 +42,6 @@ function QuestionsChecking(props: {
 
     const [searchParams] = useSearchParams();
 
-    const initialMarks = extractMarks(props.exercises);
-    const [manualMarks, setManualMarks] = useState<manualMarksType>(initialMarks.manual);
     const { displayAlert } = useAlert();
     const result = computeResult(props.exercises);
     const attemptIds = searchParams.get('attemptIds') || '';
@@ -122,22 +115,9 @@ function QuestionsChecking(props: {
     );
     const isConfirmAccessAnotherAttemptDialogOpen = !!attemptIdToNavigateTo;
 
-    useEffect(() => {
-        const marks = extractMarks(props.exercises);
-        setManualMarks(marks.manual);
-    }, [props.exercises]);
-
     const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
 
-    const questionKindsWithAmendableMarks: questionKindType[] = [
-        'phraseMelangee',
-        'questionReponse',
-        'texteLibre',
-    ];
-    const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(
-        props.exercises,
-        manualMarks,
-    );
+    const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(props.exercises);
     const canCorrectAttempt =
         props.attemptStatus === 'finished' || props.attemptStatus === 'expired';
     const UpdateCorrectedAtButton = renderUpdateCorrectedAtButton(props.attemptStatus);
@@ -200,17 +180,14 @@ function QuestionsChecking(props: {
                             const isQuestionManuallyCorrected = manualQuestionKinds.includes(
                                 question.kind,
                             );
-                            const mark = isQuestionManuallyCorrected
-                                ? manualMarks[question.id]
-                                : question.mark;
-                            const answerStatus = computeAnswerStatus(mark, question.points);
-                            const isMarkAmendable = questionKindsWithAmendableMarks.includes(
-                                question.kind,
-                            );
+                            const grade =
+                                question.kind === 'texteATrous' ? undefined : question.grade;
+                            const answerStatus = computeAnswerStatus(grade);
+
                             const displayedMark = computeDisplayedMark({
                                 answer: question.answer,
                                 isQuestionManuallyCorrected,
-                                mark,
+                                grade,
                                 totalPoints: question.points,
                             });
                             return (
@@ -219,7 +196,9 @@ function QuestionsChecking(props: {
                                     isLastItem={index === exercise.questions.length - 1}
                                 >
                                     <QuestionIndicatorsContainer>
-                                        {isMarkAmendable && (
+                                        {(question.kind === 'phraseMelangee' ||
+                                            question.kind === 'questionReponse' ||
+                                            question.kind === 'texteLibre') && (
                                             <UpdateAnswersButtons
                                                 canCorrectAttempt={canCorrectAttempt}
                                                 examId={props.examId}

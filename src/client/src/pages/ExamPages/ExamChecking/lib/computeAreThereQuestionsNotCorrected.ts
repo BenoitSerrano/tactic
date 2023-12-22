@@ -1,19 +1,16 @@
-import { manualMarksType } from '../../lib/extractMarks';
 import { exerciseWithAnswersType } from '../../types';
 
-function computeAreThereQuestionsNotCorrected(
-    exercises: exerciseWithAnswersType[],
-    manualMarks: manualMarksType,
-) {
-    const answers: Record<number, string | undefined> = {};
+function computeAreThereQuestionsNotCorrected(exercises: exerciseWithAnswersType[]) {
     for (const exercise of exercises) {
         for (const question of exercise.questions) {
-            answers[question.id] = question.answer;
+            if (question.kind === 'texteLibre') {
+                if (question.grade === undefined && !!question.answer) {
+                    return true;
+                }
+            }
         }
     }
-    return Object.entries(manualMarks).some(
-        ([questionId, manualMark]) => manualMark === undefined && !!answers[Number(questionId)],
-    );
+    return false;
 }
 
 export { computeAreThereQuestionsNotCorrected };

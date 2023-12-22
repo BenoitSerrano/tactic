@@ -12,7 +12,7 @@ const attemptUtils = {
     parseAnswers,
     encodeMarks,
     decodeMarks,
-    aggregateMarks,
+    computeNotationInfo,
 };
 
 function computeIsTimeLimitExceeded({
@@ -58,32 +58,46 @@ function parseAnswers(answers: string[]): attemptAnswersType {
     return attemptAnswers;
 }
 
-function aggregateMarks({
+function computeNotationInfo({
     answers,
     marksArray,
-    questions,
+    question,
 }: {
     answers: attemptAnswersType;
-    questions: questionDtoType[];
+    question: questionDtoType;
     marksArray: Attempt['marks'];
-}): Record<number, number | undefined> {
+}) {
     const manualMarks = attemptUtils.decodeMarks(marksArray);
 
-    const marks = questions.reduce((acc, question) => {
-        let mark = 0;
+    const isQuestionManuallyCorrected = question.kind === 'texteLibre';
+    if (isQuestionManuallyCorrected) {
+        const mark = manualMarks[question.id] as number | undefined;
+        const grade = convertMarkToGrade(mark, question.points);
+        return { mark, grade };
+    }
 
-        if (question.acceptableAnswers.length !== 0) {
-            mark = computeAutomaticMark({
-                questionKind: question.kind,
-                acceptableAnswers: question.acceptableAnswers,
-                answer: answers[question.id],
-            });
-        } else {
-            mark = manualMarks[question.id];
-        }
-        return { ...acc, [question.id]: mark };
-    }, {} as Record<number, number>);
-    return marks;
+    return computeAutomaticMark({
+        questionDto: question,
+        answer: answers[question.id],
+    });
+}
+
+function convertMarkToGrade(mark: number | undefined, totalPoints: number) {
+    if (mark === undefined) {
+        return undefined;
+    }
+    switch (mark / totalPoints) {
+        case 1:
+            return 'A';
+        case 0.75:
+            return 'B';
+        case 0.5:
+            return 'C';
+        case 0.25:
+            return 'D';
+        case 0:
+            return 'E';
+    }
 }
 
 function encodeMarks(marks: Record<Question['id'], number>) {

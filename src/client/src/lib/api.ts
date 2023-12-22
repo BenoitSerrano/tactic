@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { acceptableAnswerWithPointsType, questionKindType } from '../types';
+import { acceptableAnswerType, gradeType, questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -34,7 +34,7 @@ const api = {
     deleteQuestion,
     duplicateQuestion,
     updateQuestionsOrder,
-    updateMark,
+    updateGrade,
     updateExercisesOrder,
     updateEndedAt,
     deleteEndedAt,
@@ -129,7 +129,7 @@ async function addQuestionAcceptableAnswer({
 }: {
     examId: string;
     questionId: number;
-    acceptableAnswer: acceptableAnswerWithPointsType;
+    acceptableAnswer: acceptableAnswerType;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/acceptable-answers`;
     return performApiCall(URL, 'POST', { acceptableAnswer });
@@ -306,7 +306,7 @@ async function createQuestion(params: {
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
-    acceptableAnswers: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
@@ -325,7 +325,7 @@ async function updateQuestion(params: {
     questionId: number;
     title: string;
     possibleAnswers: string[];
-    acceptableAnswers: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerType[];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;
@@ -348,15 +348,15 @@ async function updateQuestionsOrder(params: {
     });
 }
 
-async function updateMark(params: {
+async function updateGrade(params: {
     examId: string;
     attemptId: string;
     questionId: number;
-    mark: number;
+    grade: gradeType;
 }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/mark`;
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/grade`;
     return performApiCall(URL, 'PATCH', {
-        mark: params.mark,
+        grade: params.grade,
     });
 }
 

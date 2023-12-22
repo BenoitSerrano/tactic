@@ -1,4 +1,3 @@
-import { Exam } from '../exam';
 import { examDtoType } from '../exam/types';
 import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Student } from '../student';
@@ -49,12 +48,7 @@ function convertAttemptToAttemptWithAnswers(
     studentEmail: Student['email'],
 ) {
     const now = new Date();
-    const questions = exam.exercises.map((exercise) => exercise.questions).flat();
-    const marks = attemptUtils.aggregateMarks({
-        answers: attemptAnswers,
-        marksArray: attempt.marks,
-        questions,
-    });
+
     const attemptStatus = computeAttemptStatus(
         attempt,
         {
@@ -79,12 +73,22 @@ function convertAttemptToAttemptWithAnswers(
                 ...exercise,
                 questions: exercise.questions.map((question) => ({
                     ...question,
-                    mark: marks[question.id],
+                    ...attemptUtils.computeNotationInfo({
+                        answers: attemptAnswers,
+                        marksArray: attempt.marks,
+                        question,
+                    }),
                     answer: attemptAnswers[question.id],
                 })),
             })),
         },
     };
 }
+
+// QCM: grade
+// texteATrous: mark
+// questionReponse: grade
+// texteLibre : grade
+// phraseMelange: grade
 
 export { attemptAdaptator };

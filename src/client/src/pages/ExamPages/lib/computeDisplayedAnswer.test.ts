@@ -1,3 +1,4 @@
+import { gradeType } from '../../../types';
 import { computeDisplayedAnswer } from './computeDisplayedAnswer';
 
 describe('computeDisplayedAnswer', () => {
@@ -8,9 +9,9 @@ describe('computeDisplayedAnswer', () => {
                 title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                 kind: 'questionReponse' as const,
                 possibleAnswers: [],
-                acceptableAnswers: [{ points: 2, answer: 'Non, pas vraiment' }],
+                acceptableAnswers: [{ grade: 'A' as gradeType, answer: 'Non, pas vraiment' }],
                 answer: '',
-                mark: 2,
+                grade: 'A' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -31,9 +32,9 @@ describe('computeDisplayedAnswer', () => {
                 title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                 kind: 'questionReponse' as const,
                 possibleAnswers: [],
-                acceptableAnswers: [{ points: 2, answer: 'Oui !' }],
+                acceptableAnswers: [{ grade: 'A' as gradeType, answer: 'Oui !' }],
                 answer: 'Oui !',
-                mark: 2,
+                grade: 'A' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'right');
@@ -58,11 +59,11 @@ describe('computeDisplayedAnswer', () => {
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                    { grade: 'A' as gradeType, answer: 'des' },
+                    { grade: 'A' as gradeType, answer: 'une' },
+                    { grade: 'A' as gradeType, answer: 'ses' },
+                    { grade: 'A' as gradeType, answer: 'sa' },
+                    { grade: 'A' as gradeType, answer: 'son' },
                 ],
                 answer: '',
                 mark: 2,
@@ -95,11 +96,11 @@ describe('computeDisplayedAnswer', () => {
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                    { grade: 'A' as gradeType, answer: 'des' },
+                    { grade: 'A' as gradeType, answer: 'une' },
+                    { grade: 'A' as gradeType, answer: 'ses' },
+                    { grade: 'A' as gradeType, answer: 'sa' },
+                    { grade: 'A' as gradeType, answer: 'son' },
                 ],
                 answer: 'des|une|ses|sa|son',
                 mark: 2,
@@ -132,11 +133,11 @@ describe('computeDisplayedAnswer', () => {
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                    { grade: 'A' as gradeType, answer: 'des' },
+                    { grade: 'A' as gradeType, answer: 'une' },
+                    { grade: 'A' as gradeType, answer: 'ses' },
+                    { grade: 'A' as gradeType, answer: 'sa' },
+                    { grade: 'A' as gradeType, answer: 'son' },
                 ],
                 answer: 'des|truc|ses|sa|son',
                 mark: 2,
@@ -169,11 +170,11 @@ describe('computeDisplayedAnswer', () => {
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                    { grade: 'A' as gradeType, answer: 'des' },
+                    { grade: 'A' as gradeType, answer: 'une' },
+                    { grade: 'A' as gradeType, answer: 'ses' },
+                    { grade: 'A' as gradeType, answer: 'sa' },
+                    { grade: 'A' as gradeType, answer: 'son' },
                 ],
                 answer: 'des||ses|sa|son',
                 mark: 2,
@@ -209,7 +210,8 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: [],
                 acceptableAnswers: [],
                 answer: undefined,
-                mark: 0,
+                grade: undefined as any,
+                mark: undefined,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -228,7 +230,7 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: [],
                 acceptableAnswers: [],
                 answer: "Youpi j'ai une assez bonne note",
-                mark: 1,
+                grade: 'C' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'acceptable');
@@ -252,9 +254,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'est la vie belle',
                 kind: 'phraseMelangee' as const,
                 possibleAnswers: [],
-                acceptableAnswers: [{ points: 2, answer: 'la vie est belle' }],
+                acceptableAnswers: [{ grade: 'A' as gradeType, answer: 'la vie est belle' }],
                 answer: '',
-                mark: 0,
+                grade: 'E' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -276,9 +278,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'est la vie belle',
                 kind: 'phraseMelangee' as const,
                 possibleAnswers: [],
-                acceptableAnswers: [{ points: 2, answer: 'la vie est belle' }],
+                acceptableAnswers: [{ grade: 'A' as gradeType, answer: 'la vie est belle' }],
                 answer: 'la vie est belle',
-                mark: 2,
+                grade: 'A' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'right');
@@ -302,9 +304,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'la couleur de mes yeux ?',
                 kind: 'qcm' as const,
                 possibleAnswers: ['rouge', 'bleu', 'vert', 'noir'],
-                acceptableAnswers: [{ points: 2, answer: 'bleu' }],
+                acceptableAnswers: [{ grade: 'A' as gradeType, answer: 'bleu' }],
                 answer: undefined,
-                mark: 0,
+                grade: undefined as any,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -326,9 +328,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'la couleur de mes yeux ?',
                 kind: 'qcm' as const,
                 possibleAnswers: ['rouge', 'bleu', 'vert', 'noir'],
-                acceptableAnswers: [{ points: 2, answer: 'bleu' }],
+                acceptableAnswers: [{ grade: 'A' as gradeType, answer: 'bleu' }],
                 answer: '1',
-                mark: 2,
+                grade: 'A' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'right');

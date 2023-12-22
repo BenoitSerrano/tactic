@@ -4,6 +4,8 @@ import { Exam, buildExamService } from '../exam';
 import { Exercise, buildExerciseService } from '../exercise';
 import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Question, buildQuestionService } from '../question';
+import { convertGradeToMark } from '../question/lib/convertGradeToMark';
+import { gradeType } from '../question/types';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
@@ -29,7 +31,7 @@ function buildAttemptService() {
         bulkInsertAttempts,
         deleteQuestionAnswers,
         deleteExerciseAnswers,
-        updateMark,
+        updateGrade,
         updateAttemptEndedAt,
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
@@ -186,12 +188,20 @@ function buildAttemptService() {
         return result.affected == 1;
     }
 
-    async function updateMark(attemptId: Attempt['id'], questionId: Question['id'], mark: number) {
+    async function updateGrade(
+        attemptId: Attempt['id'],
+        questionId: Question['id'],
+        grade: gradeType,
+    ) {
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
             select: { id: true, marks: true },
         });
 
+        // TODO: ne plus passer par mark mais stocker directement la grade en BDD
+        const questionRepository = dataSource.getRepository(Question);
+        const { points } = await questionRepository.findOneByOrFail({ id: questionId });
+        const mark = convertGradeToMark(grade, points);
         const previousMarks = attemptUtils.decodeMarks(attempt.marks);
         const newMarks = attemptUtils.encodeMarks({ ...previousMarks, [questionId]: mark });
         await attemptRepository.update({ id: attemptId }, { marks: newMarks });

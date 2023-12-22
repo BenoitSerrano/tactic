@@ -1,5 +1,7 @@
 import { Question } from './Question.entity';
 
+type gradeType = 'A' | 'B' | 'C' | 'D' | 'E';
+
 const questionKinds = [
     'qcm',
     'questionReponse',
@@ -9,9 +11,9 @@ const questionKinds = [
 ] as const;
 type questionKindType = (typeof questionKinds)[number];
 
-type acceptableAnswerWithPointsType = { points: number; answer: string };
+type acceptableAnswerType = { grade: gradeType; answer: string };
 type questionDtoType = Omit<Question, 'acceptableAnswers' | 'exercise'> & {
-    acceptableAnswers: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerType[];
 };
 
 // type questionDtoType = Omit<
@@ -21,7 +23,7 @@ type questionDtoType = Omit<Question, 'acceptableAnswers' | 'exercise'> & {
 //     (
 //         | {
 //               kind: 'texteATrous';
-//               acceptableAnswersWithPoints: acceptableAnswerWithPointsType[][];
+//               acceptableAnswersWithPoints: acceptableAnswerType[][];
 //           }
 //         | {
 //               kind: 'qcm';
@@ -31,9 +33,9 @@ type questionDtoType = Omit<Question, 'acceptableAnswers' | 'exercise'> & {
 //         | {
 //               kind: 'questionReponse' | 'phraseMelangee' | 'texteLibre';
 //               possibleAnswers: string[];
-//               acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+//               acceptableAnswersWithPoints: acceptableAnswerType[];
 //           }
 //     );
 
 export { questionKinds };
-export type { questionKindType, questionDtoType, acceptableAnswerWithPointsType };
+export type { questionKindType, questionDtoType, acceptableAnswerType, gradeType };
