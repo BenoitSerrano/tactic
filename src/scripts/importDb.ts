@@ -72,8 +72,12 @@ async function importDb() {
 
     for (const attempt of allAttempts) {
         const translatedAnswers = replaceQuestionIdInAnswers(attempt.answers, questionIdMapping);
-        //TODO: faire la même chose avec les marks / grades
-        await attemptRepository.insert({ ...attempt, answers: translatedAnswers });
+        const translatedGrades = replaceQuestionIdInGrades(attempt.manualGrades, questionIdMapping);
+        await attemptRepository.insert({
+            ...attempt,
+            answers: translatedAnswers,
+            manualGrades: translatedGrades,
+        });
     }
     console.log('Done!');
 }
@@ -83,7 +87,7 @@ function replaceQuestionIdInAnswers(
     questionIdMapping: questionIdMappingType,
 ): Attempt['answers'] {
     const ANSWER_REGEX = /(\d+):(.*)/;
-    let attemptAnswers = answers.map((answer) => {
+    const attemptAnswers = answers.map((answer) => {
         let regexMatch = answer.match(ANSWER_REGEX);
         if (!regexMatch) {
             throw new Error(`answer "${answer}" is wrongly formatted.`);
@@ -93,6 +97,23 @@ function replaceQuestionIdInAnswers(
         return `${localQuestionId}:${encodedQuestionAnswer}`;
     });
     return attemptAnswers;
+}
+
+function replaceQuestionIdInGrades(
+    manualGrades: Attempt['manualGrades'],
+    questionIdMapping: questionIdMappingType,
+): Attempt['answers'] {
+    const GRADE_REGEX = /^(\d+):[A-E]$/;
+    const newManualGrades = manualGrades.map((manualGrade) => {
+        let regexMatch = manualGrade.match(GRADE_REGEX);
+        if (!regexMatch) {
+            throw new Error(`manualGrade "${manualGrade}" is wrongly formatted.`);
+        }
+        const [_, distantQuestionId, grade] = regexMatch;
+        const localQuestionId = questionIdMapping[Number(distantQuestionId)];
+        return `${localQuestionId}:${grade}`;
+    });
+    return newManualGrades;
 }
 
 importDb();
