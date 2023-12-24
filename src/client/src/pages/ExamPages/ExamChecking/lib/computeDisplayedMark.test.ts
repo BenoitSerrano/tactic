@@ -6,12 +6,12 @@ describe('computeDisplayedMark', () => {
     it('should return the grade for automatic questions even if answer not filled', () => {
         const answer = undefined;
         const grade = 'E' as gradeType;
-        const isQuestionManuallyCorrected = false;
+        const mark = undefined;
 
         const displayedMark = computeDisplayedMark({
             grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 
@@ -21,12 +21,12 @@ describe('computeDisplayedMark', () => {
     it('should return the grade for automatic questions if answer filled', () => {
         const answer = 'truc';
         const grade = 'A' as gradeType;
-        const isQuestionManuallyCorrected = false;
+        const mark = undefined;
 
         const displayedMark = computeDisplayedMark({
             grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 
@@ -36,12 +36,12 @@ describe('computeDisplayedMark', () => {
     it('should display a default 0 for manual questions if answer not filled', () => {
         const answer = undefined;
         const grade = undefined;
-        const isQuestionManuallyCorrected = true;
+        const mark = undefined;
 
         const displayedMark = computeDisplayedMark({
             grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 
@@ -51,12 +51,12 @@ describe('computeDisplayedMark', () => {
     it('should display ... for manual questions if answer filled but grade not yet attributed', () => {
         const answer = 'truc';
         const grade = undefined;
-        const isQuestionManuallyCorrected = true;
+        const mark = undefined;
 
         const displayedMark = computeDisplayedMark({
             grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 

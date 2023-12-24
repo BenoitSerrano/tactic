@@ -31,7 +31,7 @@ type texteATrousWithAnswersType = {
     id: number;
     title: string;
     kind: 'texteATrous';
-    acceptableAnswers: acceptableAnswerType[];
+    acceptableAnswers: acceptableAnswerType[][];
     answer: string | undefined;
     mark: number | undefined;
     points: number;
@@ -41,7 +41,7 @@ type qcmWithAnswersType = {
     id: number;
     title: string;
     kind: 'qcm';
-    acceptableAnswers: acceptableAnswerType[];
+    acceptableAnswers: acceptableAnswerType[][];
     possibleAnswers: string[];
     answer: string | undefined;
     grade: gradeType;
@@ -61,7 +61,7 @@ type otherQuestionKindAnswersType = {
     id: number;
     title: string;
     kind: 'phraseMelangee' | 'questionReponse';
-    acceptableAnswers: acceptableAnswerType[];
+    acceptableAnswers: acceptableAnswerType[][];
     answer: string | undefined;
     grade: gradeType;
     points: number;

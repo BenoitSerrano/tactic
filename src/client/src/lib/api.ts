@@ -306,7 +306,7 @@ async function createQuestion(params: {
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
-    acceptableAnswers: acceptableAnswerType[];
+    acceptableAnswers: acceptableAnswerType[][];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
@@ -325,7 +325,7 @@ async function updateQuestion(params: {
     questionId: number;
     title: string;
     possibleAnswers: string[];
-    acceptableAnswers: acceptableAnswerType[];
+    acceptableAnswers: acceptableAnswerType[][];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;

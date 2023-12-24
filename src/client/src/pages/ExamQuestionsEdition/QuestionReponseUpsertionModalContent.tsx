@@ -7,14 +7,16 @@ import { QuestionInputContainer } from './QuestionInputContainer';
 function QuestionReponseUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerType[];
-    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[]) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const rightAnswers = props.acceptableAnswers
-        .map(({ answer }) => answer)
-        .join(SPLITTING_CHARACTER_FOR_ANSWERS);
+    const rightAnswers = props.acceptableAnswers.length
+        ? props.acceptableAnswers[0]
+              .map(({ answer }) => answer)
+              .join(SPLITTING_CHARACTER_FOR_ANSWERS)
+        : '';
 
     return (
         <>
@@ -55,7 +57,7 @@ function QuestionReponseUpsertionModalContent(props: {
         const newAcceptableAnswerWithPoints = event.target.value
             .split(SPLITTING_CHARACTER_FOR_ANSWERS)
             .map((answer) => ({ answer, grade: 'A' as const }));
-        props.setAcceptableAnswers(newAcceptableAnswerWithPoints);
+        props.setAcceptableAnswers([newAcceptableAnswerWithPoints]);
     }
 }
 

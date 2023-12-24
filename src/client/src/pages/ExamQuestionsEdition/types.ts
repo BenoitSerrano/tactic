@@ -13,7 +13,7 @@ type questionWithAnswersType = {
     kind: questionKindType;
     title: string;
     points: number;
-    acceptableAnswers: acceptableAnswerType[];
+    acceptableAnswers: acceptableAnswerType[][];
     possibleAnswers: string[] | null;
 };
 

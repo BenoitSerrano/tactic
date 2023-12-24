@@ -2,7 +2,6 @@ import { Typography, styled } from '@mui/material';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
-import { manualQuestionKinds } from '../../../constants';
 import { computeResult } from '../lib/computeResult';
 import { QuestionChecking } from '../ExamChecking/QuestionChecking';
 import { ExerciseContainer } from '../components/ExerciseContainer';
@@ -38,15 +37,14 @@ function QuestionsConsulting(props: {
                         isLastItem={exerciseIndex === props.exercises.length - 1}
                     >
                         {exercise.questions.map((question, index: number) => {
-                            const isQuestionManuallyCorrected = manualQuestionKinds.includes(
-                                question.kind,
-                            );
                             const grade =
                                 question.kind === 'texteATrous' ? undefined : question.grade;
                             const answerStatus = computeAnswerStatus(grade);
+                            const mark =
+                                question.kind === 'texteATrous' ? question.mark : undefined;
                             const displayedMark = computeDisplayedMark({
                                 answer: question.answer,
-                                isQuestionManuallyCorrected,
+                                mark,
                                 grade,
                                 totalPoints: question.points,
                             });

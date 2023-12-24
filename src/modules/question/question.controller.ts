@@ -11,6 +11,7 @@ function buildQuestionController() {
         updateQuestion,
         duplicateQuestion,
         addQuestionAcceptableAnswer,
+        addQuestionAcceptableAnswerToTexteATrous,
         removeOkAnswer,
         deleteQuestion,
         updateQuestionsOrder,
@@ -43,6 +44,18 @@ function buildQuestionController() {
                 acceptableAnswers: params.body.acceptableAnswers,
                 points: params.body.points,
             },
+        );
+    }
+
+    async function addQuestionAcceptableAnswerToTexteATrous(params: {
+        urlParams: { questionId: string };
+        body: { blankIndex: number; acceptableAnswer: acceptableAnswerType };
+    }) {
+        return questionService.addQuestionAcceptableAnswerToTexteATrous(
+            {
+                questionId: Number(params.urlParams.questionId),
+            },
+            params.body,
         );
     }
 

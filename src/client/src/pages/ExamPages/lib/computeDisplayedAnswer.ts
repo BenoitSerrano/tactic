@@ -41,7 +41,7 @@ function computeDisplayedAnswer(
                     value: question.title.slice(lastIndexFound, value.value.index).trim(),
                 });
 
-                const acceptableAnswer = question.acceptableAnswers[answerIndex];
+                const acceptableAnswer = question.acceptableAnswers[answerIndex][0];
 
                 title.push({
                     kind: 'coloredText',

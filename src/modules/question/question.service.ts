@@ -16,6 +16,7 @@ function buildQuestionService() {
         createQuestion,
         updateQuestion,
         addQuestionAcceptableAnswer,
+        addQuestionAcceptableAnswerToTexteATrous,
         removeOkAnswer,
         getQuestions,
         deleteQuestion,
@@ -100,6 +101,21 @@ function buildQuestionService() {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
+        const updatedQuestion = addAcceptableAnswerToQuestion(question, body.acceptableAnswer);
+        await questionRepository.save(updatedQuestion);
+        return true;
+    }
+
+    async function addQuestionAcceptableAnswerToTexteATrous(
+        criteria: {
+            questionId: Question['id'];
+        },
+        body: { blankIndex: number; acceptableAnswer: acceptableAnswerType },
+    ) {
+        const question = await questionRepository.findOneOrFail({
+            where: { id: criteria.questionId },
+        });
+        throw new Error(`Not yet implemented`);
         const updatedQuestion = addAcceptableAnswerToQuestion(question, body.acceptableAnswer);
         await questionRepository.save(updatedQuestion);
         return true;

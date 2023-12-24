@@ -12,8 +12,8 @@ import { QuestionInputContainer } from './QuestionInputContainer';
 function TexteATrousUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerType[];
-    setAcceptableAnswers: (newAcceptableAnswerWithPoints: acceptableAnswerType[]) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (newAcceptableAnswerWithPoints: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
@@ -97,14 +97,18 @@ function TexteATrousUpsertionModalContent(props: {
         return () => {
             const nextState = computeTexteATrousState(wordIndex, {
                 title: props.title,
-                rightAnswers: props.acceptableAnswers.map(({ answer }) => answer),
+                rightAnswers: props.acceptableAnswers.map(
+                    (acceptableAnswersPerBlank) => acceptableAnswersPerBlank[0].answer,
+                ),
             });
             props.setTitle(nextState.title);
             props.setAcceptableAnswers(
-                nextState.rightAnswers.map((answer) => ({
-                    answer,
-                    grade: 'A',
-                })),
+                nextState.rightAnswers.map((answer) => [
+                    {
+                        answer,
+                        grade: 'A',
+                    },
+                ]),
             );
             props.setPoints(`${Number(pointsPerBlank) * nextState.rightAnswers.length}`);
         };

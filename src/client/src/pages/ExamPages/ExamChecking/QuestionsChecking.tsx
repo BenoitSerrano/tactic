@@ -182,11 +182,13 @@ function QuestionsChecking(props: {
                             );
                             const grade =
                                 question.kind === 'texteATrous' ? undefined : question.grade;
+                            const mark =
+                                question.kind === 'texteATrous' ? question.mark : undefined;
                             const answerStatus = computeAnswerStatus(grade);
 
                             const displayedMark = computeDisplayedMark({
                                 answer: question.answer,
-                                isQuestionManuallyCorrected,
+                                mark,
                                 grade,
                                 totalPoints: question.points,
                             });

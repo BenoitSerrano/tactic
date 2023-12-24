@@ -12,12 +12,14 @@ import { QuestionInputContainer } from './QuestionInputContainer';
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerType[];
-    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[]) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const initialAcceptableAnswers = props.acceptableAnswers[0]?.answer || '';
+    const initialAcceptableAnswers = props.acceptableAnswers.length
+        ? props.acceptableAnswers[0][0].answer
+        : '';
     const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
     const [originalPhrase, setOriginalPhrase] = useState(initialAcceptableAnswers);
     const [displayedWordsToPlace, setDisplayedWordsToPlace] = useState(
@@ -57,7 +59,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
                         subtitle={`Cliquez sur le bouton "Ajouter" pour ajouter des phrases correctes`}
                     >
                         <table>
-                            {props.acceptableAnswers.map(({ answer }, index) => (
+                            {props.acceptableAnswers[0].map(({ answer }, index) => (
                                 <tr key={answer}>
                                     <td>
                                         <Typography>{answer}</Typography>
@@ -147,8 +149,10 @@ function PhraseMelangeeUpsertionModalContent(props: {
 
             if (newRightAnswer.length + 1 === words.length) {
                 props.setAcceptableAnswers([
-                    ...props.acceptableAnswers,
-                    { grade: 'A', answer: updatedNewRightAnswer.join(' ') },
+                    [
+                        ...props.acceptableAnswers[0],
+                        { grade: 'A', answer: updatedNewRightAnswer.join(' ') },
+                    ],
                 ]);
                 setNewRightAnswer(undefined);
                 setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
@@ -202,7 +206,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
         const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
 
         props.setTitle(shuffledPhrase);
-        props.setAcceptableAnswers([{ grade: 'A', answer: newOriginalPhrase.trim() }]);
+        props.setAcceptableAnswers([[{ grade: 'A', answer: newOriginalPhrase.trim() }]]);
     }
 }
 

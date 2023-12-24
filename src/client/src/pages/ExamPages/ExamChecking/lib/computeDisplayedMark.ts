@@ -3,25 +3,19 @@ import { gradeType } from '../../../../types';
 
 function computeDisplayedMark(props: {
     grade: gradeType | undefined;
+    mark: number | undefined;
     answer: string | undefined;
     totalPoints: number;
-    isQuestionManuallyCorrected: boolean;
 }): string {
-    let displayedMark;
-    if (props.isQuestionManuallyCorrected) {
-        if (props.grade !== undefined) {
-            displayedMark = convertGradeToMark(props.grade, props.totalPoints);
-        } else {
-            if (props.answer) {
-                displayedMark = '...';
-            } else {
-                displayedMark = 0;
-            }
-        }
-    } else {
-        displayedMark = convertGradeToMark(props.grade || 'E', props.totalPoints);
+    if (props.grade) {
+        const displayedMark = convertGradeToMark(props.grade, props.totalPoints);
+        return `${displayedMark} / ${props.totalPoints}`;
     }
-    return `${displayedMark} / ${props.totalPoints}`;
+    if (props.mark === undefined) {
+        const displayedMark = props.answer ? '...' : 0;
+        return `${displayedMark} / ${props.totalPoints}`;
+    }
+    return `${props.mark} / ${props.totalPoints}`;
 }
 
 export { computeDisplayedMark };

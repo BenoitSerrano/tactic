@@ -16,11 +16,11 @@ describe(`computeAutomaticMark`, () => {
         const answer = `le|la|les|lu`;
         const questionKind = `texteATrous` as const;
         const acceptableAnswers = [
-            { grade: 'D', answer: 'truc' },
-            { grade: 'D', answer: 'machin' },
-            { grade: 'D', answer: 'bidule' },
-            { grade: 'D', answer: 'lu' },
-        ] as acceptableAnswerType[];
+            [{ grade: 'D', answer: 'truc' }],
+            [{ grade: 'D', answer: 'machin' }],
+            [{ grade: 'D', answer: 'bidule' }],
+            [{ grade: 'D', answer: 'lu' }],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -35,11 +35,11 @@ describe(`computeAutomaticMark`, () => {
         const answer = `le|||`;
         const questionKind = `texteATrous` as const;
         const acceptableAnswers = [
-            { grade: 'D', answer: 'le' },
-            { grade: 'D', answer: 'machin' },
-            { grade: 'D', answer: 'bidule' },
-            { grade: 'D', answer: 'lu' },
-        ] as acceptableAnswerType[];
+            [{ grade: 'D', answer: 'le' }],
+            [{ grade: 'D', answer: 'machin' }],
+            [{ grade: 'D', answer: 'bidule' }],
+            [{ grade: 'D', answer: 'lu' }],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -54,7 +54,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should throw error if no right answer provided`, () => {
         const answer = `truc`;
         const questionKind = `questionReponse` as const;
-        const acceptableAnswers: acceptableAnswerType[] = [];
+        const acceptableAnswers: acceptableAnswerType[][] = [];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         expect(() =>
@@ -69,11 +69,13 @@ describe(`computeAutomaticMark`, () => {
         const answer = `truc`;
         const questionKind = `questionReponse` as const;
         const acceptableAnswers = [
-            { grade: 'A', answer: 'machin' },
-            { grade: 'A', answer: 'chose' },
-            { grade: 'C', answer: 'bidule' },
-            { grade: 'C', answer: 'chouette' },
-        ] as acceptableAnswerType[];
+            [
+                { grade: 'A', answer: 'machin' },
+                { grade: 'A', answer: 'chose' },
+                { grade: 'C', answer: 'bidule' },
+                { grade: 'C', answer: 'chouette' },
+            ],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -89,11 +91,13 @@ describe(`computeAutomaticMark`, () => {
         const questionKind = `questionReponse` as const;
         const answer = `chouette`;
         const acceptableAnswers = [
-            { grade: 'A', answer: 'machin' },
-            { grade: 'A', answer: 'chose' },
-            { grade: 'C', answer: 'bidule' },
-            { grade: 'C', answer: 'chouette' },
-        ] as acceptableAnswerType[];
+            [
+                { grade: 'A', answer: 'machin' },
+                { grade: 'A', answer: 'chose' },
+                { grade: 'C', answer: 'bidule' },
+                { grade: 'C', answer: 'chouette' },
+            ],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -109,11 +113,13 @@ describe(`computeAutomaticMark`, () => {
         const answer = `chose`;
         const questionKind = `questionReponse` as const;
         const acceptableAnswers = [
-            { grade: 'A', answer: 'machin' },
-            { grade: 'A', answer: 'chose' },
-            { grade: 'C', answer: 'bidule' },
-            { grade: 'C', answer: 'chouette' },
-        ] as acceptableAnswerType[];
+            [
+                { grade: 'A', answer: 'machin' },
+                { grade: 'A', answer: 'chose' },
+                { grade: 'C', answer: 'bidule' },
+                { grade: 'C', answer: 'chouette' },
+            ],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -129,11 +135,13 @@ describe(`computeAutomaticMark`, () => {
         const answer = `cHoSe`;
         const questionKind = `questionReponse` as const;
         const acceptableAnswers = [
-            { grade: 'A', answer: 'machin' },
-            { grade: 'A', answer: 'chose' },
-            { grade: 'C', answer: 'bidule' },
-            { grade: 'C', answer: 'chouette' },
-        ] as acceptableAnswerType[];
+            [
+                { grade: 'A', answer: 'machin' },
+                { grade: 'A', answer: 'chose' },
+                { grade: 'C', answer: 'bidule' },
+                { grade: 'C', answer: 'chouette' },
+            ],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -149,11 +157,13 @@ describe(`computeAutomaticMark`, () => {
         const answer = ` chose `;
         const questionKind = `questionReponse` as const;
         const acceptableAnswers = [
-            { grade: 'A', answer: 'machin' },
-            { grade: 'A', answer: 'chose' },
-            { grade: 'C', answer: 'bidule' },
-            { grade: 'C', answer: 'chouette' },
-        ] as acceptableAnswerType[];
+            [
+                { grade: 'A', answer: 'machin' },
+                { grade: 'A', answer: 'chose' },
+                { grade: 'C', answer: 'bidule' },
+                { grade: 'C', answer: 'chouette' },
+            ],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -168,7 +178,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo space after apostrophe`, () => {
         const answer = "c' est";
         const questionKind = `questionReponse` as const;
-        const acceptableAnswers = [{ grade: 'A', answer: "c'est" }] as acceptableAnswerType[];
+        const acceptableAnswers = [[{ grade: 'A', answer: "c'est" }]] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -183,7 +193,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo different apostrophe`, () => {
         const answer = `c’est`;
         const questionKind = `questionReponse` as const;
-        const acceptableAnswers = [{ grade: 'A', answer: "c'est" }] as acceptableAnswerType[];
+        const acceptableAnswers = [[{ grade: 'A', answer: "c'est" }]] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -197,7 +207,9 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo multiple spaces in a row`, () => {
         const answer = "s'être  levé";
         const questionKind = `questionReponse` as const;
-        const acceptableAnswers = [{ grade: 'A', answer: "s'être levé" }] as acceptableAnswerType[];
+        const acceptableAnswers = [
+            [{ grade: 'A', answer: "s'être levé" }],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -212,7 +224,7 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo same-looking accent é`, () => {
         const answer = `a sonné`;
         const questionKind = `questionReponse` as const;
-        const acceptableAnswers = [{ grade: 'A', answer: 'a sonné' }] as acceptableAnswerType[];
+        const acceptableAnswers = [[{ grade: 'A', answer: 'a sonné' }]] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -226,7 +238,9 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo same-looking accent ê`, () => {
         const answer = `s’être levé`;
         const questionKind = `questionReponse` as const;
-        const acceptableAnswers = [{ grade: 'A', answer: "s'être levé" }] as acceptableAnswerType[];
+        const acceptableAnswers = [
+            [{ grade: 'A', answer: "s'être levé" }],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -241,7 +255,9 @@ describe(`computeAutomaticMark`, () => {
     it(`should return right for match modulo presence of period`, () => {
         const answer = "s'être levé.";
         const questionKind = `questionReponse` as const;
-        const acceptableAnswers = [{ grade: 'A', answer: "s'être levé" }] as acceptableAnswerType[];
+        const acceptableAnswers = [
+            [{ grade: 'A', answer: "s'être levé" }],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({
@@ -257,8 +273,8 @@ describe(`computeAutomaticMark`, () => {
         const answer = `it ’s still nice you can get on with an ex if boyfriend`;
         const questionKind = `questionReponse` as const;
         const acceptableAnswers = [
-            { grade: 'A', answer: "it 's still nice you can get on with an ex if boyfriend" },
-        ] as acceptableAnswerType[];
+            [{ grade: 'A', answer: "it 's still nice you can get on with an ex if boyfriend" }],
+        ] as acceptableAnswerType[][];
         const questionDto = { ...baseQuestionDto, kind: questionKind, acceptableAnswers };
 
         const { mark } = computeAutomaticMark({

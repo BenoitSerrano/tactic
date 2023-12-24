@@ -6,10 +6,10 @@ import { questionEncoder } from './questionEncoder';
 function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: acceptableAnswerType) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswer.answer);
-    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswers;
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswers[0];
 
     const alreadyPresentAcceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
-        ({ answer }) => answer === sanitizedAcceptableAnswer,
+        ({ answer }) => sanitizer.sanitizeString(answer) === sanitizedAcceptableAnswer,
     );
     if (alreadyPresentAcceptableAnswerIndex !== -1) {
         if (
@@ -20,7 +20,7 @@ function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: acc
                 `This answer ${sanitizedAcceptableAnswer} already exists for this grade (${acceptableAnswer.grade})`,
             );
         } else {
-            decodedQuestion.acceptableAnswers[alreadyPresentAcceptableAnswerIndex] = {
+            decodedQuestion.acceptableAnswers[0][alreadyPresentAcceptableAnswerIndex] = {
                 grade: acceptableAnswer.grade,
                 answer: sanitizedAcceptableAnswer,
             };
@@ -30,8 +30,10 @@ function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: acc
     }
 
     decodedQuestion.acceptableAnswers = [
-        ...decodedQuestion.acceptableAnswers,
-        { grade: acceptableAnswer.grade, answer: sanitizedAcceptableAnswer },
+        [
+            ...decodedQuestion.acceptableAnswers[0],
+            { grade: acceptableAnswer.grade, answer: sanitizedAcceptableAnswer },
+        ],
     ];
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

@@ -19,12 +19,14 @@ const questionRoutes: Array<routeType<any, any>> = [
             possibleAnswers: Joi.array().items(Joi.string().allow('')).required(),
             acceptableAnswers: Joi.array()
                 .items(
-                    Joi.object({
-                        answer: Joi.string().allow(''),
-                        grade: Joi.string()
-                            .required()
-                            .regex(/^[A-D]$/),
-                    }),
+                    Joi.array().items(
+                        Joi.object({
+                            answer: Joi.string().allow(''),
+                            grade: Joi.string()
+                                .required()
+                                .regex(/^[A-D]$/),
+                        }),
+                    ),
                 )
                 .required(),
             points: Joi.number().required(),
@@ -66,6 +68,27 @@ const questionRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'POST',
+        path: '/exams/:examId/questions/:questionId/acceptable-answers-to-tat',
+        isAuthenticated: true,
+        controller: questionController.addQuestionAcceptableAnswerToTexteATrous,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            blankIndex: Joi.number().required(),
+            acceptableAnswer: Joi.object({
+                answer: Joi.string().required(),
+                grade: Joi.string()
+                    .required()
+                    .regex(/^[A-D]$/),
+            }),
+        }),
+    },
+    {
+        method: 'POST',
         path: '/exams/:examId/exercises/:exerciseId/questions',
         isAuthenticated: true,
         controller: questionController.createQuestion,
@@ -81,12 +104,14 @@ const questionRoutes: Array<routeType<any, any>> = [
             possibleAnswers: Joi.array().items(Joi.string()),
             acceptableAnswers: Joi.array()
                 .items(
-                    Joi.object({
-                        answer: Joi.string().allow(''),
-                        grade: Joi.string()
-                            .required()
-                            .regex(/^[A-D]$/),
-                    }),
+                    Joi.array().items(
+                        Joi.object({
+                            answer: Joi.string().allow(''),
+                            grade: Joi.string()
+                                .required()
+                                .regex(/^[A-D]$/),
+                        }),
+                    ),
                 )
                 .required(),
             points: Joi.number(),

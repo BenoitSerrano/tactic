@@ -22,7 +22,7 @@ function computeCanAnswerBeAttributed(
 
     if (question.grade === 'A') {
         const isThereMoreThanOneRightAnswer =
-            question.acceptableAnswers.filter(({ grade }) => grade === 'A').length > 1;
+            question.acceptableAnswers[0].filter(({ grade }) => grade === 'A').length > 1;
 
         if (!isThereMoreThanOneRightAnswer) {
             return false;

@@ -25,25 +25,25 @@ function computeAutomaticMark({
             );
         }
         const mark = chunks.reduce((totalMark, word, index) => {
-            const { grade, answer: answerForBlank } = questionDto.acceptableAnswers[index];
-            const totalPointsPerBlank = questionDto.points / blankCount;
-            const markForBlank = convertGradeToMark(grade, totalPointsPerBlank);
-
-            if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answerForBlank)) {
-                return totalMark + markForBlank;
-            } else {
-                return totalMark;
+            for (const acceptableAnswerPerBlank of questionDto.acceptableAnswers[index]) {
+                const { grade, answer: answerForBlank } = acceptableAnswerPerBlank;
+                const totalPointsPerBlank = questionDto.points / blankCount;
+                const markForBlank = convertGradeToMark(grade, totalPointsPerBlank);
+                if (sanitizer.sanitizeString(word) === sanitizer.sanitizeString(answerForBlank)) {
+                    return totalMark + markForBlank;
+                }
             }
+            return totalMark;
         }, 0);
         return { mark };
     }
-    if (questionDto.acceptableAnswers.length === 0) {
+    if (questionDto.acceptableAnswers[0].length === 0) {
         throw new Error(`Cannot compute automatic mark for acceptableAnswers=[]`);
     }
     if (answer === undefined) {
         return { mark: 0, grade: 'E' };
     }
-    const matchingAcceptableAnswer = questionDto.acceptableAnswers.find(
+    const matchingAcceptableAnswer = questionDto.acceptableAnswers[0].find(
         (acceptableAnswer) =>
             sanitizer.sanitizeString(acceptableAnswer.answer) === sanitizer.sanitizeString(answer),
     );

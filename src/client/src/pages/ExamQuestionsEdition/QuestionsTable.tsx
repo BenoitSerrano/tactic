@@ -193,13 +193,13 @@ function QuestionsTable(props: {
                                                     question.possibleAnswers ? (
                                                         question.possibleAnswers[
                                                             Number(
-                                                                question.acceptableAnswers[0]
+                                                                question.acceptableAnswers[0][0]
                                                                     .answer,
                                                             )
                                                         ]
                                                     ) : (
                                                         <ul>
-                                                            {question.acceptableAnswers.map(
+                                                            {question.acceptableAnswers[0].map(
                                                                 (
                                                                     acceptableAnswer,
                                                                     index: number,

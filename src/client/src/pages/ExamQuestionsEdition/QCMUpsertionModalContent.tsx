@@ -7,14 +7,16 @@ import { QuestionInputContainer } from './QuestionInputContainer';
 function QCMUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswers: acceptableAnswerType[];
-    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[]) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     possibleAnswers: string[];
     setPossibleAnswers: (possibleAnswers: string[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const rightAnswer: string | undefined = props.acceptableAnswers[0]?.answer;
+    const rightAnswer: string | undefined = props.acceptableAnswers.length
+        ? props.acceptableAnswers[0][0].answer
+        : undefined;
     const canRemovePossibleAnswer = computeCanRemovePossibleAnswer();
     const isAddPossibleAnswerDisabled = computeIsAddPossibleAnswerDisabled();
     return (
@@ -35,7 +37,7 @@ function QCMUpsertionModalContent(props: {
                 <RadioGroup
                     value={rightAnswer}
                     onChange={(event) =>
-                        props.setAcceptableAnswers([{ answer: event.target.value, grade: 'A' }])
+                        props.setAcceptableAnswers([[{ answer: event.target.value, grade: 'A' }]])
                     }
                 >
                     {props.possibleAnswers.map(
@@ -108,7 +110,7 @@ function QCMUpsertionModalContent(props: {
                     props.setAcceptableAnswers([]);
                 } else if (index < Number(rightAnswer)) {
                     props.setAcceptableAnswers([
-                        { answer: `${Number(rightAnswer) - 1}`, grade: 'A' },
+                        [{ answer: `${Number(rightAnswer) - 1}`, grade: 'A' }],
                     ]);
                 }
             }

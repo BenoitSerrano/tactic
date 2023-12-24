@@ -6,7 +6,7 @@ function computeIsConfirmDisabled(
     params: {
         title: string;
         possibleAnswers: string[];
-        acceptableAnswers: acceptableAnswerType[];
+        acceptableAnswers: acceptableAnswerType[][];
     },
 ) {
     if (!params.title) {
@@ -17,7 +17,7 @@ function computeIsConfirmDisabled(
         return false;
     }
 
-    if (params.acceptableAnswers.length === 0) {
+    if (params.acceptableAnswers.length === 0 || params.acceptableAnswers[0].length === 0) {
         return true;
     }
     if (
@@ -28,7 +28,10 @@ function computeIsConfirmDisabled(
         return true;
     }
 
-    if (questionKind === 'phraseMelangee' && params.acceptableAnswers[0].answer === params.title) {
+    if (
+        questionKind === 'phraseMelangee' &&
+        params.acceptableAnswers[0][0].answer === params.title
+    ) {
         return true;
     }
 

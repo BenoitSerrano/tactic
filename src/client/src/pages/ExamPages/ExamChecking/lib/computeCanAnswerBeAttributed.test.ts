@@ -15,9 +15,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'C';
             const grade = 'E';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
             const question = {
                 ...baseQuestion,
                 grade: grade as gradeType,
@@ -33,9 +35,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'C';
             const grade = 'E';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -53,9 +57,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'C';
             const grade = 'C';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -72,9 +78,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'C';
             const grade = 'A';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'chouette' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'chouette' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -91,10 +99,12 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'C';
             const grade = 'A';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'A', answer: 'chouette' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'A', answer: 'chouette' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -112,9 +122,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'E';
             const grade = 'C';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'C', answer: 'chouette' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'C', answer: 'chouette' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -130,7 +142,9 @@ describe('computeCanAnswerBeAttributed', () => {
         it('should return false for wrong if answer status is wrong', () => {
             const newGrade = 'E';
             const grade = 'E';
-            const acceptableAnswers = [{ grade: 'A', answer: 'truc' }] as acceptableAnswerType[];
+            const acceptableAnswers = [
+                [{ grade: 'A', answer: 'truc' }],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -165,7 +179,7 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'E';
             const grade = 'E';
             const answer = '';
-            const acceptableAnswers: acceptableAnswerType[] = [{ grade: 'A', answer: 'truc' }];
+            const acceptableAnswers: acceptableAnswerType[][] = [[{ grade: 'A', answer: 'truc' }]];
 
             const question = {
                 ...baseQuestion,
@@ -182,9 +196,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'E';
             const grade = 'A';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'chouette' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'chouette' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -201,10 +217,12 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'E';
             const grade = 'A';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'A', answer: 'chouette' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'A', answer: 'chouette' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -223,9 +241,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'A';
             const grade = 'E';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -242,9 +262,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'A';
             const grade = 'E';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'C', answer: 'bidule' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'C', answer: 'bidule' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -262,9 +284,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'A';
             const grade = 'C';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'truc' },
-                { grade: 'C', answer: 'chouette' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'C', answer: 'chouette' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,
@@ -281,9 +305,11 @@ describe('computeCanAnswerBeAttributed', () => {
             const newGrade = 'A';
             const grade = 'A';
             const acceptableAnswers = [
-                { grade: 'A', answer: 'chouette' },
-                { grade: 'C', answer: 'machin' },
-            ] as acceptableAnswerType[];
+                [
+                    { grade: 'A', answer: 'chouette' },
+                    { grade: 'C', answer: 'machin' },
+                ],
+            ] as acceptableAnswerType[][];
 
             const question = {
                 ...baseQuestion,

@@ -18,36 +18,38 @@ describe('questionEncoder', () => {
             const decodedQuestion = questionEncoder.decodeQuestion(question);
 
             expect(decodedQuestion.acceptableAnswers).toEqual([
-                { grade: 'A', answer: 'sure' },
-                { grade: 'A', answer: 'certaine' },
-                { grade: 'B', answer: 'bof' },
+                [
+                    { grade: 'A', answer: 'sure' },
+                    { grade: 'A', answer: 'certaine' },
+                    { grade: 'B', answer: 'bof' },
+                ],
             ]);
         });
 
-        // it('should decode a texte à trous question', () => {
-        //     const question: Omit<Question, 'exercise'> = {
-        //         id: 1,
-        //         kind: 'texteATrous',
-        //         points: 2,
-        //         title: 'title',
-        //         order: 1,
-        //         possibleAnswers: [],
-        //         acceptableAnswers: ['2:bGE=|2:bGU=', '2:ZXN0|1.5:ZXQ='],
-        //     };
+        it('should decode a texte à trous question', () => {
+            const question: Omit<Question, 'exercise'> = {
+                id: 1,
+                kind: 'texteATrous',
+                points: 2,
+                title: 'title',
+                order: 1,
+                possibleAnswers: [],
+                acceptableAnswers: ['A:bGE=|A:bGU=', 'A:ZXN0|B:ZXQ='],
+            };
 
-        //     const decodedQuestion = questionEncoder.decodeQuestion(question);
+            const decodedQuestion = questionEncoder.decodeQuestion(question);
 
-        //     expect(decodedQuestion.acceptableAnswers).toEqual([
-        //         [
-        //             { points: 2, answer: 'la' },
-        //             { points: 2, answer: 'le' },
-        //         ],
-        //         [
-        //             { points: 2, answer: 'est' },
-        //             { points: 1.5, answer: 'et' },
-        //         ],
-        //     ]);
-        // });
+            expect(decodedQuestion.acceptableAnswers).toEqual([
+                [
+                    { grade: 'A', answer: 'la' },
+                    { grade: 'A', answer: 'le' },
+                ],
+                [
+                    { grade: 'A', answer: 'est' },
+                    { grade: 'B', answer: 'et' },
+                ],
+            ]);
+        });
     });
 
     describe('encode', () => {
@@ -60,9 +62,11 @@ describe('questionEncoder', () => {
                 order: 1,
                 possibleAnswers: ['A', 'B', 'C', 'D'],
                 acceptableAnswers: [
-                    { grade: 'A', answer: 'sure' },
-                    { grade: 'A', answer: 'certaine' },
-                    { grade: 'B', answer: 'bof' },
+                    [
+                        { grade: 'A', answer: 'sure' },
+                        { grade: 'A', answer: 'certaine' },
+                        { grade: 'B', answer: 'bof' },
+                    ],
                 ],
             };
 
@@ -75,29 +79,29 @@ describe('questionEncoder', () => {
             ]);
         });
 
-        // it('should encode a texteatrous question', () => {
-        //     const question: questionDtoType = {
-        //         id: 1,
-        //         kind: 'texteATrous',
-        //         points: 2,
-        //         title: 'title',
-        //         order: 1,
-        //         possibleAnswers: [],
-        //         acceptableAnswers: [
-        //             [
-        //                 { points: 2, answer: 'la' },
-        //                 { points: 2, answer: 'le' },
-        //             ],
-        //             [
-        //                 { points: 2, answer: 'est' },
-        //                 { points: 1.5, answer: 'et' },
-        //             ],
-        //         ],
-        //     };
+        it('should encode a texteatrous question', () => {
+            const question: questionDtoType = {
+                id: 1,
+                kind: 'texteATrous',
+                points: 2,
+                title: 'title',
+                order: 1,
+                possibleAnswers: [],
+                acceptableAnswers: [
+                    [
+                        { grade: 'A', answer: 'la' },
+                        { grade: 'A', answer: 'le' },
+                    ],
+                    [
+                        { grade: 'A', answer: 'est' },
+                        { grade: 'B', answer: 'et' },
+                    ],
+                ],
+            };
 
-        //     const decodedQuestion = questionEncoder.encodeQuestion(question);
+            const decodedQuestion = questionEncoder.encodeQuestion(question);
 
-        //     expect(decodedQuestion.acceptableAnswers).toEqual(['2:bGE=|2:bGU=', '2:ZXN0|1.5:ZXQ=']);
-        // });
+            expect(decodedQuestion.acceptableAnswers).toEqual(['A:bGE=|A:bGU=', 'A:ZXN0|B:ZXQ=']);
+        });
     });
 });
