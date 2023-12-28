@@ -1,12 +1,13 @@
 import { TEXTE_A_TROU_REGEX } from '../../../constants';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { sanitizer } from '../../../lib/sanitizer';
+import { gradeType } from '../../../types';
 import { answerStatusType, questionWithAnswersType } from '../types';
 import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
 
 type chunkType =
     | { kind: 'text'; value: string }
-    | { kind: 'coloredText'; value: string; status: answerStatusType };
+    | { kind: 'coloredText'; value: string; status: answerStatusType; grade: gradeType };
 type displayedAnswerType = { title: Array<chunkType>; answer: Array<chunkType> | undefined };
 
 function computeDisplayedAnswer(
@@ -18,7 +19,12 @@ function computeDisplayedAnswer(
             return {
                 title: [{ kind: 'text', value: question.title }],
                 answer: [
-                    { kind: 'coloredText', value: question.answer || '', status: answerStatus },
+                    {
+                        kind: 'coloredText',
+                        value: question.answer || '',
+                        status: answerStatus,
+                        grade: question.grade,
+                    },
                 ],
             };
         case 'texteATrous':
@@ -57,6 +63,7 @@ function computeDisplayedAnswer(
                     kind: 'coloredText',
                     value: answers[answerIndex] || '....',
                     status: blankStatus,
+                    grade: matchingAcceptableAnswer?.grade || 'E',
                 });
                 lastIndexFound = (value.value.index || 0) + 4;
                 value = tATRegexMatch.next();
@@ -70,14 +77,24 @@ function computeDisplayedAnswer(
             return {
                 title: [{ kind: 'text', value: question.title }],
                 answer: [
-                    { kind: 'coloredText', value: question.answer || '', status: answerStatus },
+                    {
+                        kind: 'coloredText',
+                        value: question.answer || '',
+                        status: answerStatus,
+                        grade: question.grade || 'E',
+                    },
                 ],
             };
         case 'phraseMelangee':
             return {
                 title: [{ kind: 'text', value: question.title }],
                 answer: [
-                    { kind: 'coloredText', value: question.answer || '', status: answerStatus },
+                    {
+                        kind: 'coloredText',
+                        value: question.answer || '',
+                        status: answerStatus,
+                        grade: question.grade,
+                    },
                 ],
             };
         case 'qcm':
@@ -90,6 +107,7 @@ function computeDisplayedAnswer(
                             ? question.possibleAnswers[Number(question.answer)]
                             : '',
                         status: answerStatus,
+                        grade: question.grade,
                     },
                 ],
             };

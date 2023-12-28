@@ -9,6 +9,7 @@ import { useAlert } from '../../../lib/alert';
 import { computeCanTexteATrousAnswerBeAttributed } from './lib/computeCanTexteATrousAnswerBeAttributed';
 import { computeIsTexteATrousUpdateAnswerButtonLoading } from './lib/computeIsTexteATrousUpdateAnswerButtonLoading';
 import { gradeType } from '../../../types';
+import { questionWithAnswersType } from '../types';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -24,7 +25,7 @@ const styledContainerMapping = {
 
 function TexteATrousChecking(props: {
     index: number;
-    questionId: number;
+    question: questionWithAnswersType;
     attemptId: string;
     examId: string;
     displayedAnswer: displayedAnswerType;
@@ -84,7 +85,22 @@ function TexteATrousChecking(props: {
                                 const { IconComponent, color, grade, name } =
                                     attributeGradeToAnswerAction;
 
-                                const isButtonDisabled = !computeCanTexteATrousAnswerBeAttributed();
+                                const chunk =
+                                    props.displayedAnswer.title[currentChunkMenu.chunkIndex];
+                                if (chunk.kind !== 'coloredText') {
+                                    return <div />;
+                                }
+
+                                const blankIndex = convertChunkIndexToBlankIndex(
+                                    currentChunkMenu.chunkIndex,
+                                );
+
+                                const isButtonDisabled = !computeCanTexteATrousAnswerBeAttributed(
+                                    grade,
+                                    chunk.grade,
+                                    blankIndex,
+                                    props.question,
+                                );
                                 const isButtonLoading =
                                     computeIsTexteATrousUpdateAnswerButtonLoading();
 
@@ -150,14 +166,14 @@ function TexteATrousChecking(props: {
             if (body.grade === 'E') {
                 removeOkAnswerFromTexteATrousMutation.mutate({
                     examId: props.examId,
-                    questionId: props.questionId,
+                    questionId: props.question.id,
                     okAnswer: answer,
                     blankIndex,
                 });
             } else {
                 addQuestionAcceptableAnswerToTexteATrousMutation.mutate({
                     examId: props.examId,
-                    questionId: props.questionId,
+                    questionId: props.question.id,
                     acceptableAnswer: { grade: body.grade, answer },
                     blankIndex,
                 });

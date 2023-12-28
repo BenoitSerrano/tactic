@@ -17,7 +17,7 @@ function QuestionChecking(props: {
         props.question.kind === 'texteATrous' ? TexteATrousChecking : DefaultQuestionChecking;
     return (
         <QuestionCheckingComponent
-            questionId={props.question.id}
+            question={props.question}
             attemptId={props.attemptId}
             examId={props.examId}
             canUpdateAnswers={props.canUpdateAnswers}
