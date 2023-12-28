@@ -215,6 +215,9 @@ function QuestionsChecking(props: {
                                         <Typography>{displayedMark}</Typography>
                                     </QuestionIndicatorsContainer>
                                     <QuestionChecking
+                                        attemptId={props.attemptId}
+                                        examId={props.examId}
+                                        canUpdateAnswers
                                         key={'question' + question.id}
                                         index={index + 1}
                                         question={question}

@@ -68,7 +68,7 @@ const questionRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'POST',
-        path: '/exams/:examId/questions/:questionId/acceptable-answers-to-tat',
+        path: '/exams/:examId/questions/:questionId/tat-acceptable-answers',
         isAuthenticated: true,
         controller: questionController.addQuestionAcceptableAnswerToTexteATrous,
         checkAuthorization: accessControlBuilder.hasAccessToResources([
@@ -140,9 +140,24 @@ const questionRoutes: Array<routeType<any, any>> = [
                 key: 'examId',
             },
         ]),
-        schema: Joi.object({ okAnswer: Joi.string() }),
+        schema: Joi.object({ okAnswer: Joi.string().required() }),
     },
-
+    {
+        method: 'DELETE',
+        path: '/exams/:examId/questions/:questionId/tat-ok-answers',
+        isAuthenticated: true,
+        controller: questionController.removeOkAnswerFromTexteATrous,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            okAnswer: Joi.string().required(),
+            blankIndex: Joi.number().required(),
+        }),
+    },
     {
         method: 'DELETE',
         path: `/exams/:examId/questions/:questionId`,

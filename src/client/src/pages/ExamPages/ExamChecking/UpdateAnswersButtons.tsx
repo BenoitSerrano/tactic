@@ -1,57 +1,14 @@
 import { IconButton, Tooltip, styled } from '@mui/material';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
 import { amendableQuestionWithAnswersType } from '../types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
-import { ElementType } from 'react';
+
 import { Loader } from '../../../components/Loader';
 import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerButtonLoading';
 import { gradeType } from '../../../types';
-
-type attributeMarkToAnswerActionType = {
-    name: string;
-    grade: gradeType;
-    IconComponent: ElementType;
-    color: 'success' | 'error' | 'warning';
-};
-const attributeMarkToAnswerActions: attributeMarkToAnswerActionType[] = [
-    {
-        name: 'fausse',
-        grade: 'E',
-        IconComponent: ClearIcon,
-        color: 'error',
-    },
-    {
-        name: 'passable',
-        grade: 'D',
-        IconComponent: SentimentVeryDissatisfiedIcon,
-        color: 'warning',
-    },
-    {
-        name: 'moyenne',
-        grade: 'C',
-        IconComponent: SentimentNeutralIcon,
-        color: 'warning',
-    },
-    {
-        name: 'acceptable',
-        grade: 'B',
-        IconComponent: SentimentSatisfiedAltIcon,
-        color: 'warning',
-    },
-    {
-        name: 'correcte',
-        grade: 'A',
-        IconComponent: CheckIcon,
-        color: 'success',
-    },
-];
+import { attributeGradeToAnswerActions } from './constants';
 
 function UpdateAnswersButtons(props: {
     canCorrectAttempt: boolean;
@@ -107,7 +64,7 @@ function UpdateAnswersButtons(props: {
 
     return (
         <UpdateAnswersButtonContainer>
-            {attributeMarkToAnswerActions.map((attributeMarkToAnswerAction) => {
+            {attributeGradeToAnswerActions.map((attributeMarkToAnswerAction) => {
                 const { color, IconComponent, grade, name } = attributeMarkToAnswerAction;
                 const canAnswerBeAttributedMark = computeCanAnswerBeAttributed(
                     grade,

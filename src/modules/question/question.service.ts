@@ -7,6 +7,8 @@ import { questionEncoder } from './lib/questionEncoder';
 import { addAcceptableAnswerToQuestion } from './lib/addAcceptableAnswerToQuestion';
 import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
 import { acceptableAnswerType, questionDtoType } from './types';
+import { addAcceptableAnswerToTexteATrousQuestion } from './lib/addAcceptableAnswerToTexteATrousQuestion';
+import { removeOkAnswerFromQuestionFromTexteATrousQuestion } from './lib/removeOkAnswerFromQuestionFromTexteATrousQuestion';
 
 export { buildQuestionService };
 
@@ -18,6 +20,7 @@ function buildQuestionService() {
         addQuestionAcceptableAnswer,
         addQuestionAcceptableAnswerToTexteATrous,
         removeOkAnswer,
+        removeOkAnswerFromTexteATrous,
         getQuestions,
         deleteQuestion,
         updateQuestionsOrder,
@@ -115,8 +118,7 @@ function buildQuestionService() {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
-        throw new Error(`Not yet implemented`);
-        const updatedQuestion = addAcceptableAnswerToQuestion(question, body.acceptableAnswer);
+        const updatedQuestion = addAcceptableAnswerToTexteATrousQuestion(question, body);
         await questionRepository.save(updatedQuestion);
         return true;
     }
@@ -131,6 +133,20 @@ function buildQuestionService() {
             where: { id: criteria.questionId },
         });
         const updatedQuestion = removeOkAnswerFromQuestion(question, okAnswer);
+        await questionRepository.save(updatedQuestion);
+        return true;
+    }
+
+    async function removeOkAnswerFromTexteATrous(
+        criteria: {
+            questionId: Question['id'];
+        },
+        body: { okAnswer: string; blankIndex: number },
+    ) {
+        const question = await questionRepository.findOneOrFail({
+            where: { id: criteria.questionId },
+        });
+        const updatedQuestion = removeOkAnswerFromQuestionFromTexteATrousQuestion(question, body);
         await questionRepository.save(updatedQuestion);
         return true;
     }

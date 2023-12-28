@@ -13,6 +13,7 @@ function buildQuestionController() {
         addQuestionAcceptableAnswer,
         addQuestionAcceptableAnswerToTexteATrous,
         removeOkAnswer,
+        removeOkAnswerFromTexteATrous,
         deleteQuestion,
         updateQuestionsOrder,
     };
@@ -82,6 +83,18 @@ function buildQuestionController() {
                 questionId: Number(params.urlParams.questionId),
             },
             params.body.okAnswer,
+        );
+    }
+
+    async function removeOkAnswerFromTexteATrous(params: {
+        urlParams: { questionId: string };
+        body: { okAnswer: string; blankIndex: number };
+    }) {
+        return questionService.removeOkAnswerFromTexteATrous(
+            {
+                questionId: Number(params.urlParams.questionId),
+            },
+            params.body,
         );
     }
 

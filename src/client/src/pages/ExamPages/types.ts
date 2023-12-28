@@ -95,6 +95,7 @@ type attemptAnswersType = Record<number, string>;
 type answerStatusType = 'wrong' | 'acceptable' | 'right' | undefined;
 
 export type {
+    examWithAnswersType,
     attemptAnswersType,
     attemptWithAnswersApiType,
     exerciseWithAnswersType,

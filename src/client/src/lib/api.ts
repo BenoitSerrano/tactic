@@ -30,7 +30,9 @@ const api = {
     deleteExercise,
     updateQuestion,
     addQuestionAcceptableAnswer,
+    addQuestionAcceptableAnswerToTexteATrous,
     removeOkAnswer,
+    removeOkAnswerFromTexteATrous,
     deleteQuestion,
     duplicateQuestion,
     updateQuestionsOrder,
@@ -136,6 +138,22 @@ async function addQuestionAcceptableAnswer({
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
+async function addQuestionAcceptableAnswerToTexteATrous({
+    examId,
+    questionId,
+    acceptableAnswer,
+    blankIndex,
+}: {
+    examId: string;
+    questionId: number;
+    acceptableAnswer: acceptableAnswerType;
+    blankIndex: number;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-acceptable-answers`;
+    return performApiCall(URL, 'POST', { acceptableAnswer, blankIndex });
+}
+
+// TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
 async function removeOkAnswer({
     examId,
     questionId,
@@ -147,6 +165,21 @@ async function removeOkAnswer({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/ok-answers`;
     return performApiCall(URL, 'DELETE', { okAnswer });
+}
+
+async function removeOkAnswerFromTexteATrous({
+    examId,
+    questionId,
+    okAnswer,
+    blankIndex,
+}: {
+    examId: string;
+    questionId: number;
+    okAnswer: string;
+    blankIndex: number;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-ok-answers`;
+    return performApiCall(URL, 'DELETE', { okAnswer, blankIndex });
 }
 
 async function updateAttempt({

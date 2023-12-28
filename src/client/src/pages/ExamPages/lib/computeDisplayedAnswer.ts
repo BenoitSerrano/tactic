@@ -92,3 +92,4 @@ function computeDisplayedAnswer(
 }
 
 export { computeDisplayedAnswer };
+export type { displayedAnswerType };
