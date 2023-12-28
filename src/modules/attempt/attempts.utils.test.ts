@@ -34,13 +34,13 @@ describe('attemptsUtils', () => {
     });
 
     describe('convertAnswersToMarks', () => {
-        describe('decodeMarks', () => {
-            it('should decode marks', () => {
-                const str = ['131:1', '132:1', '133:3'];
+        describe('decodeGrades', () => {
+            it('should decode grades', () => {
+                const str = ['131:B', '132:B', '133:A'];
 
-                const marks = attemptUtils.decodeMarks(str);
+                const marks = attemptUtils.decodeGrades(str);
 
-                expect(marks).toEqual({ 131: 1, 132: 1, 133: 3 });
+                expect(marks).toEqual({ 131: 'B', 132: 'B', 133: 'A' });
             });
         });
     });

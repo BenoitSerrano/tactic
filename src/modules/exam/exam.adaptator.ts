@@ -28,13 +28,18 @@ function convertExamWithAttemptsToResults(
             ? Math.floor((new Date(attempt.updatedAt).getTime() - startedAtDate.getTime()) / 1000)
             : undefined;
         const answers = attemptUtils.parseAnswers(attempt.answers);
-        const marks = attemptUtils.aggregateMarks({
-            answers,
-            marksArray: attempt.marks,
-            questions: Object.values(exam.questions),
-        });
+        const totalMark = Object.values(exam.questions)
+            .map((question) => {
+                const { mark } = attemptUtils.computeNotationInfo({
+                    answers,
+                    gradesArray: attempt.manualGrades,
+                    question,
+                });
+                return mark || 0;
+            })
+            .reduce((sum, mark) => sum + mark, 0);
+
         const { extraTime, duration } = exam;
-        const totalMark = Object.values(marks).reduce((sum, mark) => (sum || 0) + (mark || 0), 0);
         const isTimeLimitExceeded = attemptUtils.computeIsTimeLimitExceeded({
             startedAt: attempt.startedAt,
             extraTime,

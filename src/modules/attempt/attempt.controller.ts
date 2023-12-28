@@ -1,3 +1,4 @@
+import { gradeType } from '../question/types';
 import { buildAttemptService } from './attempt.service';
 import { attemptAnswersType } from './types';
 
@@ -14,7 +15,7 @@ function buildAttemptController() {
         fetchAttemptWithoutAnswers,
         deleteAttempt,
         updateAttemptCheatingSummary,
-        updateMark,
+        updateGrade,
         updateAttemptEndedAt,
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
@@ -55,14 +56,14 @@ function buildAttemptController() {
         return attemptService.deleteAttempt(params.urlParams.attemptId);
     }
 
-    async function updateMark(params: {
+    async function updateGrade(params: {
         urlParams: { attemptId: string; questionId: string };
-        body: { mark: number };
+        body: { grade: gradeType };
     }) {
-        return attemptService.updateMark(
+        return attemptService.updateGrade(
             params.urlParams.attemptId,
             Number(params.urlParams.questionId),
-            params.body.mark,
+            params.body.grade,
         );
     }
 

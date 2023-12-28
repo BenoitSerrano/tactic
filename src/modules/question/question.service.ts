@@ -6,7 +6,9 @@ import { Exercise, buildExerciseService } from '../exercise';
 import { questionEncoder } from './lib/questionEncoder';
 import { addAcceptableAnswerToQuestion } from './lib/addAcceptableAnswerToQuestion';
 import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
-import { acceptableAnswerWithPointsType, questionDtoType } from './types';
+import { acceptableAnswerType, questionDtoType } from './types';
+import { addAcceptableAnswerToTexteATrousQuestion } from './lib/addAcceptableAnswerToTexteATrousQuestion';
+import { removeOkAnswerFromQuestionFromTexteATrousQuestion } from './lib/removeOkAnswerFromQuestionFromTexteATrousQuestion';
 
 export { buildQuestionService };
 
@@ -16,7 +18,9 @@ function buildQuestionService() {
         createQuestion,
         updateQuestion,
         addQuestionAcceptableAnswer,
+        addQuestionAcceptableAnswerToTexteATrous,
         removeOkAnswer,
+        removeOkAnswerFromTexteATrous,
         getQuestions,
         deleteQuestion,
         updateQuestionsOrder,
@@ -33,7 +37,7 @@ function buildQuestionService() {
         exerciseId: Exercise['id'],
         body: Pick<
             questionDtoType,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswers'
         >,
     ) {
         const exerciseService = buildExerciseService();
@@ -52,7 +56,7 @@ function buildQuestionService() {
         return questionRepository.save(
             questionEncoder.encodeQuestion({
                 ...question,
-                acceptableAnswersWithPoints: body.acceptableAnswersWithPoints,
+                acceptableAnswers: body.acceptableAnswers,
             }),
         );
     }
@@ -73,10 +77,7 @@ function buildQuestionService() {
 
     async function updateQuestion(
         criteria: { exerciseId: Exercise['id']; questionId: Question['id'] },
-        body: Pick<
-            questionDtoType,
-            'title' | 'points' | 'possibleAnswers' | 'acceptableAnswersWithPoints'
-        >,
+        body: Pick<questionDtoType, 'title' | 'points' | 'possibleAnswers' | 'acceptableAnswers'>,
     ) {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId, exercise: { id: criteria.exerciseId } },
@@ -89,7 +90,7 @@ function buildQuestionService() {
         return questionRepository.save(
             questionEncoder.encodeQuestion({
                 ...question,
-                acceptableAnswersWithPoints: body.acceptableAnswersWithPoints,
+                acceptableAnswers: body.acceptableAnswers,
             }),
         );
     }
@@ -98,15 +99,26 @@ function buildQuestionService() {
         criteria: {
             questionId: Question['id'];
         },
-        body: { acceptableAnswerWithPoints: acceptableAnswerWithPointsType },
+        body: { acceptableAnswer: acceptableAnswerType },
     ) {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
-        const updatedQuestion = addAcceptableAnswerToQuestion(
-            question,
-            body.acceptableAnswerWithPoints,
-        );
+        const updatedQuestion = addAcceptableAnswerToQuestion(question, body.acceptableAnswer);
+        await questionRepository.save(updatedQuestion);
+        return true;
+    }
+
+    async function addQuestionAcceptableAnswerToTexteATrous(
+        criteria: {
+            questionId: Question['id'];
+        },
+        body: { blankIndex: number; acceptableAnswer: acceptableAnswerType },
+    ) {
+        const question = await questionRepository.findOneOrFail({
+            where: { id: criteria.questionId },
+        });
+        const updatedQuestion = addAcceptableAnswerToTexteATrousQuestion(question, body);
         await questionRepository.save(updatedQuestion);
         return true;
     }
@@ -121,6 +133,20 @@ function buildQuestionService() {
             where: { id: criteria.questionId },
         });
         const updatedQuestion = removeOkAnswerFromQuestion(question, okAnswer);
+        await questionRepository.save(updatedQuestion);
+        return true;
+    }
+
+    async function removeOkAnswerFromTexteATrous(
+        criteria: {
+            questionId: Question['id'];
+        },
+        body: { okAnswer: string; blankIndex: number },
+    ) {
+        const question = await questionRepository.findOneOrFail({
+            where: { id: criteria.questionId },
+        });
+        const updatedQuestion = removeOkAnswerFromQuestionFromTexteATrousQuestion(question, body);
         await questionRepository.save(updatedQuestion);
         return true;
     }

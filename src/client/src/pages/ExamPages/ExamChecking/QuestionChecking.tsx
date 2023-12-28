@@ -1,59 +1,30 @@
-import { Typography, styled } from '@mui/material';
 import { answerStatusType, questionWithAnswersType } from '../types';
 import { computeDisplayedAnswer } from '../lib/computeDisplayedAnswer';
-
-const styledContainerMapping = {
-    right: styled('span')(({ theme }) => ({ color: theme.palette.success.main })),
-    acceptable: styled('span')(({ theme }) => ({ color: theme.palette.warning.main })),
-    wrong: styled('span')(({ theme }) => ({ color: theme.palette.error.main })),
-};
+import { TexteATrousChecking } from './TexteATrousChecking';
+import { DefaultQuestionChecking } from './DefaultQuestionChecking';
 
 function QuestionChecking(props: {
+    attemptId: string;
+    examId: string;
     question: questionWithAnswersType;
     index: number;
     answerStatus: answerStatusType;
+    canUpdateAnswers: boolean;
 }) {
     const displayedAnswer = computeDisplayedAnswer(props.question, props.answerStatus);
 
+    const QuestionCheckingComponent =
+        props.question.kind === 'texteATrous' ? TexteATrousChecking : DefaultQuestionChecking;
     return (
-        <Container>
-            <Title>
-                {props.index}.{' '}
-                {displayedAnswer.title.map((chunk) => {
-                    switch (chunk.kind) {
-                        case 'text':
-                            return <span>{chunk.value}</span>;
-                        case 'coloredText':
-                            const StyledComponent = styledContainerMapping[chunk.status || 'wrong'];
-                            return <StyledComponent> {chunk.value} </StyledComponent>;
-                        default:
-                            return <span />;
-                    }
-                })}
-            </Title>
-            {!!displayedAnswer.answer && (
-                <Typography>
-                    Réponse :{' '}
-                    {displayedAnswer.answer.map((chunk) => {
-                        switch (chunk.kind) {
-                            case 'text':
-                                return <span>{chunk.value}</span>;
-                            case 'coloredText':
-                                const StyledComponent =
-                                    styledContainerMapping[chunk.status || 'wrong'];
-                                return <StyledComponent> {chunk.value} </StyledComponent>;
-                            default:
-                                return <span />;
-                        }
-                    })}
-                </Typography>
-            )}
-        </Container>
+        <QuestionCheckingComponent
+            question={props.question}
+            attemptId={props.attemptId}
+            examId={props.examId}
+            canUpdateAnswers={props.canUpdateAnswers}
+            index={props.index}
+            displayedAnswer={displayedAnswer}
+        />
     );
 }
-
-const Title = styled(Typography)(({ theme }) => ({ fontWeight: 'bold' }));
-
-const Container = styled('div')({ display: 'flex', flexDirection: 'column' });
 
 export { QuestionChecking };

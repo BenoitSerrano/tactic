@@ -1,13 +1,14 @@
+import { gradeType } from '../../../types';
 import { answerStatusType } from '../types';
 
-function computeAnswerStatus(mark: number | undefined, points: number): answerStatusType {
-    if (mark === undefined) {
+function computeAnswerStatus(grade: gradeType | undefined): answerStatusType {
+    if (grade === undefined) {
         return undefined;
     }
-    if (!mark) {
+    if (grade === 'E') {
         return 'wrong';
     }
-    if (mark === points) {
+    if (grade === 'A') {
         return 'right';
     }
     return 'acceptable';

@@ -1,3 +1,4 @@
+import { gradeType } from '../../../types';
 import { computeDisplayedAnswer } from './computeDisplayedAnswer';
 
 describe('computeDisplayedAnswer', () => {
@@ -8,9 +9,9 @@ describe('computeDisplayedAnswer', () => {
                 title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                 kind: 'questionReponse' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'Non, pas vraiment' }],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'Non, pas vraiment' }]],
                 answer: '',
-                mark: 2,
+                grade: 'E' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -22,7 +23,7 @@ describe('computeDisplayedAnswer', () => {
                         value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                     },
                 ],
-                answer: [{ kind: 'coloredText', value: '', status: 'wrong' }],
+                answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: 'E' }],
             });
         });
         it('should return the completed title with color', () => {
@@ -31,10 +32,9 @@ describe('computeDisplayedAnswer', () => {
                 title: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                 kind: 'questionReponse' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'Oui !' }],
-                acceptableAnswers: [],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'Oui !' }]],
                 answer: 'Oui !',
-                mark: 2,
+                grade: 'A' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'right');
@@ -46,7 +46,7 @@ describe('computeDisplayedAnswer', () => {
                         value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                     },
                 ],
-                answer: [{ kind: 'coloredText', value: 'Oui !', status: 'right' }],
+                answer: [{ kind: 'coloredText', value: 'Oui !', status: 'right', grade: 'A' }],
             });
         });
     });
@@ -58,12 +58,12 @@ describe('computeDisplayedAnswer', () => {
                 title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                acceptableAnswers: [
+                    [{ grade: 'A' as gradeType, answer: 'des' }],
+                    [{ grade: 'A' as gradeType, answer: 'une' }],
+                    [{ grade: 'A' as gradeType, answer: 'ses' }],
+                    [{ grade: 'A' as gradeType, answer: 'sa' }],
+                    [{ grade: 'A' as gradeType, answer: 'son' }],
                 ],
                 answer: '',
                 mark: 2,
@@ -74,15 +74,55 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
+                    { kind: 'text', value: 'sourire?' },
+                ],
+                answer: undefined,
+            });
+        });
+
+        it('should return the title if one answer is acceptable', () => {
+            const question = {
+                id: 2,
+                title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
+                kind: 'texteATrous' as const,
+                possibleAnswers: [],
+                acceptableAnswers: [
+                    [{ grade: 'A' as gradeType, answer: 'des' }],
+                    [{ grade: 'A' as gradeType, answer: 'une' }],
+                    [{ grade: 'A' as gradeType, answer: 'ses' }],
+                    [
+                        { grade: 'A' as gradeType, answer: 'sa' },
+                        { grade: 'C' as gradeType, answer: 'sah' },
+                    ],
+                    [{ grade: 'A' as gradeType, answer: 'son' }],
+                ],
+                answer: 'des|une|ses|sah|son',
+                mark: 2,
+                points: 2,
+            };
+            const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
+
+            expect(displayedAnswer).toEqual({
+                title: [
+                    { kind: 'text', value: 'Portez-vous' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
+                    { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
+                    { kind: 'coloredText', value: 'une', status: 'right', grade: 'A' },
+                    { kind: 'text', value: 'personne, vous remarquez en premier :' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
+                    { kind: 'text', value: 'yeux,' },
+                    { kind: 'coloredText', value: 'sah', status: 'acceptable', grade: 'C' },
+                    { kind: 'text', value: 'silhouette,' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -95,12 +135,12 @@ describe('computeDisplayedAnswer', () => {
                 title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                acceptableAnswers: [
+                    [{ grade: 'A' as gradeType, answer: 'des' }],
+                    [{ grade: 'A' as gradeType, answer: 'une' }],
+                    [{ grade: 'A' as gradeType, answer: 'ses' }],
+                    [{ grade: 'A' as gradeType, answer: 'sa' }],
+                    [{ grade: 'A' as gradeType, answer: 'son' }],
                 ],
                 answer: 'des|une|ses|sa|son',
                 mark: 2,
@@ -111,15 +151,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: 'une', status: 'right' },
+                    { kind: 'coloredText', value: 'une', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: 'sa', status: 'right' },
+                    { kind: 'coloredText', value: 'sa', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -132,12 +172,12 @@ describe('computeDisplayedAnswer', () => {
                 title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                acceptableAnswers: [
+                    [{ grade: 'A' as gradeType, answer: 'des' }],
+                    [{ grade: 'A' as gradeType, answer: 'une' }],
+                    [{ grade: 'A' as gradeType, answer: 'ses' }],
+                    [{ grade: 'A' as gradeType, answer: 'sa' }],
+                    [{ grade: 'A' as gradeType, answer: 'son' }],
                 ],
                 answer: 'des|truc|ses|sa|son',
                 mark: 2,
@@ -148,15 +188,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: 'truc', status: 'wrong' },
+                    { kind: 'coloredText', value: 'truc', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: 'sa', status: 'right' },
+                    { kind: 'coloredText', value: 'sa', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -169,12 +209,12 @@ describe('computeDisplayedAnswer', () => {
                 title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [
-                    { points: 0.4, answer: 'des' },
-                    { points: 0.4, answer: 'une' },
-                    { points: 0.4, answer: 'ses' },
-                    { points: 0.4, answer: 'sa' },
-                    { points: 0.4, answer: 'son' },
+                acceptableAnswers: [
+                    [{ grade: 'A' as gradeType, answer: 'des' }],
+                    [{ grade: 'A' as gradeType, answer: 'une' }],
+                    [{ grade: 'A' as gradeType, answer: 'ses' }],
+                    [{ grade: 'A' as gradeType, answer: 'sa' }],
+                    [{ grade: 'A' as gradeType, answer: 'son' }],
                 ],
                 answer: 'des||ses|sa|son',
                 mark: 2,
@@ -185,15 +225,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: 'sa', status: 'right' },
+                    { kind: 'coloredText', value: 'sa', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -208,16 +248,17 @@ describe('computeDisplayedAnswer', () => {
                 title: 'Texte libre ?',
                 kind: 'texteLibre' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [],
+                acceptableAnswers: [],
                 answer: undefined,
-                mark: 0,
+                grade: undefined as any,
+                mark: undefined,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
 
             expect(displayedAnswer).toEqual({
                 title: [{ kind: 'text', value: 'Texte libre ?' }],
-                answer: [{ kind: 'coloredText', value: '', status: 'wrong' }],
+                answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: 'E' }],
             });
         });
 
@@ -227,9 +268,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'Texte libre ?',
                 kind: 'texteLibre' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [],
+                acceptableAnswers: [],
                 answer: "Youpi j'ai une assez bonne note",
-                mark: 1,
+                grade: 'C' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'acceptable');
@@ -241,6 +282,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: "Youpi j'ai une assez bonne note",
                         status: 'acceptable',
+                        grade: 'C',
                     },
                 ],
             });
@@ -253,9 +295,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'est la vie belle',
                 kind: 'phraseMelangee' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'la vie est belle' }],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'la vie est belle' }]],
                 answer: '',
-                mark: 0,
+                grade: 'E' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -267,6 +309,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: '',
                         status: 'wrong',
+                        grade: 'E',
                     },
                 ],
             });
@@ -277,9 +320,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'est la vie belle',
                 kind: 'phraseMelangee' as const,
                 possibleAnswers: [],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'la vie est belle' }],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'la vie est belle' }]],
                 answer: 'la vie est belle',
-                mark: 2,
+                grade: 'A' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'right');
@@ -291,6 +334,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: 'la vie est belle',
                         status: 'right',
+                        grade: 'A',
                     },
                 ],
             });
@@ -303,9 +347,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'la couleur de mes yeux ?',
                 kind: 'qcm' as const,
                 possibleAnswers: ['rouge', 'bleu', 'vert', 'noir'],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'bleu' }],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'bleu' }]],
                 answer: undefined,
-                mark: 0,
+                grade: 'E' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -317,6 +361,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: '',
                         status: 'wrong',
+                        grade: 'E',
                     },
                 ],
             });
@@ -327,9 +372,9 @@ describe('computeDisplayedAnswer', () => {
                 title: 'la couleur de mes yeux ?',
                 kind: 'qcm' as const,
                 possibleAnswers: ['rouge', 'bleu', 'vert', 'noir'],
-                acceptableAnswersWithPoints: [{ points: 2, answer: 'bleu' }],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'bleu' }]],
                 answer: '1',
-                mark: 2,
+                grade: 'A' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'right');
@@ -341,6 +386,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: 'bleu',
                         status: 'right',
+                        grade: 'A',
                     },
                 ],
             });

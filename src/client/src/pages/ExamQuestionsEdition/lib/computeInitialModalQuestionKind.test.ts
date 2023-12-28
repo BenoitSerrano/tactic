@@ -18,7 +18,7 @@ describe('computeInitialModalQuestionKind', () => {
             kind: 'qcm' as const,
             title: 'title',
             points: 2,
-            acceptableAnswersWithPoints: [{ points: 2, answer: '2' }],
+            acceptableAnswers: [[{ grade: 'A' as const, answer: '2' }]],
             possibleAnswers: ['bleu', 'vert', 'jaune', 'gris'],
         };
         const modalStatus = { kind: 'editing' as const, question: questionWithAnswers };

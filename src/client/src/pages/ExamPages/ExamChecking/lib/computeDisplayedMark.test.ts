@@ -1,31 +1,32 @@
+import { gradeType } from '../../../../types';
 import { computeDisplayedMark } from './computeDisplayedMark';
 
 describe('computeDisplayedMark', () => {
     const totalPoints = 1;
-    it('should return the mark for automatic questions even if answer not filled', () => {
+    it('should return the grade for automatic questions even if answer not filled', () => {
         const answer = undefined;
-        const mark = 0;
-        const isQuestionManuallyCorrected = false;
+        const grade = 'E' as gradeType;
+        const mark = undefined;
 
         const displayedMark = computeDisplayedMark({
-            mark,
+            grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 
         expect(displayedMark).toBe(`0 / 1`);
     });
 
-    it('should return the mark for automatic questions if answer filled', () => {
+    it('should return the grade for automatic questions if answer filled', () => {
         const answer = 'truc';
-        const mark = 1;
-        const isQuestionManuallyCorrected = false;
+        const grade = 'A' as gradeType;
+        const mark = undefined;
 
         const displayedMark = computeDisplayedMark({
-            mark,
+            grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 
@@ -34,28 +35,28 @@ describe('computeDisplayedMark', () => {
 
     it('should display a default 0 for manual questions if answer not filled', () => {
         const answer = undefined;
+        const grade = undefined;
         const mark = undefined;
-        const isQuestionManuallyCorrected = true;
 
         const displayedMark = computeDisplayedMark({
-            mark,
+            grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 
         expect(displayedMark).toBe(`0 / 1`);
     });
 
-    it('should display ... for manual questions if answer filled but mark not yet attributed', () => {
+    it('should display ... for manual questions if answer filled but grade not yet attributed', () => {
         const answer = 'truc';
+        const grade = undefined;
         const mark = undefined;
-        const isQuestionManuallyCorrected = true;
 
         const displayedMark = computeDisplayedMark({
-            mark,
+            grade,
             answer,
-            isQuestionManuallyCorrected,
+            mark,
             totalPoints,
         });
 

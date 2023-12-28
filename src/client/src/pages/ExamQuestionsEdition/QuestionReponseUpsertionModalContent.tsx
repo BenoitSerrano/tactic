@@ -1,27 +1,28 @@
 import { TextField } from '@mui/material';
 import { ChangeEvent } from 'react';
 import { SPLITTING_CHARACTER_FOR_ANSWERS } from './constants';
-import { acceptableAnswerWithPointsType } from '../../types';
+import { acceptableAnswerType } from '../../types';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
 function QuestionReponseUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
-    setAcceptableAnswersWithPoints: (
-        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
-    ) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const rightAnswers = props.acceptableAnswersWithPoints
-        .map(({ answer }) => answer)
-        .join(SPLITTING_CHARACTER_FOR_ANSWERS);
+    const rightAnswers = props.acceptableAnswers.length
+        ? props.acceptableAnswers[0]
+              .map(({ answer }) => answer)
+              .join(SPLITTING_CHARACTER_FOR_ANSWERS)
+        : '';
 
     return (
         <>
             <QuestionInputContainer title="Question à laquelle doit répondre l'élève">
                 <TextField
+                    autoFocus
                     fullWidth
                     label="Intitulé"
                     value={props.title}
@@ -55,8 +56,8 @@ function QuestionReponseUpsertionModalContent(props: {
     function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
         const newAcceptableAnswerWithPoints = event.target.value
             .split(SPLITTING_CHARACTER_FOR_ANSWERS)
-            .map((answer) => ({ answer, points: Number(props.points) }));
-        props.setAcceptableAnswersWithPoints(newAcceptableAnswerWithPoints);
+            .map((answer) => ({ answer, grade: 'A' as const }));
+        props.setAcceptableAnswers([newAcceptableAnswerWithPoints]);
     }
 }
 

@@ -17,9 +17,16 @@ const questionRoutes: Array<routeType<any, any>> = [
         schema: Joi.object({
             title: Joi.string().required(),
             possibleAnswers: Joi.array().items(Joi.string().allow('')).required(),
-            acceptableAnswersWithPoints: Joi.array()
+            acceptableAnswers: Joi.array()
                 .items(
-                    Joi.object({ answer: Joi.string().allow(''), points: Joi.number().required() }),
+                    Joi.array().items(
+                        Joi.object({
+                            answer: Joi.string().allow(''),
+                            grade: Joi.string()
+                                .required()
+                                .regex(/^[A-D]$/),
+                        }),
+                    ),
                 )
                 .required(),
             points: Joi.number().required(),
@@ -51,9 +58,32 @@ const questionRoutes: Array<routeType<any, any>> = [
             },
         ]),
         schema: Joi.object({
-            acceptableAnswerWithPoints: Joi.object({
+            acceptableAnswer: Joi.object({
                 answer: Joi.string().required(),
-                points: Joi.number().required(),
+                grade: Joi.string()
+                    .required()
+                    .regex(/^[A-D]$/),
+            }),
+        }),
+    },
+    {
+        method: 'POST',
+        path: '/exams/:examId/questions/:questionId/tat-acceptable-answers',
+        isAuthenticated: true,
+        controller: questionController.addQuestionAcceptableAnswerToTexteATrous,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            blankIndex: Joi.number().required(),
+            acceptableAnswer: Joi.object({
+                answer: Joi.string().required(),
+                grade: Joi.string()
+                    .required()
+                    .regex(/^[A-D]$/),
             }),
         }),
     },
@@ -72,9 +102,16 @@ const questionRoutes: Array<routeType<any, any>> = [
             title: Joi.string().allow(''),
             kind: Joi.string().valid(...questionKinds),
             possibleAnswers: Joi.array().items(Joi.string()),
-            acceptableAnswersWithPoints: Joi.array()
+            acceptableAnswers: Joi.array()
                 .items(
-                    Joi.object({ answer: Joi.string().allow(''), points: Joi.number().required() }),
+                    Joi.array().items(
+                        Joi.object({
+                            answer: Joi.string().allow(''),
+                            grade: Joi.string()
+                                .required()
+                                .regex(/^[A-D]$/),
+                        }),
+                    ),
                 )
                 .required(),
             points: Joi.number(),
@@ -103,9 +140,24 @@ const questionRoutes: Array<routeType<any, any>> = [
                 key: 'examId',
             },
         ]),
-        schema: Joi.object({ okAnswer: Joi.string() }),
+        schema: Joi.object({ okAnswer: Joi.string().required() }),
     },
-
+    {
+        method: 'DELETE',
+        path: '/exams/:examId/questions/:questionId/tat-ok-answers',
+        isAuthenticated: true,
+        controller: questionController.removeOkAnswerFromTexteATrous,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            okAnswer: Joi.string().required(),
+            blankIndex: Joi.number().required(),
+        }),
+    },
     {
         method: 'DELETE',
         path: `/exams/:examId/questions/:questionId`,

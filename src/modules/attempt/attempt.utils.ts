@@ -1,7 +1,8 @@
 import { encoder } from '../../lib/encoder';
 import { Exam } from '../exam';
 import { Question } from '../question';
-import { questionDtoType } from '../question/types';
+import { convertGradeToMark } from '../question/lib/convertGradeToMark';
+import { gradeType, questionDtoType } from '../question/types';
 import { Attempt } from './Attempt.entity';
 import { computeAutomaticMark } from './lib/computeAutomaticMark';
 import { attemptAnswersType } from './types';
@@ -10,9 +11,9 @@ const attemptUtils = {
     computeIsTimeLimitExceeded,
     stringifyAnswers,
     parseAnswers,
-    encodeMarks,
-    decodeMarks,
-    aggregateMarks,
+    encodeGrades,
+    decodeGrades,
+    computeNotationInfo,
 };
 
 function computeIsTimeLimitExceeded({
@@ -58,47 +59,43 @@ function parseAnswers(answers: string[]): attemptAnswersType {
     return attemptAnswers;
 }
 
-function aggregateMarks({
+function computeNotationInfo({
     answers,
-    marksArray,
-    questions,
+    gradesArray,
+    question,
 }: {
     answers: attemptAnswersType;
-    questions: questionDtoType[];
-    marksArray: Attempt['marks'];
-}): Record<number, number | undefined> {
-    const manualMarks = attemptUtils.decodeMarks(marksArray);
+    question: questionDtoType;
+    gradesArray: Attempt['manualGrades'];
+}) {
+    const manualGrades = attemptUtils.decodeGrades(gradesArray);
 
-    const marks = questions.reduce((acc, question) => {
-        let mark = 0;
+    const isQuestionManuallyCorrected = question.kind === 'texteLibre';
+    if (isQuestionManuallyCorrected) {
+        const grade = manualGrades[question.id] || undefined;
+        const mark = convertGradeToMark(grade, question.points);
+        return { grade, mark };
+    }
 
-        if (question.acceptableAnswersWithPoints.length !== 0) {
-            mark = computeAutomaticMark({
-                questionKind: question.kind,
-                acceptableAnswersWithPoints: question.acceptableAnswersWithPoints,
-                answer: answers[question.id],
-            });
-        } else {
-            mark = manualMarks[question.id];
-        }
-        return { ...acc, [question.id]: mark };
-    }, {} as Record<number, number>);
-    return marks;
+    return computeAutomaticMark({
+        questionDto: question,
+        answer: answers[question.id],
+    });
 }
 
-function encodeMarks(marks: Record<Question['id'], number>) {
-    return Object.entries(marks).map(([questionId, mark]) => `${questionId}:${mark}`);
+function encodeGrades(grades: Record<Question['id'], gradeType>) {
+    return Object.entries(grades).map(([questionId, grade]) => `${questionId}:${grade}`);
 }
 
-function decodeMarks(marksArray: string[]): Record<Question['id'], number> {
-    return marksArray.reduce((acc, markEntry) => {
-        const splitMark = markEntry.split(':');
-        if (splitMark.length !== 2) {
-            throw new Error(`marksArray '${marksArray.join(',')}' is wrongly formatted`);
+function decodeGrades(gradesArray: string[]): Record<Question['id'], gradeType> {
+    return gradesArray.reduce((acc, gradeEntry) => {
+        const splitGrade = gradeEntry.split(':');
+        if (splitGrade.length !== 2) {
+            throw new Error(`gradesArray '${gradesArray.join(',')}' is wrongly formatted`);
         }
-        const [questionId, mark] = splitMark;
-        return { ...acc, [Number(questionId)]: Number(mark) };
-    }, {} as Record<Question['id'], number>);
+        const [questionId, grade] = splitGrade;
+        return { ...acc, [Number(questionId)]: grade as gradeType };
+    }, {} as Record<Question['id'], gradeType>);
 }
 
 export { attemptUtils };

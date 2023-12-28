@@ -1,37 +1,39 @@
 import { sanitizer } from '../../../lib/sanitizer';
 import { Question } from '../Question.entity';
-import { acceptableAnswerWithPointsType } from '../types';
+import { acceptableAnswerType } from '../types';
 import { questionEncoder } from './questionEncoder';
 
-function addAcceptableAnswerToQuestion(
-    question: Question,
-    acceptableAnswerWithPoints: acceptableAnswerWithPointsType,
-) {
+function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: acceptableAnswerType) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
-    const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswerWithPoints.answer);
-    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswersWithPoints;
+    const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswer.answer);
+    const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswers[0];
 
     const alreadyPresentAcceptableAnswerIndex = currentParsedAcceptableAnswers.findIndex(
-        ({ answer }) => answer === sanitizedAcceptableAnswer,
+        ({ answer }) => sanitizer.sanitizeString(answer) === sanitizedAcceptableAnswer,
     );
     if (alreadyPresentAcceptableAnswerIndex !== -1) {
         if (
-            currentParsedAcceptableAnswers[alreadyPresentAcceptableAnswerIndex].points ===
-            acceptableAnswerWithPoints.points
+            currentParsedAcceptableAnswers[alreadyPresentAcceptableAnswerIndex].grade ===
+            acceptableAnswer.grade
         ) {
-            return question;
+            throw new Error(
+                `This answer ${sanitizedAcceptableAnswer} already exists for this grade (${acceptableAnswer.grade})`,
+            );
         } else {
-            decodedQuestion.acceptableAnswersWithPoints[alreadyPresentAcceptableAnswerIndex] = {
-                points: acceptableAnswerWithPoints.points,
+            decodedQuestion.acceptableAnswers[0][alreadyPresentAcceptableAnswerIndex] = {
+                grade: acceptableAnswer.grade,
                 answer: sanitizedAcceptableAnswer,
             };
-            return questionEncoder.encodeQuestion(decodedQuestion);
+            const encodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);
+            return encodedQuestion;
         }
     }
 
-    decodedQuestion.acceptableAnswersWithPoints = [
-        ...decodedQuestion.acceptableAnswersWithPoints,
-        { points: acceptableAnswerWithPoints.points, answer: sanitizedAcceptableAnswer },
+    decodedQuestion.acceptableAnswers = [
+        [
+            ...decodedQuestion.acceptableAnswers[0],
+            { grade: acceptableAnswer.grade, answer: sanitizedAcceptableAnswer },
+        ],
     ];
 
     const reEncodedQuestion = questionEncoder.encodeQuestion(decodedQuestion);

@@ -4,6 +4,7 @@ import { Exam, buildExamService } from '../exam';
 import { Exercise, buildExerciseService } from '../exercise';
 import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Question, buildQuestionService } from '../question';
+import { gradeType } from '../question/types';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
@@ -29,7 +30,7 @@ function buildAttemptService() {
         bulkInsertAttempts,
         deleteQuestionAnswers,
         deleteExerciseAnswers,
-        updateMark,
+        updateGrade,
         updateAttemptEndedAt,
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
@@ -97,7 +98,7 @@ function buildAttemptService() {
                 correctedAt: true,
                 endedAt: true,
                 answers: true,
-                marks: true,
+                manualGrades: true,
                 student: { id: true, email: true },
             },
 
@@ -186,15 +187,19 @@ function buildAttemptService() {
         return result.affected == 1;
     }
 
-    async function updateMark(attemptId: Attempt['id'], questionId: Question['id'], mark: number) {
+    async function updateGrade(
+        attemptId: Attempt['id'],
+        questionId: Question['id'],
+        grade: gradeType,
+    ) {
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
-            select: { id: true, marks: true },
+            select: { id: true, manualGrades: true },
         });
 
-        const previousMarks = attemptUtils.decodeMarks(attempt.marks);
-        const newMarks = attemptUtils.encodeMarks({ ...previousMarks, [questionId]: mark });
-        await attemptRepository.update({ id: attemptId }, { marks: newMarks });
+        const previousGrades = attemptUtils.decodeGrades(attempt.manualGrades);
+        const newGrades = attemptUtils.encodeGrades({ ...previousGrades, [questionId]: grade });
+        await attemptRepository.update({ id: attemptId }, { manualGrades: newGrades });
         return true;
     }
 

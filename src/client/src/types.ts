@@ -12,7 +12,9 @@ type attemptsCountByAttemptStatusApiType = {
     notCorrected: number;
 };
 
-type acceptableAnswerWithPointsType = { points: number; answer: string };
+type gradeType = 'A' | 'B' | 'C' | 'D' | 'E';
+
+type acceptableAnswerType = { grade: gradeType; answer: string };
 
 type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'corrected';
 
@@ -22,5 +24,6 @@ export type {
     questionKindType,
     attemptStatusType,
     attemptsCountByAttemptStatusApiType,
-    acceptableAnswerWithPointsType,
+    acceptableAnswerType,
+    gradeType,
 };

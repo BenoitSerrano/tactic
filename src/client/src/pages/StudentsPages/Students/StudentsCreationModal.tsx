@@ -39,6 +39,7 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean; grou
             confirmButtonLabel="Ajouter"
         >
             <TextField
+                autoFocus
                 label="Adresses e-mail"
                 minRows={2}
                 fullWidth

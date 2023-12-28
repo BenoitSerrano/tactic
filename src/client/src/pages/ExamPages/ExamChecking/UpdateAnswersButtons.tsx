@@ -1,60 +1,17 @@
-import { IconButton, Tooltip, styled } from '@mui/material';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
-import { questionWithAnswersType } from '../types';
+import { styled } from '@mui/material';
+import { amendableQuestionWithAnswersType } from '../types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
-import { ElementType } from 'react';
-import { Loader } from '../../../components/Loader';
 import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerButtonLoading';
-
-type attributeMarkToAnswerActionType = {
-    name: string;
-    multiplier: number;
-    IconComponent: ElementType;
-    color: 'success' | 'error' | 'warning';
-};
-const attributeMarkToAnswerActions: attributeMarkToAnswerActionType[] = [
-    {
-        name: 'fausse',
-        multiplier: 0,
-        IconComponent: ClearIcon,
-        color: 'error',
-    },
-    {
-        name: 'passable',
-        multiplier: 0.25,
-        IconComponent: SentimentVeryDissatisfiedIcon,
-        color: 'warning',
-    },
-    {
-        name: 'moyenne',
-        multiplier: 0.5,
-        IconComponent: SentimentNeutralIcon,
-        color: 'warning',
-    },
-    {
-        name: 'acceptable',
-        multiplier: 0.75,
-        IconComponent: SentimentSatisfiedAltIcon,
-        color: 'warning',
-    },
-    {
-        name: 'correcte',
-        multiplier: 1,
-        IconComponent: CheckIcon,
-        color: 'success',
-    },
-];
+import { gradeType } from '../../../types';
+import { attributeGradeToAnswerActions } from './constants';
+import { IconButton } from '../../../components/IconButton';
 
 function UpdateAnswersButtons(props: {
     canCorrectAttempt: boolean;
-    question: questionWithAnswersType;
+    question: amendableQuestionWithAnswersType;
     refetch: () => void;
     examId: string;
     attemptId: string;
@@ -90,8 +47,8 @@ function UpdateAnswersButtons(props: {
         },
     });
 
-    const saveMarkMutation = useMutation({
-        mutationFn: api.updateMark,
+    const saveGradeMutation = useMutation({
+        mutationFn: api.updateGrade,
         onSuccess: () => {
             props.refetch();
         },
@@ -106,69 +63,63 @@ function UpdateAnswersButtons(props: {
 
     return (
         <UpdateAnswersButtonContainer>
-            {attributeMarkToAnswerActions.map((attributeMarkToAnswerAction) => {
-                const { color, IconComponent, multiplier, name } = attributeMarkToAnswerAction;
+            {attributeGradeToAnswerActions.map((attributeMarkToAnswerAction) => {
+                const { color, IconComponent, grade, name } = attributeMarkToAnswerAction;
                 const canAnswerBeAttributedMark = computeCanAnswerBeAttributed(
-                    multiplier * props.question.points,
+                    grade,
                     props.question,
                 );
 
                 const addAcceptableAnswerLoadingInfo =
                     addAcceptableAnswerMutation.isPending &&
-                    addAcceptableAnswerMutation.variables.acceptableAnswerWithPoints
-                        ? addAcceptableAnswerMutation.variables.acceptableAnswerWithPoints.points /
-                          props.question.points
+                    addAcceptableAnswerMutation.variables.acceptableAnswer
+                        ? addAcceptableAnswerMutation.variables.acceptableAnswer.grade
                         : undefined;
 
-                const saveMarkLoadingInfo = saveMarkMutation.isPending
-                    ? saveMarkMutation.variables.mark / props.question.points
+                const updateGradeLoadingInfo = saveGradeMutation.isPending
+                    ? saveGradeMutation.variables.grade
                     : undefined;
 
                 const isLoading = computeIsUpdateAnswerButtonLoading(
-                    multiplier,
+                    grade,
                     props.isQuestionManuallyCorrected,
                     {
                         removeOkAnswer: removeOkAnswerMutation.isPending,
                         addAcceptableAnswer: addAcceptableAnswerLoadingInfo,
-                        saveMark: saveMarkLoadingInfo,
+                        updateGrade: updateGradeLoadingInfo,
                     },
                 );
 
                 return (
-                    <Tooltip key={`button-mark-as-${name}`} title={`Marquer comme ${name}`}>
-                        <IconButton
-                            size="small"
-                            color={color}
-                            disabled={!canAnswerBeAttributedMark || isLoading}
-                            onClick={buildOnAttributeMarkToAnswer(multiplier)}
-                        >
-                            {isLoading ? (
-                                <Loader size="small" />
-                            ) : (
-                                <IconComponent fontSize="small" />
-                            )}
-                        </IconButton>
-                    </Tooltip>
+                    <IconButton
+                        title={`Marquer comme ${name}`}
+                        size="small"
+                        color={color}
+                        disabled={!canAnswerBeAttributedMark || isLoading}
+                        onClick={buildOnAttributeMarkToAnswer(grade)}
+                        isLoading={isLoading}
+                        IconComponent={IconComponent}
+                    />
                 );
             })}
         </UpdateAnswersButtonContainer>
     );
 
-    function buildOnAttributeMarkToAnswer(multiplier: number) {
+    function buildOnAttributeMarkToAnswer(grade: gradeType) {
         return () => {
             if (props.question.answer === undefined) {
                 return;
             }
 
             if (props.isQuestionManuallyCorrected) {
-                saveMarkMutation.mutate({
+                saveGradeMutation.mutate({
                     examId: props.examId,
                     attemptId: props.attemptId,
                     questionId: props.question.id,
-                    mark: multiplier * props.question.points,
+                    grade,
                 });
             } else {
-                if (multiplier === 0) {
+                if (grade === 'E') {
                     removeOkAnswerMutation.mutate({
                         examId: props.examId,
                         questionId: props.question.id,
@@ -178,9 +129,9 @@ function UpdateAnswersButtons(props: {
                     addAcceptableAnswerMutation.mutate({
                         examId: props.examId,
                         questionId: props.question.id,
-                        acceptableAnswerWithPoints: {
+                        acceptableAnswer: {
                             answer: props.question.answer,
-                            points: multiplier * props.question.points,
+                            grade,
                         },
                     });
                 }

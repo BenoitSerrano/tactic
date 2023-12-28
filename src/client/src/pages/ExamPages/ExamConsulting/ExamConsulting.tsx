@@ -28,8 +28,7 @@ function ExamConsulting() {
                 <QuestionsConsulting
                     studentEmail={attemptWithAnswersQuery.data.studentEmail}
                     attemptId={attemptId}
-                    exercises={attemptWithAnswersQuery.data.exam.exercises}
-                    examName={attemptWithAnswersQuery.data.exam.name}
+                    exam={attemptWithAnswersQuery.data.exam}
                 />
             </MainContainer>
         </NotLoggedInPage>

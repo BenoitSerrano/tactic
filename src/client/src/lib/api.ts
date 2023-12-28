@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { acceptableAnswerWithPointsType, questionKindType } from '../types';
+import { acceptableAnswerType, gradeType, questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -30,11 +30,13 @@ const api = {
     deleteExercise,
     updateQuestion,
     addQuestionAcceptableAnswer,
+    addQuestionAcceptableAnswerToTexteATrous,
     removeOkAnswer,
+    removeOkAnswerFromTexteATrous,
     deleteQuestion,
     duplicateQuestion,
     updateQuestionsOrder,
-    updateMark,
+    updateGrade,
     updateExercisesOrder,
     updateEndedAt,
     deleteEndedAt,
@@ -125,14 +127,30 @@ async function fetchAttemptWithoutAnswers(attemptId: string) {
 async function addQuestionAcceptableAnswer({
     examId,
     questionId,
-    acceptableAnswerWithPoints,
+    acceptableAnswer,
 }: {
     examId: string;
     questionId: number;
-    acceptableAnswerWithPoints: acceptableAnswerWithPointsType;
+    acceptableAnswer: acceptableAnswerType;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/acceptable-answers`;
-    return performApiCall(URL, 'POST', { acceptableAnswerWithPoints });
+    return performApiCall(URL, 'POST', { acceptableAnswer });
+}
+
+// TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
+async function addQuestionAcceptableAnswerToTexteATrous({
+    examId,
+    questionId,
+    acceptableAnswer,
+    blankIndex,
+}: {
+    examId: string;
+    questionId: number;
+    acceptableAnswer: acceptableAnswerType;
+    blankIndex: number;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-acceptable-answers`;
+    return performApiCall(URL, 'POST', { acceptableAnswer, blankIndex });
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
@@ -147,6 +165,21 @@ async function removeOkAnswer({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/ok-answers`;
     return performApiCall(URL, 'DELETE', { okAnswer });
+}
+
+async function removeOkAnswerFromTexteATrous({
+    examId,
+    questionId,
+    okAnswer,
+    blankIndex,
+}: {
+    examId: string;
+    questionId: number;
+    okAnswer: string;
+    blankIndex: number;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-ok-answers`;
+    return performApiCall(URL, 'DELETE', { okAnswer, blankIndex });
 }
 
 async function updateAttempt({
@@ -306,7 +339,7 @@ async function createQuestion(params: {
     title: string;
     kind: questionKindType;
     possibleAnswers: string[];
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerType[][];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions`;
@@ -314,7 +347,7 @@ async function createQuestion(params: {
         title: params.title,
         kind: params.kind,
         possibleAnswers: params.possibleAnswers,
-        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
+        acceptableAnswers: params.acceptableAnswers,
         points: params.points,
     });
 }
@@ -325,14 +358,14 @@ async function updateQuestion(params: {
     questionId: number;
     title: string;
     possibleAnswers: string[];
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+    acceptableAnswers: acceptableAnswerType[][];
     points: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}`;
     return performApiCall(URL, 'PUT', {
         title: params.title,
         possibleAnswers: params.possibleAnswers,
-        acceptableAnswersWithPoints: params.acceptableAnswersWithPoints,
+        acceptableAnswers: params.acceptableAnswers,
         points: params.points,
     });
 }
@@ -348,15 +381,15 @@ async function updateQuestionsOrder(params: {
     });
 }
 
-async function updateMark(params: {
+async function updateGrade(params: {
     examId: string;
     attemptId: string;
     questionId: number;
-    mark: number;
+    grade: gradeType;
 }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/mark`;
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/grade`;
     return performApiCall(URL, 'PATCH', {
-        mark: params.mark,
+        grade: params.grade,
     });
 }
 

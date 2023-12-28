@@ -17,6 +17,8 @@ export interface AttemptInterface {
 
     marks: string[];
 
+    manualGrades: string[];
+
     endedAt: string | null;
 
     correctedAt: string | null;

@@ -6,20 +6,20 @@ import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { combinator } from '../../lib/combinator';
 import { Button } from '../../components/Button';
 import { textSplitter } from '../../lib/textSplitter';
-import { acceptableAnswerWithPointsType } from '../../types';
+import { acceptableAnswerType } from '../../types';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
-    setAcceptableAnswersWithPoints: (
-        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
-    ) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const initialAcceptableAnswers = props.acceptableAnswersWithPoints[0]?.answer || '';
+    const initialAcceptableAnswers = props.acceptableAnswers.length
+        ? props.acceptableAnswers[0][0].answer
+        : '';
     const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
     const [originalPhrase, setOriginalPhrase] = useState(initialAcceptableAnswers);
     const [displayedWordsToPlace, setDisplayedWordsToPlace] = useState(
@@ -33,6 +33,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
         <>
             <QuestionInputContainer title="Phrase originale">
                 <TextField
+                    autoFocus
                     fullWidth
                     label="Phrase originale"
                     placeholder="..."
@@ -58,7 +59,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
                         subtitle={`Cliquez sur le bouton "Ajouter" pour ajouter des phrases correctes`}
                     >
                         <table>
-                            {props.acceptableAnswersWithPoints.map(({ answer }, index) => (
+                            {props.acceptableAnswers[0].map(({ answer }, index) => (
                                 <tr key={answer}>
                                     <td>
                                         <Typography>{answer}</Typography>
@@ -147,9 +148,11 @@ function PhraseMelangeeUpsertionModalContent(props: {
             const updatedNewRightAnswer = [...newRightAnswer, displayedWordsToPlace[index]];
 
             if (newRightAnswer.length + 1 === words.length) {
-                props.setAcceptableAnswersWithPoints([
-                    ...props.acceptableAnswersWithPoints,
-                    { points: Number(props.points), answer: updatedNewRightAnswer.join(' ') },
+                props.setAcceptableAnswers([
+                    [
+                        ...props.acceptableAnswers[0],
+                        { grade: 'A', answer: updatedNewRightAnswer.join(' ') },
+                    ],
                 ]);
                 setNewRightAnswer(undefined);
                 setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
@@ -191,9 +194,9 @@ function PhraseMelangeeUpsertionModalContent(props: {
 
     function buildDeleteRightAnswer(index: number) {
         return () => {
-            const newAcceptableAnswerWithPoints = [...props.acceptableAnswersWithPoints];
+            const newAcceptableAnswerWithPoints = [...props.acceptableAnswers];
             newAcceptableAnswerWithPoints.splice(index, 1);
-            props.setAcceptableAnswersWithPoints(newAcceptableAnswerWithPoints);
+            props.setAcceptableAnswers(newAcceptableAnswerWithPoints);
         };
     }
 
@@ -203,9 +206,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
         const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
 
         props.setTitle(shuffledPhrase);
-        props.setAcceptableAnswersWithPoints([
-            { points: Number(props.points), answer: newOriginalPhrase.trim() },
-        ]);
+        props.setAcceptableAnswers([[{ grade: 'A', answer: newOriginalPhrase.trim() }]]);
     }
 }
 

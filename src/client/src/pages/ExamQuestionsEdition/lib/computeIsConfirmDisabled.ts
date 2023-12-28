@@ -1,12 +1,12 @@
 import { textSplitter } from '../../../lib/textSplitter';
-import { acceptableAnswerWithPointsType, questionKindType } from '../../../types';
+import { acceptableAnswerType, questionKindType } from '../../../types';
 
 function computeIsConfirmDisabled(
     questionKind: questionKindType,
     params: {
         title: string;
         possibleAnswers: string[];
-        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
+        acceptableAnswers: acceptableAnswerType[][];
     },
 ) {
     if (!params.title) {
@@ -17,7 +17,7 @@ function computeIsConfirmDisabled(
         return false;
     }
 
-    if (params.acceptableAnswersWithPoints.length === 0) {
+    if (params.acceptableAnswers.length === 0 || params.acceptableAnswers[0].length === 0) {
         return true;
     }
     if (
@@ -30,7 +30,7 @@ function computeIsConfirmDisabled(
 
     if (
         questionKind === 'phraseMelangee' &&
-        params.acceptableAnswersWithPoints[0].answer === params.title
+        params.acceptableAnswers[0][0].answer === params.title
     ) {
         return true;
     }
@@ -42,7 +42,7 @@ function computeIsConfirmDisabled(
         if (blankCount === 0) {
             return true;
         }
-        if (blankCount !== params.acceptableAnswersWithPoints.length) {
+        if (blankCount !== params.acceptableAnswers.length) {
             return true;
         }
     }

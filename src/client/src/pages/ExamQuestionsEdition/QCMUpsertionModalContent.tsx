@@ -1,41 +1,35 @@
 import { Button, FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { acceptableAnswerWithPointsType } from '../../types';
+import { acceptableAnswerType } from '../../types';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
 function QCMUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
-    setAcceptableAnswersWithPoints: (
-        acceptableAnswersWithPoints: acceptableAnswerWithPointsType[],
-    ) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     possibleAnswers: string[];
     setPossibleAnswers: (possibleAnswers: string[]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const rightAnswer: string | undefined = props.acceptableAnswersWithPoints[0]?.answer;
+    const rightAnswer: string | undefined = props.acceptableAnswers.length
+        ? props.acceptableAnswers[0][0].answer
+        : undefined;
     const canRemovePossibleAnswer = computeCanRemovePossibleAnswer();
     const isAddPossibleAnswerDisabled = computeIsAddPossibleAnswerDisabled();
     return (
         <ModalContent>
-            {/* <InputContainer> */}
             <QuestionInputContainer title="Question à laquelle doit répondre l'élève">
                 <TextField
+                    autoFocus
                     fullWidth
                     value={props.title}
                     label="Intitulé"
                     onChange={(event) => props.setTitle(event.target.value)}
                 />
             </QuestionInputContainer>
-            {/* </InputContainer> */}
-            {/* <HintContainer>
-                <Typography variant="h6">
-                    Indiquez les réponses possibles, et sélectionnez la bonne réponse :
-                </Typography>
-            </HintContainer> */}
             <QuestionInputContainer
                 title="Réponses possibles"
                 subtitle="Indiquez les réponses possibles, et sélectionnez la bonne réponse"
@@ -43,9 +37,7 @@ function QCMUpsertionModalContent(props: {
                 <RadioGroup
                     value={rightAnswer}
                     onChange={(event) =>
-                        props.setAcceptableAnswersWithPoints([
-                            { answer: event.target.value, points: Number(props.points) },
-                        ])
+                        props.setAcceptableAnswers([[{ answer: event.target.value, grade: 'A' }]])
                     }
                 >
                     {props.possibleAnswers.map(
@@ -115,10 +107,10 @@ function QCMUpsertionModalContent(props: {
             props.setPossibleAnswers(newPossibleAnswers);
             if (rightAnswer !== undefined) {
                 if (index === Number(rightAnswer)) {
-                    props.setAcceptableAnswersWithPoints([]);
+                    props.setAcceptableAnswers([]);
                 } else if (index < Number(rightAnswer)) {
-                    props.setAcceptableAnswersWithPoints([
-                        { answer: `${Number(rightAnswer) - 1}`, points: Number(props.points) },
+                    props.setAcceptableAnswers([
+                        [{ answer: `${Number(rightAnswer) - 1}`, grade: 'A' }],
                     ]);
                 }
             }

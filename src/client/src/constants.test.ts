@@ -18,11 +18,10 @@ describe('constants', () => {
             expect(match).not.toBe(null);
         });
 
-        it.only('should accept partial floatting number', () => {
+        it('should accept partial floatting number', () => {
             const value = '10.';
 
             const match = value.match(FLOATING_NUMBER_REGEX);
-            console.log(match);
             expect(match).not.toBe(null);
         });
     });

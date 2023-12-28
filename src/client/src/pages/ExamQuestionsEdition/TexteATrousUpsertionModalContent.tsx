@@ -5,22 +5,20 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { useState } from 'react';
 import { computeTexteATrousState } from './lib/computeTexteATrousState';
 import { textSplitter } from '../../lib/textSplitter';
-import { acceptableAnswerWithPointsType } from '../../types';
+import { acceptableAnswerType } from '../../types';
 import { FLOATING_NUMBER_REGEX } from '../../constants';
 import { QuestionInputContainer } from './QuestionInputContainer';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
-    acceptableAnswersWithPoints: acceptableAnswerWithPointsType[];
-    setAcceptableAnswersWithPoints: (
-        newAcceptableAnswerWithPoints: acceptableAnswerWithPointsType[],
-    ) => void;
+    acceptableAnswers: acceptableAnswerType[][];
+    setAcceptableAnswers: (newAcceptableAnswerWithPoints: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
 }) {
-    const initialPointsPerBlank = props.acceptableAnswersWithPoints.length
-        ? Number(props.points) / props.acceptableAnswersWithPoints.length
+    const initialPointsPerBlank = props.acceptableAnswers.length
+        ? Number(props.points) / props.acceptableAnswers.length
         : Number(props.points);
     const [pointsPerBlank, setPointsPerBlank] = useState(`${initialPointsPerBlank}`);
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(!!props.title);
@@ -31,6 +29,7 @@ function TexteATrousUpsertionModalContent(props: {
             <QuestionInputContainer title="Texte complet">
                 <RowContainer>
                     <TextField
+                        autoFocus
                         disabled={isWholeSentenceFrozen}
                         fullWidth
                         multiline
@@ -83,21 +82,14 @@ function TexteATrousUpsertionModalContent(props: {
         const value = event.target.value;
         if (value.match(FLOATING_NUMBER_REGEX)) {
             setPointsPerBlank(value);
-            const newPointsPerBlank = Number(value);
-            props.setAcceptableAnswersWithPoints(
-                props.acceptableAnswersWithPoints.map(({ answer }) => ({
-                    answer,
-                    points: newPointsPerBlank,
-                })),
-            );
-            props.setPoints(`${Number(value) * props.acceptableAnswersWithPoints.length}`);
+            props.setPoints(`${Number(value) * props.acceptableAnswers.length}`);
         }
     }
 
     function resetWholeSentence() {
         setIsWholeSentenceFrozen(false);
         props.setTitle('');
-        props.setAcceptableAnswersWithPoints([]);
+        props.setAcceptableAnswers([]);
         props.setPoints('0');
     }
 
@@ -105,14 +97,18 @@ function TexteATrousUpsertionModalContent(props: {
         return () => {
             const nextState = computeTexteATrousState(wordIndex, {
                 title: props.title,
-                rightAnswers: props.acceptableAnswersWithPoints.map(({ answer }) => answer),
+                rightAnswers: props.acceptableAnswers.map(
+                    (acceptableAnswersPerBlank) => acceptableAnswersPerBlank[0].answer,
+                ),
             });
             props.setTitle(nextState.title);
-            props.setAcceptableAnswersWithPoints(
-                nextState.rightAnswers.map((answer) => ({
-                    answer,
-                    points: Number(pointsPerBlank),
-                })),
+            props.setAcceptableAnswers(
+                nextState.rightAnswers.map((answer) => [
+                    {
+                        answer,
+                        grade: 'A',
+                    },
+                ]),
             );
             props.setPoints(`${Number(pointsPerBlank) * nextState.rightAnswers.length}`);
         };
