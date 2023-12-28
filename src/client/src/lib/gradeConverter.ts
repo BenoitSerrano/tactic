@@ -1,5 +1,10 @@
 import { gradeType } from '../types';
 
+const gradeConverter = {
+    convertGradeToMark,
+    convertGradeToStatus,
+};
+
 function convertGradeToMark(grade: gradeType | undefined, totalPoints: number) {
     switch (grade) {
         case 'A':
@@ -15,4 +20,15 @@ function convertGradeToMark(grade: gradeType | undefined, totalPoints: number) {
     }
     return undefined;
 }
-export { convertGradeToMark };
+
+function convertGradeToStatus(grade: gradeType | undefined): 'right' | 'wrong' | 'acceptable' {
+    if (grade === undefined || grade === 'E') {
+        return 'wrong';
+    }
+    if (grade === 'A') {
+        return 'right';
+    }
+    return 'acceptable';
+}
+
+export { gradeConverter };

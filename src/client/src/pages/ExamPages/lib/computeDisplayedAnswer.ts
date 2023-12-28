@@ -1,4 +1,5 @@
 import { TEXTE_A_TROU_REGEX } from '../../../constants';
+import { gradeConverter } from '../../../lib/gradeConverter';
 import { sanitizer } from '../../../lib/sanitizer';
 import { answerStatusType, questionWithAnswersType } from '../types';
 import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
@@ -41,15 +42,21 @@ function computeDisplayedAnswer(
                     value: question.title.slice(lastIndexFound, value.value.index).trim(),
                 });
 
-                const acceptableAnswer = question.acceptableAnswers[answerIndex][0];
+                const acceptableAnswersForBlank = question.acceptableAnswers[answerIndex];
+                const matchingAcceptableAnswer = acceptableAnswersForBlank.find(
+                    (acceptableAnswerForBlank) =>
+                        sanitizer.sanitizeString(answers[answerIndex]) ===
+                        acceptableAnswerForBlank.answer,
+                );
+
+                const blankStatus = gradeConverter.convertGradeToStatus(
+                    matchingAcceptableAnswer?.grade,
+                );
 
                 title.push({
                     kind: 'coloredText',
                     value: answers[answerIndex] || '....',
-                    status:
-                        sanitizer.sanitizeString(answers[answerIndex]) === acceptableAnswer.answer
-                            ? 'right'
-                            : 'wrong',
+                    status: blankStatus,
                 });
                 lastIndexFound = (value.value.index || 0) + 4;
                 value = tATRegexMatch.next();

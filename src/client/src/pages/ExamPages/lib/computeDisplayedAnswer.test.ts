@@ -89,6 +89,46 @@ describe('computeDisplayedAnswer', () => {
             });
         });
 
+        it('should return the title if one answer is acceptable', () => {
+            const question = {
+                id: 2,
+                title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
+                kind: 'texteATrous' as const,
+                possibleAnswers: [],
+                acceptableAnswers: [
+                    [{ grade: 'A' as gradeType, answer: 'des' }],
+                    [{ grade: 'A' as gradeType, answer: 'une' }],
+                    [{ grade: 'A' as gradeType, answer: 'ses' }],
+                    [
+                        { grade: 'A' as gradeType, answer: 'sa' },
+                        { grade: 'C' as gradeType, answer: 'sah' },
+                    ],
+                    [{ grade: 'A' as gradeType, answer: 'son' }],
+                ],
+                answer: 'des|une|ses|sah|son',
+                mark: 2,
+                points: 2,
+            };
+            const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
+
+            expect(displayedAnswer).toEqual({
+                title: [
+                    { kind: 'text', value: 'Portez-vous' },
+                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
+                    { kind: 'coloredText', value: 'une', status: 'right' },
+                    { kind: 'text', value: 'personne, vous remarquez en premier :' },
+                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'text', value: 'yeux,' },
+                    { kind: 'coloredText', value: 'sah', status: 'acceptable' },
+                    { kind: 'text', value: 'silhouette,' },
+                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'text', value: 'sourire?' },
+                ],
+                answer: undefined,
+            });
+        });
+
         it('should return the title with color for right answers', () => {
             const question = {
                 id: 2,

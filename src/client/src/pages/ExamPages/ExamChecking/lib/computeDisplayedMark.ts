@@ -1,4 +1,4 @@
-import { convertGradeToMark } from '../../../../lib/convertGradeToMark';
+import { gradeConverter } from '../../../../lib/gradeConverter';
 import { gradeType } from '../../../../types';
 
 function computeDisplayedMark(props: {
@@ -8,7 +8,7 @@ function computeDisplayedMark(props: {
     totalPoints: number;
 }): string {
     if (props.grade) {
-        const displayedMark = convertGradeToMark(props.grade, props.totalPoints);
+        const displayedMark = gradeConverter.convertGradeToMark(props.grade, props.totalPoints);
         return `${displayedMark} / ${props.totalPoints}`;
     }
     if (props.mark === undefined) {

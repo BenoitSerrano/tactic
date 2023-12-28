@@ -1,4 +1,4 @@
-import { convertGradeToMark } from '../../../lib/convertGradeToMark';
+import { gradeConverter } from '../../../lib/gradeConverter';
 import { exerciseWithAnswersType } from '../types';
 
 function computeResult(exercises: exerciseWithAnswersType[]) {
@@ -9,7 +9,7 @@ function computeResult(exercises: exerciseWithAnswersType[]) {
             const mark =
                 question.kind === 'texteATrous'
                     ? question.mark
-                    : convertGradeToMark(question.grade, question.points);
+                    : gradeConverter.convertGradeToMark(question.grade, question.points);
             totalMark += mark || 0;
             totalPoints += question.points;
         }
