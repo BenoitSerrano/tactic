@@ -10,6 +10,7 @@ import { computeCanTexteATrousAnswerBeAttributed } from './lib/computeCanTexteAT
 import { computeIsTexteATrousUpdateAnswerButtonLoading } from './lib/computeIsTexteATrousUpdateAnswerButtonLoading';
 import { gradeType } from '../../../types';
 import { questionWithAnswersType } from '../types';
+import { gradeConverter } from '../../../lib/gradeConverter';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -69,6 +70,10 @@ function TexteATrousChecking(props: {
         },
     });
 
+    const blankCount = props.question.title.split(' ').filter((word) => word === '....').length;
+
+    const pointsPerBlank = props.question.points / blankCount;
+
     const isMenuOpen = Boolean(currentChunkMenu);
 
     return (
@@ -81,52 +86,67 @@ function TexteATrousChecking(props: {
                 >
                     {!!currentChunkMenu && (
                         <MenuContentContainer>
-                            {attributeGradeToAnswerActions.map((attributeGradeToAnswerAction) => {
-                                const { IconComponent, color, grade, name } =
-                                    attributeGradeToAnswerAction;
+                            <IconsContainer>
+                                {attributeGradeToAnswerActions.map(
+                                    (attributeGradeToAnswerAction) => {
+                                        const { IconComponent, color, grade, name } =
+                                            attributeGradeToAnswerAction;
 
-                                const chunk =
-                                    props.displayedAnswer.title[currentChunkMenu.chunkIndex];
-                                if (chunk.kind !== 'coloredText') {
-                                    return <div />;
-                                }
+                                        const chunk =
+                                            props.displayedAnswer.title[
+                                                currentChunkMenu.chunkIndex
+                                            ];
+                                        if (chunk.kind !== 'coloredText') {
+                                            return <div />;
+                                        }
 
-                                const blankIndex = convertChunkIndexToBlankIndex(
-                                    currentChunkMenu.chunkIndex,
-                                );
+                                        const blankIndex = convertChunkIndexToBlankIndex(
+                                            currentChunkMenu.chunkIndex,
+                                        );
+                                        const blankMark =
+                                            gradeConverter.convertGradeToMark(
+                                                chunk.grade,
+                                                pointsPerBlank,
+                                            ) || 0;
 
-                                const isButtonDisabled = !computeCanTexteATrousAnswerBeAttributed(
-                                    grade,
-                                    chunk.grade,
-                                    blankIndex,
-                                    props.question,
-                                );
-                                const isButtonLoading =
-                                    computeIsTexteATrousUpdateAnswerButtonLoading();
-
-                                return (
-                                    <Tooltip
-                                        key={`button-mark-as-${name}`}
-                                        title={`Marquer comme ${name}`}
-                                    >
-                                        <IconButton
-                                            size="small"
-                                            color={color}
-                                            disabled={isButtonDisabled || isButtonLoading}
-                                            onClick={buildAttributeGradeToTatAnswer({
+                                        const isButtonDisabled =
+                                            !computeCanTexteATrousAnswerBeAttributed(
                                                 grade,
-                                                chunkIndex: currentChunkMenu.chunkIndex,
-                                            })}
-                                        >
-                                            {isButtonLoading ? (
-                                                <Loader size="small" />
-                                            ) : (
-                                                <IconComponent fontSize="small" />
-                                            )}
-                                        </IconButton>
-                                    </Tooltip>
-                                );
-                            })}
+                                                chunk.grade,
+                                                blankIndex,
+                                                props.question,
+                                            );
+                                        const isButtonLoading =
+                                            computeIsTexteATrousUpdateAnswerButtonLoading();
+
+                                        return (
+                                            <Tooltip
+                                                key={`button-mark-as-${name}`}
+                                                title={`Marquer comme ${name}`}
+                                            >
+                                                <IconButton
+                                                    size="small"
+                                                    color={color}
+                                                    disabled={isButtonDisabled || isButtonLoading}
+                                                    onClick={buildAttributeGradeToTatAnswer({
+                                                        grade,
+                                                        chunkIndex: currentChunkMenu.chunkIndex,
+                                                    })}
+                                                >
+                                                    {isButtonLoading ? (
+                                                        <Loader size="small" />
+                                                    ) : (
+                                                        <IconComponent fontSize="small" />
+                                                    )}
+                                                </IconButton>
+                                            </Tooltip>
+                                        );
+                                    },
+                                )}
+                            </IconsContainer>
+                            <Typography>
+                                {computeBlankMark(currentChunkMenu.chunkIndex)} / {pointsPerBlank}
+                            </Typography>
                         </MenuContentContainer>
                     )}
                 </Menu>
@@ -157,6 +177,15 @@ function TexteATrousChecking(props: {
 
     function closeChunkMenu() {
         setCurrentChunkMenu(null);
+    }
+
+    function computeBlankMark(chunkIndex: number) {
+        const chunk = props.displayedAnswer.title[chunkIndex];
+        if (chunk.kind !== 'coloredText') {
+            return 0;
+        }
+        const blankMark = gradeConverter.convertGradeToMark(chunk.grade, pointsPerBlank) || 0;
+        return blankMark;
     }
 
     function buildAttributeGradeToTatAnswer(body: { grade: gradeType; chunkIndex: number }) {
@@ -207,6 +236,12 @@ const Title = styled(Typography)({ fontWeight: 'bold' });
 
 const Container = styled('div')({ display: 'flex', flexDirection: 'column' });
 
-const MenuContentContainer = styled('div')({ display: 'flex' });
+const MenuContentContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
+const IconsContainer = styled('div')({ display: 'flex' });
 
 export { TexteATrousChecking };

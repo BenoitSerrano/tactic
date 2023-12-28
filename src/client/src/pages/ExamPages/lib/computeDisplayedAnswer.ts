@@ -52,7 +52,7 @@ function computeDisplayedAnswer(
                 const matchingAcceptableAnswer = acceptableAnswersForBlank.find(
                     (acceptableAnswerForBlank) =>
                         sanitizer.sanitizeString(answers[answerIndex]) ===
-                        acceptableAnswerForBlank.answer,
+                        sanitizer.sanitizeString(acceptableAnswerForBlank.answer),
                 );
 
                 const blankStatus = gradeConverter.convertGradeToStatus(
