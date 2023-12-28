@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { IconButton, Menu, Tooltip, Typography, styled } from '@mui/material';
+import { Menu, Typography, styled } from '@mui/material';
 import { displayedAnswerType } from '../lib/computeDisplayedAnswer';
 import { attributeGradeToAnswerActions } from './constants';
-import { Loader } from '../../../components/Loader';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
@@ -11,6 +10,7 @@ import { computeIsTexteATrousUpdateAnswerButtonLoading } from './lib/computeIsTe
 import { gradeType } from '../../../types';
 import { questionWithAnswersType } from '../types';
 import { gradeConverter } from '../../../lib/gradeConverter';
+import { IconButton } from '../../../components/IconButton';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -103,11 +103,6 @@ function TexteATrousChecking(props: {
                                         const blankIndex = convertChunkIndexToBlankIndex(
                                             currentChunkMenu.chunkIndex,
                                         );
-                                        const blankMark =
-                                            gradeConverter.convertGradeToMark(
-                                                chunk.grade,
-                                                pointsPerBlank,
-                                            ) || 0;
 
                                         const isButtonDisabled =
                                             !computeCanTexteATrousAnswerBeAttributed(
@@ -116,30 +111,33 @@ function TexteATrousChecking(props: {
                                                 blankIndex,
                                                 props.question,
                                             );
+                                        const loadingInfo = {
+                                            addAcceptableAnswer:
+                                                addQuestionAcceptableAnswerToTexteATrousMutation.isPending
+                                                    ? addQuestionAcceptableAnswerToTexteATrousMutation
+                                                          .variables.acceptableAnswer.grade
+                                                    : undefined,
+                                            removeOkAnswer:
+                                                removeOkAnswerFromTexteATrousMutation.isPending,
+                                        };
                                         const isButtonLoading =
-                                            computeIsTexteATrousUpdateAnswerButtonLoading();
+                                            computeIsTexteATrousUpdateAnswerButtonLoading(
+                                                grade,
+                                                loadingInfo,
+                                            );
 
                                         return (
-                                            <Tooltip
-                                                key={`button-mark-as-${name}`}
+                                            <IconButton
+                                                IconComponent={IconComponent}
+                                                onClick={buildAttributeGradeToTatAnswer({
+                                                    grade,
+                                                    chunkIndex: currentChunkMenu.chunkIndex,
+                                                })}
+                                                size="small"
+                                                color={color}
+                                                disabled={isButtonDisabled || isButtonLoading}
                                                 title={`Marquer comme ${name}`}
-                                            >
-                                                <IconButton
-                                                    size="small"
-                                                    color={color}
-                                                    disabled={isButtonDisabled || isButtonLoading}
-                                                    onClick={buildAttributeGradeToTatAnswer({
-                                                        grade,
-                                                        chunkIndex: currentChunkMenu.chunkIndex,
-                                                    })}
-                                                >
-                                                    {isButtonLoading ? (
-                                                        <Loader size="small" />
-                                                    ) : (
-                                                        <IconComponent fontSize="small" />
-                                                    )}
-                                                </IconButton>
-                                            </Tooltip>
+                                            />
                                         );
                                     },
                                 )}

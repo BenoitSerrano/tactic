@@ -1,14 +1,13 @@
-import { IconButton, Tooltip, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { amendableQuestionWithAnswersType } from '../types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
-
-import { Loader } from '../../../components/Loader';
 import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerButtonLoading';
 import { gradeType } from '../../../types';
 import { attributeGradeToAnswerActions } from './constants';
+import { IconButton } from '../../../components/IconButton';
 
 function UpdateAnswersButtons(props: {
     canCorrectAttempt: boolean;
@@ -92,20 +91,15 @@ function UpdateAnswersButtons(props: {
                 );
 
                 return (
-                    <Tooltip key={`button-mark-as-${name}`} title={`Marquer comme ${name}`}>
-                        <IconButton
-                            size="small"
-                            color={color}
-                            disabled={!canAnswerBeAttributedMark || isLoading}
-                            onClick={buildOnAttributeMarkToAnswer(grade)}
-                        >
-                            {isLoading ? (
-                                <Loader size="small" />
-                            ) : (
-                                <IconComponent fontSize="small" />
-                            )}
-                        </IconButton>
-                    </Tooltip>
+                    <IconButton
+                        title={`Marquer comme ${name}`}
+                        size="small"
+                        color={color}
+                        disabled={!canAnswerBeAttributedMark || isLoading}
+                        onClick={buildOnAttributeMarkToAnswer(grade)}
+                        isLoading={isLoading}
+                        IconComponent={IconComponent}
+                    />
                 );
             })}
         </UpdateAnswersButtonContainer>
