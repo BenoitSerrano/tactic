@@ -11,7 +11,7 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: [],
                 acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'Non, pas vraiment' }]],
                 answer: '',
-                grade: 'A' as gradeType,
+                grade: 'E' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -23,7 +23,7 @@ describe('computeDisplayedAnswer', () => {
                         value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                     },
                 ],
-                answer: [{ kind: 'coloredText', value: '', status: 'wrong' }],
+                answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: 'E' }],
             });
         });
         it('should return the completed title with color', () => {
@@ -46,7 +46,7 @@ describe('computeDisplayedAnswer', () => {
                         value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                     },
                 ],
-                answer: [{ kind: 'coloredText', value: 'Oui !', status: 'right' }],
+                answer: [{ kind: 'coloredText', value: 'Oui !', status: 'right', grade: 'A' }],
             });
         });
     });
@@ -74,15 +74,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -114,15 +114,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: 'une', status: 'right' },
+                    { kind: 'coloredText', value: 'une', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: 'sah', status: 'acceptable' },
+                    { kind: 'coloredText', value: 'sah', status: 'acceptable', grade: 'C' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -151,15 +151,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: 'une', status: 'right' },
+                    { kind: 'coloredText', value: 'une', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: 'sa', status: 'right' },
+                    { kind: 'coloredText', value: 'sa', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -188,15 +188,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: 'truc', status: 'wrong' },
+                    { kind: 'coloredText', value: 'truc', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: 'sa', status: 'right' },
+                    { kind: 'coloredText', value: 'sa', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -225,15 +225,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: 'des', status: 'right' },
+                    { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: '....', status: 'wrong' },
+                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: 'ses', status: 'right' },
+                    { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: 'sa', status: 'right' },
+                    { kind: 'coloredText', value: 'sa', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: 'son', status: 'right' },
+                    { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 answer: undefined,
@@ -258,7 +258,7 @@ describe('computeDisplayedAnswer', () => {
 
             expect(displayedAnswer).toEqual({
                 title: [{ kind: 'text', value: 'Texte libre ?' }],
-                answer: [{ kind: 'coloredText', value: '', status: 'wrong' }],
+                answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: 'E' }],
             });
         });
 
@@ -282,6 +282,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: "Youpi j'ai une assez bonne note",
                         status: 'acceptable',
+                        grade: 'C',
                     },
                 ],
             });
@@ -308,6 +309,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: '',
                         status: 'wrong',
+                        grade: 'E',
                     },
                 ],
             });
@@ -332,6 +334,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: 'la vie est belle',
                         status: 'right',
+                        grade: 'A',
                     },
                 ],
             });
@@ -346,7 +349,7 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: ['rouge', 'bleu', 'vert', 'noir'],
                 acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'bleu' }]],
                 answer: undefined,
-                grade: undefined as any,
+                grade: 'E' as gradeType,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'wrong');
@@ -358,6 +361,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: '',
                         status: 'wrong',
+                        grade: 'E',
                     },
                 ],
             });
@@ -382,6 +386,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: 'bleu',
                         status: 'right',
+                        grade: 'A',
                     },
                 ],
             });
