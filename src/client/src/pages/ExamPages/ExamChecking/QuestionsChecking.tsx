@@ -125,7 +125,7 @@ function QuestionsChecking(props: {
         <TestPageLayout
             studentEmail={props.studentEmail}
             title={props.examName}
-            buttons={UpdateCorrectedAtButton ? [UpdateCorrectedAtButton] : []}
+            centerButtons={UpdateCorrectedAtButton ? [UpdateCorrectedAtButton] : undefined}
             result={result}
         >
             <>

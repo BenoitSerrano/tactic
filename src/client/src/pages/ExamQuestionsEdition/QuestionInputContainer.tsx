@@ -10,7 +10,7 @@ function QuestionInputContainer(props: {
     const MainContainer = props.isLastItem ? LastContainer : Container;
     return (
         <MainContainer>
-            <Typography>{props.title}</Typography>
+            <Typography variant="h5">{props.title}</Typography>
             {!!props.subtitle && <Typography variant="h6">{props.subtitle}</Typography>}
             <InputContainer>{props.children}</InputContainer>
         </MainContainer>

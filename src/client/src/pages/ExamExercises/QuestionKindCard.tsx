@@ -10,7 +10,7 @@ function QuestionKindCard(props: {
     return (
         <Container>
             <CardComponent elevation={2} onClick={props.onSelect}>
-                <Typography variant="h5">{props.title}</Typography>
+                <Typography variant="h4">{props.title}</Typography>
                 <Typography variant="h6">{props.subtitle}</Typography>
             </CardComponent>
         </Container>

@@ -20,12 +20,7 @@ function QuestionsConsulting(props: {
     const result = computeResult(props.exam.exercises);
 
     return (
-        <TestPageLayout
-            studentEmail={props.studentEmail}
-            title={props.exam.name}
-            buttons={[]}
-            result={result}
-        >
+        <TestPageLayout studentEmail={props.studentEmail} title={props.exam.name} result={result}>
             <>
                 {props.exam.exercises.map((exercise, exerciseIndex) => (
                     <ExerciseContainer

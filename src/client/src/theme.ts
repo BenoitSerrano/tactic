@@ -43,7 +43,7 @@ const theme = createTheme({
             fontWeight: 'normal',
         },
         h6: {
-            fontSize: '0.8rem',
+            fontSize: '1rem',
             fontWeight: 'normal',
         },
         caption: {

@@ -96,9 +96,8 @@ function ExamTaking() {
             title={
                 <TitleContainer>
                     <Typography variant="h3">{title}</Typography>
-                    <Typography variant="h6">
-                        Enregistrez vos réponses régulièrement. Passé cette heure, aucune soumission
-                        ne sera prise en compte.
+                    <Typography style={{ fontStyle: 'italic' }} variant="h6">
+                        Passé cette heure, aucune soumission ne sera prise en compte.
                     </Typography>
                 </TitleContainer>
             }

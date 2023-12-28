@@ -62,23 +62,27 @@ function QuestionsAnswering(props: {
     return (
         <>
             <TestPageLayout
+                subtitle="Pensez à sauvegarder régulièrement vos réponses"
                 result={totalPoints}
                 studentEmail={props.studentEmail}
                 title={props.title}
-                buttons={[
+                centerButtons={[
                     <LoadingButton
                         key="safe-draft-button"
                         loading={saveDraftMutation.isPending}
                         onClick={saveDraft}
+                        variant="outlined"
                     >
-                        Enregistrer le brouillon
+                        Sauvegarder vos réponses
                     </LoadingButton>,
+                ]}
+                rightButtons={[
                     <LoadingButton
                         key="finish-exam-button"
                         variant="contained"
                         onClick={openConfirmFinishExamModal}
                     >
-                        Valider les réponses
+                        Terminer l'examen
                     </LoadingButton>,
                 ]}
             >

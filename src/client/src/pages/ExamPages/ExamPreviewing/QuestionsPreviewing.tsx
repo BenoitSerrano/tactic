@@ -21,7 +21,7 @@ function QuestionsPreviewing(props: {
 
     return (
         <>
-            <TestPageLayout studentEmail="-" title={props.title} buttons={[]} result={totalPoints}>
+            <TestPageLayout studentEmail="-" title={props.title} result={totalPoints}>
                 {props.exercises.map((exercise, exerciseIndex) => {
                     const progress = computeExerciseProgress(exercise.questions, currentAnswers);
                     const exerciseIndication = {

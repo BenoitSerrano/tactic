@@ -2,22 +2,38 @@ import { Typography, styled } from '@mui/material';
 
 function TestPageLayout(props: {
     title: string;
+    subtitle?: string;
     studentEmail: string;
     result?: string;
     children: JSX.Element[] | JSX.Element;
-    buttons: JSX.Element[];
+    centerButtons?: JSX.Element[];
+    rightButtons?: JSX.Element[];
 }) {
+    const shouldDisplayFooter = !!props.centerButtons;
     return (
         <Container>
             <TitleContainer>
-                <Typography variant="h1">{props.title}</Typography>
+                <Typography style={{ textAlign: 'center' }} variant="h2">
+                    {props.title}
+                </Typography>
+                {!!props.subtitle && (
+                    <Typography style={{ fontStyle: 'italic' }} variant="h5">
+                        {props.subtitle}
+                    </Typography>
+                )}
             </TitleContainer>
             <StudentInfoContainer>
                 <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
                 {!!props.result && <Typography variant="caption">{props.result}</Typography>}
             </StudentInfoContainer>
             {props.children}
-            {!!props.buttons.length && <FooterContainer>{props.buttons}</FooterContainer>}
+            {shouldDisplayFooter && (
+                <FooterContainer>
+                    <LeftFooterPart />
+                    <CenterFooterPart>{props.centerButtons}</CenterFooterPart>
+                    <RightFooterPart>{props.rightButtons}</RightFooterPart>
+                </FooterContainer>
+            )}
         </Container>
     );
 }
@@ -26,14 +42,38 @@ const FOOTER_HEIGHT = 50;
 
 const FooterContainer = styled('div')({
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: FOOTER_HEIGHT,
-    backgroundColor: 'white',
     position: 'fixed',
     width: '100%',
+    backgroundColor: 'white',
     bottom: 0,
     left: 0,
+});
+
+const CenterFooterPart = styled('div')({
+    height: '100%',
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
+
+const RightFooterPart = styled('div')({
+    height: '100%',
+    flex: 1,
+    paddingRight: 10,
+    display: 'flex',
+
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+});
+
+const LeftFooterPart = styled('div')({
+    height: '100%',
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
 });
 
 const StudentInfoContainer = styled('div')(({ theme }) => ({
