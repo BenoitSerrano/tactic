@@ -68,7 +68,7 @@ type otherQuestionKindAnswersType = {
 };
 
 type examWithoutAnswersType = {
-    duration: number;
+    duration: number | null;
     extraTime: number;
     name: string;
     exercises: Array<exerciseWithoutAnswersType>;

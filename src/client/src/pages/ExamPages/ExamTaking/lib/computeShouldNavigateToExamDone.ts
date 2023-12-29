@@ -8,12 +8,15 @@ function computeShouldNavigateToExamDone(
         endedAt,
         extraTime,
     }: {
-        duration: number;
+        duration: number | null;
         startedAt: string;
         endedAt: string | undefined;
         extraTime: number;
     },
 ) {
+    if (duration === null) {
+        return false;
+    }
     const isExamTimeElapsed = computeIsExamTimeElapsed(now, { duration, startedAt, extraTime });
     const hasFinishedExam = !!endedAt;
     return isExamTimeElapsed || hasFinishedExam;

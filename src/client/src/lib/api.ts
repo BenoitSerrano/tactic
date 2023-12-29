@@ -251,7 +251,7 @@ async function fetchExam(examId: string) {
     return performApiCall(URL, 'GET');
 }
 
-async function createExam({ name, duration }: { name: string; duration: number }) {
+async function createExam({ name, duration }: { name: string; duration: number | undefined }) {
     const URL = `${BASE_URL}/exams`;
     return performApiCall(URL, 'POST', { name, duration });
 }

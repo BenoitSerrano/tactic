@@ -49,7 +49,7 @@ const examRoutes: Array<routeType<any, any>> = [
         controller: examController.createExam,
         schema: Joi.object({
             name: Joi.string().required(),
-            duration: Joi.number().required(),
+            duration: Joi.number(),
         }),
     },
     {
