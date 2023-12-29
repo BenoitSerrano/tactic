@@ -11,7 +11,6 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
@@ -28,7 +27,7 @@ import { ExamCreatedModal } from './ExamCreatedModal';
 import { examApiType } from './types';
 import { pathHandler } from '../../lib/pathHandler';
 import { EditableText } from './EditableText';
-import { EditableTime } from './EditableTime';
+import { EditableDuration } from './EditableDuration';
 
 function Exams() {
     const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -72,8 +71,8 @@ function Exams() {
         },
     });
 
-    const updateExamMutation = useMutation({
-        mutationFn: api.updateExam,
+    const updateExamNameMutation = useMutation({
+        mutationFn: api.updateExamName,
         onSuccess: (exam) => {
             displayAlert({
                 variant: 'success',
@@ -97,7 +96,6 @@ function Exams() {
         return <div />;
     }
 
-    console.log(query.data);
     return (
         <>
             <Menu
@@ -114,7 +112,7 @@ function Exams() {
                     <TableRow>
                         <TableCell width={290}>Actions</TableCell>
                         <TableCell>Nom du test</TableCell>
-                        <TableCell width={150}>Durée</TableCell>
+                        <TableCell width={170}>Durée</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -160,16 +158,7 @@ function Exams() {
                                 />
                             </TableCell>
                             <TableCell>
-                                {exam.duration === null ? (
-                                    <Tooltip title="Cet examen n'a pas de durée">
-                                        <AllInclusiveIcon />
-                                    </Tooltip>
-                                ) : (
-                                    <EditableTime
-                                        initialValue={exam.duration}
-                                        changeValue={buildEditExamDuration(exam.id)}
-                                    />
-                                )}
+                                <EditableDuration exam={exam} />
                             </TableCell>
                         </TableRow>
                     ))}
@@ -209,12 +198,7 @@ function Exams() {
 
     function buildEditExamName(examId: string) {
         return (name: string) => {
-            updateExamMutation.mutate({ examId, name });
-        };
-    }
-    function buildEditExamDuration(examId: string) {
-        return (duration: number) => {
-            updateExamMutation.mutate({ examId, duration });
+            updateExamNameMutation.mutate({ examId, name });
         };
     }
 

@@ -1,0 +1,3 @@
+const EXAM_DEFAULT_DURATION = 60;
+
+export { EXAM_DEFAULT_DURATION };

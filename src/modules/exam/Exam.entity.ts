@@ -27,8 +27,8 @@ export class Exam {
     @OneToMany(() => Attempt, (attempt) => attempt.exam)
     attempts: Attempt[];
 
-    @Column({ nullable: true })
-    duration?: number;
+    @Column({ type: 'int', nullable: true })
+    duration: number | null;
 
     @Column({ default: 2 })
     extraTime: number;

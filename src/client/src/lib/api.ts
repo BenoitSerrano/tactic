@@ -19,7 +19,8 @@ const api = {
     deleteStudent,
     createExam,
     fetchExam,
-    updateExam,
+    updateExamName,
+    updateExamDuration,
     fetchExams,
     fetchExamResults,
     deleteExam,
@@ -256,17 +257,20 @@ async function createExam({ name, duration }: { name: string; duration: number |
     return performApiCall(URL, 'POST', { name, duration });
 }
 
-async function updateExam({
+async function updateExamName({ examId, name }: { examId: string; name: string }) {
+    const URL = `${BASE_URL}/exams/${examId}/name`;
+    return performApiCall(URL, 'PATCH', { name });
+}
+
+async function updateExamDuration({
     examId,
-    name,
     duration,
 }: {
     examId: string;
-    name?: string;
-    duration?: number;
+    duration: number | null;
 }) {
-    const URL = `${BASE_URL}/exams/${examId}`;
-    return performApiCall(URL, 'PATCH', { name, duration });
+    const URL = `${BASE_URL}/exams/${examId}/duration`;
+    return performApiCall(URL, 'PATCH', { duration });
 }
 
 async function fetchExercise(params: { examId: string; exerciseId: number }) {

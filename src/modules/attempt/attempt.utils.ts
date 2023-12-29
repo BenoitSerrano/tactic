@@ -27,7 +27,7 @@ function computeIsTimeLimitExceeded({
     extraTime: Exam['extraTime'];
     now: Date;
 }) {
-    if (duration === undefined) {
+    if (duration === null) {
         return false;
     }
     const attemptStartedDate = new Date(startedAt);

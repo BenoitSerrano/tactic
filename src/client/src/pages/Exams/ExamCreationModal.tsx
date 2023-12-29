@@ -5,8 +5,7 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { INTEGER_NUMBER_REGEX } from '../../constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
-
-const DEFAULT_DURATION = 60;
+import { EXAM_DEFAULT_DURATION } from './constants';
 
 function ExamCreationModal(props: {
     close: () => void;
@@ -14,7 +13,7 @@ function ExamCreationModal(props: {
     onExamCreated: () => void;
 }) {
     const [name, setName] = useState('');
-    const [duration, setDuration] = useState(`${DEFAULT_DURATION}`);
+    const [duration, setDuration] = useState(`${EXAM_DEFAULT_DURATION}`);
     const [isThereDuration, setIsThereDuration] = useState(true);
 
     const queryClient = useQueryClient();
@@ -22,7 +21,7 @@ function ExamCreationModal(props: {
     const createExamMutation = useMutation({
         mutationFn: api.createExam,
         onSuccess: () => {
-            setDuration(`${DEFAULT_DURATION}`);
+            setDuration(`${EXAM_DEFAULT_DURATION}`);
             setName('');
             setIsThereDuration(true);
             queryClient.invalidateQueries({ queryKey: ['exams'] });

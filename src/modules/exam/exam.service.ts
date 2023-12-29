@@ -15,7 +15,8 @@ function buildExamService() {
     const examRepository = dataSource.getRepository(Exam);
     const examService = {
         createExam,
-        updateExam,
+        updateExamName,
+        updateExamDuration,
         getExams,
         getAllExams,
         getExam,
@@ -30,22 +31,24 @@ function buildExamService() {
 
     return examService;
 
-    async function createExam(name: Exam['name'], duration: Exam['duration'], user: User) {
+    async function createExam(name: Exam['name'], duration: number | null, user: User) {
         const exam = new Exam();
         exam.name = name;
-        exam.duration = duration;
+        exam.duration = duration !== null ? duration : null;
         exam.user = user;
         return examRepository.save(exam);
     }
 
-    async function updateExam(examId: Exam['id'], body: { name?: string; duration?: number }) {
+    async function updateExamName(examId: Exam['id'], name: string) {
         const exam = await examRepository.findOneOrFail({ where: { id: examId } });
-        if (body.name) {
-            exam.name = body.name;
-        }
-        if (body.duration) {
-            exam.duration = body.duration;
-        }
+        exam.name = name;
+        const newExam = await examRepository.save(exam);
+        return newExam;
+    }
+
+    async function updateExamDuration(examId: Exam['id'], duration: number | null) {
+        const exam = await examRepository.findOneOrFail({ where: { id: examId } });
+        exam.duration = duration !== null ? duration : null;
         const newExam = await examRepository.save(exam);
         return newExam;
     }

@@ -34,6 +34,7 @@ function QuestionReponseUpsertionModalContent(props: {
                 subtitle="Indiquez les réponses correctes, séparées par des point-virgules (;)"
             >
                 <TextField
+                    fullWidth
                     label="Réponses correctes"
                     value={rightAnswers}
                     onChange={onChangeRightAnswers}

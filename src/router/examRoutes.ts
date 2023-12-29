@@ -49,7 +49,7 @@ const examRoutes: Array<routeType<any, any>> = [
         controller: examController.createExam,
         schema: Joi.object({
             name: Joi.string().required(),
-            duration: Joi.number(),
+            duration: Joi.number().required().allow(null),
         }),
     },
     {
@@ -63,9 +63,9 @@ const examRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'PATCH',
-        path: '/exams/:examId',
+        path: '/exams/:examId/name',
         isAuthenticated: true,
-        controller: examController.updateExam,
+        controller: examController.updateExamName,
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -74,7 +74,21 @@ const examRoutes: Array<routeType<any, any>> = [
         ]),
         schema: Joi.object({
             name: Joi.string(),
-            duration: Joi.number(),
+        }),
+    },
+    {
+        method: 'PATCH',
+        path: '/exams/:examId/duration',
+        isAuthenticated: true,
+        controller: examController.updateExamDuration,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            duration: Joi.number().allow(null),
         }),
     },
 
