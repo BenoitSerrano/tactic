@@ -9,6 +9,7 @@ import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
 import { acceptableAnswerType, questionDtoType } from './types';
 import { addAcceptableAnswerToTexteATrousQuestion } from './lib/addAcceptableAnswerToTexteATrousQuestion';
 import { removeOkAnswerFromQuestionFromTexteATrousQuestion } from './lib/removeOkAnswerFromQuestionFromTexteATrousQuestion';
+import { Exam } from '../exam';
 
 export { buildQuestionService };
 
@@ -27,6 +28,7 @@ function buildQuestionService() {
         decodeQuestion: questionEncoder.decodeQuestion,
         encodeQuestion: questionEncoder.encodeQuestion,
         getQuestionIds,
+        getQuestionsByExamId,
         duplicateQuestions,
         duplicateQuestion,
     };
@@ -203,5 +205,23 @@ function buildQuestionService() {
             order: newOrder + 1,
             exercise: { id: exerciseId },
         });
+    }
+
+    async function getQuestionsByExamId(examIds: Exam['id'][]) {
+        const questions = await questionRepository.find({
+            where: { exercise: { exam: { id: In(examIds) } } },
+            select: { exercise: { id: true, exam: { id: true } } },
+            relations: ['exercise', 'exercise.exam'],
+        });
+        const questionsByExamId: Record<Exam['id'], questionDtoType[]> = {};
+        for (const question of questions) {
+            const questionDto = questionEncoder.decodeQuestion(question);
+            questionsByExamId[question.exercise.exam.id] = questionsByExamId[
+                question.exercise.exam.id
+            ]
+                ? [...questionsByExamId[question.exercise.exam.id], questionDto]
+                : [questionDto];
+        }
+        return questionsByExamId;
     }
 }

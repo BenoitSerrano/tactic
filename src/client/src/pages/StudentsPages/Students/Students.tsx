@@ -10,6 +10,7 @@ import {
     TableRow,
     TableSortLabel,
     Tooltip,
+    styled,
 } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
@@ -31,9 +32,9 @@ type studentsSummaryType = {
         id: string;
         email: string;
         createdDate: string;
-        examStatus: Record<string, attemptStatusType>;
+        examStatus: Record<string, { attemptStatus: attemptStatusType; mark: number }>;
     }>;
-    examNames: Record<string, string>;
+    examInfos: Record<string, { name: string; totalPoints: number }>;
 };
 
 function Students() {
@@ -124,7 +125,7 @@ function Students() {
                                 Date d'ajout
                             </TableSortLabel>
                         </TableCell>
-                        {Object.entries(studentsQuery.data.examNames).map(([examId, examName]) => (
+                        {Object.entries(studentsQuery.data.examInfos).map(([examId, examInfo]) => (
                             <TableCell key={'label-' + examId}>
                                 <TableSortLabel
                                     active={activeSort === examId}
@@ -136,7 +137,7 @@ function Students() {
                                         setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                     }}
                                 >
-                                    {examName}
+                                    {examInfo.name}
                                 </TableSortLabel>
                             </TableCell>
                         ))}
@@ -164,9 +165,19 @@ function Students() {
                             <TableCell>
                                 {time.formatToReadableDatetime(student.createdDate)}
                             </TableCell>
-                            {Object.keys(studentsQuery.data.examNames).map((examId) => (
+                            {Object.keys(studentsQuery.data.examInfos).map((examId) => (
                                 <TableCell key={'examStatus-' + examId}>
-                                    {computeAttemptStatusIcon(student.examStatus[examId])}
+                                    <AttemptInfoContainer>
+                                        <MarkContainer>
+                                            {student.examStatus[examId].mark} /{' '}
+                                            {studentsQuery.data.examInfos[examId].totalPoints}{' '}
+                                        </MarkContainer>
+                                        <IconContainer>
+                                            {computeAttemptStatusIcon(
+                                                student.examStatus[examId].attemptStatus,
+                                            )}
+                                        </IconContainer>
+                                    </AttemptInfoContainer>
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -205,8 +216,8 @@ function Students() {
                     break;
                 default:
                     result =
-                        convertExamStatusToValue(resultA.examStatus[activeSort]) -
-                        convertExamStatusToValue(resultB.examStatus[activeSort]);
+                        convertExamStatusToValue(resultA.examStatus[activeSort].attemptStatus) -
+                        convertExamStatusToValue(resultB.examStatus[activeSort].attemptStatus);
                     break;
             }
             if (sortDirection === 'asc') {
@@ -251,5 +262,9 @@ function convertExamStatusToValue(status: attemptStatusType): number {
             return -1;
     }
 }
+
+const MarkContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing() }));
+const AttemptInfoContainer = styled('div')({ display: 'flex', alignItems: 'center' });
+const IconContainer = styled('div')({});
 
 export { Students };

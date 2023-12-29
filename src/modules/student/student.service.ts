@@ -8,6 +8,7 @@ import { hasher } from '../../lib/hasher';
 import { Exam, buildExamService } from '../exam';
 import { Group } from '../group';
 import { buildGroupService } from '../group/group.service';
+import { buildQuestionService } from '../question';
 
 export { buildStudentService };
 
@@ -36,6 +37,7 @@ function buildStudentService() {
     }
 
     async function getStudentsWithAttempts(groupId: Group['id']) {
+        const questionService = buildQuestionService();
         const studentsWithAttempts = await studentRepository.find({
             where: { group: { id: groupId } },
             select: {
@@ -43,6 +45,8 @@ function buildStudentService() {
                     id: true,
                     startedAt: true,
                     endedAt: true,
+                    answers: true,
+                    manualGrades: true,
                     exam: { id: true },
                 },
                 group: { id: true },
@@ -59,9 +63,11 @@ function buildStudentService() {
         }
         const examService = buildExamService();
         const exams = await examService.getExamsByIds(examIds);
+        const questionsByExamId = await questionService.getQuestionsByExamId(examIds);
         const studentsSummary = studentAdaptator.formatStudentsIntoStudentsSummary(
             studentsWithAttempts,
             exams,
+            questionsByExamId,
         );
         return studentsSummary;
     }
