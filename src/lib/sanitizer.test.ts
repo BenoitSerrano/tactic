@@ -7,4 +7,11 @@ describe('sanitizer', () => {
 
         expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
     });
+
+    it('should return true if several points', () => {
+        const answer1 = 'je suis .....';
+        const answer2 = 'je suis ..';
+
+        expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
+    });
 });
