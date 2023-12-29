@@ -24,6 +24,8 @@ import { attemptStatusType } from '../../../types';
 import { useParams } from 'react-router-dom';
 import { groupApiType } from '../types';
 import { ChangeGroupModal } from './ChangeGroupModal';
+import { Link } from '../../../components/Link';
+import { pathHandler } from '../../../lib/pathHandler';
 
 type sortColumnType = 'email' | 'createdDate' | string;
 
@@ -32,7 +34,10 @@ type studentsSummaryType = {
         id: string;
         email: string;
         createdDate: string;
-        examStatus: Record<string, { attemptStatus: attemptStatusType; mark: number }>;
+        examStatus: Record<
+            string,
+            { attemptStatus: attemptStatusType; attemptId: string | undefined; mark: number }
+        >;
     }>;
     examInfos: Record<string, { name: string; totalPoints: number }>;
 };
@@ -165,21 +170,32 @@ function Students() {
                             <TableCell>
                                 {time.formatToReadableDatetime(student.createdDate)}
                             </TableCell>
-                            {Object.keys(studentsQuery.data.examInfos).map((examId) => (
-                                <TableCell key={'examStatus-' + examId}>
-                                    <AttemptInfoContainer>
-                                        <MarkContainer>
-                                            {student.examStatus[examId].mark} /{' '}
-                                            {studentsQuery.data.examInfos[examId].totalPoints}{' '}
-                                        </MarkContainer>
-                                        <IconContainer>
-                                            {computeAttemptStatusIcon(
-                                                student.examStatus[examId].attemptStatus,
-                                            )}
-                                        </IconContainer>
-                                    </AttemptInfoContainer>
-                                </TableCell>
-                            ))}
+                            {Object.keys(studentsQuery.data.examInfos).map((examId) => {
+                                const attemptPath = computePathForAttempt(
+                                    examId,
+                                    student.examStatus[examId].attemptId,
+                                );
+                                const displayedMark = `${student.examStatus[examId].mark} /
+                                ${studentsQuery.data.examInfos[examId].totalPoints}`;
+                                return (
+                                    <TableCell key={'examStatus-' + examId}>
+                                        <AttemptInfoContainer>
+                                            <MarkContainer>
+                                                {attemptPath === undefined ? (
+                                                    displayedMark
+                                                ) : (
+                                                    <Link to={attemptPath}>{displayedMark}</Link>
+                                                )}
+                                            </MarkContainer>
+                                            <IconContainer>
+                                                {computeAttemptStatusIcon(
+                                                    student.examStatus[examId].attemptStatus,
+                                                )}
+                                            </IconContainer>
+                                        </AttemptInfoContainer>
+                                    </TableCell>
+                                );
+                            })}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -196,6 +212,13 @@ function Students() {
         return () => {
             setStudentIdToChangeGroup(studentId);
         };
+    }
+
+    function computePathForAttempt(examId: string, attemptId: string | undefined) {
+        if (attemptId === undefined) {
+            return undefined;
+        }
+        return pathHandler.getRoutePath('EXAM_CHECKING', { examId, attemptId });
     }
 
     function sortData(

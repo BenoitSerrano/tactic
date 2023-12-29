@@ -6,6 +6,7 @@ type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'co
 function computeExamStatus(
     exams: Record<Exam['id'], Pick<Exam, 'id' | 'name' | 'duration' | 'extraTime'>>,
     attempts: Array<{
+        id: Attempt['id'];
         endedAt: Attempt['endedAt'];
         answers: Attempt['answers'];
         manualGrades: Attempt['manualGrades'];
@@ -16,14 +17,17 @@ function computeExamStatus(
     questionsByExamId: Record<Exam['id'], questionDtoType[]>,
     now: Date,
 ) {
-    const examStatus: Record<string, { attemptStatus: attemptStatusType; mark: number }> = {};
+    const examStatus: Record<
+        string,
+        { attemptStatus: attemptStatusType; mark: number; attemptId: Attempt['id'] | undefined }
+    > = {};
     Object.keys(exams).forEach((examId) => {
-        examStatus[examId] = { attemptStatus: 'notStarted', mark: 0 };
+        examStatus[examId] = { attemptStatus: 'notStarted', mark: 0, attemptId: undefined };
     });
     attempts.forEach((attempt) => {
         const status = computeAttemptStatus(attempt, exams[attempt.exam.id], now);
         const answers = attemptUtils.parseAnswers(attempt.answers);
-        const questions = questionsByExamId[attempt.exam.id];
+        const questions = questionsByExamId[attempt.exam.id] || [];
         const totalMark = Object.values(questions)
             .map((question) => {
                 const { mark } = attemptUtils.computeNotationInfo({
@@ -34,7 +38,11 @@ function computeExamStatus(
                 return mark || 0;
             })
             .reduce((sum, mark) => sum + mark, 0);
-        examStatus[attempt.exam.id] = { attemptStatus: status, mark: totalMark };
+        examStatus[attempt.exam.id] = {
+            attemptStatus: status,
+            mark: totalMark,
+            attemptId: attempt.id,
+        };
     });
     return examStatus;
 }

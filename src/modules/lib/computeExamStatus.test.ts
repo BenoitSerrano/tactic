@@ -10,59 +10,101 @@ describe('computeExamStatus', () => {
     it('should return blank if the test has never been started', () => {
         const attempts: Attempt[] = [];
 
-        const examStatus = computeExamStatus(exams, attempts, now);
+        const examStatus = computeExamStatus(exams, attempts, {}, now);
 
-        expect(examStatus).toEqual({ exam1: 'notStarted' });
+        expect(examStatus).toEqual({
+            exam1: { attemptStatus: 'notStarted', mark: 0, attemptId: undefined },
+        });
     });
 
     it('should return pending if the test has been started and not expired (white zone)', () => {
         const startedAt = '2023-07-24 06:45:20.429 +0200';
-        const attempt = { startedAt, endedAt: null, correctedAt: null, exam: { id: 'exam1' } };
+        const attempt = {
+            id: 'attempt1',
+            answers: [],
+            manualGrades: [],
+            startedAt,
+            endedAt: null,
+            correctedAt: null,
+            exam: { id: 'exam1' },
+        };
 
         const attempts = [attempt];
 
-        const examStatus = computeExamStatus(exams, attempts, now);
+        const examStatus = computeExamStatus(exams, attempts, {}, now);
 
-        expect(examStatus).toEqual({ exam1: 'pending' });
+        expect(examStatus).toEqual({
+            exam1: { attemptStatus: 'pending', mark: 0, attemptId: 'attempt1' },
+        });
     });
 
     it('should return pending if the test has been started and not expired (gray zone)', () => {
         const startedAt = '2023-07-24 06:35:20.429 +0200';
         const correctedAt = null;
 
-        const attempt = { startedAt, endedAt: null, correctedAt, exam: { id: 'exam1' } };
+        const attempt = {
+            id: 'attempt1',
+            answers: [],
+            manualGrades: [],
+            startedAt,
+            endedAt: null,
+            correctedAt,
+            exam: { id: 'exam1' },
+        };
 
         const attempts = [attempt];
 
-        const examStatus = computeExamStatus(exams, attempts, now);
+        const examStatus = computeExamStatus(exams, attempts, {}, now);
 
-        expect(examStatus).toEqual({ exam1: 'pending' });
+        expect(examStatus).toEqual({
+            exam1: { attemptStatus: 'pending', mark: 0, attemptId: 'attempt1' },
+        });
     });
 
     it('should return expired if the test is expired and not finished', () => {
         const startedAt = '2023-07-24 06:10:20.429 +0200';
         const correctedAt = null;
 
-        const attempt = { startedAt, endedAt: null, exam: { id: 'exam1' }, correctedAt };
+        const attempt = {
+            id: 'attempt1',
+            answers: [],
+            manualGrades: [],
+            startedAt,
+            endedAt: null,
+            exam: { id: 'exam1' },
+            correctedAt,
+        };
 
         const attempts = [attempt];
 
-        const examStatus = computeExamStatus(exams, attempts, now);
+        const examStatus = computeExamStatus(exams, attempts, {}, now);
 
-        expect(examStatus).toEqual({ exam1: 'expired' });
+        expect(examStatus).toEqual({
+            exam1: { attemptStatus: 'expired', mark: 0, attemptId: 'attempt1' },
+        });
     });
 
     it('should return finished if the test is finished', () => {
         const startedAt = '2023-07-24 06:10:20.429 +0200';
         const endedAt = '2023-07-24 06:50:20.429 +0200';
         const correctedAt = null;
-        const attempt = { startedAt, exam: { id: 'exam1' }, endedAt, correctedAt };
+        const attempt = {
+            id: 'attempt1',
+            answers: [],
+            manualGrades: [],
+            startedAt,
+            exam: { id: 'exam1' },
+            endedAt,
+            correctedAt,
+        };
 
         const attempts = [attempt];
 
-        const examStatus = computeExamStatus(exams, attempts, now);
+        const examStatus = computeExamStatus(exams, attempts, {}, now);
 
-        expect(examStatus).toEqual({ exam1: 'finished' });
+        expect(examStatus).toEqual({
+            exam1: { attemptStatus: 'finished', mark: 0, attemptId: 'attempt1' },
+        });
     });
 
     it('should return corrected if the test is corrected', () => {
@@ -70,6 +112,9 @@ describe('computeExamStatus', () => {
         const endedAt = '2023-07-24 06:50:20.429 +0200';
         const correctedAt = '2023-07-25 06:50:20.429 +0200';
         const attempt = {
+            id: 'attempt1',
+            answers: [],
+            manualGrades: [],
             startedAt,
             exam: { id: 'exam1' },
             endedAt,
@@ -78,9 +123,11 @@ describe('computeExamStatus', () => {
 
         const attempts = [attempt];
 
-        const examStatus = computeExamStatus(exams, attempts, now);
+        const examStatus = computeExamStatus(exams, attempts, {}, now);
 
-        expect(examStatus).toEqual({ exam1: 'corrected' });
+        expect(examStatus).toEqual({
+            exam1: { attemptStatus: 'corrected', mark: 0, attemptId: 'attempt1' },
+        });
     });
 
     it('should return corrected if the test is corrected although expired but not finished', () => {
@@ -88,6 +135,9 @@ describe('computeExamStatus', () => {
         const endedAt = null;
         const correctedAt = '2023-07-25 06:50:20.429 +0200';
         const attempt = {
+            id: 'attempt1',
+            answers: [],
+            manualGrades: [],
             startedAt,
             exam: { id: 'exam1' },
             endedAt,
@@ -96,8 +146,10 @@ describe('computeExamStatus', () => {
 
         const attempts = [attempt];
 
-        const examStatus = computeExamStatus(exams, attempts, now);
+        const examStatus = computeExamStatus(exams, attempts, {}, now);
 
-        expect(examStatus).toEqual({ exam1: 'corrected' });
+        expect(examStatus).toEqual({
+            exam1: { attemptStatus: 'corrected', mark: 0, attemptId: 'attempt1' },
+        });
     });
 });
