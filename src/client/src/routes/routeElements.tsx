@@ -83,8 +83,7 @@ const ROUTE_ELEMENTS: Record<
         element: <ExamResults />,
     },
     EXAM_PREVIEWING: {
-        isAdmin: true,
-
+        isAdmin: false,
         element: <ExamPreviewing />,
     },
     EXAM_CHECKING: {

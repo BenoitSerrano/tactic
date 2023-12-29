@@ -5,6 +5,7 @@ import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
 import { QuestionsPreviewing } from './QuestionsPreviewing';
 import { examWithoutAnswersType } from '../types';
+import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
 
 function ExamPreviewing() {
     const params = useParams();
@@ -22,13 +23,15 @@ function ExamPreviewing() {
     }
 
     return (
-        <MainContainer>
-            <QuestionsPreviewing
-                title={query.data.name}
-                exercises={query.data.exercises}
-                examId={examId}
-            />
-        </MainContainer>
+        <NotLoggedInPage>
+            <MainContainer>
+                <QuestionsPreviewing
+                    title={query.data.name}
+                    exercises={query.data.exercises}
+                    examId={examId}
+                />
+            </MainContainer>
+        </NotLoggedInPage>
     );
 }
 
