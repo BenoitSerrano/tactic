@@ -16,9 +16,9 @@ function computeExerciseIndication<
         totalPoints += question.points;
     }
     if (!!indication?.hideMark) {
-        result = `/ ${totalPoints}`;
+        result = `/ ${totalPoints}`;
     } else {
-        result = `${totalMark} / ${totalPoints}`;
+        result = `${totalMark} / ${totalPoints}`;
     }
     if (indication?.progress !== undefined) {
         progress = Math.floor(indication.progress * 100);

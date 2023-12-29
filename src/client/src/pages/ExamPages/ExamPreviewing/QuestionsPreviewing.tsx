@@ -44,7 +44,7 @@ function QuestionsPreviewing(props: {
                                     key={`question-${question.id}`}
                                 >
                                     <QuestionIndicatorsContainer>
-                                        <Typography>/ {question.points}</Typography>
+                                        <Typography>/ {question.points}</Typography>
                                     </QuestionIndicatorsContainer>
                                     <QuestionAnswering
                                         currentAnswer={currentAnswers[question.id]}
@@ -73,7 +73,7 @@ function QuestionsPreviewing(props: {
 }
 
 const QuestionIndicatorsContainer = styled('div')({
-    minWidth: 80,
+    minWidth: 60,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

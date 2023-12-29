@@ -1,4 +1,11 @@
-import { Accordion, AccordionDetails, AccordionSummary, Typography, styled } from '@mui/material';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    LinearProgress,
+    Typography,
+    styled,
+} from '@mui/material';
 import { ReactNode } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Markdown from 'react-markdown';
@@ -36,12 +43,17 @@ function ExerciseContainer<
                 <TitleContainer>
                     <ExerciseHeaderContainer>
                         <ExercisePointsContainer>
-                            <Typography variant="h4">( {result})</Typography>
+                            <Typography variant="h4">( {result})</Typography>
                         </ExercisePointsContainer>
                         <Typography variant="h3">{props.exercise.name}</Typography>
                     </ExerciseHeaderContainer>
                     {progress !== undefined && (
-                        <Typography variant="h4">{progress}% complétés</Typography>
+                        <ProgressWithLabelContainer>
+                            <Typography variant="body2">{progress}%</Typography>
+                            <ProgressContainer>
+                                <LinearProgress variant="determinate" value={progress} />
+                            </ProgressContainer>
+                        </ProgressWithLabelContainer>
                     )}
                 </TitleContainer>
             </AccordionSummary>
@@ -70,6 +82,17 @@ const DefaultContainer = styled(Accordion)(({ theme }) => ({
     flex: 1,
     borderBottom: `1px solid ${theme.palette.common.black}`,
     ...mainContainerProperties,
+}));
+
+const ProgressWithLabelContainer = styled('div')({
+    width: '15%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+});
+
+const ProgressContainer = styled('div')(({ theme }) => ({
+    width: '100%',
 }));
 
 const AccordionContent = styled(AccordionDetails)({ padding: 0 });
