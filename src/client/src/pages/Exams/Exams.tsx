@@ -26,7 +26,7 @@ import { useAlert } from '../../lib/alert';
 import { ExamCreatedModal } from './ExamCreatedModal';
 import { examApiType } from './types';
 import { pathHandler } from '../../lib/pathHandler';
-import { EditableText } from './EditableText';
+import { EditableName } from './EditableName';
 import { EditableDuration } from './EditableDuration';
 
 function Exams() {
@@ -67,24 +67,6 @@ function Exams() {
             displayAlert({
                 variant: 'error',
                 text: "Une erreur est survenue. L'examen n'a pas pu être dupliqué",
-            });
-        },
-    });
-
-    const updateExamNameMutation = useMutation({
-        mutationFn: api.updateExamName,
-        onSuccess: (exam) => {
-            displayAlert({
-                variant: 'success',
-                text: `L'examen "${exam.name}" a bien été modifié`,
-            });
-            queryClient.invalidateQueries({ queryKey: ['exams'] });
-        },
-        onError: (error) => {
-            console.error(error);
-            displayAlert({
-                variant: 'error',
-                text: "Une erreur est survenue. Les modifications n'ont pas pu être enregistrées.",
             });
         },
     });
@@ -152,10 +134,7 @@ function Exams() {
                                 </Tooltip>
                             </TableCell>
                             <TableCell>
-                                <EditableText
-                                    initialText={exam.name}
-                                    changeText={buildEditExamName(exam.id)}
-                                />
+                                <EditableName exam={exam} />
                             </TableCell>
                             <TableCell>
                                 <EditableDuration exam={exam} />
@@ -196,15 +175,8 @@ function Exams() {
         return () => navigate(path);
     }
 
-    function buildEditExamName(examId: string) {
-        return (name: string) => {
-            updateExamNameMutation.mutate({ examId, name });
-        };
-    }
-
     function buildNavigateToResults(examId: string) {
         const path = pathHandler.getRoutePath('EXAM_RESULTS', { examId });
-
         return () => navigate(path);
     }
 

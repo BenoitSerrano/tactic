@@ -11,19 +11,16 @@ function IconButton(props: {
     disabled?: boolean;
 }) {
     const { IconComponent } = props;
+    const size = props.size || 'medium';
     return (
         <Tooltip title={props.title}>
             <MuiIconButton
+                size={size}
                 disabled={props.disabled}
                 onClick={props.onClick}
-                size={props.size}
                 color={props.color}
             >
-                {props.isLoading ? (
-                    <Loader size="small" />
-                ) : (
-                    <IconComponent fontSize={props.size} />
-                )}
+                {props.isLoading ? <Loader size={size} /> : <IconComponent fontSize={size} />}
             </MuiIconButton>
         </Tooltip>
     );

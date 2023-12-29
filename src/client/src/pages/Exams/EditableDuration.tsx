@@ -30,6 +30,7 @@ function EditableDuration(props: { exam: examApiType }) {
         },
         onError: (error) => {
             console.error(error);
+            setIsEditing(false);
             displayAlert({
                 variant: 'error',
                 text: "Une erreur est survenue. Les modifications n'ont pas pu être enregistrées.",
@@ -67,6 +68,7 @@ function EditableDuration(props: { exam: examApiType }) {
                 <StyledTextField autoFocus variant="standard" value={value} onChange={onChange} />
                 minutes
                 <IconButton
+                    isLoading={updateExamDurationMutation.isPending}
                     title="Valider"
                     disabled={isConfirmDisabled}
                     IconComponent={CheckIcon}
@@ -87,6 +89,7 @@ function EditableDuration(props: { exam: examApiType }) {
                 <IconButton
                     title="Valider"
                     disabled={isConfirmDisabled}
+                    isLoading={updateExamDurationMutation.isPending}
                     IconComponent={CheckIcon}
                     onClick={confirmChanges}
                 />
