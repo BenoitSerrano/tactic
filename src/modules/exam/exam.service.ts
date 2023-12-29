@@ -117,7 +117,8 @@ function buildExamService() {
     async function getExamsByIds(examIds: Array<Exam['id']>) {
         const exams = await examRepository.find({
             where: { id: In(examIds) },
-            select: { id: true, name: true, duration: true, extraTime: true },
+            order: { createdAt: 'ASC' },
+            select: { id: true, name: true, duration: true, extraTime: true, createdAt: true },
         });
 
         return mapEntities(exams);
