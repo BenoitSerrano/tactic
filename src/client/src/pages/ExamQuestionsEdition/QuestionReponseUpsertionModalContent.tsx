@@ -34,6 +34,7 @@ function QuestionReponseUpsertionModalContent(props: {
                 subtitle="Indiquez les réponses correctes, séparées par des point-virgules (;)"
             >
                 <TextField
+                    fullWidth
                     label="Réponses correctes"
                     value={rightAnswers}
                     onChange={onChangeRightAnswers}
@@ -56,6 +57,7 @@ function QuestionReponseUpsertionModalContent(props: {
     function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
         const newAcceptableAnswerWithPoints = event.target.value
             .split(SPLITTING_CHARACTER_FOR_ANSWERS)
+            .filter(Boolean)
             .map((answer) => ({ answer, grade: 'A' as const }));
         props.setAcceptableAnswers([newAcceptableAnswerWithPoints]);
     }

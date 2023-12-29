@@ -8,7 +8,8 @@ function buildExamController() {
     const examService = buildExamService();
     const examController = {
         createExam,
-        updateExam,
+        updateExamDuration,
+        updateExamName,
         getExams,
         getExam,
         getExamWithoutAnswers,
@@ -22,21 +23,25 @@ function buildExamController() {
 
     async function createExam(
         params: {
-            body: { name: string; duration: number | undefined; extraTime: number };
+            body: { name: string; duration: number | null; extraTime: number };
         },
         user: User,
     ) {
         return examService.createExam(params.body.name, params.body.duration, user);
     }
 
-    async function updateExam(params: {
+    async function updateExamName(params: {
         urlParams: { examId: Exam['id'] };
-        body: { name?: string; duration?: number };
+        body: { name: string };
     }) {
-        return examService.updateExam(params.urlParams.examId, {
-            name: params.body.name,
-            duration: params.body.duration,
-        });
+        return examService.updateExamName(params.urlParams.examId, params.body.name);
+    }
+
+    async function updateExamDuration(params: {
+        urlParams: { examId: Exam['id'] };
+        body: { duration: number | null };
+    }) {
+        return examService.updateExamDuration(params.urlParams.examId, params.body.duration);
     }
 
     async function getExams(_params: {}, user: User) {
