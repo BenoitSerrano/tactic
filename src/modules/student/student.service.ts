@@ -1,10 +1,7 @@
 import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
-import { User } from '../user';
 import { Student } from './Student.entity';
 import { studentAdaptator } from './student.adaptator';
-import { mapEntities } from '../../lib/mapEntities';
-import { hasher } from '../../lib/hasher';
 import { Exam, buildExamService } from '../exam';
 import { Group } from '../group';
 import { buildGroupService } from '../group/group.service';
