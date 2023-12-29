@@ -22,7 +22,7 @@ function buildExamController() {
 
     async function createExam(
         params: {
-            body: { name: string; duration: number; extraTime: number };
+            body: { name: string; duration: number | undefined; extraTime: number };
         },
         user: User,
     ) {

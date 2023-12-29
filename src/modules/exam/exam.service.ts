@@ -30,7 +30,7 @@ function buildExamService() {
 
     return examService;
 
-    async function createExam(name: string, duration: number, user: User) {
+    async function createExam(name: Exam['name'], duration: Exam['duration'], user: User) {
         const exam = new Exam();
         exam.name = name;
         exam.duration = duration;

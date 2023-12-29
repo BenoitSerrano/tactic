@@ -13,14 +13,8 @@ function TestPageLayout(props: {
     return (
         <Container>
             <TitleContainer>
-                <Typography style={{ textAlign: 'center' }} variant="h2">
-                    {props.title}
-                </Typography>
-                {!!props.subtitle && (
-                    <Typography style={{ fontStyle: 'italic' }} variant="h5">
-                        {props.subtitle}
-                    </Typography>
-                )}
+                <Title variant="h2">{props.title}</Title>
+                {!!props.subtitle && <Subtitle variant="h5">{props.subtitle}</Subtitle>}
             </TitleContainer>
             <StudentInfoContainer>
                 <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
@@ -86,6 +80,9 @@ const StudentInfoContainer = styled('div')(({ theme }) => ({
 const StudentEmail = styled(Typography)(({ theme }) => ({
     fontStyle: 'italic',
 }));
+
+const Title = styled(Typography)({ textAlign: 'center' });
+const Subtitle = styled(Typography)({ fontStyle: 'italic' });
 
 const TitleContainer = styled('div')(({ theme }) => ({
     display: 'flex',

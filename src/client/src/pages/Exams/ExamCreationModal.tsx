@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TextField, styled } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { INTEGER_NUMBER_REGEX } from '../../constants';
@@ -8,18 +8,23 @@ import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 
 const DEFAULT_DURATION = 60;
 
-function ExamUpsertionModal(props: {
+function ExamCreationModal(props: {
     close: () => void;
     isOpen: boolean;
     onExamCreated: () => void;
 }) {
     const [name, setName] = useState('');
     const [duration, setDuration] = useState(`${DEFAULT_DURATION}`);
+    const [isThereDuration, setIsThereDuration] = useState(true);
+
     const queryClient = useQueryClient();
 
     const createExamMutation = useMutation({
         mutationFn: api.createExam,
         onSuccess: () => {
+            setDuration(`${DEFAULT_DURATION}`);
+            setName('');
+            setIsThereDuration(true);
             queryClient.invalidateQueries({ queryKey: ['exams'] });
             props.onExamCreated();
             props.close();
@@ -52,16 +57,37 @@ function ExamUpsertionModal(props: {
                     />
                 </FieldContainer>
                 <FieldContainer>
-                    <TextField
-                        type="number"
-                        label="Durée du test en minutes"
-                        value={duration}
-                        onChange={onChangeDuration}
-                    />
+                    <StyledRadioGroup
+                        value={isThereDuration ? '1' : '0'}
+                        onChange={onChangeIsThereDuration}
+                    >
+                        <FormControlLabel
+                            value="1"
+                            control={<Radio />}
+                            label={
+                                <TextField
+                                    disabled={!isThereDuration}
+                                    type="number"
+                                    label="Durée du test en minutes"
+                                    value={duration}
+                                    onChange={onChangeDuration}
+                                />
+                            }
+                        />
+                        <FormControlLabel
+                            value="0"
+                            control={<Radio />}
+                            label="Cet examen n'a pas de durée"
+                        />
+                    </StyledRadioGroup>
                 </FieldContainer>
             </>
         </Modal>
     );
+
+    function onChangeIsThereDuration(event: React.ChangeEvent<HTMLInputElement>) {
+        setIsThereDuration(event.target.value === '1');
+    }
 
     function onChangeDuration(event: React.ChangeEvent<HTMLInputElement>) {
         const newDuration = event.target.value;
@@ -72,7 +98,7 @@ function ExamUpsertionModal(props: {
 
     function saveExam() {
         const newExam = {
-            duration: Number(duration),
+            duration: isThereDuration ? Number(duration) : undefined,
             name,
         };
         createExamMutation.mutate({
@@ -84,7 +110,16 @@ function ExamUpsertionModal(props: {
 const FieldContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1),
+    display: 'flex',
+    flexDirection: 'row',
     width: '100%',
 }));
 
-export { ExamUpsertionModal };
+const StyledRadioGroup = styled(RadioGroup)({
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+});
+
+export { ExamCreationModal };

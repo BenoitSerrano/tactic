@@ -11,6 +11,7 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
@@ -20,7 +21,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import { config } from '../../config';
 import { Loader } from '../../components/Loader';
-import { ExamUpsertionModal } from './ExamUpsertionModal';
+import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
 import { ExamCreatedModal } from './ExamCreatedModal';
@@ -96,6 +97,7 @@ function Exams() {
         return <div />;
     }
 
+    console.log(query.data);
     return (
         <>
             <Menu
@@ -158,17 +160,23 @@ function Exams() {
                                 />
                             </TableCell>
                             <TableCell>
-                                <EditableTime
-                                    initialValue={exam.duration}
-                                    changeValue={buildEditExamDuration(exam.id)}
-                                />
+                                {exam.duration === null ? (
+                                    <Tooltip title="Cet examen n'a pas de durée">
+                                        <AllInclusiveIcon />
+                                    </Tooltip>
+                                ) : (
+                                    <EditableTime
+                                        initialValue={exam.duration}
+                                        changeValue={buildEditExamDuration(exam.id)}
+                                    />
+                                )}
                             </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
 
-            <ExamUpsertionModal
+            <ExamCreationModal
                 isOpen={isCreateExamModalOpen}
                 onExamCreated={onExamCreated}
                 close={() => setIsCreateExamModalOpen(false)}

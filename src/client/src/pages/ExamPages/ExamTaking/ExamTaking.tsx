@@ -84,22 +84,20 @@ function ExamTaking() {
         return <Navigate to={examDonePath} />;
     }
 
-    const officialEndTime = computeOfficialEndTime({
+    const examCaption = computeExamCaption({
         duration: query.data.exam.duration,
         startedAt: query.data.startedAt,
     });
 
-    const title = `Votre test se terminera à ${officialEndTime}.`;
-
     return (
         <NotLoggedInPage
             title={
-                <TitleContainer>
-                    <Typography variant="h3">{title}</Typography>
-                    <Typography style={{ fontStyle: 'italic' }} variant="h6">
-                        Passé cette heure, aucune soumission ne sera prise en compte.
-                    </Typography>
-                </TitleContainer>
+                examCaption ? (
+                    <TitleContainer>
+                        <Typography variant="h3">{examCaption.title}</Typography>
+                        <Subtitle variant="h6">{examCaption.subtitle}</Subtitle>
+                    </TitleContainer>
+                ) : undefined
             }
         >
             <ExamPageContainer>
@@ -117,6 +115,27 @@ function ExamTaking() {
     function onExamDone() {
         navigate(examDonePath);
     }
+
+    function computeExamCaption({
+        duration,
+        startedAt,
+    }: {
+        duration: number | null;
+        startedAt: string;
+    }) {
+        if (duration === null) {
+            return undefined;
+        }
+        const officialEndTime = computeOfficialEndTime({
+            duration,
+            startedAt,
+        });
+
+        return {
+            title: `Votre test se terminera à ${officialEndTime}.`,
+            subtitle: 'Passé cette heure, aucune soumission ne sera prise en compte.',
+        };
+    }
 }
 
 export { ExamTaking };
@@ -125,6 +144,8 @@ const TitleContainer = styled('div')({
     flexDirection: 'column',
     textAlign: 'center',
 });
+
+const Subtitle = styled(Typography)({ fontStyle: 'italic' });
 
 const ExamPageContainer = styled('div')({
     marginTop: 10,
