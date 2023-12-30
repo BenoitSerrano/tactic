@@ -2,12 +2,12 @@ import { computePathKeyToNavigateTo } from './computePathKeyToNavigateTo';
 import { pathHandler } from './pathHandler';
 
 describe('computePathKeyToNavigateTo', () => {
-    it('should return undefined if no attempt', () => {
+    it('should return STUDENT_HOME if no attempt', () => {
         const attempt = undefined;
 
         const studentPathToNavigateTo = computePathKeyToNavigateTo(attempt);
 
-        expect(studentPathToNavigateTo).toBe(undefined);
+        expect(studentPathToNavigateTo).toBe('STUDENT_HOME');
     });
 
     it('should return EXAM_CONSULTING if attempt corrected', () => {

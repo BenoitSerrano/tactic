@@ -1,7 +1,7 @@
 import { exerciseWithAnswersType } from '../../types';
-import { computeAreThereQuestionsNotCorrected } from './computeAreThereQuestionsNotCorrected';
+import { computeExercisesCorrectionStatus } from './computeExercisesCorrectionStatus';
 
-describe('computeAreThereQuestionsNotCorrected', () => {
+describe('computeExercisesCorrectionStatus', () => {
     const baseExercise = { id: 1, instruction: '', name: '' };
     const baseQuestion = {
         kind: 'texteLibre' as const,
@@ -13,9 +13,9 @@ describe('computeAreThereQuestionsNotCorrected', () => {
     it('should return false if there is no manual grades', () => {
         const exercises: exerciseWithAnswersType[] = [];
 
-        const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(exercises);
+        const exercisesCorrectionStatus = computeExercisesCorrectionStatus(exercises);
 
-        expect(areThereQuestionsNotCorrected).toBe(false);
+        expect(exercisesCorrectionStatus.isCorrectionDone).toBe(true);
     });
 
     it('should return false if all manual grades are defined', () => {
@@ -29,9 +29,9 @@ describe('computeAreThereQuestionsNotCorrected', () => {
             },
         ];
 
-        const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(exercises);
+        const exercisesCorrectionStatus = computeExercisesCorrectionStatus(exercises);
 
-        expect(areThereQuestionsNotCorrected).toBe(false);
+        expect(exercisesCorrectionStatus.isCorrectionDone).toBe(true);
     });
 
     it('should return true if one manual grades is not defined', () => {
@@ -45,9 +45,9 @@ describe('computeAreThereQuestionsNotCorrected', () => {
             },
         ];
 
-        const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(exercises);
+        const exercisesCorrectionStatus = computeExercisesCorrectionStatus(exercises);
 
-        expect(areThereQuestionsNotCorrected).toBe(true);
+        expect(exercisesCorrectionStatus.isCorrectionDone).toBe(false);
     });
 
     it('should return false if one manual grade is not defined but the answer is falsy', () => {
@@ -61,8 +61,8 @@ describe('computeAreThereQuestionsNotCorrected', () => {
             },
         ];
 
-        const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(exercises);
+        const exercisesCorrectionStatus = computeExercisesCorrectionStatus(exercises);
 
-        expect(areThereQuestionsNotCorrected).toBe(false);
+        expect(exercisesCorrectionStatus.isCorrectionDone).toBe(true);
     });
 });

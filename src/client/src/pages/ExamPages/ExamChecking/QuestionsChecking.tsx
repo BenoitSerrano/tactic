@@ -25,7 +25,7 @@ import { Button } from '../../../components/Button';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { computeDisplayedMark } from './lib/computeDisplayedMark';
-import { computeAreThereQuestionsNotCorrected } from './lib/computeAreThereQuestionsNotCorrected';
+import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -117,7 +117,8 @@ function QuestionsChecking(props: {
 
     const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
 
-    const areThereQuestionsNotCorrected = computeAreThereQuestionsNotCorrected(props.exercises);
+    const { statuses: questionsCorrectionStatuses, isCorrectionDone } =
+        computeExercisesCorrectionStatus(props.exercises);
     const canCorrectAttempt =
         props.attemptStatus === 'finished' || props.attemptStatus === 'expired';
     const UpdateCorrectedAtButton = renderUpdateCorrectedAtButton(props.attemptStatus);
@@ -168,66 +169,75 @@ function QuestionsChecking(props: {
                     title="La copie actuelle n'est pas marquée comme corrigée"
                     text="Souhaitez-vous la marquer comme corrigée avant d'aller à la copie suivante ?"
                 />
-                {props.exercises.map((exercise, exerciseIndex) => (
-                    <ExerciseContainer
-                        isExpanded={currentExerciseExpanded === exercise.id}
-                        onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                        key={'exercise-' + exercise.id}
-                        exercise={exercise}
-                        isLastItem={exerciseIndex === props.exercises.length - 1}
-                    >
-                        {exercise.questions.map((question, index: number) => {
-                            const isQuestionManuallyCorrected = manualQuestionKinds.includes(
-                                question.kind,
-                            );
-                            const grade =
-                                question.kind === 'texteATrous' ? undefined : question.grade;
-                            const mark =
-                                question.kind === 'texteATrous' ? question.mark : undefined;
-                            const answerStatus = computeAnswerStatus(grade);
+                {props.exercises.map((exercise, exerciseIndex) => {
+                    const shouldDisplayCorrectionWarning =
+                        questionsCorrectionStatuses[exercise.id] === 'notCorrected';
 
-                            const displayedMark = computeDisplayedMark({
-                                answer: question.answer,
-                                mark,
-                                grade,
-                                totalPoints: question.points,
-                            });
-                            return (
-                                <QuestionContainer
-                                    key={'question-' + question.id}
-                                    isLastItem={index === exercise.questions.length - 1}
-                                >
-                                    <QuestionIndicatorsContainer>
-                                        {(question.kind === 'phraseMelangee' ||
-                                            question.kind === 'questionReponse' ||
-                                            question.kind === 'texteLibre') && (
-                                            <UpdateAnswersButtons
-                                                canCorrectAttempt={canCorrectAttempt}
-                                                examId={props.examId}
-                                                attemptId={props.attemptId}
-                                                refetch={props.refetch}
-                                                question={question}
-                                                isQuestionManuallyCorrected={
-                                                    isQuestionManuallyCorrected
-                                                }
-                                            />
-                                        )}
-                                        <Typography>{displayedMark}</Typography>
-                                    </QuestionIndicatorsContainer>
-                                    <QuestionChecking
-                                        attemptId={props.attemptId}
-                                        examId={props.examId}
-                                        canUpdateAnswers
-                                        key={'question' + question.id}
-                                        index={index + 1}
-                                        question={question}
-                                        answerStatus={answerStatus}
-                                    />
-                                </QuestionContainer>
-                            );
-                        })}
-                    </ExerciseContainer>
-                ))}
+                    const warningToDisplay = shouldDisplayCorrectionWarning
+                        ? 'Il reste des questions non corrigées dans cet exercice'
+                        : undefined;
+                    return (
+                        <ExerciseContainer
+                            isExpanded={currentExerciseExpanded === exercise.id}
+                            onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
+                            key={'exercise-' + exercise.id}
+                            exercise={exercise}
+                            warningToDisplay={warningToDisplay}
+                            isLastItem={exerciseIndex === props.exercises.length - 1}
+                        >
+                            {exercise.questions.map((question, index: number) => {
+                                const isQuestionManuallyCorrected = manualQuestionKinds.includes(
+                                    question.kind,
+                                );
+                                const grade =
+                                    question.kind === 'texteATrous' ? undefined : question.grade;
+                                const mark =
+                                    question.kind === 'texteATrous' ? question.mark : undefined;
+                                const answerStatus = computeAnswerStatus(grade);
+
+                                const displayedMark = computeDisplayedMark({
+                                    answer: question.answer,
+                                    mark,
+                                    grade,
+                                    totalPoints: question.points,
+                                });
+                                return (
+                                    <QuestionContainer
+                                        key={'question-' + question.id}
+                                        isLastItem={index === exercise.questions.length - 1}
+                                    >
+                                        <QuestionIndicatorsContainer>
+                                            {(question.kind === 'phraseMelangee' ||
+                                                question.kind === 'questionReponse' ||
+                                                question.kind === 'texteLibre') && (
+                                                <UpdateAnswersButtons
+                                                    canCorrectAttempt={canCorrectAttempt}
+                                                    examId={props.examId}
+                                                    attemptId={props.attemptId}
+                                                    refetch={props.refetch}
+                                                    question={question}
+                                                    isQuestionManuallyCorrected={
+                                                        isQuestionManuallyCorrected
+                                                    }
+                                                />
+                                            )}
+                                            <Typography>{displayedMark}</Typography>
+                                        </QuestionIndicatorsContainer>
+                                        <QuestionChecking
+                                            attemptId={props.attemptId}
+                                            examId={props.examId}
+                                            canUpdateAnswers
+                                            key={'question' + question.id}
+                                            index={index + 1}
+                                            question={question}
+                                            answerStatus={answerStatus}
+                                        />
+                                    </QuestionContainer>
+                                );
+                            })}
+                        </ExerciseContainer>
+                    );
+                })}
                 <RightArrowContainer>
                     <IconButton disabled={!next} onClick={buildOnArrowClick(next)}>
                         <ArrowForwardIcon fontSize="large" />
@@ -296,7 +306,7 @@ function QuestionsChecking(props: {
     }
 
     function markAsCorrected() {
-        if (areThereQuestionsNotCorrected) {
+        if (!isCorrectionDone) {
             displayAlert({
                 variant: 'error',
                 text: "Vous ne pouvez pas marquer cette copie comme corrigée. Certaines questions n'ont pas encore été notées.",
@@ -329,7 +339,7 @@ function QuestionsChecking(props: {
             if (!attemptIdToNavigateTo) {
                 return;
             }
-            if (props.attemptStatus !== 'corrected' && !areThereQuestionsNotCorrected) {
+            if (props.attemptStatus !== 'corrected' && isCorrectionDone) {
                 setAttemptIdToNavigateTo(attemptIdToNavigateTo);
             } else {
                 navigateToNewAttempt(attemptIdToNavigateTo);

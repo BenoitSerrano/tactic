@@ -1,11 +1,13 @@
 import {
     Accordion,
     AccordionDetails,
-    AccordionSummary,
+    AccordionSummary as MuiAccordionSummary,
     LinearProgress,
     Typography,
     styled,
+    Tooltip,
 } from '@mui/material';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import { ReactNode } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Markdown from 'react-markdown';
@@ -22,6 +24,7 @@ function ExerciseContainer<
     children: ReactNode;
     isLastItem: boolean;
     isExpanded: boolean;
+    warningToDisplay?: string;
     onChangeExpanded: (_: any, isExpanded: boolean) => void;
     indication?: exerciseIndicationType;
 }) {
@@ -42,6 +45,11 @@ function ExerciseContainer<
             <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />}>
                 <TitleContainer>
                     <ExerciseHeaderContainer>
+                        {!!props.warningToDisplay && (
+                            <WarningIconContainer title={props.warningToDisplay}>
+                                <PriorityHighIcon fontSize="small" color="error" />
+                            </WarningIconContainer>
+                        )}
                         <ExercisePointsContainer>
                             <Typography variant="h4">( {result})</Typography>
                         </ExercisePointsContainer>
@@ -105,6 +113,17 @@ const TitleContainer = styled('div')({
     alignItems: 'center',
     justifyContent: 'space-between',
 });
+
+const WarningIconContainer = styled(Tooltip)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: `-${theme.spacing(3)}`,
+    height: '100%',
+}));
+
+const AccordionSummary = styled(MuiAccordionSummary)({ padding: 0 });
 
 const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center' });
 const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
