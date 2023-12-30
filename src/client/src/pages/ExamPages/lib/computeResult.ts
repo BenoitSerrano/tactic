@@ -1,3 +1,4 @@
+import { computeRoundMark } from '../../../lib/computeRoundMark';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { exerciseWithAnswersType } from '../types';
 
@@ -15,7 +16,6 @@ function computeResult(exercises: exerciseWithAnswersType[]) {
         }
     }
 
-    return `${totalMark.toFixed(1)} / ${totalPoints}`;
+    return `${computeRoundMark(totalMark)} / ${totalPoints}`;
 }
-
 export { computeResult };

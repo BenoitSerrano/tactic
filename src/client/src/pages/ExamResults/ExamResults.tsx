@@ -28,6 +28,7 @@ import { pathHandler } from '../../lib/pathHandler';
 import { computeCanLockAttempt } from './lib/computeCanLockAttempt';
 import { computeCanUnlockAttempt } from './lib/computeCanUnlockAttempt';
 import { Menu } from '../../components/Menu';
+import { computeRoundMark } from '../../lib/computeRoundMark';
 
 type examResultApiType = {
     id: string;
@@ -254,7 +255,7 @@ function ExamResults() {
                                         {result.email}
                                     </Link>
                                 </TableCell>
-                                <TableCell>{result.mark.toFixed(1)}</TableCell>
+                                <TableCell>{computeRoundMark(result.mark)}</TableCell>
                                 <TableCell>{AttemptStatusIcon}</TableCell>
                                 <TableCell>{result.actualDuration}</TableCell>
                                 <TableCell>{result.roundTrips}</TableCell>
