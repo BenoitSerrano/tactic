@@ -19,6 +19,7 @@ const api = {
     deleteStudent,
     createExam,
     fetchExam,
+    fetchExamWithQuestions,
     updateExamName,
     updateExamDuration,
     fetchExams,
@@ -249,6 +250,11 @@ async function fetchExamResults(examId: string) {
 
 async function fetchExam(examId: string) {
     const URL = `${BASE_URL}/exams/${examId}`;
+    return performApiCall(URL, 'GET');
+}
+
+async function fetchExamWithQuestions(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/with-questions`;
     return performApiCall(URL, 'GET');
 }
 

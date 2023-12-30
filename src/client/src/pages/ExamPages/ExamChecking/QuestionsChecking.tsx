@@ -26,6 +26,7 @@ import { ExerciseContainer } from '../components/ExerciseContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { computeDisplayedMark } from './lib/computeDisplayedMark';
 import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
+import { HorizontalDivider } from '../../../components/HorizontalDivider';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -168,6 +169,7 @@ function QuestionsChecking(props: {
                     text="Souhaitez-vous la marquer comme corrigée avant d'aller à la copie suivante ?"
                 />
                 {props.exercises.map((exercise, exerciseIndex) => {
+                    const isLastExercise = exerciseIndex === props.exercises.length - 1;
                     const shouldDisplayCorrectionWarning =
                         questionsCorrectionStatuses[exercise.id] === 'notCorrected';
 
@@ -175,68 +177,72 @@ function QuestionsChecking(props: {
                         ? 'Il reste des questions non notées dans cet exercice'
                         : undefined;
                     return (
-                        <ExerciseContainer
-                            isExpanded={currentExerciseExpanded === exercise.id}
-                            onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                            key={'exercise-' + exercise.id}
-                            exercise={exercise}
-                            warningToDisplay={warningToDisplay}
-                            isLastItem={exerciseIndex === props.exercises.length - 1}
-                        >
-                            {exercise.questions.map((question, index: number) => {
-                                const isQuestionManuallyCorrected = manualQuestionKinds.includes(
-                                    question.kind,
-                                );
-                                const grade =
-                                    question.kind === 'texteATrous' ? undefined : question.grade;
-                                const mark =
-                                    question.kind === 'texteATrous' ? question.mark : undefined;
-                                const answerStatus = computeAnswerStatus(grade);
+                        <>
+                            <ExerciseContainer
+                                isExpanded={currentExerciseExpanded === exercise.id}
+                                onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
+                                key={'exercise-' + exercise.id}
+                                exercise={exercise}
+                                warningToDisplay={warningToDisplay}
+                            >
+                                {exercise.questions.map((question, index: number) => {
+                                    const isQuestionManuallyCorrected =
+                                        manualQuestionKinds.includes(question.kind);
+                                    const grade =
+                                        question.kind === 'texteATrous'
+                                            ? undefined
+                                            : question.grade;
+                                    const mark =
+                                        question.kind === 'texteATrous' ? question.mark : undefined;
+                                    const answerStatus = computeAnswerStatus(grade);
 
-                                const displayedMark = computeDisplayedMark({
-                                    answer: question.answer,
-                                    mark,
-                                    grade,
-                                    totalPoints: question.points,
-                                });
-                                return (
-                                    <QuestionContainer
-                                        key={'question-' + question.id}
-                                        isLastItem={index === exercise.questions.length - 1}
-                                    >
-                                        <QuestionIndicatorsContainer>
-                                            {(question.kind === 'phraseMelangee' ||
-                                                question.kind === 'questionReponse' ||
-                                                question.kind === 'texteLibre') && (
-                                                <UpdateAnswersButtons
-                                                    attemptStatus={props.attemptStatus}
-                                                    examId={props.examId}
-                                                    attemptId={props.attemptId}
-                                                    refetch={props.refetch}
-                                                    question={question}
-                                                    isQuestionManuallyCorrected={
-                                                        isQuestionManuallyCorrected
-                                                    }
-                                                />
-                                            )}
-                                            <Typography>{displayedMark}</Typography>
-                                        </QuestionIndicatorsContainer>
-                                        <QuestionChecking
-                                            attemptStatus={props.attemptStatus}
-                                            attemptId={props.attemptId}
-                                            examId={props.examId}
-                                            canUpdateAnswers
-                                            key={'question' + question.id}
-                                            index={index + 1}
-                                            question={question}
-                                            answerStatus={answerStatus}
-                                        />
-                                    </QuestionContainer>
-                                );
-                            })}
-                        </ExerciseContainer>
+                                    const displayedMark = computeDisplayedMark({
+                                        answer: question.answer,
+                                        mark,
+                                        grade,
+                                        totalPoints: question.points,
+                                    });
+                                    return (
+                                        <QuestionContainer
+                                            key={'question-' + question.id}
+                                            isLastItem={index === exercise.questions.length - 1}
+                                        >
+                                            <QuestionIndicatorsContainer>
+                                                {(question.kind === 'phraseMelangee' ||
+                                                    question.kind === 'questionReponse' ||
+                                                    question.kind === 'texteLibre') && (
+                                                    <UpdateAnswersButtons
+                                                        attemptStatus={props.attemptStatus}
+                                                        examId={props.examId}
+                                                        attemptId={props.attemptId}
+                                                        refetch={props.refetch}
+                                                        question={question}
+                                                        isQuestionManuallyCorrected={
+                                                            isQuestionManuallyCorrected
+                                                        }
+                                                    />
+                                                )}
+                                                <Typography>{displayedMark}</Typography>
+                                            </QuestionIndicatorsContainer>
+                                            <QuestionChecking
+                                                attemptStatus={props.attemptStatus}
+                                                attemptId={props.attemptId}
+                                                examId={props.examId}
+                                                canUpdateAnswers
+                                                key={'question' + question.id}
+                                                index={index + 1}
+                                                question={question}
+                                                answerStatus={answerStatus}
+                                            />
+                                        </QuestionContainer>
+                                    );
+                                })}
+                            </ExerciseContainer>
+                            {!isLastExercise && <HorizontalDivider />}
+                        </>
                     );
                 })}
+
                 <RightArrowContainer>
                     <IconButton disabled={!next} onClick={buildOnArrowClick(next)}>
                         <ArrowForwardIcon fontSize="large" />

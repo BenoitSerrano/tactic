@@ -21,6 +21,7 @@ import { StudentHome } from '../pages/StudentHome';
 import { Students } from '../pages/StudentsPages/Students';
 import { TeacherHome } from '../pages/TeacherHome';
 import { ROUTE_KEYS } from './routeKeys';
+import { ExamEditing } from '../pages/ExamPages/ExamEditing';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -28,6 +29,9 @@ const ROUTE_ELEMENTS: Record<
 > = {
     EXAM_TAKING: {
         element: <ExamTaking />,
+    },
+    EXAM_EDITING: {
+        element: <ExamEditing />,
     },
     STUDENT_HOME: {
         element: <StudentHome />,

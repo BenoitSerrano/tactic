@@ -18,6 +18,7 @@ function buildExamService() {
         updateExamName,
         updateExamDuration,
         getExams,
+        getExamWithQuestions,
         getAllExams,
         getExam,
         getExamExercises,
@@ -56,6 +57,15 @@ function buildExamService() {
 
     async function getExam(examId: Exam['id']) {
         return examRepository.findOneOrFail({ where: { id: examId } });
+    }
+
+    async function getExamWithQuestions(examId: Exam['id']) {
+        const exam = await examRepository.findOneOrFail({
+            where: { id: examId },
+            relations: ['exercises', 'exercises.questions'],
+        });
+
+        return exam;
     }
 
     async function getExamWithoutAnswers(examId: Exam['id']) {
