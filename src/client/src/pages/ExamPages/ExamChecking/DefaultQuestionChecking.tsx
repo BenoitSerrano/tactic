@@ -11,11 +11,7 @@ const styledContainerMapping = {
     wrong: styled('span')(({ theme }) => ({ color: theme.palette.error.main })),
 };
 
-function DefaultQuestionChecking(props: {
-    index: number;
-    displayedAnswer: displayedAnswerType;
-    canUpdateAnswers: boolean;
-}) {
+function DefaultQuestionChecking(props: { index: number; displayedAnswer: displayedAnswerType }) {
     return (
         <Container>
             <Title>

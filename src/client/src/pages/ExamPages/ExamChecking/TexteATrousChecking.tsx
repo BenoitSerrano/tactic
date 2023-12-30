@@ -7,7 +7,7 @@ import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { computeCanTexteATrousAnswerBeAttributed } from './lib/computeCanTexteATrousAnswerBeAttributed';
 import { computeIsTexteATrousUpdateAnswerButtonLoading } from './lib/computeIsTexteATrousUpdateAnswerButtonLoading';
-import { gradeType } from '../../../types';
+import { attemptStatusType, gradeType } from '../../../types';
 import { questionWithAnswersType } from '../types';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { IconButton } from '../../../components/IconButton';
@@ -31,6 +31,7 @@ function TexteATrousChecking(props: {
     examId: string;
     displayedAnswer: displayedAnswerType;
     canUpdateAnswers: boolean;
+    attemptStatus?: attemptStatusType;
 }) {
     const [currentChunkMenu, setCurrentChunkMenu] = useState<{
         element: HTMLElement;
@@ -190,6 +191,13 @@ function TexteATrousChecking(props: {
         const answer = props.displayedAnswer.title[body.chunkIndex].value;
         const blankIndex = convertChunkIndexToBlankIndex(body.chunkIndex);
         return () => {
+            if (props.attemptStatus === 'corrected') {
+                displayAlert({
+                    variant: 'error',
+                    text: 'Cette copie est marquée comme corrigée, vous ne pouvez plus modifier la note.',
+                });
+                return;
+            }
             if (body.grade === 'E') {
                 removeOkAnswerFromTexteATrousMutation.mutate({
                     examId: props.examId,

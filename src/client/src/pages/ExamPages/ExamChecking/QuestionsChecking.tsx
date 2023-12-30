@@ -119,8 +119,6 @@ function QuestionsChecking(props: {
 
     const { statuses: questionsCorrectionStatuses, isCorrectionDone } =
         computeExercisesCorrectionStatus(props.exercises);
-    const canCorrectAttempt =
-        props.attemptStatus === 'finished' || props.attemptStatus === 'expired';
     const UpdateCorrectedAtButton = renderUpdateCorrectedAtButton(props.attemptStatus);
     return (
         <TestPageLayout
@@ -174,7 +172,7 @@ function QuestionsChecking(props: {
                         questionsCorrectionStatuses[exercise.id] === 'notCorrected';
 
                     const warningToDisplay = shouldDisplayCorrectionWarning
-                        ? 'Il reste des questions non corrigées dans cet exercice'
+                        ? 'Il reste des questions non notées dans cet exercice'
                         : undefined;
                     return (
                         <ExerciseContainer
@@ -211,7 +209,7 @@ function QuestionsChecking(props: {
                                                 question.kind === 'questionReponse' ||
                                                 question.kind === 'texteLibre') && (
                                                 <UpdateAnswersButtons
-                                                    canCorrectAttempt={canCorrectAttempt}
+                                                    attemptStatus={props.attemptStatus}
                                                     examId={props.examId}
                                                     attemptId={props.attemptId}
                                                     refetch={props.refetch}
@@ -224,6 +222,7 @@ function QuestionsChecking(props: {
                                             <Typography>{displayedMark}</Typography>
                                         </QuestionIndicatorsContainer>
                                         <QuestionChecking
+                                            attemptStatus={props.attemptStatus}
                                             attemptId={props.attemptId}
                                             examId={props.examId}
                                             canUpdateAnswers

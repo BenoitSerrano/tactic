@@ -2,6 +2,7 @@ import { answerStatusType, questionWithAnswersType } from '../types';
 import { computeDisplayedAnswer } from '../lib/computeDisplayedAnswer';
 import { TexteATrousChecking } from './TexteATrousChecking';
 import { DefaultQuestionChecking } from './DefaultQuestionChecking';
+import { attemptStatusType } from '../../../types';
 
 function QuestionChecking(props: {
     attemptId: string;
@@ -10,6 +11,7 @@ function QuestionChecking(props: {
     index: number;
     answerStatus: answerStatusType;
     canUpdateAnswers: boolean;
+    attemptStatus?: attemptStatusType;
 }) {
     const displayedAnswer = computeDisplayedAnswer(props.question, props.answerStatus);
 
@@ -17,6 +19,7 @@ function QuestionChecking(props: {
         props.question.kind === 'texteATrous' ? TexteATrousChecking : DefaultQuestionChecking;
     return (
         <QuestionCheckingComponent
+            attemptStatus={props.attemptStatus}
             question={props.question}
             attemptId={props.attemptId}
             examId={props.examId}

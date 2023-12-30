@@ -5,12 +5,12 @@ import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
 import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerButtonLoading';
-import { gradeType } from '../../../types';
+import { attemptStatusType, gradeType } from '../../../types';
 import { attributeGradeToAnswerActions } from './constants';
 import { IconButton } from '../../../components/IconButton';
 
 function UpdateAnswersButtons(props: {
-    canCorrectAttempt: boolean;
+    attemptStatus: attemptStatusType;
     question: amendableQuestionWithAnswersType;
     refetch: () => void;
     examId: string;
@@ -108,6 +108,13 @@ function UpdateAnswersButtons(props: {
     function buildOnAttributeMarkToAnswer(grade: gradeType) {
         return () => {
             if (props.question.answer === undefined) {
+                return;
+            }
+            if (props.attemptStatus === 'corrected') {
+                displayAlert({
+                    variant: 'error',
+                    text: 'Cette copie est marquée comme corrigée, vous ne pouvez plus modifier la note.',
+                });
                 return;
             }
 
