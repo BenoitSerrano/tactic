@@ -7,7 +7,7 @@ import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { exerciseWithQuestionsType } from './types';
-import { HorizontalDivider } from '../../../components/HorizontalDivider';
+import { HorizontalDividerToAddExercise } from './HorizontalDividers';
 
 function QuestionsEditing(props: {
     title: string;
@@ -46,7 +46,9 @@ function QuestionsEditing(props: {
                                     </QuestionContainer>
                                 ))}
                             </ExerciseContainer>
-                            {!isLastExercise && <HorizontalDivider />}
+                            {!isLastExercise && (
+                                <HorizontalDividerToAddExercise onClick={() => {}} />
+                            )}
                         </>
                     );
                 })}
