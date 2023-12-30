@@ -28,7 +28,7 @@ const attemptRoutes: Array<routeType<any, any>> = [
         method: 'GET',
         path: '/exams/:examId/students/:studentId/attempts',
         isAuthenticated: false,
-        controller: attemptController.searchAttempts,
+        controller: attemptController.searchAttempt,
     },
     {
         method: 'GET',

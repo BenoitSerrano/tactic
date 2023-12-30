@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import { cheatingHandler } from '../../../lib/cheatingHandler';
 import { eventHandler } from '../../../lib/eventHandler';
 import { useAlert } from '../../../lib/alert';
+import { computePathKeyToNavigateTo } from '../../../lib/computePathKeyToNavigateTo';
 
 function ExamTaking() {
     const params = useParams();
@@ -69,6 +70,15 @@ function ExamTaking() {
                 <Loader />
             </NotLoggedInPage>
         );
+    }
+    const pathKeyToNavigateTo = computePathKeyToNavigateTo(query.data);
+
+    if (pathKeyToNavigateTo !== 'EXAM_TAKING') {
+        const pathToNavigateTo = pathHandler.getRoutePath(pathKeyToNavigateTo, {
+            studentId,
+            attemptId: query.data.id,
+        });
+        return <Navigate to={pathToNavigateTo} />;
     }
 
     const examDonePath = pathHandler.getRoutePath('EXAM_DONE', { studentId });

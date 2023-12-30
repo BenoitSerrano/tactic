@@ -1,6 +1,8 @@
 import { acceptableAnswerType, attemptStatusType, gradeType, questionKindType } from '../../types';
 
 type attemptWithAnswersApiType = {
+    id: string;
+    correctedAt: string | null;
     studentEmail: string;
     exam: examWithAnswersType;
     attemptStatus: attemptStatusType;

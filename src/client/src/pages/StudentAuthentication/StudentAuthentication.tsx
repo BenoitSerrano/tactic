@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
@@ -7,7 +7,6 @@ import { NotLoggedInPage } from '../../components/NotLoggedInPage';
 import { Card } from '../../components/Card';
 import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
-import { extractActionFromSearchParams } from './lib/extractActionFromSearchParams';
 import { LoadingButton } from '@mui/lab';
 import { pathHandler } from '../../lib/pathHandler';
 
@@ -22,25 +21,17 @@ function StudentAuthentication() {
     const query = useQuery({ queryKey: ['exams', examId], queryFn: () => api.fetchExam(examId) });
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const action = extractActionFromSearchParams(searchParams);
 
     const [email, setEmail] = useState('');
 
     const fetchStudentByEmailMutation = useMutation({
         mutationFn: api.fetchStudentByEmailForExam,
         onSuccess: (student: studentType) => {
-            const attempt = student.attempts.find((attempt) => attempt.exam.id === examId);
-            if (attempt) {
-                //TODO
-                navigate(`/student/students/${student.id}/attempts/${attempt.id}/${action}`);
-            } else {
-                const path = pathHandler.getRoutePath('STUDENT_HOME', {
-                    examId,
-                    studentId: student.id,
-                });
-                navigate(path);
-            }
+            const path = pathHandler.getRoutePath('STUDENT_HOME', {
+                examId,
+                studentId: student.id,
+            });
+            navigate(path);
         },
         onError: (error) => {
             console.warn(error);

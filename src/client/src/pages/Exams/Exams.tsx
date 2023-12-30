@@ -182,7 +182,8 @@ function Exams() {
 
     function buildCopyExamLinkToClipboard(examId: string) {
         return () => {
-            const url = `${config.HOST_URL}/student/exams/${examId}?action=take`;
+            const path = pathHandler.getRoutePath('STUDENT_AUTHENTICATION', { examId });
+            const url = `${config.HOST_URL}${path}`;
             navigator.clipboard.writeText(url);
             displayAlert({
                 text: 'Le lien a bien été copié dans le presse-papiers',

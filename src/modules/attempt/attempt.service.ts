@@ -1,5 +1,4 @@
 import { dataSource } from '../../dataSource';
-import { mapEntities } from '../../lib/mapEntities';
 import { Exam, buildExamService } from '../exam';
 import { Exercise, buildExerciseService } from '../exercise';
 import { computeAttemptStatus } from '../lib/computeExamStatus';
@@ -17,7 +16,7 @@ function buildAttemptService() {
     const attemptRepository = dataSource.getRepository(Attempt);
 
     const attemptService = {
-        searchAttempts,
+        searchAttempt,
         createAttempt,
         updateAttempt,
         fetchAttemptWithAnswers,
@@ -40,11 +39,15 @@ function buildAttemptService() {
 
     return attemptService;
 
-    async function searchAttempts(examId: string, studentId: string) {
-        const attempt = await attemptRepository.find({
+    async function searchAttempt(examId: string, studentId: string) {
+        const attempts = await attemptRepository.find({
+            select: { id: true, correctedAt: true },
             where: { exam: { id: examId }, student: { id: studentId } },
         });
-        return attempt;
+        if (attempts.length === 1) {
+            return { attempt: attempts[0] };
+        }
+        return { attempt: undefined };
     }
 
     async function createAttempt(examId: string, studentId: string) {
@@ -127,6 +130,7 @@ function buildAttemptService() {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
+                correctedAt: true,
                 endedAt: true,
                 answers: true,
                 student: { id: true, email: true },

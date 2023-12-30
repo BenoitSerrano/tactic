@@ -10,7 +10,7 @@ function buildAttemptController() {
         getAllAttempts,
         createAttempt,
         updateAttempt,
-        searchAttempts,
+        searchAttempt,
         fetchAttemptWithAnswers,
         fetchAttemptWithoutAnswers,
         deleteAttempt,
@@ -29,8 +29,8 @@ function buildAttemptController() {
         return attemptService.getAllAttempts();
     }
 
-    async function searchAttempts(params: { urlParams: { examId: string; studentId: string } }) {
-        return attemptService.searchAttempts(params.urlParams.examId, params.urlParams.studentId);
+    async function searchAttempt(params: { urlParams: { examId: string; studentId: string } }) {
+        return attemptService.searchAttempt(params.urlParams.examId, params.urlParams.studentId);
     }
 
     async function updateAttempt(params: {

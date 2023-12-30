@@ -6,6 +6,16 @@ import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
 import { pathHandler } from '../lib/pathHandler';
+import { computePathKeyToNavigateTo } from '../lib/computePathKeyToNavigateTo';
+
+type attemptApiType = {
+    attempt:
+        | {
+              id: string;
+              correctedAt: string | null;
+          }
+        | undefined;
+};
 
 function StudentHome() {
     const params = useParams();
@@ -13,7 +23,7 @@ function StudentHome() {
     const examId = params.examId as string;
     const navigate = useNavigate();
 
-    const attemptQuery = useQuery({
+    const attemptQuery = useQuery<attemptApiType>({
         queryKey: ['exams', examId, 'students', studentId, 'attempts'],
         queryFn: () => api.searchAttempt({ examId, studentId }),
     });
@@ -41,12 +51,14 @@ function StudentHome() {
         return <div />;
     }
 
-    if (attemptQuery.data.length > 0) {
-        const path = pathHandler.getRoutePath('EXAM_TAKING', {
+    const pathKeyToNavigateTo = computePathKeyToNavigateTo(attemptQuery.data.attempt);
+
+    if (pathKeyToNavigateTo !== 'STUDENT_HOME') {
+        const pathToNavigateTo = pathHandler.getRoutePath(pathKeyToNavigateTo, {
             studentId,
-            attemptId: attemptQuery.data[0].id,
+            attemptId: attemptQuery.data.attempt?.id || '',
         });
-        return <Navigate to={path} />;
+        return <Navigate to={pathToNavigateTo} />;
     }
 
     return (
