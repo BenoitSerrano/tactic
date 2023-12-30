@@ -14,4 +14,11 @@ describe('sanitizer', () => {
 
         expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
     });
+
+    it('should return true if different guillemets', () => {
+        const answer1 = `je suis « Benoit »`;
+        const answer2 = `je suis “Benoit”`;
+
+        expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
+    });
 });

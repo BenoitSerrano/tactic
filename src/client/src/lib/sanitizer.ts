@@ -7,10 +7,14 @@ function sanitizeString(value: string) {
         .join(' ')
         .toLowerCase()
         .replace(/’/g, "'")
+        .replace(/“ ?/g, `"`)
+        .replace(/ ?”/g, `"`)
+        .replace(/« ?/g, `"`)
+        .replace(/ ?»/g, `"`)
         .replace(/ ?' ?/g, "'")
         .replace(/é/g, 'é')
         .replace(/ê/g, 'ê')
-        .replace(/\.$/, '');
+        .replace(/ ?\.+$/, '');
 }
 
 export { sanitizer };
