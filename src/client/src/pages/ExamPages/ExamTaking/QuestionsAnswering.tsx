@@ -62,6 +62,7 @@ function QuestionsAnswering(props: {
     return (
         <>
             <TestPageLayout
+                shouldPreventTextSelection
                 subtitle="Pensez à sauvegarder régulièrement vos réponses"
                 result={totalPoints}
                 studentEmail={props.studentEmail}

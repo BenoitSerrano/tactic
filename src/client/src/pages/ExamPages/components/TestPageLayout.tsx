@@ -8,8 +8,12 @@ function TestPageLayout(props: {
     children: JSX.Element[] | JSX.Element;
     centerButtons?: JSX.Element[];
     rightButtons?: JSX.Element[];
+    shouldPreventTextSelection?: boolean;
 }) {
-    const shouldDisplayFooter = !!props.centerButtons;
+    const shouldDisplayFooter = !!props.centerButtons || props.rightButtons;
+    const ChildrenContainer = props.shouldPreventTextSelection
+        ? SelectionLessContainer
+        : BasicContainer;
     return (
         <Container>
             <TitleContainer>
@@ -20,7 +24,7 @@ function TestPageLayout(props: {
                 <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
                 {!!props.result && <Typography variant="caption">{props.result}</Typography>}
             </StudentInfoContainer>
-            {props.children}
+            <ChildrenContainer>{props.children}</ChildrenContainer>
             {shouldDisplayFooter && (
                 <FooterContainer>
                     <LeftFooterPart />
@@ -102,5 +106,8 @@ const Container = styled('div')(({ theme }) => ({
     padding: theme.spacing(3),
     backgroundColor: theme.palette.common.white,
 }));
+
+const BasicContainer = styled('div')({});
+const SelectionLessContainer = styled('div')({ userSelect: 'none' });
 
 export { TestPageLayout };

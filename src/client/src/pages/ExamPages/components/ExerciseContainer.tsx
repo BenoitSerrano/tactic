@@ -78,7 +78,6 @@ function ExerciseContainer<
 export { ExerciseContainer };
 
 const mainContainerProperties = {
-    userSelect: 'none' as const,
     boxShadow: 'none' as const,
     elevation: 0,
 };
