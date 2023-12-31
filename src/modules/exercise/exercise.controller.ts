@@ -26,6 +26,7 @@ function buildExerciseController() {
             name: string;
             instruction: string;
             defaultPoints: number;
+            order: number;
             defaultQuestionKind: Question['kind'];
         };
     }) {

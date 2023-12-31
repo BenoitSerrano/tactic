@@ -27,6 +27,7 @@ function buildExerciseService() {
             name: string;
             instruction: string;
             defaultPoints: number;
+            order: number;
             defaultQuestionKind: Question['kind'];
         },
     ) {
@@ -39,8 +40,8 @@ function buildExerciseService() {
         exercise.instruction = body.instruction;
         exercise.defaultPoints = body.defaultPoints;
         exercise.defaultQuestionKind = body.defaultQuestionKind;
+        exercise.order = body.order;
         exercise.exam = exam;
-        exercise.order = highestOrder + 1;
 
         return exerciseRepository.save(exercise);
     }

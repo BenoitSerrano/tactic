@@ -7,6 +7,7 @@ import { QuestionContainer } from '../components/QuestionContainer';
 import { exerciseUpsertionModalStatusType, exerciseWithQuestionsType } from './types';
 import { HorizontalDividerToAddExercise } from './HorizontalDividers';
 import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
+import { computeOrderForIndex } from './lib/computeOrderForIndex';
 
 function QuestionsEditing(props: {
     title: string;
@@ -24,9 +25,9 @@ function QuestionsEditing(props: {
     return (
         <>
             <TestPageLayout studentEmail="-" title={props.title} result={totalPoints}>
-                <HorizontalDividerToAddExercise onClick={buildOpenExerciseCreationModal()} />
+                <HorizontalDividerToAddExercise onClick={buildOpenExerciseCreationModal(-1)} />
 
-                {props.exercises.map((exercise) => {
+                {props.exercises.map((exercise, exerciseIndex) => {
                     const exerciseIndication = { hideMark: true };
 
                     return (
@@ -50,7 +51,7 @@ function QuestionsEditing(props: {
                                 ))}
                             </ExerciseContainer>
                             <HorizontalDividerToAddExercise
-                                onClick={buildOpenExerciseCreationModal()}
+                                onClick={buildOpenExerciseCreationModal(exerciseIndex)}
                             />
                         </>
                     );
@@ -66,9 +67,10 @@ function QuestionsEditing(props: {
         </>
     );
 
-    function buildOpenExerciseCreationModal() {
+    function buildOpenExerciseCreationModal(currentExerciseIndex: number) {
+        const order = computeOrderForIndex(currentExerciseIndex, props.exercises);
         return () => {
-            setExerciseUpsertionModalStatus({ kind: 'creating' });
+            setExerciseUpsertionModalStatus({ kind: 'creating', order });
         };
     }
 

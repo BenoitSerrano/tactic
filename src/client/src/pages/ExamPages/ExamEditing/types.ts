@@ -9,6 +9,7 @@ type exerciseWithQuestionsType = {
     instruction: string;
     name: string;
     defaultPoints: number;
+    order: number;
     questions: Array<questionType>;
 };
 
@@ -16,7 +17,7 @@ type questionType = { id: number; points: number };
 
 type exerciseUpsertionModalStatusType =
     | { kind: 'editing'; exercise: exerciseWithQuestionsType }
-    | { kind: 'creating' };
+    | { kind: 'creating'; order: number };
 
 export type {
     examWithQuestionsApiType,

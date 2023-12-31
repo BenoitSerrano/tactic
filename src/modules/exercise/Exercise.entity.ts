@@ -17,7 +17,7 @@ export class Exercise {
     @Column('float', { default: 1 })
     defaultPoints: number;
 
-    @Column('int')
+    @Column('float')
     order: number;
 
     @Column('enum', { enum: questionKinds })

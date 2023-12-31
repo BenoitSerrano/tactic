@@ -290,6 +290,7 @@ async function createExercise(params: {
     instruction: string;
     defaultPoints: number;
     defaultQuestionKind: questionKindType;
+    order: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises`;
     return performApiCall(URL, 'POST', {
@@ -297,6 +298,7 @@ async function createExercise(params: {
         instruction: params.instruction,
         defaultPoints: params.defaultPoints,
         defaultQuestionKind: params.defaultQuestionKind,
+        order: params.order,
     });
 }
 

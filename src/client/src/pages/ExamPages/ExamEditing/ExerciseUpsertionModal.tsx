@@ -115,21 +115,26 @@ function ExerciseUpsertionModal(props: {
     }
 
     function saveExercise() {
+        const { modalStatus } = props;
+        if (!modalStatus) {
+            return;
+        }
         const newExercise = {
             name,
             instruction,
             defaultPoints: Number(defaultPoints),
         };
-        if (props.modalStatus?.kind === 'editing') {
+        if (modalStatus.kind === 'editing') {
             updateExerciseMutation.mutate({
                 examId: props.examId,
-                exerciseId: props.modalStatus.exercise.id,
+                exerciseId: modalStatus.exercise.id,
                 ...newExercise,
             });
         } else {
             createExerciseMutation.mutate({
                 examId: props.examId,
                 defaultQuestionKind,
+                order: modalStatus.order,
                 ...newExercise,
             });
         }
