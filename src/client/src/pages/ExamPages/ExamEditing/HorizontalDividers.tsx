@@ -2,7 +2,7 @@ import { styled } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Button } from '../../../components/Button';
 
-const ICON_SIZE = 40;
+const BUTTON_HEIGHT = 40;
 
 function HorizontalDividerToAddExercise(props: { onClick: () => void }) {
     return (
@@ -21,6 +21,7 @@ function HorizontalDividerToAddQuestion(props: { onClick: () => void }) {
     return (
         <HorizontalDividerWithButton
             button={{
+                position: 'left',
                 variant: 'text',
                 label: 'Ajouter une question',
                 IconComponent: AddCircleOutlineIcon,
@@ -32,6 +33,7 @@ function HorizontalDividerToAddQuestion(props: { onClick: () => void }) {
 
 function HorizontalDividerWithButton(props: {
     button: {
+        position?: 'left' | 'center';
         variant: 'text' | 'outlined';
         onClick: () => void;
         IconComponent: React.ElementType;
@@ -40,9 +42,11 @@ function HorizontalDividerWithButton(props: {
 }) {
     const { button } = props;
     const { IconComponent } = button;
+    const position = button.position || 'center';
+    const MainContainer = mainContainerMapping[position];
     return (
-        <Container>
-            <IconContainer>
+        <MainContainer>
+            <ButtonContainer>
                 <Button
                     color="inherit"
                     variant={button.variant}
@@ -51,33 +55,48 @@ function HorizontalDividerWithButton(props: {
                 >
                     {button.label}
                 </Button>
-            </IconContainer>
-        </Container>
+            </ButtonContainer>
+        </MainContainer>
     );
 }
 
 export { HorizontalDividerToAddExercise, HorizontalDividerToAddQuestion };
 
-const Container = styled('div')(({ theme }) => ({
+const mainContainerProperties = {
     width: '100%',
     height: 1,
-    overflow: 'visible',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    overflow: 'visible' as const,
+    display: 'flex' as const,
+    alignItems: 'center' as const,
+    position: 'relative' as const,
+    marginTop: BUTTON_HEIGHT / 2,
+    marginBottom: BUTTON_HEIGHT / 2,
+};
+
+const LeftContainer = styled('div')(({ theme }) => ({
+    ...mainContainerProperties,
+    justifyContent: 'flex-start',
     backgroundColor: `${theme.palette.common.black}`,
-    position: 'relative',
-    marginTop: ICON_SIZE / 2,
-    marginBottom: ICON_SIZE / 2,
 }));
 
-const IconContainer = styled('div')({
+const CenterContainer = styled('div')(({ theme }) => ({
+    ...mainContainerProperties,
+    justifyContent: 'center',
+    backgroundColor: `${theme.palette.common.black}`,
+}));
+
+const ButtonContainer = styled('div')({
     position: 'absolute',
     zIndex: 1,
-    top: -ICON_SIZE / 2,
-    height: ICON_SIZE,
+    top: -BUTTON_HEIGHT / 2,
+    height: BUTTON_HEIGHT,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
 });
+
+const mainContainerMapping = {
+    center: CenterContainer,
+    left: LeftContainer,
+};
