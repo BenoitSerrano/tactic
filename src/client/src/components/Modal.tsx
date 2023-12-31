@@ -57,6 +57,7 @@ const ModalHeader = styled('div')(({ theme }) => ({
     paddingBottom: theme.spacing(2),
     backgroundColor: 'white',
     top: 0,
+    zIndex: 10,
 }));
 
 const ModalFooter = styled('div')(({ theme }) => ({

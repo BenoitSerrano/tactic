@@ -31,6 +31,7 @@ const ROUTE_ELEMENTS: Record<
         element: <ExamTaking />,
     },
     EXAM_EDITING: {
+        isAdmin: true,
         element: <ExamEditing />,
     },
     STUDENT_HOME: {

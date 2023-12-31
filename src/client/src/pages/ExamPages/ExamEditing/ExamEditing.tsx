@@ -4,7 +4,6 @@ import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
 import { QuestionsEditing } from './QuestionsEditing';
-import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
 import { examWithQuestionsApiType } from './types';
 
 function ExamEditing() {
@@ -23,15 +22,13 @@ function ExamEditing() {
     }
 
     return (
-        <NotLoggedInPage>
-            <MainContainer>
-                <QuestionsEditing
-                    title={query.data.name}
-                    exercises={query.data.exercises}
-                    examId={examId}
-                />
-            </MainContainer>
-        </NotLoggedInPage>
+        <MainContainer>
+            <QuestionsEditing
+                title={query.data.name}
+                exercises={query.data.exercises}
+                examId={examId}
+            />
+        </MainContainer>
     );
 }
 

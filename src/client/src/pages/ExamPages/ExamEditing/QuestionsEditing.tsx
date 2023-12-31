@@ -1,13 +1,12 @@
 import { Typography, styled } from '@mui/material';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { useState } from 'react';
-import { QuestionAnswering } from '../components/QuestionAnswering';
 import { ExerciseContainer } from '../components/ExerciseContainer';
-import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
-import { exerciseWithQuestionsType } from './types';
+import { exerciseUpsertionModalStatusType, exerciseWithQuestionsType } from './types';
 import { HorizontalDividerToAddExercise } from './HorizontalDividers';
+import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
 
 function QuestionsEditing(props: {
     title: string;
@@ -17,14 +16,18 @@ function QuestionsEditing(props: {
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
         undefined,
     );
+    const [exerciseUpsertionModalStatus, setExerciseUpsertionModalStatus] = useState<
+        exerciseUpsertionModalStatusType | undefined
+    >(undefined);
     const totalPoints = computeTotalPoints(props.exercises);
 
     return (
         <>
             <TestPageLayout studentEmail="-" title={props.title} result={totalPoints}>
-                {props.exercises.map((exercise, exerciseIndex) => {
+                <HorizontalDividerToAddExercise onClick={buildOpenExerciseCreationModal()} />
+
+                {props.exercises.map((exercise) => {
                     const exerciseIndication = { hideMark: true };
-                    const isLastExercise = exerciseIndex === props.exercises.length - 1;
 
                     return (
                         <>
@@ -46,15 +49,32 @@ function QuestionsEditing(props: {
                                     </QuestionContainer>
                                 ))}
                             </ExerciseContainer>
-                            {!isLastExercise && (
-                                <HorizontalDividerToAddExercise onClick={() => {}} />
-                            )}
+                            <HorizontalDividerToAddExercise
+                                onClick={buildOpenExerciseCreationModal()}
+                            />
                         </>
                     );
                 })}
             </TestPageLayout>
+            {!!exerciseUpsertionModalStatus && (
+                <ExerciseUpsertionModal
+                    examId={props.examId}
+                    close={closeExerciseUpsertionModal}
+                    modalStatus={exerciseUpsertionModalStatus}
+                />
+            )}
         </>
     );
+
+    function buildOpenExerciseCreationModal() {
+        return () => {
+            setExerciseUpsertionModalStatus({ kind: 'creating' });
+        };
+    }
+
+    function closeExerciseUpsertionModal() {
+        setExerciseUpsertionModalStatus(undefined);
+    }
     function buildOnExerciseExpandedChange(exerciseId: number) {
         return (_: any, isExpanded: boolean) => {
             setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);

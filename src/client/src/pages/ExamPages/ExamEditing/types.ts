@@ -8,9 +8,18 @@ type exerciseWithQuestionsType = {
     id: number;
     instruction: string;
     name: string;
+    defaultPoints: number;
     questions: Array<questionType>;
 };
 
 type questionType = { id: number; points: number };
 
-export type { examWithQuestionsApiType, exerciseWithQuestionsType };
+type exerciseUpsertionModalStatusType =
+    | { kind: 'editing'; exercise: exerciseWithQuestionsType }
+    | { kind: 'creating' };
+
+export type {
+    examWithQuestionsApiType,
+    exerciseWithQuestionsType,
+    exerciseUpsertionModalStatusType,
+};

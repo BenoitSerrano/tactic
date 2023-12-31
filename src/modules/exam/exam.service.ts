@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
 import { examAdaptator } from './exam.adaptator';
@@ -5,7 +6,6 @@ import { User } from '../user';
 import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
-import { In } from 'typeorm';
 import { computeSumPoints } from './lib/computeSumPoints';
 import { buildExerciseService } from '../exercise';
 
@@ -60,12 +60,39 @@ function buildExamService() {
     }
 
     async function getExamWithQuestions(examId: Exam['id']) {
+        const questionService = buildQuestionService();
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },
+            select: {
+                exercises: {
+                    id: true,
+                    name: true,
+                    instruction: true,
+                    defaultPoints: true,
+                    defaultQuestionKind: true,
+                    order: true,
+                    questions: { id: true, order: true },
+                },
+            },
+            order: { exercises: { order: 'ASC', questions: { order: 'ASC' } } },
             relations: ['exercises', 'exercises.questions'],
         });
+        const questionIds: Question['id'][] = [];
+        for (const exercise of exam.exercises) {
+            for (const question of exercise.questions) {
+                questionIds.push(question.id);
+            }
+        }
 
-        return exam;
+        const questions = await questionService.getQuestions(questionIds);
+
+        return {
+            ...exam,
+            exercises: exam.exercises.map((exercise) => ({
+                ...exercise,
+                questions: exercise.questions.map(({ id }) => questions[id]),
+            })),
+        };
     }
 
     async function getExamWithoutAnswers(examId: Exam['id']) {

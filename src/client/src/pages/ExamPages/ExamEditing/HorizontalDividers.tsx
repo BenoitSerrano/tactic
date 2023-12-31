@@ -1,32 +1,36 @@
 import { styled } from '@mui/material';
-import { IconButton } from '../../../components/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Button } from '../../../components/Button';
 
 const ICON_SIZE = 40;
 
 function HorizontalDividerToAddExercise(props: { onClick: () => void }) {
     return (
-        <HorizontalDividerWithIcon
-            onClick={props.onClick}
-            IconComponent={AddCircleOutlineIcon}
-            buttonTooltip="Ajouter un exercice"
+        <HorizontalDividerWithButton
+            button={{
+                label: 'Ajouter un exercice',
+                IconComponent: AddCircleOutlineIcon,
+                onClick: props.onClick,
+            }}
         />
     );
 }
 
-function HorizontalDividerWithIcon(props: {
-    onClick: () => void;
-    IconComponent: React.ElementType;
-    buttonTooltip: string;
+function HorizontalDividerWithButton(props: {
+    button: {
+        onClick: () => void;
+        IconComponent: React.ElementType;
+        label: string;
+    };
 }) {
+    const { button } = props;
+    const { IconComponent } = button;
     return (
         <Container>
             <IconContainer>
-                <IconButton
-                    IconComponent={props.IconComponent}
-                    title={props.buttonTooltip}
-                    onClick={props.onClick}
-                />
+                <Button onClick={button.onClick} startIcon={<IconComponent />}>
+                    {button.label}
+                </Button>
             </IconContainer>
         </Container>
     );
@@ -52,6 +56,8 @@ const IconContainer = styled('div')({
     zIndex: 1,
     top: -ICON_SIZE / 2,
     height: ICON_SIZE,
-    width: ICON_SIZE,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'white',
 });
