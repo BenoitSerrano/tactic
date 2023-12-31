@@ -28,7 +28,7 @@ function HorizontalDividerWithButton(props: {
     return (
         <Container>
             <IconContainer>
-                <Button onClick={button.onClick} startIcon={<IconComponent />}>
+                <Button color="inherit" onClick={button.onClick} startIcon={<IconComponent />}>
                     {button.label}
                 </Button>
             </IconContainer>
