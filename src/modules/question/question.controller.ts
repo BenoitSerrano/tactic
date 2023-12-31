@@ -24,7 +24,7 @@ function buildQuestionController() {
         urlParams: { exerciseId: string };
         body: Pick<
             questionDtoType,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswers'
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswers' | 'order'
         >;
     }) {
         return questionService.createQuestion(Number(params.urlParams.exerciseId), params.body);

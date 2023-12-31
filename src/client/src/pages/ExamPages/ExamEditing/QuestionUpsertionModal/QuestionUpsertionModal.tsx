@@ -134,6 +134,10 @@ function QuestionUpsertionModal(props: {
     }
 
     function saveQuestion() {
+        const { modalStatus } = props;
+        if (!modalStatus) {
+            return;
+        }
         const newQuestion = {
             points: Number(points),
             title,
@@ -144,17 +148,18 @@ function QuestionUpsertionModal(props: {
                     : [],
             acceptableAnswers,
         };
-        if (props.modalStatus?.kind === 'editing') {
+        if (modalStatus.kind === 'editing') {
             updateQuestionMutation.mutate({
                 examId: props.examId,
                 exerciseId: props.exerciseId,
-                questionId: props.modalStatus.question.id,
+                questionId: modalStatus.question.id,
                 ...newQuestion,
             });
         } else {
             createQuestionMutation.mutate({
                 examId: props.examId,
                 exerciseId: props.exerciseId,
+                order: modalStatus.order,
                 ...newQuestion,
             });
         }

@@ -100,6 +100,7 @@ const questionRoutes: Array<routeType<any, any>> = [
         ]),
         schema: Joi.object({
             title: Joi.string().allow(''),
+            order: Joi.number(),
             kind: Joi.string().valid(...questionKinds),
             possibleAnswers: Joi.array().items(Joi.string()),
             acceptableAnswers: Joi.array()

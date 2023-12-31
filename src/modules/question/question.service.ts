@@ -39,7 +39,7 @@ function buildQuestionService() {
         exerciseId: Exercise['id'],
         body: Pick<
             questionDtoType,
-            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswers'
+            'title' | 'kind' | 'points' | 'possibleAnswers' | 'acceptableAnswers' | 'order'
         >,
     ) {
         const exerciseService = buildExerciseService();
@@ -54,7 +54,7 @@ function buildQuestionService() {
         question.kind = body.kind;
         question.points = body.points;
         question.exercise = exercise;
-        question.order = highestOrder + 1;
+        question.order = body.order !== undefined ? body.order : highestOrder + 1;
         return questionRepository.save(
             questionEncoder.encodeQuestion({
                 ...question,
