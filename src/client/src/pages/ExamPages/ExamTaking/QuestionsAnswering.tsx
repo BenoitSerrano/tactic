@@ -105,27 +105,30 @@ function QuestionsAnswering(props: {
                                 exercise={exercise}
                                 indication={exerciseIndication}
                             >
-                                {exercise.questions.map((question, index) => (
-                                    <QuestionContainer
-                                        key={`question-${question.id}`}
-                                        isLastItem={index === exercise.questions.length - 1}
-                                    >
-                                        <QuestionIndicatorsContainer>
-                                            <Typography>/ {question.points}</Typography>
-                                        </QuestionIndicatorsContainer>
-                                        <QuestionAnswering
-                                            currentAnswer={currentAnswers[question.id]}
-                                            setCurrentAnswer={(newAnswer: string) =>
-                                                setCurrentAnswers({
-                                                    ...currentAnswers,
-                                                    [question.id]: newAnswer,
-                                                })
-                                            }
-                                            question={question}
-                                            index={index + 1}
-                                        />
-                                    </QuestionContainer>
-                                ))}
+                                {exercise.questions.map((question, index) => {
+                                    const isLastQuestion = index === exercise.questions.length - 1;
+                                    return (
+                                        <>
+                                            <QuestionContainer key={`question-${question.id}`}>
+                                                <QuestionIndicatorsContainer>
+                                                    <Typography>/ {question.points}</Typography>
+                                                </QuestionIndicatorsContainer>
+                                                <QuestionAnswering
+                                                    currentAnswer={currentAnswers[question.id]}
+                                                    setCurrentAnswer={(newAnswer: string) =>
+                                                        setCurrentAnswers({
+                                                            ...currentAnswers,
+                                                            [question.id]: newAnswer,
+                                                        })
+                                                    }
+                                                    question={question}
+                                                    index={index + 1}
+                                                />
+                                            </QuestionContainer>
+                                            {!isLastQuestion && <HorizontalDivider />}
+                                        </>
+                                    );
+                                })}
                             </ExerciseContainer>
                             {!isLastExercise && <HorizontalDivider />}
                         </>

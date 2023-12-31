@@ -8,7 +8,21 @@ function HorizontalDividerToAddExercise(props: { onClick: () => void }) {
     return (
         <HorizontalDividerWithButton
             button={{
+                variant: 'outlined',
                 label: 'Ajouter un exercice',
+                IconComponent: AddCircleOutlineIcon,
+                onClick: props.onClick,
+            }}
+        />
+    );
+}
+
+function HorizontalDividerToAddQuestion(props: { onClick: () => void }) {
+    return (
+        <HorizontalDividerWithButton
+            button={{
+                variant: 'text',
+                label: 'Ajouter une question',
                 IconComponent: AddCircleOutlineIcon,
                 onClick: props.onClick,
             }}
@@ -18,6 +32,7 @@ function HorizontalDividerToAddExercise(props: { onClick: () => void }) {
 
 function HorizontalDividerWithButton(props: {
     button: {
+        variant: 'text' | 'outlined';
         onClick: () => void;
         IconComponent: React.ElementType;
         label: string;
@@ -28,7 +43,12 @@ function HorizontalDividerWithButton(props: {
     return (
         <Container>
             <IconContainer>
-                <Button color="inherit" onClick={button.onClick} startIcon={<IconComponent />}>
+                <Button
+                    color="inherit"
+                    variant={button.variant}
+                    onClick={button.onClick}
+                    startIcon={<IconComponent />}
+                >
                     {button.label}
                 </Button>
             </IconContainer>
@@ -36,7 +56,7 @@ function HorizontalDividerWithButton(props: {
     );
 }
 
-export { HorizontalDividerToAddExercise };
+export { HorizontalDividerToAddExercise, HorizontalDividerToAddQuestion };
 
 const Container = styled('div')(({ theme }) => ({
     width: '100%',

@@ -4,10 +4,18 @@ import { useState } from 'react';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
-import { exerciseUpsertionModalStatusType, exerciseWithQuestionsType } from './types';
-import { HorizontalDividerToAddExercise } from './HorizontalDividers';
+import {
+    exerciseUpsertionModalStatusType,
+    exerciseWithQuestionsType,
+    questionUpsertionModalStatusType,
+} from './types';
+import {
+    HorizontalDividerToAddExercise,
+    HorizontalDividerToAddQuestion,
+} from './HorizontalDividers';
 import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
 import { computeOrderForIndex } from './lib/computeOrderForIndex';
+import { QuestionUpsertionModal } from './QuestionUpsertionModal/QuestionUpsertionModal';
 
 function QuestionsEditing(props: {
     title: string;
@@ -19,6 +27,9 @@ function QuestionsEditing(props: {
     );
     const [exerciseUpsertionModalStatus, setExerciseUpsertionModalStatus] = useState<
         exerciseUpsertionModalStatusType | undefined
+    >(undefined);
+    const [questionUpsertionModalStatus, setQuestionUpsertionModalStatus] = useState<
+        questionUpsertionModalStatusType | undefined
     >(undefined);
     const totalPoints = computeTotalPoints(props.exercises);
 
@@ -39,15 +50,20 @@ function QuestionsEditing(props: {
                                 exercise={exercise}
                                 indication={exerciseIndication}
                             >
+                                <HorizontalDividerToAddQuestion
+                                    onClick={buildOpenQuestionCreationModal(-1, exercise)}
+                                />
                                 {exercise.questions.map((question, index) => (
-                                    <QuestionContainer
-                                        isLastItem={index === exercise.questions.length - 1}
-                                        key={`question-${question.id}`}
-                                    >
-                                        <QuestionIndicatorsContainer>
-                                            <Typography>/ {question.points}</Typography>
-                                        </QuestionIndicatorsContainer>
-                                    </QuestionContainer>
+                                    <>
+                                        <QuestionContainer key={`question-${question.id}`}>
+                                            <QuestionIndicatorsContainer>
+                                                <Typography>/ {question.points}</Typography>
+                                            </QuestionIndicatorsContainer>
+                                        </QuestionContainer>
+                                        <HorizontalDividerToAddQuestion
+                                            onClick={buildOpenQuestionCreationModal(-1, exercise)}
+                                        />
+                                    </>
                                 ))}
                             </ExerciseContainer>
                             <HorizontalDividerToAddExercise
@@ -64,8 +80,36 @@ function QuestionsEditing(props: {
                     modalStatus={exerciseUpsertionModalStatus}
                 />
             )}
+            {!!questionUpsertionModalStatus && (
+                <QuestionUpsertionModal
+                    examId={props.examId}
+                    close={closeQuestionUpsertionModal}
+                    modalStatus={questionUpsertionModalStatus}
+                    defaultPoints={questionUpsertionModalStatus.exercise.defaultPoints}
+                    defaultQuestionKind={questionUpsertionModalStatus.exercise.defaultQuestionKind}
+                    exerciseId={questionUpsertionModalStatus.exercise.id}
+                />
+            )}
         </>
     );
+
+    function buildOpenQuestionCreationModal(
+        currentQuestionIndex: number,
+        exercise: exerciseWithQuestionsType,
+    ) {
+        const order = computeOrderForIndex(currentQuestionIndex, exercise.questions);
+        return () => {
+            setQuestionUpsertionModalStatus({
+                kind: 'creating',
+                order,
+                exercise: {
+                    id: exercise.id,
+                    defaultPoints: exercise.defaultPoints,
+                    defaultQuestionKind: exercise.defaultQuestionKind,
+                },
+            });
+        };
+    }
 
     function buildOpenExerciseCreationModal(currentExerciseIndex: number) {
         const order = computeOrderForIndex(currentExerciseIndex, props.exercises);
@@ -77,6 +121,11 @@ function QuestionsEditing(props: {
     function closeExerciseUpsertionModal() {
         setExerciseUpsertionModalStatus(undefined);
     }
+
+    function closeQuestionUpsertionModal() {
+        setQuestionUpsertionModalStatus(undefined);
+    }
+
     function buildOnExerciseExpandedChange(exerciseId: number) {
         return (_: any, isExpanded: boolean) => {
             setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);

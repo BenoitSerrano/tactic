@@ -185,7 +185,7 @@ function QuestionsChecking(props: {
                                 exercise={exercise}
                                 warningToDisplay={warningToDisplay}
                             >
-                                {exercise.questions.map((question, index: number) => {
+                                {exercise.questions.map((question, questionIndex: number) => {
                                     const isQuestionManuallyCorrected =
                                         manualQuestionKinds.includes(question.kind);
                                     const grade =
@@ -202,39 +202,41 @@ function QuestionsChecking(props: {
                                         grade,
                                         totalPoints: question.points,
                                     });
+                                    const isLastQuestion =
+                                        questionIndex === exercise.questions.length - 1;
                                     return (
-                                        <QuestionContainer
-                                            key={'question-' + question.id}
-                                            isLastItem={index === exercise.questions.length - 1}
-                                        >
-                                            <QuestionIndicatorsContainer>
-                                                {(question.kind === 'phraseMelangee' ||
-                                                    question.kind === 'questionReponse' ||
-                                                    question.kind === 'texteLibre') && (
-                                                    <UpdateAnswersButtons
-                                                        attemptStatus={props.attemptStatus}
-                                                        examId={props.examId}
-                                                        attemptId={props.attemptId}
-                                                        refetch={props.refetch}
-                                                        question={question}
-                                                        isQuestionManuallyCorrected={
-                                                            isQuestionManuallyCorrected
-                                                        }
-                                                    />
-                                                )}
-                                                <Typography>{displayedMark}</Typography>
-                                            </QuestionIndicatorsContainer>
-                                            <QuestionChecking
-                                                attemptStatus={props.attemptStatus}
-                                                attemptId={props.attemptId}
-                                                examId={props.examId}
-                                                canUpdateAnswers
-                                                key={'question' + question.id}
-                                                index={index + 1}
-                                                question={question}
-                                                answerStatus={answerStatus}
-                                            />
-                                        </QuestionContainer>
+                                        <>
+                                            <QuestionContainer key={'question-' + question.id}>
+                                                <QuestionIndicatorsContainer>
+                                                    {(question.kind === 'phraseMelangee' ||
+                                                        question.kind === 'questionReponse' ||
+                                                        question.kind === 'texteLibre') && (
+                                                        <UpdateAnswersButtons
+                                                            attemptStatus={props.attemptStatus}
+                                                            examId={props.examId}
+                                                            attemptId={props.attemptId}
+                                                            refetch={props.refetch}
+                                                            question={question}
+                                                            isQuestionManuallyCorrected={
+                                                                isQuestionManuallyCorrected
+                                                            }
+                                                        />
+                                                    )}
+                                                    <Typography>{displayedMark}</Typography>
+                                                </QuestionIndicatorsContainer>
+                                                <QuestionChecking
+                                                    attemptStatus={props.attemptStatus}
+                                                    attemptId={props.attemptId}
+                                                    examId={props.examId}
+                                                    canUpdateAnswers
+                                                    key={'question' + question.id}
+                                                    index={questionIndex + 1}
+                                                    question={question}
+                                                    answerStatus={answerStatus}
+                                                />
+                                            </QuestionContainer>
+                                            {!isLastQuestion && <HorizontalDivider />}
+                                        </>
                                     );
                                 })}
                             </ExerciseContainer>

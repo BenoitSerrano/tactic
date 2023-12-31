@@ -63,6 +63,7 @@ function ExerciseContainer<
                     )}
                 </TitleContainer>
             </AccordionSummary>
+
             <AccordionContent>
                 <Typography>
                     <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
@@ -83,6 +84,8 @@ const Container = styled(Accordion)(({ theme }) => ({
     boxShadow: 'none' as const,
     elevation: 0,
 }));
+
+const SurHeader = styled('div')({ background: 'red', width: '100%' });
 
 const ProgressWithLabelContainer = styled('div')({
     width: '15%',

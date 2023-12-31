@@ -48,26 +48,28 @@ function QuestionsConsulting(props: {
                                         grade,
                                         totalPoints: question.points,
                                     });
+                                    const isLastQuestion = index === exercise.questions.length - 1;
+
                                     return (
-                                        <QuestionContainer
-                                            key={question.id}
-                                            isLastItem={index === exercise.questions.length - 1}
-                                        >
-                                            <QuestionIndicatorsContainer>
-                                                <QuestionIndicatorContainer>
-                                                    <Typography>{displayedMark}</Typography>
-                                                </QuestionIndicatorContainer>
-                                            </QuestionIndicatorsContainer>
-                                            <QuestionChecking
-                                                attemptId={props.attemptId}
-                                                examId={props.exam.id}
-                                                canUpdateAnswers={false}
-                                                key={'question' + question.id}
-                                                index={index + 1}
-                                                question={question}
-                                                answerStatus={answerStatus}
-                                            />
-                                        </QuestionContainer>
+                                        <>
+                                            <QuestionContainer key={question.id}>
+                                                <QuestionIndicatorsContainer>
+                                                    <QuestionIndicatorContainer>
+                                                        <Typography>{displayedMark}</Typography>
+                                                    </QuestionIndicatorContainer>
+                                                </QuestionIndicatorsContainer>
+                                                <QuestionChecking
+                                                    attemptId={props.attemptId}
+                                                    examId={props.exam.id}
+                                                    canUpdateAnswers={false}
+                                                    key={'question' + question.id}
+                                                    index={index + 1}
+                                                    question={question}
+                                                    answerStatus={answerStatus}
+                                                />
+                                            </QuestionContainer>
+                                            {!isLastQuestion && <HorizontalDivider />}
+                                        </>
                                     );
                                 })}
                             </ExerciseContainer>
