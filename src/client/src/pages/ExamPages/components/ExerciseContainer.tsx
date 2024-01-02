@@ -85,8 +85,6 @@ const Container = styled(Accordion)(({ theme }) => ({
     elevation: 0,
 }));
 
-const SurHeader = styled('div')({ background: 'red', width: '100%' });
-
 const ProgressWithLabelContainer = styled('div')({
     width: '15%',
     display: 'flex',

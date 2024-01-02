@@ -1,9 +1,7 @@
-import { Typography, styled } from '@mui/material';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { useState } from 'react';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
-import { QuestionContainer } from '../components/QuestionContainer';
 import {
     exerciseUpsertionModalStatusType,
     exerciseWithQuestionsType,
@@ -16,6 +14,7 @@ import {
 import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
 import { computeOrderForIndex } from './lib/computeOrderForIndex';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal/QuestionUpsertionModal';
+import { QuestionViewMode } from './QuestionViewMode/QuestionViewMode';
 
 function QuestionsEditing(props: {
     title: string;
@@ -55,11 +54,12 @@ function QuestionsEditing(props: {
                                 />
                                 {exercise.questions.map((question, index) => (
                                     <>
-                                        <QuestionContainer key={`question-${question.id}`}>
-                                            <QuestionIndicatorsContainer>
-                                                <Typography>/ {question.points}</Typography>
-                                            </QuestionIndicatorsContainer>
-                                        </QuestionContainer>
+                                        <QuestionViewMode
+                                            question={question}
+                                            index={index + 1}
+                                            examId={props.examId}
+                                            exerciseId={exercise.id}
+                                        />
                                         <HorizontalDividerToAddQuestion
                                             onClick={buildOpenQuestionCreationModal(-1, exercise)}
                                         />
@@ -132,12 +132,5 @@ function QuestionsEditing(props: {
         };
     }
 }
-
-const QuestionIndicatorsContainer = styled('div')({
-    minWidth: 60,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-});
 
 export { QuestionsEditing };

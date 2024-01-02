@@ -18,6 +18,7 @@ type exerciseWithQuestionsType = {
 
 type questionType = {
     id: number;
+    kind: questionKindType;
     title: string;
     points: number;
     order: number;
