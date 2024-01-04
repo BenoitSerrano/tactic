@@ -5,10 +5,6 @@ import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
 import { QuestionsEditing } from './QuestionsEditing';
 import { examWithQuestionsApiType } from './types';
-import { useState } from 'react';
-import { viewModeType } from './constants';
-import { ViewModeToggle } from './ViewModeToggle';
-import { HEADER_HEIGHT } from '../../../constants';
 
 function ExamEditing() {
     const params = useParams();

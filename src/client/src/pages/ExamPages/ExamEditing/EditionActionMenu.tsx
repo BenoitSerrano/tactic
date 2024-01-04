@@ -1,8 +1,8 @@
 import { styled } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
-import ClearIcon from '@mui/icons-material/Clear';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton } from '../../../components/IconButton';
 import { viewModeType } from './constants';
 

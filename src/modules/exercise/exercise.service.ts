@@ -121,7 +121,10 @@ function buildExerciseService() {
         await attemptService.deleteExerciseAnswers(exerciseId);
 
         const result = await exerciseRepository.delete({ id: exerciseId });
-        return result.affected == 1;
+        if (result.affected !== 1) {
+            throw new Error(`The affected row length (${result.affected}) !== 1 `);
+        }
+        return { id: exerciseId };
     }
 
     async function duplicateExercises(newExam: Exam, exercises: Exercise[]) {
