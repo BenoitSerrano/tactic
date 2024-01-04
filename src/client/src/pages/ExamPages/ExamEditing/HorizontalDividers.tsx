@@ -21,7 +21,7 @@ function HorizontalDividerToAddQuestion(props: { onClick: () => void }) {
     return (
         <HorizontalDividerWithButton
             button={{
-                position: 'left',
+                position: 'center',
                 variant: 'text',
                 label: 'Ajouter une question',
                 IconComponent: AddCircleOutlineIcon,
@@ -65,10 +65,8 @@ export { HorizontalDividerToAddExercise, HorizontalDividerToAddQuestion };
 const mainContainerProperties = {
     width: '100%',
     height: 1,
-    overflow: 'visible' as const,
     display: 'flex' as const,
     alignItems: 'center' as const,
-    position: 'relative' as const,
     marginTop: BUTTON_HEIGHT / 2,
     marginBottom: BUTTON_HEIGHT / 2,
 };
@@ -86,9 +84,7 @@ const CenterContainer = styled('div')(({ theme }) => ({
 }));
 
 const ButtonContainer = styled('div')({
-    position: 'absolute',
     zIndex: 1,
-    top: -BUTTON_HEIGHT / 2,
     height: BUTTON_HEIGHT,
     display: 'flex',
     justifyContent: 'center',

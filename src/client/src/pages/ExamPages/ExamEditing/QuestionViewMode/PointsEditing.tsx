@@ -8,14 +8,18 @@ function PointsEditing(props: {
     points: string;
     setPoints: (points: string) => void;
     formErrors: string[];
+    shouldDisplayErrors: boolean;
 }) {
     const formErrorMessage = formErrorHandler.extractPointsFormErrorMessage(props.formErrors);
     return (
         <Container>
             <SlashText>/</SlashText>
             <StyledTextField
-                error={!!formErrorMessage}
-                helperText={<FormHelperText label={formErrorMessage} />}
+                label="Points"
+                error={props.shouldDisplayErrors && !!formErrorMessage}
+                helperText={
+                    props.shouldDisplayErrors && <FormHelperText label={formErrorMessage} />
+                }
                 variant="standard"
                 value={props.points}
                 onChange={onChange}

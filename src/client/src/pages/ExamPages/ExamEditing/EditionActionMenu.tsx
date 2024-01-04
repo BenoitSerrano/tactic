@@ -1,6 +1,7 @@
 import { styled } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { IconButton } from '../../../components/IconButton';
 import { viewModeType } from './constants';
@@ -9,24 +10,25 @@ function EditionActionMenu(props: {
     currentViewMode: viewModeType;
     setCurrentViewMode: (viewMode: viewModeType) => void;
     onSave: () => void;
+    onCancel: () => void;
+    onDelete: () => void;
     isSaving: boolean;
-    isSaveButtonDisabled: boolean;
+    isDeleting: boolean;
 }) {
     if (props.currentViewMode === 'editing') {
         return (
             <MenuContainer>
                 <IconButton
-                    onClick={setEditingMode}
-                    IconComponent={DeleteForeverIcon}
-                    title="Supprimer la question"
-                />
-                <IconButton
                     isLoading={props.isSaving}
                     onClick={props.onSave}
                     IconComponent={SaveIcon}
-                    disabled={props.isSaveButtonDisabled}
                     title="Sauvegarder les changements"
                     color="success"
+                />
+                <IconButton
+                    onClick={props.onCancel}
+                    IconComponent={ClearIcon}
+                    title="Annuler les changements"
                 />
             </MenuContainer>
         );
@@ -35,13 +37,14 @@ function EditionActionMenu(props: {
         <MenuContainer>
             <IconButton
                 onClick={setEditingMode}
-                IconComponent={DeleteForeverIcon}
-                title="Supprimer la question"
-            />
-            <IconButton
-                onClick={setEditingMode}
                 IconComponent={EditIcon}
                 title="Éditer la question"
+            />
+            <IconButton
+                isLoading={props.isDeleting}
+                onClick={props.onDelete}
+                IconComponent={DeleteForeverIcon}
+                title="Supprimer la question"
             />
         </MenuContainer>
     );
@@ -51,6 +54,9 @@ function EditionActionMenu(props: {
     }
 }
 
-const MenuContainer = styled('div')({});
+const MenuContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+});
 
 export { EditionActionMenu };

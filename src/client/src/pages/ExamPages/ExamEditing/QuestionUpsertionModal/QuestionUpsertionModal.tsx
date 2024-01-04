@@ -159,7 +159,6 @@ function QuestionUpsertionModal(props: {
             createQuestionMutation.mutate({
                 examId: props.examId,
                 exerciseId: props.exerciseId,
-                order: modalStatus.order,
                 ...newQuestion,
             });
         }

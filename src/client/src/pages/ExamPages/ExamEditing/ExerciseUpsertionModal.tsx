@@ -134,7 +134,6 @@ function ExerciseUpsertionModal(props: {
             createExerciseMutation.mutate({
                 examId: props.examId,
                 defaultQuestionKind,
-                order: modalStatus.order,
                 ...newExercise,
             });
         }

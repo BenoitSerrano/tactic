@@ -10,6 +10,7 @@ import { FormHelperText } from '../../../../components/FormHelperText';
 function QcmEditing(props: {
     index: number;
     formErrors: string[];
+    shouldDisplayErrors: boolean;
     title: string;
     setTitle: (title: string) => void;
     possibleAnswers: string[];
@@ -26,10 +27,13 @@ function QcmEditing(props: {
     return (
         <Container>
             <TitleContainer>
-                <IndexContainer>{props.index}.</IndexContainer>
                 <TextField
-                    error={titleFormErrorMessage !== undefined}
-                    helperText={<FormHelperText label={titleFormErrorMessage} />}
+                    error={props.shouldDisplayErrors && titleFormErrorMessage !== undefined}
+                    helperText={
+                        props.shouldDisplayErrors && (
+                            <FormHelperText label={titleFormErrorMessage} />
+                        )
+                    }
                     fullWidth
                     label="Intitulé"
                     placeholder="Intitulé de la question"
@@ -59,9 +63,13 @@ function QcmEditing(props: {
                                         control={<StyledCorrectRadio />}
                                         label={
                                             <PossibleAnswerTextField
-                                                error={!!formErrorMessage}
+                                                error={
+                                                    props.shouldDisplayErrors && !!formErrorMessage
+                                                }
                                                 helperText={
-                                                    <FormHelperText label={formErrorMessage} />
+                                                    props.shouldDisplayErrors && (
+                                                        <FormHelperText label={formErrorMessage} />
+                                                    )
                                                 }
                                                 label={`Réponse n°${possibleAnswerIndex + 1}`}
                                                 fullWidth
@@ -174,10 +182,5 @@ const PossibleAnswerFormControlLabel = styled(FormControlLabel)({
         width: '100%',
     },
 });
-
-const IndexContainer = styled(Typography)(({ theme }) => ({
-    fontWeight: 'bold',
-    marginRight: theme.spacing(),
-}));
 
 export { QcmEditing };

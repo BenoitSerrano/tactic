@@ -81,12 +81,12 @@ function QuestionsTable(props: {
             result.destination.index,
         );
         setQuestions(newQuestions);
-        const orders = newQuestions.map((question, index) => ({ id: question.id, order: index }));
+        const orderedIds = newQuestions.map((question, index) => question.id);
 
         updateQuestionsOrderMutation.mutate({
             examId: props.examId,
             exerciseId: props.exerciseId,
-            orders,
+            orderedIds,
         });
     };
     return (

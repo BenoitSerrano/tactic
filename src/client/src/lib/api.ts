@@ -387,11 +387,11 @@ async function updateQuestion(params: {
 async function updateQuestionsOrder(params: {
     examId: string;
     exerciseId: number;
-    orders: Array<{ id: number; order: number }>;
+    orderedIds: number[];
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/order`;
     return performApiCall(URL, 'PATCH', {
-        orders: params.orders,
+        orderedIds: params.orderedIds,
     });
 }
 

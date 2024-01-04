@@ -6,4 +6,10 @@ const HorizontalDivider = styled('div')(({ theme }) => ({
     width: '100%',
 }));
 
-export { HorizontalDivider };
+const LightHorizontalDivider = styled('div')(({ theme }) => ({
+    height: 1,
+    backgroundColor: `${theme.palette.grey[200]}`,
+    width: '100%',
+}));
+
+export { HorizontalDivider, LightHorizontalDivider };

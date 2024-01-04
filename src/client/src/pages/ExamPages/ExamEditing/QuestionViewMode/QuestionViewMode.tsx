@@ -5,7 +5,7 @@ import {
     questionPreviewingComponentMapping,
     viewModeType,
 } from '../constants';
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { QuestionContainer } from '../../components/QuestionContainer';
 import { questionType } from '../types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -41,6 +41,16 @@ function QuestionViewMode(props: {
     const [title, setTitle] = useState(props.question.title);
     const [acceptableAnswers, setAcceptableAnswers] = useState(props.question.acceptableAnswers);
     const [possibleAnswers, setPossibleAnswers] = useState(props.question.possibleAnswers);
+    const deleteQuestionMutation = useMutation({
+        mutationFn: api.deleteQuestion,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['exam-with-questions', props.examId],
+            });
+            displayAlert({ variant: 'success', text: 'La question a été supprimée.' });
+        },
+    });
+    const [shouldDisplayErrors, setShouldDisplayErrors] = useState(false);
     const formErrors = formErrorHandler.computeFormErrors(props.question.kind, {
         title: title,
         possibleAnswers,
@@ -49,28 +59,33 @@ function QuestionViewMode(props: {
     });
     const PointsViewModeComponent = pointsViewModeComponentMapping[currentViewMode];
 
-    const isSaveButtonDisabled = formErrors.length > 0;
+    const areThereErrors = formErrors.length > 0;
     const QuestionViewModeComponent = questionViewModeComponentMapping[currentViewMode];
     const isSaving = updateQuestionMutation.isPending;
 
     return (
-        <QuestionContainer key={`question-${props.question.id}`}>
-            <ViewModeToggleContainer>
-                <EditionActionMenu
-                    isSaving={isSaving}
-                    isSaveButtonDisabled={isSaveButtonDisabled}
-                    onSave={saveQuestion}
-                    currentViewMode={currentViewMode}
-                    setCurrentViewMode={setCurrentViewMode}
-                />
-            </ViewModeToggleContainer>
-            <QuestionIndicatorsContainer>
-                <PointsViewModeComponent
-                    points={points}
-                    setPoints={setPoints}
-                    formErrors={formErrors}
-                />
-            </QuestionIndicatorsContainer>
+        <QuestionContainer>
+            <LeftContainer>
+                <QuestionIndicatorsContainer>
+                    <PointsViewModeComponent
+                        points={points}
+                        setPoints={setPoints}
+                        formErrors={formErrors}
+                        shouldDisplayErrors={shouldDisplayErrors}
+                    />
+                </QuestionIndicatorsContainer>
+                <ViewModeToggleContainer>
+                    <EditionActionMenu
+                        isDeleting={deleteQuestionMutation.isPending}
+                        onDelete={deleteQuestion}
+                        onCancel={cancelChanges}
+                        isSaving={isSaving}
+                        onSave={saveQuestion}
+                        currentViewMode={currentViewMode}
+                        setCurrentViewMode={setCurrentViewMode}
+                    />
+                </ViewModeToggleContainer>
+            </LeftContainer>
 
             <QuestionViewModeComponent
                 formErrors={formErrors}
@@ -81,11 +96,24 @@ function QuestionViewMode(props: {
                 acceptableAnswers={acceptableAnswers}
                 setAcceptableAnswers={setAcceptableAnswers}
                 index={props.index}
+                shouldDisplayErrors={shouldDisplayErrors}
             />
         </QuestionContainer>
     );
 
+    function cancelChanges() {
+        setAcceptableAnswers(props.question.acceptableAnswers);
+        setPoints(`${props.question.points}`);
+        setPossibleAnswers(props.question.possibleAnswers);
+        setTitle(props.question.title);
+        setCurrentViewMode('previewing');
+    }
+
     function saveQuestion() {
+        setShouldDisplayErrors(true);
+        if (areThereErrors) {
+            return;
+        }
         const updatedQuestion = {
             ...props.question,
             possibleAnswers,
@@ -100,16 +128,34 @@ function QuestionViewMode(props: {
             questionId: props.question.id,
         });
     }
+
+    function deleteQuestion() {
+        // eslint-disable-next-line no-restricted-globals
+        const hasConfirmed = confirm(
+            'Souhaitez-vous réellement supprimer cette question ? Tous les résultats des élèves pour cette question seront également supprimés.',
+        );
+        if (hasConfirmed) {
+            deleteQuestionMutation.mutate({ examId: props.examId, questionId: props.question.id });
+        }
+    }
 }
 
 const ViewModeToggleContainer = styled('div')(({ theme }) => ({
-    position: 'absolute',
-    left: -150,
-}));
-
-const QuestionIndicatorsContainer = styled('div')({
-    minWidth: 100,
     display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+const LeftContainer = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
 });
+
+const QuestionIndicatorsContainer = styled('div')(({ theme }) => ({
+    width: 100,
+    display: 'flex',
+    justifyContent: 'center',
+}));
 
 export { QuestionViewMode };
