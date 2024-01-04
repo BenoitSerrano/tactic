@@ -6,13 +6,12 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import { examApiType, exerciseType, modalStatusType } from './types';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
-import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
 import { Menu } from '../../components/Menu';
 import { Typography, styled } from '@mui/material';
+import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
 
 function ExamExercises() {
     const params = useParams<{ examId: string }>();
-
     const [currentExerciseModalStatus, setCurrentExerciseModalStatus] = useState<
         modalStatusType | undefined
     >();
@@ -34,6 +33,7 @@ function ExamExercises() {
             IconComponent: AddCircleOutlineOutlinedIcon,
         },
     ];
+
     return (
         <>
             <TitleContainer>

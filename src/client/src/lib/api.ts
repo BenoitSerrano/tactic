@@ -19,6 +19,7 @@ const api = {
     deleteStudent,
     createExam,
     fetchExam,
+    fetchExamWithQuestions,
     updateExamName,
     updateExamDuration,
     fetchExams,
@@ -252,6 +253,11 @@ async function fetchExam(examId: string) {
     return performApiCall(URL, 'GET');
 }
 
+async function fetchExamWithQuestions(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/with-questions`;
+    return performApiCall(URL, 'GET');
+}
+
 async function createExam({ name, duration }: { name: string; duration: number | undefined }) {
     const URL = `${BASE_URL}/exams`;
     return performApiCall(URL, 'POST', { name, duration });
@@ -284,6 +290,7 @@ async function createExercise(params: {
     instruction: string;
     defaultPoints: number;
     defaultQuestionKind: questionKindType;
+    order?: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises`;
     return performApiCall(URL, 'POST', {
@@ -291,6 +298,7 @@ async function createExercise(params: {
         instruction: params.instruction,
         defaultPoints: params.defaultPoints,
         defaultQuestionKind: params.defaultQuestionKind,
+        order: params.order,
     });
 }
 
@@ -342,6 +350,7 @@ async function createQuestion(params: {
     exerciseId: number;
     title: string;
     kind: questionKindType;
+    order?: number;
     possibleAnswers: string[];
     acceptableAnswers: acceptableAnswerType[][];
     points: number;
@@ -350,6 +359,7 @@ async function createQuestion(params: {
     return performApiCall(URL, 'POST', {
         title: params.title,
         kind: params.kind,
+        order: params.order,
         possibleAnswers: params.possibleAnswers,
         acceptableAnswers: params.acceptableAnswers,
         points: params.points,
@@ -377,11 +387,11 @@ async function updateQuestion(params: {
 async function updateQuestionsOrder(params: {
     examId: string;
     exerciseId: number;
-    orders: Array<{ id: number; order: number }>;
+    orderedIds: number[];
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/order`;
     return performApiCall(URL, 'PATCH', {
-        orders: params.orders,
+        orderedIds: params.orderedIds,
     });
 }
 
@@ -431,13 +441,10 @@ async function duplicateQuestion(params: {
     return performApiCall(URL, 'POST');
 }
 
-async function updateExercisesOrder(params: {
-    examId: string;
-    orders: Array<{ id: number; order: number }>;
-}) {
+async function updateExercisesOrder(params: { examId: string; orderedIds: number[] }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/order`;
     return performApiCall(URL, 'PATCH', {
-        orders: params.orders,
+        orderedIds: params.orderedIds,
     });
 }
 

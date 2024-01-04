@@ -42,9 +42,7 @@ const exerciseRoutes: Array<routeType<any, any>> = [
             },
         ]),
         schema: Joi.object({
-            orders: Joi.array().items(
-                Joi.object({ id: Joi.number().required(), order: Joi.number().required() }),
-            ),
+            orderedIds: Joi.array().items(Joi.number().required()),
         }),
     },
     {

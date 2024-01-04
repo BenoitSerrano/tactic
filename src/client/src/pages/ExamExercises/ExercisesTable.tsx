@@ -176,8 +176,8 @@ function ExercisesTable(props: {
             result.destination.index,
         );
         setExercises(newExercises);
-        const orders = newExercises.map((exercise, index) => ({ id: exercise.id, order: index }));
-        updateExercisesOrderMutation.mutate({ examId: props.examId, orders });
+        const orderedIds = newExercises.map((exercise, index) => exercise.id);
+        updateExercisesOrderMutation.mutate({ examId: props.examId, orderedIds });
     }
 
     function buildDeleteExercise(exerciseId: number) {

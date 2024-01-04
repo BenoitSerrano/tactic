@@ -10,9 +10,11 @@ function Button(props: {
     title?: string;
     startIcon?: JSX.Element;
     autoFocus?: boolean;
+    color?: 'primary' | 'error' | 'inherit';
 }) {
     return (
         <MuiButton
+            color={props.color}
             autoFocus={props.autoFocus}
             title={props.title}
             startIcon={props.startIcon}

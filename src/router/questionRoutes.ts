@@ -41,9 +41,7 @@ const questionRoutes: Array<routeType<any, any>> = [
             { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
-            orders: Joi.array().items(
-                Joi.object({ id: Joi.number().required(), order: Joi.number().required() }),
-            ),
+            orderedIds: Joi.array().items(Joi.number().required()),
         }),
     },
     {

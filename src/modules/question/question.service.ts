@@ -55,12 +55,13 @@ function buildQuestionService() {
         question.points = body.points;
         question.exercise = exercise;
         question.order = highestOrder + 1;
-        return questionRepository.save(
+        const newQuestion = await questionRepository.save(
             questionEncoder.encodeQuestion({
                 ...question,
                 acceptableAnswers: body.acceptableAnswers,
             }),
         );
+        return { id: newQuestion.id };
     }
 
     async function getHighestQuestionOrder(exerciseId: Exercise['id']) {
@@ -162,13 +163,15 @@ function buildQuestionService() {
         }, {} as Record<Question['id'], questionDtoType>);
     }
 
-    async function updateQuestionsOrder(orders: Array<{ id: Question['id']; order: number }>) {
-        for (const { id, order } of orders) {
-            const result = await questionRepository.update({ id }, { order });
+    async function updateQuestionsOrder(orderedIds: Question['id'][]) {
+        for (let i = 0; i < orderedIds.length; i++) {
+            const id = orderedIds[i];
+            const result = await questionRepository.update({ id }, { order: i });
             if (result.affected !== 1) {
                 console.error(`Could not update question id ${id} order because it does not exist`);
             }
         }
+
         return true;
     }
 

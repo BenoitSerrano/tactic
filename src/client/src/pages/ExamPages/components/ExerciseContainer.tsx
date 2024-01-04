@@ -16,20 +16,20 @@ import {
     exerciseIndicationType,
 } from '../lib/computeExerciseIndication';
 
+const EXERCISE_ACCORDION_SUMMARY_HEIGHT = 52;
+
 function ExerciseContainer<
     questionT extends { points: number; mark?: number | undefined },
     exerciseT extends { id: number; name: string; instruction: string; questions: questionT[] },
 >(props: {
     exercise: exerciseT;
     children: ReactNode;
-    isLastItem: boolean;
     isExpanded: boolean;
     warningToDisplay?: string;
     onChangeExpanded: (_: any, isExpanded: boolean) => void;
     indication?: exerciseIndicationType;
 }) {
     const { result, progress } = computeExerciseIndication(props.exercise, props.indication);
-    const Container = props.isLastItem ? LastContainer : DefaultContainer;
     return (
         <Container
             onChange={props.onChangeExpanded}
@@ -65,6 +65,7 @@ function ExerciseContainer<
                     )}
                 </TitleContainer>
             </AccordionSummary>
+
             <AccordionContent>
                 <Typography>
                     <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
@@ -75,20 +76,15 @@ function ExerciseContainer<
     );
 }
 
-export { ExerciseContainer };
+export { ExerciseContainer, EXERCISE_ACCORDION_SUMMARY_HEIGHT };
 
-const mainContainerProperties = {
-    boxShadow: 'none' as const,
-    elevation: 0,
-};
-
-const DefaultContainer = styled(Accordion)(({ theme }) => ({
+const Container = styled(Accordion)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     flex: 1,
-    borderBottom: `1px solid ${theme.palette.common.black}`,
-    ...mainContainerProperties,
+    boxShadow: 'none' as const,
+    elevation: 0,
 }));
 
 const ProgressWithLabelContainer = styled('div')({
@@ -103,8 +99,6 @@ const ProgressContainer = styled('div')(({ theme }) => ({
 }));
 
 const AccordionContent = styled(AccordionDetails)({ padding: 0 });
-
-const LastContainer = styled(Accordion)(({ theme }) => ({ ...mainContainerProperties }));
 
 const TitleContainer = styled('div')({
     display: 'flex',
@@ -122,7 +116,10 @@ const WarningIconContainer = styled(Tooltip)(({ theme }) => ({
     height: '100%',
 }));
 
-const AccordionSummary = styled(MuiAccordionSummary)({ padding: 0 });
+const AccordionSummary = styled(MuiAccordionSummary)({
+    padding: 0,
+    height: EXERCISE_ACCORDION_SUMMARY_HEIGHT,
+});
 
 const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center' });
 const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));

@@ -26,6 +26,12 @@ const examRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'GET',
+        path: '/exams/:examId/with-questions',
+        isAuthenticated: true,
+        controller: examController.getExamWithQuestions,
+    },
+    {
+        method: 'GET',
         path: '/exams/:examId/without-answers',
         isAuthenticated: false,
         controller: examController.getExamWithoutAnswers,

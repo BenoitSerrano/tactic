@@ -28,7 +28,7 @@ const FixedContainer = styled('div')(({ theme }) => ({
     top: 0,
     position: 'fixed',
     width: '100vw',
-    zIndex: 1,
+    zIndex: 2,
     borderBottom: `${theme.palette.divider} 1px solid`,
 }));
 const ContentContainer = styled('div')(({ theme }) => ({

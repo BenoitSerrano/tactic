@@ -49,9 +49,7 @@ function buildExerciseController() {
         return exerciseService.deleteExercise(Number(params.urlParams.exerciseId));
     }
 
-    async function updateExercisesOrder(params: {
-        body: { orders: Array<{ id: Exercise['id']; order: number }> };
-    }) {
-        return exerciseService.updateExercisesOrder(params.body.orders);
+    async function updateExercisesOrder(params: { body: { orderedIds: Exercise['id'][] } }) {
+        return exerciseService.updateExercisesOrder(params.body.orderedIds);
     }
 }
