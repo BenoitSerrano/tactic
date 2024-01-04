@@ -28,7 +28,7 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { tableHandler } from '../../../lib/tableHandler';
-import { IconButton as MuiIconButton, styled } from '@mui/material';
+import { IconButton as MuiIconButton, Tooltip, styled } from '@mui/material';
 import { HorizontalDivider, LightHorizontalDivider } from '../../../components/HorizontalDivider';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
@@ -125,11 +125,13 @@ function QuestionsEditing(props: {
                                                         {...draggableExerciseProvided.draggableProps}
                                                     >
                                                         <ExerciseIconsContainer>
-                                                            <MuiIconButton
-                                                                {...draggableExerciseProvided.dragHandleProps}
-                                                            >
-                                                                <DragIndicatorIcon />
-                                                            </MuiIconButton>
+                                                            <Tooltip title="Maintenez le clic enfoncé pour déplacer l'exercice">
+                                                                <MuiIconButton
+                                                                    {...draggableExerciseProvided.dragHandleProps}
+                                                                >
+                                                                    <DragIndicatorIcon />
+                                                                </MuiIconButton>
+                                                            </Tooltip>
                                                             <IconButton
                                                                 IconComponent={EditIcon}
                                                                 title="Éditer l'exercice"
@@ -210,11 +212,13 @@ function QuestionsEditing(props: {
                                                                                                         {...draggableQuestionProvided.draggableProps}
                                                                                                     >
                                                                                                         <QuestionDragIconContainer>
-                                                                                                            <MuiIconButton
-                                                                                                                {...draggableQuestionProvided.dragHandleProps}
-                                                                                                            >
-                                                                                                                <DragIndicatorIcon />
-                                                                                                            </MuiIconButton>
+                                                                                                            <Tooltip title="Maintenez le clic enfoncé pour déplacer la question">
+                                                                                                                <MuiIconButton
+                                                                                                                    {...draggableQuestionProvided.dragHandleProps}
+                                                                                                                >
+                                                                                                                    <DragIndicatorIcon />
+                                                                                                                </MuiIconButton>
+                                                                                                            </Tooltip>
                                                                                                         </QuestionDragIconContainer>
                                                                                                         <QuestionViewMode
                                                                                                             onDeleteQuestion={buildOnDeleteQuestion(
