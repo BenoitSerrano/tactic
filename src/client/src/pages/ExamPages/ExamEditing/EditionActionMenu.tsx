@@ -45,6 +45,7 @@ function EditionActionMenu(props: {
                 onClick={props.onDelete}
                 IconComponent={DeleteForeverIcon}
                 title="Supprimer la question"
+                color="error"
             />
         </MenuContainer>
     );
