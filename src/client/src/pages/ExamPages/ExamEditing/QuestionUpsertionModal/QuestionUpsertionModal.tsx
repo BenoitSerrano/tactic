@@ -148,7 +148,7 @@ function QuestionUpsertionModal(props: {
                 currentQuestionKind === 'qcm'
                     ? possibleAnswers.map((possibleAnswer) => possibleAnswer.trim())
                     : [],
-            acceptableAnswers,
+            acceptableAnswers: acceptableAnswers.filter(Boolean),
         };
         if (modalStatus.kind === 'editing') {
             updateQuestionMutation.mutate({

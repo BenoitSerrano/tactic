@@ -57,7 +57,6 @@ function QuestionReponseUpsertionModalContent(props: {
     function onChangeRightAnswers(event: ChangeEvent<HTMLInputElement>) {
         const newAcceptableAnswerWithPoints = event.target.value
             .split(SPLITTING_CHARACTER_FOR_ANSWERS)
-            .filter(Boolean)
             .map((answer) => ({ answer, grade: 'A' as const }));
         props.setAcceptableAnswers([newAcceptableAnswerWithPoints]);
     }
