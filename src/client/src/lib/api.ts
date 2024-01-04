@@ -441,13 +441,10 @@ async function duplicateQuestion(params: {
     return performApiCall(URL, 'POST');
 }
 
-async function updateExercisesOrder(params: {
-    examId: string;
-    orders: Array<{ id: number; order: number }>;
-}) {
+async function updateExercisesOrder(params: { examId: string; orderedIds: number[] }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/order`;
     return performApiCall(URL, 'PATCH', {
-        orders: params.orders,
+        orderedIds: params.orderedIds,
     });
 }
 

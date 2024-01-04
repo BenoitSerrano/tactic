@@ -43,7 +43,6 @@ function QuestionUpsertionModal(props: {
     const createQuestionMutation = useMutation({
         mutationFn: api.createQuestion,
         onSuccess: (createdQuestion: { id: number }) => {
-            console.log('createdQuestion', createdQuestion);
             props.onCreateQuestion(props.exerciseId, createdQuestion.id);
             props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });

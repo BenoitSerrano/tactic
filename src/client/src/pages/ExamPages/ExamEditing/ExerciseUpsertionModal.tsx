@@ -14,6 +14,7 @@ import { exerciseUpsertionModalStatusType } from './types';
 function ExerciseUpsertionModal(props: {
     close: () => void;
     modalStatus: exerciseUpsertionModalStatusType;
+    onCreateExercise: (createdExerciseId: number) => void;
     examId: string;
 }) {
     const queryClient = useQueryClient();
@@ -35,7 +36,8 @@ function ExerciseUpsertionModal(props: {
 
     const createExerciseMutation = useMutation({
         mutationFn: api.createExercise,
-        onSuccess: () => {
+        onSuccess: (createdExercise: { id: number }) => {
+            props.onCreateExercise(createdExercise.id);
             props.close();
             displayAlert({ text: "L'exercice a bien été créé.", variant: 'success' });
             queryClient.invalidateQueries({

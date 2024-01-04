@@ -1,6 +1,9 @@
 import { TestPageLayout } from '../components/TestPageLayout';
 import { useState } from 'react';
-import { ExerciseContainer } from '../components/ExerciseContainer';
+import {
+    EXERCISE_ACCORDION_SUMMARY_HEIGHT,
+    ExerciseContainer,
+} from '../components/ExerciseContainer';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import {
     exerciseUpsertionModalStatusType,
@@ -55,6 +58,15 @@ function QuestionsEditing(props: {
             });
         },
     });
+    const updateExercisesOrderMutation = useMutation({
+        mutationFn: api.updateExercisesOrder,
+        onError: () => {
+            displayAlert({
+                variant: 'error',
+                text: "La question n'a pas pu être déplacée. Veuillez recharger la page.",
+            });
+        },
+    });
     const initialOrderedExerciseIds = props.exercises.map((exercise) => exercise.id);
     const [orderedExerciseIds, setOrderedExerciseIds] = useState(initialOrderedExerciseIds);
     const initialOrderedQuestionIds = props.exercises.reduce((acc, exercise) => {
@@ -64,96 +76,180 @@ function QuestionsEditing(props: {
         };
     }, {} as Record<number, number[]>);
     const [orderedQuestionIds, setOrderedQuestionIds] = useState(initialOrderedQuestionIds);
+
     const orderedExercises = computeOrderedItems(orderedExerciseIds, props.exercises);
 
     const totalPoints = computeTotalPoints(props.exercises);
     return (
         <>
             <TestPageLayout studentEmail="-" title={props.title} result={totalPoints}>
-                {orderedExercises.map((exercise) => {
-                    const exerciseIndication = { hideMark: true };
-
-                    return (
-                        <ExerciseContainer
-                            isExpanded={currentExerciseExpanded === exercise.id}
-                            onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                            key={`exercise-${exercise.id}`}
-                            exercise={exercise}
-                            indication={exerciseIndication}
-                        >
-                            <DragDropContext
-                                onDragEnd={(result) => handleQuestionsDragEnd(result, exercise.id)}
+                <DragDropContext onDragEnd={handleExercisesDragEnd}>
+                    <Droppable droppableId="droppable-exercise">
+                        {(droppableExerciseProvided) => (
+                            <PageContent
+                                ref={droppableExerciseProvided.innerRef}
+                                {...droppableExerciseProvided.droppableProps}
                             >
-                                <Droppable droppableId="droppable-question">
-                                    {(provided) => {
-                                        const orderedQuestions = computeOrderedItems(
-                                            orderedQuestionIds[exercise.id],
-                                            exercise.questions,
-                                        );
+                                {orderedExercises.map((exercise, exerciseIndex) => {
+                                    const exerciseIndication = { hideMark: true };
 
-                                        return (
-                                            <QuestionsContainer
-                                                ref={provided.innerRef}
-                                                {...provided.droppableProps}
-                                            >
-                                                {orderedQuestions.map((question, questionIndex) => (
-                                                    <QuestionMainContainer
-                                                        key={`question-${question.id}`}
-                                                    >
-                                                        <Draggable
-                                                            key={'question-' + question.id}
-                                                            draggableId={'question-' + question.id}
-                                                            index={questionIndex}
+                                    return (
+                                        <Draggable
+                                            key={'exercise-' + exercise.id}
+                                            draggableId={'exercise-' + exercise.id}
+                                            index={exerciseIndex}
+                                        >
+                                            {(draggableExerciseProvided) => (
+                                                <ExerciseMainContainer
+                                                    ref={draggableExerciseProvided.innerRef}
+                                                    {...draggableExerciseProvided.draggableProps}
+                                                >
+                                                    <ExerciseDragIconContainer>
+                                                        <IconButton
+                                                            {...draggableExerciseProvided.dragHandleProps}
                                                         >
-                                                            {(provided) => (
-                                                                <QuestionContainer
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                >
-                                                                    <DragIconContainer>
-                                                                        <IconButton
-                                                                            {...provided.dragHandleProps}
-                                                                        >
-                                                                            <DragIndicatorIcon />
-                                                                        </IconButton>
-                                                                    </DragIconContainer>
-                                                                    <QuestionViewMode
-                                                                        onDeleteQuestion={buildOnDeleteQuestion(
-                                                                            exercise.id,
-                                                                            question.id,
-                                                                        )}
-                                                                        question={question}
-                                                                        index={questionIndex + 1}
-                                                                        examId={props.examId}
-                                                                        exerciseId={exercise.id}
-                                                                    />
-                                                                </QuestionContainer>
-                                                            )}
-                                                        </Draggable>
-                                                        {questionIndex <
-                                                            exercise.questions.length - 1 && (
-                                                            <LightHorizontalDivider />
+                                                            <DragIndicatorIcon />
+                                                        </IconButton>
+                                                    </ExerciseDragIconContainer>
+                                                    <ExerciseContainer
+                                                        isExpanded={
+                                                            currentExerciseExpanded === exercise.id
+                                                        }
+                                                        onChangeExpanded={buildOnExerciseExpandedChange(
+                                                            exercise.id,
                                                         )}
-                                                    </QuestionMainContainer>
-                                                ))}
-                                                {provided.placeholder}
-                                                <HorizontalDividerToAddQuestion
-                                                    onClick={buildOpenQuestionCreationModal(
-                                                        exercise,
-                                                    )}
-                                                />
-                                            </QuestionsContainer>
-                                        );
-                                    }}
-                                </Droppable>
-                            </DragDropContext>
-                        </ExerciseContainer>
-                    );
-                })}
-                <HorizontalDividerToAddExercise onClick={buildOpenExerciseCreationModal()} />
+                                                        key={`exercise-${exercise.id}`}
+                                                        exercise={exercise}
+                                                        indication={exerciseIndication}
+                                                    >
+                                                        <DragDropContext
+                                                            onDragEnd={(result) =>
+                                                                handleQuestionsDragEnd(
+                                                                    result,
+                                                                    exercise.id,
+                                                                )
+                                                            }
+                                                        >
+                                                            <Droppable droppableId="droppable-question">
+                                                                {(droppableQuestionProvided) => {
+                                                                    const ids =
+                                                                        orderedQuestionIds[
+                                                                            exercise.id
+                                                                        ] || [];
+                                                                    const orderedQuestions =
+                                                                        computeOrderedItems(
+                                                                            ids,
+                                                                            exercise.questions,
+                                                                        );
+
+                                                                    return (
+                                                                        <QuestionsContainer
+                                                                            ref={
+                                                                                droppableQuestionProvided.innerRef
+                                                                            }
+                                                                            {...droppableQuestionProvided.droppableProps}
+                                                                        >
+                                                                            {orderedQuestions.map(
+                                                                                (
+                                                                                    question,
+                                                                                    questionIndex,
+                                                                                ) => (
+                                                                                    <QuestionMainContainer
+                                                                                        key={`question-${question.id}`}
+                                                                                    >
+                                                                                        <Draggable
+                                                                                            key={
+                                                                                                'question-' +
+                                                                                                question.id
+                                                                                            }
+                                                                                            draggableId={
+                                                                                                'question-' +
+                                                                                                question.id
+                                                                                            }
+                                                                                            index={
+                                                                                                questionIndex
+                                                                                            }
+                                                                                        >
+                                                                                            {(
+                                                                                                draggableQuestionProvided,
+                                                                                            ) => (
+                                                                                                <QuestionContainer
+                                                                                                    ref={
+                                                                                                        draggableQuestionProvided.innerRef
+                                                                                                    }
+                                                                                                    {...draggableQuestionProvided.draggableProps}
+                                                                                                >
+                                                                                                    <QuestionDragIconContainer>
+                                                                                                        <IconButton
+                                                                                                            {...draggableQuestionProvided.dragHandleProps}
+                                                                                                        >
+                                                                                                            <DragIndicatorIcon />
+                                                                                                        </IconButton>
+                                                                                                    </QuestionDragIconContainer>
+                                                                                                    <QuestionViewMode
+                                                                                                        onDeleteQuestion={buildOnDeleteQuestion(
+                                                                                                            exercise.id,
+                                                                                                            question.id,
+                                                                                                        )}
+                                                                                                        question={
+                                                                                                            question
+                                                                                                        }
+                                                                                                        index={
+                                                                                                            questionIndex +
+                                                                                                            1
+                                                                                                        }
+                                                                                                        examId={
+                                                                                                            props.examId
+                                                                                                        }
+                                                                                                        exerciseId={
+                                                                                                            exercise.id
+                                                                                                        }
+                                                                                                    />
+                                                                                                </QuestionContainer>
+                                                                                            )}
+                                                                                        </Draggable>
+                                                                                        {questionIndex <
+                                                                                            exercise
+                                                                                                .questions
+                                                                                                .length -
+                                                                                                1 && (
+                                                                                            <LightHorizontalDivider />
+                                                                                        )}
+                                                                                    </QuestionMainContainer>
+                                                                                ),
+                                                                            )}
+                                                                            {
+                                                                                droppableQuestionProvided.placeholder
+                                                                            }
+                                                                            <HorizontalDividerToAddQuestion
+                                                                                onClick={buildOpenQuestionCreationModal(
+                                                                                    exercise,
+                                                                                )}
+                                                                            />
+                                                                        </QuestionsContainer>
+                                                                    );
+                                                                }}
+                                                            </Droppable>
+                                                        </DragDropContext>
+                                                    </ExerciseContainer>
+                                                </ExerciseMainContainer>
+                                            )}
+                                        </Draggable>
+                                    );
+                                })}
+                                {droppableExerciseProvided.placeholder}
+                                <HorizontalDividerToAddExercise
+                                    onClick={buildOpenExerciseCreationModal()}
+                                />
+                            </PageContent>
+                        )}
+                    </Droppable>
+                </DragDropContext>
             </TestPageLayout>
+
             {!!exerciseUpsertionModalStatus && (
                 <ExerciseUpsertionModal
+                    onCreateExercise={onCreateExercise}
                     examId={props.examId}
                     close={closeExerciseUpsertionModal}
                     modalStatus={exerciseUpsertionModalStatus}
@@ -193,6 +289,25 @@ function QuestionsEditing(props: {
             examId: props.examId,
             exerciseId: exerciseId,
             orderedIds: newQuestionIds,
+        });
+    }
+
+    function handleExercisesDragEnd(result: DropResult): ReturnType<OnDragEndResponder> {
+        if (!result.destination) {
+            return;
+        }
+        if (result.destination.index === result.source.index) {
+            return;
+        }
+        const newExerciseIds = tableHandler.shift(
+            orderedExerciseIds,
+            result.source.index,
+            result.destination.index,
+        );
+        setOrderedExerciseIds(newExerciseIds);
+        updateExercisesOrderMutation.mutate({
+            examId: props.examId,
+            orderedIds: newExerciseIds,
         });
     }
 
@@ -238,17 +353,22 @@ function QuestionsEditing(props: {
         };
     }
 
-    function onCreateQuestion(exerciseId: number, addedQuestionId: number) {
+    function onCreateQuestion(exerciseId: number, createdQuestionId: number) {
         const newOrderedQuestionIds = {
             ...orderedQuestionIds,
-            [exerciseId]: [...orderedQuestionIds[exerciseId], addedQuestionId],
+            [exerciseId]: [...orderedQuestionIds[exerciseId], createdQuestionId],
         };
         setOrderedQuestionIds(newOrderedQuestionIds);
+    }
+
+    function onCreateExercise(createdExerciseId: number) {
+        const newOrderedExerciseIds = [...orderedExerciseIds, createdExerciseId];
+        setOrderedExerciseIds(newOrderedExerciseIds);
     }
 }
 
 const QuestionsContainer = styled('div')({});
-const DragIconContainer = styled('div')(({ theme }) => ({
+const QuestionDragIconContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     paddingTop: theme.spacing(3),
     alignItems: 'flex-start',
@@ -257,5 +377,13 @@ const QuestionContainer = styled('div')(({ theme }) => ({
     display: 'flex',
 }));
 const QuestionMainContainer = styled('div')(({ theme }) => ({}));
+const ExerciseMainContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+}));
+const ExerciseDragIconContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    height: EXERCISE_ACCORDION_SUMMARY_HEIGHT,
+}));
+const PageContent = styled('div')({});
 
 export { QuestionsEditing };

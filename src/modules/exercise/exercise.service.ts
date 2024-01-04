@@ -27,7 +27,6 @@ function buildExerciseService() {
             name: string;
             instruction: string;
             defaultPoints: number;
-            order?: number;
             defaultQuestionKind: Question['kind'];
         },
     ) {
@@ -40,10 +39,11 @@ function buildExerciseService() {
         exercise.instruction = body.instruction;
         exercise.defaultPoints = body.defaultPoints;
         exercise.defaultQuestionKind = body.defaultQuestionKind;
-        exercise.order = body.order !== undefined ? body.order : highestOrder;
+        exercise.order = highestOrder + 1;
         exercise.exam = exam;
 
-        return exerciseRepository.save(exercise);
+        const newExercise = await exerciseRepository.save(exercise);
+        return { id: newExercise.id };
     }
 
     async function getHighestExerciseOrder(examId: Exam['id']) {
@@ -104,13 +104,15 @@ function buildExerciseService() {
         };
     }
 
-    async function updateExercisesOrder(orders: Array<{ id: Exercise['id']; order: number }>) {
-        for (const { id, order } of orders) {
-            const result = await exerciseRepository.update({ id }, { order });
+    async function updateExercisesOrder(orderedIds: Exercise['id'][]) {
+        for (let i = 0; i < orderedIds.length; i++) {
+            const id = orderedIds[i];
+            const result = await exerciseRepository.update({ id }, { order: i });
             if (result.affected !== 1) {
                 console.error(`Could not update exercise id ${id} order because it does not exist`);
             }
         }
+
         return true;
     }
 

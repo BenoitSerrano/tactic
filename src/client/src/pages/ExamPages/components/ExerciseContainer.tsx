@@ -16,6 +16,8 @@ import {
     exerciseIndicationType,
 } from '../lib/computeExerciseIndication';
 
+const EXERCISE_ACCORDION_SUMMARY_HEIGHT = 52;
+
 function ExerciseContainer<
     questionT extends { points: number; mark?: number | undefined },
     exerciseT extends { id: number; name: string; instruction: string; questions: questionT[] },
@@ -74,7 +76,7 @@ function ExerciseContainer<
     );
 }
 
-export { ExerciseContainer };
+export { ExerciseContainer, EXERCISE_ACCORDION_SUMMARY_HEIGHT };
 
 const Container = styled(Accordion)(({ theme }) => ({
     display: 'flex',
@@ -114,7 +116,10 @@ const WarningIconContainer = styled(Tooltip)(({ theme }) => ({
     height: '100%',
 }));
 
-const AccordionSummary = styled(MuiAccordionSummary)({ padding: 0 });
+const AccordionSummary = styled(MuiAccordionSummary)({
+    padding: 0,
+    height: EXERCISE_ACCORDION_SUMMARY_HEIGHT,
+});
 
 const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center' });
 const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
