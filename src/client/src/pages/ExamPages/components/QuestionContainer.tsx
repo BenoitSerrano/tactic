@@ -8,6 +8,7 @@ const Container = styled('div')(({ theme }) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
     display: 'flex',
+    flex: 1,
 }));
 
 export { QuestionContainer };

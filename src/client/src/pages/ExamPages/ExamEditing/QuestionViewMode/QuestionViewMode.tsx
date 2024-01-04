@@ -19,6 +19,7 @@ function QuestionViewMode(props: {
     index: number;
     examId: string;
     exerciseId: number;
+    onDeleteQuestion: () => void;
 }): JSX.Element {
     const [currentViewMode, setCurrentViewMode] = useState<viewModeType>('previewing');
     const questionViewModeComponentMapping: Record<viewModeType, ElementType> = {
@@ -135,6 +136,8 @@ function QuestionViewMode(props: {
             'Souhaitez-vous réellement supprimer cette question ? Tous les résultats des élèves pour cette question seront également supprimés.',
         );
         if (hasConfirmed) {
+            props.onDeleteQuestion();
+
             deleteQuestionMutation.mutate({ examId: props.examId, questionId: props.question.id });
         }
     }

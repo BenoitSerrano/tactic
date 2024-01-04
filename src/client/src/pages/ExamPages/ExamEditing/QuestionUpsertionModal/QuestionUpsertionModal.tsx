@@ -21,6 +21,7 @@ function QuestionUpsertionModal(props: {
     examId: string;
     exerciseId: number;
     defaultPoints: number;
+    onCreateQuestion: (exerciseId: number, questionId: number) => void;
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
@@ -41,7 +42,9 @@ function QuestionUpsertionModal(props: {
 
     const createQuestionMutation = useMutation({
         mutationFn: api.createQuestion,
-        onSuccess: () => {
+        onSuccess: (createdQuestion: { id: number }) => {
+            console.log('createdQuestion', createdQuestion);
+            props.onCreateQuestion(props.exerciseId, createdQuestion.id);
             props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
             queryClient.invalidateQueries({

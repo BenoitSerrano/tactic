@@ -55,12 +55,13 @@ function buildQuestionService() {
         question.points = body.points;
         question.exercise = exercise;
         question.order = body.order !== undefined ? body.order : highestOrder + 1;
-        return questionRepository.save(
+        const newQuestion = await questionRepository.save(
             questionEncoder.encodeQuestion({
                 ...question,
                 acceptableAnswers: body.acceptableAnswers,
             }),
         );
+        return { id: newQuestion.id };
     }
 
     async function getHighestQuestionOrder(exerciseId: Exercise['id']) {

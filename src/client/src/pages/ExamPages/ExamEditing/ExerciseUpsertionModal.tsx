@@ -74,6 +74,14 @@ function ExerciseUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
+                {props.modalStatus.kind === 'creating' && (
+                    <RowContainer>
+                        <QuestionKindSelect
+                            currentQuestionKind={defaultQuestionKind}
+                            onSelect={setDefaultQuestionKind}
+                        />
+                    </RowContainer>
+                )}
                 <RowContainer>
                     <TextField
                         autoFocus
@@ -84,14 +92,6 @@ function ExerciseUpsertionModal(props: {
                         onChange={(event) => setName(event.target.value)}
                     />
                 </RowContainer>
-                {props.modalStatus.kind === 'creating' && (
-                    <RowContainer>
-                        <QuestionKindSelect
-                            currentQuestionKind={defaultQuestionKind}
-                            onSelect={setDefaultQuestionKind}
-                        />
-                    </RowContainer>
-                )}
                 <RowContainer>
                     <Editable editor={editor} value={instruction} onChange={setInstruction} />
                 </RowContainer>
