@@ -75,7 +75,7 @@ function QuestionViewMode(props: {
                         shouldDisplayErrors={shouldDisplayErrors}
                     />
                 </QuestionIndicatorsContainer>
-                <ViewModeToggleContainer>
+                <EditionActionMenuContainer>
                     <EditionActionMenu
                         isDeleting={deleteQuestionMutation.isPending}
                         onDelete={deleteQuestion}
@@ -85,7 +85,7 @@ function QuestionViewMode(props: {
                         currentViewMode={currentViewMode}
                         setCurrentViewMode={setCurrentViewMode}
                     />
-                </ViewModeToggleContainer>
+                </EditionActionMenuContainer>
             </LeftContainer>
 
             <QuestionViewModeComponent
@@ -143,11 +143,12 @@ function QuestionViewMode(props: {
     }
 }
 
-const ViewModeToggleContainer = styled('div')(({ theme }) => ({
+const EditionActionMenuContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
 }));
 const LeftContainer = styled('div')({
     display: 'flex',

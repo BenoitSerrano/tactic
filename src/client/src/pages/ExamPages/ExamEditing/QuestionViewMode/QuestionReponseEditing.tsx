@@ -1,4 +1,4 @@
-import { TextField, styled } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 import { formErrorHandler } from '../lib/formErrorHandler';
 import { FormHelperText } from '../../../../components/FormHelperText';
 
@@ -37,5 +37,6 @@ const TitleContainer = styled('div')({
     display: 'flex',
     alignItems: 'baseline',
 });
+const AcceptableAnswersContainer = styled('div')({ display: 'flex' });
 
 export { QuestionReponseEditing };

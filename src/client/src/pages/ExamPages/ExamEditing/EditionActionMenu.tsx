@@ -17,7 +17,7 @@ function EditionActionMenu(props: {
 }) {
     if (props.currentViewMode === 'editing') {
         return (
-            <MenuContainer>
+            <MenuCenterContainer>
                 <IconButton
                     isLoading={props.isSaving}
                     onClick={props.onSave}
@@ -30,11 +30,11 @@ function EditionActionMenu(props: {
                     IconComponent={ClearIcon}
                     title="Annuler les changements"
                 />
-            </MenuContainer>
+            </MenuCenterContainer>
         );
     }
     return (
-        <MenuContainer>
+        <MenuRightContainer>
             <IconButton
                 onClick={setEditingMode}
                 IconComponent={EditIcon}
@@ -47,7 +47,7 @@ function EditionActionMenu(props: {
                 title="Supprimer la question"
                 color="error"
             />
-        </MenuContainer>
+        </MenuRightContainer>
     );
 
     function setEditingMode() {
@@ -55,9 +55,20 @@ function EditionActionMenu(props: {
     }
 }
 
-const MenuContainer = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
+const mainMenuProperties = {
+    display: 'flex' as const,
+    flexDirection: 'column' as const,
+    width: '100%',
+};
+
+const MenuRightContainer = styled('div')({
+    ...mainMenuProperties,
+    alignItems: 'flex-start',
+});
+
+const MenuCenterContainer = styled('div')({
+    ...mainMenuProperties,
+    alignItems: 'center',
 });
 
 export { EditionActionMenu };
