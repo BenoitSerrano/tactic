@@ -8,8 +8,14 @@ const HorizontalDivider = styled('div')(({ theme }) => ({
 
 const LightHorizontalDivider = styled('div')(({ theme }) => ({
     height: 1,
+    backgroundColor: `${theme.palette.grey[400]}`,
+    width: '100%',
+}));
+
+const VeryLightHorizontalDivider = styled('div')(({ theme }) => ({
+    height: 1,
     backgroundColor: `${theme.palette.grey[200]}`,
     width: '100%',
 }));
 
-export { HorizontalDivider, LightHorizontalDivider };
+export { HorizontalDivider, LightHorizontalDivider, VeryLightHorizontalDivider };

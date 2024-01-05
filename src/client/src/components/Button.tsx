@@ -1,9 +1,10 @@
 import { Button as MuiButton } from '@mui/material';
+import { ReactNode } from 'react';
 
 function Button(props: {
     fullWidth?: boolean;
     onClick?: () => void;
-    children: string;
+    children: string | ReactNode;
     variant?: 'contained' | 'outlined' | 'text';
     disabled?: boolean;
     type?: 'submit';

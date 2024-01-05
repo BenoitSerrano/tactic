@@ -22,9 +22,12 @@ describe('aggregateAcceptableAnswersByGrade', () => {
         const aggregatedAcceptableAnswers = aggregateAcceptableAnswersByGrade(acceptableAnswers);
 
         expect(aggregatedAcceptableAnswers).toEqual({
-            A: ['truc', 'bidule'],
+            A: [
+                { answer: 'truc', index: 0 },
+                { answer: 'bidule', index: 1 },
+            ],
             B: [],
-            C: ['machin'],
+            C: [{ answer: 'machin', index: 2 }],
             D: [],
         });
     });

@@ -1,11 +1,11 @@
 import { FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 import { Button } from '../../../../components/Button';
 import { acceptableAnswerType } from '../../../../types';
 import { formErrorHandler } from '../lib/formErrorHandler';
 import { FormHelperText } from '../../../../components/FormHelperText';
+import { RemoveButton } from './Buttons';
 
 function QcmEditing(props: {
     index: number;
@@ -81,15 +81,10 @@ function QcmEditing(props: {
                                             />
                                         }
                                     />
-                                    <Button
+                                    <RemoveButton
                                         onClick={buildRemovePossibleAnswer(possibleAnswerIndex)}
-                                        variant="outlined"
-                                        color="error"
-                                        startIcon={<RemoveCircleOutlineIcon />}
                                         disabled={!canRemovePossibleAnswer}
-                                    >
-                                        Retirer
-                                    </Button>
+                                    />
                                 </InputContainer>
                             );
                         },
