@@ -11,6 +11,7 @@ import { attemptStatusType, gradeType } from '../../../types';
 import { questionWithAnswersType } from '../types';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { IconButton } from '../../../components/IconButton';
+import { convertGradeToAdjective } from '../lib/convertGradeToAdjective';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -90,9 +91,9 @@ function TexteATrousChecking(props: {
                             <IconsContainer>
                                 {attributeGradeToAnswerActions.map(
                                     (attributeGradeToAnswerAction) => {
-                                        const { IconComponent, color, grade, name } =
+                                        const { IconComponent, color, grade } =
                                             attributeGradeToAnswerAction;
-
+                                        const adjective = convertGradeToAdjective(grade);
                                         const chunk =
                                             props.displayedAnswer.title[
                                                 currentChunkMenu.chunkIndex
@@ -137,7 +138,7 @@ function TexteATrousChecking(props: {
                                                 size="small"
                                                 color={color}
                                                 disabled={isButtonDisabled || isButtonLoading}
-                                                title={`Marquer comme ${name}`}
+                                                title={`Marquer comme ${adjective}`}
                                             />
                                         );
                                     },

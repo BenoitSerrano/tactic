@@ -1,6 +1,11 @@
 import { Typography, styled } from '@mui/material';
 import { acceptableAnswerType } from '../../../../types';
 import { aggregateAcceptableAnswersByGrade } from '../lib/aggregateAcceptableAnswersByGrade';
+import { convertGradeToAdjective } from '../../lib/convertGradeToAdjective';
+
+type rightGradeType = 'A';
+const okGrades = ['B', 'C', 'D'] as const;
+type okGradeType = (typeof okGrades)[number];
 
 function QuestionReponsePreviewing(props: {
     index: number;
@@ -8,8 +13,10 @@ function QuestionReponsePreviewing(props: {
     acceptableAnswers: acceptableAnswerType[][];
 }) {
     const aggregatedAcceptableAnswers = aggregateAcceptableAnswersByGrade(props.acceptableAnswers);
-    const areThereSeveralRightAnswers = aggregatedAcceptableAnswers['A'].length > 1;
     const areThereAcceptableAnswers = aggregatedAcceptableAnswers['A'].length > 0;
+    const areThereOkAnswers = okGrades.some(
+        (okGrade) => aggregatedAcceptableAnswers[okGrade].length > 0,
+    );
     return (
         <Container>
             <TitleContainer>
@@ -19,9 +26,12 @@ function QuestionReponsePreviewing(props: {
             <AcceptableAnswersContainer>
                 {!areThereAcceptableAnswers
                     ? renderNoRightAnswer()
-                    : areThereSeveralRightAnswers
-                    ? renderSeveralRightAnswers(aggregatedAcceptableAnswers['A'])
-                    : renderRightAnswer(aggregatedAcceptableAnswers['A'][0])}
+                    : renderRightAnswers(aggregatedAcceptableAnswers['A'])}
+
+                {areThereOkAnswers &&
+                    okGrades.map((okGrade) =>
+                        renderOkAnswers(okGrade, aggregatedAcceptableAnswers[okGrade]),
+                    )}
             </AcceptableAnswersContainer>
         </Container>
     );
@@ -29,24 +39,53 @@ function QuestionReponsePreviewing(props: {
     function renderNoRightAnswer() {
         return <Typography>Pas de réponse correcte.</Typography>;
     }
+    function renderRightAnswers(rightAnswers: string[]) {
+        if (rightAnswers.length > 1) {
+            return renderSeveralAcceptableAnswers('A', rightAnswers);
+        } else {
+            return renderAcceptableAnswer('A', rightAnswers[0]);
+        }
+    }
 
-    function renderRightAnswer(rightAnswer: string) {
+    function renderOkAnswers(okGrade: okGradeType, okAnswers: string[]) {
+        const adjective = convertGradeToAdjective(okGrade);
+
+        if (okAnswers.length === 0) {
+            return <Typography>Réponse {adjective} : -</Typography>;
+        }
+        if (okAnswers.length === 1) {
+            return renderAcceptableAnswer(okGrade, okAnswers[0]);
+        }
+        return renderSeveralAcceptableAnswers(okGrade, okAnswers);
+    }
+
+    function renderAcceptableAnswer(grade: rightGradeType | okGradeType, acceptableAnswer: string) {
+        const adjective = convertGradeToAdjective(grade);
+        const TextComponent = textComponentMapping[grade];
+
         return (
             <Typography>
-                Réponse correcte : <RightAnswerText>{rightAnswer}</RightAnswerText>
+                Réponse {adjective} : <TextComponent>{acceptableAnswer}</TextComponent>
             </Typography>
         );
     }
 
-    function renderSeveralRightAnswers(rightAnswers: string[]) {
+    function renderSeveralAcceptableAnswers(
+        grade: rightGradeType | okGradeType,
+        acceptableAnswers: string[],
+    ) {
+        const adjective = convertGradeToAdjective(grade, { isPlural: true });
+        const TextComponent = textComponentMapping[grade];
         return (
             <>
-                <Typography>Réponses correctes :</Typography>
+                <Typography>Réponses {adjective} :</Typography>
                 <ul>
-                    {rightAnswers.map((rightAnswer) => (
-                        <ListItem key={`right-answer-${rightAnswer}`}>
-                            <Typography>{rightAnswer}</Typography>
-                        </ListItem>
+                    {acceptableAnswers.map((acceptableAnswer) => (
+                        <li key={`acceptable-answer-${grade}-${acceptableAnswer}`}>
+                            <Typography>
+                                <TextComponent>{acceptableAnswer}</TextComponent>
+                            </Typography>
+                        </li>
                     ))}
                 </ul>
             </>
@@ -61,7 +100,13 @@ const TitleContainer = styled(Typography)(({ theme }) => ({
     fontWeight: 'bold',
 }));
 const RightAnswerText = styled('span')(({ theme }) => ({ color: theme.palette.success.main }));
+const OkAnswerText = styled('span')(({ theme }) => ({ color: theme.palette.warning.main }));
 const AcceptableAnswersContainer = styled('div')({ display: 'flex', flexDirection: 'column' });
-const ListItem = styled('li')(({ theme }) => ({ color: theme.palette.success.main }));
+const textComponentMapping = {
+    A: RightAnswerText,
+    B: OkAnswerText,
+    C: OkAnswerText,
+    D: OkAnswerText,
+};
 
 export { QuestionReponsePreviewing };

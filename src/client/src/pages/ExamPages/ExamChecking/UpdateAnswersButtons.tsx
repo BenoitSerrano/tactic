@@ -8,6 +8,7 @@ import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerB
 import { attemptStatusType, gradeType } from '../../../types';
 import { attributeGradeToAnswerActions } from './constants';
 import { IconButton } from '../../../components/IconButton';
+import { convertGradeToAdjective } from '../lib/convertGradeToAdjective';
 
 function UpdateAnswersButtons(props: {
     attemptStatus: attemptStatusType;
@@ -64,11 +65,13 @@ function UpdateAnswersButtons(props: {
     return (
         <UpdateAnswersButtonContainer>
             {attributeGradeToAnswerActions.map((attributeMarkToAnswerAction) => {
-                const { color, IconComponent, grade, name } = attributeMarkToAnswerAction;
+                const { color, IconComponent, grade } = attributeMarkToAnswerAction;
                 const canAnswerBeAttributedMark = computeCanAnswerBeAttributed(
                     grade,
                     props.question,
                 );
+
+                const adjective = convertGradeToAdjective(grade);
 
                 const addAcceptableAnswerLoadingInfo =
                     addAcceptableAnswerMutation.isPending &&
@@ -92,7 +95,7 @@ function UpdateAnswersButtons(props: {
 
                 return (
                     <IconButton
-                        title={`Marquer comme ${name}`}
+                        title={`Marquer comme ${adjective}`}
                         size="small"
                         color={color}
                         disabled={!canAnswerBeAttributedMark || isLoading}

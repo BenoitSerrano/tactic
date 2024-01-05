@@ -37,6 +37,5 @@ const TitleContainer = styled('div')({
     display: 'flex',
     alignItems: 'baseline',
 });
-const AcceptableAnswersContainer = styled('div')({ display: 'flex' });
 
 export { QuestionReponseEditing };

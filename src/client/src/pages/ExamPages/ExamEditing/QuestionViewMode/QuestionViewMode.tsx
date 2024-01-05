@@ -142,7 +142,6 @@ function QuestionViewMode(props: {
         }
     }
 }
-
 const EditionActionMenuContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
