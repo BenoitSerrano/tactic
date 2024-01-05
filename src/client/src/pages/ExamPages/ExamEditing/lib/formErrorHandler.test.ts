@@ -120,6 +120,30 @@ describe('formErrorHandler', () => {
             expect(formError).toEqual(['NO_RIGHT_ANSWER']);
         });
 
+        test('questionReponse with acceptable answers empty = true', () => {
+            const questionKind = 'questionReponse';
+            const title = 'ceci est une question';
+            const possibleAnswers: string[] = [];
+            const acceptableAnswers: acceptableAnswerType[][] = [
+                [
+                    { grade: 'A', answer: 'truc' },
+                    { grade: 'B', answer: '' },
+                    { grade: 'C', answer: 'truc' },
+                    { grade: 'D', answer: '' },
+                ],
+            ];
+            const points = 2;
+
+            const formError = formErrorHandler.computeFormErrors(questionKind, {
+                title,
+                possibleAnswers,
+                acceptableAnswers,
+                points,
+            });
+
+            expect(formError).toEqual(['ACCEPTABLE_ANSWER_EMPTY_1', 'ACCEPTABLE_ANSWER_EMPTY_3']);
+        });
+
         test('questionReponse rightly filled = false', () => {
             const questionKind = 'questionReponse';
             const title = 'ceci est une question';

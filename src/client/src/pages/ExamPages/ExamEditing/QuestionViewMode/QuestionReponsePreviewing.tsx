@@ -4,8 +4,9 @@ import {
     aggregateAcceptableAnswersByGrade,
     aggregatedAcceptableAnswerType,
 } from '../lib/aggregateAcceptableAnswersByGrade';
-import { convertGradeToAdjective } from '../../lib/convertGradeToAdjective';
 import { okGradeType, okGrades, rightGradeType, textComponentMapping } from './constants';
+import { gradeConverter } from '../../../../lib/gradeConverter';
+import { GradeExplanationIcon } from './GradeExplanationIcon';
 
 function QuestionReponsePreviewing(props: {
     index: number;
@@ -48,10 +49,14 @@ function QuestionReponsePreviewing(props: {
     }
 
     function renderOkAnswers(okGrade: okGradeType, okAnswers: aggregatedAcceptableAnswerType[]) {
-        const adjective = convertGradeToAdjective(okGrade);
+        const adjective = gradeConverter.convertGradeToAdjective(okGrade);
 
         if (okAnswers.length === 0) {
-            return <Typography>Réponse {adjective} : -</Typography>;
+            return (
+                <Typography>
+                    Réponse {adjective} <GradeExplanationIcon grade={okGrade} /> : -
+                </Typography>
+            );
         }
         if (okAnswers.length === 1) {
             return renderAcceptableAnswer(okGrade, okAnswers[0]);
@@ -63,12 +68,13 @@ function QuestionReponsePreviewing(props: {
         grade: rightGradeType | okGradeType,
         acceptableAnswer: aggregatedAcceptableAnswerType,
     ) {
-        const adjective = convertGradeToAdjective(grade);
+        const adjective = gradeConverter.convertGradeToAdjective(grade);
         const TextComponent = textComponentMapping[grade];
 
         return (
             <Typography>
-                Réponse {adjective} : <TextComponent>{acceptableAnswer.answer}</TextComponent>
+                Réponse {adjective} <GradeExplanationIcon grade={grade} /> :{' '}
+                <TextComponent>{acceptableAnswer.answer}</TextComponent>
             </Typography>
         );
     }
@@ -77,11 +83,13 @@ function QuestionReponsePreviewing(props: {
         grade: rightGradeType | okGradeType,
         acceptableAnswers: aggregatedAcceptableAnswerType[],
     ) {
-        const adjective = convertGradeToAdjective(grade, { isPlural: true });
+        const adjective = gradeConverter.convertGradeToAdjective(grade, { isPlural: true });
         const TextComponent = textComponentMapping[grade];
         return (
             <>
-                <Typography>Réponses {adjective} :</Typography>
+                <Typography>
+                    Réponses {adjective} <GradeExplanationIcon grade={grade} /> :
+                </Typography>
                 <ul>
                     {acceptableAnswers.map((acceptableAnswer) => (
                         <li key={`acceptable-answer-${grade}-${acceptableAnswer}`}>

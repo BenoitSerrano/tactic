@@ -1,6 +1,4 @@
 <!-- -   Ne plus mettre en gris / disabled les radio -->
-
--   Bouton poignée
 <!-- -   enlever coloration jaune -->
 
 -   ETQP, je vois les réponses au Texte à trous dans le tableau de manière plus claire

@@ -8,7 +8,7 @@ import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerB
 import { attemptStatusType, gradeType } from '../../../types';
 import { attributeGradeToAnswerActions } from './constants';
 import { IconButton } from '../../../components/IconButton';
-import { convertGradeToAdjective } from '../lib/convertGradeToAdjective';
+import { gradeConverter } from '../../../lib/gradeConverter';
 
 function UpdateAnswersButtons(props: {
     attemptStatus: attemptStatusType;
@@ -71,7 +71,7 @@ function UpdateAnswersButtons(props: {
                     props.question,
                 );
 
-                const adjective = convertGradeToAdjective(grade);
+                const adjective = gradeConverter.convertGradeToAdjective(grade);
 
                 const addAcceptableAnswerLoadingInfo =
                     addAcceptableAnswerMutation.isPending &&

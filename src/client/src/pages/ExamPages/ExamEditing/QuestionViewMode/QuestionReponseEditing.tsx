@@ -1,6 +1,8 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { formErrorHandler } from '../lib/formErrorHandler';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SchoolIcon from '@mui/icons-material/School';
+
 import { FormHelperText } from '../../../../components/FormHelperText';
 import {
     okGradeType,
@@ -14,10 +16,12 @@ import {
     aggregatedAcceptableAnswerType,
 } from '../lib/aggregateAcceptableAnswersByGrade';
 import { acceptableAnswerType } from '../../../../types';
-import { convertGradeToAdjective } from '../../lib/convertGradeToAdjective';
 import { RemoveButton } from './Buttons';
 import { Button } from '../../../../components/Button';
 import { VeryLightHorizontalDivider } from '../../../../components/HorizontalDivider';
+import { ChangeEvent } from 'react';
+import { gradeConverter } from '../../../../lib/gradeConverter';
+import { GradeExplanationIcon } from './GradeExplanationIcon';
 
 function QuestionReponseEditing(props: {
     index: number;
@@ -56,11 +60,13 @@ function QuestionReponseEditing(props: {
                 />
             </TitleContainer>
             <AcceptableAnswersContainer>
-                {acceptableAnswerGradesToEdit.map((grade) => {
+                {acceptableAnswerGradesToEdit.map((grade, gradeIndex) => {
                     return (
                         <>
                             {renderAnswersToEdit(grade, aggregatedAcceptableAnswers[grade])}
-                            <VeryLightHorizontalDivider />
+                            {gradeIndex < acceptableAnswerGradesToEdit.length - 1 && (
+                                <VeryLightHorizontalDivider />
+                            )}
                         </>
                     );
                 })}
@@ -72,31 +78,49 @@ function QuestionReponseEditing(props: {
         grade: rightGradeType | okGradeType,
         acceptableAnswers: aggregatedAcceptableAnswerType[],
     ) {
-        const pluralAdjective = convertGradeToAdjective(grade, { isPlural: true });
-        const singularAdjective = convertGradeToAdjective(grade, { isPlural: false });
+        const pluralAdjective = gradeConverter.convertGradeToAdjective(grade, { isPlural: true });
+        const singularAdjective = gradeConverter.convertGradeToAdjective(grade, {
+            isPlural: false,
+        });
         const canRemoveAcceptableAnswer = computeCanRemoveAcceptableAnswer(grade);
         const TextComponent = textComponentMapping[grade];
         return (
             <GradeAcceptableAnswersContainer>
                 <AcceptableAnswersCaption>
-                    <TextComponent>Réponses {pluralAdjective} :</TextComponent>
+                    <TextComponent>
+                        Réponses {pluralAdjective} <GradeExplanationIcon grade={grade} /> :
+                    </TextComponent>
                 </AcceptableAnswersCaption>
-                {acceptableAnswers.map((acceptableAnswer) => (
-                    <AcceptableAnswerRow
-                        key={`acceptableAnswer-${grade}-${acceptableAnswer.answer}`}
-                    >
-                        <TextField
-                            fullWidth
-                            variant="standard"
-                            value={acceptableAnswer.answer}
-                            label="Réponse"
-                        />
-                        <RemoveButton
-                            disabled={!canRemoveAcceptableAnswer}
-                            onClick={buildRemoveAcceptableAnswer(acceptableAnswer)}
-                        />
-                    </AcceptableAnswerRow>
-                ))}
+                {acceptableAnswers.map((acceptableAnswer) => {
+                    const formErrorMessage =
+                        formErrorHandler.extractAcceptableAnswerEmptyFormErrorMessage(
+                            props.formErrors,
+                            acceptableAnswer.index,
+                        );
+                    return (
+                        <AcceptableAnswerRow
+                            key={`acceptableAnswer-${grade}-${acceptableAnswer.index}`}
+                        >
+                            <TextField
+                                error={props.shouldDisplayErrors && !!formErrorMessage}
+                                helperText={
+                                    props.shouldDisplayErrors && (
+                                        <FormHelperText label={formErrorMessage} />
+                                    )
+                                }
+                                fullWidth
+                                variant="standard"
+                                value={acceptableAnswer.answer}
+                                label="Réponse"
+                                onChange={buildOnChangeAcceptableAnswer(acceptableAnswer.index)}
+                            />
+                            <RemoveButton
+                                disabled={!canRemoveAcceptableAnswer}
+                                onClick={buildRemoveAcceptableAnswer(acceptableAnswer)}
+                            />
+                        </AcceptableAnswerRow>
+                    );
+                })}
                 <AddAcceptableAnswerRow>
                     <Button
                         onClick={buildAddAcceptableAnswer(grade)}
@@ -116,6 +140,18 @@ function QuestionReponseEditing(props: {
             return aggregatedAcceptableAnswers[grade].length > 1;
         }
         return true;
+    }
+
+    function buildOnChangeAcceptableAnswer(acceptableAnswerIndex: number) {
+        return (event: ChangeEvent<HTMLInputElement>) => {
+            const currentAcceptableAnswer = props.acceptableAnswers[0][acceptableAnswerIndex];
+            const newAcceptableAnswers = [...props.acceptableAnswers[0]];
+            newAcceptableAnswers[acceptableAnswerIndex] = {
+                grade: currentAcceptableAnswer.grade,
+                answer: event.target.value,
+            };
+            props.setAcceptableAnswers([newAcceptableAnswers]);
+        };
     }
 
     function buildAddAcceptableAnswer(grade: rightGradeType | okGradeType) {

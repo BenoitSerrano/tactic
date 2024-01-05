@@ -6,6 +6,7 @@ const formErrorHandler = {
     extractPossibleAnswerFormErrorMessage,
     extractTitleFormErrorMessage,
     extractPointsFormErrorMessage,
+    extractAcceptableAnswerEmptyFormErrorMessage,
 };
 
 function computeFormErrors(
@@ -30,9 +31,6 @@ function computeFormErrors(
         return formErrors;
     }
 
-    if (params.acceptableAnswers.length === 0 || params.acceptableAnswers[0].length === 0) {
-        formErrors.push('NO_RIGHT_ANSWER');
-    }
     if (questionKind === 'qcm' && params.possibleAnswers.length <= 1) {
         formErrors.push('ONLY_ONE_POSSIBLE_ANSWER');
     }
@@ -47,11 +45,19 @@ function computeFormErrors(
         }
     }
 
+    if (params.acceptableAnswers.length === 0 || params.acceptableAnswers[0].length === 0) {
+        formErrors.push('NO_RIGHT_ANSWER');
+        return formErrors;
+    }
+    params.acceptableAnswers[0].forEach((acceptableAnswer, acceptableAnswerIndex) => {
+        if (!acceptableAnswer.answer) {
+            formErrors.push(`ACCEPTABLE_ANSWER_EMPTY_${acceptableAnswerIndex}`);
+        }
+    });
+
     if (
         questionKind === 'phraseMelangee' &&
-        params.acceptableAnswers.length > 0 &&
-        params.acceptableAnswers[0].length > 0 &&
-        params.acceptableAnswers[0][0].answer === params.title
+        params.acceptableAnswers[0].some(({ answer }) => answer === params.title)
     ) {
         formErrors.push('SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE');
     }
@@ -89,6 +95,18 @@ function extractPointsFormErrorMessage(formErrors: string[]) {
     const formError = formErrors.find((formError) => formError === 'POINTS_SHOULD_BE_POSITIVE');
     if (formError !== undefined) {
         return `Mauvaise valeur`;
+    }
+    return undefined;
+}
+
+function extractAcceptableAnswerEmptyFormErrorMessage(
+    formErrors: string[],
+    acceptableAnswerIndex: number,
+) {
+    const FORM_ERROR_REGEX = new RegExp(`^ACCEPTABLE_ANSWER_EMPTY_${acceptableAnswerIndex}+$`);
+    const formErrorMatch = formErrors.find((formError) => formError.match(FORM_ERROR_REGEX));
+    if (formErrorMatch) {
+        return `Veuillez saisir une réponse dans ce champ`;
     }
     return undefined;
 }

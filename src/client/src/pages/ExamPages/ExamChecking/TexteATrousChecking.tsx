@@ -11,7 +11,6 @@ import { attemptStatusType, gradeType } from '../../../types';
 import { questionWithAnswersType } from '../types';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { IconButton } from '../../../components/IconButton';
-import { convertGradeToAdjective } from '../lib/convertGradeToAdjective';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -93,7 +92,8 @@ function TexteATrousChecking(props: {
                                     (attributeGradeToAnswerAction) => {
                                         const { IconComponent, color, grade } =
                                             attributeGradeToAnswerAction;
-                                        const adjective = convertGradeToAdjective(grade);
+                                        const adjective =
+                                            gradeConverter.convertGradeToAdjective(grade);
                                         const chunk =
                                             props.displayedAnswer.title[
                                                 currentChunkMenu.chunkIndex
