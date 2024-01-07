@@ -14,6 +14,7 @@ import { TexteLibrePreviewing } from './QuestionViewMode/TexteLibrePreviewing';
 import { TexteLibreEditing } from './QuestionViewMode/TexteLibreEditing';
 import { QuestionReponsePreviewing } from './QuestionViewMode/QuestionReponsePreviewing';
 import { QuestionReponseEditing } from './QuestionViewMode/QuestionReponseEditing';
+import { PhraseMelangeePreviewing } from './QuestionViewMode/PhraseMelangeePreviewing';
 
 const viewModes = ['editing', 'previewing'] as const;
 type viewModeType = (typeof viewModes)[number];
@@ -42,7 +43,7 @@ const questionEditingComponentMapping: Record<questionKindType, ElementType> = {
 const questionPreviewingComponentMapping: Record<questionKindType, ElementType> = {
     qcm: QcmPreviewing,
     questionReponse: QuestionReponsePreviewing,
-    phraseMelangee: TemporaryEditing,
+    phraseMelangee: PhraseMelangeePreviewing,
     texteLibre: TexteLibrePreviewing,
     texteATrous: TemporaryEditing,
 };
