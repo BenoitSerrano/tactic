@@ -1,12 +1,15 @@
 import { Typography, styled } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { ShuffledWord, ShuffledWordContainer } from './ShuffledWord';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import { shuffledAnswerStateType } from '../lib/computeShuffledAnswerState';
+import { IconButton } from '../../../components/IconButton';
 
 function WordsShuffler(props: {
     initialWords: string[];
     shuffledAnswerState: shuffledAnswerStateType;
     placeWord: (wordIndex: number) => void;
+    reset: () => void;
 }) {
     const { alreadyPlacedWords, remainingWordIndexesToPlace } = props.shuffledAnswerState;
     const totalWordsCount = props.initialWords.length;
@@ -26,11 +29,17 @@ function WordsShuffler(props: {
                 })}
             </Row>
             <Row>
+                <SubdirectoryArrowRightIcon />
                 <Typography>
-                    <SubdirectoryArrowRightIcon />
                     {alreadyPlacedWords.join(' ')}
                     {' ___'.repeat(totalWordsCount - alreadyPlacedWords.length)}
                 </Typography>
+                <IconButton
+                    disabled={alreadyPlacedWords.length === 0}
+                    IconComponent={RefreshIcon}
+                    onClick={props.reset}
+                    title="Réinitialiser"
+                />
             </Row>
         </Container>
     );

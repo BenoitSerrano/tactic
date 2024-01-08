@@ -9,24 +9,24 @@ function QuestionChoixMultipleAnswering(props: {
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
     return (
-        <div>
-            <FormControl>
-                <StyledFormLabel>
-                    <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
-                </StyledFormLabel>
-                <RadioGroup value={props.currentAnswer} onChange={onChooseNewAnswer}>
-                    {props.question.possibleAnswers.map((possibleAnswer, index: number) => (
-                        <React.Fragment key={`${props.question.id}-${index}`}>
-                            <StyledFormControlLabel
-                                value={index}
-                                control={<StyledRadio />}
-                                label={possibleAnswer}
-                            />
-                        </React.Fragment>
-                    ))}
-                </RadioGroup>
-            </FormControl>
-        </div>
+        <FormControl>
+            <StyledFormLabel>
+                <Title>
+                    {props.index}. {props.question.title}
+                </Title>
+            </StyledFormLabel>
+            <RadioGroup value={props.currentAnswer} onChange={onChooseNewAnswer}>
+                {props.question.possibleAnswers.map((possibleAnswer, index: number) => (
+                    <React.Fragment key={`${props.question.id}-${index}`}>
+                        <StyledFormControlLabel
+                            value={index}
+                            control={<StyledRadio />}
+                            label={possibleAnswer}
+                        />
+                    </React.Fragment>
+                ))}
+            </RadioGroup>
+        </FormControl>
     );
 
     function onChooseNewAnswer(event: ChangeEvent<HTMLInputElement>) {
@@ -34,7 +34,12 @@ function QuestionChoixMultipleAnswering(props: {
     }
 }
 
-const StyledFormLabel = styled(FormLabel)(({ theme }) => ({ color: theme.palette.common.black }));
+const StyledFormLabel = styled(FormLabel)(({ theme }) => ({
+    color: theme.palette.common.black,
+    '&.MuiFormLabel-root': {
+        color: theme.palette.common.black,
+    },
+}));
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
     color: theme.palette.common.black,
 }));
@@ -43,6 +48,6 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
     color: theme.palette.common.black,
 }));
 
-const IndexContainer = styled('span')({ fontWeight: 'bold' });
+const Title = styled('span')({ fontWeight: 'bold' });
 
 export { QuestionChoixMultipleAnswering };

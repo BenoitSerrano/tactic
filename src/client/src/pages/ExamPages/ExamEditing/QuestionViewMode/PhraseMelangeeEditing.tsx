@@ -117,6 +117,7 @@ function PhraseMelangeeEditing(props: {
 
                     return (
                         <WordsShuffler
+                            reset={buildResetAcceptableCombination(grade, combinationIndex)}
                             initialWords={shuffledPhraseWords}
                             shuffledAnswerState={shuffledAnswerState}
                             placeWord={buildPlaceWord(grade, combinationIndex)}
@@ -136,6 +137,20 @@ function PhraseMelangeeEditing(props: {
                 </AddAcceptableAnswerRow>
             </GradeAcceptableAnswersContainer>
         );
+    }
+
+    function buildResetAcceptableCombination(
+        grade: rightGradeType | okGradeType,
+        combinationIndex: number,
+    ) {
+        return () => {
+            const updatedNewAcceptableCombinations = [...newAcceptableCombinationsByGrade[grade]];
+            updatedNewAcceptableCombinations[combinationIndex] = [];
+            setNewAcceptableCombinationsByGrade({
+                ...newAcceptableCombinationsByGrade,
+                [grade]: updatedNewAcceptableCombinations,
+            });
+        };
     }
 
     function buildPlaceWord(grade: rightGradeType | okGradeType, combinationIndex: number) {

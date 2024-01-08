@@ -9,9 +9,9 @@ function QuestionReponseAnswering(props: {
 }) {
     return (
         <StyledContainer>
-            <Typography>
-                <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
-            </Typography>
+            <Title>
+                {props.index}. {props.question.title}
+            </Title>
             <StyledTextField
                 fullWidth
                 variant="outlined"
@@ -37,5 +37,5 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     marginTop: theme.spacing(1),
 }));
 
-const IndexContainer = styled('span')({ fontWeight: 'bold' });
+const Title = styled(Typography)({ fontWeight: 'bold' });
 export { QuestionReponseAnswering };

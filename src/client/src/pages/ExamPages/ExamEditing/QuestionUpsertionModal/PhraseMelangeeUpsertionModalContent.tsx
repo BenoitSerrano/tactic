@@ -93,6 +93,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                                 words,
                                                 newRightAnswerCombination,
                                             )}
+                                            reset={resetNewRightAnswer}
                                         />
                                     </td>
                                     <td>
