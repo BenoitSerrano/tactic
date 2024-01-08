@@ -3,7 +3,7 @@ import { IconButton, Tooltip, Typography, styled } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { questionWithoutAnswerType } from '../types';
 import { textSplitter } from '../../../lib/textSplitter';
-import { ShuffleWord } from './ShuffledWord';
+import { ShuffledWord, ShuffledWordContainer } from './ShuffledWord';
 
 function PhraseMelangeeAnswering(props: {
     question: questionWithoutAnswerType;
@@ -32,7 +32,7 @@ function PhraseMelangeeAnswering(props: {
                 </Typography>
                 {displayedShuffleWords.map((word, index) => (
                     <ShuffledWordContainer key={index}>
-                        <ShuffleWord word={word} onClick={buildOnClickOnShuffledWord(index)} />
+                        <ShuffledWord word={word} onClick={buildOnClickOnShuffledWord(index)} />
                     </ShuffledWordContainer>
                 ))}
             </StyledContainer>
@@ -80,11 +80,6 @@ const StyledContainer = styled('div')({
     alignItems: 'center',
     marginTop: '10px',
     marginBottom: '10px',
-});
-
-const ShuffledWordContainer = styled('div')({
-    marginLeft: '4px',
-    marginRight: '4px',
 });
 
 const BoldContainer = styled('span')({ fontWeight: 'bold' });

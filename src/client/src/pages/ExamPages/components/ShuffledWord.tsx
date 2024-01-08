@@ -1,25 +1,28 @@
 import { Typography, styled } from '@mui/material';
 
-function ShuffleWord(props: { word: string; onClick?: () => void }) {
+function ShuffledWord(props: { word: string; onClick?: () => void }) {
     const Container = props.onClick ? ClickableContainer : NonClickableContainer;
-    return <Container>{props.word}</Container>;
+    return <Container onClick={props.onClick}>{props.word}</Container>;
 }
 
 const ClickableContainer = styled(Typography)({
-    borderWidth: '2px',
-    borderStyle: 'dotted',
+    borderWidth: '1px',
+    borderStyle: 'dashed',
     padding: '4px',
-    marginLeft: '4px',
-    marginRight: '4px',
+    borderRadius: '4px',
     cursor: 'pointer',
 });
 
 const NonClickableContainer = styled(Typography)({
-    borderWidth: '2px',
-    borderStyle: 'dotted',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderRadius: '4px',
     padding: '4px',
+});
+
+const ShuffledWordContainer = styled('div')({
     marginLeft: '4px',
     marginRight: '4px',
 });
 
-export { ShuffleWord };
+export { ShuffledWord, ShuffledWordContainer };

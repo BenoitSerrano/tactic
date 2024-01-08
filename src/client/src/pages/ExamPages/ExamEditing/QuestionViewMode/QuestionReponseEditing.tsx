@@ -1,8 +1,6 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { formErrorHandler } from '../lib/formErrorHandler';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import SchoolIcon from '@mui/icons-material/School';
-
 import { FormHelperText } from '../../../../components/FormHelperText';
 import {
     okGradeType,

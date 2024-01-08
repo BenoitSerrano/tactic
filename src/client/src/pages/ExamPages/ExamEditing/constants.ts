@@ -15,6 +15,7 @@ import { TexteLibreEditing } from './QuestionViewMode/TexteLibreEditing';
 import { QuestionReponsePreviewing } from './QuestionViewMode/QuestionReponsePreviewing';
 import { QuestionReponseEditing } from './QuestionViewMode/QuestionReponseEditing';
 import { PhraseMelangeePreviewing } from './QuestionViewMode/PhraseMelangeePreviewing';
+import { PhraseMelangeeEditing } from './QuestionViewMode/PhraseMelangeeEditing';
 
 const viewModes = ['editing', 'previewing'] as const;
 type viewModeType = (typeof viewModes)[number];
@@ -35,7 +36,7 @@ const questionUpsertionModalContentComponentMapping: Record<questionKindType, El
 const questionEditingComponentMapping: Record<questionKindType, ElementType> = {
     qcm: QcmEditing,
     questionReponse: QuestionReponseEditing,
-    phraseMelangee: TemporaryEditing,
+    phraseMelangee: PhraseMelangeeEditing,
     texteLibre: TexteLibreEditing,
     texteATrous: TemporaryEditing,
 };

@@ -1,7 +1,7 @@
 import { Typography, styled } from '@mui/material';
 import { AcceptableAnswersPreviewing } from './AcceptableAnswersPreviewing';
 import { acceptableAnswerType } from '../../../../types';
-import { ShuffleWord } from '../../components/ShuffledWord';
+import { ShuffledWord, ShuffledWordContainer } from '../../components/ShuffledWord';
 
 function PhraseMelangeePreviewing(props: {
     index: number;
@@ -13,7 +13,9 @@ function PhraseMelangeePreviewing(props: {
             <TitleContainer>
                 {props.index}.{' '}
                 {props.title.split(' ').map((word, index) => (
-                    <ShuffleWord key={`shuffled-word-${index}`} word={word} />
+                    <ShuffledWordContainer key={`shuffled-word-${index}`}>
+                        <ShuffledWord word={word} />
+                    </ShuffledWordContainer>
                 ))}
             </TitleContainer>
             <AcceptableAnswersPreviewing acceptableAnswers={props.acceptableAnswers} />
