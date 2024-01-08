@@ -1,7 +1,5 @@
-import { TextField, Typography, styled } from '@mui/material';
-import { formErrorHandler } from '../lib/formErrorHandler';
+import { Typography, styled } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { FormHelperText } from '../../../../components/FormHelperText';
 import {
     okGradeType,
     okGrades,
@@ -13,17 +11,16 @@ import {
     aggregateAcceptableAnswersByGrade,
     aggregatedAcceptableAnswerType,
 } from '../lib/aggregateAcceptableAnswersByGrade';
-import { acceptableAnswerType, gradeType } from '../../../../types';
+import { acceptableAnswerType } from '../../../../types';
 import { RemoveButton } from './Buttons';
 import { Button } from '../../../../components/Button';
 import { VeryLightHorizontalDivider } from '../../../../components/HorizontalDivider';
-import { ChangeEvent, useState } from 'react';
-import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
-
+import { useState } from 'react';
 import { gradeConverter } from '../../../../lib/gradeConverter';
 import { GradeExplanationIcon } from './GradeExplanationIcon';
 import { ShuffledWord, ShuffledWordContainer } from '../../components/ShuffledWord';
 import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
+import { WordsShuffler } from '../../components/WordsShuffler';
 
 const initialNewAcceptableCombinationsByGrade = { A: [], B: [], C: [], D: [] };
 
@@ -96,12 +93,6 @@ function PhraseMelangeeEditing(props: {
                     </TextComponent>
                 </AcceptableAnswersCaption>
                 {acceptableAnswers.map((acceptableAnswer) => {
-                    const formErrorMessage =
-                        formErrorHandler.extractAcceptableAnswerEmptyFormErrorMessage(
-                            props.formErrors,
-                            acceptableAnswer.index,
-                        );
-
                     return (
                         <Row key={`acceptableAnswer-${grade}-${acceptableAnswer.index}`}>
                             {acceptableAnswer.answer.split(' ').map((word) => {
@@ -119,36 +110,17 @@ function PhraseMelangeeEditing(props: {
                     );
                 })}
                 {newAcceptableCombinations.map((newAcceptableCombination, combinationIndex) => {
-                    const { alreadyPlacedWords, remainingWordIndexesToPlace } =
-                        computeShuffledAnswerState(shuffledPhraseWords, newAcceptableCombination);
+                    const shuffledAnswerState = computeShuffledAnswerState(
+                        shuffledPhraseWords,
+                        newAcceptableCombination,
+                    );
 
                     return (
-                        <NewAcceptableAnswerContainer key={`newCombination-${combinationIndex}`}>
-                            <Row>
-                                {remainingWordIndexesToPlace.map((wordIndexToPlace) => {
-                                    const wordToPlace = shuffledPhraseWords[wordIndexToPlace];
-                                    return (
-                                        <ShuffledWordContainer>
-                                            <ShuffledWord
-                                                onClick={buildPlaceWord(
-                                                    grade,
-                                                    combinationIndex,
-                                                    wordIndexToPlace,
-                                                )}
-                                                word={wordToPlace}
-                                            />
-                                        </ShuffledWordContainer>
-                                    );
-                                })}
-                            </Row>
-                            <Row>
-                                <Typography>
-                                    <SubdirectoryArrowRightIcon />
-                                    {alreadyPlacedWords.join(' ')}
-                                    {' ___'.repeat(wordCount - alreadyPlacedWords.length)}
-                                </Typography>
-                            </Row>
-                        </NewAcceptableAnswerContainer>
+                        <WordsShuffler
+                            initialWords={shuffledPhraseWords}
+                            shuffledAnswerState={shuffledAnswerState}
+                            placeWord={buildPlaceWord(grade, combinationIndex)}
+                        />
                     );
                 })}
 
@@ -166,12 +138,8 @@ function PhraseMelangeeEditing(props: {
         );
     }
 
-    function buildPlaceWord(
-        grade: rightGradeType | okGradeType,
-        combinationIndex: number,
-        wordIndexToPlace: number,
-    ) {
-        return () => {
+    function buildPlaceWord(grade: rightGradeType | okGradeType, combinationIndex: number) {
+        return (wordIndexToPlace: number) => {
             const newAcceptableCombination = [
                 ...newAcceptableCombinationsByGrade[grade][combinationIndex],
                 wordIndexToPlace,

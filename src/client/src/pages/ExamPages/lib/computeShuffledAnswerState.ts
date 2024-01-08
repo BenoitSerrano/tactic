@@ -1,3 +1,8 @@
+type shuffledAnswerStateType = {
+    alreadyPlacedWords: string[];
+    remainingWordIndexesToPlace: number[];
+};
+
 function computeShuffledAnswerState(initialWords: string[], currentCombination: number[]) {
     const alreadyPlacedWords: string[] = [];
 
@@ -15,3 +20,4 @@ function computeShuffledAnswerState(initialWords: string[], currentCombination: 
 }
 
 export { computeShuffledAnswerState };
+export type { shuffledAnswerStateType };
