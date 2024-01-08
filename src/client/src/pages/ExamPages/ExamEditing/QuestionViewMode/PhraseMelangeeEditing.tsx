@@ -21,6 +21,8 @@ import { GradeExplanationIcon } from './GradeExplanationIcon';
 import { ShuffledWord, ShuffledWordContainer } from '../../components/ShuffledWord';
 import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
 import { WordsShuffler } from '../../components/WordsShuffler';
+import { FormHelperText } from '../../../../components/FormHelperText';
+import { formErrorHandler } from '../lib/formErrorHandler';
 
 const initialNewAcceptableCombinationsByGrade = { A: [], B: [], C: [], D: [] };
 
@@ -92,21 +94,33 @@ function PhraseMelangeeEditing(props: {
                         Réponses {pluralAdjective} <GradeExplanationIcon grade={grade} /> :
                     </TextComponent>
                 </AcceptableAnswersCaption>
-                {acceptableAnswers.map((acceptableAnswer) => {
+                {acceptableAnswers.map((acceptableAnswer, acceptableAnswerIndex) => {
+                    const formErrorMessage =
+                        formErrorHandler.extractAcceptableShuffledPhraseFormErrorMessage(
+                            props.formErrors,
+                            acceptableAnswerIndex,
+                        );
                     return (
-                        <Row key={`acceptableAnswer-${grade}-${acceptableAnswer.index}`}>
-                            {acceptableAnswer.answer.split(' ').map((word) => {
-                                return (
-                                    <ShuffledWordContainer>
-                                        <ShuffledWord word={word} />
-                                    </ShuffledWordContainer>
-                                );
-                            })}
-                            <RemoveButton
-                                disabled={!canRemoveAcceptableAnswer}
-                                onClick={buildRemoveAcceptableAnswer(acceptableAnswer)}
-                            />
-                        </Row>
+                        <>
+                            <Row key={`acceptableAnswer-${grade}-${acceptableAnswer.index}`}>
+                                {acceptableAnswer.answer.split(' ').map((word) => {
+                                    return (
+                                        <ShuffledWordContainer>
+                                            <ShuffledWord word={word} />
+                                        </ShuffledWordContainer>
+                                    );
+                                })}
+                                <RemoveButton
+                                    disabled={!canRemoveAcceptableAnswer}
+                                    onClick={buildRemoveAcceptableAnswer(acceptableAnswer)}
+                                />
+                            </Row>
+                            {props.shouldDisplayErrors && (
+                                <ErrorContainer>
+                                    <FormHelperText label={formErrorMessage} />
+                                </ErrorContainer>
+                            )}
+                        </>
                     );
                 })}
                 {newAcceptableCombinations.map((newAcceptableCombination, combinationIndex) => {
@@ -212,10 +226,11 @@ function PhraseMelangeeEditing(props: {
 }
 
 const Container = styled('div')({ width: '100%' });
-const TitleContainer = styled('div')({
+const TitleContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'baseline',
-});
+    marginBottom: theme.spacing(1),
+}));
 const AcceptableAnswersContainer = styled('div')({ display: 'flex', flexDirection: 'column' });
 const GradeAcceptableAnswersContainer = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -225,7 +240,7 @@ const GradeAcceptableAnswersContainer = styled('div')(({ theme }) => ({
 }));
 const QuestionIndex = styled(Typography)({ fontWeight: 'bold' });
 const Row = styled('div')({ display: 'flex', alignItems: 'center' });
-const NewAcceptableAnswerContainer = styled('div')({ display: 'flex', flexDirection: 'column' });
+const ErrorContainer = styled('div')(({ theme }) => ({ color: theme.palette.error.main }));
 const AcceptableAnswersCaption = styled(Typography)({});
 const AddAcceptableAnswerRow = styled('div')({ display: 'flex', justifyContent: 'flex-end' });
 

@@ -6,6 +6,7 @@ const formErrorHandler = {
     extractPossibleAnswerFormErrorMessage,
     extractTitleFormErrorMessage,
     extractPointsFormErrorMessage,
+    extractAcceptableShuffledPhraseFormErrorMessage,
     extractAcceptableAnswerEmptyFormErrorMessage,
 };
 
@@ -55,11 +56,15 @@ function computeFormErrors(
         }
     });
 
-    if (
-        questionKind === 'phraseMelangee' &&
-        params.acceptableAnswers[0].some(({ answer }) => answer === params.title)
-    ) {
-        formErrors.push('SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE');
+    if (questionKind === 'phraseMelangee') {
+        const acceptableShuffledPhraseIndex = params.acceptableAnswers[0].findIndex(
+            (acceptableAnswer) => acceptableAnswer.answer === params.title,
+        );
+        if (acceptableShuffledPhraseIndex !== -1) {
+            formErrors.push(
+                `SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE_${acceptableShuffledPhraseIndex}`,
+            );
+        }
     }
 
     if (questionKind === 'texteATrous') {
@@ -95,6 +100,20 @@ function extractPointsFormErrorMessage(formErrors: string[]) {
     const formError = formErrors.find((formError) => formError === 'POINTS_SHOULD_BE_POSITIVE');
     if (formError !== undefined) {
         return `Mauvaise valeur`;
+    }
+    return undefined;
+}
+
+function extractAcceptableShuffledPhraseFormErrorMessage(
+    formErrors: string[],
+    acceptableAnswerIndex: number,
+) {
+    const FORM_ERROR_REGEX = new RegExp(
+        `^SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE_${acceptableAnswerIndex}+$`,
+    );
+    const formErrorMatch = formErrors.find((formError) => formError.match(FORM_ERROR_REGEX));
+    if (formErrorMatch) {
+        return `L'intitulé de la question ne peut pas figurer parmi les réponses acceptées`;
     }
     return undefined;
 }

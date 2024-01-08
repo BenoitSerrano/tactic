@@ -23,6 +23,7 @@ const TitleContainer = styled(Typography)(({ theme }) => ({
     display: 'flex',
     alignItems: 'flex-start',
     fontWeight: 'bold',
+    marginBottom: theme.spacing(2),
 }));
 
 export { QuestionReponsePreviewing };

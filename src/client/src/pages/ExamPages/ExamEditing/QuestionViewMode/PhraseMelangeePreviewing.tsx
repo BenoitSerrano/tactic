@@ -28,5 +28,6 @@ const TitleContainer = styled(Typography)(({ theme }) => ({
     display: 'flex',
     alignItems: 'baseline',
     fontWeight: 'bold',
+    marginBottom: theme.spacing(2),
 }));
 export { PhraseMelangeePreviewing };

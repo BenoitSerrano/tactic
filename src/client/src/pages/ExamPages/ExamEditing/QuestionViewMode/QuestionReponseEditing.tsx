@@ -172,10 +172,11 @@ function QuestionReponseEditing(props: {
 }
 
 const Container = styled('div')({ width: '100%' });
-const TitleContainer = styled('div')({
+const TitleContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'baseline',
-});
+    marginBottom: theme.spacing(2),
+}));
 const AcceptableAnswersContainer = styled('div')({ display: 'flex', flexDirection: 'column' });
 const GradeAcceptableAnswersContainer = styled('div')(({ theme }) => ({
     display: 'flex',

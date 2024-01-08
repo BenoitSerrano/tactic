@@ -183,7 +183,10 @@ describe('formErrorHandler', () => {
             const title = 'ceci est une phrase';
             const possibleAnswers: string[] = [];
             const acceptableAnswers: acceptableAnswerType[][] = [
-                [{ grade: 'A', answer: 'ceci est une phrase' }],
+                [
+                    { grade: 'A', answer: 'ceci une phrase est' },
+                    { grade: 'A', answer: 'ceci est une phrase' },
+                ],
             ];
             const points = 2;
 
@@ -194,7 +197,7 @@ describe('formErrorHandler', () => {
                 points,
             });
 
-            expect(formError).toEqual(['SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE']);
+            expect(formError).toEqual(['SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE_1']);
         });
         test('phraseMelangee rightly filled = false', () => {
             const questionKind = 'phraseMelangee';
