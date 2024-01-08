@@ -12,34 +12,34 @@ function QcmPreviewing(props: {
         ? props.acceptableAnswers[0][0].answer
         : undefined;
     return (
-        <div>
-            <FormControl>
-                <StyledFormLabel>
-                    <IndexContainer>{props.index}</IndexContainer>. {props.title}
-                </StyledFormLabel>
-                <RadioGroup value={rightAnswer}>
-                    {props.possibleAnswers.map((possibleAnswer, index: number) => {
-                        const isRightAnswer =
-                            rightAnswer !== undefined && Number(rightAnswer) === index;
-                        const FormControlLabelComponent = isRightAnswer
-                            ? StyledCorrectFormLabel
-                            : StyledIncorrectFormLabel;
-                        const RadioComponent = isRightAnswer
-                            ? StyledCorrectRadio
-                            : StyledIncorrectRadio;
-                        return (
-                            <React.Fragment key={`${possibleAnswer}-${index}`}>
-                                <FormControlLabelComponent
-                                    value={index}
-                                    control={<RadioComponent disabled />}
-                                    label={possibleAnswer}
-                                />
-                            </React.Fragment>
-                        );
-                    })}
-                </RadioGroup>
-            </FormControl>
-        </div>
+        <FormControl>
+            <StyledFormLabel>
+                <Title>
+                    {props.index}. {props.title}
+                </Title>
+            </StyledFormLabel>
+            <RadioGroup value={rightAnswer}>
+                {props.possibleAnswers.map((possibleAnswer, index: number) => {
+                    const isRightAnswer =
+                        rightAnswer !== undefined && Number(rightAnswer) === index;
+                    const FormControlLabelComponent = isRightAnswer
+                        ? StyledCorrectFormLabel
+                        : StyledIncorrectFormLabel;
+                    const RadioComponent = isRightAnswer
+                        ? StyledCorrectRadio
+                        : StyledIncorrectRadio;
+                    return (
+                        <React.Fragment key={`${possibleAnswer}-${index}`}>
+                            <FormControlLabelComponent
+                                value={index}
+                                control={<RadioComponent disabled />}
+                                label={possibleAnswer}
+                            />
+                        </React.Fragment>
+                    );
+                })}
+            </RadioGroup>
+        </FormControl>
     );
 }
 
@@ -65,6 +65,6 @@ const StyledIncorrectRadio = styled(Radio)(({ theme }) => ({
     color: theme.palette.error.main,
 }));
 
-const IndexContainer = styled('span')({ fontWeight: 'bold' });
+const Title = styled('span')({ fontWeight: 'bold' });
 
 export { QcmPreviewing };
