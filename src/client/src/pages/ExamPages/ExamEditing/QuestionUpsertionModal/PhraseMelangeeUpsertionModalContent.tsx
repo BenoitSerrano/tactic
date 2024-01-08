@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { IconButton, TextField, Typography, styled } from '@mui/material';
@@ -8,6 +7,8 @@ import { textSplitter } from '../../../../lib/textSplitter';
 import { QuestionInputContainer } from './QuestionInputContainer';
 import { Button } from '../../../../components/Button';
 import { combinator } from '../../../../lib/combinator';
+import { WordsShuffler } from '../../components/WordsShuffler';
+import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
@@ -20,14 +21,13 @@ function PhraseMelangeeUpsertionModalContent(props: {
     const initialAcceptableAnswers = props.acceptableAnswers.length
         ? props.acceptableAnswers[0][0].answer
         : '';
-    const [newRightAnswer, setNewRightAnswer] = useState<string[] | undefined>(undefined);
+    const [newRightAnswerCombination, setNewRightAnswerCombination] = useState<
+        number[] | undefined
+    >();
     const [originalPhrase, setOriginalPhrase] = useState(initialAcceptableAnswers);
-    const [displayedWordsToPlace, setDisplayedWordsToPlace] = useState(
-        textSplitter.split(initialAcceptableAnswers),
-    );
     const words = textSplitter.split(originalPhrase);
 
-    const isResetCombinationDisabled = newRightAnswer?.length === 0;
+    const isResetCombinationDisabled = newRightAnswerCombination?.length === 0;
 
     return (
         <>
@@ -74,7 +74,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                     </td>
                                 </tr>
                             ))}
-                            {newRightAnswer === undefined && (
+                            {newRightAnswerCombination === undefined && (
                                 <tr>
                                     <td>
                                         <Button onClick={resetNewRightAnswer}>Ajouter</Button>
@@ -83,34 +83,17 @@ function PhraseMelangeeUpsertionModalContent(props: {
                                 </tr>
                             )}
                             <tr></tr>
-                            {newRightAnswer !== undefined && (
+                            {newRightAnswerCombination !== undefined && (
                                 <tr>
                                     <td>
-                                        <CorrectPhraseCreationContainer>
-                                            <WordLinesContainer>
-                                                <WordLineContainer>
-                                                    {displayedWordsToPlace.map((word, index) => (
-                                                        <WordContainer
-                                                            key={index + word}
-                                                            onClick={buildOnClickOnWordToPlace(
-                                                                index,
-                                                            )}
-                                                        >
-                                                            <Typography>{word}</Typography>
-                                                        </WordContainer>
-                                                    ))}
-                                                </WordLineContainer>
-                                                <WordLineContainer>
-                                                    <SubdirectoryArrowRightIcon />
-                                                    <Typography>
-                                                        {newRightAnswer.join(' ')}
-                                                        {' ___'.repeat(
-                                                            words.length - newRightAnswer.length,
-                                                        )}
-                                                    </Typography>
-                                                </WordLineContainer>
-                                            </WordLinesContainer>
-                                        </CorrectPhraseCreationContainer>
+                                        <WordsShuffler
+                                            initialWords={words}
+                                            placeWord={buildPlaceWord()}
+                                            shuffledAnswerState={computeShuffledAnswerState(
+                                                words,
+                                                newRightAnswerCombination,
+                                            )}
+                                        />
                                     </td>
                                     <td>
                                         <IconButton color="error" onClick={deleteNewRightAnswer}>
@@ -140,40 +123,40 @@ function PhraseMelangeeUpsertionModalContent(props: {
         </>
     );
 
-    function buildOnClickOnWordToPlace(index: number) {
-        return () => {
-            if (!newRightAnswer) {
+    function buildPlaceWord() {
+        return (wordIndexToPlace: number) => {
+            if (!newRightAnswerCombination) {
                 return;
             }
-            const updatedNewRightAnswer = [...newRightAnswer, displayedWordsToPlace[index]];
-
-            if (newRightAnswer.length + 1 === words.length) {
+            const updatedNewRightAnswerCombination = [
+                ...newRightAnswerCombination,
+                wordIndexToPlace,
+            ];
+            if (updatedNewRightAnswerCombination.length === words.length) {
                 props.setAcceptableAnswers([
                     [
                         ...props.acceptableAnswers[0],
-                        { grade: 'A', answer: updatedNewRightAnswer.join(' ') },
+                        {
+                            grade: 'A',
+                            answer: updatedNewRightAnswerCombination
+                                .map((wordIndex) => words[wordIndex])
+                                .join(' '),
+                        },
                     ],
                 ]);
-                setNewRightAnswer(undefined);
-                setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
+                setNewRightAnswerCombination(undefined);
             } else {
-                setNewRightAnswer(updatedNewRightAnswer);
-                const newDisplayedWordsToPlace = [...displayedWordsToPlace];
-                newDisplayedWordsToPlace.splice(index, 1);
-
-                setDisplayedWordsToPlace(newDisplayedWordsToPlace);
+                setNewRightAnswerCombination(updatedNewRightAnswerCombination);
             }
         };
     }
 
     function resetNewRightAnswer() {
-        setNewRightAnswer([]);
-        setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
+        setNewRightAnswerCombination([]);
     }
 
     function deleteNewRightAnswer() {
-        setNewRightAnswer(undefined);
-        setDisplayedWordsToPlace(textSplitter.split(originalPhrase));
+        setNewRightAnswerCombination(undefined);
     }
 
     function shufflePhrase() {
@@ -217,26 +200,4 @@ const RowContainer = styled('div')({
     alignItems: 'center',
 });
 
-const CorrectPhraseCreationContainer = styled('div')({
-    display: 'flex',
-});
-
-const WordLineContainer = styled('div')({
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-});
-const WordLinesContainer = styled('div')({
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-});
-const WordContainer = styled('span')({
-    borderWidth: '1px',
-    borderStyle: 'dotted',
-    padding: '4px',
-    marginLeft: '4px',
-    marginRight: '4px',
-    cursor: 'pointer',
-});
 export { PhraseMelangeeUpsertionModalContent };
