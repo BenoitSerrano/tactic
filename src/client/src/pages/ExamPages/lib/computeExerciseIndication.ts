@@ -1,3 +1,5 @@
+import { computeRoundMark } from '../../../lib/computeRoundMark';
+
 type exerciseIndicationType = { hideMark?: boolean; progress?: number };
 
 function computeExerciseIndication<
@@ -15,10 +17,12 @@ function computeExerciseIndication<
         totalMark += question.mark || 0;
         totalPoints += question.points;
     }
+    const roundedTotalPoints = computeRoundMark(totalPoints);
     if (!!indication?.hideMark) {
-        result = `/ ${totalPoints}`;
+        result = `/ ${roundedTotalPoints}`;
     } else {
-        result = `${totalMark} / ${totalPoints}`;
+        const roundedTotalMark = computeRoundMark(totalMark);
+        result = `${roundedTotalMark} / ${roundedTotalPoints}`;
     }
     if (indication?.progress !== undefined) {
         progress = Math.floor(indication.progress * 100);
