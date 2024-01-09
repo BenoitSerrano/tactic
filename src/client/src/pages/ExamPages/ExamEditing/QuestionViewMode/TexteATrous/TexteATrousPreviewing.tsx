@@ -3,7 +3,7 @@ import { computeDisplayedTitle } from './lib/computeDisplayedTitle';
 import { RightAnswerTextField } from './components/RightAnswerTextField';
 import { PlainText } from './components/PlainText';
 import { Typography, styled } from '@mui/material';
-import { Caption } from '../components/Caption';
+import { Caption } from '../../components/Caption';
 import { converter } from '../../../lib/converter';
 
 function TexteATrousPreviewing(props: {

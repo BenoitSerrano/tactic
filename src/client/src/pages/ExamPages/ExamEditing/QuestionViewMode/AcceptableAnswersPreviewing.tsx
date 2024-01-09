@@ -7,7 +7,7 @@ import {
     aggregatedAcceptableAnswerType,
 } from '../lib/aggregateAcceptableAnswersByGrade';
 import { GradeExplanationIcon } from './components/GradeExplanationIcon';
-import { Caption } from './components/Caption';
+import { Caption } from '../components/Caption';
 
 function AcceptableAnswersPreviewing(props: { acceptableAnswers: acceptableAnswerType[][] }) {
     const aggregatedAcceptableAnswers = aggregateAcceptableAnswersByGrade(props.acceptableAnswers);

@@ -2,9 +2,10 @@ import { acceptableAnswerType } from '../../../../../types';
 import { TextField, Typography, styled } from '@mui/material';
 import { WordsBlanker } from '../../components/WordsBlanker';
 import { converter } from '../../../lib/converter';
-import { Caption } from '../components/Caption';
+import { Caption } from '../../components/Caption';
 import { FLOATING_NUMBER_REGEX, POINTS_TEXT_FIELD_WIDTH } from '../../../../../constants';
 import { useState } from 'react';
+import { PointsPerBlankHandler } from '../../components/PointsPerBlankHandler';
 
 function TexteATrousEditing(props: {
     index: number;
@@ -31,36 +32,17 @@ function TexteATrousEditing(props: {
                     setPoints={(points) => props.setPoints(`${points}`)}
                 />
             </TitleContainer>
-            <PointsPerBlankContainer>
-                <CaptionContainer>
-                    <Caption>Nombre de points par trou</Caption> :
-                </CaptionContainer>
-                <PointsTextField
-                    label="Point(s) par trou"
-                    variant="standard"
-                    value={`${pointsPerBlank}`}
-                    onChange={onChangePointPerBlank}
-                />
-            </PointsPerBlankContainer>
+            <PointsPerBlankHandler
+                mode="editing"
+                blankCount={blankCount}
+                pointsPerBlank={pointsPerBlank}
+                setPoints={props.setPoints}
+                setPointsPerBlank={setPointsPerBlank}
+            />
         </Container>
     );
-
-    function onChangePointPerBlank(event: React.ChangeEvent<HTMLInputElement>) {
-        const value = event.target.value;
-        if (value.match(FLOATING_NUMBER_REGEX)) {
-            setPointsPerBlank(value);
-            props.setPoints(`${Number(value) * props.acceptableAnswers.length}`);
-        }
-    }
 }
 
-const PointsPerBlankContainer = styled(Typography)({ display: 'flex', alignItems: 'baseline' });
-
-const CaptionContainer = styled('span')(({ theme }) => ({
-    marginRight: theme.spacing(1),
-}));
-
-const PointsTextField = styled(TextField)({ width: POINTS_TEXT_FIELD_WIDTH });
 const TitleContainer = styled(Typography)(({ theme }) => ({
     display: 'flex',
     flexWrap: 'wrap',
