@@ -1,10 +1,8 @@
+import { Typography, styled } from '@mui/material';
+import { useState } from 'react';
 import { acceptableAnswerType } from '../../../../../types';
-import { TextField, Typography, styled } from '@mui/material';
 import { WordsBlanker } from '../../components/WordsBlanker';
 import { converter } from '../../../lib/converter';
-import { Caption } from '../../components/Caption';
-import { FLOATING_NUMBER_REGEX, POINTS_TEXT_FIELD_WIDTH } from '../../../../../constants';
-import { useState } from 'react';
 import { PointsPerBlankHandler } from '../../components/PointsPerBlankHandler';
 
 function TexteATrousEditing(props: {
