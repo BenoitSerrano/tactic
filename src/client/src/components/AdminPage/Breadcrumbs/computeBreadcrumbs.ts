@@ -42,6 +42,12 @@ function computeBreadcrumbs(pathname: string): Array<{ label: string; href?: str
             if (path.length === 4) {
                 return breadcrumbs;
             }
+        } else if (path[3] === 'edit') {
+            const examEditHref = path.length > 4 ? `/${path.slice(0, 4).join('/')}` : undefined;
+            breadcrumbs.push({ label: 'Édition', href: examEditHref });
+            if (path.length === 4) {
+                return breadcrumbs;
+            }
         }
     } else if (path[1] === 'groups') {
         const groupsHref = path.length > 2 ? `/${path.slice(0, 2).join('/')}` : undefined;

@@ -5,7 +5,8 @@ import { api } from '../../lib/api';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+// import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -99,10 +100,15 @@ function Exams() {
                                     title="Prévisualiser l'examen"
                                     onClick={buildNavigateToPreview(exam.id)}
                                 />
-                                <IconButton
+                                {/* <IconButton
                                     title="Accéder à la liste des exercices"
                                     IconComponent={FormatListBulletedIcon}
                                     onClick={buildNavigateToEdition(exam.id)}
+                                /> */}
+                                <IconButton
+                                    title="Éditer l'examen"
+                                    IconComponent={EditNoteIcon}
+                                    onClick={buildNavigateToExamEdition(exam.id)}
                                 />
 
                                 <IconButton
@@ -163,8 +169,13 @@ function Exams() {
         return () => navigate(path);
     }
 
-    function buildNavigateToEdition(examId: string) {
-        const path = pathHandler.getRoutePath('EXAM_EXERCISES', { examId });
+    // function buildNavigateToEdition(examId: string) {
+    //     const path = pathHandler.getRoutePath('EXAM_EXERCISES', { examId });
+    //     return () => navigate(path);
+    // }
+
+    function buildNavigateToExamEdition(examId: string) {
+        const path = pathHandler.getRoutePath('EXAM_EDITING', { examId });
         return () => navigate(path);
     }
 
