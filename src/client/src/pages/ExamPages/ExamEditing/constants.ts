@@ -16,6 +16,7 @@ import { QuestionReponsePreviewing } from './QuestionViewMode/QuestionReponsePre
 import { QuestionReponseEditing } from './QuestionViewMode/QuestionReponseEditing';
 import { PhraseMelangeePreviewing } from './QuestionViewMode/PhraseMelangeePreviewing';
 import { PhraseMelangeeEditing } from './QuestionViewMode/PhraseMelangeeEditing';
+import { TexteATrousPreviewing } from './QuestionViewMode/TexteATrous';
 
 const viewModes = ['editing', 'previewing'] as const;
 type viewModeType = (typeof viewModes)[number];
@@ -46,7 +47,7 @@ const questionPreviewingComponentMapping: Record<questionKindType, ElementType> 
     questionReponse: QuestionReponsePreviewing,
     phraseMelangee: PhraseMelangeePreviewing,
     texteLibre: TexteLibrePreviewing,
-    texteATrous: TemporaryEditing,
+    texteATrous: TexteATrousPreviewing,
 };
 
 const SPLITTING_CHARACTER_FOR_ANSWERS = ';';

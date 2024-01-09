@@ -21,7 +21,6 @@ function QuestionReponsePreviewing(props: {
 const Container = styled('div')({});
 const TitleContainer = styled(Typography)(({ theme }) => ({
     display: 'flex',
-    alignItems: 'flex-start',
     fontWeight: 'bold',
     marginBottom: theme.spacing(2),
 }));
