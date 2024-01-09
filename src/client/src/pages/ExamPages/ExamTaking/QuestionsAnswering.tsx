@@ -53,8 +53,10 @@ function QuestionsAnswering(props: {
             initialCurrentAnswers[question.id] = question.currentAnswer;
         }
     }
+    const initialExerciseIdExpanded =
+        props.exercises.length > 0 ? props.exercises[0].id : undefined;
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
-        undefined,
+        initialExerciseIdExpanded,
     );
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);

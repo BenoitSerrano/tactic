@@ -15,8 +15,10 @@ function QuestionsConsulting(props: {
     studentEmail: string;
     attemptId: string;
 }) {
+    const initialExerciseIdExpanded =
+        props.exam.exercises.length > 0 ? props.exam.exercises[0].id : undefined;
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
-        undefined,
+        initialExerciseIdExpanded,
     );
     const result = computeResult(props.exam.exercises);
 

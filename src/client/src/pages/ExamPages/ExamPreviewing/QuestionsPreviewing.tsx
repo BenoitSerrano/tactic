@@ -15,8 +15,10 @@ function QuestionsPreviewing(props: {
     exercises: Array<exerciseWithoutAnswersType>;
 }) {
     const [currentAnswers, setCurrentAnswers] = useState<Record<number, string>>({});
+    const initialExerciseIdExpanded =
+        props.exercises.length > 0 ? props.exercises[0].id : undefined;
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
-        undefined,
+        initialExerciseIdExpanded,
     );
     const totalPoints = computeTotalPoints(props.exercises);
 
