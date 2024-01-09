@@ -44,6 +44,6 @@ function WordsBlanker(props: {
     }
 }
 
-const Container = styled('div')({ display: 'flex' });
+const Container = styled('div')({ display: 'flex', flexWrap: 'wrap' });
 
 export { WordsBlanker };

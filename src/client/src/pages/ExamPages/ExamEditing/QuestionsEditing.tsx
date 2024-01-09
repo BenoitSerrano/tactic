@@ -444,6 +444,7 @@ const QuestionDragIconContainer = styled('div')(({ theme }) => ({
 }));
 const QuestionContainer = styled('div')(({ theme }) => ({
     display: 'flex',
+    flexWrap: 'wrap',
 }));
 const QuestionMainContainer = styled('div')(({ theme }) => ({}));
 const ExerciseMainContainer = styled('div')(({ theme }) => ({
