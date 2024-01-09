@@ -1,6 +1,5 @@
-import { TAT_BLANK_STRING } from '../../../../constants';
-import { textSplitter } from '../../../../lib/textSplitter';
 import { acceptableAnswerType, questionKindType } from '../../../../types';
+import { converter } from '../../lib/converter';
 
 const formErrorHandler = {
     computeFormErrors,
@@ -9,6 +8,8 @@ const formErrorHandler = {
     extractPointsFormErrorMessage,
     extractAcceptableShuffledPhraseFormErrorMessage,
     extractAcceptableAnswerEmptyFormErrorMessage,
+    extractPointsPerBlankFormErrorMessage,
+    extractRightAnswerPresenceFormErrorMessageForTaT,
 };
 
 function computeFormErrors(
@@ -21,65 +22,107 @@ function computeFormErrors(
     },
 ) {
     const formErrors: string[] = [];
-    if (isNaN(params.points) || params.points <= 0) {
-        formErrors.push('POINTS_SHOULD_BE_POSITIVE');
-    }
 
     if (!params.title) {
         formErrors.push('NO_TITLE');
     }
+    switch (questionKind) {
+        case 'texteLibre':
+            if (!arePointsPositive(params.points)) {
+                formErrors.push('POINTS_SHOULD_BE_POSITIVE');
+            }
+            return formErrors;
+        case 'qcm':
+            if (!arePointsPositive(params.points)) {
+                formErrors.push('POINTS_SHOULD_BE_POSITIVE');
+            }
+            if (params.possibleAnswers.length <= 1) {
+                formErrors.push('ONLY_ONE_POSSIBLE_ANSWER');
+            }
+            const emptyPossibleAnswers = params.possibleAnswers.reduce(
+                (acc, possibleAnswer, index) => (possibleAnswer === '' ? [...acc, index] : acc),
+                [] as number[],
+            );
+            for (const possibleAnswerIndex of emptyPossibleAnswers) {
+                formErrors.push(`EMPTY_POSSIBLE_ANSWER_${possibleAnswerIndex}`);
+            }
+            if (!areThereAcceptableAnswers(params.acceptableAnswers)) {
+                formErrors.push('NO_RIGHT_ANSWER');
+                return formErrors;
+            }
+            break;
+        case 'phraseMelangee':
+            if (!arePointsPositive(params.points)) {
+                formErrors.push('POINTS_SHOULD_BE_POSITIVE');
+            }
+            if (!areThereAcceptableAnswers(params.acceptableAnswers)) {
+                formErrors.push('NO_RIGHT_ANSWER');
+                return formErrors;
+            }
+            const acceptableShuffledPhraseIndex = computeAcceptableShuffledPhraseIndex(
+                params.title,
+                params.acceptableAnswers,
+            );
+            if (acceptableShuffledPhraseIndex !== -1) {
+                formErrors.push(
+                    `SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE_${acceptableShuffledPhraseIndex}`,
+                );
+            }
 
-    if (questionKind === 'texteLibre') {
-        return formErrors;
+            break;
+        case 'texteATrous':
+            if (!areThereAcceptableAnswers(params.acceptableAnswers)) {
+                formErrors.push('NO_RIGHT_ANSWER');
+                return formErrors;
+            }
+            if (!arePointsPositive(params.points)) {
+                formErrors.push('POINTS_SHOULD_BE_POSITIVE');
+            }
+            if (!areBlanksConsistent(params.title, params.acceptableAnswers)) {
+                formErrors.push('BLANK_RIGHT_ANSWERS_MISMATCH');
+            }
+            break;
+        default:
+            if (!arePointsPositive(params.points)) {
+                formErrors.push('POINTS_SHOULD_BE_POSITIVE');
+            }
+            if (!areThereAcceptableAnswers(params.acceptableAnswers)) {
+                formErrors.push('NO_RIGHT_ANSWER');
+                return formErrors;
+            }
     }
 
-    if (questionKind === 'qcm' && params.possibleAnswers.length <= 1) {
-        formErrors.push('ONLY_ONE_POSSIBLE_ANSWER');
-    }
-
-    if (questionKind === 'qcm') {
-        const emptyPossibleAnswers = params.possibleAnswers.reduce(
-            (acc, possibleAnswer, index) => (possibleAnswer === '' ? [...acc, index] : acc),
-            [] as number[],
-        );
-        for (const possibleAnswerIndex of emptyPossibleAnswers) {
-            formErrors.push(`EMPTY_POSSIBLE_ANSWER_${possibleAnswerIndex}`);
-        }
-    }
-
-    if (params.acceptableAnswers.length === 0 || params.acceptableAnswers[0].length === 0) {
-        formErrors.push('NO_RIGHT_ANSWER');
-        return formErrors;
-    }
     params.acceptableAnswers[0].forEach((acceptableAnswer, acceptableAnswerIndex) => {
         if (!acceptableAnswer.answer) {
             formErrors.push(`ACCEPTABLE_ANSWER_EMPTY_${acceptableAnswerIndex}`);
         }
     });
-
-    if (questionKind === 'phraseMelangee') {
-        const acceptableShuffledPhraseIndex = params.acceptableAnswers[0].findIndex(
-            (acceptableAnswer) => acceptableAnswer.answer === params.title,
-        );
-        if (acceptableShuffledPhraseIndex !== -1) {
-            formErrors.push(
-                `SHUFFLED_PHRASE_SHOULD_NOT_BE_ACCEPTABLE_${acceptableShuffledPhraseIndex}`,
-            );
-        }
-    }
-
-    if (questionKind === 'texteATrous') {
-        const blankCount = textSplitter
-            .split(params.title)
-            .filter((word) => word === TAT_BLANK_STRING).length;
-        if (blankCount === 0) {
-            formErrors.push('NO_BLANKS');
-        } else if (blankCount !== params.acceptableAnswers.length) {
-            formErrors.push('BLANK_RIGHT_ANSWERS_MISMATCH');
-        }
-    }
     return formErrors;
 }
+
+function computeAcceptableShuffledPhraseIndex(
+    title: string,
+    acceptableAnswers: acceptableAnswerType[][],
+) {
+    const acceptableShuffledPhraseIndex = acceptableAnswers[0].findIndex(
+        (acceptableAnswer) => acceptableAnswer.answer === title,
+    );
+    return acceptableShuffledPhraseIndex;
+}
+
+function arePointsPositive(points: number) {
+    return !isNaN(points) && points > 0;
+}
+
+function areThereAcceptableAnswers(acceptableAnswers: acceptableAnswerType[][]) {
+    return acceptableAnswers.length > 0 && acceptableAnswers[0].length > 0;
+}
+
+function areBlanksConsistent(title: string, acceptableAnswers: acceptableAnswerType[][]) {
+    const blankCount = converter.computeBlankCount(title);
+    return blankCount === acceptableAnswers.length;
+}
+
 function extractPossibleAnswerFormErrorMessage(formErrors: string[], possibleAnswerIndex: number) {
     const FORM_ERROR_REGEX = new RegExp(`^EMPTY_POSSIBLE_ANSWER_${possibleAnswerIndex}+$`);
     const formErrorMatch = formErrors.find((formError) => formError.match(FORM_ERROR_REGEX));
@@ -99,6 +142,24 @@ function extractTitleFormErrorMessage(formErrors: string[]) {
 
 function extractPointsFormErrorMessage(formErrors: string[]) {
     const formError = formErrors.find((formError) => formError === 'POINTS_SHOULD_BE_POSITIVE');
+    if (formError !== undefined) {
+        return `Mauvaise valeur`;
+    }
+    return undefined;
+}
+
+function extractRightAnswerPresenceFormErrorMessageForTaT(formErrors: string[]) {
+    const formError = formErrors.find((formError) => formError === 'NO_RIGHT_ANSWER');
+    if (formError !== undefined) {
+        return `Veuillez au moins cliquer sur un mot pour le transformer en trou`;
+    }
+    return undefined;
+}
+
+function extractPointsPerBlankFormErrorMessage(formErrors: string[]) {
+    const formError = formErrors.find(
+        (formError) => formError === 'POINTS_PER_BLANK_SHOULD_BE_POSITIVE',
+    );
     if (formError !== undefined) {
         return `Mauvaise valeur`;
     }

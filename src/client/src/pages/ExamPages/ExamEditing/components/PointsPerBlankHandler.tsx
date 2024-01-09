@@ -1,12 +1,14 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { Caption } from './Caption';
 import { FLOATING_NUMBER_REGEX, POINTS_TEXT_FIELD_WIDTH } from '../../../../constants';
+import { FormHelperText } from '../../../../components/FormHelperText';
 
 function PointsPerBlankHandler(props: {
     pointsPerBlank: string;
     setPointsPerBlank: (pointsPerBlank: string) => void;
     setPoints: (points: string) => void;
     blankCount: number;
+    errorMessage?: string;
     mode: 'editing' | 'previewing';
 }) {
     return (
@@ -23,6 +25,8 @@ function PointsPerBlankHandler(props: {
             case 'editing':
                 return (
                     <PointsTextField
+                        error={!!props.errorMessage}
+                        helperText={<FormHelperText label={props.errorMessage} />}
                         label="Point(s) par trou"
                         variant="standard"
                         value={`${props.pointsPerBlank}`}

@@ -254,8 +254,8 @@ describe('formErrorHandler', () => {
             const questionKind = 'texteATrous';
             const title = 'tu es la plus belle';
             const possibleAnswers: string[] = [];
-            const acceptableAnswers: acceptableAnswerType[][] = [[{ grade: 'A', answer: 'la' }]];
-            const points = 2;
+            const acceptableAnswers: acceptableAnswerType[][] = [];
+            const points = 0;
 
             const formError = formErrorHandler.computeFormErrors(questionKind, {
                 title,
@@ -264,10 +264,10 @@ describe('formErrorHandler', () => {
                 points,
             });
 
-            expect(formError).toEqual(['NO_BLANKS']);
+            expect(formError).toEqual(['NO_RIGHT_ANSWER']);
         });
 
-        test('texteATrous with a  difference between .... count and right answers length = true', () => {
+        test('texteATrous with a difference between .... count and right answers length = true', () => {
             const questionKind = 'texteATrous';
             const title = 'tu es .... plus belle';
             const possibleAnswers: string[] = [];
