@@ -7,7 +7,7 @@ import {
     aggregatedAcceptableAnswerType,
 } from '../lib/aggregateAcceptableAnswersByGrade';
 import { GradeExplanationIcon } from './components/GradeExplanationIcon';
-import { AcceptableAnswerCaption } from './components/AcceptableAnswerCaption';
+import { Caption } from './components/Caption';
 
 function AcceptableAnswersPreviewing(props: { acceptableAnswers: acceptableAnswerType[][] }) {
     const aggregatedAcceptableAnswers = aggregateAcceptableAnswersByGrade(props.acceptableAnswers);
@@ -45,8 +45,8 @@ function AcceptableAnswersPreviewing(props: { acceptableAnswers: acceptableAnswe
         if (okAnswers.length === 0) {
             return (
                 <Typography>
-                    <AcceptableAnswerCaption>Réponse {adjective}</AcceptableAnswerCaption>{' '}
-                    <GradeExplanationIcon grade={okGrade} /> : -
+                    <Caption>Réponse {adjective}</Caption> <GradeExplanationIcon grade={okGrade} />{' '}
+                    : -
                 </Typography>
             );
         }
@@ -65,8 +65,7 @@ function AcceptableAnswersPreviewing(props: { acceptableAnswers: acceptableAnswe
 
         return (
             <Typography>
-                <AcceptableAnswerCaption>Réponse {adjective}</AcceptableAnswerCaption>{' '}
-                <GradeExplanationIcon grade={grade} /> :{' '}
+                <Caption>Réponse {adjective}</Caption> <GradeExplanationIcon grade={grade} /> :{' '}
                 <TextComponent>{acceptableAnswer.answer}</TextComponent>
             </Typography>
         );
@@ -81,8 +80,7 @@ function AcceptableAnswersPreviewing(props: { acceptableAnswers: acceptableAnswe
         return (
             <>
                 <Typography>
-                    <AcceptableAnswerCaption>Réponses {adjective}</AcceptableAnswerCaption>{' '}
-                    <GradeExplanationIcon grade={grade} /> :
+                    <Caption>Réponses {adjective}</Caption> <GradeExplanationIcon grade={grade} /> :
                 </Typography>
                 <ul>
                     {acceptableAnswers.map((acceptableAnswer) => (

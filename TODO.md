@@ -1,8 +1,8 @@
 <!-- -   Ne plus mettre en gris / disabled les radio -->
 <!-- -   enlever coloration jaune -->
 
--   refacto outil sélection mot shuffled
--   gérer les erreurs sur phrase melangee, si deux réponses correctes sont identiques ou si l'une d'elle est identique à la shuffled
+-   flex wrap pour phrase melangee
+-   upsertion modale pour tat
 
 -   ETQP, je vois les réponses au Texte à trous dans le tableau de manière plus claire
 

@@ -45,7 +45,7 @@ function TexteATrousUpsertionModalContent(props: {
                         <IconButton
                             color="success"
                             disabled={!props.title}
-                            onClick={() => setIsWholeSentenceFrozen(true)}
+                            onClick={freezeSentence}
                         >
                             <CheckIcon />
                         </IconButton>
@@ -77,6 +77,11 @@ function TexteATrousUpsertionModalContent(props: {
             </QuestionInputContainer>
         </>
     );
+
+    function freezeSentence() {
+        props.setTitle(props.title.trim());
+        setIsWholeSentenceFrozen(true);
+    }
 
     function onChangePointPerBlank(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;

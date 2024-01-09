@@ -4,6 +4,7 @@ import { textSplitter } from '../../../lib/textSplitter';
 const SPLITTING_CHARACTER_FOR_TAT = '|';
 
 const converter = {
+    computeBlankCount,
     convertTextInputToAnswer,
     convertWordIndexToAnswerIndex,
     convertAnswerToTextInputs,

@@ -3,13 +3,17 @@ import { computeDisplayedTitle } from './lib/computeDisplayedTitle';
 import { RightAnswerTextField } from './components/RightAnswerTextField';
 import { PlainText } from './components/PlainText';
 import { Typography, styled } from '@mui/material';
-import { AcceptableAnswerCaption } from '../components/AcceptableAnswerCaption';
+import { Caption } from '../components/Caption';
+import { converter } from '../../../lib/converter';
 
 function TexteATrousPreviewing(props: {
     index: number;
+    points: string;
     title: string;
     acceptableAnswers: acceptableAnswerType[][];
 }) {
+    const blankCount = converter.computeBlankCount(props.title);
+    const pointsPerBlank = Number(props.points) / blankCount;
     const displayedTitle = computeDisplayedTitle(props.title, props.acceptableAnswers);
     return (
         <MainContainer>
@@ -18,7 +22,7 @@ function TexteATrousPreviewing(props: {
                 {displayedTitle.map((chunk) => {
                     switch (chunk.kind) {
                         case 'text':
-                            return <PlainText>{chunk.value}</PlainText>;
+                            return <PlainText>{chunk.word}</PlainText>;
                         case 'rightAnswerText':
                             return (
                                 <RightAnswerTextField variant="standard" disabled value="...." />
@@ -28,15 +32,16 @@ function TexteATrousPreviewing(props: {
                     }
                 })}
             </TitleContainer>
+
             <RightAnswerContainer>
-                <AcceptableAnswerCaptionContainer>
-                    <AcceptableAnswerCaption>Réponse correcte</AcceptableAnswerCaption> :
-                </AcceptableAnswerCaptionContainer>
+                <CaptionContainer>
+                    <Caption>Réponse correcte</Caption> :
+                </CaptionContainer>
                 {displayedTitle.map((chunk, chunkIndex) => {
                     const key = `question-${props.index}-chunk-${chunkIndex}`;
                     switch (chunk.kind) {
                         case 'text':
-                            return <PlainText key={key}>{chunk.value}</PlainText>;
+                            return <PlainText key={key}>{chunk.word}</PlainText>;
                         case 'rightAnswerText':
                             return (
                                 <RightAnswerText key={key}>{chunk.words.join(' ')}</RightAnswerText>
@@ -46,9 +51,17 @@ function TexteATrousPreviewing(props: {
                     }
                 })}
             </RightAnswerContainer>
+            <PointsPerBlankContainer>
+                <CaptionContainer>
+                    <Caption>Nombre de points par trou</Caption> :
+                </CaptionContainer>
+                {pointsPerBlank}
+            </PointsPerBlankContainer>
         </MainContainer>
     );
 }
+
+const PointsPerBlankContainer = styled(Typography)({ display: 'flex' });
 
 const TitleContainer = styled(Typography)(({ theme }) => ({
     display: 'flex',
@@ -67,11 +80,10 @@ const RightAnswerText = styled('span')(({ theme }) => ({
 const RightAnswerContainer = styled(Typography)(({ theme }) => ({
     display: 'flex',
     flexWrap: 'wrap',
-    flex: 1,
     alignItems: 'baseline',
 }));
 
-const AcceptableAnswerCaptionContainer = styled('span')(({ theme }) => ({
+const CaptionContainer = styled('span')(({ theme }) => ({
     marginRight: theme.spacing(1),
 }));
 

@@ -1,7 +1,7 @@
 import { TAT_BLANK_STRING } from '../../../../../../constants';
 import { acceptableAnswerType } from '../../../../../../types';
 
-type chunkType = { kind: 'text'; value: string } | { kind: 'rightAnswerText'; words: string[] };
+type chunkType = { kind: 'text'; word: string } | { kind: 'rightAnswerText'; words: string[] };
 
 function computeDisplayedTitle(
     title: string,
@@ -24,7 +24,7 @@ function computeDisplayedTitle(
         } else {
             displayedTitle.push({
                 kind: 'text',
-                value: word,
+                word,
             });
         }
     }

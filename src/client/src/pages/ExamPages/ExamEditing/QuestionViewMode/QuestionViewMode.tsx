@@ -13,6 +13,7 @@ import { api } from '../../../../lib/api';
 import { useAlert } from '../../../../lib/alert';
 import { EditionActionMenu } from '../EditionActionMenu';
 import { formErrorHandler } from '../lib/formErrorHandler';
+import { PointsPreviewing } from './PointsPreviewing';
 
 function QuestionViewMode(props: {
     question: questionType;
@@ -58,7 +59,10 @@ function QuestionViewMode(props: {
         acceptableAnswers,
         points: Number(points),
     });
-    const PointsViewModeComponent = pointsViewModeComponentMapping[currentViewMode];
+    const PointsViewModeComponent =
+        props.question.kind === 'texteATrous'
+            ? PointsPreviewing
+            : pointsViewModeComponentMapping[currentViewMode];
 
     const areThereErrors = formErrors.length > 0;
     const QuestionViewModeComponent = questionViewModeComponentMapping[currentViewMode];
@@ -96,6 +100,8 @@ function QuestionViewMode(props: {
                 setPossibleAnswers={setPossibleAnswers}
                 acceptableAnswers={acceptableAnswers}
                 setAcceptableAnswers={setAcceptableAnswers}
+                points={points}
+                setPoints={setPoints}
                 index={props.index}
                 shouldDisplayErrors={shouldDisplayErrors}
             />

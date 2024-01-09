@@ -12,13 +12,13 @@ describe('computeDisplayedTitle', () => {
         const displayedTitle = computeDisplayedTitle(title, acceptableAnswers);
 
         expect(displayedTitle).toEqual([
-            { kind: 'text', value: 'la' },
+            { kind: 'text', word: 'la' },
             { kind: 'rightAnswerText', words: ['vie'] },
-            { kind: 'text', value: 'est' },
+            { kind: 'text', word: 'est' },
             { kind: 'rightAnswerText', words: ['la', 'plus'] },
-            { kind: 'text', value: 'belle' },
-            { kind: 'text', value: 'de' },
-            { kind: 'text', value: 'toutes.' },
+            { kind: 'text', word: 'belle' },
+            { kind: 'text', word: 'de' },
+            { kind: 'text', word: 'toutes.' },
         ]);
     });
 });
