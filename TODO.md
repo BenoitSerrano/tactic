@@ -2,7 +2,7 @@
 <!-- -   enlever coloration jaune -->
 
 -   flex wrap pour phrase melangee
--   upsertion modale pour tat
+-   quand on presse entrée, ça valide le texte frozen
 
 -   ETQP, je vois les réponses au Texte à trous dans le tableau de manière plus claire
 

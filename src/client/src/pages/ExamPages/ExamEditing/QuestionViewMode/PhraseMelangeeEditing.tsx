@@ -230,6 +230,7 @@ const TitleContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'baseline',
     marginBottom: theme.spacing(1),
+    flexWrap: 'wrap',
 }));
 const AcceptableAnswersContainer = styled('div')({ display: 'flex', flexDirection: 'column' });
 const GradeAcceptableAnswersContainer = styled('div')(({ theme }) => ({
@@ -239,7 +240,7 @@ const GradeAcceptableAnswersContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(1),
 }));
 const QuestionIndex = styled(Typography)({ fontWeight: 'bold' });
-const Row = styled('div')({ display: 'flex', alignItems: 'center' });
+const Row = styled('div')({ display: 'flex', alignItems: 'center', flexWrap: 'wrap' });
 const ErrorContainer = styled('div')(({ theme }) => ({ color: theme.palette.error.main }));
 const AcceptableAnswersCaption = styled(Typography)({});
 const AddAcceptableAnswerRow = styled('div')({ display: 'flex', justifyContent: 'flex-end' });

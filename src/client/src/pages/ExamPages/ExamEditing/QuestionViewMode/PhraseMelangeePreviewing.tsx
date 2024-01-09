@@ -27,6 +27,7 @@ const Container = styled('div')({});
 const TitleContainer = styled(Typography)(({ theme }) => ({
     display: 'flex',
     alignItems: 'baseline',
+    flexWrap: 'wrap',
     fontWeight: 'bold',
     marginBottom: theme.spacing(2),
 }));

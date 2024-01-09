@@ -1,13 +1,12 @@
-import { IconButton, TextField, Typography, styled } from '@mui/material';
+import { IconButton, TextField, styled } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import RefreshIcon from '@mui/icons-material/Refresh';
-
-import { useState } from 'react';
-import { computeTexteATrousState } from '../lib/computeTexteATrousState';
+import { FormEvent, useState } from 'react';
 import { QuestionInputContainer } from './QuestionInputContainer';
 import { acceptableAnswerType } from '../../../../types';
-import { textSplitter } from '../../../../lib/textSplitter';
-import { FLOATING_NUMBER_REGEX } from '../../../../constants';
+import { WordsBlanker } from '../components/WordsBlanker';
+import { PointsPerBlankHandler } from '../components/PointsPerBlankHandler';
+import { converter } from '../../lib/converter';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
@@ -22,73 +21,65 @@ function TexteATrousUpsertionModalContent(props: {
         : Number(props.points);
     const [pointsPerBlank, setPointsPerBlank] = useState(`${initialPointsPerBlank}`);
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(!!props.title);
-    const words = textSplitter.split(props.title);
-
+    const blankCount = converter.computeBlankCount(props.title);
     return (
         <>
             <QuestionInputContainer title="Texte complet">
-                <RowContainer>
+                <OriginalTextContainer onSubmit={handleSubmitOriginalText}>
                     <TextField
                         autoFocus
                         disabled={isWholeSentenceFrozen}
                         fullWidth
-                        multiline
                         label="Texte complet"
                         value={props.title}
                         onChange={(event) => props.setTitle(event.target.value)}
                     />
                     {isWholeSentenceFrozen ? (
-                        <IconButton color="warning" onClick={resetWholeSentence}>
+                        <IconButton onClick={resetWholeSentence} color="warning">
                             <RefreshIcon />
                         </IconButton>
                     ) : (
-                        <IconButton
-                            color="success"
-                            disabled={!props.title}
-                            onClick={freezeSentence}
-                        >
+                        <IconButton type="submit" color="success" disabled={!props.title}>
                             <CheckIcon />
                         </IconButton>
                     )}
-                </RowContainer>
+                </OriginalTextContainer>
             </QuestionInputContainer>
             {isWholeSentenceFrozen && (
                 <QuestionInputContainer
                     title="Texte à trous"
-                    subtitle="Cliquez sur les mots à cacher dans le texte ci-dessous"
+                    subtitle="Cliquez sur les mots à cacher dans le texte ci-dessous :"
                 >
-                    <WordPickingContainer>
-                        <WordsContainer>
-                            {words.map((word, index) => (
-                                <WordContainer onClick={buildOnClickOnWord(index)}>
-                                    {word}
-                                </WordContainer>
-                            ))}
-                        </WordsContainer>
-                    </WordPickingContainer>
+                    <WordsBlanker
+                        title={props.title}
+                        setTitle={props.setTitle}
+                        acceptableAnswers={props.acceptableAnswers}
+                        setAcceptableAnswers={props.setAcceptableAnswers}
+                        pointsPerBlank={Number(pointsPerBlank)}
+                        setPoints={(points) => props.setPoints(`${points}`)}
+                    />
                 </QuestionInputContainer>
             )}
-            <QuestionInputContainer isLastItem title="Nombre de points attribués à chaque trou">
-                <TextField
-                    value={pointsPerBlank}
-                    onChange={onChangePointPerBlank}
-                    label="Point(s) par trou"
+            <QuestionInputContainer isLastItem title="Points">
+                <PointsPerBlankHandler
+                    blankCount={blankCount}
+                    mode="editing"
+                    pointsPerBlank={pointsPerBlank}
+                    setPoints={props.setPoints}
+                    setPointsPerBlank={setPointsPerBlank}
                 />
             </QuestionInputContainer>
         </>
     );
 
+    function handleSubmitOriginalText(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        freezeSentence();
+    }
+
     function freezeSentence() {
         props.setTitle(props.title.trim());
         setIsWholeSentenceFrozen(true);
-    }
-
-    function onChangePointPerBlank(event: React.ChangeEvent<HTMLInputElement>) {
-        const value = event.target.value;
-        if (value.match(FLOATING_NUMBER_REGEX)) {
-            setPointsPerBlank(value);
-            props.setPoints(`${Number(value) * props.acceptableAnswers.length}`);
-        }
     }
 
     function resetWholeSentence() {
@@ -97,40 +88,11 @@ function TexteATrousUpsertionModalContent(props: {
         props.setAcceptableAnswers([]);
         props.setPoints('0');
     }
-
-    function buildOnClickOnWord(wordIndex: number) {
-        return () => {
-            const nextState = computeTexteATrousState(wordIndex, {
-                title: props.title,
-                rightAnswers: props.acceptableAnswers.map(
-                    (acceptableAnswersPerBlank) => acceptableAnswersPerBlank[0].answer,
-                ),
-            });
-            props.setTitle(nextState.title);
-            props.setAcceptableAnswers(
-                nextState.rightAnswers.map((answer) => [
-                    {
-                        answer,
-                        grade: 'A',
-                    },
-                ]),
-            );
-            props.setPoints(`${Number(pointsPerBlank) * nextState.rightAnswers.length}`);
-        };
-    }
 }
 
-const RowContainer = styled('div')(({ theme }) => ({
+const OriginalTextContainer = styled('form')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-}));
-
-const WordsContainer = styled('div')({ display: 'flex', flexWrap: 'wrap' });
-const WordPickingContainer = styled('div')({});
-const WordContainer = styled(Typography)(({ theme }) => ({
-    textDecorationLine: 'underline',
-    paddingRight: theme.spacing(1),
-    cursor: 'pointer',
 }));
 
 export { TexteATrousUpsertionModalContent };
