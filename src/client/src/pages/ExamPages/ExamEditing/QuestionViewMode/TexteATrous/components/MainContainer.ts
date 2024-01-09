@@ -1,9 +1,8 @@
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
-const MainContainer = styled(Typography)(({ theme }) => ({
+const MainContainer = styled('div')(({ theme }) => ({
     display: 'flex',
-    fontWeight: 'bold',
-    alignItems: 'baseline',
+    flexDirection: 'column',
 }));
 
 export { MainContainer };

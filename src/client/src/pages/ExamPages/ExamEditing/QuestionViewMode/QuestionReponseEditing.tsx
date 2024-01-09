@@ -14,12 +14,12 @@ import {
     aggregatedAcceptableAnswerType,
 } from '../lib/aggregateAcceptableAnswersByGrade';
 import { acceptableAnswerType } from '../../../../types';
-import { RemoveButton } from './Buttons';
+import { RemoveButton } from './components/Buttons';
 import { Button } from '../../../../components/Button';
 import { VeryLightHorizontalDivider } from '../../../../components/HorizontalDivider';
 import { ChangeEvent } from 'react';
 import { gradeConverter } from '../../../../lib/gradeConverter';
-import { GradeExplanationIcon } from './GradeExplanationIcon';
+import { GradeExplanationIcon } from './components/GradeExplanationIcon';
 
 function QuestionReponseEditing(props: {
     index: number;

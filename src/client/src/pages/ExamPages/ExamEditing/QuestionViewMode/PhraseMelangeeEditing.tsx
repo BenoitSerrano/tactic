@@ -12,12 +12,12 @@ import {
     aggregatedAcceptableAnswerType,
 } from '../lib/aggregateAcceptableAnswersByGrade';
 import { acceptableAnswerType } from '../../../../types';
-import { RemoveButton } from './Buttons';
+import { RemoveButton } from './components/Buttons';
 import { Button } from '../../../../components/Button';
 import { VeryLightHorizontalDivider } from '../../../../components/HorizontalDivider';
 import { useState } from 'react';
 import { gradeConverter } from '../../../../lib/gradeConverter';
-import { GradeExplanationIcon } from './GradeExplanationIcon';
+import { GradeExplanationIcon } from './components/GradeExplanationIcon';
 import { ShuffledWord, ShuffledWordContainer } from '../../components/ShuffledWord';
 import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
 import { WordsShuffler } from '../../components/WordsShuffler';

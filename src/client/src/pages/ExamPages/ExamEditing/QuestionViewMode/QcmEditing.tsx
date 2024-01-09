@@ -5,7 +5,7 @@ import { Button } from '../../../../components/Button';
 import { acceptableAnswerType } from '../../../../types';
 import { formErrorHandler } from '../lib/formErrorHandler';
 import { FormHelperText } from '../../../../components/FormHelperText';
-import { RemoveButton } from './Buttons';
+import { RemoveButton } from './components/Buttons';
 
 function QcmEditing(props: {
     index: number;

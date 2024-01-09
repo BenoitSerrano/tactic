@@ -1,5 +1,5 @@
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { Button } from '../../../../components/Button';
+import { Button } from '../../../../../components/Button';
 
 function RemoveButton(props: { onClick: () => void; disabled?: boolean }) {
     return (
