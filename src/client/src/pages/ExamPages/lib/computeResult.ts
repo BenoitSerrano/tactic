@@ -15,7 +15,9 @@ function computeResult(exercises: exerciseWithAnswersType[]) {
             totalPoints += question.points;
         }
     }
+    const roundedTotalMark = computeRoundMark(totalMark);
+    const roundedTotalPoints = computeRoundMark(totalPoints);
 
-    return `${computeRoundMark(totalMark)} / ${totalPoints}`;
+    return `${roundedTotalMark} / ${roundedTotalPoints}`;
 }
 export { computeResult };
