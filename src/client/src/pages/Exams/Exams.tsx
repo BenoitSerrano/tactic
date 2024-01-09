@@ -2,15 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
-import {
-    IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Tooltip,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
@@ -28,6 +20,7 @@ import { examApiType } from './types';
 import { pathHandler } from '../../lib/pathHandler';
 import { EditableName } from './EditableName';
 import { EditableDuration } from './EditableDuration';
+import { IconButton } from '../../components/IconButton';
 
 function Exams() {
     const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
@@ -101,37 +94,37 @@ function Exams() {
                     {query.data.map((exam) => (
                         <TableRow key={exam.id}>
                             <TableCell>
-                                <Tooltip title="Prévisualiser l'examen">
-                                    <IconButton onClick={buildNavigateToPreview(exam.id)}>
-                                        <VisibilityIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Accéder à la liste des exercices">
-                                    <IconButton onClick={buildNavigateToEdition(exam.id)}>
-                                        <FormatListBulletedIcon />
-                                    </IconButton>
-                                </Tooltip>
+                                <IconButton
+                                    IconComponent={VisibilityIcon}
+                                    title="Prévisualiser l'examen"
+                                    onClick={buildNavigateToPreview(exam.id)}
+                                />
+                                <IconButton
+                                    title="Accéder à la liste des exercices"
+                                    IconComponent={FormatListBulletedIcon}
+                                    onClick={buildNavigateToEdition(exam.id)}
+                                />
 
-                                <Tooltip title="Voir les copies des étudiants">
-                                    <IconButton onClick={buildNavigateToResults(exam.id)}>
-                                        <RateReviewIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Copier le lien à partager aux étudiants">
-                                    <IconButton onClick={buildCopyExamLinkToClipboard(exam.id)}>
-                                        <ContentCopyIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Dupliquer l'examen">
-                                    <IconButton onClick={buildDuplicateExam(exam.id)}>
-                                        <ScannerIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Supprimer l'examen">
-                                    <IconButton onClick={buildDeleteExam(exam.id)}>
-                                        <DeleteForeverIcon />
-                                    </IconButton>
-                                </Tooltip>
+                                <IconButton
+                                    title="Voir les copies des étudiants"
+                                    IconComponent={RateReviewIcon}
+                                    onClick={buildNavigateToResults(exam.id)}
+                                />
+                                <IconButton
+                                    title="Copier le lien à partager aux étudiants"
+                                    onClick={buildCopyExamLinkToClipboard(exam.id)}
+                                    IconComponent={ContentCopyIcon}
+                                />
+                                <IconButton
+                                    title="Dupliquer l'examen"
+                                    IconComponent={ScannerIcon}
+                                    onClick={buildDuplicateExam(exam.id)}
+                                />
+                                <IconButton
+                                    IconComponent={DeleteForeverIcon}
+                                    title="Supprimer l'examen"
+                                    onClick={buildDeleteExam(exam.id)}
+                                />
                             </TableCell>
                             <TableCell>
                                 <EditableName exam={exam} />
