@@ -1,6 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { ShuffledWord, ShuffledWordContainer } from './ShuffledWord';
+import { IsolatedWord, IsolatedWordContainer } from './IsolatedWord';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import { shuffledAnswerStateType } from '../lib/computeShuffledAnswerState';
 import { IconButton } from '../../../components/IconButton';
@@ -19,12 +19,12 @@ function WordsShuffler(props: {
                 {remainingWordIndexesToPlace.map((wordIndexToPlace) => {
                     const wordToPlace = props.initialWords[wordIndexToPlace];
                     return (
-                        <ShuffledWordContainer>
-                            <ShuffledWord
+                        <IsolatedWordContainer>
+                            <IsolatedWord
                                 onClick={() => props.placeWord(wordIndexToPlace)}
                                 word={wordToPlace}
                             />
-                        </ShuffledWordContainer>
+                        </IsolatedWordContainer>
                     );
                 })}
             </Row>

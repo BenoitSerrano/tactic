@@ -1,3 +1,4 @@
+import { TAT_BLANK_STRING } from '../../../../constants';
 import { textSplitter } from '../../../../lib/textSplitter';
 
 type texteATrousStateType = { title: string; rightAnswers: string[] };
@@ -13,11 +14,11 @@ function computeTexteATrousState(
     const nextRightAnswers = [...prevState.rightAnswers];
 
     const rightAnswerIndex = computeRightAnswerIndex(wordIndex, prevState.title);
-    if (replacedWord === '....') {
+    if (replacedWord === TAT_BLANK_STRING) {
         nextWords[wordIndex] = prevState.rightAnswers[rightAnswerIndex];
         nextRightAnswers.splice(rightAnswerIndex, 1);
     } else {
-        nextWords[wordIndex] = '....';
+        nextWords[wordIndex] = TAT_BLANK_STRING;
         nextRightAnswers.splice(rightAnswerIndex, 0, replacedWord);
     }
     const nextTitle = nextWords.join(' ');
@@ -34,7 +35,7 @@ function computeRightAnswerIndex(wordIndex: number, title: string) {
     let rightAnswerIndex = 0;
     for (let i = 0; i < wordIndex; i++) {
         const word = words[i];
-        if (word === '....') {
+        if (word === TAT_BLANK_STRING) {
             rightAnswerIndex++;
         }
     }
@@ -50,9 +51,9 @@ function mergeAdjacentBlanks(prevState: texteATrousStateType): texteATrousStateT
     let nextTitleChunks: string[] = [];
     for (let i = 0; i < splittedText.length; i++) {
         const word = splittedText[i];
-        if (word === '....') {
+        if (word === TAT_BLANK_STRING) {
             if (startedRightAnswer.length === 0) {
-                nextTitleChunks.push('....');
+                nextTitleChunks.push(TAT_BLANK_STRING);
             }
             rightAnswerIndex++;
             const currentRightAnswer = prevState.rightAnswers[rightAnswerIndex];

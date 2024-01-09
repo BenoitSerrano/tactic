@@ -1,7 +1,6 @@
 import { acceptableAnswerType } from '../../../../../types';
 import { computeDisplayedTitle } from './lib/computeDisplayedTitle';
 import { RightAnswerTextField } from './components/RightAnswerTextField';
-import { MainContainer } from './components/MainContainer';
 import { PlainText } from './components/PlainText';
 import { Typography, styled } from '@mui/material';
 import { AcceptableAnswerCaption } from '../components/AcceptableAnswerCaption';
@@ -39,7 +38,9 @@ function TexteATrousPreviewing(props: {
                         case 'text':
                             return <PlainText key={key}>{chunk.value}</PlainText>;
                         case 'rightAnswerText':
-                            return <RightAnswerText key={key}>{chunk.value}</RightAnswerText>;
+                            return (
+                                <RightAnswerText key={key}>{chunk.words.join(' ')}</RightAnswerText>
+                            );
                         default:
                             return undefined;
                     }
@@ -77,5 +78,8 @@ const AcceptableAnswerCaptionContainer = styled('span')(({ theme }) => ({
 const IndexContainer = styled('span')(({ theme }) => ({
     marginRight: theme.spacing(1),
 }));
-
+const MainContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+}));
 export { TexteATrousPreviewing };

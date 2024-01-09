@@ -185,11 +185,11 @@ function PhraseMelangeeUpsertionModalContent(props: {
     function computeShuffledPhrase(originalPhrase: string) {
         const words = textSplitter.split(originalPhrase.trim());
         const shuffledCombination = combinator.generate(words.length);
-        const shuffledWords = [];
+        const IsolatedWords = [];
         for (let i = 0; i < shuffledCombination.length; i++) {
-            shuffledWords.push(words[shuffledCombination[i]]);
+            IsolatedWords.push(words[shuffledCombination[i]]);
         }
-        return shuffledWords.join(' ');
+        return IsolatedWords.join(' ');
     }
 
     function buildDeleteRightAnswer(index: number) {

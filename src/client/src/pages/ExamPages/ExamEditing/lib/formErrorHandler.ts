@@ -1,3 +1,4 @@
+import { TAT_BLANK_STRING } from '../../../../constants';
 import { textSplitter } from '../../../../lib/textSplitter';
 import { acceptableAnswerType, questionKindType } from '../../../../types';
 
@@ -70,7 +71,7 @@ function computeFormErrors(
     if (questionKind === 'texteATrous') {
         const blankCount = textSplitter
             .split(params.title)
-            .filter((word) => word === '....').length;
+            .filter((word) => word === TAT_BLANK_STRING).length;
         if (blankCount === 0) {
             formErrors.push('NO_BLANKS');
         } else if (blankCount !== params.acceptableAnswers.length) {

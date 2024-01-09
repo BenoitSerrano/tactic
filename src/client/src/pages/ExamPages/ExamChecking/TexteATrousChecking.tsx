@@ -11,6 +11,7 @@ import { attemptStatusType, gradeType } from '../../../types';
 import { questionWithAnswersType } from '../types';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { IconButton } from '../../../components/IconButton';
+import { TAT_BLANK_STRING } from '../../../constants';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -71,7 +72,9 @@ function TexteATrousChecking(props: {
         },
     });
 
-    const blankCount = props.question.title.split(' ').filter((word) => word === '....').length;
+    const blankCount = props.question.title
+        .split(' ')
+        .filter((word) => word === TAT_BLANK_STRING).length;
 
     const pointsPerBlank = props.question.points / blankCount;
 

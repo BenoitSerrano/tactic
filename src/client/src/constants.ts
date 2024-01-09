@@ -8,6 +8,7 @@ import { questionKindType } from './types';
 
 const FLOATING_NUMBER_REGEX = /^([0-9]+)?(\.)?([0-9]*)?$/;
 const INTEGER_NUMBER_REGEX = /^[0-9]*$/;
+const TAT_BLANK_STRING = '....';
 
 const TEXTE_A_TROU_REGEX = /(\.{4})/g;
 const HEADER_HEIGHT = 60;
@@ -64,4 +65,5 @@ export {
     HEADER_HEIGHT,
     localeInfo,
     manualQuestionKinds,
+    TAT_BLANK_STRING,
 };

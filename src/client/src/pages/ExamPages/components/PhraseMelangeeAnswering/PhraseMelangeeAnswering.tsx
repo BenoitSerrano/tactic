@@ -12,14 +12,14 @@ function PhraseMelangeeAnswering(props: {
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
-    const shuffledWords = textSplitter.split(props.question.title);
+    const IsolatedWords = textSplitter.split(props.question.title);
     const initialPendingCombination = props.currentAnswer
-        ? convertAnswerToCombination(shuffledWords, props.currentAnswer)
+        ? convertAnswerToCombination(IsolatedWords, props.currentAnswer)
         : [];
     const [pendingCombination, setPendingCombination] =
         useState<number[]>(initialPendingCombination);
 
-    const shuffledAnswerState = computeShuffledAnswerState(shuffledWords, pendingCombination);
+    const shuffledAnswerState = computeShuffledAnswerState(IsolatedWords, pendingCombination);
     return (
         <Container>
             <Title>
@@ -27,7 +27,7 @@ function PhraseMelangeeAnswering(props: {
             </Title>
             <WordsShuffler
                 reset={resetPendingCombination}
-                initialWords={shuffledWords}
+                initialWords={IsolatedWords}
                 shuffledAnswerState={shuffledAnswerState}
                 placeWord={buildPlaceWord()}
             />
@@ -43,9 +43,9 @@ function PhraseMelangeeAnswering(props: {
             const newPendingCombination = [...pendingCombination, wordIndex];
             setPendingCombination(newPendingCombination);
 
-            if (newPendingCombination.length === shuffledWords.length) {
+            if (newPendingCombination.length === IsolatedWords.length) {
                 const answer = newPendingCombination
-                    .map((wordIndex) => shuffledWords[wordIndex])
+                    .map((wordIndex) => IsolatedWords[wordIndex])
                     .join(' ');
                 props.setCurrentAnswer(answer);
             } else {

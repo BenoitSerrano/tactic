@@ -6,7 +6,6 @@ import { TexteLibreUpsertionModalContent } from './QuestionUpsertionModal/TexteL
 import { TexteATrousUpsertionModalContent } from './QuestionUpsertionModal/TexteATrousUpsertionModalContent';
 import { questionKindType } from '../../../types';
 import { QcmEditing } from './QuestionViewMode/QcmEditing';
-import { TemporaryEditing } from './QuestionViewMode/TemporaryEditing';
 import { QcmPreviewing } from './QuestionViewMode/QcmPreviewing';
 import { PointsPreviewing } from './QuestionViewMode/PointsPreviewing';
 import { PointsEditing } from './QuestionViewMode/PointsEditing';

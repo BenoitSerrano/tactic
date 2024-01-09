@@ -18,7 +18,7 @@ import { VeryLightHorizontalDivider } from '../../../../components/HorizontalDiv
 import { useState } from 'react';
 import { gradeConverter } from '../../../../lib/gradeConverter';
 import { GradeExplanationIcon } from './components/GradeExplanationIcon';
-import { ShuffledWord, ShuffledWordContainer } from '../../components/ShuffledWord';
+import { IsolatedWord, IsolatedWordContainer } from '../../components/IsolatedWord';
 import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
 import { WordsShuffler } from '../../components/WordsShuffler';
 import { FormHelperText } from '../../../../components/FormHelperText';
@@ -55,9 +55,9 @@ function PhraseMelangeeEditing(props: {
             <TitleContainer>
                 <QuestionIndex>{props.index}. </QuestionIndex>
                 {props.title.split(' ').map((word, index) => (
-                    <ShuffledWordContainer key={`shuffled-word-${index}`}>
-                        <ShuffledWord word={word} />
-                    </ShuffledWordContainer>
+                    <IsolatedWordContainer key={`shuffled-word-${index}`}>
+                        <IsolatedWord word={word} />
+                    </IsolatedWordContainer>
                 ))}
             </TitleContainer>
             <AcceptableAnswersContainer>
@@ -105,9 +105,9 @@ function PhraseMelangeeEditing(props: {
                             <Row key={`acceptableAnswer-${grade}-${acceptableAnswer.index}`}>
                                 {acceptableAnswer.answer.split(' ').map((word) => {
                                     return (
-                                        <ShuffledWordContainer>
-                                            <ShuffledWord word={word} />
-                                        </ShuffledWordContainer>
+                                        <IsolatedWordContainer>
+                                            <IsolatedWord word={word} />
+                                        </IsolatedWordContainer>
                                     );
                                 })}
                                 <RemoveButton

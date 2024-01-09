@@ -1,3 +1,4 @@
+import { TAT_BLANK_STRING } from '../../../constants';
 import { questionKindType } from '../../../types';
 import { attemptAnswersType } from '../types';
 import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
@@ -10,7 +11,9 @@ function computeExerciseProgress<
     }
     const blankLength = questions.reduce((acc, question) => {
         if (question.kind === 'texteATrous') {
-            const blankCount = question.title.split(' ').filter((chunk) => chunk === '....').length;
+            const blankCount = question.title
+                .split(' ')
+                .filter((chunk) => chunk === TAT_BLANK_STRING).length;
             return acc + blankCount;
         } else {
             return acc + 1;
