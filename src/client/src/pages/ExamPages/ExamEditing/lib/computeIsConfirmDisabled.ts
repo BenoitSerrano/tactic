@@ -8,9 +8,14 @@ function computeIsConfirmDisabled(
         title: string;
         possibleAnswers: string[];
         acceptableAnswers: acceptableAnswerType[][];
+        points: number;
     },
 ) {
     if (!params.title) {
+        return true;
+    }
+
+    if (isNaN(params.points) || !params.points) {
         return true;
     }
 

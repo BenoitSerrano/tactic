@@ -10,8 +10,9 @@ function Button(props: {
     type?: 'submit';
     title?: string;
     startIcon?: JSX.Element;
+    endIcon?: JSX.Element;
     autoFocus?: boolean;
-    color?: 'primary' | 'error' | 'inherit';
+    color?: 'primary' | 'error' | 'inherit' | 'success' | 'warning';
 }) {
     return (
         <MuiButton
@@ -19,6 +20,7 @@ function Button(props: {
             autoFocus={props.autoFocus}
             title={props.title}
             startIcon={props.startIcon}
+            endIcon={props.endIcon}
             type={props.type}
             fullWidth={props.fullWidth}
             variant={props.variant}

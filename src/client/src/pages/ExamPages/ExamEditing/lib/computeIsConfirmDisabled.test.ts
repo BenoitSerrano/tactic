@@ -7,11 +7,13 @@ describe('computeIsConfirmDisabled', () => {
         const title = 'title';
         const possibleAnswers: string[] = ['a', 'b', 'c', 'd'];
         const acceptableAnswers: acceptableAnswerType[][] = [];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -21,11 +23,13 @@ describe('computeIsConfirmDisabled', () => {
         const title = 'title';
         const possibleAnswers: string[] = ['a'];
         const acceptableAnswers: acceptableAnswerType[][] = [[{ grade: 'A', answer: '0' }]];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -36,25 +40,47 @@ describe('computeIsConfirmDisabled', () => {
         const title = 'title';
         const possibleAnswers: string[] = ['a', 'b', 'c', 'd'];
         const acceptableAnswers: acceptableAnswerType[][] = [[{ grade: 'A', answer: '0' }]];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(false);
     });
+
+    test('qcm with no points = true', () => {
+        const questionKind = 'qcm';
+        const title = 'title';
+        const possibleAnswers: string[] = ['a', 'b', 'c', 'd'];
+        const acceptableAnswers: acceptableAnswerType[][] = [[{ grade: 'A', answer: '0' }]];
+        const points = 0;
+
+        const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
+            title,
+            possibleAnswers,
+            acceptableAnswers,
+            points,
+        });
+
+        expect(isConfirmDisabled).toBe(true);
+    });
+
     test('questionReponse with no right answer = true', () => {
         const questionKind = 'questionReponse';
         const title = 'ceci est une question';
         const possibleAnswers: string[] = [];
         const acceptableAnswers: acceptableAnswerType[][] = [];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -67,11 +93,13 @@ describe('computeIsConfirmDisabled', () => {
         const acceptableAnswers: acceptableAnswerType[][] = [
             [{ grade: 'A', answer: 'rightAnswer' }],
         ];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(false);
@@ -81,11 +109,13 @@ describe('computeIsConfirmDisabled', () => {
         const title = 'ceci est une phrase';
         const possibleAnswers: string[] = [];
         const acceptableAnswers: acceptableAnswerType[][] = [];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -97,11 +127,13 @@ describe('computeIsConfirmDisabled', () => {
         const acceptableAnswers: acceptableAnswerType[][] = [
             [{ grade: 'A', answer: 'ceci est une phrase' }],
         ];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -113,11 +145,13 @@ describe('computeIsConfirmDisabled', () => {
         const acceptableAnswers: acceptableAnswerType[][] = [
             [{ grade: 'A', answer: 'ceci est une phrase' }],
         ];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(false);
@@ -127,11 +161,13 @@ describe('computeIsConfirmDisabled', () => {
         const title = '';
         const possibleAnswers: string[] = [];
         const acceptableAnswers: acceptableAnswerType[][] = [];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -141,11 +177,13 @@ describe('computeIsConfirmDisabled', () => {
         const title = 'title';
         const possibleAnswers: string[] = [];
         const acceptableAnswers: acceptableAnswerType[][] = [];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(false);
@@ -156,11 +194,13 @@ describe('computeIsConfirmDisabled', () => {
         const title = 'tu es la plus belle';
         const possibleAnswers: string[] = [];
         const acceptableAnswers: acceptableAnswerType[][] = [[{ grade: 'A', answer: 'la' }]];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -174,11 +214,13 @@ describe('computeIsConfirmDisabled', () => {
             [{ grade: 'C', answer: 'la' }],
             [{ grade: 'C', answer: 'plus' }],
         ];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(true);
@@ -192,11 +234,13 @@ describe('computeIsConfirmDisabled', () => {
             [{ grade: 'C', answer: 'la' }],
             [{ grade: 'C', answer: 'plus' }],
         ];
+        const points = 1;
 
         const isConfirmDisabled = computeIsConfirmDisabled(questionKind, {
             title,
             possibleAnswers,
             acceptableAnswers,
+            points,
         });
 
         expect(isConfirmDisabled).toBe(false);

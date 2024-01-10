@@ -83,6 +83,7 @@ function QuestionUpsertionModal(props: {
         title,
         acceptableAnswers,
         possibleAnswers,
+        points: Number(points),
     });
 
     return (

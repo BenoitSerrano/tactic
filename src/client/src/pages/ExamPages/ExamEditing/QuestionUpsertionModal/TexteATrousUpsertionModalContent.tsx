@@ -1,12 +1,13 @@
-import { IconButton, TextField, styled } from '@mui/material';
+import { TextField, styled } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import ClearIcon from '@mui/icons-material/Clear';
 import { FormEvent, useState } from 'react';
 import { QuestionInputContainer } from './QuestionInputContainer';
 import { acceptableAnswerType } from '../../../../types';
 import { WordsBlanker } from '../components/WordsBlanker';
 import { PointsPerBlankHandler } from '../components/PointsPerBlankHandler';
 import { converter } from '../../lib/converter';
+import { Button } from '../../../../components/Button';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
@@ -34,21 +35,32 @@ function TexteATrousUpsertionModalContent(props: {
                         value={props.title}
                         onChange={(event) => props.setTitle(event.target.value)}
                     />
-                    {isWholeSentenceFrozen ? (
-                        <IconButton onClick={resetWholeSentence} color="warning">
-                            <RefreshIcon />
-                        </IconButton>
-                    ) : (
-                        <IconButton type="submit" color="success" disabled={!props.title}>
-                            <CheckIcon />
-                        </IconButton>
-                    )}
+                    <OriginalTextButtonContainer>
+                        {isWholeSentenceFrozen ? (
+                            <Button
+                                color="error"
+                                startIcon={<ClearIcon />}
+                                onClick={resetWholeSentence}
+                            >
+                                Supprimer
+                            </Button>
+                        ) : (
+                            <Button
+                                color="inherit"
+                                disabled={!props.title}
+                                startIcon={<CheckIcon />}
+                                type="submit"
+                            >
+                                Valider
+                            </Button>
+                        )}
+                    </OriginalTextButtonContainer>
                 </OriginalTextContainer>
             </QuestionInputContainer>
             {isWholeSentenceFrozen && (
                 <QuestionInputContainer
                     title="Texte à trous"
-                    subtitle="Cliquez sur les mots à cacher dans le texte ci-dessous :"
+                    subtitle={`Cliquez sur les mots à cacher dans le texte ci-dessous. En cas d'erreur, cliquez sur "....".`}
                 >
                     <WordsBlanker
                         title={props.title}
@@ -93,6 +105,10 @@ function TexteATrousUpsertionModalContent(props: {
 const OriginalTextContainer = styled('form')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
+}));
+
+const OriginalTextButtonContainer = styled('div')(({ theme }) => ({
+    marginLeft: theme.spacing(2),
 }));
 
 export { TexteATrousUpsertionModalContent };
