@@ -22,6 +22,7 @@ import { Students } from '../pages/StudentsPages/Students';
 import { TeacherHome } from '../pages/TeacherHome';
 import { ROUTE_KEYS } from './routeKeys';
 import { ExamEditing } from '../pages/ExamPages/ExamEditing';
+import { ExamArchived } from '../pages/ExamArchived';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -69,6 +70,9 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAM_DONE: {
         element: <ExamDone />,
+    },
+    EXAM_ARCHIVED: {
+        element: <ExamArchived />,
     },
     EXAMS: { isAdmin: true, element: <Exams /> },
     STUDENTS: { isAdmin: true, element: <Students /> },

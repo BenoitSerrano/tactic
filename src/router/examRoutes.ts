@@ -97,7 +97,18 @@ const examRoutes: Array<routeType<any, any>> = [
             duration: Joi.number().allow(null),
         }),
     },
-
+    {
+        method: 'PATCH',
+        path: '/exams/:examId/archivedAt',
+        isAuthenticated: true,
+        controller: examController.updateExamArchivedAt,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    },
     {
         method: 'DELETE',
         path: '/exams/:examId',
