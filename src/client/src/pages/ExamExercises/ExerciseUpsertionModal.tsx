@@ -118,6 +118,7 @@ function ExerciseUpsertionModal(props: {
             name,
             instruction,
             defaultPoints: Number(defaultPoints),
+            defaultQuestionKind,
         };
         if (props.modalStatus?.kind === 'editing') {
             updateExerciseMutation.mutate({
@@ -128,7 +129,6 @@ function ExerciseUpsertionModal(props: {
         } else {
             createExerciseMutation.mutate({
                 examId: props.examId,
-                defaultQuestionKind,
                 ...newExercise,
             });
         }

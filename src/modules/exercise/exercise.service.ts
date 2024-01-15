@@ -3,6 +3,7 @@ import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../exam';
 import { Question, buildQuestionService } from '../question';
 import { buildAttemptService } from '../attempt';
+import { questionKindType } from '../question/types';
 
 export { buildExerciseService };
 
@@ -62,11 +63,21 @@ function buildExerciseService() {
 
     async function updateExercise(
         criteria: { examId: Exam['id']; exerciseId: Exercise['id'] },
-        body: { name: string; instruction: string; defaultPoints: number },
+        body: {
+            name: string;
+            instruction: string;
+            defaultPoints: number;
+            defaultQuestionKind: questionKindType;
+        },
     ) {
         return exerciseRepository.update(
             { exam: { id: criteria.examId }, id: criteria.exerciseId },
-            { name: body.name, instruction: body.instruction, defaultPoints: body.defaultPoints },
+            {
+                name: body.name,
+                instruction: body.instruction,
+                defaultPoints: body.defaultPoints,
+                defaultQuestionKind: body.defaultQuestionKind,
+            },
         );
     }
 

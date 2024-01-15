@@ -308,12 +308,14 @@ async function updateExercise(params: {
     name: string;
     instruction: string;
     defaultPoints: number;
+    defaultQuestionKind: questionKindType;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
     return performApiCall(URL, 'PUT', {
         name: params.name,
         instruction: params.instruction,
         defaultPoints: params.defaultPoints,
+        defaultQuestionKind: params.defaultQuestionKind,
     });
 }
 

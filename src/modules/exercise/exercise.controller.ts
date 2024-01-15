@@ -1,4 +1,5 @@
 import { Question } from '../question';
+import { questionKindType } from '../question/types';
 import { Exercise } from './Exercise.entity';
 import { buildExerciseService } from './exercise.service';
 
@@ -34,7 +35,12 @@ function buildExerciseController() {
 
     function updateExercise(params: {
         urlParams: { examId: string; exerciseId: string };
-        body: { name: string; instruction: string; defaultPoints: number };
+        body: {
+            name: string;
+            instruction: string;
+            defaultPoints: number;
+            defaultQuestionKind: questionKindType;
+        };
     }) {
         return exerciseService.updateExercise(
             {

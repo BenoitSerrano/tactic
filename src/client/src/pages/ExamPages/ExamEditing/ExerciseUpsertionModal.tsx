@@ -21,7 +21,12 @@ function ExerciseUpsertionModal(props: {
     const editor = useEditor({ authToken: config.PORTIVE_AUTH_TOKEN });
     const { displayAlert } = useAlert();
 
-    const [defaultQuestionKind, setDefaultQuestionKind] = useState<questionKindType>('qcm');
+    const initialQuestionKind =
+        props.modalStatus.kind === 'creating'
+            ? 'qcm'
+            : props.modalStatus.exercise.defaultQuestionKind;
+    const [defaultQuestionKind, setDefaultQuestionKind] =
+        useState<questionKindType>(initialQuestionKind);
 
     const updateExerciseMutation = useMutation({
         mutationFn: api.updateExercise,
@@ -76,14 +81,12 @@ function ExerciseUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
-                {props.modalStatus.kind === 'creating' && (
-                    <RowContainer>
-                        <QuestionKindSelect
-                            currentQuestionKind={defaultQuestionKind}
-                            onSelect={setDefaultQuestionKind}
-                        />
-                    </RowContainer>
-                )}
+                <RowContainer>
+                    <QuestionKindSelect
+                        currentQuestionKind={defaultQuestionKind}
+                        onSelect={setDefaultQuestionKind}
+                    />
+                </RowContainer>
                 <RowContainer>
                     <TextField
                         autoFocus
@@ -125,6 +128,7 @@ function ExerciseUpsertionModal(props: {
             name,
             instruction,
             defaultPoints: Number(defaultPoints),
+            defaultQuestionKind,
         };
         if (modalStatus.kind === 'editing') {
             updateExerciseMutation.mutate({
@@ -135,7 +139,6 @@ function ExerciseUpsertionModal(props: {
         } else {
             createExerciseMutation.mutate({
                 examId: props.examId,
-                defaultQuestionKind,
                 ...newExercise,
             });
         }
