@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 // import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import ArchiveIcon from '@mui/icons-material/Archive';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -44,6 +45,22 @@ function Exams() {
             displayAlert({
                 variant: 'error',
                 text: `Une erreur est survenue. L'examen n'a pas pu être supprimé`,
+            });
+        },
+    });
+    const archiveExamMutation = useMutation({
+        mutationFn: api.archiveExam,
+        onSuccess: () => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen a bien été archivé.`,
+            });
+            queryClient.invalidateQueries({ queryKey: ['exams'] });
+        },
+        onError: () => {
+            displayAlert({
+                variant: 'error',
+                text: `Une erreur est survenue. L'examen n'a pas pu être archivé`,
             });
         },
     });
@@ -127,6 +144,11 @@ function Exams() {
                                     onClick={buildDuplicateExam(exam.id)}
                                 />
                                 <IconButton
+                                    IconComponent={ArchiveIcon}
+                                    title="Archiver l'examen"
+                                    onClick={buildArchiveExam(exam.id)}
+                                />
+                                <IconButton
                                     IconComponent={DeleteForeverIcon}
                                     title="Supprimer l'examen"
                                     onClick={buildDeleteExam(exam.id)}
@@ -199,6 +221,18 @@ function Exams() {
     function buildDuplicateExam(examId: string) {
         return () => {
             duplicateExamMutation.mutate({ examId });
+        };
+    }
+
+    function buildArchiveExam(examId: string) {
+        return () => {
+            // eslint-disable-next-line no-restricted-globals
+            const hasConfirmed = confirm(
+                "Souhaitez-vous réellement archiver cet examen ? Il n'apparaîtra plus dans votre liste d'examens et les étudiant.es n'y auront plus accès.",
+            );
+            if (hasConfirmed) {
+                archiveExamMutation.mutate(examId);
+            }
         };
     }
 

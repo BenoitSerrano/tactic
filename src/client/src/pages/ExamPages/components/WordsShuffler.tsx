@@ -45,7 +45,15 @@ function WordsShuffler(props: {
     );
 }
 
-const Container = styled('div')({ display: 'flex', flexDirection: 'column' });
-const Row = styled('div')({ display: 'flex', alignItems: 'center' });
+const Container = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+});
+
+const Row = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+});
 
 export { WordsShuffler };

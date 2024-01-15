@@ -22,6 +22,7 @@ const ROUTE_KEYS = [
     'EXAM_CHECKING',
     'TEACHER_HOME',
     'GROUPS',
+    'EXAM_ARCHIVED',
 ] as const;
 
 export { ROUTE_KEYS };

@@ -1,4 +1,4 @@
-import { In } from 'typeorm';
+import { In, IsNull, Not } from 'typeorm';
 import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
 import { examAdaptator } from './exam.adaptator';
@@ -29,6 +29,7 @@ function buildExamService() {
         deleteExam,
         getExamResults,
         duplicateExam,
+        updateExamArchivedAt,
     };
 
     return examService;
@@ -114,7 +115,10 @@ function buildExamService() {
     }
 
     async function getExams(user: User) {
-        return examRepository.find({ where: { user }, order: { createdAt: 'DESC' } });
+        return examRepository.find({
+            where: { user, archivedAt: IsNull() },
+            order: { createdAt: 'DESC' },
+        });
     }
 
     async function getUserIdForExam(examId: Exam['id']): Promise<User['id']> {
@@ -135,6 +139,7 @@ function buildExamService() {
             select: {
                 id: true,
                 name: true,
+                archivedAt: true,
                 exercises: {
                     id: true,
                     name: true,
@@ -275,5 +280,10 @@ function buildExamService() {
         await exerciseService.duplicateExercises(newExam, exercises);
 
         return newExam;
+    }
+
+    async function updateExamArchivedAt(examId: Exam['id']) {
+        await examRepository.update({ id: examId }, { archivedAt: () => 'CURRENT_TIMESTAMP' });
+        return true;
     }
 }
