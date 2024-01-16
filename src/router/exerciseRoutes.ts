@@ -8,15 +8,6 @@ const exerciseController = buildExerciseController();
 
 const exerciseRoutes: Array<routeType<any, any>> = [
     {
-        method: 'GET',
-        path: `/exams/:examId/exercises/:exerciseId`,
-        isAuthenticated: true,
-        controller: exerciseController.getExercise,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            { entity: 'exam', key: 'examId' },
-        ]),
-    },
-    {
         method: 'PUT',
         path: `/exams/:examId/exercises/:exerciseId`,
         isAuthenticated: true,

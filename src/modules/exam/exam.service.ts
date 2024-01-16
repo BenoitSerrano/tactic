@@ -6,7 +6,6 @@ import { User } from '../user';
 import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
-import { computeSumPoints } from './lib/computeSumPoints';
 import { buildExerciseService } from '../exercise';
 
 export { buildExamService };
@@ -21,7 +20,6 @@ function buildExamService() {
         getExamWithQuestions,
         getAllExams,
         getExam,
-        getExamExercises,
         getExamWithoutAnswers,
         getExamQuestions,
         getExamsByIds,
@@ -128,42 +126,6 @@ function buildExamService() {
             relations: ['user'],
         });
         return exam.user.id;
-    }
-
-    async function getExamExercises(examId: Exam['id']) {
-        const exam = await examRepository.findOneOrFail({
-            where: { id: examId },
-            order: {
-                exercises: { order: 'ASC' },
-            },
-            select: {
-                id: true,
-                name: true,
-                archivedAt: true,
-                exercises: {
-                    id: true,
-                    name: true,
-                    instruction: true,
-                    defaultQuestionKind: true,
-                    defaultPoints: true,
-                    order: true,
-                    questions: { id: true, points: true },
-                },
-            },
-            relations: ['exercises', 'exercises.questions'],
-        });
-        return {
-            ...exam,
-            exercises: exam.exercises.map((exercise) => ({
-                id: exercise.id,
-                name: exercise.name,
-                instruction: exercise.instruction,
-                defaultQuestionKind: exercise.defaultQuestionKind,
-                defaultPoints: exercise.defaultPoints,
-                order: exercise.order,
-                totalPoints: computeSumPoints(exercise.questions),
-            })),
-        };
     }
 
     async function getExamsByIds(examIds: Array<Exam['id']>) {

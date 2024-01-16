@@ -27,7 +27,6 @@ const api = {
     deleteExam,
     archiveExam,
     createQuestion,
-    fetchExercise,
     createExercise,
     updateExercise,
     deleteExercise,
@@ -283,11 +282,6 @@ async function updateExamDuration({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/duration`;
     return performApiCall(URL, 'PATCH', { duration });
-}
-
-async function fetchExercise(params: { examId: string; exerciseId: number }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
-    return performApiCall(URL, 'GET');
 }
 
 async function createExercise(params: {

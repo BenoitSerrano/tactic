@@ -21,18 +21,6 @@ describe('computeBreadcrumbs', () => {
         ]);
     });
 
-    it("returns exams edit exercises when you're on exam edit exercises page", () => {
-        const pathname = pathHandler.getRoutePath('EXAM_EXERCISES', { examId: 'examId' });
-
-        const breadcrumbs = computeBreadcrumbs(pathname);
-
-        expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: '/teacher' },
-            { label: 'Liste des examens', href: '/teacher/exams' },
-            { label: 'Liste des exercices' },
-        ]);
-    });
-
     it("returns exams edit when you're on exam edit page", () => {
         const pathname = pathHandler.getRoutePath('EXAM_EDITING', { examId: 'examId' });
 
@@ -42,22 +30,6 @@ describe('computeBreadcrumbs', () => {
             { label: 'Accueil', href: '/teacher' },
             { label: 'Liste des examens', href: '/teacher/exams' },
             { label: 'Édition' },
-        ]);
-    });
-
-    it("returns exams questions edit when you're on exam edit questions page", () => {
-        const pathname = pathHandler.getRoutePath('EXAM_QUESTIONS_EDITION', {
-            examId: 'examId',
-            exerciseId: 'exerciseId',
-        });
-
-        const breadcrumbs = computeBreadcrumbs(pathname);
-
-        expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: '/teacher' },
-            { label: 'Liste des examens', href: '/teacher/exams' },
-            { label: 'Liste des exercices', href: '/teacher/exams/examId/exercises' },
-            { label: 'Liste des questions' },
         ]);
     });
 

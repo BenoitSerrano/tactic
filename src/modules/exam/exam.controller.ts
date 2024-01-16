@@ -51,7 +51,7 @@ function buildExamController() {
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {
-        return examService.getExamExercises(params.urlParams.examId);
+        return examService.getExam(params.urlParams.examId);
     }
 
     async function getExamWithoutAnswers(params: { urlParams: { examId: string } }) {

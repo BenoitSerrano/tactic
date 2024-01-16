@@ -8,7 +8,6 @@ export { buildExerciseController };
 function buildExerciseController() {
     const exerciseService = buildExerciseService();
     const exerciseController = {
-        getExercise,
         deleteExercise,
         updateExercisesOrder,
         createExercise,
@@ -16,10 +15,6 @@ function buildExerciseController() {
     };
 
     return exerciseController;
-
-    function getExercise(params: { urlParams: { exerciseId: string } }) {
-        return exerciseService.getExercise(Number(params.urlParams.exerciseId));
-    }
 
     function createExercise(params: {
         urlParams: { examId: string };

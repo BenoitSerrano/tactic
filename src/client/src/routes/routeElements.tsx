@@ -1,11 +1,9 @@
 import { api } from '../lib/api';
 import { ExamDone } from '../pages/ExamDone';
-import { ExamExercises } from '../pages/ExamExercises';
 import { ExamChecking } from '../pages/ExamPages/ExamChecking';
 import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
 import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
-import { ExamQuestionsEdition } from '../pages/ExamQuestionsEdition';
 import { ExamResults } from '../pages/ExamResults';
 import { Exams } from '../pages/Exams';
 import { Groups } from '../pages/StudentsPages/Groups';
@@ -76,16 +74,6 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAMS: { isAdmin: true, element: <Exams /> },
     STUDENTS: { isAdmin: true, element: <Students /> },
-    EXAM_EXERCISES: {
-        isAdmin: true,
-
-        element: <ExamExercises />,
-    },
-    EXAM_QUESTIONS_EDITION: {
-        isAdmin: true,
-
-        element: <ExamQuestionsEdition />,
-    },
     EXAM_RESULTS: {
         isAdmin: true,
 

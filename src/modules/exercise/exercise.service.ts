@@ -12,7 +12,6 @@ function buildExerciseService() {
     const exerciseService = {
         createExercise,
         updateExercise,
-        getExercise,
         getExerciseWithoutQuestions,
         deleteExercise,
         updateExercisesOrder,
@@ -97,22 +96,6 @@ function buildExerciseService() {
         });
 
         return exercise;
-    }
-
-    async function getExercise(exerciseId: Exercise['id']) {
-        const questionService = buildQuestionService();
-        const exercise = await exerciseRepository.findOneOrFail({
-            where: { id: exerciseId },
-            order: { order: 'ASC', questions: { order: 'ASC' } },
-            relations: ['questions'],
-        });
-
-        return {
-            ...exercise,
-            questions: exercise.questions.map((question) =>
-                questionService.decodeQuestion(question),
-            ),
-        };
     }
 
     async function updateExercisesOrder(orderedIds: Exercise['id'][]) {
