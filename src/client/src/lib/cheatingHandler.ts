@@ -16,7 +16,7 @@ const cheatingHandler = {
 };
 
 function buildOnFocusChangeCallback(kind: focusChangeEventType['kind'], displayAlert: () => void) {
-    return (pathname: string) => {
+    return async (pathname: string) => {
         const currentAttemptId = pathHandler.extractCurrentAttemptId(pathname);
         if (!!currentAttemptId) {
             displayAlert();
@@ -40,10 +40,14 @@ function buildOnFocusChangeCallback(kind: focusChangeEventType['kind'], displayA
             if (kind === 'focus') {
                 const cheatingSummary = computeCheatingSummary(nextFocusChangesEvents);
                 if (!!cheatingSummary) {
-                    api.updateAttemptCheatingSummary({
-                        attemptId: currentAttemptId,
-                        ...cheatingSummary,
-                    });
+                    try {
+                        await api.updateAttemptCheatingSummary({
+                            attemptId: currentAttemptId,
+                            ...cheatingSummary,
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
             }
         }
