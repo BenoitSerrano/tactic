@@ -4,6 +4,9 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_TAKING: {
         path: '/student/students/:studentId/attempts/:attemptId/take',
     },
+    EXAM_EDITING: {
+        path: '/teacher/exams/:examId/edit',
+    },
     STUDENT_HOME: {
         path: '/student/exams/:examId/students/:studentId',
     },
@@ -40,14 +43,11 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_DONE: {
         path: '/student/students/:studentId/exam-done',
     },
+    EXAM_ARCHIVED: {
+        path: '/student/exam-archived',
+    },
     EXAMS: { path: `/teacher/exams` },
     STUDENTS: { path: `/teacher/groups/:groupId/students` },
-    EXAM_EXERCISES: {
-        path: `/teacher/exams/:examId/exercises`,
-    },
-    EXAM_QUESTIONS_EDITION: {
-        path: `/teacher/exams/:examId/exercises/:exerciseId`,
-    },
     EXAM_RESULTS: {
         path: `/teacher/exams/:examId/results`,
     },

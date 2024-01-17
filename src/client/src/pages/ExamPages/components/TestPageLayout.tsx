@@ -1,11 +1,12 @@
 import { Typography, styled } from '@mui/material';
+import { ReactNode } from 'react';
 
 function TestPageLayout(props: {
     title: string;
     subtitle?: string;
     studentEmail: string;
     result?: string;
-    children: JSX.Element[] | JSX.Element;
+    children: ReactNode;
     centerButtons?: JSX.Element[];
     rightButtons?: JSX.Element[];
     shouldPreventTextSelection?: boolean;

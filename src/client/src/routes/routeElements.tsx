@@ -1,11 +1,9 @@
 import { api } from '../lib/api';
 import { ExamDone } from '../pages/ExamDone';
-import { ExamExercises } from '../pages/ExamExercises';
 import { ExamChecking } from '../pages/ExamPages/ExamChecking';
 import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
 import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
-import { ExamQuestionsEdition } from '../pages/ExamQuestionsEdition';
 import { ExamResults } from '../pages/ExamResults';
 import { Exams } from '../pages/Exams';
 import { Groups } from '../pages/StudentsPages/Groups';
@@ -21,6 +19,8 @@ import { StudentHome } from '../pages/StudentHome';
 import { Students } from '../pages/StudentsPages/Students';
 import { TeacherHome } from '../pages/TeacherHome';
 import { ROUTE_KEYS } from './routeKeys';
+import { ExamEditing } from '../pages/ExamPages/ExamEditing';
+import { ExamArchived } from '../pages/ExamArchived';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -28,6 +28,10 @@ const ROUTE_ELEMENTS: Record<
 > = {
     EXAM_TAKING: {
         element: <ExamTaking />,
+    },
+    EXAM_EDITING: {
+        isAdmin: true,
+        element: <ExamEditing />,
     },
     STUDENT_HOME: {
         element: <StudentHome />,
@@ -65,18 +69,11 @@ const ROUTE_ELEMENTS: Record<
     EXAM_DONE: {
         element: <ExamDone />,
     },
+    EXAM_ARCHIVED: {
+        element: <ExamArchived />,
+    },
     EXAMS: { isAdmin: true, element: <Exams /> },
     STUDENTS: { isAdmin: true, element: <Students /> },
-    EXAM_EXERCISES: {
-        isAdmin: true,
-
-        element: <ExamExercises />,
-    },
-    EXAM_QUESTIONS_EDITION: {
-        isAdmin: true,
-
-        element: <ExamQuestionsEdition />,
-    },
     EXAM_RESULTS: {
         isAdmin: true,
 

@@ -8,15 +8,6 @@ const exerciseController = buildExerciseController();
 
 const exerciseRoutes: Array<routeType<any, any>> = [
     {
-        method: 'GET',
-        path: `/exams/:examId/exercises/:exerciseId`,
-        isAuthenticated: true,
-        controller: exerciseController.getExercise,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
-            { entity: 'exam', key: 'examId' },
-        ]),
-    },
-    {
         method: 'PUT',
         path: `/exams/:examId/exercises/:exerciseId`,
         isAuthenticated: true,
@@ -28,6 +19,7 @@ const exerciseRoutes: Array<routeType<any, any>> = [
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
             defaultPoints: Joi.number().required(),
+            defaultQuestionKind: Joi.string().valid(...questionKinds),
         }),
     },
     {
@@ -42,9 +34,7 @@ const exerciseRoutes: Array<routeType<any, any>> = [
             },
         ]),
         schema: Joi.object({
-            orders: Joi.array().items(
-                Joi.object({ id: Joi.number().required(), order: Joi.number().required() }),
-            ),
+            orderedIds: Joi.array().items(Joi.number().required()),
         }),
     },
     {

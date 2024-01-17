@@ -28,7 +28,9 @@ function Modal(props: {
                 )}
                 <ModalBody>{props.children}</ModalBody>
                 <ModalFooter>
-                    <Button onClick={onCancel}>{props.cancelButtonLabel || 'Annuler'}</Button>
+                    <Button color="inherit" onClick={onCancel}>
+                        {props.cancelButtonLabel || 'Annuler'}
+                    </Button>
                     <LoadingButton
                         disabled={props.isConfirmDisabled}
                         loading={props.isConfirmLoading}
@@ -57,6 +59,7 @@ const ModalHeader = styled('div')(({ theme }) => ({
     paddingBottom: theme.spacing(2),
     backgroundColor: 'white',
     top: 0,
+    zIndex: 10,
 }));
 
 const ModalFooter = styled('div')(({ theme }) => ({

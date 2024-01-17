@@ -19,13 +19,14 @@ const api = {
     deleteStudent,
     createExam,
     fetchExam,
+    fetchExamWithQuestions,
     updateExamName,
     updateExamDuration,
     fetchExams,
     fetchExamResults,
     deleteExam,
+    archiveExam,
     createQuestion,
-    fetchExercise,
     createExercise,
     updateExercise,
     deleteExercise,
@@ -242,6 +243,11 @@ async function deleteExam(examId: string) {
     return performApiCall(URL, 'DELETE');
 }
 
+async function archiveExam(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/archivedAt`;
+    return performApiCall(URL, 'PATCH');
+}
+
 async function fetchExamResults(examId: string) {
     const URL = `${BASE_URL}/exams/${examId}/results`;
     return performApiCall(URL, 'GET');
@@ -249,6 +255,11 @@ async function fetchExamResults(examId: string) {
 
 async function fetchExam(examId: string) {
     const URL = `${BASE_URL}/exams/${examId}`;
+    return performApiCall(URL, 'GET');
+}
+
+async function fetchExamWithQuestions(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/with-questions`;
     return performApiCall(URL, 'GET');
 }
 
@@ -273,17 +284,13 @@ async function updateExamDuration({
     return performApiCall(URL, 'PATCH', { duration });
 }
 
-async function fetchExercise(params: { examId: string; exerciseId: number }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
-    return performApiCall(URL, 'GET');
-}
-
 async function createExercise(params: {
     examId: string;
     name: string;
     instruction: string;
     defaultPoints: number;
     defaultQuestionKind: questionKindType;
+    order?: number;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises`;
     return performApiCall(URL, 'POST', {
@@ -291,6 +298,7 @@ async function createExercise(params: {
         instruction: params.instruction,
         defaultPoints: params.defaultPoints,
         defaultQuestionKind: params.defaultQuestionKind,
+        order: params.order,
     });
 }
 
@@ -300,12 +308,14 @@ async function updateExercise(params: {
     name: string;
     instruction: string;
     defaultPoints: number;
+    defaultQuestionKind: questionKindType;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
     return performApiCall(URL, 'PUT', {
         name: params.name,
         instruction: params.instruction,
         defaultPoints: params.defaultPoints,
+        defaultQuestionKind: params.defaultQuestionKind,
     });
 }
 
@@ -342,6 +352,7 @@ async function createQuestion(params: {
     exerciseId: number;
     title: string;
     kind: questionKindType;
+    order?: number;
     possibleAnswers: string[];
     acceptableAnswers: acceptableAnswerType[][];
     points: number;
@@ -350,6 +361,7 @@ async function createQuestion(params: {
     return performApiCall(URL, 'POST', {
         title: params.title,
         kind: params.kind,
+        order: params.order,
         possibleAnswers: params.possibleAnswers,
         acceptableAnswers: params.acceptableAnswers,
         points: params.points,
@@ -377,11 +389,11 @@ async function updateQuestion(params: {
 async function updateQuestionsOrder(params: {
     examId: string;
     exerciseId: number;
-    orders: Array<{ id: number; order: number }>;
+    orderedIds: number[];
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/order`;
     return performApiCall(URL, 'PATCH', {
-        orders: params.orders,
+        orderedIds: params.orderedIds,
     });
 }
 
@@ -431,13 +443,10 @@ async function duplicateQuestion(params: {
     return performApiCall(URL, 'POST');
 }
 
-async function updateExercisesOrder(params: {
-    examId: string;
-    orders: Array<{ id: number; order: number }>;
-}) {
+async function updateExercisesOrder(params: { examId: string; orderedIds: number[] }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/order`;
     return performApiCall(URL, 'PATCH', {
-        orders: params.orders,
+        orderedIds: params.orderedIds,
     });
 }
 

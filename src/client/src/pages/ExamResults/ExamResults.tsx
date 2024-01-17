@@ -141,6 +141,8 @@ function ExamResults() {
         },
     ];
 
+    const roundedTotalPoints = computeRoundMark(resultsQuery.data.totalPoints);
+
     return (
         <>
             <TitleContainer>
@@ -193,7 +195,7 @@ function ExamResults() {
                                     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                 }}
                             >
-                                Note (/ {resultsQuery.data.totalPoints})
+                                Note (/ {roundedTotalPoints})
                             </TableSortLabel>
                         </TableCell>
                         <TableCell width={80}>Statut</TableCell>

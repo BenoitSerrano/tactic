@@ -3,6 +3,7 @@ import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../exam';
 import { Question, buildQuestionService } from '../question';
 import { buildAttemptService } from '../attempt';
+import { questionKindType } from '../question/types';
 
 export { buildExerciseService };
 
@@ -11,7 +12,6 @@ function buildExerciseService() {
     const exerciseService = {
         createExercise,
         updateExercise,
-        getExercise,
         getExerciseWithoutQuestions,
         deleteExercise,
         updateExercisesOrder,
@@ -39,10 +39,11 @@ function buildExerciseService() {
         exercise.instruction = body.instruction;
         exercise.defaultPoints = body.defaultPoints;
         exercise.defaultQuestionKind = body.defaultQuestionKind;
-        exercise.exam = exam;
         exercise.order = highestOrder + 1;
+        exercise.exam = exam;
 
-        return exerciseRepository.save(exercise);
+        const newExercise = await exerciseRepository.save(exercise);
+        return { id: newExercise.id };
     }
 
     async function getHighestExerciseOrder(examId: Exam['id']) {
@@ -61,11 +62,21 @@ function buildExerciseService() {
 
     async function updateExercise(
         criteria: { examId: Exam['id']; exerciseId: Exercise['id'] },
-        body: { name: string; instruction: string; defaultPoints: number },
+        body: {
+            name: string;
+            instruction: string;
+            defaultPoints: number;
+            defaultQuestionKind: questionKindType;
+        },
     ) {
         return exerciseRepository.update(
             { exam: { id: criteria.examId }, id: criteria.exerciseId },
-            { name: body.name, instruction: body.instruction, defaultPoints: body.defaultPoints },
+            {
+                name: body.name,
+                instruction: body.instruction,
+                defaultPoints: body.defaultPoints,
+                defaultQuestionKind: body.defaultQuestionKind,
+            },
         );
     }
 
@@ -87,29 +98,15 @@ function buildExerciseService() {
         return exercise;
     }
 
-    async function getExercise(exerciseId: Exercise['id']) {
-        const questionService = buildQuestionService();
-        const exercise = await exerciseRepository.findOneOrFail({
-            where: { id: exerciseId },
-            order: { order: 'ASC', questions: { order: 'ASC' } },
-            relations: ['questions'],
-        });
-
-        return {
-            ...exercise,
-            questions: exercise.questions.map((question) =>
-                questionService.decodeQuestion(question),
-            ),
-        };
-    }
-
-    async function updateExercisesOrder(orders: Array<{ id: Exercise['id']; order: number }>) {
-        for (const { id, order } of orders) {
-            const result = await exerciseRepository.update({ id }, { order });
+    async function updateExercisesOrder(orderedIds: Exercise['id'][]) {
+        for (let i = 0; i < orderedIds.length; i++) {
+            const id = orderedIds[i];
+            const result = await exerciseRepository.update({ id }, { order: i });
             if (result.affected !== 1) {
                 console.error(`Could not update exercise id ${id} order because it does not exist`);
             }
         }
+
         return true;
     }
 
@@ -118,7 +115,10 @@ function buildExerciseService() {
         await attemptService.deleteExerciseAnswers(exerciseId);
 
         const result = await exerciseRepository.delete({ id: exerciseId });
-        return result.affected == 1;
+        if (result.affected !== 1) {
+            throw new Error(`The affected row length (${result.affected}) !== 1 `);
+        }
+        return { id: exerciseId };
     }
 
     async function duplicateExercises(newExam: Exam, exercises: Exercise[]) {

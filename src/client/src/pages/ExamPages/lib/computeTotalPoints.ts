@@ -1,3 +1,5 @@
+import { computeRoundMark } from '../../../lib/computeRoundMark';
+
 function computeTotalPoints<
     questionT extends { points: number },
     exerciseT extends { questions: questionT[] },
@@ -8,7 +10,8 @@ function computeTotalPoints<
             totalPoints += question.points;
         }
     }
-    return `/ ${totalPoints}`;
+    const roundedTotalPoints = computeRoundMark(totalPoints);
+    return `/ ${roundedTotalPoints}`;
 }
 
 export { computeTotalPoints };

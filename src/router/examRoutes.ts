@@ -26,6 +26,12 @@ const examRoutes: Array<routeType<any, any>> = [
     },
     {
         method: 'GET',
+        path: '/exams/:examId/with-questions',
+        isAuthenticated: true,
+        controller: examController.getExamWithQuestions,
+    },
+    {
+        method: 'GET',
         path: '/exams/:examId/without-answers',
         isAuthenticated: false,
         controller: examController.getExamWithoutAnswers,
@@ -91,7 +97,18 @@ const examRoutes: Array<routeType<any, any>> = [
             duration: Joi.number().allow(null),
         }),
     },
-
+    {
+        method: 'PATCH',
+        path: '/exams/:examId/archivedAt',
+        isAuthenticated: true,
+        controller: examController.updateExamArchivedAt,
+        checkAuthorization: accessControlBuilder.hasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+    },
     {
         method: 'DELETE',
         path: '/exams/:examId',

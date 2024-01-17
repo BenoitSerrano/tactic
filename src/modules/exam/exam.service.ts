@@ -1,3 +1,4 @@
+import { In, IsNull, Not } from 'typeorm';
 import { Exam } from './Exam.entity';
 import { dataSource } from '../../dataSource';
 import { examAdaptator } from './exam.adaptator';
@@ -5,8 +6,6 @@ import { User } from '../user';
 import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
-import { In } from 'typeorm';
-import { computeSumPoints } from './lib/computeSumPoints';
 import { buildExerciseService } from '../exercise';
 
 export { buildExamService };
@@ -18,9 +17,9 @@ function buildExamService() {
         updateExamName,
         updateExamDuration,
         getExams,
+        getExamWithQuestions,
         getAllExams,
         getExam,
-        getExamExercises,
         getExamWithoutAnswers,
         getExamQuestions,
         getExamsByIds,
@@ -28,6 +27,7 @@ function buildExamService() {
         deleteExam,
         getExamResults,
         duplicateExam,
+        updateExamArchivedAt,
     };
 
     return examService;
@@ -58,6 +58,42 @@ function buildExamService() {
         return examRepository.findOneOrFail({ where: { id: examId } });
     }
 
+    async function getExamWithQuestions(examId: Exam['id']) {
+        const questionService = buildQuestionService();
+        const exam = await examRepository.findOneOrFail({
+            where: { id: examId },
+            select: {
+                exercises: {
+                    id: true,
+                    name: true,
+                    instruction: true,
+                    defaultPoints: true,
+                    defaultQuestionKind: true,
+                    order: true,
+                    questions: { id: true, order: true },
+                },
+            },
+            order: { exercises: { order: 'ASC', questions: { order: 'ASC' } } },
+            relations: ['exercises', 'exercises.questions'],
+        });
+        const questionIds: Question['id'][] = [];
+        for (const exercise of exam.exercises) {
+            for (const question of exercise.questions) {
+                questionIds.push(question.id);
+            }
+        }
+
+        const questions = await questionService.getQuestions(questionIds);
+
+        return {
+            ...exam,
+            exercises: exam.exercises.map((exercise) => ({
+                ...exercise,
+                questions: exercise.questions.map(({ id }) => questions[id]),
+            })),
+        };
+    }
+
     async function getExamWithoutAnswers(examId: Exam['id']) {
         const exam = await getExamQuestions(examId);
         return {
@@ -77,7 +113,10 @@ function buildExamService() {
     }
 
     async function getExams(user: User) {
-        return examRepository.find({ where: { user }, order: { createdAt: 'DESC' } });
+        return examRepository.find({
+            where: { user, archivedAt: IsNull() },
+            order: { createdAt: 'DESC' },
+        });
     }
 
     async function getUserIdForExam(examId: Exam['id']): Promise<User['id']> {
@@ -87,41 +126,6 @@ function buildExamService() {
             relations: ['user'],
         });
         return exam.user.id;
-    }
-
-    async function getExamExercises(examId: Exam['id']) {
-        const exam = await examRepository.findOneOrFail({
-            where: { id: examId },
-            order: {
-                exercises: { order: 'ASC' },
-            },
-            select: {
-                id: true,
-                name: true,
-                exercises: {
-                    id: true,
-                    name: true,
-                    instruction: true,
-                    defaultQuestionKind: true,
-                    defaultPoints: true,
-                    order: true,
-                    questions: { id: true, points: true },
-                },
-            },
-            relations: ['exercises', 'exercises.questions'],
-        });
-        return {
-            ...exam,
-            exercises: exam.exercises.map((exercise) => ({
-                id: exercise.id,
-                name: exercise.name,
-                instruction: exercise.instruction,
-                defaultQuestionKind: exercise.defaultQuestionKind,
-                defaultPoints: exercise.defaultPoints,
-                order: exercise.order,
-                totalPoints: computeSumPoints(exercise.questions),
-            })),
-        };
     }
 
     async function getExamsByIds(examIds: Array<Exam['id']>) {
@@ -238,5 +242,10 @@ function buildExamService() {
         await exerciseService.duplicateExercises(newExam, exercises);
 
         return newExam;
+    }
+
+    async function updateExamArchivedAt(examId: Exam['id']) {
+        await examRepository.update({ id: examId }, { archivedAt: () => 'CURRENT_TIMESTAMP' });
+        return true;
     }
 }

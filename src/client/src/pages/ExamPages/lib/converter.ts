@@ -1,8 +1,10 @@
+import { TAT_BLANK_STRING } from '../../../constants';
 import { textSplitter } from '../../../lib/textSplitter';
 
 const SPLITTING_CHARACTER_FOR_TAT = '|';
 
 const converter = {
+    computeBlankCount,
     convertTextInputToAnswer,
     convertWordIndexToAnswerIndex,
     convertAnswerToTextInputs,
@@ -39,7 +41,7 @@ function computeBlankIndex(wordIndex: number, title: string) {
     let blankIndex = 0;
     for (let i = 0; i < wordIndex; i++) {
         const word = words[i];
-        if (word === '....') {
+        if (word === TAT_BLANK_STRING) {
             blankIndex++;
         }
     }
@@ -66,7 +68,7 @@ function convertWordIndexToAnswerIndex({ wordIndex, title }: { wordIndex: number
     let answerIndex = 0;
     for (let i = 0, wordCount = words.length; i < wordCount; i++) {
         const word = words[i];
-        if (word === '....') {
+        if (word === TAT_BLANK_STRING) {
             if (i === wordIndex) {
                 return answerIndex;
             } else {
@@ -79,7 +81,7 @@ function convertWordIndexToAnswerIndex({ wordIndex, title }: { wordIndex: number
 }
 
 function computeBlankCount(title: string) {
-    return textSplitter.split(title).filter((word) => word === '....').length;
+    return textSplitter.split(title).filter((word) => word === TAT_BLANK_STRING).length;
 }
 
 export { converter, SPLITTING_CHARACTER_FOR_TAT };

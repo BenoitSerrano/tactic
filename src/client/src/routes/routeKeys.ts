@@ -14,13 +14,13 @@ const ROUTE_KEYS = [
     'EXAM_DONE',
     'EXAMS',
     'STUDENTS',
-    'EXAM_EXERCISES',
-    'EXAM_QUESTIONS_EDITION',
     'EXAM_RESULTS',
     'EXAM_PREVIEWING',
+    'EXAM_EDITING',
     'EXAM_CHECKING',
     'TEACHER_HOME',
     'GROUPS',
+    'EXAM_ARCHIVED',
 ] as const;
 
 export { ROUTE_KEYS };

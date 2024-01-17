@@ -20,7 +20,7 @@ export class Question {
     @Column('simple-array', { default: '' })
     acceptableAnswers: string[];
 
-    @Column('int')
+    @Column('float')
     order: number;
 
     @Column('simple-array', { default: '' })

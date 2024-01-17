@@ -102,10 +102,8 @@ function buildQuestionController() {
         return questionService.deleteQuestion(Number(params.urlParams.questionId));
     }
 
-    async function updateQuestionsOrder(params: {
-        body: { orders: Array<{ id: Question['id']; order: number }> };
-    }) {
-        return questionService.updateQuestionsOrder(params.body.orders);
+    async function updateQuestionsOrder(params: { body: { orderedIds: Question['id'][] } }) {
+        return questionService.updateQuestionsOrder(params.body.orderedIds);
     }
 
     async function duplicateQuestion(params: {

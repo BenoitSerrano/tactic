@@ -17,6 +17,12 @@ type attemptApiType = {
         | undefined;
 };
 
+type examApiType = {
+    id: string;
+    name: string;
+    archivedAt: string | null;
+};
+
 function StudentHome() {
     const params = useParams();
     const studentId = params.studentId as string;
@@ -28,7 +34,7 @@ function StudentHome() {
         queryFn: () => api.searchAttempt({ examId, studentId }),
     });
 
-    const examQuery = useQuery({
+    const examQuery = useQuery<examApiType>({
         queryKey: ['exams', examId],
         queryFn: () => api.fetchExam(examId),
     });
@@ -44,11 +50,16 @@ function StudentHome() {
         },
     });
 
-    if (!attemptQuery.data) {
-        if (attemptQuery.isLoading) {
+    if (!attemptQuery.data || !examQuery.data) {
+        if (attemptQuery.isLoading || examQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
+    }
+
+    if (!!examQuery.data.archivedAt) {
+        const pathToNavigateTo = pathHandler.getRoutePath('EXAM_ARCHIVED');
+        return <Navigate to={pathToNavigateTo} />;
     }
 
     const pathKeyToNavigateTo = computePathKeyToNavigateTo(attemptQuery.data.attempt);
