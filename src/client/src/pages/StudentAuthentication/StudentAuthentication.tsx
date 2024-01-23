@@ -9,6 +9,7 @@ import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
 import { LoadingButton } from '@mui/lab';
 import { pathHandler } from '../../lib/pathHandler';
+import { attemptActionEncoder } from '../../lib/attemptActionEncoder';
 
 type studentType = {
     id: string;
@@ -18,6 +19,7 @@ type studentType = {
 function StudentAuthentication() {
     const params = useParams();
     const examId = params.examId as string;
+    const encodedAction = params.encodedAction as string;
     const query = useQuery({ queryKey: ['exams', examId], queryFn: () => api.fetchExam(examId) });
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
@@ -30,7 +32,9 @@ function StudentAuthentication() {
             const path = pathHandler.getRoutePath('STUDENT_HOME', {
                 examId,
                 studentId: student.id,
+                encodedAction,
             });
+
             navigate(path);
         },
         onError: (error) => {

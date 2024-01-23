@@ -4,14 +4,17 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_TAKING: {
         path: '/student/students/:studentId/attempts/:attemptId/take',
     },
+    EXAM_CONSULTING: {
+        path: '/student/students/:studentId/attempts/:attemptId/consult',
+    },
     EXAM_EDITING: {
         path: '/teacher/exams/:examId/edit',
     },
     STUDENT_HOME: {
-        path: '/student/exams/:examId/students/:studentId',
+        path: '/student/exams/:examId/students/:studentId/:encodedAction',
     },
     STUDENT_AUTHENTICATION: {
-        path: '/student/exams/:examId',
+        path: '/student/exams/:examId/:encodedAction',
     },
     RESET_PASSWORD_FAILURE: {
         path: '/reset-password-failure',
@@ -37,9 +40,7 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     HOME: {
         path: '/',
     },
-    EXAM_CONSULTING: {
-        path: '/student/students/:studentId/attempts/:attemptId/consult',
-    },
+
     EXAM_DONE: {
         path: '/student/students/:studentId/exam-done',
     },
@@ -61,6 +62,7 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
         path: `/teacher/groups`,
     },
     TEACHER_HOME: { path: `/teacher` },
+    ATTEMPT_NOT_CORRECTED: { path: `/student/attempt-not-corrected` },
 };
 
 export { ROUTE_PATHS };

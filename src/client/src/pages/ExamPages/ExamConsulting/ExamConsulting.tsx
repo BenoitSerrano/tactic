@@ -25,12 +25,12 @@ function ExamConsulting() {
         return <div />;
     }
 
-    const pathKeyToNavigateTo = computePathKeyToNavigateTo(attemptWithAnswersQuery.data);
+    const pathKeyToNavigateTo = computePathKeyToNavigateTo(attemptWithAnswersQuery.data, 'consult');
 
     if (pathKeyToNavigateTo !== 'EXAM_CONSULTING') {
         const pathToNavigateTo = pathHandler.getRoutePath(pathKeyToNavigateTo, {
             studentId,
-            attemptId: attemptWithAnswersQuery.data.id,
+            attemptId: attemptWithAnswersQuery.data.id || '',
         });
         return <Navigate to={pathToNavigateTo} />;
     }
