@@ -1,13 +1,22 @@
+import { attemptActionType } from './attemptActionEncoder';
+
 function computePathKeyToNavigateTo<attemptT extends { id: string; correctedAt: string | null }>(
     attempt: attemptT | undefined,
+    attemptAction: attemptActionType,
 ) {
     if (!attempt) {
         return 'STUDENT_HOME';
-    }
-    if (!!attempt.correctedAt) {
-        return 'EXAM_CONSULTING';
     } else {
-        return 'EXAM_TAKING';
+        switch (attemptAction) {
+            case 'take':
+                return 'EXAM_TAKING';
+            case 'consult':
+                if (!!attempt.correctedAt) {
+                    return 'EXAM_CONSULTING';
+                } else {
+                    return 'ATTEMPT_NOT_CORRECTED';
+                }
+        }
     }
 }
 

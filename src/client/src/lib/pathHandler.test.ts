@@ -19,16 +19,14 @@ describe('pathHandler', () => {
             );
         });
 
-        it('should return the route path with parameters and query parameters', () => {
+        it('should return the route path with query parameters', () => {
             const path = pathHandler.getRoutePath(
-                'STUDENT_AUTHENTICATION',
-                {
-                    examId: 'examId1',
-                },
-                { truc: 'machin', bidule: 'chouette' },
+                'RESET_PASSWORD',
+                {},
+                { resetPasswordRequestId: 'machin', bidule: 'chouette' },
             );
 
-            expect(path).toBe('/student/exams/examId1?truc=machin&bidule=chouette');
+            expect(path).toBe('/reset-password?resetPasswordRequestId=machin&bidule=chouette');
         });
     });
 

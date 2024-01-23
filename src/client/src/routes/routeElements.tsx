@@ -21,6 +21,7 @@ import { TeacherHome } from '../pages/TeacherHome';
 import { ROUTE_KEYS } from './routeKeys';
 import { ExamEditing } from '../pages/ExamPages/ExamEditing';
 import { ExamArchived } from '../pages/ExamArchived';
+import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -90,6 +91,7 @@ const ROUTE_ELEMENTS: Record<
     },
     TEACHER_HOME: { isAdmin: true, element: <TeacherHome /> },
     GROUPS: { isAdmin: true, element: <Groups /> },
+    ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
 };
 
 export { ROUTE_ELEMENTS };

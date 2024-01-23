@@ -7,6 +7,7 @@ import { Button } from '../components/Button';
 import { Loader } from '../components/Loader';
 import { pathHandler } from '../lib/pathHandler';
 import { computePathKeyToNavigateTo } from '../lib/computePathKeyToNavigateTo';
+import { attemptActionEncoder } from '../lib/attemptActionEncoder';
 
 type attemptApiType = {
     attempt:
@@ -27,6 +28,8 @@ function StudentHome() {
     const params = useParams();
     const studentId = params.studentId as string;
     const examId = params.examId as string;
+    const encodedAction = params.encodedAction as string;
+    const attemptAction = attemptActionEncoder.decode(encodedAction);
     const navigate = useNavigate();
 
     const attemptQuery = useQuery<attemptApiType>({
@@ -62,7 +65,11 @@ function StudentHome() {
         return <Navigate to={pathToNavigateTo} />;
     }
 
-    const pathKeyToNavigateTo = computePathKeyToNavigateTo(attemptQuery.data.attempt);
+    const pathKeyToNavigateTo = computePathKeyToNavigateTo(
+        attemptQuery.data.attempt,
+        attemptAction,
+    );
+    console.log(attemptAction);
 
     if (pathKeyToNavigateTo !== 'STUDENT_HOME') {
         const pathToNavigateTo = pathHandler.getRoutePath(pathKeyToNavigateTo, {

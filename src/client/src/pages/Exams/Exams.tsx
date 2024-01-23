@@ -2,10 +2,17 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+    MenuItem,
+    Menu as MuiMenu,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from '@mui/material';
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-// import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -23,12 +30,17 @@ import { pathHandler } from '../../lib/pathHandler';
 import { EditableName } from './EditableName';
 import { EditableDuration } from './EditableDuration';
 import { IconButton } from '../../components/IconButton';
+import { attemptActionEncoder, attemptActionType } from '../../lib/attemptActionEncoder';
 
 function Exams() {
     const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
+    const [currentCopyExamLinkMenu, setCurrentCopyExamLinkMenu] = useState<{
+        element: HTMLElement;
+        examId: string;
+    } | null>(null);
 
     const [isCreateExamModalOpen, setIsCreateExamModalOpen] = useState(false);
     const [isExamCreatedModalOpen, setIsExamCreatedModalOpen] = useState(false);
@@ -91,6 +103,25 @@ function Exams() {
 
     return (
         <>
+            <MuiMenu
+                anchorEl={currentCopyExamLinkMenu?.element}
+                open={!!currentCopyExamLinkMenu}
+                onClose={closeCopyExamLinkMenu}
+            >
+                <MenuItem
+                    onClick={buildCopyExamLinkToClipboard(currentCopyExamLinkMenu?.examId, 'take')}
+                >
+                    Copier le lien de passage de l'examen
+                </MenuItem>
+                <MenuItem
+                    onClick={buildCopyExamLinkToClipboard(
+                        currentCopyExamLinkMenu?.examId,
+                        'consult',
+                    )}
+                >
+                    Copier le lien de consultation des copies
+                </MenuItem>
+            </MuiMenu>
             <Menu
                 buttons={[
                     {
@@ -135,7 +166,7 @@ function Exams() {
                                 />
                                 <IconButton
                                     title="Copier le lien à partager aux étudiants"
-                                    onClick={buildCopyExamLinkToClipboard(exam.id)}
+                                    onClick={buildOnClickCopyExamLink(exam.id)}
                                     IconComponent={ContentCopyIcon}
                                 />
                                 <IconButton
@@ -181,6 +212,12 @@ function Exams() {
         setIsCreateExamModalOpen(true);
     }
 
+    function buildOnClickCopyExamLink(examId: string) {
+        return (event: React.MouseEvent<HTMLElement>) => {
+            setCurrentCopyExamLinkMenu({ element: event.currentTarget, examId });
+        };
+    }
+
     function onExamCreated() {
         queryClient.invalidateQueries({ queryKey: ['exams'] });
         setIsExamCreatedModalOpen(true);
@@ -191,10 +228,9 @@ function Exams() {
         return () => navigate(path);
     }
 
-    // function buildNavigateToEdition(examId: string) {
-    //     const path = pathHandler.getRoutePath('EXAM_EXERCISES', { examId });
-    //     return () => navigate(path);
-    // }
+    function closeCopyExamLinkMenu() {
+        setCurrentCopyExamLinkMenu(null);
+    }
 
     function buildNavigateToExamEdition(examId: string) {
         const path = pathHandler.getRoutePath('EXAM_EDITING', { examId });
@@ -206,11 +242,22 @@ function Exams() {
         return () => navigate(path);
     }
 
-    function buildCopyExamLinkToClipboard(examId: string) {
+    function buildCopyExamLinkToClipboard(
+        examId: string | undefined,
+        attemptAction: attemptActionType,
+    ) {
         return () => {
-            const path = pathHandler.getRoutePath('STUDENT_AUTHENTICATION', { examId });
+            if (!examId) {
+                return;
+            }
+            const encodedAction = attemptActionEncoder.encode(attemptAction);
+            const path = pathHandler.getRoutePath('STUDENT_AUTHENTICATION', {
+                examId,
+                encodedAction,
+            });
             const url = `${config.HOST_URL}${path}`;
             navigator.clipboard.writeText(url);
+            closeCopyExamLinkMenu();
             displayAlert({
                 text: 'Le lien a bien été copié dans le presse-papiers',
                 variant: 'success',

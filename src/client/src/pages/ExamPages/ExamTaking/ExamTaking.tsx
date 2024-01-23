@@ -71,7 +71,7 @@ function ExamTaking() {
             </NotLoggedInPage>
         );
     }
-    const pathKeyToNavigateTo = computePathKeyToNavigateTo(query.data);
+    const pathKeyToNavigateTo = computePathKeyToNavigateTo(query.data, 'take');
 
     if (pathKeyToNavigateTo !== 'EXAM_TAKING') {
         const pathToNavigateTo = pathHandler.getRoutePath(pathKeyToNavigateTo, {
