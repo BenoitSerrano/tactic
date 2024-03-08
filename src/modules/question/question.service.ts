@@ -216,7 +216,10 @@ function buildQuestionService() {
             select: { exercise: { id: true, exam: { id: true } } },
             relations: ['exercise', 'exercise.exam'],
         });
-        const questionsByExamId: Record<Exam['id'], questionDtoType[]> = {};
+        const questionsByExamId: Record<Exam['id'], questionDtoType[]> = examIds.reduce(
+            (acc, examId) => ({ ...acc, [examId]: [] }),
+            {},
+        );
         for (const question of questions) {
             const questionDto = questionEncoder.decodeQuestion(question);
             questionsByExamId[question.exercise.exam.id] = questionsByExamId[
