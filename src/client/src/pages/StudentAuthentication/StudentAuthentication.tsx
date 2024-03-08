@@ -9,7 +9,6 @@ import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
 import { LoadingButton } from '@mui/lab';
 import { pathHandler } from '../../lib/pathHandler';
-import { attemptActionEncoder } from '../../lib/attemptActionEncoder';
 
 type studentType = {
     id: string;
