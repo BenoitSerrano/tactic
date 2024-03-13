@@ -1,14 +1,16 @@
 import { styled } from '@mui/material/styles';
 import { Header } from './Header';
 import { HEADER_HEIGHT } from '../constants';
+import { Logo } from './Logo';
 
-function NotLoggedInPage(props: {
-    children: React.ReactElement | React.ReactElement[];
-    title?: JSX.Element;
-}) {
+function NotLoggedInPage(props: { children: React.ReactNode; title?: JSX.Element }) {
     return (
         <Container>
-            <Header buttons={[]} title={props.title} />
+            <Header
+                buttons={[]}
+                LeftContent={<Logo variant="full" />}
+                MiddleContent={props.title}
+            />
             <ChildrenContainer>{props.children}</ChildrenContainer>
         </Container>
     );

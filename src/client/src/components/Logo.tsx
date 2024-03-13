@@ -1,12 +1,15 @@
 const HEIGHT = 35;
 
 const logoUrlMapping = {
-    mini: 'https://tactic-app.fr/logo_mini.png',
+    mini: './logo_mini.png',
     full: 'https://tactic-app.fr/full_logo.png',
 };
 
-function Logo(props: { variant: 'mini' | 'full' }) {
+type logoVariantType = 'mini' | 'full';
+
+function Logo(props: { variant: logoVariantType }) {
     return <img src={logoUrlMapping[props.variant]} alt="Logo Tactic" height={HEIGHT} />;
 }
 
+export type { logoVariantType };
 export { Logo };

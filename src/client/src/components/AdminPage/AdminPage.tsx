@@ -6,17 +6,24 @@ import { Header } from '../Header';
 import { LogoutButton } from './LogoutButton';
 import { HEADER_HEIGHT } from '../../constants';
 import { pathHandler } from '../../lib/pathHandler';
+import { Link } from '../Link';
+import { Logo } from '../Logo';
 
 function AdminPage(props: { children: React.ReactNode | null }) {
     const token = localStorage.jwtTokenHandler.get();
     if (!token) {
         return <Navigate to="/sign-in" />;
     }
+
     return (
         <Container>
             <Header
                 buttons={[<LogoutButton key="logout-button" />]}
-                logoLink={pathHandler.getRoutePath('TEACHER_HOME')}
+                LeftContent={
+                    <Link to={pathHandler.getRoutePath('TEACHER_HOME')}>
+                        <Logo variant="full" />
+                    </Link>
+                }
             />
 
             <ContentContainer>

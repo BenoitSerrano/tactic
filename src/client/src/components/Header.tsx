@@ -1,20 +1,17 @@
 import { styled } from '@mui/material';
-import { Logo } from './Logo';
-import { Link } from './Link';
 import { HEADER_HEIGHT } from '../constants';
 
-function Header(props: { logoLink?: string; buttons: Array<JSX.Element>; title?: JSX.Element }) {
+function Header(props: {
+    LeftContent: React.ReactNode;
+    MiddleContent?: React.ReactNode;
+    buttons: Array<React.ReactNode>;
+}) {
     return (
         <FixedContainer>
             <ContentContainer>
-                {props.logoLink ? (
-                    <Link to={props.logoLink}>
-                        <Logo variant="full" />
-                    </Link>
-                ) : (
-                    <Logo variant="full" />
-                )}
-                <TitleContainer>{props.title}</TitleContainer>
+                <LeftContainer>{props.LeftContent}</LeftContainer>
+
+                {!!props.MiddleContent && <MiddleContainer>{props.MiddleContent}</MiddleContainer>}
 
                 <ButtonsContainer>{props.buttons}</ButtonsContainer>
             </ContentContainer>
@@ -39,7 +36,8 @@ const ContentContainer = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
 }));
-const TitleContainer = styled('div')({ display: 'flex' });
+const MiddleContainer = styled('div')({ display: 'flex' });
+const LeftContainer = styled('div')({ display: 'flex' });
 
 const ButtonsContainer = styled('div')({ display: 'flex' });
 
