@@ -5,7 +5,6 @@ import { Link } from '../../components/Link';
 import { Button } from '../../components/Button';
 import { Logo } from '../../components/Logo';
 import { pathHandler } from '../../lib/pathHandler';
-import { HEADER_HEIGHT } from '../../constants';
 import { Header } from '../../components/Header';
 
 function HomeHeader() {
@@ -106,23 +105,11 @@ function HomeHeader() {
     }
 }
 
-const Container = styled('div')(({ theme }) => ({
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: HEADER_HEIGHT,
-    backgroundColor: 'white',
-    borderBottom: `${theme.palette.divider} 1px solid`,
-}));
-
 const MenuContainer = styled('div')({ display: 'flex', justifyContent: 'space-between' });
 const LinkContainer = styled('div')(({ theme }) => ({
     paddingRight: theme.spacing(6),
     paddingLeft: theme.spacing(6),
 }));
-const ButtonsContainer = styled('div')({ display: 'flex' });
 const ButtonContainer = styled('div')(({ theme }) => ({
     marginRight: theme.spacing(1),
     marginLeft: theme.spacing(1),
