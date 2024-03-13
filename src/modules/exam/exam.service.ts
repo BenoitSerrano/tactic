@@ -37,7 +37,8 @@ function buildExamService() {
         exam.name = name;
         exam.duration = duration !== null ? duration : null;
         exam.user = user;
-        return examRepository.save(exam);
+        const insertedExam = await examRepository.save(exam);
+        return insertedExam;
     }
 
     async function updateExamName(examId: Exam['id'], name: string) {

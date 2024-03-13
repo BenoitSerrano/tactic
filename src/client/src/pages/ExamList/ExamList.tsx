@@ -25,7 +25,6 @@ import { Loader } from '../../components/Loader';
 import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
-import { ExamCreatedModal } from './ExamCreatedModal';
 import { examApiType } from './types';
 import { pathHandler } from '../../lib/pathHandler';
 import { EditableName } from './EditableName';
@@ -46,7 +45,6 @@ function ExamList() {
     } | null>(null);
 
     const [isCreateExamModalOpen, setIsCreateExamModalOpen] = useState(false);
-    const [isExamCreatedModalOpen, setIsExamCreatedModalOpen] = useState(false);
     const deleteExamMutation = useMutation({
         mutationFn: api.deleteExam,
         onSuccess: () => {
@@ -212,10 +210,6 @@ function ExamList() {
                 onExamCreated={onExamCreated}
                 close={() => setIsCreateExamModalOpen(false)}
             />
-            <ExamCreatedModal
-                isOpen={isExamCreatedModalOpen}
-                close={() => setIsExamCreatedModalOpen(false)}
-            />
         </>
     );
 
@@ -229,9 +223,11 @@ function ExamList() {
         };
     }
 
-    function onExamCreated() {
+    function onExamCreated(examId: string) {
         queryClient.invalidateQueries({ queryKey: ['exams'] });
-        setIsExamCreatedModalOpen(true);
+        const path = pathHandler.getRoutePath('EXAM_EDITING', { examId });
+
+        navigate(path);
     }
 
     function buildNavigateToPreview(examId: string) {

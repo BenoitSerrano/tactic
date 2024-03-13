@@ -10,7 +10,7 @@ import { EXAM_DEFAULT_DURATION } from './constants';
 function ExamCreationModal(props: {
     close: () => void;
     isOpen: boolean;
-    onExamCreated: () => void;
+    onExamCreated: (examId: string) => void;
 }) {
     const [name, setName] = useState('');
     const [duration, setDuration] = useState(`${EXAM_DEFAULT_DURATION}`);
@@ -20,12 +20,12 @@ function ExamCreationModal(props: {
 
     const createExamMutation = useMutation({
         mutationFn: api.createExam,
-        onSuccess: () => {
+        onSuccess: (exam) => {
             setDuration(`${EXAM_DEFAULT_DURATION}`);
             setName('');
             setIsThereDuration(true);
             queryClient.invalidateQueries({ queryKey: ['exams'] });
-            props.onExamCreated();
+            props.onExamCreated(exam.id);
             props.close();
         },
     });
