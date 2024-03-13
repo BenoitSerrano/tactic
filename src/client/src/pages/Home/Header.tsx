@@ -13,7 +13,7 @@ function Header() {
     return (
         <Container>
             <Link to="/">
-                <Logo />
+                <Logo variant="full" />
             </Link>
             <MenuContainer>
                 <LinkContainer>

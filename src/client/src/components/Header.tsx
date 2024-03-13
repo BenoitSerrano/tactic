@@ -9,10 +9,10 @@ function Header(props: { logoLink?: string; buttons: Array<JSX.Element>; title?:
             <ContentContainer>
                 {props.logoLink ? (
                     <Link to={props.logoLink}>
-                        <Logo />
+                        <Logo variant="full" />
                     </Link>
                 ) : (
-                    <Logo />
+                    <Logo variant="full" />
                 )}
                 <TitleContainer>{props.title}</TitleContainer>
 

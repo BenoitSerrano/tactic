@@ -5,7 +5,7 @@ function Footer() {
     return (
         <Container>
             <InnerContainer>
-                <Logo />
+                <Logo variant="full" />
                 <Typography>Copyright © 2023 Tactic SAS</Typography>
             </InnerContainer>
         </Container>
