@@ -1,5 +1,5 @@
 import { styled } from '@mui/material';
-import { Header } from './Header';
+import { HomeHeader } from './HomeHeader';
 import { useLocation } from 'react-router-dom';
 import { ProductContent } from './ProductContent';
 import { PricingContent } from './PricingContent';
@@ -9,7 +9,7 @@ function Home() {
     const { hash } = useLocation();
     return (
         <Container>
-            <Header />
+            <HomeHeader />
             {renderContent()}
             <Footer />
         </Container>

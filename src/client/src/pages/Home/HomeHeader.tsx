@@ -7,7 +7,7 @@ import { Logo } from '../../components/Logo';
 import { pathHandler } from '../../lib/pathHandler';
 import { HEADER_HEIGHT } from '../../constants';
 
-function Header() {
+function HomeHeader() {
     const navigate = useNavigate();
     const jwtToken = localStorage.jwtTokenHandler.get();
     return (
@@ -83,4 +83,4 @@ const ButtonContainer = styled('div')(({ theme }) => ({
     marginLeft: theme.spacing(1),
 }));
 
-export { Header };
+export { HomeHeader };
