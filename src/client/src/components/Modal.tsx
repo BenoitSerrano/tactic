@@ -89,10 +89,10 @@ const modalDefaultProperties = {
 
 const SmallModalContent = styled('div')({
     ...modalDefaultProperties,
-    minWidth: '40%',
-    minHeight: '40%',
-    maxHeight: '40%',
-    maxWidth: '40%',
+    minWidth: '45%',
+    minHeight: '45%',
+    maxHeight: '45%',
+    maxWidth: '45%',
 });
 
 const LargeModalContent = styled('div')({
