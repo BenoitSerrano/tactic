@@ -10,7 +10,7 @@ function AdminSideMenu() {
             <SideItemMenu
                 title="Mes examens"
                 IconComponent={SchoolIcon}
-                path={pathHandler.getRoutePath('EXAMS')}
+                path={pathHandler.getRoutePath('EXAM_LIST')}
             />
             <SideItemMenu
                 title="Mes groupes"

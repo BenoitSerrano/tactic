@@ -18,7 +18,7 @@ function computeBreadcrumbs(pathname: string): Array<{ label: string; href?: str
 
     if (path[1] === 'exams') {
         const examsHref = path.length > 2 ? `/${path.slice(0, 2).join('/')}` : undefined;
-        breadcrumbs.push({ label: 'Liste des examens', href: examsHref });
+        breadcrumbs.push({ label: 'Mes examens', href: examsHref });
         if (path.length === 2) {
             return breadcrumbs;
         } else if (path[3] === 'results') {

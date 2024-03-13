@@ -47,7 +47,7 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_ARCHIVED: {
         path: '/student/exam-archived',
     },
-    EXAMS: { path: `/teacher/exams` },
+    EXAM_LIST: { path: `/teacher/exams` },
     STUDENTS: { path: `/teacher/groups/:groupId/students` },
     EXAM_RESULTS: {
         path: `/teacher/exams/:examId/results`,

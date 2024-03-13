@@ -12,7 +12,7 @@ const ROUTE_KEYS = [
     'HOME',
     'EXAM_CONSULTING',
     'EXAM_DONE',
-    'EXAMS',
+    'EXAM_LIST',
     'STUDENTS',
     'EXAM_RESULTS',
     'EXAM_PREVIEWING',

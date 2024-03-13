@@ -33,8 +33,9 @@ import { EditableDuration } from './EditableDuration';
 import { IconButton } from '../../components/IconButton';
 import { attemptActionEncoder, attemptActionType } from '../../lib/attemptActionEncoder';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
+import { PageTitle } from '../../components/PageTitle';
 
-function Exams() {
+function ExamList() {
     const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
@@ -124,81 +125,86 @@ function Exams() {
                     Copier le lien de consultation des copies
                 </MenuItem>
             </MuiMenu>
-            <Menu
-                buttons={[
-                    {
-                        onClick: openCreationModal,
-                        IconComponent: PostAddIcon,
-                        title: 'Créer un examen',
-                    },
-                ]}
-            />
+
             <ContentContainer>
                 <AdminSideMenu />
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell width={290}>Actions</TableCell>
-                            <TableCell>Nom du test</TableCell>
-                            <TableCell width={170}>Durée</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {query.data.map((exam) => (
-                            <TableRow key={exam.id}>
-                                <TableCell>
-                                    <IconButton
-                                        IconComponent={VisibilityIcon}
-                                        title="Prévisualiser l'examen"
-                                        onClick={buildNavigateToPreview(exam.id)}
-                                    />
-                                    {/* <IconButton
+
+                <TableContainer>
+                    <PageTitle title="Mes examens" />
+                    <Menu
+                        buttons={[
+                            {
+                                onClick: openCreationModal,
+                                IconComponent: PostAddIcon,
+                                title: 'Créer un examen',
+                            },
+                        ]}
+                    />
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell width={290}>Actions</TableCell>
+                                <TableCell>Nom du test</TableCell>
+                                <TableCell width={170}>Durée</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {query.data.map((exam) => (
+                                <TableRow key={exam.id}>
+                                    <TableCell>
+                                        <IconButton
+                                            IconComponent={VisibilityIcon}
+                                            title="Prévisualiser l'examen"
+                                            onClick={buildNavigateToPreview(exam.id)}
+                                        />
+                                        {/* <IconButton
                                     title="Accéder à la liste des exercices"
                                     IconComponent={FormatListBulletedIcon}
                                     onClick={buildNavigateToEdition(exam.id)}
                                 /> */}
-                                    <IconButton
-                                        title="Éditer l'examen"
-                                        IconComponent={EditNoteIcon}
-                                        onClick={buildNavigateToExamEdition(exam.id)}
-                                    />
+                                        <IconButton
+                                            title="Éditer l'examen"
+                                            IconComponent={EditNoteIcon}
+                                            onClick={buildNavigateToExamEdition(exam.id)}
+                                        />
 
-                                    <IconButton
-                                        title="Voir les copies des étudiants"
-                                        IconComponent={RateReviewIcon}
-                                        onClick={buildNavigateToResults(exam.id)}
-                                    />
-                                    <IconButton
-                                        title="Copier le lien à partager aux étudiants"
-                                        onClick={buildOnClickCopyExamLink(exam.id)}
-                                        IconComponent={ContentCopyIcon}
-                                    />
-                                    <IconButton
-                                        title="Dupliquer l'examen"
-                                        IconComponent={ScannerIcon}
-                                        onClick={buildDuplicateExam(exam.id)}
-                                    />
-                                    <IconButton
-                                        IconComponent={ArchiveIcon}
-                                        title="Archiver l'examen"
-                                        onClick={buildArchiveExam(exam.id)}
-                                    />
-                                    <IconButton
-                                        IconComponent={DeleteForeverIcon}
-                                        title="Supprimer l'examen"
-                                        onClick={buildDeleteExam(exam.id)}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <EditableName exam={exam} />
-                                </TableCell>
-                                <TableCell>
-                                    <EditableDuration exam={exam} />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                                        <IconButton
+                                            title="Voir les copies des étudiants"
+                                            IconComponent={RateReviewIcon}
+                                            onClick={buildNavigateToResults(exam.id)}
+                                        />
+                                        <IconButton
+                                            title="Copier le lien à partager aux étudiants"
+                                            onClick={buildOnClickCopyExamLink(exam.id)}
+                                            IconComponent={ContentCopyIcon}
+                                        />
+                                        <IconButton
+                                            title="Dupliquer l'examen"
+                                            IconComponent={ScannerIcon}
+                                            onClick={buildDuplicateExam(exam.id)}
+                                        />
+                                        <IconButton
+                                            IconComponent={ArchiveIcon}
+                                            title="Archiver l'examen"
+                                            onClick={buildArchiveExam(exam.id)}
+                                        />
+                                        <IconButton
+                                            IconComponent={DeleteForeverIcon}
+                                            title="Supprimer l'examen"
+                                            onClick={buildDeleteExam(exam.id)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <EditableName exam={exam} />
+                                    </TableCell>
+                                    <TableCell>
+                                        <EditableDuration exam={exam} />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </ContentContainer>
 
             <ExamCreationModal
@@ -301,6 +307,7 @@ function Exams() {
     }
 }
 
-const ContentContainer = styled('div')(({ theme }) => ({ display: 'flex' }));
+const ContentContainer = styled('div')({ display: 'flex' });
+const TableContainer = styled('div')({});
 
-export { Exams };
+export { ExamList };

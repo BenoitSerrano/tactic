@@ -3,13 +3,13 @@ import { computeBreadcrumbs } from './computeBreadcrumbs';
 
 describe('computeBreadcrumbs', () => {
     it("returns exams when you're on exam page", () => {
-        const pathname = pathHandler.getRoutePath('EXAMS');
+        const pathname = pathHandler.getRoutePath('EXAM_LIST');
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: '/teacher' },
-            { label: 'Liste des examens' },
+            { label: 'Mes examens' },
         ]);
     });
 
@@ -20,7 +20,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Liste des examens', href: '/teacher/exams' },
+            { label: 'Mes examens', href: '/teacher/exams' },
             { label: 'Édition' },
         ]);
     });
@@ -32,7 +32,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Liste des examens', href: '/teacher/exams' },
+            { label: 'Mes examens', href: '/teacher/exams' },
             { label: 'Résultats' },
         ]);
     });
@@ -44,7 +44,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Liste des examens', href: '/teacher/exams' },
+            { label: 'Mes examens', href: '/teacher/exams' },
             { label: 'Prévisualisation' },
         ]);
     });
@@ -59,7 +59,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Liste des examens', href: '/teacher/exams' },
+            { label: 'Mes examens', href: '/teacher/exams' },
             { label: 'Résultats', href: '/teacher/exams/examId/results' },
             { label: 'Correction de copie' },
         ]);

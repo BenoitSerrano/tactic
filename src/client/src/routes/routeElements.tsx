@@ -5,7 +5,7 @@ import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
 import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamResults } from '../pages/ExamResults';
-import { Exams } from '../pages/Exams';
+import { ExamList } from '../pages/ExamList';
 import { Groups } from '../pages/StudentsPages/Groups';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
@@ -74,7 +74,7 @@ const ROUTE_ELEMENTS: Record<
     EXAM_ARCHIVED: {
         element: <ExamArchived />,
     },
-    EXAMS: { isAdmin: true, element: <Exams /> },
+    EXAM_LIST: { isAdmin: true, element: <ExamList /> },
     STUDENTS: { isAdmin: true, element: <Students /> },
     EXAM_RESULTS: {
         isAdmin: true,
@@ -89,7 +89,7 @@ const ROUTE_ELEMENTS: Record<
 
         element: <ExamChecking />,
     },
-    TEACHER_HOME: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAMS.path} /> },
+    TEACHER_HOME: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} /> },
     GROUPS: { isAdmin: true, element: <Groups /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
 };

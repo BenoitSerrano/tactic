@@ -5,6 +5,7 @@ import { Breadcrumbs } from './Breadcrumbs';
 import { Header } from '../Header';
 import { LogoutButton } from './LogoutButton';
 import { HEADER_HEIGHT } from '../../constants';
+import { pathHandler } from '../../lib/pathHandler';
 
 function AdminPage(props: { children: React.ReactNode | null }) {
     const token = localStorage.jwtTokenHandler.get();
@@ -13,7 +14,10 @@ function AdminPage(props: { children: React.ReactNode | null }) {
     }
     return (
         <Container>
-            <Header buttons={[<LogoutButton key="logout-button" />]} logoLink="/teacher" />
+            <Header
+                buttons={[<LogoutButton key="logout-button" />]}
+                logoLink={pathHandler.getRoutePath('TEACHER_HOME')}
+            />
 
             <ContentContainer>
                 <Breadcrumbs />
