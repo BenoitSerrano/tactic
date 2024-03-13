@@ -2,14 +2,6 @@ import { pathHandler } from '../../../lib/pathHandler';
 import { computeBreadcrumbs } from './computeBreadcrumbs';
 
 describe('computeBreadcrumbs', () => {
-    it("returns home when you're home", () => {
-        const pathname = pathHandler.getRoutePath('TEACHER_HOME');
-
-        const breadcrumbs = computeBreadcrumbs(pathname);
-
-        expect(breadcrumbs).toEqual([{ label: 'Accueil' }]);
-    });
-
     it("returns exams when you're on exam page", () => {
         const pathname = pathHandler.getRoutePath('EXAMS');
 
@@ -27,7 +19,7 @@ describe('computeBreadcrumbs', () => {
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: '/teacher' },
+            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Liste des examens', href: '/teacher/exams' },
             { label: 'Édition' },
         ]);
@@ -39,7 +31,7 @@ describe('computeBreadcrumbs', () => {
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: '/teacher' },
+            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Liste des examens', href: '/teacher/exams' },
             { label: 'Résultats' },
         ]);
@@ -51,7 +43,7 @@ describe('computeBreadcrumbs', () => {
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: '/teacher' },
+            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Liste des examens', href: '/teacher/exams' },
             { label: 'Prévisualisation' },
         ]);
@@ -66,7 +58,7 @@ describe('computeBreadcrumbs', () => {
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: '/teacher' },
+            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Liste des examens', href: '/teacher/exams' },
             { label: 'Résultats', href: '/teacher/exams/examId/results' },
             { label: 'Correction de copie' },
@@ -79,7 +71,7 @@ describe('computeBreadcrumbs', () => {
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: '/teacher' },
+            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Mes groupes' },
         ]);
     });

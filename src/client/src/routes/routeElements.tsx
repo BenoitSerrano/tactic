@@ -17,11 +17,12 @@ import { SignIn } from '../pages/SignIn';
 import { StudentAuthentication } from '../pages/StudentAuthentication';
 import { StudentHome } from '../pages/StudentHome';
 import { Students } from '../pages/StudentsPages/Students';
-import { TeacherHome } from '../pages/TeacherHome';
 import { ROUTE_KEYS } from './routeKeys';
 import { ExamEditing } from '../pages/ExamPages/ExamEditing';
 import { ExamArchived } from '../pages/ExamArchived';
 import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
+import { Navigate } from 'react-router-dom';
+import { ROUTE_PATHS } from './routePaths';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -77,7 +78,6 @@ const ROUTE_ELEMENTS: Record<
     STUDENTS: { isAdmin: true, element: <Students /> },
     EXAM_RESULTS: {
         isAdmin: true,
-
         element: <ExamResults />,
     },
     EXAM_PREVIEWING: {
@@ -89,7 +89,7 @@ const ROUTE_ELEMENTS: Record<
 
         element: <ExamChecking />,
     },
-    TEACHER_HOME: { isAdmin: true, element: <TeacherHome /> },
+    TEACHER_HOME: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAMS.path} /> },
     GROUPS: { isAdmin: true, element: <Groups /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
 };
