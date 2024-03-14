@@ -253,7 +253,7 @@ function ExamList() {
         examId: string | undefined,
         attemptAction: attemptActionType,
     ) {
-        return () => {
+        return async () => {
             if (!examId) {
                 return;
             }
@@ -263,12 +263,21 @@ function ExamList() {
                 encodedAction,
             });
             const url = `${config.HOST_URL}${path}`;
-            navigator.clipboard.writeText(url);
+            try {
+                await navigator.clipboard.writeText(url);
+                displayAlert({
+                    text: 'Le lien a bien été copié dans le presse-papiers',
+                    variant: 'success',
+                });
+            } catch (error) {
+                console.error(error);
+                displayAlert({
+                    autoHideDuration: null,
+                    variant: 'error',
+                    text: `Le lien n'a pas pu être copié dans le presse-papiers. Vous pouvez le copier ici : ${url}`,
+                });
+            }
             closeCopyExamLinkMenu();
-            displayAlert({
-                text: 'Le lien a bien été copié dans le presse-papiers',
-                variant: 'success',
-            });
         };
     }
 
