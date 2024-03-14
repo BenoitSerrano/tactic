@@ -8,9 +8,11 @@ import { HEADER_HEIGHT } from '../../constants';
 import { pathHandler } from '../../lib/pathHandler';
 import { Link } from '../Link';
 import { Logo } from '../Logo';
+import { EditingBreadcrumbs } from './EditingBreadcrumbs';
 
 function AdminPage(props: { children: React.ReactNode | null }) {
     const token = localStorage.jwtTokenHandler.get();
+
     if (!token) {
         return <Navigate to="/sign-in" />;
     }
@@ -19,6 +21,7 @@ function AdminPage(props: { children: React.ReactNode | null }) {
         <Container>
             <Header
                 buttons={[<LogoutButton key="logout-button" />]}
+                MiddleContent={<EditingBreadcrumbs />}
                 LeftContent={
                     <Link to={pathHandler.getRoutePath('TEACHER_HOME')}>
                         <Logo variant="full" />

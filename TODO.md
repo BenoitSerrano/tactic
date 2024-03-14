@@ -1,2 +1,4 @@
 -   afficher en surbrillance un élément du menu lorsqu'il est actif
 -   afficher dans le header les 4 éléments du menu Examen > Paramètres > Collecte des réponses > Résultat
+-   afficher une boîte vide et un message si pas d'examen
+-   afficher un groupe vide et un message si pas de group

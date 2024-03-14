@@ -31,9 +31,21 @@ const ROUTE_ELEMENTS: Record<
     EXAM_TAKING: {
         element: <ExamTaking />,
     },
-    EXAM_EDITING: {
+    EXAM_EDITING_CONTENT: {
         isAdmin: true,
         element: <ExamEditing />,
+    },
+    EXAM_EDITING_PARAMETERS: {
+        isAdmin: true,
+        element: <div />,
+    },
+    EXAM_EDITING_COLLECT: {
+        isAdmin: true,
+        element: <div />,
+    },
+    EXAM_EDITING_RESULTS: {
+        isAdmin: true,
+        element: <div />,
     },
     STUDENT_HOME: {
         element: <StudentHome />,

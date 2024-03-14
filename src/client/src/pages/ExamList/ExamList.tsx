@@ -225,7 +225,7 @@ function ExamList() {
 
     function onExamCreated(examId: string) {
         queryClient.invalidateQueries({ queryKey: ['exams'] });
-        const path = pathHandler.getRoutePath('EXAM_EDITING', { examId });
+        const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
 
         navigate(path);
     }
@@ -240,7 +240,7 @@ function ExamList() {
     }
 
     function buildNavigateToExamEdition(examId: string) {
-        const path = pathHandler.getRoutePath('EXAM_EDITING', { examId });
+        const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
         return () => navigate(path);
     }
 

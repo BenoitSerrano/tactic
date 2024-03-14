@@ -14,7 +14,7 @@ describe('computeBreadcrumbs', () => {
     });
 
     it("returns exams edit when you're on exam edit page", () => {
-        const pathname = pathHandler.getRoutePath('EXAM_EDITING', { examId: 'examId' });
+        const pathname = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' });
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
