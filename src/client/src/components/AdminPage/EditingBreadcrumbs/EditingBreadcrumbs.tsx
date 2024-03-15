@@ -17,7 +17,7 @@ function EditingBreadcrumbs() {
         for (let i = 0; i < editingBreadcrumbs.length; i++) {
             const editingBreadcrumb = editingBreadcrumbs[i];
             const renderedBreadcrumb = (
-                <BreadcrumbContainer>
+                <BreadcrumbContainer key={`editingBreadcrumb-${editingBreadcrumb.label}`}>
                     <Typography>{editingBreadcrumb.label}</Typography>
                 </BreadcrumbContainer>
             );
@@ -25,7 +25,7 @@ function EditingBreadcrumbs() {
             renderedBreadcrumbs.push(renderedBreadcrumb);
 
             if (i < editingBreadcrumbs.length - 1) {
-                renderedBreadcrumbs.push(<Chevron />);
+                renderedBreadcrumbs.push(<Chevron key={`chevron-${i}`} />);
             }
         }
         return renderedBreadcrumbs;
