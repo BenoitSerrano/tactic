@@ -7,8 +7,15 @@ import { extractUserIdFromHeader } from './extractUserIdFromHeader';
 
 export { buildAuthenticatedController };
 
-function buildAuthenticatedController<paramsT extends Record<string, string>, bodyT>(
-    controller: (params: { urlParams: paramsT; body: bodyT }, user: User) => any | Promise<any>,
+function buildAuthenticatedController<
+    paramsT extends Record<string, string>,
+    queryT extends Record<string, string>,
+    bodyT,
+>(
+    controller: (
+        params: { query: queryT; urlParams: paramsT; body: bodyT },
+        user: User,
+    ) => any | Promise<any>,
     options?: {
         schema?: Joi.Schema;
         checkAuthorization?: (params: paramsT, user: User) => void | Promise<void>;
@@ -50,6 +57,7 @@ function buildAuthenticatedController<paramsT extends Record<string, string>, bo
         try {
             const result = await controller(
                 {
+                    query: req.query as queryT,
                     urlParams: req.params as paramsT,
                     body: req.body,
                 },

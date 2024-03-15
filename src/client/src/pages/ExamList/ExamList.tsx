@@ -33,9 +33,13 @@ import { IconButton } from '../../components/IconButton';
 import { attemptActionEncoder, attemptActionType } from '../../lib/attemptActionEncoder';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { PageTitle } from '../../components/PageTitle';
+import { examFilterType } from '../../types';
 
-function ExamList() {
-    const query = useQuery<Array<examApiType>>({ queryKey: ['exams'], queryFn: api.fetchExams });
+function ExamList(props: { filter: examFilterType }) {
+    const examListQuery = useQuery<Array<examApiType>>({
+        queryKey: [`exams-${props.filter}`],
+        queryFn: () => api.fetchExams(props.filter),
+    });
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
@@ -95,12 +99,14 @@ function ExamList() {
         },
     });
 
-    if (!query.data) {
-        if (query.isLoading) {
+    if (!examListQuery.data) {
+        if (examListQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
     }
+
+    const title = computeTitle(props.filter);
 
     return (
         <>
@@ -128,7 +134,7 @@ function ExamList() {
                 <AdminSideMenu />
 
                 <TableContainer>
-                    <PageTitle title="Mes examens" />
+                    <PageTitle title={title} />
                     <Menu
                         buttons={[
                             {
@@ -147,7 +153,7 @@ function ExamList() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {query.data.map((exam) => (
+                            {examListQuery.data.map((exam) => (
                                 <TableRow key={exam.id}>
                                     <TableCell>
                                         <IconButton
@@ -155,17 +161,11 @@ function ExamList() {
                                             title="Prévisualiser l'examen"
                                             onClick={buildNavigateToPreview(exam.id)}
                                         />
-                                        {/* <IconButton
-                                    title="Accéder à la liste des exercices"
-                                    IconComponent={FormatListBulletedIcon}
-                                    onClick={buildNavigateToEdition(exam.id)}
-                                /> */}
                                         <IconButton
                                             title="Éditer l'examen"
                                             IconComponent={EditNoteIcon}
                                             onClick={buildNavigateToExamEdition(exam.id)}
                                         />
-
                                         <IconButton
                                             title="Voir les copies des étudiants"
                                             IconComponent={RateReviewIcon}
@@ -215,6 +215,15 @@ function ExamList() {
 
     function openCreationModal() {
         setIsCreateExamModalOpen(true);
+    }
+
+    function computeTitle(filter: examFilterType) {
+        switch (filter) {
+            case 'current':
+                return 'Mes examens en cours';
+            case 'archived':
+                return 'Mes examens archivés';
+        }
     }
 
     function buildOnClickCopyExamLink(examId: string) {

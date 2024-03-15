@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { acceptableAnswerType, gradeType, questionKindType } from '../types';
+import { acceptableAnswerType, examFilterType, gradeType, questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -233,8 +233,8 @@ async function createStudents(params: { emails: string[]; groupId: string }) {
     return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
-async function fetchExams() {
-    const URL = `${BASE_URL}/exams`;
+async function fetchExams(filter: examFilterType) {
+    const URL = `${BASE_URL}/exams?filter=${filter}`;
     return performApiCall(URL, 'GET');
 }
 

@@ -11,7 +11,7 @@ import { userRoutes } from './userRoutes';
 const routes = buildRoutes();
 
 function buildRoutes() {
-    const routes: routeType<any, any>[] = [];
+    const routes: routeType<any, any, any>[] = [];
     routes.push(...userRoutes);
     routes.push(...examRoutes);
     routes.push(...studentRoutes);

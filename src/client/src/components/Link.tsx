@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
-function Link(props: { children: JSX.Element | string; to: string }) {
+function Link(props: { children: React.ReactNode | string; to: string }) {
     return <StyledLink to={props.to}>{props.children}</StyledLink>;
 }
 

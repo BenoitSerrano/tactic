@@ -42,10 +42,6 @@ function Chevron() {
     return <div>{'>'}</div>;
 }
 
-const BreadcrumbLinkContainer = styled('div')(({ theme }) => ({
-    paddingRight: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
-}));
 const BreadcrumbTypographyContainer = styled(Typography)(({ theme }) => ({
     paddingRight: theme.spacing(1),
     paddingLeft: theme.spacing(1),

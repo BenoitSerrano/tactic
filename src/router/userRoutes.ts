@@ -3,7 +3,7 @@ import { routeType } from './types';
 
 const userController = buildUserController();
 
-const userRoutes: Array<routeType<any, any>> = [
+const userRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/users',

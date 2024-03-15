@@ -86,7 +86,9 @@ const ROUTE_ELEMENTS: Record<
     EXAM_ARCHIVED: {
         element: <ExamArchived />,
     },
-    EXAM_LIST: { isAdmin: true, element: <ExamList /> },
+    EXAM_LIST: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST_CURRENT.path} /> },
+    EXAM_LIST_ARCHIVED: { isAdmin: true, element: <ExamList filter="archived" /> },
+    EXAM_LIST_CURRENT: { isAdmin: true, element: <ExamList filter="current" /> },
     STUDENTS: { isAdmin: true, element: <Students /> },
     EXAM_RESULTS: {
         isAdmin: true,

@@ -4,8 +4,12 @@ import Joi from 'joi';
 
 export { buildAnonymousController };
 
-function buildAnonymousController<paramsT extends Record<string, string>, bodyT>(
-    controller: (params: { urlParams: paramsT; body: bodyT }) => any | Promise<any>,
+function buildAnonymousController<
+    paramsT extends Record<string, string>,
+    queryT extends Record<string, string>,
+    bodyT,
+>(
+    controller: (params: { query: queryT; urlParams: paramsT; body: bodyT }) => any | Promise<any>,
     options?: {
         schema?: Joi.Schema;
     },
@@ -24,6 +28,7 @@ function buildAnonymousController<paramsT extends Record<string, string>, bodyT>
 
         try {
             const result = await controller({
+                query: req.query as queryT,
                 urlParams: req.params as paramsT,
                 body: req.body,
             });

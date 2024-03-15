@@ -7,6 +7,7 @@ import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
 import { buildExerciseService } from '../exercise';
+import { examFilterType } from './types';
 
 export { buildExamService };
 
@@ -113,11 +114,20 @@ function buildExamService() {
         };
     }
 
-    async function getExams(user: User) {
+    async function getExams(criteria: { filter: examFilterType }, user: User) {
         return examRepository.find({
-            where: { user, archivedAt: IsNull() },
+            where: { user, archivedAt: getArchivedWhereFilter() },
             order: { createdAt: 'DESC' },
         });
+
+        function getArchivedWhereFilter() {
+            switch (criteria.filter) {
+                case 'current':
+                    return IsNull();
+                case 'archived':
+                    return Not(IsNull());
+            }
+        }
     }
 
     async function getUserIdForExam(examId: Exam['id']): Promise<User['id']> {

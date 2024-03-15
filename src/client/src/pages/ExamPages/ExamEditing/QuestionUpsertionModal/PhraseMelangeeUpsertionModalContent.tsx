@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { acceptableAnswerType } from '../../../../types';
 import { textSplitter } from '../../../../lib/textSplitter';

@@ -20,6 +20,27 @@ describe('computeBreadcrumbs', () => {
         ]);
     });
 
+    it("returns exams when you're on exam archived page", () => {
+        const pathname = pathHandler.getRoutePath('EXAM_LIST_ARCHIVED');
+
+        const breadcrumbs = computeBreadcrumbs(pathname);
+
+        expect(breadcrumbs).toEqual([
+            { label: 'Accueil', href: '/teacher' },
+            { label: 'Mes examens', isActive: true },
+        ]);
+    });
+
+    it("returns exams when you're on exam current page", () => {
+        const pathname = pathHandler.getRoutePath('EXAM_LIST_CURRENT');
+
+        const breadcrumbs = computeBreadcrumbs(pathname);
+
+        expect(breadcrumbs).toEqual([
+            { label: 'Accueil', href: '/teacher' },
+            { label: 'Mes examens', isActive: true },
+        ]);
+    });
     it("returns exams edit when you're on exam edit content page", () => {
         const pathname = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' });
 

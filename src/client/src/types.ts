@@ -18,6 +18,8 @@ type acceptableAnswerType = { grade: gradeType; answer: string };
 
 type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'corrected';
 
+type examFilterType = 'archived' | 'current';
+
 export { questionKinds };
 
 export type {
@@ -26,4 +28,5 @@ export type {
     attemptsCountByAttemptStatusApiType,
     acceptableAnswerType,
     gradeType,
+    examFilterType,
 };

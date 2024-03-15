@@ -3,12 +3,12 @@ import { anonymousControllerType, authenticatedControllerType } from '../lib/bui
 import { User } from '../modules/user';
 
 type methodType = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-type routeType<paramsT, bodyT> =
+type routeType<paramsT, queryT, bodyT> =
     | {
           method: methodType;
           path: string;
           isAuthenticated: true;
-          controller: authenticatedControllerType<paramsT, bodyT>;
+          controller: authenticatedControllerType<paramsT, queryT, bodyT>;
           schema?: Joi.Schema;
           checkAuthorization?: (params: paramsT, user: User) => void | Promise<void>;
       }
@@ -16,7 +16,7 @@ type routeType<paramsT, bodyT> =
           method: methodType;
           path: string;
           isAuthenticated: false;
-          controller: anonymousControllerType<paramsT, bodyT>;
+          controller: anonymousControllerType<paramsT, queryT, bodyT>;
           schema?: Joi.Schema;
       };
 

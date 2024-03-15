@@ -1,31 +1,59 @@
 import { Typography, styled } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { ElementType } from 'react';
+import { Link } from '../Link';
 
-function SideItemMenu(props: { IconComponent: ElementType; title: string; path: string }) {
+const HighItemContainer = styled('div')(({ theme }) => ({
+    paddingLeft: theme.spacing(0),
+    marginTop: theme.spacing(2),
+}));
+const LowItemContainer = styled('div')(({ theme }) => ({
+    paddingLeft: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+}));
+
+const levelMapping = {
+    high: {
+        ContainerComponent: HighItemContainer,
+        typographyVariant: 'h5' as const,
+        iconSize: 'large',
+    },
+    low: {
+        ContainerComponent: LowItemContainer,
+        typographyVariant: 'h6' as const,
+        iconSize: 'medium',
+    },
+};
+
+function SideItemMenu(props: {
+    IconComponent: ElementType;
+    title: string;
+    path: string;
+    level: 'high' | 'low';
+}) {
     const { IconComponent, title, path } = props;
+    const { ContainerComponent, typographyVariant, iconSize } = levelMapping[props.level];
     return (
-        <ItemContainer>
+        <ContainerComponent>
             <Link to={path}>
                 <LinkContent>
                     <IconContainer>
-                        <IconComponent fontSize="large" />
+                        <IconComponent fontSize={iconSize} />
                     </IconContainer>
-                    <Typography>{title}</Typography>
+                    <Typography variant={typographyVariant}>{title}</Typography>
                 </LinkContent>
             </Link>
-        </ItemContainer>
+        </ContainerComponent>
     );
 }
 
 export { SideItemMenu };
 
-const ItemContainer = styled('div')(({ theme }) => ({
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+const IconContainer = styled('div')(({ theme }) => ({
+    marginRight: theme.spacing(2),
+    display: 'flex',
+    alignItems: 'center',
 }));
-
-const IconContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(2) }));
 
 const LinkContent = styled('div')({
     display: 'flex',

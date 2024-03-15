@@ -5,7 +5,7 @@ import { accessControlBuilder } from '../lib/accessControlBuilder';
 
 const attemptController = buildAttemptController();
 
-const attemptRoutes: Array<routeType<any, any>> = [
+const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/all-attempts',
