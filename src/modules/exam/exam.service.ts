@@ -255,8 +255,12 @@ function buildExamService() {
         return newExam;
     }
 
-    async function updateExamArchivedAt(examId: Exam['id']) {
-        await examRepository.update({ id: examId }, { archivedAt: () => 'CURRENT_TIMESTAMP' });
+    async function updateExamArchivedAt(examId: Exam['id'], archive: boolean) {
+        if (archive) {
+            await examRepository.update({ id: examId }, { archivedAt: () => 'CURRENT_TIMESTAMP' });
+        } else {
+            await examRepository.update({ id: examId }, { archivedAt: null });
+        }
         return true;
     }
 }

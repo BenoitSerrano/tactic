@@ -15,6 +15,7 @@ import {
 import ScannerIcon from '@mui/icons-material/Scanner';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -72,12 +73,30 @@ function ExamList(props: { filter: examFilterType }) {
                 variant: 'success',
                 text: `L'examen a bien été archivé.`,
             });
-            queryClient.invalidateQueries({ queryKey: ['exams'] });
+            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
+            queryClient.invalidateQueries({ queryKey: ['exams-archived'] });
         },
         onError: () => {
             displayAlert({
                 variant: 'error',
                 text: `Une erreur est survenue. L'examen n'a pas pu être archivé`,
+            });
+        },
+    });
+    const unarchiveExamMutation = useMutation({
+        mutationFn: api.unarchiveExam,
+        onSuccess: () => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen a bien été désarchivé.`,
+            });
+            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
+            queryClient.invalidateQueries({ queryKey: ['exams-archived'] });
+        },
+        onError: () => {
+            displayAlert({
+                variant: 'error',
+                text: `Une erreur est survenue. L'examen n'a pas pu être désarchivé`,
             });
         },
     });
@@ -181,11 +200,7 @@ function ExamList(props: { filter: examFilterType }) {
                                             IconComponent={ScannerIcon}
                                             onClick={buildDuplicateExam(exam.id)}
                                         />
-                                        <IconButton
-                                            IconComponent={ArchiveIcon}
-                                            title="Archiver l'examen"
-                                            onClick={buildArchiveExam(exam.id)}
-                                        />
+                                        {renderArchiveButton(exam.id)}
                                         <IconButton
                                             IconComponent={DeleteForeverIcon}
                                             title="Supprimer l'examen"
@@ -212,6 +227,27 @@ function ExamList(props: { filter: examFilterType }) {
             />
         </>
     );
+
+    function renderArchiveButton(examId: string) {
+        switch (props.filter) {
+            case 'current':
+                return (
+                    <IconButton
+                        IconComponent={ArchiveIcon}
+                        title="Archiver l'examen"
+                        onClick={buildArchiveExam(examId)}
+                    />
+                );
+            case 'archived':
+                return (
+                    <IconButton
+                        IconComponent={UnarchiveIcon}
+                        title="Désarchiver l'examen"
+                        onClick={buildUnarchiveExam(examId)}
+                    />
+                );
+        }
+    }
 
     function openCreationModal() {
         setIsCreateExamModalOpen(true);
@@ -300,11 +336,17 @@ function ExamList(props: { filter: examFilterType }) {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                "Souhaitez-vous réellement archiver cet examen ? Il n'apparaîtra plus dans votre liste d'examens et les étudiant.es n'y auront plus accès.",
+                "Souhaitez-vous réellement archiver cet examen ? Les étudiant·es n'y auront plus accès.",
             );
             if (hasConfirmed) {
                 archiveExamMutation.mutate(examId);
             }
+        };
+    }
+
+    function buildUnarchiveExam(examId: string) {
+        return () => {
+            unarchiveExamMutation.mutate(examId);
         };
     }
 

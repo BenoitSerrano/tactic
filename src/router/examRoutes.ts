@@ -108,6 +108,9 @@ const examRoutes: Array<routeType<any, any, any>> = [
                 key: 'examId',
             },
         ]),
+        schema: Joi.object({
+            archive: Joi.boolean(),
+        }),
     },
     {
         method: 'DELETE',

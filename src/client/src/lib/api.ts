@@ -26,6 +26,7 @@ const api = {
     fetchExamResults,
     deleteExam,
     archiveExam,
+    unarchiveExam,
     createQuestion,
     createExercise,
     updateExercise,
@@ -245,7 +246,12 @@ async function deleteExam(examId: string) {
 
 async function archiveExam(examId: string) {
     const URL = `${BASE_URL}/exams/${examId}/archivedAt`;
-    return performApiCall(URL, 'PATCH');
+    return performApiCall(URL, 'PATCH', { archive: true });
+}
+
+async function unarchiveExam(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/archivedAt`;
+    return performApiCall(URL, 'PATCH', { archive: false });
 }
 
 async function fetchExamResults(examId: string) {

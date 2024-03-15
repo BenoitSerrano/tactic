@@ -84,7 +84,10 @@ function buildExamController() {
         return examService.duplicateExam({ examId: params.urlParams.examId, user });
     }
 
-    async function updateExamArchivedAt(params: { urlParams: { examId: string } }) {
-        return examService.updateExamArchivedAt(params.urlParams.examId);
+    async function updateExamArchivedAt(params: {
+        urlParams: { examId: string };
+        body: { archive: boolean };
+    }) {
+        return examService.updateExamArchivedAt(params.urlParams.examId, params.body.archive);
     }
 }
