@@ -1,3 +1,3 @@
-type breadcrumbItemType = { label: string; path?: string; isActive: boolean };
+type breadcrumbItemType = { label: string; href?: string; isActive?: boolean };
 
 export type { breadcrumbItemType };

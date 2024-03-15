@@ -35,7 +35,7 @@ function getRoutePath<paramsT extends Record<string, string>>(
 
 function parsePath(
     path: string,
-): { parameters: Object; routeKey: (typeof ROUTE_KEYS)[number] } | undefined {
+): { parameters: Record<string, string>; routeKey: (typeof ROUTE_KEYS)[number] } | undefined {
     const splitActualPath = path.split('/');
 
     routeKeysLoop: for (const ROUTE_KEY of ROUTE_KEYS) {

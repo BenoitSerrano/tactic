@@ -2,6 +2,13 @@ import { pathHandler } from '../../../lib/pathHandler';
 import { computeBreadcrumbs } from './computeBreadcrumbs';
 
 describe('computeBreadcrumbs', () => {
+    it("returns home when you're on home page", () => {
+        const pathname = pathHandler.getRoutePath('TEACHER_HOME');
+
+        const breadcrumbs = computeBreadcrumbs(pathname);
+
+        expect(breadcrumbs).toEqual([{ label: 'Accueil', isActive: true }]);
+    });
     it("returns exams when you're on exam page", () => {
         const pathname = pathHandler.getRoutePath('EXAM_LIST');
 
@@ -9,19 +16,30 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: '/teacher' },
-            { label: 'Mes examens' },
+            { label: 'Mes examens', isActive: true },
         ]);
     });
 
-    it("returns exams edit when you're on exam edit page", () => {
+    it("returns exams edit when you're on exam edit content page", () => {
         const pathname = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' });
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: '/teacher/exams' },
-            { label: 'Édition' },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Édition', isActive: true },
+        ]);
+    });
+    it("returns exams edit when you're on exam edit results page", () => {
+        const pathname = pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId: 'examId' });
+
+        const breadcrumbs = computeBreadcrumbs(pathname);
+
+        expect(breadcrumbs).toEqual([
+            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Édition', isActive: true },
         ]);
     });
 
@@ -32,8 +50,8 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: '/teacher/exams' },
-            { label: 'Résultats' },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Résultats', isActive: true },
         ]);
     });
 
@@ -44,8 +62,8 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: '/teacher/exams' },
-            { label: 'Prévisualisation' },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Prévisualisation', isActive: true },
         ]);
     });
 
@@ -59,9 +77,9 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: '/teacher/exams' },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
             { label: 'Résultats', href: '/teacher/exams/examId/results' },
-            { label: 'Correction de copie' },
+            { label: 'Correction de copie', isActive: true },
         ]);
     });
 
@@ -72,7 +90,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes groupes' },
+            { label: 'Mes groupes', isActive: true },
         ]);
     });
 
@@ -86,7 +104,7 @@ describe('computeBreadcrumbs', () => {
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Mes groupes', href: pathHandler.getRoutePath('GROUPS') },
-            { label: 'Liste des étudiants' },
+            { label: 'Liste des étudiants', isActive: true },
         ]);
     });
 });

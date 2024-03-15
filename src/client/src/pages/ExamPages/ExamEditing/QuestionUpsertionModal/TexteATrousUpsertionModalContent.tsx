@@ -1,5 +1,4 @@
 import { TextField, styled } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import { QuestionInputContainer } from './QuestionInputContainer';
