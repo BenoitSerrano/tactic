@@ -134,7 +134,7 @@ function ExamResults() {
     const subtite = computeSubtitle(attemptsCountQuery.data);
     const menuButtons = [
         {
-            title: 'Rafraîchir',
+            title: 'Actualiser',
             onClick: resultsQuery.refetch,
             IconComponent: RefreshIcon,
             isLoading: resultsQuery.isLoading,
