@@ -1,3 +1,4 @@
+import { acceptableAnswerType } from '../../../types';
 import { converter } from './converter';
 
 describe('converter', () => {
@@ -152,6 +153,44 @@ describe('converter', () => {
             const answerIndex = converter.convertWordIndexToAnswerIndex({ wordIndex, title });
 
             expect(answerIndex).toBe(-1);
+        });
+    });
+
+    describe('convertBlankedTitleToFullTitle', () => {
+        it('should return original title if no blank', () => {
+            const acceptableAnswers: acceptableAnswerType[][] = [];
+            const blankedTitle = 'tu es la plus belle';
+
+            const fullTitle = converter.convertBlankedTitleToFullTitle(
+                blankedTitle,
+                acceptableAnswers,
+            );
+
+            expect(fullTitle).toBe(blankedTitle);
+        });
+
+        it('should return original title if discrepancy in acceptable answers', () => {
+            const acceptableAnswers: acceptableAnswerType[][] = [[{ answer: 'la', grade: 'A' }]];
+            const blankedTitle = 'tu es la plus belle';
+
+            const fullTitle = converter.convertBlankedTitleToFullTitle(
+                blankedTitle,
+                acceptableAnswers,
+            );
+
+            expect(fullTitle).toBe(blankedTitle);
+        });
+
+        it('should return full title if one blank', () => {
+            const acceptableAnswers: acceptableAnswerType[][] = [[{ answer: 'la', grade: 'A' }]];
+            const blankedTitle = 'tu es .... plus belle';
+
+            const fullTitle = converter.convertBlankedTitleToFullTitle(
+                blankedTitle,
+                acceptableAnswers,
+            );
+
+            expect(fullTitle).toBe('tu es la plus belle');
         });
     });
 });

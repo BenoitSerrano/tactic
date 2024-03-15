@@ -1,7 +1,7 @@
 import { TextField, styled } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import ClearIcon from '@mui/icons-material/Clear';
-import { FormEvent, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+import { useState } from 'react';
 import { QuestionInputContainer } from './QuestionInputContainer';
 import { acceptableAnswerType } from '../../../../types';
 import { WordsBlanker } from '../components/WordsBlanker';
@@ -23,55 +23,50 @@ function TexteATrousUpsertionModalContent(props: {
     const [pointsPerBlank, setPointsPerBlank] = useState(`${initialPointsPerBlank}`);
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(!!props.title);
     const blankCount = converter.computeBlankCount(props.title);
+    const displayedTitle = converter.convertBlankedTitleToFullTitle(
+        props.title,
+        props.acceptableAnswers,
+    );
     return (
         <>
             <QuestionInputContainer title="Texte complet">
-                <OriginalTextContainer onSubmit={handleSubmitOriginalText}>
+                <OriginalTextContainer>
                     <TextField
+                        multiline
                         autoFocus
                         disabled={isWholeSentenceFrozen}
                         fullWidth
                         label="Texte complet"
-                        value={props.title}
+                        value={displayedTitle}
                         onChange={(event) => props.setTitle(event.target.value)}
                     />
                     <OriginalTextButtonContainer>
-                        {isWholeSentenceFrozen ? (
-                            <Button
-                                color="error"
-                                startIcon={<ClearIcon />}
-                                onClick={resetWholeSentence}
-                            >
-                                Supprimer
-                            </Button>
-                        ) : (
+                        {isWholeSentenceFrozen && (
                             <Button
                                 color="inherit"
-                                disabled={!props.title}
-                                startIcon={<CheckIcon />}
+                                startIcon={<EditIcon />}
+                                onClick={unfreezeSentence}
                                 type="submit"
                             >
-                                Valider
+                                Éditer
                             </Button>
                         )}
                     </OriginalTextButtonContainer>
                 </OriginalTextContainer>
             </QuestionInputContainer>
-            {isWholeSentenceFrozen && (
-                <QuestionInputContainer
-                    title="Texte à trous"
-                    subtitle={`Cliquez sur les mots à cacher dans le texte ci-dessous. En cas d'erreur, cliquez sur "....".`}
-                >
-                    <WordsBlanker
-                        title={props.title}
-                        setTitle={props.setTitle}
-                        acceptableAnswers={props.acceptableAnswers}
-                        setAcceptableAnswers={props.setAcceptableAnswers}
-                        pointsPerBlank={Number(pointsPerBlank)}
-                        setPoints={(points) => props.setPoints(`${points}`)}
-                    />
-                </QuestionInputContainer>
-            )}
+            <QuestionInputContainer
+                title="Texte à trous"
+                subtitle={`Cliquez sur les mots à cacher dans le texte ci-dessous. En cas d'erreur, cliquez sur "....".`}
+            >
+                <WordsBlanker
+                    title={props.title.trim()}
+                    setTitle={onSetTitleInWordsBlanker}
+                    acceptableAnswers={props.acceptableAnswers}
+                    setAcceptableAnswers={onSetAcceptableAnswersInWordsBlanker}
+                    pointsPerBlank={Number(pointsPerBlank)}
+                    setPoints={(points) => props.setPoints(`${points}`)}
+                />
+            </QuestionInputContainer>
             <QuestionInputContainer isLastItem title="Points">
                 <PointsPerBlankHandler
                     blankCount={blankCount}
@@ -84,25 +79,30 @@ function TexteATrousUpsertionModalContent(props: {
         </>
     );
 
-    function handleSubmitOriginalText(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        freezeSentence();
-    }
-
     function freezeSentence() {
-        props.setTitle(props.title.trim());
-        setIsWholeSentenceFrozen(true);
+        if (!isWholeSentenceFrozen) {
+            setIsWholeSentenceFrozen(true);
+        }
     }
 
-    function resetWholeSentence() {
-        setIsWholeSentenceFrozen(false);
-        props.setTitle('');
+    function onSetTitleInWordsBlanker(title: string) {
+        freezeSentence();
+        props.setTitle(title);
+    }
+
+    function onSetAcceptableAnswersInWordsBlanker(acceptableAnswers: acceptableAnswerType[][]) {
+        freezeSentence();
+        props.setAcceptableAnswers(acceptableAnswers);
+    }
+
+    function unfreezeSentence() {
+        props.setTitle(displayedTitle);
         props.setAcceptableAnswers([]);
-        props.setPoints('0');
+        setIsWholeSentenceFrozen(false);
     }
 }
 
-const OriginalTextContainer = styled('form')(({ theme }) => ({
+const OriginalTextContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
 }));

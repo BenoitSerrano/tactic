@@ -151,7 +151,7 @@ function extractPointsFormErrorMessage(formErrors: string[]) {
 function extractRightAnswerPresenceFormErrorMessageForTaT(formErrors: string[]) {
     const formError = formErrors.find((formError) => formError === 'NO_RIGHT_ANSWER');
     if (formError !== undefined) {
-        return `Veuillez au moins cliquer sur un mot pour le transformer en trou`;
+        return `Veuillez cliquer sur au moins un mot pour le transformer en trou`;
     }
     return undefined;
 }
