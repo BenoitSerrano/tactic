@@ -26,6 +26,7 @@ function computeEditingBreadcrumbs(currentPath: string): Array<breadcrumbItemTyp
     return EDITING_EXAM_ROUTE_KEYS.map((EDITING_EXAM_ROUTE_KEY) => ({
         label: editingExamLabelMapping[EDITING_EXAM_ROUTE_KEY],
         isActive: EDITING_EXAM_ROUTE_KEY === parsedPath.routeKey,
+        href: pathHandler.getRoutePath(EDITING_EXAM_ROUTE_KEY, parsedPath.parameters),
     }));
 }
 

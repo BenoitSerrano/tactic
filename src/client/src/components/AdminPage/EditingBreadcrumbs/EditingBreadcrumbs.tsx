@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { computeEditingBreadcrumbs } from './computeEditingBreadcrumbs';
 import { Typography, styled } from '@mui/material';
+import { Link } from '../../Link';
 
 function EditingBreadcrumbs() {
     const location = useLocation();
@@ -17,12 +18,17 @@ function EditingBreadcrumbs() {
         for (let i = 0; i < editingBreadcrumbs.length; i++) {
             const editingBreadcrumb = editingBreadcrumbs[i];
             const renderedBreadcrumb = (
-                <BreadcrumbContainer key={`editingBreadcrumb-${editingBreadcrumb.label}`}>
-                    <Typography>{editingBreadcrumb.label}</Typography>
-                </BreadcrumbContainer>
+                <BreadcrumbTypographyContainer>
+                    {editingBreadcrumb.label}
+                </BreadcrumbTypographyContainer>
             );
-
-            renderedBreadcrumbs.push(renderedBreadcrumb);
+            if (editingBreadcrumb.isActive || !editingBreadcrumb.href) {
+                renderedBreadcrumbs.push(renderedBreadcrumb);
+            } else {
+                renderedBreadcrumbs.push(
+                    <Link to={editingBreadcrumb.href}>{renderedBreadcrumb}</Link>,
+                );
+            }
 
             if (i < editingBreadcrumbs.length - 1) {
                 renderedBreadcrumbs.push(<Chevron key={`chevron-${i}`} />);
@@ -36,7 +42,11 @@ function Chevron() {
     return <div>{'>'}</div>;
 }
 
-const BreadcrumbContainer = styled('div')(({ theme }) => ({
+const BreadcrumbLinkContainer = styled('div')(({ theme }) => ({
+    paddingRight: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+}));
+const BreadcrumbTypographyContainer = styled(Typography)(({ theme }) => ({
     paddingRight: theme.spacing(1),
     paddingLeft: theme.spacing(1),
 }));

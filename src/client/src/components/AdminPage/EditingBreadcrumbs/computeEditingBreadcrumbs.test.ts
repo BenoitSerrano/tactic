@@ -17,10 +17,26 @@ describe('computeEditingBreadcrumbs', () => {
         const editingBreadcrumbs = computeEditingBreadcrumbs(currentPath);
 
         expect(editingBreadcrumbs).toEqual([
-            { label: 'Examen', isActive: true },
-            { label: 'Paramètres', isActive: false },
-            { label: 'Collecte des réponses', isActive: false },
-            { label: 'Résultats', isActive: false },
+            {
+                label: 'Examen',
+                isActive: true,
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId }),
+            },
+            {
+                label: 'Paramètres',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_PARAMETERS', { examId }),
+            },
+            {
+                label: 'Collecte des réponses',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_COLLECT', { examId }),
+            },
+            {
+                label: 'Résultats',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId }),
+            },
         ]);
     });
 
@@ -30,10 +46,26 @@ describe('computeEditingBreadcrumbs', () => {
         const editingBreadcrumbs = computeEditingBreadcrumbs(currentPath);
 
         expect(editingBreadcrumbs).toEqual([
-            { label: 'Examen', isActive: false },
-            { label: 'Paramètres', isActive: false },
-            { label: 'Collecte des réponses', isActive: true },
-            { label: 'Résultats', isActive: false },
+            {
+                label: 'Examen',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId }),
+            },
+            {
+                label: 'Paramètres',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_PARAMETERS', { examId }),
+            },
+            {
+                label: 'Collecte des réponses',
+                isActive: true,
+                href: pathHandler.getRoutePath('EXAM_EDITING_COLLECT', { examId }),
+            },
+            {
+                label: 'Résultats',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId }),
+            },
         ]);
     });
 });
