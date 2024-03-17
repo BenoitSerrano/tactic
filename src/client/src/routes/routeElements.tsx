@@ -23,6 +23,7 @@ import { ExamArchived } from '../pages/ExamArchived';
 import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
 import { Navigate } from 'react-router-dom';
 import { ROUTE_PATHS } from './routePaths';
+import { ExamParameters } from '../pages/ExamParameters';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -37,7 +38,7 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAM_EDITING_PARAMETERS: {
         isAdmin: true,
-        element: <div />,
+        element: <ExamParameters />,
     },
     EXAM_EDITING_COLLECT: {
         isAdmin: true,

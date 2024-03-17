@@ -7,6 +7,5 @@ function Link(props: { children: React.ReactNode | string; to: string }) {
 
 const StyledLink = styled(ReactRouterLink)(({ theme }) => ({
     color: theme.palette.common.black,
-    textDecorationLine: 'none',
 }));
 export { Link };
