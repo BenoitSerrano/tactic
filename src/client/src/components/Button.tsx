@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 function Button(props: {
     fullWidth?: boolean;
-    onClick?: () => void;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
     children: string | ReactNode;
     variant?: 'contained' | 'outlined' | 'text';
     disabled?: boolean;

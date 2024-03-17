@@ -25,6 +25,7 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
         case 'EXAM_EDITING_CONTENT':
         case 'EXAM_EDITING_PARAMETERS':
         case 'EXAM_EDITING_RESULTS':
+        case 'EXAM_EDITING_CONSULT':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
             breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
             breadcrumbs.push({ label: 'Édition', isActive: true });

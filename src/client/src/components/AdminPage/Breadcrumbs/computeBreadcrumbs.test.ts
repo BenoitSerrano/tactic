@@ -63,6 +63,17 @@ describe('computeBreadcrumbs', () => {
             { label: 'Édition', isActive: true },
         ]);
     });
+    it("returns exams edit when you're on exam edit consult page", () => {
+        const pathname = pathHandler.getRoutePath('EXAM_EDITING_CONSULT', { examId: 'examId' });
+
+        const breadcrumbs = computeBreadcrumbs(pathname);
+
+        expect(breadcrumbs).toEqual([
+            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Édition', isActive: true },
+        ]);
+    });
 
     it("returns exams edit when you're on exam results page", () => {
         const pathname = pathHandler.getRoutePath('EXAM_RESULTS', { examId: 'examId' });

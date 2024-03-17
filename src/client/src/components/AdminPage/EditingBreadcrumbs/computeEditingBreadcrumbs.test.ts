@@ -37,6 +37,11 @@ describe('computeEditingBreadcrumbs', () => {
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId }),
             },
+            {
+                label: 'Consultation des copies',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONSULT', { examId }),
+            },
         ]);
     });
 
@@ -65,6 +70,11 @@ describe('computeEditingBreadcrumbs', () => {
                 label: 'Résultats',
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId }),
+            },
+            {
+                label: 'Consultation des copies',
+                isActive: false,
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONSULT', { examId }),
             },
         ]);
     });

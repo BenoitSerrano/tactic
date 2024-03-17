@@ -24,6 +24,8 @@ import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
 import { Navigate } from 'react-router-dom';
 import { ROUTE_PATHS } from './routePaths';
 import { ExamParameters } from '../pages/ExamParameters';
+import { ExamCollect } from '../pages/ExamCollect';
+import { ExamConsult } from '../pages/ExamConsult';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -42,11 +44,15 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAM_EDITING_COLLECT: {
         isAdmin: true,
-        element: <div />,
+        element: <ExamCollect />,
     },
     EXAM_EDITING_RESULTS: {
         isAdmin: true,
-        element: <div />,
+        element: <ExamResults />,
+    },
+    EXAM_EDITING_CONSULT: {
+        isAdmin: true,
+        element: <ExamConsult />,
     },
     STUDENT_HOME: {
         element: <StudentHome />,

@@ -39,6 +39,6 @@ const ContentContainer = styled('div')(({ theme }) => ({
 const MiddleContainer = styled('div')({ display: 'flex' });
 const LeftContainer = styled('div')({ display: 'flex' });
 
-const ButtonsContainer = styled('div')({ display: 'flex' });
+const ButtonsContainer = styled('div')({ display: 'flex', alignItems: 'center' });
 
 export { Header };
