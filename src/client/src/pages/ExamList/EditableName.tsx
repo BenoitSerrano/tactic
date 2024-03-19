@@ -19,7 +19,7 @@ function EditableName(props: { exam: examApiType }) {
                 text: `L'examen "${exam.name}" a bien été modifié`,
             });
             setIsEditing(false);
-            queryClient.invalidateQueries({ queryKey: ['exams'] });
+            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
         },
         onError: (error) => {
             setIsEditing(false);
@@ -46,7 +46,7 @@ function EditableName(props: { exam: examApiType }) {
                     onChange={onChange}
                 />
                 <IconButton
-                    onClick={confirmChanges}
+                    onClick={onValidateChanges}
                     IconComponent={CheckIcon}
                     title="Valider"
                     disabled={isConfirmButtonDisabled}
@@ -75,11 +75,19 @@ function EditableName(props: { exam: examApiType }) {
         }
     }
 
+    function onValidateChanges(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
+
+        confirmChanges();
+    }
+
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
         setName(event.target.value);
     }
 
-    function activateEditing() {
+    function activateEditing(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
+
         setIsEditing(true);
     }
 }

@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
 import {
+    ListItemIcon,
+    ListItemText,
     MenuItem,
     Menu as MuiMenu,
     Table,
@@ -13,15 +15,11 @@ import {
     styled,
 } from '@mui/material';
 import ScannerIcon from '@mui/icons-material/Scanner';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import { config } from '../../config';
 import { Loader } from '../../components/Loader';
 import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
@@ -31,7 +29,6 @@ import { pathHandler } from '../../lib/pathHandler';
 import { EditableName } from './EditableName';
 import { EditableDuration } from './EditableDuration';
 import { IconButton } from '../../components/IconButton';
-import { attemptActionEncoder, attemptActionType } from '../../lib/attemptActionEncoder';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { PageTitle } from '../../components/PageTitle';
 import { examFilterType } from '../../types';
@@ -44,7 +41,8 @@ function ExamList(props: { filter: examFilterType }) {
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
-    const [currentCopyExamLinkMenu, setCurrentCopyExamLinkMenu] = useState<{
+
+    const [currentOptionMenu, setCurrentOptionMenu] = useState<{
         element: HTMLElement;
         examId: string;
     } | null>(null);
@@ -57,7 +55,7 @@ function ExamList(props: { filter: examFilterType }) {
                 variant: 'success',
                 text: `L'examen a bien été supprimé.`,
             });
-            queryClient.invalidateQueries({ queryKey: ['exams'] });
+            queryClient.invalidateQueries({ queryKey: [`exams-${props.filter}`] });
         },
         onError: () => {
             displayAlert({
@@ -107,7 +105,7 @@ function ExamList(props: { filter: examFilterType }) {
                 variant: 'success',
                 text: `L'examen "${exam.name}" a bien été dupliqué`,
             });
-            queryClient.invalidateQueries({ queryKey: ['exams'] });
+            queryClient.invalidateQueries({ queryKey: [`exams-${props.filter}`] });
         },
         onError: (error) => {
             console.error(error);
@@ -130,23 +128,25 @@ function ExamList(props: { filter: examFilterType }) {
     return (
         <>
             <MuiMenu
-                anchorEl={currentCopyExamLinkMenu?.element}
-                open={!!currentCopyExamLinkMenu}
-                onClose={closeCopyExamLinkMenu}
+                anchorEl={currentOptionMenu?.element}
+                open={!!currentOptionMenu}
+                onClose={closeEditionMenu}
             >
-                <MenuItem
-                    onClick={buildCopyExamLinkToClipboard(currentCopyExamLinkMenu?.examId, 'take')}
-                >
-                    Copier le lien de passage de l'examen
+                <MenuItem onClick={buildDuplicateExam(currentOptionMenu?.examId)}>
+                    <ListItemIcon>
+                        <ScannerIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Dupliquer</ListItemText>
                 </MenuItem>
-                <MenuItem
-                    onClick={buildCopyExamLinkToClipboard(
-                        currentCopyExamLinkMenu?.examId,
-                        'consult',
-                    )}
-                >
-                    Copier le lien de consultation des copies
+                <MenuItem onClick={buildArchiveExamAction(currentOptionMenu?.examId)}>
+                    {renderArchiveListItem()}
                 </MenuItem>
+                <ImportantMenuItem onClick={buildDeleteExam(currentOptionMenu?.examId)}>
+                    <ListItemIcon>
+                        <DeleteForeverIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Supprimer</ListItemText>
+                </ImportantMenuItem>
             </MuiMenu>
 
             <ContentContainer>
@@ -166,45 +166,23 @@ function ExamList(props: { filter: examFilterType }) {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell width={290}>Actions</TableCell>
+                                <TableCell width={10}></TableCell>
                                 <TableCell>Nom du test</TableCell>
                                 <TableCell width={170}>Durée</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {examListQuery.data.map((exam) => (
-                                <TableRow key={exam.id}>
+                                <ClickableTableRow
+                                    hover
+                                    key={exam.id}
+                                    onClick={handleRowClick(exam.id)}
+                                >
                                     <TableCell>
                                         <IconButton
-                                            IconComponent={VisibilityIcon}
-                                            title="Prévisualiser l'examen"
-                                            onClick={buildNavigateToPreview(exam.id)}
-                                        />
-                                        <IconButton
-                                            title="Éditer l'examen"
-                                            IconComponent={EditNoteIcon}
-                                            onClick={buildNavigateToExamEdition(exam.id)}
-                                        />
-                                        <IconButton
-                                            title="Voir les copies des étudiants"
-                                            IconComponent={RateReviewIcon}
-                                            onClick={buildNavigateToResults(exam.id)}
-                                        />
-                                        <IconButton
-                                            title="Copier le lien à partager aux étudiants"
-                                            onClick={buildOnClickCopyExamLink(exam.id)}
-                                            IconComponent={ContentCopyIcon}
-                                        />
-                                        <IconButton
-                                            title="Dupliquer l'examen"
-                                            IconComponent={ScannerIcon}
-                                            onClick={buildDuplicateExam(exam.id)}
-                                        />
-                                        {renderArchiveButton(exam.id)}
-                                        <IconButton
-                                            IconComponent={DeleteForeverIcon}
-                                            title="Supprimer l'examen"
-                                            onClick={buildDeleteExam(exam.id)}
+                                            title="Actions"
+                                            IconComponent={MoreHorizIcon}
+                                            onClick={buildOpenOptionMenu(exam.id)}
                                         />
                                     </TableCell>
                                     <TableCell>
@@ -213,7 +191,7 @@ function ExamList(props: { filter: examFilterType }) {
                                     <TableCell>
                                         <EditableDuration exam={exam} />
                                     </TableCell>
-                                </TableRow>
+                                </ClickableTableRow>
                             ))}
                         </TableBody>
                     </Table>
@@ -228,24 +206,29 @@ function ExamList(props: { filter: examFilterType }) {
         </>
     );
 
-    function renderArchiveButton(examId: string) {
+    function handleRowClick(examId: string) {
+        return () => {
+            const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
+            navigate(path);
+        };
+    }
+
+    function renderArchiveListItem() {
         switch (props.filter) {
             case 'current':
-                return (
-                    <IconButton
-                        IconComponent={ArchiveIcon}
-                        title="Archiver l'examen"
-                        onClick={buildArchiveExam(examId)}
-                    />
-                );
+                return [
+                    <ListItemIcon>
+                        <ArchiveIcon fontSize="small" />
+                    </ListItemIcon>,
+                    <ListItemText>Archiver</ListItemText>,
+                ];
             case 'archived':
-                return (
-                    <IconButton
-                        IconComponent={UnarchiveIcon}
-                        title="Désarchiver l'examen"
-                        onClick={buildUnarchiveExam(examId)}
-                    />
-                );
+                return [
+                    <ListItemIcon>
+                        <UnarchiveIcon fontSize="small" />
+                    </ListItemIcon>,
+                    <ListItemText>Désarchiver</ListItemText>,
+                ];
         }
     }
 
@@ -262,96 +245,63 @@ function ExamList(props: { filter: examFilterType }) {
         }
     }
 
-    function buildOnClickCopyExamLink(examId: string) {
+    function buildOpenOptionMenu(examId: string) {
         return (event: React.MouseEvent<HTMLElement>) => {
-            setCurrentCopyExamLinkMenu({ element: event.currentTarget, examId });
+            event.stopPropagation();
+
+            setCurrentOptionMenu({ element: event.currentTarget, examId });
         };
     }
 
     function onExamCreated(examId: string) {
-        queryClient.invalidateQueries({ queryKey: ['exams'] });
+        queryClient.invalidateQueries({ queryKey: [`exams-${props.filter}`] });
         const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
 
         navigate(path);
     }
 
-    function buildNavigateToPreview(examId: string) {
-        const path = pathHandler.getRoutePath('EXAM_PREVIEWING', { examId });
-        return () => navigate(path);
+    function closeEditionMenu() {
+        setCurrentOptionMenu(null);
     }
 
-    function closeCopyExamLinkMenu() {
-        setCurrentCopyExamLinkMenu(null);
-    }
-
-    function buildNavigateToExamEdition(examId: string) {
-        const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
-        return () => navigate(path);
-    }
-
-    function buildNavigateToResults(examId: string) {
-        const path = pathHandler.getRoutePath('EXAM_RESULTS', { examId });
-        return () => navigate(path);
-    }
-
-    function buildCopyExamLinkToClipboard(
-        examId: string | undefined,
-        attemptAction: attemptActionType,
-    ) {
-        return async () => {
+    function buildDuplicateExam(examId: string | undefined) {
+        return () => {
             if (!examId) {
                 return;
             }
-            const encodedAction = attemptActionEncoder.encode(attemptAction);
-            const path = pathHandler.getRoutePath('STUDENT_AUTHENTICATION', {
-                examId,
-                encodedAction,
-            });
-            const url = `${config.HOST_URL}${path}`;
-            try {
-                await navigator.clipboard.writeText(url);
-                displayAlert({
-                    text: 'Le lien a bien été copié dans le presse-papiers',
-                    variant: 'success',
-                });
-            } catch (error) {
-                console.error(error);
-                displayAlert({
-                    autoHideDuration: null,
-                    variant: 'error',
-                    text: `Le lien n'a pas pu être copié dans le presse-papiers. Vous pouvez le copier ici : ${url}`,
-                });
-            }
-            closeCopyExamLinkMenu();
-        };
-    }
-
-    function buildDuplicateExam(examId: string) {
-        return () => {
+            closeEditionMenu();
             duplicateExamMutation.mutate({ examId });
         };
     }
 
-    function buildArchiveExam(examId: string) {
+    function buildArchiveExamAction(examId: string | undefined) {
         return () => {
-            // eslint-disable-next-line no-restricted-globals
-            const hasConfirmed = confirm(
-                "Souhaitez-vous réellement archiver cet examen ? Les étudiant·es n'y auront plus accès.",
-            );
-            if (hasConfirmed) {
-                archiveExamMutation.mutate(examId);
+            if (!examId) {
+                return;
+            }
+            closeEditionMenu();
+            switch (props.filter) {
+                case 'archived':
+                    unarchiveExamMutation.mutate(examId);
+                    break;
+                case 'current':
+                    // eslint-disable-next-line no-restricted-globals
+                    const hasConfirmed = confirm(
+                        "Souhaitez-vous réellement archiver cet examen ? Les étudiant·es n'y auront plus accès.",
+                    );
+                    if (hasConfirmed) {
+                        archiveExamMutation.mutate(examId);
+                    }
             }
         };
     }
 
-    function buildUnarchiveExam(examId: string) {
+    function buildDeleteExam(examId: string | undefined) {
         return () => {
-            unarchiveExamMutation.mutate(examId);
-        };
-    }
-
-    function buildDeleteExam(examId: string) {
-        return () => {
+            if (!examId) {
+                return;
+            }
+            closeEditionMenu();
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
                 'Souhaitez-vous réellement supprimer ce test ? Tous les résultats liés à ce test seront supprimés.',
@@ -365,5 +315,10 @@ function ExamList(props: { filter: examFilterType }) {
 
 const ContentContainer = styled('div')({ display: 'flex' });
 const TableContainer = styled('div')({});
+const ImportantMenuItem = styled(MenuItem)(({ theme }) => ({
+    color: theme.palette.error.main,
+    '.MuiListItemIcon-root': { color: theme.palette.error.main },
+}));
+const ClickableTableRow = styled(TableRow)({ cursor: 'pointer' });
 
 export { ExamList };
