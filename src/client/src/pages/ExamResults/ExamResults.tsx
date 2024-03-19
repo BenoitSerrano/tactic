@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Link, useParams } from 'react-router-dom';
 import HistoryIcon from '@mui/icons-material/History';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -29,6 +29,7 @@ import { computeCanLockAttempt } from './lib/computeCanLockAttempt';
 import { computeCanUnlockAttempt } from './lib/computeCanUnlockAttempt';
 import { Menu } from '../../components/Menu';
 import { computeRoundMark } from '../../lib/computeRoundMark';
+import { IconLink } from '../../components/IconLink';
 
 type examResultApiType = {
     id: string;
@@ -52,7 +53,6 @@ type examResultsApiType = {
 type sortColumnType = 'email' | 'mark' | 'startedAt';
 
 function ExamResults() {
-    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const params = useParams();
     const examId = params.examId as string;
@@ -215,39 +215,42 @@ function ExamResults() {
                         return (
                             <TableRow key={result.attemptId}>
                                 <TableCell>{index + 1}</TableCell>
-
                                 <TableCell>
-                                    <Tooltip title="Voir la copie">
-                                        <IconButton onClick={buildGoToAttempt(result.attemptId)}>
-                                            <VisibilityIcon />
-                                        </IconButton>
-                                    </Tooltip>
+                                    <TableCellContent>
+                                        <IconLink
+                                            to={computeAttemptRoute(result.attemptId)}
+                                            IconComponent={FindInPageIcon}
+                                            title="Voir la copie"
+                                        />
 
-                                    {canLockAttempt && (
-                                        <Tooltip title="Terminer l'examen pour cet étudiant">
+                                        {canLockAttempt && (
+                                            <Tooltip title="Terminer l'examen pour cet étudiant">
+                                                <IconButton
+                                                    onClick={buildLockAttempt(result.attemptId)}
+                                                >
+                                                    <LockIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        )}
+
+                                        {canUnlockAttempt && (
+                                            <Tooltip title="Permettre à l'étudiant de reprendre l'examen">
+                                                <IconButton
+                                                    onClick={buildUnlockAttempt(result.attemptId)}
+                                                >
+                                                    <NoEncryptionGmailerrorredIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        )}
+
+                                        <Tooltip title="Réinitialiser">
                                             <IconButton
-                                                onClick={buildLockAttempt(result.attemptId)}
+                                                onClick={buildDeleteAttempt(result.attemptId)}
                                             >
-                                                <LockIcon />
+                                                <HistoryIcon />
                                             </IconButton>
                                         </Tooltip>
-                                    )}
-
-                                    {canUnlockAttempt && (
-                                        <Tooltip title="Permettre à l'étudiant de reprendre l'examen">
-                                            <IconButton
-                                                onClick={buildUnlockAttempt(result.attemptId)}
-                                            >
-                                                <NoEncryptionGmailerrorredIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
-
-                                    <Tooltip title="Réinitialiser">
-                                        <IconButton onClick={buildDeleteAttempt(result.attemptId)}>
-                                            <HistoryIcon />
-                                        </IconButton>
-                                    </Tooltip>
+                                    </TableCellContent>
                                 </TableCell>
                                 <TableCell>
                                     {time.formatToReadableDatetime(result.startedAt)}
@@ -305,12 +308,6 @@ function ExamResults() {
         );
     }
 
-    function buildGoToAttempt(attemptId: string) {
-        return () => {
-            navigate(computeAttemptRoute(attemptId));
-        };
-    }
-
     function formatData(data: examResultsApiType['results']) {
         return data.map((result) => {
             return {
@@ -366,5 +363,7 @@ function ExamResults() {
 const TitleContainer = styled('div')(({ theme }) => ({
     textAlign: 'center',
 }));
+
+const TableCellContent = styled('div')({ display: 'flex', alignItems: 'center' });
 
 export { ExamResults };

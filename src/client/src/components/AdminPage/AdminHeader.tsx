@@ -7,7 +7,8 @@ import { pathHandler } from '../../lib/pathHandler';
 import { Logo } from '../Logo';
 import { LogoutButton } from './LogoutButton';
 import { EDITING_EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
-import { Tooltip, styled } from '@mui/material';
+import { styled } from '@mui/material';
+import { IconLink } from '../IconLink';
 
 function AdminHeader() {
     const location = useLocation();
@@ -39,17 +40,17 @@ function AdminHeader() {
         const examPreviewingLink = pathHandler.getRoutePath('EXAM_PREVIEWING', {
             examId: parameters.examId,
         });
-        const previewButton = (
-            <Tooltip title="Aperçu de l'examen">
-                <PreviewLinkContainer>
-                    <Link opensNewTab to={examPreviewingLink}>
-                        <VisibilityIcon />
-                    </Link>
-                </PreviewLinkContainer>
-            </Tooltip>
-        );
 
-        return [previewButton, logoutButton];
+        return [
+            <PreviewLinkContainer>
+                <IconLink
+                    title="Aperçu de l'examen"
+                    to={examPreviewingLink}
+                    IconComponent={VisibilityIcon}
+                />
+            </PreviewLinkContainer>,
+            logoutButton,
+        ];
     }
 }
 
