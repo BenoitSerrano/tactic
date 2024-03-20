@@ -11,6 +11,7 @@ import {
     TableHead,
     TableRow,
     Tooltip,
+    styled,
 } from '@mui/material';
 import { Loader } from '../../../components/Loader';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +21,8 @@ import { useState } from 'react';
 import { Menu } from '../../../components/Menu';
 import { groupApiType } from '../types';
 import { useAlert } from '../../../lib/alert';
+import { AdminSideMenu } from '../../../components/AdminSideMenu';
+import { PageTitle } from '../../../components/PageTitle';
 
 function Groups() {
     const query = useQuery<groupApiType[]>({
@@ -65,35 +68,39 @@ function Groups() {
         <>
             <GroupCreationModal isOpen={isGroupCreationModalOpen} close={closeGroupCreationModal} />
             <Menu buttons={buttons} />
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell width={20}>N°</TableCell>
-                        <TableCell width={100}>Actions</TableCell>
-                        <TableCell>Nom</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {groups.map((group, index) => (
-                        <TableRow key={group.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>
-                                <Tooltip title="Accéder à la liste des étudiants">
-                                    <IconButton onClick={buildNavigateToStudents(group.id)}>
-                                        <FormatListBulletedIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Supprimer le groupe">
-                                    <IconButton onClick={buildDeleteGroup(group.id)}>
-                                        <DeleteForeverIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </TableCell>
-                            <TableCell>{group.name}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <ContentContainer>
+                <AdminSideMenu />
+                <TableContainer>
+                    <PageTitle title="Mes groupes" />
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell width={100}>Actions</TableCell>
+                                <TableCell>Nom</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {groups.map((group) => (
+                                <TableRow key={group.id}>
+                                    <TableCell>
+                                        <Tooltip title="Accéder à la liste des étudiants">
+                                            <IconButton onClick={buildNavigateToStudents(group.id)}>
+                                                <FormatListBulletedIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Supprimer le groupe">
+                                            <IconButton onClick={buildDeleteGroup(group.id)}>
+                                                <DeleteForeverIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell>{group.name}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </ContentContainer>
         </>
     );
 
@@ -123,5 +130,8 @@ function Groups() {
         };
     }
 }
+
+const ContentContainer = styled('div')({ display: 'flex' });
+const TableContainer = styled('div')({});
 
 export { Groups };

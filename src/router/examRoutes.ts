@@ -5,7 +5,7 @@ import { routeType } from './types';
 
 const examController = buildExamController();
 
-const examRoutes: Array<routeType<any, any>> = [
+const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/exams',
@@ -108,6 +108,9 @@ const examRoutes: Array<routeType<any, any>> = [
                 key: 'examId',
             },
         ]),
+        schema: Joi.object({
+            archive: Joi.boolean(),
+        }),
     },
     {
         method: 'DELETE',

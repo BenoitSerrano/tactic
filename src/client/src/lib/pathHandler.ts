@@ -4,6 +4,7 @@ import { ROUTE_PATHS } from '../routes/routePaths';
 const pathHandler = {
     extractCurrentAttemptId,
     getRoutePath,
+    parsePath,
 };
 
 function getRoutePath<paramsT extends Record<string, string>>(
@@ -30,6 +31,36 @@ function getRoutePath<paramsT extends Record<string, string>>(
         }
     }
     return path;
+}
+
+function parsePath(
+    path: string,
+): { parameters: Record<string, string>; routeKey: (typeof ROUTE_KEYS)[number] } | undefined {
+    const splitActualPath = path.split('/');
+
+    routeKeysLoop: for (const ROUTE_KEY of ROUTE_KEYS) {
+        const parameters: any = {};
+
+        const ROUTE_PATH = ROUTE_PATHS[ROUTE_KEY].path;
+        const splitCanonicalPath = ROUTE_PATH.split('/');
+        if (splitActualPath.length !== splitCanonicalPath.length) {
+            continue;
+        }
+        const chunkCount = splitActualPath.length;
+        for (let i = 0; i < chunkCount; i++) {
+            const actualPathChunk = splitActualPath[i];
+            const canonicalPathChunk = splitCanonicalPath[i];
+            if (canonicalPathChunk.length > 0 && canonicalPathChunk[0] === ':') {
+                const parameterKey = canonicalPathChunk.substring(1);
+                const parameterValue = actualPathChunk;
+                parameters[parameterKey] = parameterValue;
+            } else if (canonicalPathChunk !== actualPathChunk) {
+                continue routeKeysLoop;
+            }
+        }
+        return { parameters, routeKey: ROUTE_KEY };
+    }
+    return undefined;
 }
 
 function extractCurrentAttemptId(pathname: string) {

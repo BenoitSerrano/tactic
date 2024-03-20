@@ -1,5 +1,6 @@
 import { TAT_BLANK_STRING } from '../../../constants';
 import { textSplitter } from '../../../lib/textSplitter';
+import { acceptableAnswerType } from '../../../types';
 
 const SPLITTING_CHARACTER_FOR_TAT = '|';
 
@@ -8,6 +9,7 @@ const converter = {
     convertTextInputToAnswer,
     convertWordIndexToAnswerIndex,
     convertAnswerToTextInputs,
+    convertBlankedTitleToFullTitle,
 };
 
 function convertTextInputToAnswer({
@@ -82,6 +84,24 @@ function convertWordIndexToAnswerIndex({ wordIndex, title }: { wordIndex: number
 
 function computeBlankCount(title: string) {
     return textSplitter.split(title).filter((word) => word === TAT_BLANK_STRING).length;
+}
+
+function convertBlankedTitleToFullTitle(
+    blankedTitle: string,
+    acceptableAnswers: acceptableAnswerType[][],
+) {
+    const blankCount = computeBlankCount(blankedTitle);
+    let fullTitle = blankedTitle;
+    if (blankCount !== acceptableAnswers.length) {
+        console.error(
+            `ERROR: discrepancy between title "${blankedTitle}" and acceptableAnswers lenth: ${acceptableAnswers.length}`,
+        );
+        return fullTitle;
+    }
+    for (let i = 0; i < blankCount; i++) {
+        fullTitle = fullTitle.replace(TAT_BLANK_STRING, acceptableAnswers[i][0].answer);
+    }
+    return fullTitle;
 }
 
 export { converter, SPLITTING_CHARACTER_FOR_TAT };

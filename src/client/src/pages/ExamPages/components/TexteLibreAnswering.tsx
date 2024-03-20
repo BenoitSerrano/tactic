@@ -15,6 +15,7 @@ function TexteLibreAnswering(props: {
                 </Typography>
             </TitleContainer>
             <StyledTextField
+                multiline
                 placeholder="..."
                 value={props.currentAnswer}
                 onChange={onChangeAnswer}

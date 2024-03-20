@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { acceptableAnswerType, gradeType, questionKindType } from '../types';
+import { acceptableAnswerType, examFilterType, gradeType, questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -26,6 +26,7 @@ const api = {
     fetchExamResults,
     deleteExam,
     archiveExam,
+    unarchiveExam,
     createQuestion,
     createExercise,
     updateExercise,
@@ -233,8 +234,8 @@ async function createStudents(params: { emails: string[]; groupId: string }) {
     return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
-async function fetchExams() {
-    const URL = `${BASE_URL}/exams`;
+async function fetchExams(filter: examFilterType) {
+    const URL = `${BASE_URL}/exams?filter=${filter}`;
     return performApiCall(URL, 'GET');
 }
 
@@ -245,7 +246,12 @@ async function deleteExam(examId: string) {
 
 async function archiveExam(examId: string) {
     const URL = `${BASE_URL}/exams/${examId}/archivedAt`;
-    return performApiCall(URL, 'PATCH');
+    return performApiCall(URL, 'PATCH', { archive: true });
+}
+
+async function unarchiveExam(examId: string) {
+    const URL = `${BASE_URL}/exams/${examId}/archivedAt`;
+    return performApiCall(URL, 'PATCH', { archive: false });
 }
 
 async function fetchExamResults(examId: string) {

@@ -7,8 +7,20 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_CONSULTING: {
         path: '/student/students/:studentId/attempts/:attemptId/consult',
     },
-    EXAM_EDITING: {
-        path: '/teacher/exams/:examId/edit',
+    EXAM_EDITING_CONTENT: {
+        path: '/teacher/exams/:examId/edit/content',
+    },
+    EXAM_EDITING_PARAMETERS: {
+        path: '/teacher/exams/:examId/edit/parameters',
+    },
+    EXAM_EDITING_COLLECT: {
+        path: '/teacher/exams/:examId/edit/collect',
+    },
+    EXAM_EDITING_RESULTS: {
+        path: '/teacher/exams/:examId/edit/results',
+    },
+    EXAM_EDITING_CONSULT: {
+        path: '/teacher/exams/:examId/edit/consult',
     },
     STUDENT_HOME: {
         path: '/student/exams/:examId/students/:studentId/:encodedAction',
@@ -40,18 +52,16 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     HOME: {
         path: '/',
     },
-
     EXAM_DONE: {
         path: '/student/students/:studentId/exam-done',
     },
     EXAM_ARCHIVED: {
         path: '/student/exam-archived',
     },
-    EXAMS: { path: `/teacher/exams` },
+    EXAM_LIST: { path: `/teacher/exams` },
+    EXAM_LIST_ARCHIVED: { path: `/teacher/exams/archived` },
+    EXAM_LIST_CURRENT: { path: `/teacher/exams/current` },
     STUDENTS: { path: `/teacher/groups/:groupId/students` },
-    EXAM_RESULTS: {
-        path: `/teacher/exams/:examId/results`,
-    },
     EXAM_PREVIEWING: {
         path: `/teacher/exams/:examId/preview`,
     },

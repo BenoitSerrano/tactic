@@ -1,56 +1,58 @@
-function computeBreadcrumbs(pathname: string): Array<{ label: string; href?: string }> {
-    const breadcrumbs = [];
-    const path = pathname.split('/').filter(Boolean);
-    if (path.length === 0) {
-        return [];
-    }
-    if (path[0] !== 'teacher') {
-        return [];
-    }
+import { pathHandler } from '../../../lib/pathHandler';
+import { breadcrumbItemType } from '../types';
 
-    const homeHref = path.length > 1 ? `/${path.slice(0, 1).join('/')}` : undefined;
-
-    breadcrumbs.push({ label: 'Accueil', href: homeHref });
-
-    if (path.length === 1) {
+function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
+    const breadcrumbs: Array<breadcrumbItemType> = [];
+    const parsedPath = pathHandler.parsePath(pathname);
+    if (!parsedPath) {
         return breadcrumbs;
     }
+    switch (parsedPath.routeKey) {
+        case 'EXAM_LIST':
+        case 'EXAM_LIST_CURRENT':
+        case 'EXAM_LIST_ARCHIVED':
+            breadcrumbs.push({ label: 'Accueil', href: '/teacher' });
+            breadcrumbs.push({ label: 'Mes examens', isActive: true });
+            break;
+        case 'GROUPS':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes groupes', isActive: true });
+            break;
+        case 'TEACHER_HOME':
+            breadcrumbs.push({ label: 'Accueil', isActive: true });
+            break;
+        case 'EXAM_EDITING_COLLECT':
+        case 'EXAM_EDITING_CONTENT':
+        case 'EXAM_EDITING_PARAMETERS':
+        case 'EXAM_EDITING_RESULTS':
+        case 'EXAM_EDITING_CONSULT':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({ label: 'Édition', isActive: true });
+            break;
 
-    if (path[1] === 'exams') {
-        const examsHref = path.length > 2 ? `/${path.slice(0, 2).join('/')}` : undefined;
-        breadcrumbs.push({ label: 'Liste des examens', href: examsHref });
-        if (path.length === 2) {
-            return breadcrumbs;
-        } else if (path[3] === 'results') {
-            const examResultsHref = path.length > 4 ? `/${path.slice(0, 4).join('/')}` : undefined;
-            breadcrumbs.push({ label: 'Résultats', href: examResultsHref });
-            if (path.length === 4) {
-                return breadcrumbs;
-            }
-            breadcrumbs.push({ label: 'Correction de copie' });
-        } else if (path[3] === 'preview') {
-            const examPreviewHref = path.length > 4 ? `/${path.slice(0, 4).join('/')}` : undefined;
-            breadcrumbs.push({ label: 'Prévisualisation', href: examPreviewHref });
-            if (path.length === 4) {
-                return breadcrumbs;
-            }
-        } else if (path[3] === 'edit') {
-            const examEditHref = path.length > 4 ? `/${path.slice(0, 4).join('/')}` : undefined;
-            breadcrumbs.push({ label: 'Édition', href: examEditHref });
-            if (path.length === 4) {
-                return breadcrumbs;
-            }
-        }
-    } else if (path[1] === 'groups') {
-        const groupsHref = path.length > 2 ? `/${path.slice(0, 2).join('/')}` : undefined;
-        breadcrumbs.push({ label: 'Mes groupes', href: groupsHref });
-        if (path.length <= 3) {
-            return breadcrumbs;
-        }
-        if (path[3] === 'students') {
-            breadcrumbs.push({ label: 'Liste des étudiants' });
-            return breadcrumbs;
-        }
+        case 'EXAM_PREVIEWING':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({ label: 'Prévisualisation', isActive: true });
+            break;
+        case 'EXAM_CHECKING':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', {
+                    examId: parsedPath.parameters.examId,
+                }),
+            });
+
+            breadcrumbs.push({ label: 'Correction de copie', isActive: true });
+            break;
+        case 'STUDENTS':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes groupes', href: pathHandler.getRoutePath('GROUPS') });
+            breadcrumbs.push({ label: 'Liste des étudiants', isActive: true });
+            break;
     }
 
     return breadcrumbs;

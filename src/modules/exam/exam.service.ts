@@ -7,6 +7,7 @@ import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
 import { buildExerciseService } from '../exercise';
+import { examFilterType } from './types';
 
 export { buildExamService };
 
@@ -37,7 +38,8 @@ function buildExamService() {
         exam.name = name;
         exam.duration = duration !== null ? duration : null;
         exam.user = user;
-        return examRepository.save(exam);
+        const insertedExam = await examRepository.save(exam);
+        return insertedExam;
     }
 
     async function updateExamName(examId: Exam['id'], name: string) {
@@ -112,11 +114,20 @@ function buildExamService() {
         };
     }
 
-    async function getExams(user: User) {
+    async function getExams(criteria: { filter: examFilterType }, user: User) {
         return examRepository.find({
-            where: { user, archivedAt: IsNull() },
+            where: { user, archivedAt: getArchivedWhereFilter() },
             order: { createdAt: 'DESC' },
         });
+
+        function getArchivedWhereFilter() {
+            switch (criteria.filter) {
+                case 'current':
+                    return IsNull();
+                case 'archived':
+                    return Not(IsNull());
+            }
+        }
     }
 
     async function getUserIdForExam(examId: Exam['id']): Promise<User['id']> {
@@ -244,8 +255,12 @@ function buildExamService() {
         return newExam;
     }
 
-    async function updateExamArchivedAt(examId: Exam['id']) {
-        await examRepository.update({ id: examId }, { archivedAt: () => 'CURRENT_TIMESTAMP' });
+    async function updateExamArchivedAt(examId: Exam['id'], archive: boolean) {
+        if (archive) {
+            await examRepository.update({ id: examId }, { archivedAt: () => 'CURRENT_TIMESTAMP' });
+        } else {
+            await examRepository.update({ id: examId }, { archivedAt: null });
+        }
         return true;
     }
 }

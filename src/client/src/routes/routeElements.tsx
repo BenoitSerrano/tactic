@@ -5,7 +5,7 @@ import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
 import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamResults } from '../pages/ExamResults';
-import { Exams } from '../pages/Exams';
+import { ExamList } from '../pages/ExamList';
 import { Groups } from '../pages/StudentsPages/Groups';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
@@ -17,11 +17,15 @@ import { SignIn } from '../pages/SignIn';
 import { StudentAuthentication } from '../pages/StudentAuthentication';
 import { StudentHome } from '../pages/StudentHome';
 import { Students } from '../pages/StudentsPages/Students';
-import { TeacherHome } from '../pages/TeacherHome';
 import { ROUTE_KEYS } from './routeKeys';
 import { ExamEditing } from '../pages/ExamPages/ExamEditing';
 import { ExamArchived } from '../pages/ExamArchived';
 import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
+import { Navigate } from 'react-router-dom';
+import { ROUTE_PATHS } from './routePaths';
+import { ExamParameters } from '../pages/ExamParameters';
+import { ExamCollect } from '../pages/ExamCollect';
+import { ExamConsult } from '../pages/ExamConsult';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -30,9 +34,25 @@ const ROUTE_ELEMENTS: Record<
     EXAM_TAKING: {
         element: <ExamTaking />,
     },
-    EXAM_EDITING: {
+    EXAM_EDITING_CONTENT: {
         isAdmin: true,
         element: <ExamEditing />,
+    },
+    EXAM_EDITING_PARAMETERS: {
+        isAdmin: true,
+        element: <ExamParameters />,
+    },
+    EXAM_EDITING_COLLECT: {
+        isAdmin: true,
+        element: <ExamCollect />,
+    },
+    EXAM_EDITING_RESULTS: {
+        isAdmin: true,
+        element: <ExamResults />,
+    },
+    EXAM_EDITING_CONSULT: {
+        isAdmin: true,
+        element: <ExamConsult />,
     },
     STUDENT_HOME: {
         element: <StudentHome />,
@@ -73,13 +93,10 @@ const ROUTE_ELEMENTS: Record<
     EXAM_ARCHIVED: {
         element: <ExamArchived />,
     },
-    EXAMS: { isAdmin: true, element: <Exams /> },
+    EXAM_LIST: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST_CURRENT.path} /> },
+    EXAM_LIST_ARCHIVED: { isAdmin: true, element: <ExamList filter="archived" /> },
+    EXAM_LIST_CURRENT: { isAdmin: true, element: <ExamList filter="current" /> },
     STUDENTS: { isAdmin: true, element: <Students /> },
-    EXAM_RESULTS: {
-        isAdmin: true,
-
-        element: <ExamResults />,
-    },
     EXAM_PREVIEWING: {
         isAdmin: false,
         element: <ExamPreviewing />,
@@ -89,7 +106,7 @@ const ROUTE_ELEMENTS: Record<
 
         element: <ExamChecking />,
     },
-    TEACHER_HOME: { isAdmin: true, element: <TeacherHome /> },
+    TEACHER_HOME: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} /> },
     GROUPS: { isAdmin: true, element: <Groups /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
 };

@@ -1,6 +1,7 @@
 import { User } from '../user';
 import { Exam } from './Exam.entity';
 import { buildExamService } from './exam.service';
+import { EXAM_FILTERS, examFilterType } from './types';
 
 export { buildExamController };
 
@@ -46,8 +47,13 @@ function buildExamController() {
         return examService.updateExamDuration(params.urlParams.examId, params.body.duration);
     }
 
-    async function getExams(_params: {}, user: User) {
-        return examService.getExams(user);
+    async function getExams(params: { query: { filter: examFilterType } }, user: User) {
+        if (!EXAM_FILTERS.includes(params.query.filter)) {
+            throw new Error(
+                `Query filter "${params.query.filter}" is neither "archived" nor "current"`,
+            );
+        }
+        return examService.getExams({ filter: params.query.filter }, user);
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {
@@ -78,7 +84,10 @@ function buildExamController() {
         return examService.duplicateExam({ examId: params.urlParams.examId, user });
     }
 
-    async function updateExamArchivedAt(params: { urlParams: { examId: string } }) {
-        return examService.updateExamArchivedAt(params.urlParams.examId);
+    async function updateExamArchivedAt(params: {
+        urlParams: { examId: string };
+        body: { archive: boolean };
+    }) {
+        return examService.updateExamArchivedAt(params.urlParams.examId, params.body.archive);
     }
 }

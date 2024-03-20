@@ -5,7 +5,7 @@ import { accessControlBuilder } from '../lib/accessControlBuilder';
 
 const questionController = buildQuestionController();
 
-const questionRoutes: Array<routeType<any, any>> = [
+const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PUT',
         path: '/exams/:examId/exercises/:exerciseId/questions/:questionId',

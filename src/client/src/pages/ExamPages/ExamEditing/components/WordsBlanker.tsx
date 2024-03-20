@@ -2,6 +2,7 @@ import { styled } from '@mui/material';
 import { acceptableAnswerType } from '../../../../types';
 import { IsolatedWord, IsolatedWordContainer } from '../../components/IsolatedWord';
 import { computeTexteATrousState } from '../lib/computeTexteATrousState';
+import { textSplitter } from '../../../../lib/textSplitter';
 
 function WordsBlanker(props: {
     title: string;
@@ -11,7 +12,7 @@ function WordsBlanker(props: {
     pointsPerBlank: number;
     setPoints: (points: number) => void;
 }) {
-    const words = props.title.split(' ');
+    const words = textSplitter.split(props.title);
     return (
         <Container>
             {words.map((word, wordIndex) => (

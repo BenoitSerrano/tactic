@@ -6,7 +6,7 @@ import { questionKinds } from '../modules/question';
 
 const exerciseController = buildExerciseController();
 
-const exerciseRoutes: Array<routeType<any, any>> = [
+const exerciseRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PUT',
         path: `/exams/:examId/exercises/:exerciseId`,

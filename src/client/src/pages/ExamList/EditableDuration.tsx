@@ -26,7 +26,7 @@ function EditableDuration(props: { exam: examApiType }) {
                 text: `L'examen "${exam.name}" a bien été modifié`,
             });
             setIsEditing(false);
-            queryClient.invalidateQueries({ queryKey: ['exams'] });
+            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
         },
         onError: (error) => {
             console.error(error);
@@ -91,7 +91,7 @@ function EditableDuration(props: { exam: examApiType }) {
                     disabled={isConfirmDisabled}
                     isLoading={updateExamDurationMutation.isPending}
                     IconComponent={CheckIcon}
-                    onClick={confirmChanges}
+                    onClick={onValidateChanges}
                 />
                 <IconButton
                     title="Enlever la durée"
@@ -110,11 +110,17 @@ function EditableDuration(props: { exam: examApiType }) {
         confirmChanges();
     }
 
+    function onValidateChanges(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
+        confirmChanges();
+    }
+
     function confirmChanges() {
         updateExamDurationMutation.mutate({ examId: props.exam.id, duration: value });
     }
 
-    function setNullValue() {
+    function setNullValue(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
         setValue(null);
         updateExamDurationMutation.mutate({ examId: props.exam.id, duration: null });
     }
@@ -131,7 +137,8 @@ function EditableDuration(props: { exam: examApiType }) {
         }
     }
 
-    function activateEditing() {
+    function activateEditing(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
         setIsEditing(true);
     }
 }

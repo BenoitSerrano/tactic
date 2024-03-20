@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import { IconButton, TextField, Typography, styled } from '@mui/material';
 import { acceptableAnswerType } from '../../../../types';
 import { textSplitter } from '../../../../lib/textSplitter';
@@ -26,8 +25,8 @@ function PhraseMelangeeUpsertionModalContent(props: {
     >();
     const [originalPhrase, setOriginalPhrase] = useState(initialAcceptableAnswers);
     const words = textSplitter.split(originalPhrase);
-
-    const isResetCombinationDisabled = newRightAnswerCombination?.length === 0;
+    const isDeleteButtonDisabled =
+        !props.acceptableAnswers.length || props.acceptableAnswers[0].length <= 1;
 
     return (
         <>
@@ -58,59 +57,37 @@ function PhraseMelangeeUpsertionModalContent(props: {
                         title="Phrases correctes"
                         subtitle={`Cliquez sur le bouton "Ajouter" pour ajouter des phrases correctes`}
                     >
-                        <table>
-                            {props.acceptableAnswers[0].map(({ answer }, index) => (
-                                <tr key={answer}>
-                                    <td>
-                                        <Typography>{answer}</Typography>
-                                    </td>
-                                    <td>
-                                        <IconButton
-                                            color="error"
-                                            onClick={buildDeleteRightAnswer(index)}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </td>
-                                </tr>
-                            ))}
-                            {newRightAnswerCombination === undefined && (
-                                <tr>
-                                    <td>
-                                        <Button onClick={resetNewRightAnswer}>Ajouter</Button>
-                                    </td>
-                                    <td />
-                                </tr>
-                            )}
-                            <tr></tr>
-                            {newRightAnswerCombination !== undefined && (
-                                <tr>
-                                    <td>
-                                        <WordsShuffler
-                                            initialWords={words}
-                                            placeWord={buildPlaceWord()}
-                                            shuffledAnswerState={computeShuffledAnswerState(
-                                                words,
-                                                newRightAnswerCombination,
-                                            )}
-                                            reset={resetNewRightAnswer}
-                                        />
-                                    </td>
-                                    <td>
-                                        <IconButton color="error" onClick={deleteNewRightAnswer}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton
-                                            disabled={isResetCombinationDisabled}
-                                            color="warning"
-                                            onClick={resetNewRightAnswer}
-                                        >
-                                            <RefreshIcon />
-                                        </IconButton>
-                                    </td>
-                                </tr>
-                            )}
-                        </table>
+                        {props.acceptableAnswers[0].map(({ answer }, index) => (
+                            <RowContainer key={`answer-${answer}`}>
+                                <IconButton
+                                    color="error"
+                                    onClick={buildDeleteRightAnswer(index)}
+                                    disabled={isDeleteButtonDisabled}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                                <Typography>{answer}</Typography>
+                            </RowContainer>
+                        ))}
+                        {newRightAnswerCombination === undefined && (
+                            <Button onClick={resetNewRightAnswer}>Ajouter</Button>
+                        )}
+                        {newRightAnswerCombination !== undefined && (
+                            <RowContainer>
+                                <IconButton color="error" onClick={deleteNewRightAnswer}>
+                                    <DeleteIcon />
+                                </IconButton>
+                                <WordsShuffler
+                                    initialWords={words}
+                                    placeWord={buildPlaceWord()}
+                                    shuffledAnswerState={computeShuffledAnswerState(
+                                        words,
+                                        newRightAnswerCombination,
+                                    )}
+                                    reset={resetNewRightAnswer}
+                                />
+                            </RowContainer>
+                        )}
                     </QuestionInputContainer>
                 </MainContainer>
             )}
@@ -179,7 +156,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
     function buildDeleteRightAnswer(index: number) {
         return () => {
             const newAcceptableAnswerWithPoints = [...props.acceptableAnswers];
-            newAcceptableAnswerWithPoints.splice(index, 1);
+            newAcceptableAnswerWithPoints[0].splice(index, 1);
             props.setAcceptableAnswers(newAcceptableAnswerWithPoints);
         };
     }

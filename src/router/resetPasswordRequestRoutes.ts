@@ -4,7 +4,7 @@ import { routeType } from './types';
 
 const resetPasswordRequestController = buildResetPasswordRequestController();
 
-const resetPasswordRequestRoutes: Array<routeType<any, any>> = [
+const resetPasswordRequestRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/reset-password-requests',

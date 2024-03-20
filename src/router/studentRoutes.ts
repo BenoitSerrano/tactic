@@ -5,7 +5,7 @@ import { accessControlBuilder } from '../lib/accessControlBuilder';
 
 const studentController = buildStudentController();
 
-const studentRoutes: Array<routeType<any, any>> = [
+const studentRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/groups/:groupId/students',

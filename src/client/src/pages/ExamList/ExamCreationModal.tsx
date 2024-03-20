@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
@@ -10,22 +10,19 @@ import { EXAM_DEFAULT_DURATION } from './constants';
 function ExamCreationModal(props: {
     close: () => void;
     isOpen: boolean;
-    onExamCreated: () => void;
+    onExamCreated: (examId: string) => void;
 }) {
     const [name, setName] = useState('');
     const [duration, setDuration] = useState(`${EXAM_DEFAULT_DURATION}`);
     const [isThereDuration, setIsThereDuration] = useState(true);
 
-    const queryClient = useQueryClient();
-
     const createExamMutation = useMutation({
         mutationFn: api.createExam,
-        onSuccess: () => {
+        onSuccess: (exam) => {
             setDuration(`${EXAM_DEFAULT_DURATION}`);
             setName('');
             setIsThereDuration(true);
-            queryClient.invalidateQueries({ queryKey: ['exams'] });
-            props.onExamCreated();
+            props.onExamCreated(exam.id);
             props.close();
         },
     });
