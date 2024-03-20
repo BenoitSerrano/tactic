@@ -42,11 +42,8 @@ function QuestionsEditing(props: {
     exercises: Array<exerciseWithQuestionsType>;
 }) {
     const { displayAlert } = useAlert();
-    const initialExerciseIdExpanded =
-        props.exercises.length > 0 ? props.exercises[0].id : undefined;
-    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
-        initialExerciseIdExpanded,
-    );
+
+    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
     const [exerciseUpsertionModalStatus, setExerciseUpsertionModalStatus] = useState<
         exerciseUpsertionModalStatusType | undefined
     >(undefined);

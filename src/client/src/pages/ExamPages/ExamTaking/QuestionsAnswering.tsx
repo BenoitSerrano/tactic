@@ -53,11 +53,7 @@ function QuestionsAnswering(props: {
             initialCurrentAnswers[question.id] = question.currentAnswer;
         }
     }
-    const initialExerciseIdExpanded =
-        props.exercises.length > 0 ? props.exercises[0].id : undefined;
-    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
-        initialExerciseIdExpanded,
-    );
+    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
     const totalPoints = computeTotalPoints(props.exercises);

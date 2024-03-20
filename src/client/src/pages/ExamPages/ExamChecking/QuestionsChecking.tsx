@@ -107,11 +107,7 @@ function QuestionsChecking(props: {
             console.error(error);
         },
     });
-    const initialExerciseIdExpanded =
-        props.exercises.length > 0 ? props.exercises[0].id : undefined;
-    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>(
-        initialExerciseIdExpanded,
-    );
+    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
 
     const [attemptIdToNavigateTo, setAttemptIdToNavigateTo] = useState<string | undefined>(
         undefined,
