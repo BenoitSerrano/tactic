@@ -132,7 +132,6 @@ function QCMUpsertionModalContent(props: {
 
 const ButtonAddPossibleAnswerContainer = styled('div')(({ theme }) => ({
     display: 'flex',
-    justifyContent: 'flex-end',
     marginBottom: theme.spacing(2),
 }));
 
@@ -140,7 +139,6 @@ const ModalContent = styled('div')({ width: '100%' });
 const InputContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
 }));
