@@ -65,9 +65,9 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'PATCH',
-        path: '/exams/:examId/attempts/:attemptId/questions/:questionId/grade',
+        path: '/exams/:examId/attempts/:attemptId/questions/:questionId/manual-mark',
         isAuthenticated: true,
-        controller: attemptController.updateGrade,
+        controller: attemptController.updateManualMark,
         checkAuthorization: accessControlBuilder.hasAccessToResources([
             {
                 entity: 'exam',
@@ -75,9 +75,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
             },
         ]),
         schema: Joi.object({
-            grade: Joi.string()
-                .required()
-                .regex(/^[A-E]$/),
+            manualMark: Joi.number().required(),
         }),
     },
     {

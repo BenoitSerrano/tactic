@@ -48,8 +48,8 @@ function UpdateAnswersButtons(props: {
         },
     });
 
-    const saveGradeMutation = useMutation({
-        mutationFn: api.updateGrade,
+    const saveManualMarkMutation = useMutation({
+        mutationFn: api.updateManualMark,
         onSuccess: () => {
             props.refetch();
         },
@@ -79,8 +79,11 @@ function UpdateAnswersButtons(props: {
                         ? addAcceptableAnswerMutation.variables.acceptableAnswer.grade
                         : undefined;
 
-                const updateGradeLoadingInfo = saveGradeMutation.isPending
-                    ? saveGradeMutation.variables.grade
+                const pendingConvertedGrade = saveManualMarkMutation.isPending
+                    ? gradeConverter.convertMarkToGrade(
+                          saveManualMarkMutation.variables?.manualMark,
+                          props.question.points,
+                      )
                     : undefined;
 
                 const isLoading = computeIsUpdateAnswerButtonLoading(
@@ -89,12 +92,13 @@ function UpdateAnswersButtons(props: {
                     {
                         removeOkAnswer: removeOkAnswerMutation.isPending,
                         addAcceptableAnswer: addAcceptableAnswerLoadingInfo,
-                        updateGrade: updateGradeLoadingInfo,
+                        updateGrade: pendingConvertedGrade,
                     },
                 );
 
                 return (
                     <IconButton
+                        placement="top"
                         title={`Marquer comme ${adjective}`}
                         size="small"
                         color={color}
@@ -122,11 +126,15 @@ function UpdateAnswersButtons(props: {
             }
 
             if (props.isQuestionManuallyCorrected) {
-                saveGradeMutation.mutate({
+                const manualMark = gradeConverter.convertGradeToMark(
+                    grade,
+                    props.question.points,
+                ) as number;
+                saveManualMarkMutation.mutate({
                     examId: props.examId,
                     attemptId: props.attemptId,
                     questionId: props.question.id,
-                    grade,
+                    manualMark,
                 });
             } else {
                 if (grade === 'E') {

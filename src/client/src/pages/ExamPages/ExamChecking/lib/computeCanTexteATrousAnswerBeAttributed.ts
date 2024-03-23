@@ -3,7 +3,7 @@ import { questionWithAnswersType } from '../../types';
 
 function computeCanTexteATrousAnswerBeAttributed(
     gradeToAttribute: gradeType,
-    currentBlankGrade: gradeType,
+    currentBlankGrade: gradeType | undefined,
     blankIndex: number,
     question: questionWithAnswersType,
 ) {

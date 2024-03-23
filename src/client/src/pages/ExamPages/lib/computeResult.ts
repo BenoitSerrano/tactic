@@ -8,7 +8,7 @@ function computeResult(exercises: exerciseWithAnswersType[]) {
     for (const exercise of exercises) {
         for (const question of exercise.questions) {
             const mark =
-                question.kind === 'texteATrous'
+                question.kind === 'texteATrous' || question.kind === 'texteLibre'
                     ? question.mark
                     : gradeConverter.convertGradeToMark(question.grade, question.points);
             totalMark += mark || 0;

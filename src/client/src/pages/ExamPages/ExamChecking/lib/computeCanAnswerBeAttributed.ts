@@ -1,3 +1,4 @@
+import { gradeConverter } from '../../../../lib/gradeConverter';
 import { gradeType } from '../../../../types';
 import { amendableQuestionWithAnswersType } from '../../types';
 
@@ -10,7 +11,8 @@ function computeCanAnswerBeAttributed(
     }
 
     if (question.kind === 'texteLibre') {
-        return newGrade !== question.grade;
+        const convertedGrade = gradeConverter.convertMarkToGrade(question.mark, question.points);
+        return newGrade !== convertedGrade;
     }
 
     if (!question.answer) {

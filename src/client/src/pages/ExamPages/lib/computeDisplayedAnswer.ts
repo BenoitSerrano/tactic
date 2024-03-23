@@ -7,7 +7,12 @@ import { SPLITTING_CHARACTER_FOR_TAT } from './converter';
 
 type chunkType =
     | { kind: 'text'; value: string }
-    | { kind: 'coloredText'; value: string; status: answerStatusType; grade: gradeType };
+    | {
+          kind: 'coloredText';
+          value: string;
+          status: answerStatusType;
+          grade: gradeType | undefined;
+      };
 type displayedAnswerType = { title: Array<chunkType>; answer: Array<chunkType> | undefined };
 
 function computeDisplayedAnswer(
@@ -81,7 +86,7 @@ function computeDisplayedAnswer(
                         kind: 'coloredText',
                         value: question.answer || '',
                         status: answerStatus,
-                        grade: question.grade || 'E',
+                        grade: question.grade,
                     },
                 ],
             };

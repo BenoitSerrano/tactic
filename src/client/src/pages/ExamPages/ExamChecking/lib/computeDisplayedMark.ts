@@ -1,21 +1,22 @@
 import { gradeConverter } from '../../../../lib/gradeConverter';
-import { gradeType } from '../../../../types';
+import { questionWithAnswersType } from '../../types';
 
-function computeDisplayedMark(props: {
-    grade: gradeType | undefined;
-    mark: number | undefined;
-    answer: string | undefined;
-    totalPoints: number;
-}): string {
-    if (props.grade) {
-        const displayedMark = gradeConverter.convertGradeToMark(props.grade, props.totalPoints);
-        return `${displayedMark} / ${props.totalPoints}`;
+function computeDisplayedMark(question: questionWithAnswersType): {
+    mark: string | undefined;
+    points: number;
+} {
+    const points = question.points;
+    if (question.kind === 'texteATrous' || question.kind === 'texteLibre') {
+        console.log(question.mark);
+        if (question.mark === undefined) {
+            const displayedMark = question.answer ? undefined : '0';
+            return { mark: displayedMark, points };
+        } else {
+            return { mark: `${question.mark}`, points };
+        }
     }
-    if (props.mark === undefined) {
-        const displayedMark = props.answer ? '...' : 0;
-        return `${displayedMark} / ${props.totalPoints}`;
-    }
-    return `${props.mark} / ${props.totalPoints}`;
+    const displayedMark = gradeConverter.convertGradeToMark(question.grade, question.points);
+    return { mark: `${displayedMark}`, points };
 }
 
 export { computeDisplayedMark };

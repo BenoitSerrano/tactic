@@ -1,7 +1,6 @@
 import { encoder } from '../../lib/encoder';
 import { Exam } from '../exam';
 import { Question } from '../question';
-import { convertGradeToMark } from '../question/lib/convertGradeToMark';
 import { gradeType, questionDtoType } from '../question/types';
 import { Attempt } from './Attempt.entity';
 import { computeAutomaticMark } from './lib/computeAutomaticMark';
@@ -13,6 +12,8 @@ const attemptUtils = {
     parseAnswers,
     encodeGrades,
     decodeGrades,
+    encodeManualMarks,
+    decodeManualMarks,
     computeNotationInfo,
 };
 
@@ -64,26 +65,42 @@ function parseAnswers(answers: string[]): attemptAnswersType {
 
 function computeNotationInfo({
     answers,
-    gradesArray,
+    manualMarks,
     question,
 }: {
     answers: attemptAnswersType;
     question: questionDtoType;
-    gradesArray: Attempt['manualGrades'];
+    manualMarks: Attempt['manualMarks'];
 }) {
-    const manualGrades = attemptUtils.decodeGrades(gradesArray);
+    const decodedManualMarks = attemptUtils.decodeManualMarks(manualMarks);
 
     const isQuestionManuallyCorrected = question.kind === 'texteLibre';
     if (isQuestionManuallyCorrected) {
-        const grade = manualGrades[question.id] || undefined;
-        const mark = convertGradeToMark(grade, question.points);
-        return { grade, mark };
+        const mark = decodedManualMarks[question.id];
+        return { grade: undefined, mark };
     }
 
     return computeAutomaticMark({
         questionDto: question,
         answer: answers[question.id],
     });
+}
+
+function encodeManualMarks(manualMarks: Record<Question['id'], number>): string[] {
+    return Object.entries(manualMarks).map(
+        ([questionId, manualMark]) => `${questionId}:${manualMark}`,
+    );
+}
+
+function decodeManualMarks(marksArray: string[]): Record<Question['id'], number> {
+    return marksArray.reduce((acc, markEntry) => {
+        const splitMark = markEntry.split(':');
+        if (splitMark.length !== 2) {
+            throw new Error(`marksArray '${marksArray.join(',')}' is wrongly formatted`);
+        }
+        const [questionId, mark] = splitMark;
+        return { ...acc, [Number(questionId)]: Number(mark) };
+    }, {} as Record<Question['id'], number>);
 }
 
 function encodeGrades(grades: Record<Question['id'], gradeType>) {

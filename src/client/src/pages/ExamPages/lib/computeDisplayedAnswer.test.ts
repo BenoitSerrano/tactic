@@ -258,7 +258,7 @@ describe('computeDisplayedAnswer', () => {
 
             expect(displayedAnswer).toEqual({
                 title: [{ kind: 'text', value: 'Texte libre ?' }],
-                answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: 'E' }],
+                answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: undefined }],
             });
         });
 
@@ -270,7 +270,7 @@ describe('computeDisplayedAnswer', () => {
                 possibleAnswers: [],
                 acceptableAnswers: [],
                 answer: "Youpi j'ai une assez bonne note",
-                grade: 'C' as gradeType,
+                mark: 1,
                 points: 2,
             };
             const displayedAnswer = computeDisplayedAnswer(question, 'acceptable');
@@ -282,7 +282,7 @@ describe('computeDisplayedAnswer', () => {
                         kind: 'coloredText',
                         value: "Youpi j'ai une assez bonne note",
                         status: 'acceptable',
-                        grade: 'C',
+                        grade: undefined,
                     },
                 ],
             });

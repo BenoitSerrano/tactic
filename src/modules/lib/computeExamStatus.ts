@@ -9,7 +9,7 @@ function computeExamStatus(
         id: Attempt['id'];
         endedAt: Attempt['endedAt'];
         answers: Attempt['answers'];
-        manualGrades: Attempt['manualGrades'];
+        manualMarks: Attempt['manualMarks'];
         startedAt: Attempt['startedAt'];
         correctedAt: Attempt['correctedAt'];
         exam: Pick<Exam, 'id'>;
@@ -32,7 +32,7 @@ function computeExamStatus(
             .map((question) => {
                 const { mark } = attemptUtils.computeNotationInfo({
                     answers,
-                    gradesArray: attempt.manualGrades,
+                    manualMarks: attempt.manualMarks,
                     question,
                 });
                 return mark || 0;

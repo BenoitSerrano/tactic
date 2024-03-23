@@ -3,7 +3,6 @@ import { Exam, buildExamService } from '../exam';
 import { Exercise, buildExerciseService } from '../exercise';
 import { computeAttemptStatus } from '../lib/computeExamStatus';
 import { Question, buildQuestionService } from '../question';
-import { gradeType } from '../question/types';
 import { Student } from '../student';
 import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
@@ -29,7 +28,7 @@ function buildAttemptService() {
         bulkInsertAttempts,
         deleteQuestionAnswers,
         deleteExerciseAnswers,
-        updateGrade,
+        updateManualMark,
         updateAttemptEndedAt,
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
@@ -101,7 +100,7 @@ function buildAttemptService() {
                 correctedAt: true,
                 endedAt: true,
                 answers: true,
-                manualGrades: true,
+                manualMarks: true,
                 student: { id: true, email: true },
             },
 
@@ -191,19 +190,22 @@ function buildAttemptService() {
         return result.affected == 1;
     }
 
-    async function updateGrade(
+    async function updateManualMark(
         attemptId: Attempt['id'],
         questionId: Question['id'],
-        grade: gradeType,
+        manualMark: number,
     ) {
         const attempt = await attemptRepository.findOneOrFail({
             where: { id: attemptId },
-            select: { id: true, manualGrades: true },
+            select: { id: true, manualMarks: true },
         });
 
-        const previousGrades = attemptUtils.decodeGrades(attempt.manualGrades);
-        const newGrades = attemptUtils.encodeGrades({ ...previousGrades, [questionId]: grade });
-        await attemptRepository.update({ id: attemptId }, { manualGrades: newGrades });
+        const previousMarks = attemptUtils.decodeManualMarks(attempt.manualMarks);
+        const newMarks = attemptUtils.encodeManualMarks({
+            ...previousMarks,
+            [questionId]: manualMark,
+        });
+        await attemptRepository.update({ id: attemptId }, { manualMarks: newMarks });
         return true;
     }
 
