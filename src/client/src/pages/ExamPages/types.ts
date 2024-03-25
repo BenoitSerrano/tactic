@@ -55,7 +55,8 @@ type texteLibreWithAnswersType = {
     title: string;
     kind: 'texteLibre';
     answer: string | undefined;
-    grade: gradeType | undefined;
+    grade?: undefined;
+    mark: number | undefined;
     points: number;
 };
 

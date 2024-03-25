@@ -23,6 +23,11 @@ async function importDb() {
     const questionRepository = dataSource.getRepository(Question);
     const user = await userRepository.findOneOrFail({ where: {} });
 
+    console.log('Erasing local database...');
+
+    await examRepository.delete({});
+    await groupRepository.delete({});
+
     console.log('Fetching exams...');
     const allExams = await api.fetchAllExams();
     console.log(`${allExams.length} exams fetched! Inserting them in database...`);
@@ -71,6 +76,7 @@ async function importDb() {
     console.log(`${allAttempts.length} attempts fetched! Inserting them in database...`);
 
     for (const attempt of allAttempts) {
+        console.log(`attempt ${attempt.id}`);
         const translatedAnswers = replaceQuestionIdInAnswers(attempt.answers, questionIdMapping);
         const translatedGrades = replaceQuestionIdInGrades(attempt.manualGrades, questionIdMapping);
         await attemptRepository.insert({
@@ -87,15 +93,20 @@ function replaceQuestionIdInAnswers(
     questionIdMapping: questionIdMappingType,
 ): Attempt['answers'] {
     const ANSWER_REGEX = /(\d+):(.*)/;
-    const attemptAnswers = answers.map((answer) => {
-        let regexMatch = answer.match(ANSWER_REGEX);
-        if (!regexMatch) {
-            throw new Error(`answer "${answer}" is wrongly formatted.`);
-        }
-        const [_, distantQuestionId, encodedQuestionAnswer] = regexMatch;
-        const localQuestionId = questionIdMapping[Number(distantQuestionId)];
-        return `${localQuestionId}:${encodedQuestionAnswer}`;
-    });
+    const attemptAnswers = answers
+        .map((answer) => {
+            let regexMatch = answer.match(ANSWER_REGEX);
+            if (!regexMatch) {
+                throw new Error(`answer "${answer}" is wrongly formatted.`);
+            }
+            const [_, distantQuestionId, encodedQuestionAnswer] = regexMatch;
+            const localQuestionId = questionIdMapping[Number(distantQuestionId)];
+            if (localQuestionId === undefined) {
+                return '';
+            }
+            return `${localQuestionId}:${encodedQuestionAnswer}`;
+        })
+        .filter(Boolean);
     return attemptAnswers;
 }
 
@@ -103,16 +114,21 @@ function replaceQuestionIdInGrades(
     manualGrades: Attempt['manualGrades'],
     questionIdMapping: questionIdMappingType,
 ): Attempt['answers'] {
-    const GRADE_REGEX = /^(\d+):[A-E]$/;
-    const newManualGrades = manualGrades.map((manualGrade) => {
-        let regexMatch = manualGrade.match(GRADE_REGEX);
-        if (!regexMatch) {
-            throw new Error(`manualGrade "${manualGrade}" is wrongly formatted.`);
-        }
-        const [_, distantQuestionId, grade] = regexMatch;
-        const localQuestionId = questionIdMapping[Number(distantQuestionId)];
-        return `${localQuestionId}:${grade}`;
-    });
+    const GRADE_REGEX = /^(\d+):([A-E])$/;
+    const newManualGrades = manualGrades
+        .map((manualGrade) => {
+            let regexMatch = manualGrade.match(GRADE_REGEX);
+            if (!regexMatch || regexMatch.length !== 3 || isNaN(Number(regexMatch[1]))) {
+                throw new Error(`manualGrade "${manualGrade}" is wrongly formatted.`);
+            }
+            const [_, distantQuestionId, grade] = regexMatch;
+            const localQuestionId = questionIdMapping[Number(distantQuestionId)];
+            if (localQuestionId === undefined) {
+                return '';
+            }
+            return `${localQuestionId}:${grade}`;
+        })
+        .filter(Boolean);
     return newManualGrades;
 }
 

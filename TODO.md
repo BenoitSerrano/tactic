@@ -1,4 +1,7 @@
--   afficher en surbrillance un élément du menu lorsqu'il est actif
--   afficher dans le header les 4 éléments du menu Examen > Paramètres > Collecte des réponses > Résultat
--   afficher une boîte vide et un message si pas d'examen
--   afficher un groupe vide et un message si pas de group
+- [ ] ETQP, je peux écrire une note pour le texte libre
+- [ ] ETQP, j'ai 3 possible answers par défaut dans un QCM
+- [ ] ETQP, je peux dupliquer une question dans un exercice (import CopyAllIcon from '@mui/icons-material/CopyAll';)
+- [ ] ETQP, quand j'appuie sur Entrée dans la création d'une question, le formulaire est validé
+- [ ] ETQP, je vois avec quel compte je suis connecté
+- [ ] ETQE, quand je consulte ma copie, je vois la bonne réponse si ma réponse n'est pas la bonne
+- [ ] ETQP, je veux pouvoir éditer le texte d'un texte à trous directement dans la page

@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { acceptableAnswerType, examFilterType, gradeType, questionKindType } from '../types';
+import { acceptableAnswerType, examFilterType, questionKindType } from '../types';
 import { localStorage } from './localStorage';
 
 const api = {
@@ -39,7 +39,7 @@ const api = {
     deleteQuestion,
     duplicateQuestion,
     updateQuestionsOrder,
-    updateGrade,
+    updateManualMark,
     updateExercisesOrder,
     updateEndedAt,
     deleteEndedAt,
@@ -403,15 +403,15 @@ async function updateQuestionsOrder(params: {
     });
 }
 
-async function updateGrade(params: {
+async function updateManualMark(params: {
     examId: string;
     attemptId: string;
     questionId: number;
-    grade: gradeType;
+    manualMark: number;
 }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/grade`;
+    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/manual-mark`;
     return performApiCall(URL, 'PATCH', {
-        grade: params.grade,
+        manualMark: params.manualMark,
     });
 }
 

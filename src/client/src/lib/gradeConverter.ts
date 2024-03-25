@@ -1,11 +1,33 @@
 import { gradeType } from '../types';
 
+const gradeMappings: Array<{ grade: gradeType; ratio: number }> = [
+    { grade: 'A', ratio: 1 },
+    { grade: 'B', ratio: 0.75 },
+    { grade: 'C', ratio: 0.5 },
+    { grade: 'D', ratio: 0.25 },
+    { grade: 'E', ratio: 0 },
+];
+
 const gradeConverter = {
     convertGradeToMark,
     convertGradeToStatus,
     convertGradeToAdjective,
     convertGradeToExplanation,
+    convertMarkToGrade,
 };
+
+function convertMarkToGrade(mark: number | undefined, points: number): gradeType | undefined {
+    if (mark === undefined) {
+        return undefined;
+    }
+    const ratio = mark / points;
+    const foundGrade = gradeMappings.find((gradeMapping) => gradeMapping.ratio === ratio);
+    if (foundGrade) {
+        return foundGrade.grade;
+    } else {
+        return undefined;
+    }
+}
 
 function convertGradeToMark(grade: gradeType | undefined, totalPoints: number) {
     switch (grade) {

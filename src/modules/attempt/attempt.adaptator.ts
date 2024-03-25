@@ -77,7 +77,7 @@ function convertAttemptToAttemptWithAnswers(
                     ...question,
                     ...attemptUtils.computeNotationInfo({
                         answers: attemptAnswers,
-                        gradesArray: attempt.manualGrades,
+                        manualMarks: attempt.manualMarks,
                         question,
                     }),
                     answer: attemptAnswers[question.id],

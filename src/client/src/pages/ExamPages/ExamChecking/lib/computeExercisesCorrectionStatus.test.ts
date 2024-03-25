@@ -23,8 +23,8 @@ describe('computeExercisesCorrectionStatus', () => {
             {
                 ...baseExercise,
                 questions: [
-                    { ...baseQuestion, id: 2, grade: 'D', answer: 'truc' },
-                    { ...baseQuestion, id: 3, grade: 'C', answer: 'bidule' },
+                    { ...baseQuestion, id: 2, mark: 0, answer: 'truc' },
+                    { ...baseQuestion, id: 3, mark: 2, answer: 'bidule' },
                 ],
             },
         ];
@@ -39,8 +39,8 @@ describe('computeExercisesCorrectionStatus', () => {
             {
                 ...baseExercise,
                 questions: [
-                    { ...baseQuestion, id: 2, grade: 'D', answer: 'truc' },
-                    { ...baseQuestion, id: 3, grade: undefined as any, answer: 'bidule' },
+                    { ...baseQuestion, id: 2, mark: 1, answer: 'truc' },
+                    { ...baseQuestion, id: 3, mark: undefined, answer: 'bidule' },
                 ],
             },
         ];
@@ -55,8 +55,8 @@ describe('computeExercisesCorrectionStatus', () => {
             {
                 ...baseExercise,
                 questions: [
-                    { ...baseQuestion, id: 2, grade: 'D', answer: 'truc' },
-                    { ...baseQuestion, id: 3, grade: undefined as any, answer: '' },
+                    { ...baseQuestion, id: 2, mark: 1, answer: 'truc' },
+                    { ...baseQuestion, id: 3, mark: undefined as any, answer: '' },
                 ],
             },
         ];

@@ -43,7 +43,7 @@ function buildStudentService() {
                     startedAt: true,
                     endedAt: true,
                     answers: true,
-                    manualGrades: true,
+                    manualMarks: true,
                     exam: { id: true },
                 },
                 group: { id: true },

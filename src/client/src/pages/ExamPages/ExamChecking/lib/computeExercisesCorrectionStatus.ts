@@ -17,7 +17,7 @@ function computeExercisesCorrectionStatus(
         };
         for (const question of exercise.questions) {
             if (question.kind === 'texteLibre') {
-                if (question.grade === undefined && !!question.answer) {
+                if (question.mark === undefined && !!question.answer) {
                     exercisesCorrectionStatuses = {
                         ...exercisesCorrectionStatuses,
                         [exercise.id]: 'notCorrected',

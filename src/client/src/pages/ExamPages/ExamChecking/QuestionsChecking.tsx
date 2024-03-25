@@ -1,4 +1,4 @@
-import { IconButton, Typography, styled } from '@mui/material';
+import { IconButton, styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GradingIcon from '@mui/icons-material/Grading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -24,9 +24,9 @@ import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
-import { computeDisplayedMark } from './lib/computeDisplayedMark';
 import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
+import { DisplayedMark } from './DisplayedMark';
 
 function QuestionsChecking(props: {
     refetch: () => void;
@@ -186,20 +186,9 @@ function QuestionsChecking(props: {
                                 {exercise.questions.map((question, questionIndex: number) => {
                                     const isQuestionManuallyCorrected =
                                         manualQuestionKinds.includes(question.kind);
-                                    const grade =
-                                        question.kind === 'texteATrous'
-                                            ? undefined
-                                            : question.grade;
-                                    const mark =
-                                        question.kind === 'texteATrous' ? question.mark : undefined;
-                                    const answerStatus = computeAnswerStatus(grade);
 
-                                    const displayedMark = computeDisplayedMark({
-                                        answer: question.answer,
-                                        mark,
-                                        grade,
-                                        totalPoints: question.points,
-                                    });
+                                    const answerStatus = computeAnswerStatus(question);
+
                                     const isLastQuestion =
                                         questionIndex === exercise.questions.length - 1;
                                     return (
@@ -220,7 +209,14 @@ function QuestionsChecking(props: {
                                                             }
                                                         />
                                                     )}
-                                                    <Typography>{displayedMark}</Typography>
+                                                    <DisplayedMark
+                                                        attemptId={props.attemptId}
+                                                        examId={props.examId}
+                                                        question={question}
+                                                        isQuestionManuallyCorrected={
+                                                            isQuestionManuallyCorrected
+                                                        }
+                                                    />
                                                 </QuestionIndicatorsContainer>
                                                 <QuestionChecking
                                                     attemptStatus={props.attemptStatus}

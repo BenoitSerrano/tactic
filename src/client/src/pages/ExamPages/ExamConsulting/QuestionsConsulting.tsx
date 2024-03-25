@@ -33,19 +33,9 @@ function QuestionsConsulting(props: {
                                 exercise={exercise}
                             >
                                 {exercise.questions.map((question, index: number) => {
-                                    const grade =
-                                        question.kind === 'texteATrous'
-                                            ? undefined
-                                            : question.grade;
-                                    const answerStatus = computeAnswerStatus(grade);
-                                    const mark =
-                                        question.kind === 'texteATrous' ? question.mark : undefined;
-                                    const displayedMark = computeDisplayedMark({
-                                        answer: question.answer,
-                                        mark,
-                                        grade,
-                                        totalPoints: question.points,
-                                    });
+                                    const answerStatus = computeAnswerStatus(question);
+
+                                    const displayedMark = computeDisplayedMark(question);
                                     const isLastQuestion = index === exercise.questions.length - 1;
 
                                     return (
@@ -53,7 +43,10 @@ function QuestionsConsulting(props: {
                                             <QuestionContainer key={question.id}>
                                                 <QuestionIndicatorsContainer>
                                                     <QuestionIndicatorContainer>
-                                                        <Typography>{displayedMark}</Typography>
+                                                        <Typography>
+                                                            {displayedMark.mark} /{' '}
+                                                            {displayedMark.points}
+                                                        </Typography>
                                                     </QuestionIndicatorContainer>
                                                 </QuestionIndicatorsContainer>
                                                 <QuestionChecking

@@ -43,6 +43,9 @@ export class Attempt implements AttemptInterface {
     @Column('simple-array', { default: '' })
     manualGrades: string[];
 
+    @Column('simple-array', { default: '' })
+    manualMarks: string[];
+
     @Column({ type: 'timestamptz', nullable: true })
     endedAt: string | null;
 

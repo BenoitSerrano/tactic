@@ -1,14 +1,20 @@
-import { gradeType } from '../../../types';
-import { answerStatusType } from '../types';
+import { answerStatusType, questionWithAnswersType } from '../types';
 
-function computeAnswerStatus(grade: gradeType | undefined): answerStatusType {
-    if (grade === undefined) {
-        return undefined;
+function computeAnswerStatus(question: questionWithAnswersType): answerStatusType {
+    if (question.kind === 'texteATrous' || question.kind === 'texteLibre') {
+        if (question.mark === question.points) {
+            return 'right';
+        } else if (question.mark !== undefined && question.mark > 0) {
+            return 'acceptable';
+        } else {
+            return 'wrong';
+        }
     }
-    if (grade === 'E') {
+
+    if (question.grade === 'E') {
         return 'wrong';
     }
-    if (grade === 'A') {
+    if (question.grade === 'A') {
         return 'right';
     }
     return 'acceptable';

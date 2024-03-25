@@ -9,13 +9,18 @@ function IconButton(props: {
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
     IconComponent: React.ElementType;
     disabled?: boolean;
+    placement?: 'top' | 'bottom';
 }) {
     const { IconComponent } = props;
     const size = props.size || 'medium';
     if (props.disabled) {
         return renderButton();
     }
-    return <Tooltip title={props.title}>{renderButton()}</Tooltip>;
+    return (
+        <Tooltip title={props.title} placement={props.placement}>
+            {renderButton()}
+        </Tooltip>
+    );
 
     function renderButton() {
         return (
