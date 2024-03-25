@@ -29,7 +29,8 @@ export class ConvertGradesToMarks1711185211447 implements MigrationInterface {
                 const [questionId, grade] = splitManualGrade as [number, gradeType];
                 const totalPoints = questionPointsMapping[Number(questionId)];
                 if (totalPoints === undefined) {
-                    throw new Error(`No points defined for questionId ${questionId}`);
+                    console.log(`No points defined for questionId ${questionId}`);
+                    continue;
                 }
                 const manualMark = convertGradeToMark(grade, totalPoints);
                 if (manualMark === undefined) {
