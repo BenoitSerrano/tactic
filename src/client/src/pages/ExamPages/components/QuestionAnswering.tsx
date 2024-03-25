@@ -1,5 +1,19 @@
 import { questionWithoutAnswerType } from '../types';
-import { questionAnsweringComponentMapping } from '../constants';
+import { QuestionChoixMultipleAnswering } from './QuestionChoixMultipleAnswering';
+import { QuestionReponseAnswering } from './QuestionReponseAnswering';
+import { PhraseMelangeeAnswering } from './PhraseMelangeeAnswering';
+import { TexteLibreAnswering } from './TexteLibreAnswering';
+import { TexteATrousAnswering } from './TexteATrousAnswering';
+import { questionKindType } from '../../../types';
+import { ElementType } from 'react';
+
+const questionAnsweringComponentMapping: Record<questionKindType, ElementType> = {
+    qcm: QuestionChoixMultipleAnswering,
+    questionReponse: QuestionReponseAnswering,
+    phraseMelangee: PhraseMelangeeAnswering,
+    texteLibre: TexteLibreAnswering,
+    texteATrous: TexteATrousAnswering,
+};
 
 function QuestionAnswering(props: {
     question: questionWithoutAnswerType;

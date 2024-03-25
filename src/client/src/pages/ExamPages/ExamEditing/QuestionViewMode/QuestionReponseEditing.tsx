@@ -2,13 +2,7 @@ import { TextField, Typography, styled } from '@mui/material';
 import { formErrorHandler } from '../lib/formErrorHandler';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { FormHelperText } from '../../../../components/FormHelperText';
-import {
-    okGradeType,
-    okGrades,
-    rightGradeType,
-    rightGrades,
-    textComponentMapping,
-} from './constants';
+import { okGradeType, okGrades, rightGradeType, rightGrades } from './constants';
 import {
     aggregateAcceptableAnswersByGrade,
     aggregatedAcceptableAnswerType,
@@ -19,7 +13,8 @@ import { Button } from '../../../../components/Button';
 import { VeryLightHorizontalDivider } from '../../../../components/HorizontalDivider';
 import { ChangeEvent } from 'react';
 import { gradeConverter } from '../../../../lib/gradeConverter';
-import { GradeExplanationIcon } from './components/GradeExplanationIcon';
+import { GradeExplanationIcon } from '../../components/GradeExplanationIcon';
+import { textComponentMapping } from '../../constants';
 
 function QuestionReponseEditing(props: {
     index: number;

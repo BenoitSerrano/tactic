@@ -12,6 +12,7 @@ function QuestionChecking(props: {
     answerStatus: answerStatusType;
     canUpdateAnswers: boolean;
     attemptStatus?: attemptStatusType;
+    shouldDisplayRightAnswers?: boolean;
 }) {
     const displayedAnswer = computeDisplayedAnswer(props.question, props.answerStatus);
 
@@ -19,6 +20,7 @@ function QuestionChecking(props: {
         props.question.kind === 'texteATrous' ? TexteATrousChecking : DefaultQuestionChecking;
     return (
         <QuestionCheckingComponent
+            shouldDisplayRightAnswers={props.shouldDisplayRightAnswers}
             attemptStatus={props.attemptStatus}
             question={props.question}
             attemptId={props.attemptId}

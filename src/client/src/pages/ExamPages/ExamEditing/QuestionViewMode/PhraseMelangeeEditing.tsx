@@ -1,12 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import {
-    okGradeType,
-    okGrades,
-    rightGradeType,
-    rightGrades,
-    textComponentMapping,
-} from './constants';
+import { okGradeType, okGrades, rightGradeType, rightGrades } from './constants';
 import {
     aggregateAcceptableAnswersByGrade,
     aggregatedAcceptableAnswerType,
@@ -17,12 +11,13 @@ import { Button } from '../../../../components/Button';
 import { VeryLightHorizontalDivider } from '../../../../components/HorizontalDivider';
 import { useState } from 'react';
 import { gradeConverter } from '../../../../lib/gradeConverter';
-import { GradeExplanationIcon } from './components/GradeExplanationIcon';
+import { GradeExplanationIcon } from '../../components/GradeExplanationIcon';
 import { IsolatedWord, IsolatedWordContainer } from '../../components/IsolatedWord';
 import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
 import { WordsShuffler } from '../../components/WordsShuffler';
 import { FormHelperText } from '../../../../components/FormHelperText';
 import { formErrorHandler } from '../lib/formErrorHandler';
+import { textComponentMapping } from '../../constants';
 
 const initialNewAcceptableCombinationsByGrade = { A: [], B: [], C: [], D: [] };
 

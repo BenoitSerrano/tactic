@@ -1,7 +1,9 @@
 import { TextField, Typography, styled } from '@mui/material';
-import { Caption } from './Caption';
-import { FLOATING_NUMBER_REGEX, POINTS_TEXT_FIELD_WIDTH } from '../../../../constants';
+import { Caption } from '../../components/Caption';
+import { FLOATING_NUMBER_REGEX } from '../../../../constants';
 import { FormHelperText } from '../../../../components/FormHelperText';
+
+const POINTS_TEXT_FIELD_WIDTH = 100;
 
 function PointsPerBlankHandler(props: {
     pointsPerBlank: string;

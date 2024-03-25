@@ -1,17 +1,15 @@
-import { questionKindType } from '../../types';
-import { ElementType } from 'react';
-import { QuestionChoixMultipleAnswering } from './components/QuestionChoixMultipleAnswering';
-import { QuestionReponseAnswering } from './components/QuestionReponseAnswering';
-import { PhraseMelangeeAnswering } from './components/PhraseMelangeeAnswering';
-import { TexteLibreAnswering } from './components/TexteLibreAnswering';
-import { TexteATrousAnswering } from './components/TexteATrousAnswering';
+import { styled } from '@mui/material';
 
-const questionAnsweringComponentMapping: Record<questionKindType, ElementType> = {
-    qcm: QuestionChoixMultipleAnswering,
-    questionReponse: QuestionReponseAnswering,
-    phraseMelangee: PhraseMelangeeAnswering,
-    texteLibre: TexteLibreAnswering,
-    texteATrous: TexteATrousAnswering,
+const BLANK_TEXT_FIELD_WIDTH = 100;
+
+const RightAnswerText = styled('span')(({ theme }) => ({ color: theme.palette.success.main }));
+const OkAnswerText = styled('span')(({ theme }) => ({ color: theme.palette.warning.main }));
+
+const textComponentMapping = {
+    A: RightAnswerText,
+    B: OkAnswerText,
+    C: OkAnswerText,
+    D: OkAnswerText,
 };
 
-export { questionAnsweringComponentMapping };
+export { BLANK_TEXT_FIELD_WIDTH, textComponentMapping };
