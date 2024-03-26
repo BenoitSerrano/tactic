@@ -104,6 +104,7 @@ export type {
     exerciseWithAnswersType,
     questionWithAnswersType,
     answerStatusType,
+    qcmWithAnswersType,
     examWithoutAnswersType,
     exerciseWithoutAnswersType,
     questionWithoutAnswerType,

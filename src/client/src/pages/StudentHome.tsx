@@ -69,7 +69,6 @@ function StudentHome() {
         attemptQuery.data.attempt,
         attemptAction,
     );
-    console.log(attemptAction);
 
     if (pathKeyToNavigateTo !== 'STUDENT_HOME') {
         const pathToNavigateTo = pathHandler.getRoutePath(pathKeyToNavigateTo, {

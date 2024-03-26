@@ -1,5 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import { displayedAnswerType } from '../lib/computeDisplayedAnswer';
+import { AcceptableAnswers } from '../components/AcceptableAnswers';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -11,7 +12,11 @@ const styledContainerMapping = {
     wrong: styled('span')(({ theme }) => ({ color: theme.palette.error.main })),
 };
 
-function DefaultQuestionChecking(props: { index: number; displayedAnswer: displayedAnswerType }) {
+function DefaultQuestionChecking(props: {
+    index: number;
+    displayedAnswer: displayedAnswerType;
+    shouldDisplayRightAnswers?: boolean;
+}) {
     return (
         <Container>
             <Title>
@@ -49,6 +54,14 @@ function DefaultQuestionChecking(props: { index: number; displayedAnswer: displa
                     })}
                 </Typography>
             )}
+            {props.shouldDisplayRightAnswers && (
+                <RightAnswersContainer>
+                    <AcceptableAnswers
+                        grade="A"
+                        values={props.displayedAnswer.displayedRightAnswers}
+                    />
+                </RightAnswersContainer>
+            )}
         </Container>
     );
 }
@@ -56,5 +69,6 @@ function DefaultQuestionChecking(props: { index: number; displayedAnswer: displa
 const Title = styled(Typography)({ fontWeight: 'bold' });
 
 const Container = styled('div')({ display: 'flex', flexDirection: 'column' });
+const RightAnswersContainer = styled('div')(({ theme }) => ({ paddingTop: theme.spacing(2) }));
 
 export { DefaultQuestionChecking };

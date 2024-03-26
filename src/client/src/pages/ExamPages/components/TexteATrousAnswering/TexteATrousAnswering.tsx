@@ -3,8 +3,7 @@ import { ChangeEvent } from 'react';
 import { questionWithoutAnswerType } from '../../types';
 import { SPLITTING_CHARACTER_FOR_TAT, converter } from '../../lib/converter';
 import { textSplitter } from '../../../../lib/textSplitter';
-
-const WORD_WIDTH = 100;
+import { BLANK_TEXT_FIELD_WIDTH } from '../../constants';
 
 function TexteATrousAnswering(props: {
     question: questionWithoutAnswerType;
@@ -75,5 +74,5 @@ const WordContainer = styled(Typography)(({ theme }) => ({
     paddingLeft: 4,
 }));
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
-const AnswerTextField = styled(TextField)({ width: WORD_WIDTH });
+const AnswerTextField = styled(TextField)({ width: BLANK_TEXT_FIELD_WIDTH });
 export { TexteATrousAnswering };

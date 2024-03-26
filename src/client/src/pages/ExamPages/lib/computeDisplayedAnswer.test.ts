@@ -23,6 +23,7 @@ describe('computeDisplayedAnswer', () => {
                         value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                     },
                 ],
+                displayedRightAnswers: ['Non, pas vraiment'],
                 answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: 'E' }],
             });
         });
@@ -46,6 +47,7 @@ describe('computeDisplayedAnswer', () => {
                         value: "Croyez-vous que John soit à l'origine de ces lettres anonymes ?",
                     },
                 ],
+                displayedRightAnswers: ['Oui !'],
                 answer: [{ kind: 'coloredText', value: 'Oui !', status: 'right', grade: 'A' }],
             });
         });
@@ -84,6 +86,9 @@ describe('computeDisplayedAnswer', () => {
                     { kind: 'text', value: 'silhouette,' },
                     { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'sourire?' },
+                ],
+                displayedRightAnswers: [
+                    'Portez-vous des vêtements décontractés pour aller au travail ? Chez une personne, vous remarquez en premier : ses yeux, sa silhouette, son sourire?',
                 ],
                 answer: undefined,
             });
@@ -125,6 +130,9 @@ describe('computeDisplayedAnswer', () => {
                     { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
+                displayedRightAnswers: [
+                    'Portez-vous des vêtements décontractés pour aller au travail ? Chez une personne, vous remarquez en premier : ses yeux, sa silhouette, son sourire?',
+                ],
                 answer: undefined,
             });
         });
@@ -161,6 +169,9 @@ describe('computeDisplayedAnswer', () => {
                     { kind: 'text', value: 'silhouette,' },
                     { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
+                ],
+                displayedRightAnswers: [
+                    'Portez-vous des vêtements décontractés pour aller au travail ? Chez une personne, vous remarquez en premier : ses yeux, sa silhouette, son sourire?',
                 ],
                 answer: undefined,
             });
@@ -199,6 +210,9 @@ describe('computeDisplayedAnswer', () => {
                     { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
+                displayedRightAnswers: [
+                    'Portez-vous des vêtements décontractés pour aller au travail ? Chez une personne, vous remarquez en premier : ses yeux, sa silhouette, son sourire?',
+                ],
                 answer: undefined,
             });
         });
@@ -236,6 +250,9 @@ describe('computeDisplayedAnswer', () => {
                     { kind: 'coloredText', value: 'son', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'sourire?' },
                 ],
+                displayedRightAnswers: [
+                    'Portez-vous des vêtements décontractés pour aller au travail ? Chez une personne, vous remarquez en premier : ses yeux, sa silhouette, son sourire?',
+                ],
                 answer: undefined,
             });
         });
@@ -258,6 +275,7 @@ describe('computeDisplayedAnswer', () => {
 
             expect(displayedAnswer).toEqual({
                 title: [{ kind: 'text', value: 'Texte libre ?' }],
+                displayedRightAnswers: [],
                 answer: [{ kind: 'coloredText', value: '', status: 'wrong', grade: undefined }],
             });
         });
@@ -277,6 +295,7 @@ describe('computeDisplayedAnswer', () => {
 
             expect(displayedAnswer).toEqual({
                 title: [{ kind: 'text', value: 'Texte libre ?' }],
+                displayedRightAnswers: [],
                 answer: [
                     {
                         kind: 'coloredText',
@@ -304,6 +323,7 @@ describe('computeDisplayedAnswer', () => {
 
             expect(displayedAnswer).toEqual({
                 title: [{ kind: 'text', value: 'est la vie belle' }],
+                displayedRightAnswers: ['la vie est belle'],
                 answer: [
                     {
                         kind: 'coloredText',
@@ -337,6 +357,7 @@ describe('computeDisplayedAnswer', () => {
                         grade: 'A',
                     },
                 ],
+                displayedRightAnswers: ['la vie est belle'],
             });
         });
     });
@@ -347,7 +368,7 @@ describe('computeDisplayedAnswer', () => {
                 title: 'la couleur de mes yeux ?',
                 kind: 'qcm' as const,
                 possibleAnswers: ['rouge', 'bleu', 'vert', 'noir'],
-                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'bleu' }]],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: '1' }]],
                 answer: undefined,
                 grade: 'E' as gradeType,
                 points: 2,
@@ -364,6 +385,7 @@ describe('computeDisplayedAnswer', () => {
                         grade: 'E',
                     },
                 ],
+                displayedRightAnswers: ['bleu'],
             });
         });
         it('should return the title and colored answer if answer provided', () => {
@@ -372,7 +394,7 @@ describe('computeDisplayedAnswer', () => {
                 title: 'la couleur de mes yeux ?',
                 kind: 'qcm' as const,
                 possibleAnswers: ['rouge', 'bleu', 'vert', 'noir'],
-                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: 'bleu' }]],
+                acceptableAnswers: [[{ grade: 'A' as gradeType, answer: '1' }]],
                 answer: '1',
                 grade: 'A' as gradeType,
                 points: 2,
@@ -389,6 +411,7 @@ describe('computeDisplayedAnswer', () => {
                         grade: 'A',
                     },
                 ],
+                displayedRightAnswers: ['bleu'],
             });
         });
     });

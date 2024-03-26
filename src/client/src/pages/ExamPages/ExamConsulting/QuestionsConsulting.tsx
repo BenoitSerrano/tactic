@@ -50,6 +50,7 @@ function QuestionsConsulting(props: {
                                                     </QuestionIndicatorContainer>
                                                 </QuestionIndicatorsContainer>
                                                 <QuestionChecking
+                                                    shouldDisplayRightAnswers
                                                     attemptId={props.attemptId}
                                                     examId={props.exam.id}
                                                     canUpdateAnswers={false}

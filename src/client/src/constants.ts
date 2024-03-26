@@ -57,8 +57,6 @@ const questionSpecificityMapping: Record<
     },
 };
 
-const POINTS_TEXT_FIELD_WIDTH = 100;
-
 export {
     questionSpecificityMapping,
     FLOATING_NUMBER_REGEX,
@@ -68,5 +66,4 @@ export {
     localeInfo,
     manualQuestionKinds,
     TAT_BLANK_STRING,
-    POINTS_TEXT_FIELD_WIDTH,
 };

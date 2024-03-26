@@ -12,6 +12,7 @@ import { questionWithAnswersType } from '../types';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { IconButton } from '../../../components/IconButton';
 import { TAT_BLANK_STRING } from '../../../constants';
+import { AcceptableAnswers } from '../components/AcceptableAnswers';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -33,6 +34,7 @@ function TexteATrousChecking(props: {
     displayedAnswer: displayedAnswerType;
     canUpdateAnswers: boolean;
     attemptStatus?: attemptStatusType;
+    shouldDisplayRightAnswers?: boolean;
 }) {
     const [currentChunkMenu, setCurrentChunkMenu] = useState<{
         element: HTMLElement;
@@ -175,6 +177,14 @@ function TexteATrousChecking(props: {
                     }
                 })}
             </Title>
+            {props.shouldDisplayRightAnswers && (
+                <RightAnswersContainer>
+                    <AcceptableAnswers
+                        grade="A"
+                        values={props.displayedAnswer.displayedRightAnswers}
+                    />
+                </RightAnswersContainer>
+            )}
         </Container>
     );
 
@@ -253,5 +263,6 @@ const MenuContentContainer = styled('div')({
     alignItems: 'center',
 });
 const IconsContainer = styled('div')({ display: 'flex' });
+const RightAnswersContainer = styled('div')(({ theme }) => ({ paddingTop: theme.spacing(2) }));
 
 export { TexteATrousChecking };
