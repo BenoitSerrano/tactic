@@ -54,15 +54,16 @@ function computeDisplayedAnswer(
                 displayedRightAnswers: rightAnswers[0],
             };
         case 'texteATrous':
+            let displayedRightAnswer = '';
             const tATRegexMatch = question.title.matchAll(TEXTE_A_TROU_REGEX);
             let value = tATRegexMatch.next();
-            const displayedRightAnswers: string[] = [];
+            // const displayedRightAnswers: string[] = [];
             if (!!value.done) {
                 console.error(`texte à trous wrongly formatted: ${question.title}`);
                 return {
                     title: [{ kind: 'text', value: question.title }],
                     answer: undefined,
-                    displayedRightAnswers,
+                    displayedRightAnswers: [],
                 };
             }
 
@@ -75,10 +76,13 @@ function computeDisplayedAnswer(
             let lastIndexFound = 0;
             let blankIndex = 0;
             while (!value.done) {
+                const titleSlice = question.title.slice(lastIndexFound, value.value.index);
                 title.push({
                     kind: 'text',
-                    value: question.title.slice(lastIndexFound, value.value.index).trim(),
+                    value: titleSlice.trim(),
                 });
+
+                displayedRightAnswer += titleSlice;
 
                 const acceptableAnswersForBlank = question.acceptableAnswers[blankIndex];
                 const matchingAcceptableAnswer = acceptableAnswersForBlank.find(
@@ -97,18 +101,20 @@ function computeDisplayedAnswer(
                     status: blankStatus,
                     grade: matchingAcceptableAnswer?.grade || 'E',
                 });
-                displayedRightAnswers[blankIndex] = rightAnswers[blankIndex].join(' / ');
+                displayedRightAnswer += rightAnswers[blankIndex].join(' / ');
                 lastIndexFound = (value.value.index || 0) + 4;
                 value = tATRegexMatch.next();
                 blankIndex++;
             }
             if (lastIndexFound < question.title.length - 1) {
-                title.push({ kind: 'text', value: question.title.slice(lastIndexFound).trim() });
+                const sliceTitle = question.title.slice(lastIndexFound);
+                title.push({ kind: 'text', value: sliceTitle.trim() });
+                displayedRightAnswer += sliceTitle;
             }
             return {
                 title,
                 answer: undefined,
-                displayedRightAnswers,
+                displayedRightAnswers: [displayedRightAnswer],
             };
         case 'phraseMelangee':
             return {
