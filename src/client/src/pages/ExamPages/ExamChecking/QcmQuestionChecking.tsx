@@ -2,6 +2,7 @@ import { FormControlLabel, Radio, RadioGroup, Typography, styled } from '@mui/ma
 import { displayedAnswerType } from '../lib/computeDisplayedAnswer';
 import { answerStatusType, qcmWithAnswersType } from '../types';
 import { ElementType } from 'react';
+import { AcceptableAnswers } from '../components/AcceptableAnswers';
 const RightRadio = styled(Radio)(({ theme }) => ({
     '&.Mui-checked': {
         color: theme.palette.success.main,
@@ -18,11 +19,34 @@ const AcceptableRadio = styled(Radio)(({ theme }) => ({
     },
 }));
 
+const RightFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
+    '& .MuiFormControlLabel-label.Mui-disabled': {
+        color: theme.palette.success.main,
+    },
+}));
+const WrongFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
+    '& .MuiFormControlLabel-label.Mui-disabled': {
+        color: theme.palette.error.main,
+    },
+}));
+const AcceptableFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
+    '& .MuiFormControlLabel-label.Mui-disabled': {
+        color: theme.palette.warning.main,
+    },
+}));
+
 const radioAttemptStatusMapping: Record<'right' | 'wrong' | 'acceptable', ElementType> = {
     acceptable: AcceptableRadio,
     wrong: WrongRadio,
     right: RightRadio,
 };
+
+const formControlLabelAttemptStatusMapping: Record<'right' | 'wrong' | 'acceptable', ElementType> =
+    {
+        acceptable: AcceptableFormControlLabel,
+        wrong: WrongFormControlLabel,
+        right: RightFormControlLabel,
+    };
 
 function QcmQuestionChecking(props: {
     index: number;
@@ -40,12 +64,19 @@ function QcmQuestionChecking(props: {
                 <RadioGroup value={props.question.answer}>
                     {props.question.possibleAnswers.map(
                         (possibleAnswer: string, possibleAnswerIndex: number) => {
-                            const StyledRadio = props.answerStatus
-                                ? radioAttemptStatusMapping[props.answerStatus]
-                                : Radio;
+                            const isChoiceSelected =
+                                possibleAnswerIndex === Number(props.question.answer);
+                            const StyledRadio =
+                                isChoiceSelected && props.answerStatus
+                                    ? radioAttemptStatusMapping[props.answerStatus]
+                                    : Radio;
+                            const StyledFormControlLabel =
+                                isChoiceSelected && props.answerStatus
+                                    ? formControlLabelAttemptStatusMapping[props.answerStatus]
+                                    : FormControlLabel;
                             return (
                                 <InputContainer key={'possibleAnswer-' + possibleAnswerIndex}>
-                                    <FormControlLabel
+                                    <StyledFormControlLabel
                                         disabled
                                         value={`${possibleAnswerIndex}`}
                                         control={<StyledRadio />}
@@ -57,6 +88,14 @@ function QcmQuestionChecking(props: {
                     )}
                 </RadioGroup>
             </PossibleAnswersContainer>
+            {props.shouldDisplayRightAnswers && (
+                <RightAnswersContainer>
+                    <AcceptableAnswers
+                        grade="A"
+                        values={props.displayedAnswer.displayedRightAnswers}
+                    />
+                </RightAnswersContainer>
+            )}
         </Container>
     );
 }
@@ -67,9 +106,8 @@ const InputContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // marginTop: theme.spacing(1),
-    // marginBottom: theme.spacing(1),
 }));
+const RightAnswersContainer = styled('div')(({ theme }) => ({ paddingTop: theme.spacing(2) }));
 
 const Container = styled('div')({ display: 'flex', flexDirection: 'column' });
 
