@@ -29,6 +29,8 @@ function buildExamService() {
         getExamResults,
         duplicateExam,
         updateExamArchivedAt,
+        fetchShouldDisplayRightAnswersForExamId,
+        updateShouldDisplayRightAnswersForExamId,
     };
 
     return examService;
@@ -261,6 +263,24 @@ function buildExamService() {
         } else {
             await examRepository.update({ id: examId }, { archivedAt: null });
         }
+        return true;
+    }
+
+    async function fetchShouldDisplayRightAnswersForExamId(examId: Exam['id']) {
+        const exam = await examRepository.findOneOrFail({
+            where: { id: examId },
+            select: { shouldDisplayRightAnswers: true },
+        });
+        return { shouldDisplayRightAnswers: exam.shouldDisplayRightAnswers };
+    }
+    async function updateShouldDisplayRightAnswersForExamId(
+        examId: Exam['id'],
+        newShouldDisplayRightAnswers: boolean,
+    ) {
+        await examRepository.update(
+            { id: examId },
+            { shouldDisplayRightAnswers: newShouldDisplayRightAnswers },
+        );
         return true;
     }
 }
