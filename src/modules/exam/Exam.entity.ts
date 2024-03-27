@@ -38,4 +38,7 @@ export class Exam {
 
     @Column({ type: 'timestamptz', nullable: true })
     archivedAt: string | null;
+
+    @Column({ default: false })
+    shouldDisplayRightAnswers: boolean;
 }

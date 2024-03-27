@@ -20,6 +20,8 @@ function buildExamController() {
         duplicateExam,
         getExamWithQuestions,
         updateExamArchivedAt,
+        fetchShouldDisplayRightAnswersForExamId,
+        updateShouldDisplayRightAnswersForExamId,
     };
 
     return examController;
@@ -89,5 +91,21 @@ function buildExamController() {
         body: { archive: boolean };
     }) {
         return examService.updateExamArchivedAt(params.urlParams.examId, params.body.archive);
+    }
+
+    async function fetchShouldDisplayRightAnswersForExamId(params: {
+        urlParams: { examId: Exam['id'] };
+    }) {
+        return examService.fetchShouldDisplayRightAnswersForExamId(params.urlParams.examId);
+    }
+
+    async function updateShouldDisplayRightAnswersForExamId(params: {
+        urlParams: { examId: Exam['id'] };
+        body: { shouldDisplayRightAnswers: boolean };
+    }) {
+        return examService.updateShouldDisplayRightAnswersForExamId(
+            params.urlParams.examId,
+            params.body.shouldDisplayRightAnswers,
+        );
     }
 }

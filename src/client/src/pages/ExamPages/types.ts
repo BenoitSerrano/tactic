@@ -11,6 +11,7 @@ type attemptWithAnswersApiType = {
 type examWithAnswersType = {
     id: string;
     name: string;
+    shouldDisplayRightAnswers: boolean;
     exercises: Array<exerciseWithAnswersType>;
 };
 

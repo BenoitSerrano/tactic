@@ -54,6 +54,8 @@ const api = {
     deleteGroup,
     changeGroup,
     duplicateExam,
+    fetchShouldDisplayRightAnswersForExamId,
+    updateShouldDisplayRightAnswersForExamId,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -484,6 +486,21 @@ async function changeGroup(params: { groupId: string; studentId: string; newGrou
 async function duplicateExam(params: { examId: string }) {
     const URL = `${BASE_URL}/exams/${params.examId}/duplicate`;
     return performApiCall(URL, 'POST');
+}
+
+async function fetchShouldDisplayRightAnswersForExamId(params: { examId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/shouldDisplayRightAnswers`;
+    return performApiCall(URL, 'GET');
+}
+
+async function updateShouldDisplayRightAnswersForExamId(params: {
+    examId: string;
+    shouldDisplayRightAnswers: boolean;
+}) {
+    const URL = `${BASE_URL}/exams/${params.examId}/shouldDisplayRightAnswers`;
+    return performApiCall(URL, 'PATCH', {
+        shouldDisplayRightAnswers: params.shouldDisplayRightAnswers,
+    });
 }
 
 export { api };

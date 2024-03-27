@@ -71,6 +71,7 @@ function convertAttemptToAttemptWithAnswers(
             name: exam.name,
             duration: exam.duration,
             extraTime: exam.extraTime,
+            shouldDisplayRightAnswers: exam.shouldDisplayRightAnswers,
             exercises: exam.exercises.map((exercise) => ({
                 ...exercise,
                 questions: exercise.questions.map((question) => ({
