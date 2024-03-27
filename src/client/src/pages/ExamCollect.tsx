@@ -1,10 +1,11 @@
-import { Typography, styled } from '@mui/material';
+import { Typography } from '@mui/material';
 import { attemptActionEncoder } from '../lib/attemptActionEncoder';
 import { pathHandler } from '../lib/pathHandler';
 import { useAlert } from '../lib/alert';
 import { config } from '../config';
 import { useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
+import { Link } from '../components/Link';
 
 function ExamCollect() {
     const { displayAlert } = useAlert();
@@ -14,13 +15,17 @@ function ExamCollect() {
         <div>
             <Typography variant="h3">Comment voulez-vous collecter les réponses ?</Typography>
             <Typography variant="h4">Adresse web de votre examen</Typography>
-            <Typography variant="h6">Copiez ce lien et envoyez-le à vos étudiant.es</Typography>
-            <LinkContainer>
-                <Link variant="body2">{url}</Link>
-                <Button variant="contained" onClick={copyUrlToClipboard}>
-                    Copier
-                </Button>
-            </LinkContainer>
+            <Typography variant="h6">
+                Cliquez sur le bouton ci-dessous pour copier le lien à envoyer à vos étudiant.es.
+            </Typography>
+            <Button variant="contained" onClick={copyUrlToClipboard}>
+                Copier
+            </Button>
+            <Typography variant="h6">
+                Vos étudiant.es arriveront sur une page où iels devront rentrer leur email
+                d'identification. Pour gérer vos groupes d'étudiant.es, cliquez{' '}
+                <Link to={pathHandler.getRoutePath('GROUPS')}>ici</Link>.
+            </Typography>
         </div>
     );
 
@@ -51,18 +56,5 @@ function ExamCollect() {
         return url;
     }
 }
-
-const LinkContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    background: theme.palette.primary.light,
-    padding: theme.spacing(2),
-    borderRadius: 5,
-    flexWrap: 'nowrap',
-}));
-
-const Link = styled(Typography)(({ theme }) => ({
-    marginRight: theme.spacing(2),
-}));
 
 export { ExamCollect };

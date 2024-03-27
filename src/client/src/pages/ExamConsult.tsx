@@ -1,4 +1,4 @@
-import { FormControlLabel, Switch, Typography, styled } from '@mui/material';
+import { FormControlLabel, Switch, Typography } from '@mui/material';
 import { attemptActionEncoder } from '../lib/attemptActionEncoder';
 import { pathHandler } from '../lib/pathHandler';
 import { useAlert } from '../lib/alert';
@@ -43,15 +43,16 @@ function ExamConsult() {
             </Typography>
             <Typography variant="h4">Adresse web de votre examen</Typography>
             <Typography variant="h6">
-                Copiez ce lien et envoyez-le à vos étudiant.es pour qu'iels puisse consulter leur
-                copie
+                Cliquez sur le bouton ci-dessous pour copier le lien à envoyer à vos étudiant.es
+                qu'iels puisse consulter leur copie.
             </Typography>
-            <LinkContainer>
-                <Link variant="body2">{url}</Link>
-                <Button variant="contained" onClick={copyUrlToClipboard}>
-                    Copier
-                </Button>
-            </LinkContainer>
+            <Button variant="contained" onClick={copyUrlToClipboard}>
+                Copier
+            </Button>
+            <Typography variant="h6">
+                Vos étudiant.es arriveront sur une page où iels devront rentrer leur email
+                d'identification pour consulter leur copie.
+            </Typography>
             {!!query.data && (
                 <>
                     <Typography variant="h4">Affichage des réponses correctes</Typography>
@@ -105,18 +106,5 @@ function ExamConsult() {
         return url;
     }
 }
-
-const LinkContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    background: theme.palette.primary.light,
-    padding: theme.spacing(2),
-    borderRadius: 5,
-    flexWrap: 'nowrap',
-}));
-
-const Link = styled(Typography)(({ theme }) => ({
-    marginRight: theme.spacing(2),
-}));
 
 export { ExamConsult };
