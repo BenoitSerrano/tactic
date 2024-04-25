@@ -182,6 +182,7 @@ function QuestionsAnswering(props: {
     }
 
     function finishExam() {
+        closeConfirmFinishExamModal();
         finishExamMutation.mutate({ attemptId: props.attemptId });
     }
 
