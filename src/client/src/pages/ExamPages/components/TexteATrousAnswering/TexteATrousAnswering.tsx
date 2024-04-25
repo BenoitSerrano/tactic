@@ -1,5 +1,5 @@
 import { TextField, Typography, styled } from '@mui/material';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { questionWithoutAnswerType } from '../../types';
 import { SPLITTING_CHARACTER_FOR_TAT, converter } from '../../lib/converter';
 import { textSplitter } from '../../../../lib/textSplitter';
@@ -11,12 +11,14 @@ function TexteATrousAnswering(props: {
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
+    const [localAnswer, setLocalAnswer] = useState(props.currentAnswer);
     const { title } = props.question;
     const words = textSplitter.split(title);
     const textInputs = converter.convertAnswerToTextInputs({
-        currentAnswer: props.currentAnswer,
+        currentAnswer: localAnswer,
         title,
     });
+
     return (
         <>
             <Typography>
@@ -35,6 +37,7 @@ function TexteATrousAnswering(props: {
                                         })
                                     ]
                                 }
+                                onBlur={onBlur}
                                 onChange={buildSetWordAnswer(wordIndex)}
                                 variant="outlined"
                             />
@@ -59,12 +62,15 @@ function TexteATrousAnswering(props: {
             }
             const answer = converter.convertTextInputToAnswer({
                 textInput,
-                currentAnswer: props.currentAnswer,
+                currentAnswer: localAnswer,
                 wordIndex,
                 title,
             });
-            props.setCurrentAnswer(answer);
+            setLocalAnswer(answer);
         };
+    }
+    function onBlur() {
+        props.setCurrentAnswer(localAnswer);
     }
 }
 
