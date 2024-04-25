@@ -30,7 +30,9 @@ function QuestionReponseAnswering(props: {
     }
 
     function onBlur() {
-        props.setCurrentAnswer(localAnswer);
+        if (localAnswer !== props.currentAnswer) {
+            props.setCurrentAnswer(localAnswer);
+        }
     }
 }
 

@@ -21,7 +21,7 @@ function TexteLibreAnswering(props: {
                 onBlur={onBlur}
                 multiline
                 placeholder="..."
-                value={props.currentAnswer}
+                value={localAnswer}
                 onChange={onChangeAnswer}
             />
         </Container>
@@ -32,7 +32,9 @@ function TexteLibreAnswering(props: {
     }
 
     function onBlur() {
-        props.setCurrentAnswer(localAnswer);
+        if (localAnswer !== props.currentAnswer) {
+            props.setCurrentAnswer(localAnswer);
+        }
     }
 }
 

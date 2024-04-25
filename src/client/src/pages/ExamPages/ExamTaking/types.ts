@@ -5,6 +5,7 @@ type attemptWithoutAnswersType = {
     correctedAt: string | null;
     startedAt: string;
     endedAt: string | undefined;
+    updatedAt: string | undefined;
     studentEmail: string;
     exam: examWithoutAnswersType;
 };

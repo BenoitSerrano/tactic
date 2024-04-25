@@ -14,6 +14,7 @@ import { cheatingHandler } from '../../../lib/cheatingHandler';
 import { eventHandler } from '../../../lib/eventHandler';
 import { useAlert } from '../../../lib/alert';
 import { computePathKeyToNavigateTo } from '../../../lib/computePathKeyToNavigateTo';
+import { time } from '../../../lib/time';
 
 function ExamTaking() {
     const params = useParams();
@@ -99,6 +100,8 @@ function ExamTaking() {
         startedAt: query.data.startedAt,
     });
 
+    const lastUpdatedAt = computeReadableUpdatedAt(query.data.updatedAt);
+
     return (
         <NotLoggedInPage
             title={
@@ -112,6 +115,7 @@ function ExamTaking() {
         >
             <ExamPageContainer>
                 <QuestionsAnswering
+                    lastUpdatedAt={lastUpdatedAt}
                     studentEmail={query.data.studentEmail}
                     title={query.data.exam.name}
                     exercises={query.data.exam.exercises}
@@ -124,6 +128,13 @@ function ExamTaking() {
 
     function onExamDone() {
         navigate(examDonePath);
+    }
+
+    function computeReadableUpdatedAt(updatedAt: string | undefined) {
+        if (!updatedAt) {
+            return undefined;
+        }
+        return time.formatToReadableTime(updatedAt, { hideSeconds: true });
     }
 
     function computeExamCaption({

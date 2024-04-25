@@ -4,6 +4,7 @@ const time = {
     formatToClock,
     computeElapsedTime,
     formatToReadableDatetime,
+    formatToReadableTime,
 };
 
 function formatToClock(seconds: number, options?: { hideHours: boolean }) {
@@ -31,6 +32,17 @@ function formatToClock(seconds: number, options?: { hideHours: boolean }) {
 function formatToReadableDatetime(date: string) {
     const parsedDate = new Date(date);
     return parsedDate.toLocaleString(localeInfo.locale, { timeZone: localeInfo.timeZone });
+}
+
+function formatToReadableTime(date: string, options?: { hideSeconds?: boolean }) {
+    const parsedDate = new Date(date);
+    const readableTime = parsedDate.toLocaleTimeString(localeInfo.locale, {
+        timeZone: localeInfo.timeZone,
+    });
+    if (options?.hideSeconds) {
+        return readableTime.substring(0, readableTime.length - 3);
+    }
+    return readableTime;
 }
 
 function formatToHumanReadable(value: number) {
