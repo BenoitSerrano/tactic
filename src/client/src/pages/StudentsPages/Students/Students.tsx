@@ -168,7 +168,7 @@ function Students() {
                             </TableCell>
                             <TableCell>{student.email}</TableCell>
                             <TableCell>
-                                {time.formatToReadableDatetime(student.createdDate)}
+                                {time.formatToReadable(new Date(student.createdDate))}
                             </TableCell>
                             {Object.keys(studentsQuery.data.examInfos).map((examId) => {
                                 const attemptPath = computePathForAttempt(

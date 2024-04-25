@@ -28,11 +28,4 @@ describe('time', () => {
             expect(time.computeElapsedTime(date, new Date('2023-06-19T19:16:35.858Z'))).toBe(600);
         });
     });
-
-    describe('formatToReadableDatetime', () => {
-        it('19/06/2023 22:28:03', () => {
-            const date = '2023-06-19T20:28:03.314Z';
-            expect(time.formatToReadableDatetime(date)).toBe('19/06/2023 22:28:03');
-        });
-    });
 });

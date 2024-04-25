@@ -48,6 +48,7 @@ type examResultsApiType = {
     results: Array<examResultApiType>;
     totalPoints: number;
     examName: string;
+    examDuration: number;
 };
 
 type sortColumnType = 'email' | 'mark' | 'startedAt';
@@ -155,8 +156,8 @@ function ExamResults() {
                 <TableHead>
                     <TableRow>
                         <TableCell width={20}>N°</TableCell>
-                        <TableCell width={120}>Actions</TableCell>
-                        <TableCell width={120}>
+                        <TableCell width={60}>Actions</TableCell>
+                        <TableCell width={90}>
                             <TableSortLabel
                                 active={activeSort === 'startedAt'}
                                 direction={sortDirection}
@@ -167,9 +168,12 @@ function ExamResults() {
                                     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                 }}
                             >
-                                Heure de début
+                                Heure début
                             </TableSortLabel>
                         </TableCell>
+                        {!!resultsQuery.data.examDuration && (
+                            <TableCell width={90}>Heure limite</TableCell>
+                        )}
                         <TableCell sortDirection={sortDirection}>
                             <TableSortLabel
                                 active={activeSort === 'email'}
@@ -212,6 +216,11 @@ function ExamResults() {
                             result.isTimeLimitExceeded,
                         );
                         const AttemptStatusIcon = computeAttemptStatusIcon(result.attemptStatus);
+                        const deadlineDate = time.addSeconds(
+                            result.startedAt,
+                            resultsQuery.data.examDuration * 60,
+                        );
+                        const readableDeadlineDate = time.formatToReadable(deadlineDate);
                         return (
                             <TableRow key={result.attemptId}>
                                 <TableCell>{index + 1}</TableCell>
@@ -253,8 +262,11 @@ function ExamResults() {
                                     </TableCellContent>
                                 </TableCell>
                                 <TableCell>
-                                    {time.formatToReadableDatetime(result.startedAt)}
+                                    {time.formatToReadable(new Date(result.startedAt))}
                                 </TableCell>
+                                {!!resultsQuery.data.examDuration && (
+                                    <TableCell>{readableDeadlineDate}</TableCell>
+                                )}
                                 <TableCell>
                                     <Link to={computeAttemptRoute(result.attemptId)}>
                                         {result.email}
