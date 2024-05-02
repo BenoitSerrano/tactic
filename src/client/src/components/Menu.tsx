@@ -1,11 +1,13 @@
 import { styled } from '@mui/material';
 import { HEADER_HEIGHT } from '../constants';
 import { LoadingButton } from '@mui/lab';
+import { IconButton } from './IconButton';
 
 type buttonType = {
     IconComponent: React.ElementType;
     onClick: () => void;
     title: string;
+    variant?: 'text-with-icon' | 'icon-only';
     isLoading?: boolean;
 };
 
@@ -14,6 +16,19 @@ function Menu(props: { buttons: Array<buttonType> }) {
         <MenuContainer>
             {props.buttons.map((button, index) => {
                 const { IconComponent, onClick, title, isLoading } = button;
+                const variant = button.variant || 'text-with-icon';
+                if (variant === 'icon-only') {
+                    return (
+                        <ButtonContainer key={index}>
+                            <IconButton
+                                IconComponent={IconComponent}
+                                title={title}
+                                onClick={onClick}
+                                isLoading={isLoading}
+                            />
+                        </ButtonContainer>
+                    );
+                }
                 return (
                     <ButtonContainer key={index}>
                         <LoadingButton
@@ -36,8 +51,7 @@ const BUTTON_CONTAINER_HEIGHT = 80;
 const MenuContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     zIndex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     position: 'fixed',
     right: 0,
     top: HEADER_HEIGHT,

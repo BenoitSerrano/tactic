@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import HistoryIcon from '@mui/icons-material/History';
+import SettingsIcon from '@mui/icons-material/Settings';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
@@ -30,6 +31,8 @@ import { computeCanUnlockAttempt } from './lib/computeCanUnlockAttempt';
 import { Menu } from '../../components/Menu';
 import { computeRoundMark } from '../../lib/computeRoundMark';
 import { IconLink } from '../../components/IconLink';
+import { SettingsDrawer } from './SettingsDrawer';
+import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 
 type examResultApiType = {
     id: string;
@@ -84,6 +87,8 @@ function ExamResults() {
         },
     });
 
+    const [totalDenominator, setTotalDenominator] = useState<denominatorType>('original');
+
     const lockAttemptMutation = useMutation({
         mutationFn: api.updateEndedAt,
         onSuccess: () => {
@@ -119,6 +124,7 @@ function ExamResults() {
             console.error(error);
         },
     });
+    const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
     if (!resultsQuery.data || !attemptsCountQuery.data) {
         if (resultsQuery.isLoading || !attemptsCountQuery.isLoading) {
@@ -140,9 +146,15 @@ function ExamResults() {
             IconComponent: RefreshIcon,
             isLoading: resultsQuery.isLoading,
         },
+        {
+            title: "Paramètres d'affichage",
+            onClick: openSettingsDrawer,
+            IconComponent: SettingsIcon,
+            variant: 'icon-only' as const,
+        },
     ];
 
-    const roundedTotalPoints = computeRoundMark(resultsQuery.data.totalPoints);
+    const roundedTotalPoints = computeDisplayedTotalPoints(resultsQuery.data.totalPoints);
 
     return (
         <>
@@ -272,7 +284,12 @@ function ExamResults() {
                                         {result.email}
                                     </Link>
                                 </TableCell>
-                                <TableCell>{computeRoundMark(result.mark)}</TableCell>
+                                <TableCell>
+                                    {computeDisplayedMark(
+                                        result.mark,
+                                        resultsQuery.data.totalPoints,
+                                    )}
+                                </TableCell>
                                 <TableCell>{AttemptStatusIcon}</TableCell>
                                 <TableCell>{result.actualDuration}</TableCell>
                                 <TableCell>{result.roundTrips}</TableCell>
@@ -282,8 +299,45 @@ function ExamResults() {
                     })}
                 </TableBody>
             </Table>
+            <SettingsDrawer
+                isOpen={isSettingsDrawerOpen}
+                close={closeSettingsDrawer}
+                onChangeTotalDenominator={setTotalDenominator}
+                totalDenominator={totalDenominator}
+            />
         </>
     );
+
+    function computeDisplayedTotalPoints(totalPoints: number) {
+        switch (totalDenominator) {
+            case '20':
+                return '20';
+            case 'original':
+                return computeRoundMark(totalPoints);
+        }
+    }
+
+    function computeDisplayedMark(mark: number, totalPoints: number) {
+        switch (totalDenominator) {
+            case '20':
+                const convertedMark = denominatorHandler.convertMark(
+                    mark,
+                    totalPoints,
+                    totalDenominator,
+                );
+                return computeRoundMark(convertedMark);
+            case 'original':
+                return computeRoundMark(mark);
+        }
+    }
+
+    function closeSettingsDrawer() {
+        setIsSettingsDrawerOpen(false);
+    }
+
+    function openSettingsDrawer() {
+        setIsSettingsDrawerOpen(true);
+    }
 
     function computeSubtitle(attemptsCountByAttemptStatus: attemptsCountByAttemptStatusApiType) {
         const { corrected, notCorrected } = attemptsCountByAttemptStatus;
