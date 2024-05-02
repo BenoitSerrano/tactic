@@ -161,7 +161,9 @@ function Students() {
                                     </Tooltip>
                                 )}
                                 <Tooltip title="Supprimer">
-                                    <IconButton onClick={buildDeleteStudent(student.id)}>
+                                    <IconButton
+                                        onClick={buildDeleteStudent(student.id, student.email)}
+                                    >
                                         <DeleteForeverIcon />
                                     </IconButton>
                                 </Tooltip>
@@ -254,11 +256,11 @@ function Students() {
         });
     }
 
-    function buildDeleteStudent(studentId: string) {
+    function buildDeleteStudent(studentId: string, studentEmail: string) {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                'Souhaitez-vous réellement supprimer cet élève ? Tous ses résultats aux tests seront également supprimés.',
+                `Souhaitez-vous réellement supprimer ${studentEmail} ? Tous ses résultats aux tests seront également supprimés.`,
             );
             if (hasConfirmed) {
                 deleteStudentMutation.mutate({ studentId, groupId });
