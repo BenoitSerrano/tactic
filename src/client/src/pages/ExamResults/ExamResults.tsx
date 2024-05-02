@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import HistoryIcon from '@mui/icons-material/History';
-import SettingsIcon from '@mui/icons-material/Settings';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
@@ -31,7 +30,6 @@ import { computeCanUnlockAttempt } from './lib/computeCanUnlockAttempt';
 import { Menu } from '../../components/Menu';
 import { computeRoundMark } from '../../lib/computeRoundMark';
 import { IconLink } from '../../components/IconLink';
-import { SettingsDrawer } from './SettingsDrawer';
 import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 
 type examResultApiType = {
@@ -87,8 +85,6 @@ function ExamResults() {
         },
     });
 
-    const [totalDenominator, setTotalDenominator] = useState<denominatorType>('original');
-
     const lockAttemptMutation = useMutation({
         mutationFn: api.updateEndedAt,
         onSuccess: () => {
@@ -124,7 +120,6 @@ function ExamResults() {
             console.error(error);
         },
     });
-    const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
     if (!resultsQuery.data || !attemptsCountQuery.data) {
         if (resultsQuery.isLoading || !attemptsCountQuery.isLoading) {
@@ -146,15 +141,9 @@ function ExamResults() {
             IconComponent: RefreshIcon,
             isLoading: resultsQuery.isLoading,
         },
-        {
-            title: "Paramètres d'affichage",
-            onClick: openSettingsDrawer,
-            IconComponent: SettingsIcon,
-            variant: 'icon-only' as const,
-        },
     ];
 
-    const roundedTotalPoints = computeDisplayedTotalPoints(resultsQuery.data.totalPoints);
+    const roundedTotalPoints = computeRoundMark(resultsQuery.data.totalPoints);
 
     return (
         <>
@@ -200,7 +189,7 @@ function ExamResults() {
                                 Adresse e-mail
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell width={80}>
+                        <TableCell width={40}>
                             <TableSortLabel
                                 active={activeSort === 'mark'}
                                 direction={sortDirection}
@@ -211,7 +200,7 @@ function ExamResults() {
                                     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                 }}
                             >
-                                Note (/ {roundedTotalPoints})
+                                Note
                             </TableSortLabel>
                         </TableCell>
                         <TableCell width={80}>Statut</TableCell>
@@ -285,10 +274,26 @@ function ExamResults() {
                                     </Link>
                                 </TableCell>
                                 <TableCell>
-                                    {computeDisplayedMark(
-                                        result.mark,
-                                        resultsQuery.data.totalPoints,
-                                    )}
+                                    <MarksContainer>
+                                        <div>
+                                            {computeDisplayedMark(
+                                                result.mark,
+                                                resultsQuery.data.totalPoints,
+                                                'original',
+                                            )}
+                                             / {roundedTotalPoints}
+                                        </div>
+                                        <div>
+                                            <BoldContainer>
+                                                {computeDisplayedMark(
+                                                    result.mark,
+                                                    resultsQuery.data.totalPoints,
+                                                    '20',
+                                                )}
+                                                 / 20
+                                            </BoldContainer>
+                                        </div>
+                                    </MarksContainer>
                                 </TableCell>
                                 <TableCell>{AttemptStatusIcon}</TableCell>
                                 <TableCell>{result.actualDuration}</TableCell>
@@ -299,44 +304,21 @@ function ExamResults() {
                     })}
                 </TableBody>
             </Table>
-            <SettingsDrawer
-                isOpen={isSettingsDrawerOpen}
-                close={closeSettingsDrawer}
-                onChangeTotalDenominator={setTotalDenominator}
-                totalDenominator={totalDenominator}
-            />
         </>
     );
 
-    function computeDisplayedTotalPoints(totalPoints: number) {
-        switch (totalDenominator) {
-            case '20':
-                return '20';
-            case 'original':
-                return computeRoundMark(totalPoints);
-        }
-    }
-
-    function computeDisplayedMark(mark: number, totalPoints: number) {
-        switch (totalDenominator) {
+    function computeDisplayedMark(mark: number, totalPoints: number, denominator: denominatorType) {
+        switch (denominator) {
             case '20':
                 const convertedMark = denominatorHandler.convertMark(
                     mark,
                     totalPoints,
-                    totalDenominator,
+                    denominator,
                 );
                 return computeRoundMark(convertedMark);
             case 'original':
                 return computeRoundMark(mark);
         }
-    }
-
-    function closeSettingsDrawer() {
-        setIsSettingsDrawerOpen(false);
-    }
-
-    function openSettingsDrawer() {
-        setIsSettingsDrawerOpen(true);
     }
 
     function computeSubtitle(attemptsCountByAttemptStatus: attemptsCountByAttemptStatusApiType) {
@@ -347,7 +329,7 @@ function ExamResults() {
     function buildDeleteAttempt(attemptId: string) {
         return () => {
             // eslint-disable-next-line no-restricted-globals
-            const hasConfirmed = confirm('Souhaitez-vous réellement réinitialiser ce test ?');
+            const hasConfirmed = confirm('Souhaitez-vous réellement réinitialiser cet examen ?');
             if (hasConfirmed) {
                 deleteAttemptMutation.mutate({ attemptId, examId });
             }
@@ -431,5 +413,8 @@ const TitleContainer = styled('div')(({ theme }) => ({
 }));
 
 const TableCellContent = styled('div')({ display: 'flex', alignItems: 'center' });
+
+const MarksContainer = styled('div')({ display: 'flex', flexDirection: 'column' });
+const BoldContainer = styled('span')({ fontWeight: 'bolder' });
 
 export { ExamResults };
