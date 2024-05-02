@@ -7,11 +7,12 @@ function TestPageLayout(props: {
     studentEmail: string;
     result?: string;
     children: ReactNode;
-    centerButtons?: JSX.Element[];
+    centerElement?: JSX.Element;
+    leftElement?: JSX.Element;
     rightButtons?: JSX.Element[];
     shouldPreventTextSelection?: boolean;
 }) {
-    const shouldDisplayFooter = !!props.centerButtons || props.rightButtons;
+    const shouldDisplayFooter = !!props.centerElement || !!props.rightButtons;
     const ChildrenContainer = props.shouldPreventTextSelection
         ? SelectionLessContainer
         : BasicContainer;
@@ -28,8 +29,8 @@ function TestPageLayout(props: {
             <ChildrenContainer>{props.children}</ChildrenContainer>
             {shouldDisplayFooter && (
                 <FooterContainer>
-                    <LeftFooterPart />
-                    <CenterFooterPart>{props.centerButtons}</CenterFooterPart>
+                    <LeftFooterPart>{props.leftElement}</LeftFooterPart>
+                    <CenterFooterPart>{props.centerElement}</CenterFooterPart>
                     <RightFooterPart>{props.rightButtons}</RightFooterPart>
                 </FooterContainer>
             )}
@@ -71,8 +72,6 @@ const LeftFooterPart = styled('div')({
     height: '100%',
     flex: 1,
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
 });
 
 const StudentInfoContainer = styled('div')(({ theme }) => ({

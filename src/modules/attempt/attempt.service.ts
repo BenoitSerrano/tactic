@@ -129,6 +129,7 @@ function buildAttemptService() {
                 id: true,
                 exam: { id: true },
                 startedAt: true,
+                updatedAt: true,
                 correctedAt: true,
                 endedAt: true,
                 answers: true,

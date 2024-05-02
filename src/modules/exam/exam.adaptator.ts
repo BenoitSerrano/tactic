@@ -66,7 +66,12 @@ function convertExamWithAttemptsToResults(
         (sum, question) => sum + question.points,
         0,
     );
-    return { totalPoints, results: examWithResults, examName: exam.name };
+    return {
+        totalPoints,
+        results: examWithResults,
+        examName: exam.name,
+        examDuration: exam.duration,
+    };
 }
 
 export { examAdaptator };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Typography, styled } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
@@ -13,8 +13,10 @@ import { Modal } from '../../../components/Modal';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
+import { LastUpdatedAtIndication } from './LastUpdatedAtIndication';
 
 function QuestionsAnswering(props: {
+    lastUpdatedAt: string | undefined;
     attemptId: string;
     title: string;
     studentEmail: string;
@@ -22,12 +24,21 @@ function QuestionsAnswering(props: {
     onExamDone: () => void;
 }) {
     const [isConfirmFinishExamModalOpen, setIsConfirmFinishExamModalOpen] = useState(false);
+    const queryClient = useQueryClient();
     const saveDraftMutation = useMutation({
         mutationFn: api.updateAttempt,
+        retry: 2,
         onSuccess: () => {
-            displayAlert({ variant: 'success', text: 'Vos réponses ont bien été sauvegardées.' });
+            queryClient.invalidateQueries({
+                queryKey: ['attempts-without-answers', props.attemptId],
+            });
         },
         onError: (error: any) => {
+            displayAlert({
+                variant: 'error',
+                autoHideDuration: 5000,
+                text: `Une erreur est survenue lors de l'enregistrement de vos réponses. `,
+            });
             console.error(error);
         },
     });
@@ -62,20 +73,16 @@ function QuestionsAnswering(props: {
         <>
             <TestPageLayout
                 shouldPreventTextSelection
-                subtitle="Pensez à sauvegarder régulièrement vos réponses"
                 result={totalPoints}
                 studentEmail={props.studentEmail}
                 title={props.title}
-                centerButtons={[
-                    <LoadingButton
-                        key="safe-draft-button"
-                        loading={saveDraftMutation.isPending}
-                        onClick={saveDraft}
-                        variant="outlined"
-                    >
-                        Sauvegarder vos réponses
-                    </LoadingButton>,
-                ]}
+                leftElement={
+                    <LastUpdatedAtIndication
+                        lastUpdatedAt={props.lastUpdatedAt}
+                        isLoading={saveDraftMutation.isPending}
+                        onClick={() => saveDraft(currentAnswers)}
+                    />
+                }
                 rightButtons={[
                     <LoadingButton
                         key="finish-exam-button"
@@ -113,12 +120,9 @@ function QuestionsAnswering(props: {
                                                 </QuestionIndicatorsContainer>
                                                 <QuestionAnswering
                                                     currentAnswer={currentAnswers[question.id]}
-                                                    setCurrentAnswer={(newAnswer: string) =>
-                                                        setCurrentAnswers({
-                                                            ...currentAnswers,
-                                                            [question.id]: newAnswer,
-                                                        })
-                                                    }
+                                                    setCurrentAnswer={buildSetCurrentAnswersAndSave(
+                                                        question.id,
+                                                    )}
                                                     question={question}
                                                     index={index + 1}
                                                 />
@@ -163,17 +167,29 @@ function QuestionsAnswering(props: {
 
     function cancelFinishExamModal() {
         closeConfirmFinishExamModal();
-        saveDraft();
+        saveDraft(currentAnswers);
+    }
+
+    function buildSetCurrentAnswersAndSave(questionId: number) {
+        return (newAnswer: string) => {
+            const newCurrentAnswers = {
+                ...currentAnswers,
+                [questionId]: newAnswer,
+            };
+            setCurrentAnswers(newCurrentAnswers);
+            saveDraft(newCurrentAnswers);
+        };
     }
 
     function finishExam() {
+        closeConfirmFinishExamModal();
         finishExamMutation.mutate({ attemptId: props.attemptId });
     }
 
-    function saveDraft() {
+    function saveDraft(newCurrentAnswers: attemptAnswersType) {
         saveDraftMutation.mutate({
             attemptId: props.attemptId,
-            answers: currentAnswers,
+            answers: newCurrentAnswers,
         });
     }
 

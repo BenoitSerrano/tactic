@@ -3,8 +3,44 @@ import { localeInfo } from '../constants';
 const time = {
     formatToClock,
     computeElapsedTime,
-    formatToReadableDatetime,
+    formatToReadableTime,
+    addSeconds,
+    formatToReadable,
 };
+
+function addSeconds(date: string, seconds: number) {
+    const parsedDate = new Date(date);
+    parsedDate.setTime(parsedDate.getTime() + seconds * 1000);
+    return parsedDate;
+}
+
+function formatToReadable(date: Date) {
+    let result = '';
+    const now = new Date();
+
+    if (
+        date.toLocaleDateString(localeInfo.locale, {
+            timeZone: localeInfo.timeZone,
+        }) ===
+        now.toLocaleDateString(localeInfo.locale, {
+            timeZone: localeInfo.timeZone,
+        })
+    ) {
+        result += "Aujourd'hui - ";
+    } else {
+        result +=
+            date.toLocaleDateString(localeInfo.locale, {
+                timeZone: localeInfo.timeZone,
+            }) + ' - ';
+    }
+
+    result += date.toLocaleTimeString(localeInfo.locale, {
+        timeZone: localeInfo.timeZone,
+        timeStyle: 'short',
+    });
+
+    return result;
+}
 
 function formatToClock(seconds: number, options?: { hideHours: boolean }) {
     if (seconds < 0) {
@@ -28,9 +64,15 @@ function formatToClock(seconds: number, options?: { hideHours: boolean }) {
     )}`;
 }
 
-function formatToReadableDatetime(date: string) {
+function formatToReadableTime(date: string, options?: { hideSeconds?: boolean }) {
     const parsedDate = new Date(date);
-    return parsedDate.toLocaleString(localeInfo.locale, { timeZone: localeInfo.timeZone });
+    const readableTime = parsedDate.toLocaleTimeString(localeInfo.locale, {
+        timeZone: localeInfo.timeZone,
+    });
+    if (options?.hideSeconds) {
+        return readableTime.substring(0, readableTime.length - 3);
+    }
+    return readableTime;
 }
 
 function formatToHumanReadable(value: number) {

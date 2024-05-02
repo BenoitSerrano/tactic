@@ -1,5 +1,6 @@
 import { TextField, Typography, styled } from '@mui/material';
 import { questionWithoutAnswerType } from '../types';
+import { useState } from 'react';
 
 function TexteLibreAnswering(props: {
     question: questionWithoutAnswerType;
@@ -7,6 +8,8 @@ function TexteLibreAnswering(props: {
     currentAnswer: string;
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
+    const [localAnswer, setLocalAnswer] = useState(props.currentAnswer);
+
     return (
         <Container>
             <TitleContainer>
@@ -15,16 +18,23 @@ function TexteLibreAnswering(props: {
                 </Typography>
             </TitleContainer>
             <StyledTextField
+                onBlur={onBlur}
                 multiline
                 placeholder="..."
-                value={props.currentAnswer}
+                value={localAnswer}
                 onChange={onChangeAnswer}
             />
         </Container>
     );
 
     function onChangeAnswer(event: React.ChangeEvent<HTMLInputElement>) {
-        props.setCurrentAnswer(event.target.value);
+        setLocalAnswer(event.target.value);
+    }
+
+    function onBlur() {
+        if (localAnswer !== props.currentAnswer) {
+            props.setCurrentAnswer(localAnswer);
+        }
     }
 }
 
