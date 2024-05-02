@@ -272,6 +272,7 @@ function QuestionsEditing(props: {
                                                                 title="Supprimer l'exercice"
                                                                 onClick={buildDeleteExercise(
                                                                     exercise.id,
+                                                                    exercise.name,
                                                                 )}
                                                             />
                                                         </ExerciseIconsContainer>
@@ -420,11 +421,11 @@ function QuestionsEditing(props: {
         setOrderedExerciseIds(newOrderedExerciseIds);
     }
 
-    function buildDeleteExercise(exerciseId: number) {
+    function buildDeleteExercise(exerciseId: number, exerciseName: string) {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                'Souhaitez-vous réellement supprimer cet exercice ? Tous les résultats des élèves pour cet exercice seront supprimés.',
+                `Souhaitez-vous réellement supprimer l'exercice "${exerciseName}" ? Tous les résultats des élèves pour cet exercice seront supprimés.`,
             );
             if (hasConfirmed) {
                 deleteExerciseMutation.mutate({ examId: props.examId, exerciseId });
