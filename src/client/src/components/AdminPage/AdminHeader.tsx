@@ -42,7 +42,7 @@ function AdminHeader() {
         });
 
         return [
-            <PreviewLinkContainer>
+            <PreviewLinkContainer key="preview-link-button">
                 <IconLink
                     title="Aperçu de l'examen"
                     to={examPreviewingLink}

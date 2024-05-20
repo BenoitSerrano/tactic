@@ -18,7 +18,7 @@ function EditingBreadcrumbs() {
         for (let i = 0; i < editingBreadcrumbs.length; i++) {
             const editingBreadcrumb = editingBreadcrumbs[i];
             const renderedBreadcrumb = (
-                <BreadcrumbTypographyContainer>
+                <BreadcrumbTypographyContainer key={`breadcrumb-editing-${i}`}>
                     {editingBreadcrumb.label}
                 </BreadcrumbTypographyContainer>
             );
@@ -26,7 +26,9 @@ function EditingBreadcrumbs() {
                 renderedBreadcrumbs.push(renderedBreadcrumb);
             } else {
                 renderedBreadcrumbs.push(
-                    <Link to={editingBreadcrumb.href}>{renderedBreadcrumb}</Link>,
+                    <Link to={editingBreadcrumb.href} key={`breadcrumb-editing-${i}`}>
+                        {renderedBreadcrumb}
+                    </Link>,
                 );
             }
 
