@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-const BLANK_TEXT_FIELD_WIDTH = 100;
+const BLANK_TEXT_FIELD_WIDTH = 130;
 
 const RightAnswerText = styled('span')(({ theme }) => ({ color: theme.palette.success.main }));
 const OkAnswerText = styled('span')(({ theme }) => ({ color: theme.palette.warning.main }));
