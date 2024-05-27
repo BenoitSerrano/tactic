@@ -117,13 +117,6 @@ function UpdateAnswersButtons(props: {
             if (props.question.answer === undefined) {
                 return;
             }
-            if (props.attemptStatus === 'corrected') {
-                displayAlert({
-                    variant: 'error',
-                    text: 'Cette copie est marquée comme corrigée, vous ne pouvez plus modifier la note.',
-                });
-                return;
-            }
 
             if (props.isQuestionManuallyCorrected) {
                 const manualMark = gradeConverter.convertGradeToMark(
