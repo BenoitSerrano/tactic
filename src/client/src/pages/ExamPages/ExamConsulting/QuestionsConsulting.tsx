@@ -3,7 +3,7 @@ import { Typography, styled } from '@mui/material';
 import { TestPageLayout } from '../components/TestPageLayout';
 import { examWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
-import { computeResult } from '../lib/computeResult';
+import { computeResults } from '../lib/computeResults';
 import { QuestionChecking } from '../ExamChecking/QuestionChecking';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
@@ -16,10 +16,15 @@ function QuestionsConsulting(props: {
     attemptId: string;
 }) {
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
-    const result = computeResult(props.exam.exercises);
+    const results = computeResults(props.exam.exercises);
 
     return (
-        <TestPageLayout studentEmail={props.studentEmail} title={props.exam.name} result={result}>
+        <TestPageLayout
+            studentEmail={props.studentEmail}
+            title={props.exam.name}
+            highlightedResult={results.converted}
+            lowlightedResult={results.total}
+        >
             <>
                 {props.exam.exercises.map((exercise, exerciseIndex) => {
                     const isLastExercise = exerciseIndex === props.exam.exercises.length - 1;

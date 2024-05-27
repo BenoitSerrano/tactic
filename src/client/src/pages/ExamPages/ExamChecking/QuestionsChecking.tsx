@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { IconButton, styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GradingIcon from '@mui/icons-material/Grading';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LockIcon from '@mui/icons-material/Lock';
-import { useState } from 'react';
+import { LoadingButton } from '@mui/lab';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../components/TestPageLayout';
@@ -16,16 +17,15 @@ import { attemptStatusType, attemptsCountByAttemptStatusApiType } from '../../..
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { manualQuestionKinds } from '../../../constants';
-import { computeResult } from '../lib/computeResult';
+import { computeResults } from '../lib/computeResults';
 import { pathHandler } from '../../../lib/pathHandler';
-import { LoadingButton } from '@mui/lab';
 import { AttemptsCount } from './AttemptsCount';
 import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
-import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
+import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
 import { DisplayedMark } from './DisplayedMark';
 
 function QuestionsChecking(props: {
@@ -44,7 +44,7 @@ function QuestionsChecking(props: {
     const [searchParams] = useSearchParams();
 
     const { displayAlert } = useAlert();
-    const result = computeResult(props.exercises);
+    const results = computeResults(props.exercises);
     const attemptIds = searchParams.get('attemptIds') || '';
 
     const lockAttemptMutation = useMutation({
@@ -124,7 +124,9 @@ function QuestionsChecking(props: {
             studentEmail={props.studentEmail}
             title={props.examName}
             centerElement={UpdateCorrectedAtButton || undefined}
-            result={result}
+            highlightedResult={results.converted}
+            lowlightedResult={results.total}
+            // results={results}
         >
             <>
                 <LeftArrowContainer>

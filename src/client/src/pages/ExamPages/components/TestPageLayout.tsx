@@ -5,7 +5,8 @@ function TestPageLayout(props: {
     title: string;
     subtitle?: string;
     studentEmail: string;
-    result?: string;
+    highlightedResult?: string;
+    lowlightedResult?: string;
     children: ReactNode;
     centerElement?: JSX.Element;
     leftElement?: JSX.Element;
@@ -24,7 +25,14 @@ function TestPageLayout(props: {
             </TitleContainer>
             <StudentInfoContainer>
                 <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
-                {!!props.result && <Typography variant="caption">{props.result}</Typography>}
+                {!!props.highlightedResult && (
+                    <ResultContainer>
+                        {<Typography variant="caption">{props.highlightedResult}</Typography>}
+                        {props.lowlightedResult && (
+                            <Typography variant="h6">{props.lowlightedResult}</Typography>
+                        )}
+                    </ResultContainer>
+                )}
             </StudentInfoContainer>
             <ChildrenContainer>{props.children}</ChildrenContainer>
             {shouldDisplayFooter && (
@@ -109,5 +117,10 @@ const Container = styled('div')(({ theme }) => ({
 
 const BasicContainer = styled('div')({});
 const SelectionLessContainer = styled('div')({ userSelect: 'none' });
+const ResultContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+});
 
 export { TestPageLayout };

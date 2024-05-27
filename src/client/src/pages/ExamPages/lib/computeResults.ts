@@ -1,8 +1,12 @@
 import { computeRoundMark } from '../../../lib/computeRoundMark';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { exerciseWithAnswersType } from '../types';
+import { CONVERSION_DENOMINATOR } from './constants';
 
-function computeResult(exercises: exerciseWithAnswersType[]) {
+function computeResults(exercises: exerciseWithAnswersType[]): {
+    total: string;
+    converted: string;
+} {
     let totalMark = 0;
     let totalPoints = 0;
     for (const exercise of exercises) {
@@ -18,6 +22,11 @@ function computeResult(exercises: exerciseWithAnswersType[]) {
     const roundedTotalMark = computeRoundMark(totalMark);
     const roundedTotalPoints = computeRoundMark(totalPoints);
 
-    return `${roundedTotalMark} / ${roundedTotalPoints}`;
+    const total = `${roundedTotalMark} / ${roundedTotalPoints}`;
+    const roundedConvertedMark = computeRoundMark(
+        (totalMark / totalPoints) * CONVERSION_DENOMINATOR,
+    );
+    const converted = `${roundedConvertedMark} / ${CONVERSION_DENOMINATOR}`;
+    return { total, converted };
 }
-export { computeResult };
+export { computeResults };

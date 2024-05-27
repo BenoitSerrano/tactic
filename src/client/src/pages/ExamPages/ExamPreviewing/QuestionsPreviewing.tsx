@@ -16,11 +16,11 @@ function QuestionsPreviewing(props: {
 }) {
     const [currentAnswers, setCurrentAnswers] = useState<Record<number, string>>({});
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
-    const totalPoints = computeTotalPoints(props.exercises);
+    const totalResult = computeTotalPoints(props.exercises);
 
     return (
         <>
-            <TestPageLayout studentEmail="-" title={props.title} result={totalPoints}>
+            <TestPageLayout studentEmail="-" title={props.title} highlightedResult={totalResult}>
                 {props.exercises.map((exercise, exerciseIndex) => {
                     const progress = computeExerciseProgress(exercise.questions, currentAnswers);
                     const exerciseIndication = {

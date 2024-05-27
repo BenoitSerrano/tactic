@@ -67,13 +67,13 @@ function QuestionsAnswering(props: {
     const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
-    const totalPoints = computeTotalPoints(props.exercises);
+    const totalResult = computeTotalPoints(props.exercises);
 
     return (
         <>
             <TestPageLayout
                 shouldPreventTextSelection
-                result={totalPoints}
+                highlightedResult={totalResult}
                 studentEmail={props.studentEmail}
                 title={props.title}
                 leftElement={
