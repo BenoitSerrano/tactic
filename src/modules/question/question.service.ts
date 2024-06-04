@@ -82,9 +82,22 @@ function buildQuestionService() {
         criteria: { exerciseId: Exercise['id']; questionId: Question['id'] },
         body: Pick<questionDtoType, 'title' | 'points' | 'possibleAnswers' | 'acceptableAnswers'>,
     ) {
+        const attemptService = buildAttemptService();
+
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId, exercise: { id: criteria.exerciseId } },
+            relations: ['exercise', 'exercise.exam'],
+            select: { exercise: { id: true, exam: { id: true } } },
         });
+
+        if (question.kind === 'texteLibre' && question.points !== body.points) {
+            await attemptService.convertAttemptQuestionPoints({
+                previousPoints: question.points,
+                nextPoints: body.points,
+                questionId: criteria.questionId,
+                examId: question.exercise.exam.id,
+            });
+        }
 
         question.title = body.title;
         question.possibleAnswers = body.possibleAnswers;
