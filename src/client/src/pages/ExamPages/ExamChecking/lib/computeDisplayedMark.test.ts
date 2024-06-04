@@ -2,7 +2,6 @@ import { gradeType } from '../../../../types';
 import { computeDisplayedMark } from './computeDisplayedMark';
 
 describe('computeDisplayedMark', () => {
-    const totalPoints = 1;
     const baseQuestion = { id: 1, points: 1, title: 'titre ....' };
     it('should return the grade for automatic questions even if answer not filled', () => {
         const answer = undefined;
@@ -73,6 +72,6 @@ describe('computeDisplayedMark', () => {
 
         const displayedMark = computeDisplayedMark(question);
 
-        expect(displayedMark).toEqual({ mark: undefined, points: 1 });
+        expect(displayedMark).toEqual({ mark: '', points: 1 });
     });
 });

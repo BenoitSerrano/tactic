@@ -8,7 +8,7 @@ function computeDisplayedMark(question: questionWithAnswersType): {
     const points = question.points;
     if (question.kind === 'texteATrous' || question.kind === 'texteLibre') {
         if (question.mark === undefined) {
-            const displayedMark = question.answer ? undefined : '0';
+            const displayedMark = question.answer ? '' : '0';
             return { mark: displayedMark, points };
         } else {
             return { mark: `${question.mark}`, points };
