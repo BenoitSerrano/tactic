@@ -126,7 +126,6 @@ function QuestionsChecking(props: {
             centerElement={UpdateCorrectedAtButton || undefined}
             highlightedResult={results.converted}
             lowlightedResult={results.total}
-            // results={results}
         >
             <>
                 <LeftArrowContainer>
@@ -139,10 +138,14 @@ function QuestionsChecking(props: {
                 />
                 <Dialog
                     buttons={[
-                        <Button onClick={() => setAttemptIdToNavigateTo(undefined)}>
+                        <Button
+                            key="button-stay"
+                            onClick={() => setAttemptIdToNavigateTo(undefined)}
+                        >
                             Non, rester
                         </Button>,
                         <Button
+                            key="button-next"
                             onClick={() => {
                                 if (attemptIdToNavigateTo) {
                                     setAttemptIdToNavigateTo(undefined);
@@ -153,6 +156,7 @@ function QuestionsChecking(props: {
                             Non, copie suivante
                         </Button>,
                         <Button
+                            key="button-next-mark-as-corrected"
                             variant="contained"
                             onClick={() =>
                                 attemptIdToNavigateTo &&
