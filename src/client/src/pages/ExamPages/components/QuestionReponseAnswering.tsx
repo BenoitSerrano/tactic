@@ -1,6 +1,7 @@
-import { TextField, Typography, styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { questionWithoutAnswerType } from '../types';
 import { useState } from 'react';
+import { AutoBlurringTextField } from './AutoBlurringTextField';
 
 function QuestionReponseAnswering(props: {
     question: questionWithoutAnswerType;
@@ -14,20 +15,14 @@ function QuestionReponseAnswering(props: {
             <Title>
                 {props.index}. {props.question.title}
             </Title>
-            <StyledTextField
-                fullWidth
-                variant="outlined"
+            <AutoBlurringTextField
+                isFullWidth
                 value={localAnswer}
                 onBlur={onBlur}
-                onChange={onChangeAnswer}
-                placeholder="..."
+                onChange={setLocalAnswer}
             />
         </StyledContainer>
     );
-
-    function onChangeAnswer(event: React.ChangeEvent<HTMLInputElement>) {
-        setLocalAnswer(event.target.value);
-    }
 
     function onBlur() {
         if (localAnswer !== props.currentAnswer) {
@@ -41,10 +36,6 @@ const StyledContainer = styled('div')({
     flexDirection: 'column',
     width: '100%',
 });
-
-const StyledTextField = styled(TextField)(({ theme }) => ({
-    marginTop: theme.spacing(1),
-}));
 
 const Title = styled(Typography)({ fontWeight: 'bold' });
 export { QuestionReponseAnswering };
