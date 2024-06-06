@@ -15,6 +15,7 @@ function AutoBlurringTextField(props: {
             width={props.width}
             fullWidth={props.isFullWidth}
             onBlur={onBlur}
+            onPaste={(event) => event.preventDefault()}
             focused={isTextInputFocused}
             onFocus={onFocus}
             multiline={props.isMultiline}
