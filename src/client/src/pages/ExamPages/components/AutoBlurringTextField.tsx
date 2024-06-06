@@ -10,7 +10,6 @@ function AutoBlurringTextField(props: {
     width?: number;
 }) {
     const [isTextInputFocused, setIsTextInputFocused] = useState(false);
-
     return (
         <StyledTextField
             width={props.width}
@@ -42,13 +41,12 @@ function AutoBlurringTextField(props: {
 }
 
 const StyledTextField = styled(TextField)<{ width?: number }>((props) => ({
-    flex: 1,
     width: props.width,
     '& .MuiInputBase-input': {
-        filter: props.focused ? 'none' : 'blur(3px)',
+        filter:
+            props.focused || props.value === undefined || props.value === '' ? 'none' : 'blur(3px)',
     },
     '&:hover': {
-        color: 'red',
         '& .MuiInputBase-input': {
             filter: 'none',
         },
