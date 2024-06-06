@@ -7,6 +7,7 @@ import { WordsBlanker } from '../components/WordsBlanker';
 import { PointsPerBlankHandler } from '../components/PointsPerBlankHandler';
 import { converter } from '../../lib/converter';
 import { Button } from '../../../../components/Button';
+import { sanitizer } from '../lib/sanitizer';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
@@ -80,7 +81,8 @@ function TexteATrousUpsertionModalContent(props: {
 
     function setTitle(event: React.ChangeEvent<HTMLInputElement>) {
         const title = event.target.value;
-        props.setTitle(title);
+        const sanitizedTitle = sanitizer.sanitize(title);
+        props.setTitle(sanitizedTitle);
     }
 
     function freezeSentence() {
