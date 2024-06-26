@@ -3,11 +3,14 @@ import { HEADER_HEIGHT } from '../constants';
 import { LoadingButton } from '@mui/lab';
 import { IconButton } from './IconButton';
 
+type buttonVariantType = 'text-with-icon' | 'icon-only';
+
 type buttonType = {
     IconComponent: React.ElementType;
     onClick: () => void;
     title: string;
-    variant?: 'text-with-icon' | 'icon-only';
+    shape?: 'outlined' | 'contained';
+    variant?: buttonVariantType;
     isLoading?: boolean;
 };
 
@@ -16,7 +19,8 @@ function Menu(props: { buttons: Array<buttonType> }) {
         <MenuContainer>
             {props.buttons.map((button, index) => {
                 const { IconComponent, onClick, title, isLoading } = button;
-                const variant = button.variant || 'text-with-icon';
+                const shape = button.shape || 'contained';
+                const variant: buttonVariantType = button.variant || 'text-with-icon';
                 if (variant === 'icon-only') {
                     return (
                         <ButtonContainer key={index}>
@@ -33,7 +37,7 @@ function Menu(props: { buttons: Array<buttonType> }) {
                     <ButtonContainer key={index}>
                         <LoadingButton
                             loading={isLoading}
-                            variant="contained"
+                            variant={shape}
                             startIcon={<IconComponent />}
                             onClick={onClick}
                         >
