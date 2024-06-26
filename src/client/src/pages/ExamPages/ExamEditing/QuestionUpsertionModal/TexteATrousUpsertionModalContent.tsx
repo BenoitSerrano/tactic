@@ -37,7 +37,7 @@ function TexteATrousUpsertionModalContent(props: {
                         fullWidth
                         label="Texte complet"
                         value={displayedTitle}
-                        onChange={(event) => props.setTitle(event.target.value)}
+                        onChange={setTitle}
                     />
                     <OriginalTextButtonContainer>
                         {isWholeSentenceFrozen && (
@@ -77,6 +77,11 @@ function TexteATrousUpsertionModalContent(props: {
             </QuestionInputContainer>
         </>
     );
+
+    function setTitle(event: React.ChangeEvent<HTMLInputElement>) {
+        const title = event.target.value;
+        props.setTitle(title);
+    }
 
     function freezeSentence() {
         if (!isWholeSentenceFrozen) {

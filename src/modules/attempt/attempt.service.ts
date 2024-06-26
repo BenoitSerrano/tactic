@@ -15,6 +15,7 @@ function buildAttemptService() {
     const attemptRepository = dataSource.getRepository(Attempt);
 
     const attemptService = {
+        convertAttemptQuestionPoints,
         searchAttempt,
         createAttempt,
         updateAttempt,
@@ -118,6 +119,41 @@ function buildAttemptService() {
         );
 
         return result;
+    }
+
+    async function convertAttemptQuestionPoints({
+        nextPoints,
+        previousPoints,
+        questionId,
+        examId,
+    }: {
+        previousPoints: number;
+        nextPoints: number;
+        questionId: Question['id'];
+        examId: Exam['id'];
+    }) {
+        const attempts = await attemptRepository.find({ where: { exam: { id: examId } } });
+        const updatedAttempts: Attempt[] = [];
+        for (const attempt of attempts) {
+            const previousMarks = attemptUtils.decodeManualMarks(attempt.manualMarks);
+            const previousMark = previousMarks[questionId];
+            if (previousMark === undefined) {
+                updatedAttempts.push(attempt);
+            } else {
+                const convertedMark = attemptUtils.convertMark({
+                    previousPoints,
+                    nextPoints,
+                    previousMark,
+                });
+                const nextMarks = attemptUtils.encodeManualMarks({
+                    ...previousMarks,
+                    [questionId]: convertedMark,
+                });
+                const updatedAttempt = { ...attempt, manualMarks: nextMarks };
+                updatedAttempts.push(updatedAttempt);
+            }
+        }
+        return attemptRepository.save(updatedAttempts);
     }
 
     async function fetchAttemptWithoutAnswers(attemptId: Attempt['id']) {

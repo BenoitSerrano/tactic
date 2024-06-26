@@ -7,6 +7,7 @@ import { computeAutomaticMark } from './lib/computeAutomaticMark';
 import { attemptAnswersType } from './types';
 
 const attemptUtils = {
+    convertMark,
     computeIsTimeLimitExceeded,
     stringifyAnswers,
     parseAnswers,
@@ -16,6 +17,19 @@ const attemptUtils = {
     decodeManualMarks,
     computeNotationInfo,
 };
+
+function convertMark({
+    previousPoints,
+    nextPoints,
+    previousMark,
+}: {
+    previousPoints: number;
+    nextPoints: number;
+    previousMark: number;
+}) {
+    const newMark = (previousMark / previousPoints) * nextPoints;
+    return newMark;
+}
 
 function computeIsTimeLimitExceeded({
     startedAt,

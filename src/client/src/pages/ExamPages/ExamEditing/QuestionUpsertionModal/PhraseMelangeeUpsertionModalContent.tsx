@@ -8,6 +8,7 @@ import { Button } from '../../../../components/Button';
 import { combinator } from '../../../../lib/combinator';
 import { WordsShuffler } from '../../components/WordsShuffler';
 import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
+import { punctuationSpacesHandler } from '../lib/punctationSpacesHandler';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
@@ -162,7 +163,8 @@ function PhraseMelangeeUpsertionModalContent(props: {
     }
 
     function onChangeOriginalPhrase(event: React.ChangeEvent<HTMLInputElement>) {
-        const newOriginalPhrase = event.target.value;
+        const newOriginalPhrase = punctuationSpacesHandler.addSpaces(event.target.value);
+
         setOriginalPhrase(newOriginalPhrase);
         const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
 

@@ -76,7 +76,6 @@ async function importDb() {
     console.log(`${allAttempts.length} attempts fetched! Inserting them in database...`);
 
     for (const attempt of allAttempts) {
-        console.log(`attempt ${attempt.id}`);
         const translatedAnswers = replaceQuestionIdInAnswers(attempt.answers, questionIdMapping);
         const translatedGrades = replaceQuestionIdInGrades(attempt.manualGrades, questionIdMapping);
         await attemptRepository.insert({

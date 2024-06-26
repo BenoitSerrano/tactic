@@ -1,9 +1,10 @@
-import { TextField, Typography, styled } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { Typography, styled } from '@mui/material';
+import { useState } from 'react';
 import { questionWithoutAnswerType } from '../../types';
 import { SPLITTING_CHARACTER_FOR_TAT, converter } from '../../lib/converter';
 import { textSplitter } from '../../../../lib/textSplitter';
 import { BLANK_TEXT_FIELD_WIDTH } from '../../constants';
+import { AutoBlurringTextField } from '../AutoBlurringTextField';
 
 function TexteATrousAnswering(props: {
     question: questionWithoutAnswerType;
@@ -26,9 +27,9 @@ function TexteATrousAnswering(props: {
                     <IndexContainer>{props.index}.</IndexContainer>
                     {words.map((word, wordIndex) =>
                         word === '....' ? (
-                            <AnswerTextField
+                            <AutoBlurringTextField
+                                width={BLANK_TEXT_FIELD_WIDTH}
                                 key={`tat-question-${props.question.id}-word-${wordIndex}-input`}
-                                placeholder="..."
                                 value={
                                     textInputs[
                                         converter.convertWordIndexToAnswerIndex({
@@ -39,7 +40,6 @@ function TexteATrousAnswering(props: {
                                 }
                                 onBlur={onBlur}
                                 onChange={buildSetWordAnswer(wordIndex)}
-                                variant="outlined"
                             />
                         ) : (
                             <WordContainer
@@ -55,13 +55,12 @@ function TexteATrousAnswering(props: {
     );
 
     function buildSetWordAnswer(wordIndex: number) {
-        return (event: ChangeEvent<HTMLInputElement>) => {
-            const textInput = event.target.value;
-            if (textInput.includes(SPLITTING_CHARACTER_FOR_TAT)) {
+        return (value: string) => {
+            if (value.includes(SPLITTING_CHARACTER_FOR_TAT)) {
                 return;
             }
             const answer = converter.convertTextInputToAnswer({
-                textInput,
+                textInput: value,
                 currentAnswer: localAnswer,
                 wordIndex,
                 title,
@@ -82,5 +81,4 @@ const WordContainer = styled(Typography)(({ theme }) => ({
     paddingLeft: 4,
 }));
 const IndexContainer = styled('span')({ fontWeight: 'bold' });
-const AnswerTextField = styled(TextField)({ width: BLANK_TEXT_FIELD_WIDTH });
 export { TexteATrousAnswering };
