@@ -6,6 +6,7 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import DownloadIcon from '@mui/icons-material/Download';
 import { api } from '../../lib/api';
 import {
     IconButton,
@@ -21,7 +22,7 @@ import {
 } from '@mui/material';
 import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
-import { attemptStatusType, attemptsCountByAttemptStatusApiType } from '../../types';
+import { attemptsCountByAttemptStatusApiType } from '../../types';
 import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
 import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
@@ -31,26 +32,8 @@ import { Menu } from '../../components/Menu';
 import { computeRoundMark } from '../../lib/computeRoundMark';
 import { IconLink } from '../../components/IconLink';
 import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
-
-type examResultApiType = {
-    id: string;
-    email: string;
-    attemptId: string;
-    startedAt: string;
-    isTimeLimitExceeded: boolean;
-    attemptStatus: attemptStatusType;
-    actualDuration: number | undefined;
-    mark: number;
-    roundTrips: number;
-    timeSpentOutside: number;
-};
-
-type examResultsApiType = {
-    results: Array<examResultApiType>;
-    totalPoints: number;
-    examName: string;
-    examDuration: number;
-};
+import { examResultsApiType } from './types';
+import { createCsv } from './lib/createCsv';
 
 type sortColumnType = 'email' | 'mark' | 'startedAt';
 
@@ -135,6 +118,12 @@ function ExamResults() {
     const title = resultsQuery.data.examName;
     const subtite = computeSubtitle(attemptsCountQuery.data);
     const menuButtons = [
+        {
+            title: 'Télécharger les résultats',
+            onClick: () => downloadResultsCsv(resultsQuery.data),
+            IconComponent: DownloadIcon,
+            shape: 'outlined' as const,
+        },
         {
             title: 'Actualiser',
             onClick: resultsQuery.refetch,
@@ -405,6 +394,24 @@ function ExamResults() {
                 return result > 0 ? -1 : 1;
             }
         });
+    }
+
+    function downloadResultsCsv(examResultsApi: examResultsApiType) {
+        const csv = createCsv(examResultsApi, [
+            'email',
+            'totalMark',
+            'convertedMark',
+            'actualDuration',
+            'roundTrips',
+            'timeSpentOutside',
+        ]);
+        const data = csv.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
+        const blob = new Blob([data], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Résultats - ${examResultsApi.examName}.csv`;
+        a.click();
     }
 }
 
