@@ -397,7 +397,14 @@ function ExamResults() {
     }
 
     function downloadResultsCsv(examResultsApi: examResultsApiType) {
-        const csv = createCsv(examResultsApi);
+        const csv = createCsv(examResultsApi, [
+            'email',
+            'totalMark',
+            'convertedMark',
+            'actualDuration',
+            'roundTrips',
+            'timeSpentOutside',
+        ]);
         const data = csv.map((row) => row.join(',')).join('\n');
         // Create a Blob with the CSV data and type
         const blob = new Blob([data], { type: 'text/csv' });

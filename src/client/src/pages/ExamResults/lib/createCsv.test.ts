@@ -34,8 +34,9 @@ describe('createCsv', () => {
             examName: 'ESAJ - LEVEL 3 - FINAL EXAM',
             examDuration: 60,
         };
+        const columns = ['email' as const, 'totalMark' as const, 'convertedMark' as const];
 
-        const csv = createCsv(examResults);
+        const csv = createCsv(examResults, columns);
 
         expect(csv).toEqual([
             ['E-mail', 'Note (/ 65)', 'Note (/ 20)'],
