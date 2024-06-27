@@ -405,21 +405,12 @@ function ExamResults() {
             'roundTrips',
             'timeSpentOutside',
         ]);
-        const data = csv.map((row) => row.join(',')).join('\n');
-        // Create a Blob with the CSV data and type
+        const data = csv.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
         const blob = new Blob([data], { type: 'text/csv' });
-
-        // Create a URL for the Blob
         const url = URL.createObjectURL(blob);
-
-        // Create an anchor tag for downloading
         const a = document.createElement('a');
-
-        // Set the URL and download attribute of the anchor tag
         a.href = url;
-        a.download = 'download.csv';
-
-        // Trigger the download by clicking the anchor tag
+        a.download = `Résultats - ${examResultsApi.examName}.csv`;
         a.click();
     }
 }

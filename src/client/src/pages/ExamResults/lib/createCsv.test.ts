@@ -36,12 +36,12 @@ describe('createCsv', () => {
         };
         const columns = ['email' as const, 'totalMark' as const, 'convertedMark' as const];
 
-        const csv = createCsv(examResults, columns);
+        const csv = createCsv(examResults, columns, { sortBy: 'email' });
 
         expect(csv).toEqual([
             ['E-mail', 'Note (/ 65)', 'Note (/ 20)'],
-            ['bartholome.g@truc.fr', '52.5', '16.25'],
-            ['benoit.s@truc.fr', '30.75', '9.5'],
+            ['bartholome.g@truc.fr', '52,5', '16,25'],
+            ['benoit.s@truc.fr', '30,75', '9,5'],
         ]);
     });
 });

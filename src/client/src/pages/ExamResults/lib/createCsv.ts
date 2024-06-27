@@ -1,17 +1,24 @@
 import { computeRoundMark } from '../../../lib/computeRoundMark';
 import { CONVERSION_DENOMINATOR, convertMark } from '../../../lib/convertMark';
+import { formatNumber } from '../../../lib/formatNumber';
 import { time } from '../../../lib/time';
 import { examResultsApiType } from '../types';
 
-type columnType =
-    | 'email'
-    | 'totalMark'
-    | 'convertedMark'
-    | 'actualDuration'
-    | 'roundTrips'
-    | 'timeSpentOutside';
+const COLUMNS = [
+    'email',
+    'totalMark',
+    'convertedMark',
+    'actualDuration',
+    'roundTrips',
+    'timeSpentOutside',
+] as const;
+type columnType = (typeof COLUMNS)[number];
 
-function createCsv(examResultsApi: examResultsApiType, columns: columnType[]) {
+function createCsv(
+    examResultsApi: examResultsApiType,
+    columns: columnType[],
+    options?: { sortBy?: columnType },
+) {
     const csv: string[][] = [];
     const roundedTotalPoints = computeRoundMark(examResultsApi.totalPoints);
     const HEADERS: Record<columnType, string> = {
@@ -38,14 +45,15 @@ function createCsv(examResultsApi: examResultsApiType, columns: columnType[]) {
                         totalMark: examResult.mark,
                         totalPoints: examResultsApi.totalPoints,
                     });
-                    row.push(`${roundedConvertedMark}`);
+
+                    row.push(formatNumber(Number(roundedConvertedMark)));
                     break;
                 case 'totalMark':
                     const { roundedTotalMark } = convertMark({
                         totalMark: examResult.mark,
                         totalPoints: examResultsApi.totalPoints,
                     });
-                    row.push(`${roundedTotalMark}`);
+                    row.push(formatNumber(Number(roundedTotalMark)));
                     break;
                 case 'actualDuration':
                     if (examResult.actualDuration === undefined) {
@@ -73,7 +81,15 @@ function createCsv(examResultsApi: examResultsApiType, columns: columnType[]) {
 
         rows.push(row);
     }
-    rows.sort((resultA, resultB) => resultA[0].localeCompare(resultB[0]));
+    if (options?.sortBy) {
+        const sortBy = options.sortBy;
+        const indexOfSortBy = columns.indexOf(sortBy);
+        if (indexOfSortBy !== -1) {
+            rows.sort((resultA, resultB) =>
+                resultA[indexOfSortBy].localeCompare(resultB[indexOfSortBy]),
+            );
+        }
+    }
     for (const row of rows) {
         csv.push(row);
     }
