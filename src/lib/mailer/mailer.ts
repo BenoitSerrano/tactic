@@ -1,6 +1,7 @@
 // @ts-ignore
 import Brevo from '@getbrevo/brevo';
 import { config } from '../../config';
+import { logger } from '../logger';
 
 const EMAIL_TEMPLATE_MAPPING = {
     RESET_PASSWORD: 1,
@@ -24,7 +25,7 @@ function buildMailer() {
             await contactsApi.createContact(createContact);
             return true;
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             return false;
         }
     }
@@ -51,7 +52,7 @@ function buildMailer() {
             await transactionalEmailsApi.sendTransacEmail(sendSmtpEmail);
             return true;
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             return false;
         }
     }

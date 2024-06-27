@@ -4,6 +4,7 @@ import Joi from 'joi';
 import { User } from '../../modules/user';
 import { dataSource } from '../../dataSource';
 import { extractUserIdFromHeader } from './extractUserIdFromHeader';
+import { logger } from '../logger';
 
 export { buildAuthenticatedController };
 
@@ -22,7 +23,7 @@ function buildAuthenticatedController<
     },
 ) {
     return async (req: Request, res: Response) => {
-        console.log(`${req.method} ${req.originalUrl}`);
+        logger.info(`${req.method} ${req.originalUrl}`);
 
         let user: User;
         const userRepository = dataSource.getRepository(User);
@@ -30,7 +31,7 @@ function buildAuthenticatedController<
             const userId = extractUserIdFromHeader(req);
             user = await userRepository.findOneByOrFail({ id: userId });
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             res.sendStatus(httpStatus.UNAUTHORIZED);
             return;
         }
@@ -39,7 +40,7 @@ function buildAuthenticatedController<
             try {
                 await options.checkAuthorization(req.params as paramsT, user);
             } catch (error) {
-                console.error(error);
+                logger.error(error);
                 res.sendStatus(httpStatus.FORBIDDEN);
                 return;
             }
@@ -48,7 +49,7 @@ function buildAuthenticatedController<
         if (options?.schema) {
             const { error } = options.schema.validate(req.body);
             if (error) {
-                console.error(error);
+                logger.error(error);
                 res.status(httpStatus.BAD_REQUEST).send(error.message);
                 return;
             }
@@ -66,7 +67,7 @@ function buildAuthenticatedController<
             res.setHeader('Content-Type', 'application/json');
             res.send(result);
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
         }
     };

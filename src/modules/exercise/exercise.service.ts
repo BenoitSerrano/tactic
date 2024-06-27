@@ -4,6 +4,7 @@ import { Exam, buildExamService } from '../exam';
 import { Question, buildQuestionService } from '../question';
 import { buildAttemptService } from '../attempt';
 import { questionKindType } from '../question/types';
+import { logger } from '../../lib/logger';
 
 export { buildExerciseService };
 
@@ -103,7 +104,7 @@ function buildExerciseService() {
             const id = orderedIds[i];
             const result = await exerciseRepository.update({ id }, { order: i });
             if (result.affected !== 1) {
-                console.error(`Could not update exercise id ${id} order because it does not exist`);
+                logger.error(`Could not update exercise id ${id} order because it does not exist`);
             }
         }
 

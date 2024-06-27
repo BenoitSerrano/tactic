@@ -5,12 +5,13 @@ import bodyParser from 'body-parser';
 import { config } from './config';
 import { dataSource } from './dataSource';
 import { router } from './router';
+import { logger } from './lib/logger';
 
 export { runApp };
 
 async function runApp() {
     await dataSource.initialize();
-    console.log(`Data source has been initialized`);
+    logger.info(`Data source has been initialized`);
 
     const app = Express();
 
@@ -23,6 +24,6 @@ async function runApp() {
     });
 
     app.listen(config.PORT, async () => {
-        console.log(`Server is running on port ${config.PORT}`);
+        logger.info(`Server is running on port ${config.PORT}`);
     });
 }

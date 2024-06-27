@@ -10,6 +10,7 @@ import { acceptableAnswerType, questionDtoType } from './types';
 import { addAcceptableAnswerToTexteATrousQuestion } from './lib/addAcceptableAnswerToTexteATrousQuestion';
 import { removeOkAnswerFromQuestionFromTexteATrousQuestion } from './lib/removeOkAnswerFromQuestionFromTexteATrousQuestion';
 import { Exam } from '../exam';
+import { logger } from '../../lib/logger';
 
 export { buildQuestionService };
 
@@ -181,7 +182,7 @@ function buildQuestionService() {
             const id = orderedIds[i];
             const result = await questionRepository.update({ id }, { order: i });
             if (result.affected !== 1) {
-                console.error(`Could not update question id ${id} order because it does not exist`);
+                logger.error(`Could not update question id ${id} order because it does not exist`);
             }
         }
 

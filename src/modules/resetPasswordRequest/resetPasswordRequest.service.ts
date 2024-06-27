@@ -5,6 +5,7 @@ import { ResetPasswordRequest } from './ResetPasswordRequest.entity';
 import { mailer } from '../../lib/mailer';
 import { assertIsResetPasswordRequestRecent } from './lib/assertIsResetPasswordRequestRecent';
 import { MINUTES_ALLOWED_FOR_RESET_PASSWORD_REQUEST } from './constants';
+import { logger } from '../../lib/logger';
 
 export { buildResetPasswordRequestService };
 
@@ -39,7 +40,7 @@ function buildResetPasswordRequestService() {
     async function createResetPasswordRequest(email: User['email']) {
         const user = await userService.findUserByEmail(email);
         if (!user) {
-            console.error(
+            logger.error(
                 `No user associated to email adresse ${email}: cannot create reset password request`,
             );
             return true;

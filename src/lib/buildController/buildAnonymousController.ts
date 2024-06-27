@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import Joi from 'joi';
+import { logger } from '../logger';
 
 export { buildAnonymousController };
 
@@ -15,12 +16,12 @@ function buildAnonymousController<
     },
 ) {
     return async (req: Request, res: Response) => {
-        console.log(`${req.method} ${req.originalUrl}`);
+        logger.info(`${req.method} ${req.originalUrl}`);
 
         if (options?.schema) {
             const { error } = options.schema.validate(req.body);
             if (error) {
-                console.error(error);
+                logger.error(error);
                 res.status(httpStatus.BAD_REQUEST).send(error.message);
                 return;
             }
@@ -35,7 +36,7 @@ function buildAnonymousController<
             res.setHeader('Content-Type', 'application/json');
             res.send(result);
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
         }
     };
