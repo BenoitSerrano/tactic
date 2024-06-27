@@ -40,8 +40,8 @@ describe('createCsv', () => {
 
         expect(csv).toEqual([
             ['E-mail', 'Note (/ 65)', 'Note (/ 20)'],
-            ['bartholome.g@truc.fr', '52,5', '16,25'],
-            ['benoit.s@truc.fr', '30,75', '9,5'],
+            ['bartholome.g@truc.fr', '52.5', '16.25'],
+            ['benoit.s@truc.fr', '30.75', '9.5'],
         ]);
     });
 });

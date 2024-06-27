@@ -39,7 +39,7 @@ describe('formatNumber', () => {
 
             const formattedValue = formatNumber(value);
 
-            expect(formattedValue).toBe('1 002');
+            expect(formattedValue).toBe('1 002');
         });
     });
 });

@@ -35,5 +35,8 @@ jobs:
               run: cd src/client && npm install
 
             # Finally, run our tests
-            - name: Run the tests
-              run: npm test
+            - name: Run the back-end tests
+              run: npm run test:back
+
+            - name: Run the front-end tests
+              run: npm run test:front
