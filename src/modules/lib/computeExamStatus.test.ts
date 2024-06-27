@@ -22,7 +22,6 @@ describe('computeExamStatus', () => {
         const attempt = {
             id: 'attempt1',
             answers: [],
-            manualGrades: [],
             manualMarks: [],
             startedAt,
             endedAt: null,
@@ -46,7 +45,6 @@ describe('computeExamStatus', () => {
         const attempt = {
             id: 'attempt1',
             answers: [],
-            manualGrades: [],
             manualMarks: [],
             startedAt,
             endedAt: null,
@@ -70,7 +68,6 @@ describe('computeExamStatus', () => {
         const attempt = {
             id: 'attempt1',
             answers: [],
-            manualGrades: [],
             manualMarks: [],
             startedAt,
             endedAt: null,
@@ -94,7 +91,6 @@ describe('computeExamStatus', () => {
         const attempt = {
             id: 'attempt1',
             answers: [],
-            manualGrades: [],
             manualMarks: [],
             startedAt,
             exam: { id: 'exam1' },
@@ -118,7 +114,6 @@ describe('computeExamStatus', () => {
         const attempt = {
             id: 'attempt1',
             answers: [],
-            manualGrades: [],
             manualMarks: [],
             startedAt,
             exam: { id: 'exam1' },
@@ -142,7 +137,6 @@ describe('computeExamStatus', () => {
         const attempt = {
             id: 'attempt1',
             answers: [],
-            manualGrades: [],
             manualMarks: [],
             startedAt,
             exam: { id: 'exam1' },

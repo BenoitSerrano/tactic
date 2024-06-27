@@ -13,14 +13,14 @@ export class Question {
     @Column()
     title: string;
 
-    @Column({ type: 'float4' })
+    @Column({ type: 'real' })
     points: number;
 
     // Format décodé: [2:tu es la plus belle, 1.5:es-tu la plus belle]
     @Column('simple-array', { default: '' })
     acceptableAnswers: string[];
 
-    @Column({ type: 'int2' })
+    @Column({ type: 'smallint' })
     order: number;
 
     @Column('simple-array', { default: '' })

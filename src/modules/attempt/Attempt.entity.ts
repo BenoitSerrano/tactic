@@ -38,12 +38,6 @@ export class Attempt implements AttemptInterface {
     answers: string[];
 
     @Column('simple-array', { default: '' })
-    marks: string[];
-
-    @Column('simple-array', { default: '' })
-    manualGrades: string[];
-
-    @Column('simple-array', { default: '' })
     manualMarks: string[];
 
     @Column({ type: 'timestamptz', nullable: true })

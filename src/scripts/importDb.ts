@@ -77,11 +77,11 @@ async function importDb() {
 
     for (const attempt of allAttempts) {
         const translatedAnswers = replaceQuestionIdInAnswers(attempt.answers, questionIdMapping);
-        const translatedGrades = replaceQuestionIdInGrades(attempt.manualGrades, questionIdMapping);
+        const translatedMarks = replaceQuestionIdInMarks(attempt.manualMarks, questionIdMapping);
         await attemptRepository.insert({
             ...attempt,
             answers: translatedAnswers,
-            manualGrades: translatedGrades,
+            manualMarks: translatedMarks,
         });
     }
     console.log('Done!');
@@ -109,26 +109,26 @@ function replaceQuestionIdInAnswers(
     return attemptAnswers;
 }
 
-function replaceQuestionIdInGrades(
-    manualGrades: Attempt['manualGrades'],
+function replaceQuestionIdInMarks(
+    manualMarks: Attempt['manualMarks'],
     questionIdMapping: questionIdMappingType,
 ): Attempt['answers'] {
-    const GRADE_REGEX = /^(\d+):([A-E])$/;
-    const newManualGrades = manualGrades
-        .map((manualGrade) => {
-            let regexMatch = manualGrade.match(GRADE_REGEX);
+    const MARK_REGEX = /^(\d+):(\d\.?\d*)$/;
+    const newManualMarks = manualMarks
+        .map((manualMark) => {
+            let regexMatch = manualMark.match(MARK_REGEX);
             if (!regexMatch || regexMatch.length !== 3 || isNaN(Number(regexMatch[1]))) {
-                throw new Error(`manualGrade "${manualGrade}" is wrongly formatted.`);
+                throw new Error(`manualMark "${manualMark}" is wrongly formatted.`);
             }
-            const [_, distantQuestionId, grade] = regexMatch;
+            const [_, distantQuestionId, mark] = regexMatch;
             const localQuestionId = questionIdMapping[Number(distantQuestionId)];
             if (localQuestionId === undefined) {
                 return '';
             }
-            return `${localQuestionId}:${grade}`;
+            return `${localQuestionId}:${mark}`;
         })
         .filter(Boolean);
-    return newManualGrades;
+    return newManualMarks;
 }
 
 importDb();

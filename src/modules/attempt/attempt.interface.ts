@@ -15,10 +15,6 @@ export interface AttemptInterface {
 
     answers: string[];
 
-    marks: string[];
-
-    manualGrades: string[];
-
     manualMarks: string[];
 
     endedAt: string | null;
