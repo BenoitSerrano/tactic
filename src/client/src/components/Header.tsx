@@ -28,9 +28,10 @@ const FixedContainer = styled('div')(({ theme }) => ({
     zIndex: 2,
     borderBottom: `${theme.palette.divider} 1px solid`,
 }));
+
 const ContentContainer = styled('div')(({ theme }) => ({
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
     display: 'flex',
     height: '100%',
     alignItems: 'center',

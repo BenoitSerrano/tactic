@@ -5,7 +5,7 @@ function IconButton(props: {
     title: string;
     size?: 'small' | 'medium' | 'large';
     isLoading?: boolean;
-    color?: 'success' | 'warning' | 'error';
+    color?: 'success' | 'warning' | 'error' | 'primary' | 'default';
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
     IconComponent: React.ElementType;
     disabled?: boolean;
