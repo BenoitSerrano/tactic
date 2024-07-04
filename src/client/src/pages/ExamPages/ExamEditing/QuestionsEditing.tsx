@@ -1,5 +1,5 @@
 import { TestPageLayout } from '../components/TestPageLayout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     EXERCISE_ACCORDION_SUMMARY_HEIGHT,
     ExerciseContainer,
@@ -85,15 +85,15 @@ function QuestionsEditing(props: {
             });
         },
     });
+
     const initialOrderedExerciseIds = props.exercises.map((exercise) => exercise.id);
     const [orderedExerciseIds, setOrderedExerciseIds] = useState(initialOrderedExerciseIds);
-    const initialOrderedQuestionIds = props.exercises.reduce((acc, exercise) => {
-        return {
-            ...acc,
-            [exercise.id]: [...exercise.questions.map((question) => question.id)],
-        };
-    }, {} as Record<number, number[]>);
+    const initialOrderedQuestionIds = computeOrderedQuestionIds(props.exercises);
     const [orderedQuestionIds, setOrderedQuestionIds] = useState(initialOrderedQuestionIds);
+    useEffect(() => {
+        const newOrderedQuestionIds = computeOrderedQuestionIds(props.exercises);
+        setOrderedQuestionIds(newOrderedQuestionIds);
+    }, [props.exercises]);
 
     const orderedExercises = computeOrderedItems(orderedExerciseIds, props.exercises);
 
@@ -432,6 +432,15 @@ function QuestionsEditing(props: {
             }
         };
     }
+}
+
+function computeOrderedQuestionIds(exercises: exerciseWithQuestionsType[]) {
+    return exercises.reduce((acc, exercise) => {
+        return {
+            ...acc,
+            [exercise.id]: [...exercise.questions.map((question) => question.id)],
+        };
+    }, {} as Record<number, number[]>);
 }
 
 const QuestionsContainer = styled('div')({});

@@ -42,13 +42,13 @@ function QuestionUpsertionModal(props: {
 
     const createQuestionMutation = useMutation({
         mutationFn: api.createQuestion,
-        onSuccess: (createdQuestion: { id: number }) => {
-            props.close();
-            props.onCreateQuestion(props.exerciseId, createdQuestion.id);
-            displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
-            queryClient.invalidateQueries({
+        onSuccess: async (createdQuestion: { id: number }) => {
+            await queryClient.invalidateQueries({
                 queryKey: ['exam-with-questions', props.examId],
             });
+            // props.onCreateQuestion(props.exerciseId, createdQuestion.id);
+            props.close();
+            displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
         },
     });
 
