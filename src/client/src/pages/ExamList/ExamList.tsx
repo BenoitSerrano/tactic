@@ -167,7 +167,7 @@ function ExamList(props: { filter: examFilterType }) {
                         <TableHead>
                             <TableRow>
                                 <TableCell width={10}></TableCell>
-                                <TableCell>Nom du test</TableCell>
+                                <TableCell>Nom de l'examen</TableCell>
                                 <TableCell width={170}>Durée</TableCell>
                             </TableRow>
                         </TableHead>
@@ -304,7 +304,7 @@ function ExamList(props: { filter: examFilterType }) {
             closeEditionMenu();
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                'Souhaitez-vous réellement supprimer ce test ? Tous les résultats liés à ce test seront supprimés.',
+                'Souhaitez-vous réellement supprimer cet examen ? Tous les résultats liés à cet examen seront supprimés.',
             );
             if (hasConfirmed) {
                 deleteExamMutation.mutate(examId);

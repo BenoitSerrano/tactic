@@ -40,7 +40,7 @@ function StudentAuthentication() {
         onError: (error) => {
             console.warn(error);
             displayAlert({
-                text: `L'adresse "${email}" n'existe pas pour ce test.`,
+                text: `L'adresse "${email}" n'existe pas pour cet examen.`,
                 variant: 'error',
             });
         },

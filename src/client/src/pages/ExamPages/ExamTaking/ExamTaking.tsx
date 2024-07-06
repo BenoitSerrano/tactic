@@ -153,7 +153,7 @@ function ExamTaking() {
         });
 
         return {
-            title: `Votre test se terminera à ${officialEndTime}.`,
+            title: `Votre examen se terminera à ${officialEndTime}.`,
             subtitle: 'Passé cette heure, aucune soumission ne sera prise en compte.',
         };
     }

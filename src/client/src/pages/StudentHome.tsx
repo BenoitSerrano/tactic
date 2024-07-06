@@ -84,7 +84,7 @@ function StudentHome() {
                 {examQuery.data && <Title variant="h4">{examQuery.data.name}</Title>}
 
                 <Button variant="contained" onClick={launchExam}>
-                    Lancer le test
+                    Lancer l'examen
                 </Button>
             </ContentContainer>
         </NotLoggedInPage>

@@ -46,7 +46,7 @@ function ExamCreationModal(props: {
                 <FieldContainer>
                     <TextField
                         autoFocus
-                        label="Nom du test"
+                        label="Nom de l'examen"
                         fullWidth
                         value={name}
                         onChange={(event) => setName(event.target.value)}
@@ -64,7 +64,7 @@ function ExamCreationModal(props: {
                                 <TextField
                                     disabled={!isThereDuration}
                                     type="number"
-                                    label="Durée du test en minutes"
+                                    label="Durée de l'examen en minutes"
                                     value={duration}
                                     onChange={onChangeDuration}
                                 />

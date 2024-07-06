@@ -260,7 +260,7 @@ function Students() {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                `Souhaitez-vous réellement supprimer ${studentEmail} ? Tous ses résultats aux tests seront également supprimés.`,
+                `Souhaitez-vous réellement supprimer ${studentEmail} ? Tous ses résultats aux examens seront également supprimés.`,
             );
             if (hasConfirmed) {
                 deleteStudentMutation.mutate({ studentId, groupId });

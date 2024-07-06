@@ -194,8 +194,8 @@ function ExamResults() {
                         </TableCell>
                         <TableCell width={80}>Statut</TableCell>
                         <TableCell width={50}>Durée</TableCell>
-                        <TableCell width={50}>Sorties de test</TableCell>
-                        <TableCell width={50}>Temps total hors test</TableCell>
+                        <TableCell width={50}>Sorties d'examen</TableCell>
+                        <TableCell width={50}>Temps total hors examen</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
