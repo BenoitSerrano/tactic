@@ -1,14 +1,7 @@
 import { pathHandler } from '../../../lib/pathHandler';
 import { EDITING_EXAM_ROUTE_KEYS } from '../../../routes/routeKeys';
 import { breadcrumbItemType } from '../types';
-
-const editingExamLabelMapping: Record<(typeof EDITING_EXAM_ROUTE_KEYS)[number], string> = {
-    EXAM_EDITING_CONTENT: 'Examen',
-    EXAM_EDITING_PARAMETERS: 'Paramètres',
-    EXAM_EDITING_COLLECT: 'Collecte des réponses',
-    EXAM_EDITING_RESULTS: 'Résultats',
-    EXAM_EDITING_CONSULT: 'Consultation des copies',
-};
+import { editingExamLabelMapping } from './constants';
 
 function computeEditingBreadcrumbs(currentPath: string): Array<breadcrumbItemType> {
     const parsedPath = pathHandler.parsePath(currentPath);

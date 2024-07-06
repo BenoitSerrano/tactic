@@ -100,7 +100,7 @@ function QuestionsEditing(props: {
     const totalResult = computeTotalPoints(props.exercises);
     return (
         <>
-            <TestPageLayout studentEmail="-" title={props.title} highlightedResult={totalResult}>
+            <TestPageLayout title={props.title} highlightedResult={totalResult}>
                 <DragDropContext onDragEnd={handleExercisesDragEnd}>
                     <Droppable droppableId="droppable-exercise">
                         {(droppableExerciseProvided) => (

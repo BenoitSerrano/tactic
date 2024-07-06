@@ -37,7 +37,7 @@ const ContentContainer = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
 }));
-const MiddleContainer = styled('div')({ display: 'flex' });
+const MiddleContainer = styled('div')({ display: 'flex', flex: 1 });
 const LeftContainer = styled('div')({ display: 'flex' });
 
 const ButtonsContainer = styled('div')({ display: 'flex', alignItems: 'center' });

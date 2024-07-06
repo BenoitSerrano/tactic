@@ -2,11 +2,17 @@ import { useLocation } from 'react-router-dom';
 import { computeEditingBreadcrumbs } from './computeEditingBreadcrumbs';
 import { Typography, styled } from '@mui/material';
 import { Link } from '../../Link';
+import { BreadcrumbsSelect } from './BreadcrumbsSelect';
 
 function EditingBreadcrumbs() {
     const location = useLocation();
 
-    return <BreadcrumbsContainer>{renderBreadcrumbs()}</BreadcrumbsContainer>;
+    return (
+        <Container>
+            <BreadcrumbsSelect pathname={location.pathname} />
+            <BreadcrumbsContainer>{renderBreadcrumbs()}</BreadcrumbsContainer>
+        </Container>
+    );
 
     function renderBreadcrumbs() {
         const editingBreadcrumbs = computeEditingBreadcrumbs(location.pathname);
@@ -48,6 +54,17 @@ const BreadcrumbTypographyContainer = styled(Typography)(({ theme }) => ({
     paddingRight: theme.spacing(1),
     paddingLeft: theme.spacing(1),
 }));
-const BreadcrumbsContainer = styled('div')({ display: 'flex', alignItems: 'center' });
+const BreadcrumbsContainer = styled('div')(({ theme }) => ({
+    [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    [theme.breakpoints.down('md')]: {
+        display: 'none',
+    },
+}));
+const Container = styled('div')({ flex: 1 });
 
 export { EditingBreadcrumbs };

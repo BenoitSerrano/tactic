@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 function TestPageLayout(props: {
     title: string;
     subtitle?: string;
-    studentEmail: string;
+    studentEmail?: string;
     highlightedResult?: string;
     lowlightedResult?: string;
     children: ReactNode;
@@ -24,7 +24,11 @@ function TestPageLayout(props: {
                 {!!props.subtitle && <Subtitle variant="h5">{props.subtitle}</Subtitle>}
             </TitleContainer>
             <StudentInfoContainer>
-                <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
+                <StudentEmailContainer>
+                    {!!props.studentEmail && (
+                        <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
+                    )}
+                </StudentEmailContainer>
                 {!!props.highlightedResult && (
                     <ResultContainer>
                         {<Typography variant="caption">{props.highlightedResult}</Typography>}
@@ -92,6 +96,9 @@ const StudentInfoContainer = styled('div')(({ theme }) => ({
 const StudentEmail = styled(Typography)(({ theme }) => ({
     fontStyle: 'italic',
 }));
+const StudentEmailContainer = styled('div')(({ theme }) => ({
+    fontStyle: 'italic',
+}));
 
 const Title = styled(Typography)({ textAlign: 'center' });
 const Subtitle = styled(Typography)({ fontStyle: 'italic' });
@@ -104,14 +111,20 @@ const TitleContainer = styled('div')(({ theme }) => ({
 }));
 
 const Container = styled('div')(({ theme }) => ({
-    width: '60%',
+    [theme.breakpoints.up('md')]: {
+        width: '60%',
+        padding: theme.spacing(3),
+    },
+    [theme.breakpoints.down('md')]: {
+        width: '90%',
+        padding: theme.spacing(1),
+    },
     marginBottom: FOOTER_HEIGHT,
     borderRadius: 2,
     border: `solid ${theme.palette.common.black} 1px`,
     boxShadow: theme.shadows[4],
     display: 'flex',
     flexDirection: 'column',
-    padding: theme.spacing(3),
     backgroundColor: theme.palette.common.white,
 }));
 
