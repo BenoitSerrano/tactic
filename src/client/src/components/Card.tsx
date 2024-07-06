@@ -9,7 +9,7 @@ const Container = styled('div')<{ width?: string }>(({ theme, width }) => ({
     marginLeft: theme.spacing(1),
     backgroundColor: 'white',
     borderRadius: 10,
-    width,
+    minWidth: width,
     boxShadow: theme.shadows[1],
     border: `solid 1px ${theme.palette.divider}`,
 }));

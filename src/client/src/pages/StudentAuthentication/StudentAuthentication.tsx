@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import LoginIcon from '@mui/icons-material/Login';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
@@ -7,8 +8,8 @@ import { NotLoggedInPage } from '../../components/NotLoggedInPage';
 import { Card } from '../../components/Card';
 import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
-import { LoadingButton } from '@mui/lab';
 import { pathHandler } from '../../lib/pathHandler';
+import { LoadingIconButton } from '../../components/LoadingIconButton';
 
 type studentType = {
     id: string;
@@ -60,20 +61,21 @@ function StudentAuthentication() {
                     </TitleContainer>
                     <Form onSubmit={handleSubmit}>
                         <EmailTextField
+                            variant="outlined"
+                            fullWidth
                             autoFocus
                             label="Adresse e-mail"
                             name="email"
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                         />
-                        <LoadingButton
-                            loading={fetchStudentByEmailMutation.isPending}
-                            variant="contained"
+                        <LoadingIconButton
+                            IconComponent={LoginIcon}
+                            isLoading={fetchStudentByEmailMutation.isPending}
+                            isDisabled={!email}
+                            label="Se connecter"
                             type="submit"
-                            disabled={!email}
-                        >
-                            Se connecter
-                        </LoadingButton>
+                        />
                     </Form>
                 </Card>
             </ContentContainer>
@@ -97,11 +99,12 @@ const TitleContainer = styled('div')(({ theme }) => ({
 
 const Form = styled('form')({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
+    flexDirection: 'column',
 });
 
-const EmailTextField = styled(TextField)(({ theme }) => ({ marginRight: theme.spacing(1) }));
+const EmailTextField = styled(TextField)(({ theme }) => ({ marginBottom: theme.spacing(1) }));
 
 const ContentContainer = styled('div')({
     display: 'flex',
