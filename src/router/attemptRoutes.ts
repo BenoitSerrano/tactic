@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { buildAttemptController } from '../modules/attempt';
 import { routeType } from './types';
-import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { accessControlBuilder } from './lib/accessControlBuilder';
 
 const attemptController = buildAttemptController();
 

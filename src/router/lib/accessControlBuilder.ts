@@ -1,7 +1,7 @@
-import { dataSource } from '../dataSource';
-import { Exam } from '../modules/exam';
-import { Group } from '../modules/group';
-import { User } from '../modules/user';
+import { dataSource } from '../../dataSource';
+import { Exam } from '../../modules/exam';
+import { Group } from '../../modules/group';
+import { User } from '../../modules/user';
 
 function hasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: string }>) {
     return async (params: Record<string, string>, user: User) => {

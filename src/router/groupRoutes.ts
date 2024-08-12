@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { buildGroupController } from '../modules/group';
 import { routeType } from './types';
-import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { accessControlBuilder } from './lib/accessControlBuilder';
 
 const groupController = buildGroupController();
 

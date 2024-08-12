@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { buildStudentController } from '../modules/student';
 import { routeType } from './types';
-import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { accessControlBuilder } from './lib/accessControlBuilder';
 
 const studentController = buildStudentController();
 

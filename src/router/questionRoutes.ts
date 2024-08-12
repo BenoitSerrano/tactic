@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { buildQuestionController, questionKinds } from '../modules/question';
 import { routeType } from './types';
-import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { accessControlBuilder } from './lib/accessControlBuilder';
 
 const questionController = buildQuestionController();
 

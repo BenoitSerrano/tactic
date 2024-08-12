@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { buildExerciseController } from '../modules/exercise';
 import { routeType } from './types';
-import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { accessControlBuilder } from './lib/accessControlBuilder';
 import { questionKinds } from '../modules/question';
 
 const exerciseController = buildExerciseController();

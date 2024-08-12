@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { accessControlBuilder } from './lib/accessControlBuilder';
 import { buildExamController } from '../modules/exam';
 import { routeType } from './types';
 
