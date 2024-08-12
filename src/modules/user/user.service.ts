@@ -3,12 +3,14 @@ import { hasher } from '../../lib/hasher';
 import { mailer } from '../../lib/mailer';
 import { mapEntities } from '../../lib/mapEntities';
 import { signer } from '../../lib/signer';
+import { buildPlanService } from '../plan';
 import { User } from './User.entity';
 
 export { buildUserService };
 
 function buildUserService() {
     const userRepository = dataSource.getRepository(User);
+    const planService = buildPlanService();
 
     const userService = {
         createUser,
@@ -25,6 +27,9 @@ function buildUserService() {
         const newUser = new User();
         newUser.email = email;
         newUser.hashedPassword = hasher.hash(password);
+
+        const freePlan = await planService.findFreePlan();
+        newUser.plan = freePlan;
 
         const result = await userRepository.insert(newUser);
         if (result.identifiers.length !== 1) {
