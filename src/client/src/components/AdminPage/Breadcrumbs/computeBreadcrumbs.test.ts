@@ -49,7 +49,11 @@ describe('computeBreadcrumbs', () => {
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
-            { label: 'Édition', isActive: true },
+            {
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
+            },
+            { label: 'Contenu', isActive: true },
         ]);
     });
     it("returns exams edit when you're on exam edit results page", () => {
@@ -60,7 +64,11 @@ describe('computeBreadcrumbs', () => {
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
-            { label: 'Édition', isActive: true },
+            {
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
+            },
+            { label: 'Résultats', isActive: true },
         ]);
     });
     it("returns exams edit when you're on exam edit consult page", () => {
@@ -71,7 +79,11 @@ describe('computeBreadcrumbs', () => {
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
             { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
-            { label: 'Édition', isActive: true },
+            {
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
+            },
+            { label: 'Consultation des copies', isActive: true },
         ]);
     });
 
@@ -101,6 +113,10 @@ describe('computeBreadcrumbs', () => {
             {
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
+            },
+            {
+                label: 'Résultats',
+                href: pathHandler.getRoutePath('EXAM_RESULTS', { examId: 'examId' }),
             },
             { label: 'Correction de copie', isActive: true },
         ]);

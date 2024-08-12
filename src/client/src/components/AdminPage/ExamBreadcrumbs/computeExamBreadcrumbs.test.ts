@@ -18,7 +18,7 @@ describe('computeExamBreadcrumbs', () => {
 
         expect(editingBreadcrumbs).toEqual([
             {
-                label: 'Examen',
+                label: 'Contenu',
                 isActive: true,
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId }),
             },
@@ -52,7 +52,7 @@ describe('computeExamBreadcrumbs', () => {
 
         expect(editingBreadcrumbs).toEqual([
             {
-                label: 'Examen',
+                label: 'Contenu',
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId }),
             },
