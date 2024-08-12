@@ -4,10 +4,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { IconButton } from '../../../components/IconButton';
 
 function EditionActionMenu(props: {
-    onSave: () => void;
-    onCancel: () => void;
     onDelete: () => void;
-    isSaving: boolean;
     isDeleting: boolean;
     openEditingModal: () => void;
 }) {
