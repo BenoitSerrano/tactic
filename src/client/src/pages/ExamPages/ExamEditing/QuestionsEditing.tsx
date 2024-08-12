@@ -6,8 +6,10 @@ import {
 } from '../components/ExerciseContainer';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import {
+    exerciseDefaultType,
     exerciseUpsertionModalStatusType,
     exerciseWithQuestionsType,
+    questionType,
     questionUpsertionModalStatusType,
 } from './types';
 import {
@@ -16,7 +18,7 @@ import {
 } from './HorizontalDividers';
 import { ExerciseUpsertionModal } from './ExerciseUpsertionModal';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal/QuestionUpsertionModal';
-import { QuestionViewMode } from './QuestionViewMode/QuestionViewMode';
+import { QuestionPreviewing } from './QuestionPreviewing/QuestionPreviewing';
 import {
     DragDropContext,
     Draggable,
@@ -96,7 +98,6 @@ function QuestionsEditing(props: {
     }, [props.exercises]);
 
     const orderedExercises = computeOrderedItems(orderedExerciseIds, props.exercises);
-
     const totalResult = computeTotalPoints(props.exercises);
     return (
         <>
@@ -219,7 +220,10 @@ function QuestionsEditing(props: {
                                                                                                                 </MuiIconButton>
                                                                                                             </Tooltip>
                                                                                                         </QuestionDragIconContainer>
-                                                                                                        <QuestionViewMode
+                                                                                                        <QuestionPreviewing
+                                                                                                            openEditingModal={buildOpenEditingModal(
+                                                                                                                exercise,
+                                                                                                            )}
                                                                                                             onDeleteQuestion={buildOnDeleteQuestion(
                                                                                                                 exercise.id,
                                                                                                                 question.id,
@@ -317,6 +321,12 @@ function QuestionsEditing(props: {
             )}
         </>
     );
+
+    function buildOpenEditingModal(exercise: exerciseDefaultType) {
+        return (question: questionType) => {
+            setQuestionUpsertionModalStatus({ kind: 'editing', question, exercise });
+        };
+    }
 
     function handleQuestionsDragEnd(
         result: DropResult,

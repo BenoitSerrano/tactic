@@ -15,12 +15,13 @@ import { EditionActionMenu } from '../EditionActionMenu';
 import { formErrorHandler } from '../lib/formErrorHandler';
 import { PointsPreviewing } from './PointsPreviewing';
 
-function QuestionViewMode(props: {
+function QuestionPreviewing(props: {
     question: questionType;
     index: number;
     examId: string;
     exerciseId: number;
     onDeleteQuestion: () => void;
+    openEditingModal: (question: questionType) => void;
 }): JSX.Element {
     const [currentViewMode, setCurrentViewMode] = useState<viewModeType>('previewing');
     const questionViewModeComponentMapping: Record<viewModeType, ElementType> = {
@@ -86,8 +87,7 @@ function QuestionViewMode(props: {
                         onCancel={cancelChanges}
                         isSaving={isSaving}
                         onSave={saveQuestion}
-                        currentViewMode={currentViewMode}
-                        setCurrentViewMode={setCurrentViewMode}
+                        openEditingModal={openEditingModal}
                     />
                 </EditionActionMenuContainer>
             </LeftContainer>
@@ -107,6 +107,10 @@ function QuestionViewMode(props: {
             />
         </QuestionContainer>
     );
+
+    function openEditingModal() {
+        props.openEditingModal(props.question);
+    }
 
     function cancelChanges() {
         setAcceptableAnswers(props.question.acceptableAnswers);
@@ -167,4 +171,4 @@ const QuestionIndicatorsContainer = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-export { QuestionViewMode };
+export { QuestionPreviewing };
