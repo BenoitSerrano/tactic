@@ -88,7 +88,14 @@ async function performApiCall(
         if (response.status === 401) {
             localStorage.jwtTokenHandler.remove();
         }
-        throw new Error(response.statusText);
+        let message = response.statusText;
+        try {
+            message = await response.text();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            throw new Error(message);
+        }
     }
     return response.json();
 }

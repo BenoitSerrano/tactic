@@ -39,9 +39,9 @@ function buildAuthenticatedController<
         if (options?.checkAuthorization) {
             try {
                 await options.checkAuthorization(req.params as paramsT, user);
-            } catch (error) {
-                logger.error(error);
-                res.sendStatus(httpStatus.FORBIDDEN);
+            } catch (error: any) {
+                logger.error(error.message);
+                res.status(httpStatus.FORBIDDEN).send(error.message);
                 return;
             }
         }

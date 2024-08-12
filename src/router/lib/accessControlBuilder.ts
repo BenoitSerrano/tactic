@@ -17,7 +17,9 @@ function assertHasRightPlanForCreation(entity: 'exam') {
                 if (examCount < plan.maxExams) {
                     return;
                 }
-                throw new Error('Error while trying to create a new exam');
+                throw new Error(
+                    `Votre formule actuelle ("${plan.name}") ne vous permet pas de créer un examen supplémentaire.`,
+                );
         }
     };
 }
