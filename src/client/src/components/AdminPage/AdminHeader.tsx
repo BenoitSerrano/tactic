@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { Header } from '../Header';
-import { EditingBreadcrumbs } from './EditingBreadcrumbs';
+import { ExamBreadcrumbs } from './ExamBreadcrumbs';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from '../Link';
 import { pathHandler } from '../../lib/pathHandler';
@@ -18,7 +18,7 @@ function AdminHeader() {
     return (
         <Header
             buttons={buttons}
-            MiddleContent={<EditingBreadcrumbs />}
+            MiddleContent={<ExamBreadcrumbs />}
             LeftContent={
                 <Link to={pathHandler.getRoutePath('TEACHER_HOME')}>
                     <Logo variant="full" />

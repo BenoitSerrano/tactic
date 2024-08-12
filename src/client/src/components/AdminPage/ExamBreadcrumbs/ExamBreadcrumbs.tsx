@@ -4,7 +4,7 @@ import { Typography, styled } from '@mui/material';
 import { Link } from '../../Link';
 import { BreadcrumbsSelect } from './BreadcrumbsSelect';
 
-function EditingBreadcrumbs() {
+function ExamBreadcrumbs() {
     const location = useLocation();
 
     return (
@@ -67,4 +67,4 @@ const BreadcrumbsContainer = styled('div')(({ theme }) => ({
 }));
 const Container = styled('div')({ flex: 1 });
 
-export { EditingBreadcrumbs };
+export { ExamBreadcrumbs };
