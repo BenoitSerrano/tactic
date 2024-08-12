@@ -31,7 +31,7 @@ function ExerciseEditing(props: {
     const { displayAlert } = useAlert();
     const [questionUpsertionModalStatus, setQuestionUpsertionModalStatus] = useState<
         questionUpsertionModalStatusType | undefined
-    >(undefined);
+    >();
     const [orderedQuestionIds, setOrderedQuestionIds] = useState(initialOrderedQuestionIds);
     const updateQuestionsOrderMutation = useMutation({
         mutationFn: api.updateQuestionsOrder,
@@ -120,16 +120,16 @@ function ExerciseEditing(props: {
                     onCreateQuestion={onCreateQuestion}
                     close={closeQuestionUpsertionModal}
                     modalStatus={questionUpsertionModalStatus}
-                    defaultPoints={questionUpsertionModalStatus.exercise.defaultPoints}
-                    defaultQuestionKind={questionUpsertionModalStatus.exercise.defaultQuestionKind}
-                    exerciseId={questionUpsertionModalStatus.exercise.id}
+                    defaultPoints={props.exercise.defaultPoints}
+                    defaultQuestionKind={props.exercise.defaultQuestionKind}
+                    exerciseId={props.exercise.id}
                 />
             )}
         </ExerciseContainer>
     );
 
     function openQuestionEditingModal(question: questionType) {
-        setQuestionUpsertionModalStatus({ kind: 'editing', question, exercise: props.exercise });
+        setQuestionUpsertionModalStatus({ kind: 'editing', question });
     }
 
     function closeQuestionUpsertionModal() {
@@ -175,11 +175,6 @@ function ExerciseEditing(props: {
     function openQuestionCreationModal() {
         setQuestionUpsertionModalStatus({
             kind: 'creating',
-            exercise: {
-                id: props.exercise.id,
-                defaultPoints: props.exercise.defaultPoints,
-                defaultQuestionKind: props.exercise.defaultQuestionKind,
-            },
         });
     }
 }

@@ -39,12 +39,10 @@ type exerciseDefaultType = {
 type questionUpsertionModalStatusType =
     | {
           kind: 'editing';
-          exercise: exerciseDefaultType;
           question: questionType;
       }
     | {
           kind: 'creating';
-          exercise: exerciseDefaultType;
       };
 
 export type {
