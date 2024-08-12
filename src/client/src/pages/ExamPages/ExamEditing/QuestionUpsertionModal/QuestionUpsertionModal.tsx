@@ -97,10 +97,13 @@ function QuestionUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <ModalContentContainer>
-                <QuestionKindSelect
-                    currentQuestionKind={currentQuestionKind}
-                    onSelect={onSelectQuestionKind}
-                />
+                {props.modalStatus.kind === 'creating' && (
+                    <QuestionKindSelect
+                        currentQuestionKind={currentQuestionKind}
+                        onSelect={onSelectQuestionKind}
+                    />
+                )}
+
                 <QuestionUpsertionModalContentComponent
                     title={title}
                     setTitle={setTitle}
