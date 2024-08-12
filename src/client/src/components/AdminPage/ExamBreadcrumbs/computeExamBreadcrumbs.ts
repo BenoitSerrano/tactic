@@ -1,7 +1,7 @@
 import { pathHandler } from '../../../lib/pathHandler';
 import { EXAM_ROUTE_KEYS } from '../../../routes/routeKeys';
 import { breadcrumbItemType } from '../types';
-import { editingExamLabelMapping } from './constants';
+import { editingExamLabelMapping } from '../constants';
 
 function computeExamBreadcrumbs(currentPath: string): Array<breadcrumbItemType> {
     const parsedPath = pathHandler.parsePath(currentPath);

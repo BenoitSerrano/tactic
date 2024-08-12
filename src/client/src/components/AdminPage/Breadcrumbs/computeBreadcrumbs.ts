@@ -1,4 +1,5 @@
 import { pathHandler } from '../../../lib/pathHandler';
+import { editingExamLabelMapping } from '../constants';
 import { breadcrumbItemType } from '../types';
 
 function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
@@ -21,14 +22,66 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
         case 'TEACHER_HOME':
             breadcrumbs.push({ label: 'Accueil', isActive: true });
             break;
-        case 'EXAM_ATTEMPT_COLLECT':
+
         case 'EXAM_EDITING_CONTENT':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
+            });
+            breadcrumbs.push({
+                label: editingExamLabelMapping[parsedPath.routeKey],
+                isActive: true,
+            });
+            break;
         case 'EXAM_PARAMETERS':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
+            });
+            breadcrumbs.push({
+                label: editingExamLabelMapping[parsedPath.routeKey],
+                isActive: true,
+            });
+            break;
+        case 'EXAM_ATTEMPT_COLLECT':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
+            });
+            breadcrumbs.push({
+                label: editingExamLabelMapping[parsedPath.routeKey],
+                isActive: true,
+            });
+            break;
         case 'EXAM_RESULTS':
+            breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
+            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
+            });
+            breadcrumbs.push({
+                label: editingExamLabelMapping[parsedPath.routeKey],
+                isActive: true,
+            });
+            break;
         case 'EXAM_CONSULT':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
             breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
-            breadcrumbs.push({ label: 'Édition', isActive: true });
+            breadcrumbs.push({
+                label: 'Édition',
+                href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
+            });
+            breadcrumbs.push({
+                label: editingExamLabelMapping[parsedPath.routeKey],
+                isActive: true,
+            });
             break;
 
         case 'EXAM_PREVIEWING':
@@ -42,6 +95,12 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             breadcrumbs.push({
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', {
+                    examId: parsedPath.parameters.examId,
+                }),
+            });
+            breadcrumbs.push({
+                label: 'Résultats',
+                href: pathHandler.getRoutePath('EXAM_RESULTS', {
                     examId: parsedPath.parameters.examId,
                 }),
             });
