@@ -25,28 +25,28 @@ describe('computeExamBreadcrumbs', () => {
             {
                 label: 'Paramètres',
                 isActive: false,
-                href: pathHandler.getRoutePath('EXAM_EDITING_PARAMETERS', { examId }),
+                href: pathHandler.getRoutePath('EXAM_PARAMETERS', { examId }),
             },
             {
                 label: 'Collecte des réponses',
                 isActive: false,
-                href: pathHandler.getRoutePath('EXAM_EDITING_COLLECT', { examId }),
+                href: pathHandler.getRoutePath('EXAM_ATTEMPT_COLLECT', { examId }),
             },
             {
                 label: 'Résultats',
                 isActive: false,
-                href: pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId }),
+                href: pathHandler.getRoutePath('EXAM_RESULTS', { examId }),
             },
             {
                 label: 'Consultation des copies',
                 isActive: false,
-                href: pathHandler.getRoutePath('EXAM_EDITING_CONSULT', { examId }),
+                href: pathHandler.getRoutePath('EXAM_CONSULT', { examId }),
             },
         ]);
     });
 
     it('should return third active if exam editing collect', () => {
-        const currentPath = pathHandler.getRoutePath('EXAM_EDITING_COLLECT', { examId });
+        const currentPath = pathHandler.getRoutePath('EXAM_ATTEMPT_COLLECT', { examId });
 
         const editingBreadcrumbs = computeExamBreadcrumbs(currentPath);
 
@@ -59,22 +59,22 @@ describe('computeExamBreadcrumbs', () => {
             {
                 label: 'Paramètres',
                 isActive: false,
-                href: pathHandler.getRoutePath('EXAM_EDITING_PARAMETERS', { examId }),
+                href: pathHandler.getRoutePath('EXAM_PARAMETERS', { examId }),
             },
             {
                 label: 'Collecte des réponses',
                 isActive: true,
-                href: pathHandler.getRoutePath('EXAM_EDITING_COLLECT', { examId }),
+                href: pathHandler.getRoutePath('EXAM_ATTEMPT_COLLECT', { examId }),
             },
             {
                 label: 'Résultats',
                 isActive: false,
-                href: pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId }),
+                href: pathHandler.getRoutePath('EXAM_RESULTS', { examId }),
             },
             {
                 label: 'Consultation des copies',
                 isActive: false,
-                href: pathHandler.getRoutePath('EXAM_EDITING_CONSULT', { examId }),
+                href: pathHandler.getRoutePath('EXAM_CONSULT', { examId }),
             },
         ]);
     });

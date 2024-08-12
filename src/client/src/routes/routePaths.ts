@@ -10,16 +10,16 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_EDITING_CONTENT: {
         path: '/teacher/exams/:examId/edit/content',
     },
-    EXAM_EDITING_PARAMETERS: {
+    EXAM_PARAMETERS: {
         path: '/teacher/exams/:examId/edit/parameters',
     },
-    EXAM_EDITING_COLLECT: {
+    EXAM_ATTEMPT_COLLECT: {
         path: '/teacher/exams/:examId/edit/collect',
     },
-    EXAM_EDITING_RESULTS: {
+    EXAM_RESULTS: {
         path: '/teacher/exams/:examId/edit/results',
     },
-    EXAM_EDITING_CONSULT: {
+    EXAM_CONSULT: {
         path: '/teacher/exams/:examId/edit/consult',
     },
     STUDENT_HOME: {

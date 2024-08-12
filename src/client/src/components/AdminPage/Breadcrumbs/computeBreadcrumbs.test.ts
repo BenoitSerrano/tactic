@@ -53,7 +53,7 @@ describe('computeBreadcrumbs', () => {
         ]);
     });
     it("returns exams edit when you're on exam edit results page", () => {
-        const pathname = pathHandler.getRoutePath('EXAM_EDITING_RESULTS', { examId: 'examId' });
+        const pathname = pathHandler.getRoutePath('EXAM_RESULTS', { examId: 'examId' });
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
@@ -64,7 +64,7 @@ describe('computeBreadcrumbs', () => {
         ]);
     });
     it("returns exams edit when you're on exam edit consult page", () => {
-        const pathname = pathHandler.getRoutePath('EXAM_EDITING_CONSULT', { examId: 'examId' });
+        const pathname = pathHandler.getRoutePath('EXAM_CONSULT', { examId: 'examId' });
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
