@@ -15,24 +15,28 @@ function PricingContent() {
                     </Typography>
                 </PricingDescriptionContainer>
                 <OffersContainer>
-                    <Card>
-                        <Offer
-                            title="FREE"
-                            price={0}
-                            features={['40 copies corrigées maximum', 'Un examen maximum']}
-                        />
-                    </Card>
-                    <Card>
-                        <Offer
-                            title="UNLIMITED"
-                            price={10}
-                            features={[
-                                'Copies corrigées illimitées',
-                                'Examens illimités',
-                                'Support réactif en moins de 24h',
-                            ]}
-                        />
-                    </Card>
+                    <CardContainer>
+                        <Card>
+                            <Offer
+                                title="FREE"
+                                price={0}
+                                features={['40 copies corrigées maximum', 'Un examen maximum']}
+                            />
+                        </Card>
+                    </CardContainer>
+                    <CardContainer>
+                        <Card>
+                            <Offer
+                                title="UNLIMITED"
+                                price={10}
+                                features={[
+                                    'Copies corrigées illimitées',
+                                    'Examens illimités',
+                                    'Support réactif en moins de 24h',
+                                ]}
+                            />
+                        </Card>
+                    </CardContainer>
                 </OffersContainer>
             </InnerMainContainer>
         </MainContainer>
@@ -42,25 +46,64 @@ function PricingContent() {
 const MainContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flex: 1,
-    paddingTop: theme.spacing(5),
-    padding: theme.spacing(11),
+    [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(9),
+        paddingTop: theme.spacing(6),
+    },
+    [theme.breakpoints.down('md')]: {
+        padding: theme.spacing(3),
+        paddingTop: theme.spacing(2),
+    },
 }));
-const InnerMainContainer = styled('div')({
+const InnerMainContainer = styled('div')(({ theme }) => ({
     display: 'flex',
-    flexDirection: 'row',
+    [theme.breakpoints.up('md')]: {
+        flexDirection: 'row',
+    },
+    [theme.breakpoints.down('md')]: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     width: '100%',
-});
+}));
 const PricingDescriptionContainer = styled('div')(({ theme }) => ({
-    width: '35%',
-    marginRight: theme.spacing(4),
+    [theme.breakpoints.up('md')]: {
+        width: '35%',
+        marginRight: theme.spacing(4),
+    },
+    [theme.breakpoints.down('md')]: {
+        width: '50%',
+        textAlign: 'center',
+        marginBottom: theme.spacing(4),
+    },
 }));
 const PricingDescriptionTitleContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(2),
 }));
-const OffersContainer = styled('div')({
-    width: '65%',
+const OffersContainer = styled('div')(({ theme }) => ({
+    [theme.breakpoints.up('md')]: {
+        width: '65%',
+    },
+    [theme.breakpoints.down('md')]: {
+        width: '95%',
+    },
     display: 'flex',
+    [theme.breakpoints.down('sm')]: {
+        flexDirection: 'column',
+    },
     justifyContent: 'space-between',
-});
+}));
+const CardContainer = styled('div')(({ theme }) => ({
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+        marginBottom: theme.spacing(2),
+    },
+    [theme.breakpoints.up('sm')]: {
+        marginRight: theme.spacing(2),
+    },
+}));
 
 export { PricingContent };
