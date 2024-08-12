@@ -16,7 +16,7 @@ function PricingContent() {
                 </PricingDescriptionContainer>
                 <OffersContainer>
                     <CardContainer>
-                        <Card>
+                        <Card style={{ flex: 1 }}>
                             <Offer
                                 title="FREE"
                                 price={0}
@@ -25,7 +25,7 @@ function PricingContent() {
                         </Card>
                     </CardContainer>
                     <CardContainer>
-                        <Card>
+                        <Card style={{ flex: 1 }}>
                             <Offer
                                 title="UNLIMITED"
                                 price={10}

@@ -6,7 +6,7 @@ function ResetPasswordSuccess() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                <Card width="40%">
+                <Card size="medium">
                     <TitleContainer>
                         <Typography variant="h2">Mot de passe réinitialisé !</Typography>
                     </TitleContainer>

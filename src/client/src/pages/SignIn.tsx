@@ -39,7 +39,7 @@ function SignIn(props: {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                <Card width="40%">
+                <Card size="medium">
                     <CardContent onSubmit={handleSubmit}>
                         <TitleContainer>
                             <Typography variant="h2">{props.title}</Typography>

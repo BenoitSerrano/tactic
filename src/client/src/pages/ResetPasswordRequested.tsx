@@ -6,7 +6,7 @@ function ResetPasswordRequested() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                <Card width="40%">
+                <Card size="medium">
                     <TitleContainer>
                         <Typography variant="h2">Demande envoyée !</Typography>
                     </TitleContainer>
