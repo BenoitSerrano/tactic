@@ -17,7 +17,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/attempts/count-by-correction-status',
         isAuthenticated: true,
         controller: attemptController.fetchAttemptsCountByCorrectionStatus,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -68,7 +68,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/attempts/:attemptId/questions/:questionId/manual-mark',
         isAuthenticated: true,
         controller: attemptController.updateManualMark,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -89,7 +89,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/attempts/:attemptId/correctedAt',
         isAuthenticated: true,
         controller: attemptController.updateAttemptCorrectedAt,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -107,7 +107,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/attempts/:attemptId/endedAt',
         isAuthenticated: true,
         controller: attemptController.deleteAttemptEndedAt,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -119,7 +119,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/attempts/:attemptId',
         isAuthenticated: true,
         controller: attemptController.deleteAttempt,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -131,7 +131,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/attempts/:attemptId/correctedAt',
         isAuthenticated: true,
         controller: attemptController.deleteAttemptCorrectedAt,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',

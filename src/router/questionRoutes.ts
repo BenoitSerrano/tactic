@@ -11,7 +11,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/exercises/:exerciseId/questions/:questionId',
         isAuthenticated: true,
         controller: questionController.updateQuestion,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
@@ -37,7 +37,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: `/exams/:examId/exercises/:exerciseId/questions/order`,
         isAuthenticated: true,
         controller: questionController.updateQuestionsOrder,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
@@ -49,7 +49,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/questions/:questionId/acceptable-answers',
         isAuthenticated: true,
         controller: questionController.addQuestionAcceptableAnswer,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -69,7 +69,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/questions/:questionId/tat-acceptable-answers',
         isAuthenticated: true,
         controller: questionController.addQuestionAcceptableAnswerToTexteATrous,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -90,7 +90,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/exercises/:exerciseId/questions',
         isAuthenticated: true,
         controller: questionController.createQuestion,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -120,7 +120,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/exercises/:exerciseId/questions/:questionId/duplicate',
         isAuthenticated: true,
         controller: questionController.duplicateQuestion,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -132,7 +132,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/questions/:questionId/ok-answers',
         isAuthenticated: true,
         controller: questionController.removeOkAnswer,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -145,7 +145,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/questions/:questionId/tat-ok-answers',
         isAuthenticated: true,
         controller: questionController.removeOkAnswerFromTexteATrous,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -161,7 +161,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: `/exams/:examId/questions/:questionId`,
         isAuthenticated: true,
         controller: questionController.deleteQuestion,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',

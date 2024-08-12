@@ -30,7 +30,7 @@ const groupRoutes: Array<routeType<any, any, any>> = [
         path: '/groups/:groupId',
         isAuthenticated: true,
         controller: groupController.deleteGroup,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
     },

@@ -41,7 +41,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/results',
         isAuthenticated: true,
         controller: examController.getExamResults,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -57,13 +57,14 @@ const examRoutes: Array<routeType<any, any, any>> = [
             name: Joi.string().required(),
             duration: Joi.number(),
         }),
+        checkAuthorization: accessControlBuilder.assertHasRightPlanForCreation('exam'),
     },
     {
         method: 'POST',
         path: '/exams/:examId/duplicate',
         isAuthenticated: true,
         controller: examController.duplicateExam,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
     },
@@ -72,7 +73,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/name',
         isAuthenticated: true,
         controller: examController.updateExamName,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -87,7 +88,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/duration',
         isAuthenticated: true,
         controller: examController.updateExamDuration,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -102,7 +103,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/archivedAt',
         isAuthenticated: true,
         controller: examController.updateExamArchivedAt,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -117,7 +118,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId',
         isAuthenticated: true,
         controller: examController.deleteExam,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
     },
@@ -126,7 +127,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/shouldDisplayRightAnswers',
         isAuthenticated: true,
         controller: examController.fetchShouldDisplayRightAnswersForExamId,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -138,7 +139,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/shouldDisplayRightAnswers',
         isAuthenticated: true,
         controller: examController.updateShouldDisplayRightAnswersForExamId,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',

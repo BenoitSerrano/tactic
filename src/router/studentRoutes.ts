@@ -11,7 +11,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         path: '/groups/:groupId/students',
         isAuthenticated: true,
         controller: studentController.getStudentsWithAttempts,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
     },
@@ -32,7 +32,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         path: '/groups/:groupId/students',
         isAuthenticated: true,
         controller: studentController.createStudents,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
         schema: Joi.object({
@@ -44,7 +44,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         path: '/groups/:groupId/students/:studentId/new-group/:newGroupId',
         isAuthenticated: true,
         controller: studentController.changeGroup,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'group', key: 'groupId' },
             { entity: 'group', key: 'newGroupId' },
         ]),
@@ -54,7 +54,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         path: '/groups/:groupId/students/:studentId',
         isAuthenticated: true,
         controller: studentController.deleteStudent,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
     },

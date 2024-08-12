@@ -3,7 +3,7 @@ import { hasher } from '../../lib/hasher';
 import { mailer } from '../../lib/mailer';
 import { mapEntities } from '../../lib/mapEntities';
 import { signer } from '../../lib/signer';
-import { buildPlanService } from '../plan';
+import { Plan, buildPlanService } from '../plan';
 import { User } from './User.entity';
 
 export { buildUserService };
@@ -19,6 +19,7 @@ function buildUserService() {
         getAllAnonymizedUsers,
         bulkInsertUsers,
         changePassword,
+        findPlanForUser,
     };
 
     return userService;
@@ -74,5 +75,14 @@ function buildUserService() {
         const hashedPassword = hasher.hash(newPassword);
         const result = await userRepository.update({ id: user.id }, { hashedPassword });
         return result.affected === 1;
+    }
+
+    async function findPlanForUser(user: User): Promise<Plan> {
+        const { plan } = await userRepository.findOneOrFail({
+            where: { id: user.id },
+            relations: ['plan'],
+            select: ['id', 'plan'],
+        });
+        return plan;
     }
 }

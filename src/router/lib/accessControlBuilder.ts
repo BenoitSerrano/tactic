@@ -1,9 +1,28 @@
 import { dataSource } from '../../dataSource';
-import { Exam } from '../../modules/exam';
+import { Exam, buildExamService } from '../../modules/exam';
 import { Group } from '../../modules/group';
-import { User } from '../../modules/user';
+import { User, buildUserService } from '../../modules/user';
 
-function hasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: string }>) {
+function assertHasRightPlanForCreation(entity: 'exam') {
+    const userService = buildUserService();
+    return async (params: Record<string, string>, user: User) => {
+        const plan = await userService.findPlanForUser(user);
+        switch (entity) {
+            case 'exam':
+                if (plan.maxExams === undefined) {
+                    return;
+                }
+                const examService = buildExamService();
+                const examCount = await examService.countExamsForUser(user);
+                if (examCount < plan.maxExams) {
+                    return;
+                }
+                throw new Error('Error while trying to create a new exam');
+        }
+    };
+}
+
+function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: string }>) {
     return async (params: Record<string, string>, user: User) => {
         for (const resource of resources) {
             const { entity, key } = resource;
@@ -40,7 +59,8 @@ function hasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: 
 }
 
 const accessControlBuilder = {
-    hasAccessToResources,
+    assertHasAccessToResources,
+    assertHasRightPlanForCreation,
 };
 
 export { accessControlBuilder };

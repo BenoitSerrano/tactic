@@ -12,7 +12,7 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
         path: `/exams/:examId/exercises/:exerciseId`,
         isAuthenticated: true,
         controller: exerciseController.updateExercise,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
@@ -27,7 +27,7 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/exercises/order',
         isAuthenticated: true,
         controller: exerciseController.updateExercisesOrder,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
                 key: 'examId',
@@ -42,7 +42,7 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
         path: `/exams/:examId/exercises`,
         isAuthenticated: true,
         controller: exerciseController.createExercise,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
         schema: Joi.object({
@@ -57,7 +57,7 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
         path: `/exams/:examId/exercises/:exerciseId`,
         isAuthenticated: true,
         controller: exerciseController.deleteExercise,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
         ]),
     },
