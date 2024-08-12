@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { computeEditingBreadcrumbs } from './computeEditingBreadcrumbs';
+import { computeExamBreadcrumbs } from './computeExamBreadcrumbs';
 import { Typography, styled } from '@mui/material';
 import { Link } from '../../Link';
 import { BreadcrumbsSelect } from './BreadcrumbsSelect';
@@ -15,7 +15,7 @@ function ExamBreadcrumbs() {
     );
 
     function renderBreadcrumbs() {
-        const editingBreadcrumbs = computeEditingBreadcrumbs(location.pathname);
+        const editingBreadcrumbs = computeExamBreadcrumbs(location.pathname);
         const renderedBreadcrumbs: React.ReactNode[] = [];
 
         if (editingBreadcrumbs.length === 0) {
