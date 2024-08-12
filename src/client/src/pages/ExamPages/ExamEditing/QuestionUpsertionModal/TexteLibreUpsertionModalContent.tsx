@@ -11,6 +11,7 @@ function TexteLibreUpsertionModalContent(props: {
         <>
             <QuestionInputContainer title="Question à laquelle doit répondre l'élève">
                 <TextField
+                    multiline
                     autoFocus
                     fullWidth
                     label="Intitulé"

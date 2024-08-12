@@ -25,6 +25,7 @@ function QCMUpsertionModalContent(props: {
                 <TextField
                     autoFocus
                     fullWidth
+                    multiline
                     value={props.title}
                     label="Intitulé"
                     onChange={(event) => props.setTitle(event.target.value)}
