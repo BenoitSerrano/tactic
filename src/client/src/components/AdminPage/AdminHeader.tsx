@@ -6,7 +6,7 @@ import { Link } from '../Link';
 import { pathHandler } from '../../lib/pathHandler';
 import { Logo } from '../Logo';
 import { LogoutButton } from './LogoutButton';
-import { EDITING_EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
+import { EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
 import { styled } from '@mui/material';
 import { IconLink } from '../IconLink';
 
@@ -33,7 +33,7 @@ function AdminHeader() {
         if (!parsedPath) {
             return [logoutButton];
         }
-        if (!EDITING_EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
+        if (!EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
             return [logoutButton];
         }
         const { parameters } = parsedPath;

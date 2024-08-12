@@ -1,6 +1,6 @@
-import { EDITING_EXAM_ROUTE_KEYS } from '../../../routes/routeKeys';
+import { EXAM_ROUTE_KEYS } from '../../../routes/routeKeys';
 
-const editingExamLabelMapping: Record<(typeof EDITING_EXAM_ROUTE_KEYS)[number], string> = {
+const editingExamLabelMapping: Record<(typeof EXAM_ROUTE_KEYS)[number], string> = {
     EXAM_EDITING_CONTENT: 'Examen',
     EXAM_EDITING_PARAMETERS: 'Paramètres',
     EXAM_EDITING_COLLECT: 'Collecte des réponses',
