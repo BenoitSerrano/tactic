@@ -11,30 +11,24 @@ function PricingContent() {
                         <Typography variant="h2">Tarifs</Typography>
                     </PricingDescriptionTitleContainer>
                     <Typography variant="h4">
-                        Commencer gratuitement en créant votre premier test !
+                        Commencer gratuitement en créant votre premier examen !
                     </Typography>
                 </PricingDescriptionContainer>
                 <OffersContainer>
                     <Card>
                         <Offer
-                            title="Free"
+                            title="FREE"
                             price={0}
-                            features={[
-                                "Nombre d'élèves illimité",
-                                'Nombre de questions par test illimité',
-                                'Un test maximum',
-                            ]}
+                            features={['40 copies corrigées maximum', 'Un examen maximum']}
                         />
                     </Card>
                     <Card>
                         <Offer
-                            title="Pro"
-                            price={5}
+                            title="UNLIMITED"
+                            price={10}
                             features={[
-                                "Nombre d'élèves illimité",
-                                'Nombre de questions par test illimité',
-                                'Nombre de tests illimité',
-                                'Statistiques avancées',
+                                'Copies corrigées illimitées',
+                                'Examens illimités',
                                 'Support réactif en moins de 24h',
                             ]}
                         />
