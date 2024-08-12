@@ -8,6 +8,7 @@ import { Question } from './modules/question';
 import { Exercise } from './modules/exercise';
 import { ResetPasswordRequest } from './modules/resetPasswordRequest';
 import { Group } from './modules/group';
+import { Plan } from './modules/plan';
 
 const dataSource = new DataSource({
     type: 'postgres',
@@ -18,7 +19,7 @@ const dataSource = new DataSource({
     database: config.DATABASE_NAME,
     logging: ['warn', 'error'],
     connectTimeoutMS: 20000,
-    entities: [Exam, Attempt, Student, User, Question, Exercise, ResetPasswordRequest, Group],
+    entities: [Exam, Attempt, Student, User, Question, Exercise, ResetPasswordRequest, Group, Plan],
     subscribers: [],
     migrations: ['**/migrations/*.js'],
 });
