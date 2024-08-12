@@ -1,5 +1,5 @@
 import Express from 'express';
-import { buildAnonymousController, buildAuthenticatedController } from '../lib/buildController';
+import { buildAnonymousController, buildAuthenticatedController } from './lib/buildController';
 import { routes } from './routes';
 
 const router = buildRouter();
