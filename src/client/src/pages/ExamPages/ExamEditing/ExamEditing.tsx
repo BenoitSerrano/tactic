@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
-import { QuestionsEditing } from './QuestionsEditing';
 import { examWithQuestionsApiType } from './types';
+import { ExercisesEditing } from './ExercisesEditing';
 
 function ExamEditing() {
     const params = useParams();
@@ -23,7 +23,7 @@ function ExamEditing() {
 
     return (
         <MainContainer>
-            <QuestionsEditing
+            <ExercisesEditing
                 title={query.data.name}
                 exercises={query.data.exercises}
                 examId={examId}
