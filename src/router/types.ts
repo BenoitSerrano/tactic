@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { anonymousControllerType, authenticatedControllerType } from '../lib/buildController/types';
 import { User } from '../modules/user';
+import { anonymousControllerType, authenticatedControllerType } from './lib/buildController/types';
 
 type methodType = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 type routeType<paramsT, queryT, bodyT> =

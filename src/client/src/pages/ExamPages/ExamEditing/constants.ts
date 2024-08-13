@@ -5,26 +5,11 @@ import { PhraseMelangeeUpsertionModalContent } from './QuestionUpsertionModal/Ph
 import { TexteLibreUpsertionModalContent } from './QuestionUpsertionModal/TexteLibreUpsertionModalContent';
 import { TexteATrousUpsertionModalContent } from './QuestionUpsertionModal/TexteATrousUpsertionModalContent';
 import { questionKindType } from '../../../types';
-import { QcmEditing } from './QuestionViewMode/QcmEditing';
-import { QcmPreviewing } from './QuestionViewMode/QcmPreviewing';
-import { PointsPreviewing } from './QuestionViewMode/PointsPreviewing';
-import { PointsEditing } from './QuestionViewMode/PointsEditing';
-import { TexteLibrePreviewing } from './QuestionViewMode/TexteLibrePreviewing';
-import { TexteLibreEditing } from './QuestionViewMode/TexteLibreEditing';
-import { QuestionReponsePreviewing } from './QuestionViewMode/QuestionReponsePreviewing';
-import { QuestionReponseEditing } from './QuestionViewMode/QuestionReponseEditing';
-import { PhraseMelangeePreviewing } from './QuestionViewMode/PhraseMelangeePreviewing';
-import { PhraseMelangeeEditing } from './QuestionViewMode/PhraseMelangeeEditing';
-import { TexteATrousPreviewing } from './QuestionViewMode/TexteATrous';
-import { TexteATrousEditing } from './QuestionViewMode/TexteATrous/TexteATrousEditing';
-
-const viewModes = ['editing', 'previewing'] as const;
-type viewModeType = (typeof viewModes)[number];
-
-const pointsViewModeComponentMapping: Record<viewModeType, ElementType> = {
-    editing: PointsEditing,
-    previewing: PointsPreviewing,
-};
+import { QcmPreviewing } from './QuestionPreviewing/QcmPreviewing';
+import { TexteLibrePreviewing } from './QuestionPreviewing/TexteLibrePreviewing';
+import { QuestionReponsePreviewing } from './QuestionPreviewing/QuestionReponsePreviewing';
+import { PhraseMelangeePreviewing } from './QuestionPreviewing/PhraseMelangeePreviewing';
+import { TexteATrousPreviewing } from './QuestionPreviewing/TexteATrous';
 
 const questionUpsertionModalContentComponentMapping: Record<questionKindType, ElementType> = {
     qcm: QCMUpsertionModalContent,
@@ -32,14 +17,6 @@ const questionUpsertionModalContentComponentMapping: Record<questionKindType, El
     phraseMelangee: PhraseMelangeeUpsertionModalContent,
     texteLibre: TexteLibreUpsertionModalContent,
     texteATrous: TexteATrousUpsertionModalContent,
-};
-
-const questionEditingComponentMapping: Record<questionKindType, ElementType> = {
-    qcm: QcmEditing,
-    questionReponse: QuestionReponseEditing,
-    phraseMelangee: PhraseMelangeeEditing,
-    texteLibre: TexteLibreEditing,
-    texteATrous: TexteATrousEditing,
 };
 
 const questionPreviewingComponentMapping: Record<questionKindType, ElementType> = {
@@ -54,10 +31,6 @@ const SPLITTING_CHARACTER_FOR_ANSWERS = ';';
 
 export {
     questionUpsertionModalContentComponentMapping,
-    questionEditingComponentMapping,
     questionPreviewingComponentMapping,
-    pointsViewModeComponentMapping,
     SPLITTING_CHARACTER_FOR_ANSWERS,
 };
-
-export type { viewModeType };

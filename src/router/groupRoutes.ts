@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { buildGroupController } from '../modules/group';
 import { routeType } from './types';
-import { accessControlBuilder } from '../lib/accessControlBuilder';
+import { accessControlBuilder } from './lib/accessControlBuilder';
 
 const groupController = buildGroupController();
 
@@ -30,7 +30,7 @@ const groupRoutes: Array<routeType<any, any, any>> = [
         path: '/groups/:groupId',
         isAuthenticated: true,
         controller: groupController.deleteGroup,
-        checkAuthorization: accessControlBuilder.hasAccessToResources([
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'group', key: 'groupId' },
         ]),
     },

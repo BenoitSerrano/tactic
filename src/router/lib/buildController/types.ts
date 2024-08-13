@@ -1,4 +1,4 @@
-import { User } from '../../modules/user';
+import { User } from '../../../modules/user';
 
 type anonymousControllerType<paramsT, queryT, bodyT> = (params: {
     urlParams: paramsT;

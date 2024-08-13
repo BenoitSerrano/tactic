@@ -50,7 +50,7 @@ function ResetPassword() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                <Card width="40%">
+                <Card size="medium">
                     {!!userQuery.isLoading && <Loader />}
                     {!!userQuery.data && (
                         <CardContent onSubmit={handleSubmit}>

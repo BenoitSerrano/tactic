@@ -1,10 +1,10 @@
 import { useLocation } from 'react-router-dom';
-import { computeEditingBreadcrumbs } from './computeEditingBreadcrumbs';
+import { computeExamBreadcrumbs } from './computeExamBreadcrumbs';
 import { Typography, styled } from '@mui/material';
 import { Link } from '../../Link';
 import { BreadcrumbsSelect } from './BreadcrumbsSelect';
 
-function EditingBreadcrumbs() {
+function ExamBreadcrumbs() {
     const location = useLocation();
 
     return (
@@ -15,7 +15,7 @@ function EditingBreadcrumbs() {
     );
 
     function renderBreadcrumbs() {
-        const editingBreadcrumbs = computeEditingBreadcrumbs(location.pathname);
+        const editingBreadcrumbs = computeExamBreadcrumbs(location.pathname);
         const renderedBreadcrumbs: React.ReactNode[] = [];
 
         if (editingBreadcrumbs.length === 0) {
@@ -67,4 +67,4 @@ const BreadcrumbsContainer = styled('div')(({ theme }) => ({
 }));
 const Container = styled('div')({ flex: 1 });
 
-export { EditingBreadcrumbs };
+export { ExamBreadcrumbs };

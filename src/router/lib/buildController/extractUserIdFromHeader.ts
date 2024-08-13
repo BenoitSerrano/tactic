@@ -1,6 +1,5 @@
 import { Request } from 'express';
-
-import { signer } from '../signer';
+import { signer } from '../../../lib/signer';
 
 function extractUserIdFromHeader(req: Request) {
     const authorization = req.header('Authorization');

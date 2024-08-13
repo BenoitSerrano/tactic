@@ -1,12 +1,12 @@
 import { useLocation } from 'react-router-dom';
 import { Header } from '../Header';
-import { EditingBreadcrumbs } from './EditingBreadcrumbs';
+import { ExamBreadcrumbs } from './ExamBreadcrumbs';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from '../Link';
 import { pathHandler } from '../../lib/pathHandler';
 import { Logo } from '../Logo';
 import { LogoutButton } from './LogoutButton';
-import { EDITING_EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
+import { EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
 import { styled } from '@mui/material';
 import { IconLink } from '../IconLink';
 
@@ -18,7 +18,7 @@ function AdminHeader() {
     return (
         <Header
             buttons={buttons}
-            MiddleContent={<EditingBreadcrumbs />}
+            MiddleContent={<ExamBreadcrumbs />}
             LeftContent={
                 <Link to={pathHandler.getRoutePath('TEACHER_HOME')}>
                     <Logo variant="full" />
@@ -33,7 +33,7 @@ function AdminHeader() {
         if (!parsedPath) {
             return [logoutButton];
         }
-        if (!EDITING_EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
+        if (!EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
             return [logoutButton];
         }
         const { parameters } = parsedPath;

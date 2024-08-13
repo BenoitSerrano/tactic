@@ -3,12 +3,14 @@ import { hasher } from '../../lib/hasher';
 import { mailer } from '../../lib/mailer';
 import { mapEntities } from '../../lib/mapEntities';
 import { signer } from '../../lib/signer';
+import { Plan, buildPlanService } from '../plan';
 import { User } from './User.entity';
 
 export { buildUserService };
 
 function buildUserService() {
     const userRepository = dataSource.getRepository(User);
+    const planService = buildPlanService();
 
     const userService = {
         createUser,
@@ -17,6 +19,7 @@ function buildUserService() {
         getAllAnonymizedUsers,
         bulkInsertUsers,
         changePassword,
+        findPlanForUser,
     };
 
     return userService;
@@ -25,6 +28,9 @@ function buildUserService() {
         const newUser = new User();
         newUser.email = email;
         newUser.hashedPassword = hasher.hash(password);
+
+        const freePlan = await planService.findFreePlan();
+        newUser.plan = freePlan;
 
         const result = await userRepository.insert(newUser);
         if (result.identifiers.length !== 1) {
@@ -69,5 +75,14 @@ function buildUserService() {
         const hashedPassword = hasher.hash(newPassword);
         const result = await userRepository.update({ id: user.id }, { hashedPassword });
         return result.affected === 1;
+    }
+
+    async function findPlanForUser(user: User): Promise<Plan> {
+        const { plan } = await userRepository.findOneOrFail({
+            where: { id: user.id },
+            relations: ['plan'],
+            select: ['id', 'plan'],
+        });
+        return plan;
     }
 }

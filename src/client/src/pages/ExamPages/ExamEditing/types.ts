@@ -30,15 +30,19 @@ type exerciseUpsertionModalStatusType =
     | { kind: 'editing'; exercise: exerciseWithQuestionsType }
     | { kind: 'creating' };
 
+type exerciseDefaultType = {
+    id: number;
+    defaultQuestionKind: questionKindType;
+    defaultPoints: number;
+};
+
 type questionUpsertionModalStatusType =
     | {
           kind: 'editing';
-          exercise: { id: number; defaultQuestionKind: questionKindType; defaultPoints: number };
           question: questionType;
       }
     | {
           kind: 'creating';
-          exercise: { id: number; defaultQuestionKind: questionKindType; defaultPoints: number };
       };
 
 export type {
@@ -47,4 +51,5 @@ export type {
     questionType,
     exerciseUpsertionModalStatusType,
     questionUpsertionModalStatusType,
+    exerciseDefaultType,
 };

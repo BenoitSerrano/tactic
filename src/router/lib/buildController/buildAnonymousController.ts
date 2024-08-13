@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import Joi from 'joi';
-import { logger } from '../logger';
+import { logger } from '../../../lib/logger';
 
 export { buildAnonymousController };
 

@@ -6,7 +6,7 @@ function ResetPasswordFailure() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                <Card width="40%">
+                <Card size="medium">
                     <TitleContainer>
                         <Typography variant="h2">
                             Échec de réinitialisation du mot de passe

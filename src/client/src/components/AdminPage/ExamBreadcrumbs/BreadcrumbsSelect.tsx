@@ -1,10 +1,10 @@
 import { MenuItem, Select, SelectChangeEvent, styled } from '@mui/material';
-import { computeEditingBreadcrumbs } from './computeEditingBreadcrumbs';
+import { computeExamBreadcrumbs } from './computeExamBreadcrumbs';
 import { useNavigate } from 'react-router-dom';
 
 function BreadcrumbsSelect(props: { pathname: string }) {
     const navigate = useNavigate();
-    const editingBreadcrumbs = computeEditingBreadcrumbs(props.pathname);
+    const editingBreadcrumbs = computeExamBreadcrumbs(props.pathname);
     const currentEditingBreadcrumb = editingBreadcrumbs.find(
         (editingBreadcrumb) => editingBreadcrumb.isActive,
     );

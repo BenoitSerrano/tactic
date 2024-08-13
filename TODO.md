@@ -1,12 +1,5 @@
--   [ ] ETQP, je peux dupliquer une question dans un exercice (import CopyAllIcon from '@mui/icons-material/CopyAll';)
--   [ ] ETQP, quand j'appuie sur Entrée dans la création d'une question, le formulaire est validé
--   [ ] ETQP, je vois avec quel compte je suis connecté
--   [ ] ETQP, je veux pouvoir éditer le texte d'un texte à trous directement dans la page
--   [ ] ETQP, sur la modale d'upsertion d'un QCM, quand je sélectionne une bonne réponse puis supprime une réponse avant ou après, la bonne réponse sélectionnée reste la même
--   [ ] ETQP, j'ai une UX plus efficace pour l'ajout de réponses possibles quand je créé une question
--   [ ] ETQP, je sais avec quelle adresse je suis connecté
--   [ ] BUG : ETQP, quand j'ajoute une nouvelle question, je veux la voir s'afficher sans avoir à rafraîchir
--   [ ] ETQPE, je vois la note sur 20 en-dessous de la vraie note
--   [ ] ETQP, quand je supprime un exercice, j'ai le nom de l'examen en cours dans la modale
--   [ ] Bug quand j'édite le titre de l'examen et que je reclique sur l'input
--   [ ] ETQP, quand je supprime un élève, je vois son nom dans la modale
+ETQP, je peux modifier le nombre de points pour toutes les questions quand je modifie le nombre de points pour un exo
+ETQP, je veux pouvoir éditer le texte d'un texte à trous directement dans la page
+ETQP, j'ai accès à un support (Crisp)
+ETQBenoit, j'ai accès à un éditeur de BDD (Forest Admin)
+ETQP, j'ai un onboarding qui me permet d'inscrire les écoles où je taffe

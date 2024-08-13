@@ -6,6 +6,7 @@ import { api } from '../../lib/api';
 import { INTEGER_NUMBER_REGEX } from '../../constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { EXAM_DEFAULT_DURATION } from './constants';
+import { useAlert } from '../../lib/alert';
 
 function ExamCreationModal(props: {
     close: () => void;
@@ -15,6 +16,7 @@ function ExamCreationModal(props: {
     const [name, setName] = useState('');
     const [duration, setDuration] = useState(`${EXAM_DEFAULT_DURATION}`);
     const [isThereDuration, setIsThereDuration] = useState(true);
+    const { displayAlert } = useAlert();
 
     const createExamMutation = useMutation({
         mutationFn: api.createExam,
@@ -24,6 +26,9 @@ function ExamCreationModal(props: {
             setIsThereDuration(true);
             props.onExamCreated(exam.id);
             props.close();
+        },
+        onError: (error) => {
+            displayAlert({ text: error.message, variant: 'error', autoHideDuration: 3000 });
         },
     });
 

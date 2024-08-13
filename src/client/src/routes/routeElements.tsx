@@ -38,19 +38,19 @@ const ROUTE_ELEMENTS: Record<
         isAdmin: true,
         element: <ExamEditing />,
     },
-    EXAM_EDITING_PARAMETERS: {
+    EXAM_PARAMETERS: {
         isAdmin: true,
         element: <ExamParameters />,
     },
-    EXAM_EDITING_COLLECT: {
+    EXAM_ATTEMPT_COLLECT: {
         isAdmin: true,
         element: <ExamCollect />,
     },
-    EXAM_EDITING_RESULTS: {
+    EXAM_RESULTS: {
         isAdmin: true,
         element: <ExamResults />,
     },
-    EXAM_EDITING_CONSULT: {
+    EXAM_CONSULT: {
         isAdmin: true,
         element: <ExamConsult />,
     },

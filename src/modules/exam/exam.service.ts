@@ -31,6 +31,7 @@ function buildExamService() {
         updateExamArchivedAt,
         fetchShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
+        countExamsForUser,
     };
 
     return examService;
@@ -282,5 +283,10 @@ function buildExamService() {
             { shouldDisplayRightAnswers: newShouldDisplayRightAnswers },
         );
         return true;
+    }
+
+    async function countExamsForUser(user: User) {
+        const examCount = await examRepository.count({ where: { user } });
+        return examCount;
     }
 }

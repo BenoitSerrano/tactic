@@ -32,21 +32,20 @@ function QuestionUpsertionModal(props: {
     const updateQuestionMutation = useMutation({
         mutationFn: api.updateQuestion,
         onSuccess: () => {
-            props.close();
-            displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
             queryClient.invalidateQueries({
                 queryKey: ['exam-with-questions', props.examId],
             });
+            props.close();
+            displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
         },
     });
 
     const createQuestionMutation = useMutation({
         mutationFn: api.createQuestion,
-        onSuccess: async (createdQuestion: { id: number }) => {
+        onSuccess: async () => {
             await queryClient.invalidateQueries({
                 queryKey: ['exam-with-questions', props.examId],
             });
-            // props.onCreateQuestion(props.exerciseId, createdQuestion.id);
             props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
         },
@@ -98,10 +97,13 @@ function QuestionUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <ModalContentContainer>
-                <QuestionKindSelect
-                    currentQuestionKind={currentQuestionKind}
-                    onSelect={onSelectQuestionKind}
-                />
+                {props.modalStatus.kind === 'creating' && (
+                    <QuestionKindSelect
+                        currentQuestionKind={currentQuestionKind}
+                        onSelect={onSelectQuestionKind}
+                    />
+                )}
+
                 <QuestionUpsertionModalContentComponent
                     title={title}
                     setTitle={setTitle}
