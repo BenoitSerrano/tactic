@@ -1,13 +1,14 @@
 import { styled, TextField, Typography } from '@mui/material';
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import { FormEvent, useState } from 'react';
-import { Button } from '../../components/Button';
+import { Button } from '../../../components/Button';
 import { useNavigate } from 'react-router-dom';
-import { pathHandler } from '../../lib/pathHandler';
+import { pathHandler } from '../../../lib/pathHandler';
 
 const TITLES_WIDTH = '80%';
 const FORM_WIDTH = '30%';
 
-function ProductContent() {
+function LandingPageHeader() {
     const [newEmail, setNewEmail] = useState('');
     const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ function ProductContent() {
                     value={newEmail}
                     onChange={onChangeEmail}
                 />
-                <Button type="submit" variant="contained">
+                <Button startIcon={<HistoryEduIcon />} type="submit" variant="contained">
                     Créer un compte gratuit
                 </Button>
             </FormContainer>
@@ -69,4 +70,4 @@ const EmailInput = styled(TextField)(({ theme }) => ({
     marginBottom: theme.spacing(1),
 }));
 
-export { ProductContent };
+export { LandingPageHeader };
