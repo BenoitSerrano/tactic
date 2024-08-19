@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
 import { localStorage } from '../lib/localStorage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Card } from '../components/Card';
 import { Link } from '../components/Link';
 import { pathHandler } from '../lib/pathHandler';
@@ -15,7 +15,9 @@ function SignIn(props: {
     apiCall: (params: { email: string; password: string }) => Promise<{ token: string }>;
     title: string;
 }) {
-    const [email, setEmail] = useState('');
+    const [searchParams] = useSearchParams();
+    const queryParamsEmail = searchParams.get('email');
+    const [email, setEmail] = useState(queryParamsEmail || '');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
