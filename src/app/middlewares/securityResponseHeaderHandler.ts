@@ -1,6 +1,7 @@
 import helmet from 'helmet';
 
 const specificCspDirectives = {
+    'default-src': ["'self'"],
     'img-src': [
         "'self'",
         'data:',
