@@ -15,7 +15,7 @@ function LandingPageHeader() {
     return (
         <Container>
             <Title variant="h1">Gagnez du temps en automatisant la correction de vos copies</Title>
-            <Subtitle variant="h3">
+            <Subtitle variant="h2">
                 Créez et faites passer vos examens sur une seule plateforme. Avec Tactic, vous
                 divisez en moyenne par 3 votre temps de correction.
             </Subtitle>
@@ -44,6 +44,7 @@ function LandingPageHeader() {
 }
 const Container = styled('div')(({ theme }) => ({
     paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(6),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

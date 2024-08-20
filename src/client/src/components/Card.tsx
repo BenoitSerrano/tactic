@@ -9,12 +9,7 @@ const sizeMapping: Record<sizeType, string> = {
     large: '80%',
 };
 
-function Card(props: {
-    children: React.ReactNode;
-    style?: CSSProperties;
-    width?: string;
-    size?: sizeType;
-}) {
+function Card(props: { children: React.ReactNode; style?: CSSProperties; size?: sizeType }) {
     const minWidth = props.size ? sizeMapping[props.size] : undefined;
     return (
         <Container style={props.style} minWidth={minWidth}>

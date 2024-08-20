@@ -55,7 +55,7 @@ function StudentAuthentication() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                <Card width="30%">
+                <Card size="medium">
                     <TitleContainer>
                         <Typography variant="h4">{query.data.name}</Typography>
                     </TitleContainer>
