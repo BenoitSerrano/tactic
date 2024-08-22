@@ -9,7 +9,7 @@ function NotLoggedInPage(props: { children: React.ReactNode; title?: JSX.Element
             <Header
                 buttons={[]}
                 LeftContent={<Logo variant="full" />}
-                MiddleContent={props.title}
+                MiddleContent={<TitleContainer>{props.title}</TitleContainer>}
             />
             <ChildrenContainer>{props.children}</ChildrenContainer>
         </Container>
@@ -27,5 +27,6 @@ const ChildrenContainer = styled('div')({
     display: 'flex',
     flex: 1,
 });
+const TitleContainer = styled('div')({ flex: 1 });
 
 export { NotLoggedInPage };
