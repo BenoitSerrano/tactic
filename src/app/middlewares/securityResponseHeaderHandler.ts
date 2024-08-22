@@ -13,17 +13,12 @@ const specificCspDirectives = {
     ],
     'font-src': ["'self'", 'client.crisp.chat'],
     'media-src': ["'self'", 'client.crisp.chat'],
-    'style-src': [
-        "'self'",
-        'client.crisp.chat',
-        "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='",
-        "'sha256-qGZj8fy4Etp9XlooL/Ilz+mx0y4V+Uu+F7tY38W+15g='",
-        "'sha256-MKASWYfd3dGFQes9nQT5XnslE3xYlnUb4cHpxhk4fag='",
-    ],
+    'style-src': ["'self'", 'client.crisp.chat', "'unsafe-inline'"],
     'frame-src': ["'self'", 'game.crisp.chat'],
     'script-src': [
         "'self'",
         'settings.crisp.chat',
+        'blob:',
         "'sha256-RtdC0WqE+hX0MgZZk4QgMbkV1woYKbsuKQKKnWxsudI='",
     ],
     'script-src-elem': [
