@@ -1,8 +1,10 @@
+import { config } from '../config';
+
 const HEIGHT = 35;
 
 const logoUrlMapping = {
-    mini: './logo_mini.png',
-    full: 'https://tactic-app.fr/full_logo.png',
+    mini: `${config.API_URL}/static/images/logo_mini.png`,
+    full: `${config.API_URL}/static/images/full_logo.png`,
 };
 
 type logoVariantType = 'mini' | 'full';

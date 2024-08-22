@@ -14,6 +14,7 @@ import { BurgerMenu } from './BurgerMenu';
 import { NAV_LINKS } from './constants';
 import { BurgerDrawer } from './BurgerDrawer';
 import { useState } from 'react';
+import { TextLink } from '../../components/TextLink';
 
 type headerButtonType = {
     title: string;
@@ -54,9 +55,9 @@ function HomeHeader() {
                         {[
                             NAV_LINKS.map((NAV_LINK) => (
                                 <LinkContainer key={`${NAV_LINK.to}`}>
-                                    <Link to={NAV_LINK.to}>
+                                    <TextLink to={NAV_LINK.to}>
                                         <Typography variant="h5">{NAV_LINK.label}</Typography>
-                                    </Link>
+                                    </TextLink>
                                 </LinkContainer>
                             )),
                         ]}
@@ -149,12 +150,13 @@ const FullMenuContainer = styled('div')(({ theme }) => ({
     },
     [theme.breakpoints.up('md')]: {
         display: 'flex',
-        justifyContent: 'space-between',
+        flex: 1,
+        justifyContent: 'center',
     },
 }));
 const LinkContainer = styled('div')(({ theme }) => ({
-    paddingRight: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
 }));
 const ButtonWithTextContainer = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
