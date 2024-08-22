@@ -19,13 +19,18 @@ function TexteATrousPreviewing(props: {
         <MainContainer>
             <TitleContainer>
                 <IndexContainer>{props.index}.</IndexContainer>
-                {displayedTitle.map((chunk) => {
+                {displayedTitle.map((chunk, index) => {
                     switch (chunk.kind) {
                         case 'text':
-                            return <PlainText>{chunk.word}</PlainText>;
+                            return <PlainText key={`chunk-text-${index}`}>{chunk.word}</PlainText>;
                         case 'rightAnswerText':
                             return (
-                                <RightAnswerTextField variant="standard" disabled value="...." />
+                                <RightAnswerTextField
+                                    key={`chunk-rightAnswerText-${index}`}
+                                    variant="standard"
+                                    disabled
+                                    value="...."
+                                />
                             );
                         default:
                             return undefined;

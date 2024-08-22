@@ -217,17 +217,17 @@ function ExamList(props: { filter: examFilterType }) {
         switch (props.filter) {
             case 'current':
                 return [
-                    <ListItemIcon>
+                    <ListItemIcon key="archive-filter-icon">
                         <ArchiveIcon fontSize="small" />
                     </ListItemIcon>,
-                    <ListItemText>Archiver</ListItemText>,
+                    <ListItemText key="archive-filter-text">Archiver</ListItemText>,
                 ];
             case 'archived':
                 return [
-                    <ListItemIcon>
+                    <ListItemIcon key="unarchive-filter-icon">
                         <UnarchiveIcon fontSize="small" />
                     </ListItemIcon>,
-                    <ListItemText>Désarchiver</ListItemText>,
+                    <ListItemText key="unarchive-filter-text">Désarchiver</ListItemText>,
                 ];
         }
     }

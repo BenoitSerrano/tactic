@@ -20,7 +20,7 @@ function BreadcrumbsSelect(props: { pathname: string }) {
                     onChange={onSelectHref}
                 >
                     {editingBreadcrumbs.map((editingBreadcrumb) => (
-                        <MenuItem value={editingBreadcrumb.href}>
+                        <MenuItem key={editingBreadcrumb.label} value={editingBreadcrumb.href}>
                             {editingBreadcrumb.label}
                         </MenuItem>
                     ))}
