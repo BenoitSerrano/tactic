@@ -5,11 +5,11 @@ describe('computeOfficialEndTime', () => {
     const startedAt = '2023-07-24 07:00:00.000 +0200';
 
     it('should compute the official end time', () => {
-        const shouldNavigateToExamDone = computeOfficialEndTime({
+        const officialEndTime = computeOfficialEndTime({
             duration,
             startedAt,
         });
 
-        expect(shouldNavigateToExamDone).toBe('08:30');
+        expect(officialEndTime).toBe('08:30');
     });
 });

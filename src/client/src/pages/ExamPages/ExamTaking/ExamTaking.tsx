@@ -15,6 +15,7 @@ import { eventHandler } from '../../../lib/eventHandler';
 import { useAlert } from '../../../lib/alert';
 import { computePathKeyToNavigateTo } from '../../../lib/computePathKeyToNavigateTo';
 import { time } from '../../../lib/time';
+import { computeRemainingTime } from './lib/computeRemainingTime';
 
 function ExamTaking() {
     const params = useParams();
@@ -101,6 +102,10 @@ function ExamTaking() {
     });
 
     const lastUpdatedAt = computeReadableUpdatedAt(query.data.updatedAt);
+    const remainingTime = computeRemainingTime(
+        { startedAt: query.data.startedAt, duration: query.data.exam.duration },
+        new Date(),
+    );
 
     return (
         <NotLoggedInPage
@@ -118,6 +123,7 @@ function ExamTaking() {
                     lastUpdatedAt={lastUpdatedAt}
                     studentEmail={query.data.studentEmail}
                     title={query.data.exam.name}
+                    remainingTime={remainingTime}
                     exercises={query.data.exam.exercises}
                     attemptId={attemptId}
                     onExamDone={onExamDone}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Typography, styled } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
@@ -15,16 +15,41 @@ import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { LastUpdatedAtIndication } from './LastUpdatedAtIndication';
 
+const DELAY_BETWEEN_SHOWING_ALERT_AND_END_OF_EXAM = 30 * 1000;
+
 function QuestionsAnswering(props: {
     lastUpdatedAt: string | undefined;
     attemptId: string;
     title: string;
+    remainingTime: number;
     studentEmail: string;
     exercises: Array<exerciseWithoutAnswersType>;
     onExamDone: () => void;
 }) {
     const [isConfirmFinishExamModalOpen, setIsConfirmFinishExamModalOpen] = useState(false);
     const queryClient = useQueryClient();
+    const [remainingTimeTimeout, setRemainingTimeTimeout] = useState<NodeJS.Timeout | null>(null);
+    useEffect(() => {
+        if (props.remainingTime === Infinity || props.remainingTime < 0) {
+            return;
+        }
+        const remainingTimeAlertMessage =
+            "Attention, il vous reste moins de 30 secondes. Veuillez sauvegarder vos réponses et terminer l'examen.";
+
+        if (props.remainingTime < DELAY_BETWEEN_SHOWING_ALERT_AND_END_OF_EXAM) {
+            alert(remainingTimeAlertMessage);
+            return;
+        }
+        if (props.remainingTime !== Infinity) {
+            const remainingTimeBeforeShowingAlert =
+                props.remainingTime - DELAY_BETWEEN_SHOWING_ALERT_AND_END_OF_EXAM;
+            const newRemainingTimeTimeout = setTimeout(
+                () => alert(remainingTimeAlertMessage),
+                remainingTimeBeforeShowingAlert,
+            );
+            setRemainingTimeTimeout(newRemainingTimeTimeout);
+        }
+    }, []);
     const saveDraftMutation = useMutation({
         mutationFn: api.updateAttempt,
         retry: 2,
@@ -102,19 +127,18 @@ function QuestionsAnswering(props: {
                     const isLastExercise = exerciseIndex === props.exercises.length - 1;
 
                     return (
-                        <>
+                        <Fragment key={`exercise-${exercise.id}`}>
                             <ExerciseContainer
                                 isExpanded={currentExerciseExpanded === exercise.id}
                                 onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                                key={`exercise-${exercise.id}`}
                                 exercise={exercise}
                                 indication={exerciseIndication}
                             >
                                 {exercise.questions.map((question, index) => {
                                     const isLastQuestion = index === exercise.questions.length - 1;
                                     return (
-                                        <>
-                                            <QuestionContainer key={`question-${question.id}`}>
+                                        <Fragment key={`question-${question.id}`}>
+                                            <QuestionContainer>
                                                 <QuestionIndicatorsContainer>
                                                     <Typography>/ {question.points}</Typography>
                                                 </QuestionIndicatorsContainer>
@@ -128,12 +152,12 @@ function QuestionsAnswering(props: {
                                                 />
                                             </QuestionContainer>
                                             {!isLastQuestion && <HorizontalDivider />}
-                                        </>
+                                        </Fragment>
                                     );
                                 })}
                             </ExerciseContainer>
                             {!isLastExercise && <HorizontalDivider />}
-                        </>
+                        </Fragment>
                     );
                 })}
             </TestPageLayout>
@@ -182,6 +206,9 @@ function QuestionsAnswering(props: {
     }
 
     function finishExam() {
+        if (remainingTimeTimeout) {
+            clearTimeout(remainingTimeTimeout);
+        }
         closeConfirmFinishExamModal();
         finishExamMutation.mutate({ attemptId: props.attemptId });
     }
