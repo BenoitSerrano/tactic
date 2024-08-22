@@ -9,9 +9,10 @@ function assertHasRightPlanForCreation(entity: 'exam') {
         const plan = await userService.findPlanForUser(user);
         switch (entity) {
             case 'exam':
-                if (plan.maxExams === undefined) {
+                if (plan.maxExams === null || plan.maxExams === undefined) {
                     return;
                 }
+
                 const examService = buildExamService();
                 const examCount = await examService.countExamsForUser(user);
                 if (examCount < plan.maxExams) {
