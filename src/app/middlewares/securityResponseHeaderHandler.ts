@@ -37,7 +37,9 @@ const specificCspDirectives = {
         'client.crisp.chat',
         'storage.crisp.chat',
         'wss://stream.relay.crisp.chat',
+        '*.ingest.sentry.io',
     ],
+    'worker-src': ["'self'", 'blob:'],
 };
 
 const securityResponseHeaderHandler = helmet({
