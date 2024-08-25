@@ -105,6 +105,7 @@ const ContentContainer = styled('div')({
     width: '50%',
     margin: 'auto',
     display: 'flex',
+    textAlign: 'justify',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
