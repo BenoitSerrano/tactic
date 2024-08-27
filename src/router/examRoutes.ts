@@ -85,6 +85,22 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'PATCH',
+        path: '/exams/:examId/edgeText',
+        isAuthenticated: true,
+        controller: examController.updateExamEdgeText,
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            kind: Joi.string().valid('start', 'end'),
+            text: Joi.string().required().allow(null),
+        }),
+    },
+    {
+        method: 'PATCH',
         path: '/exams/:examId/duration',
         isAuthenticated: true,
         controller: examController.updateExamDuration,

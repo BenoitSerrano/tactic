@@ -7,7 +7,7 @@ import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
 import { buildExerciseService } from '../exercise';
-import { examFilterType } from './types';
+import { examEdgeTextKind, examFilterType } from './types';
 
 export { buildExamService };
 
@@ -17,6 +17,7 @@ function buildExamService() {
         createExam,
         updateExamName,
         updateExamDuration,
+        updateExamEdgeText,
         getExams,
         getExamWithQuestions,
         getAllExams,
@@ -48,6 +49,24 @@ function buildExamService() {
     async function updateExamName(examId: Exam['id'], name: string) {
         const exam = await examRepository.findOneOrFail({ where: { id: examId } });
         exam.name = name;
+        const newExam = await examRepository.save(exam);
+        return newExam;
+    }
+
+    async function updateExamEdgeText(
+        examId: Exam['id'],
+        kind: examEdgeTextKind,
+        text: string | null,
+    ) {
+        const exam = await examRepository.findOneOrFail({ where: { id: examId } });
+        switch (kind) {
+            case 'start':
+                exam.startText = text;
+                break;
+            case 'end':
+                exam.endText = text;
+                break;
+        }
         const newExam = await examRepository.save(exam);
         return newExam;
     }

@@ -1,19 +1,30 @@
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { NotLoggedInPage } from '../../components/NotLoggedInPage';
-import Markdown from 'react-markdown';
-import { examDoneText } from './constants';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../../lib/api';
+import { Loader } from '../../components/Loader';
+import { examApiType } from '../ExamList/types';
+import { ExamDoneText } from '../ExamParameters/components/ExamDoneText';
 
 function ExamDone() {
+    const params = useParams();
+
+    const examId = params.examId as string;
+    const query = useQuery<examApiType>({
+        queryKey: ['exams', examId],
+        queryFn: () => api.fetchExam(examId),
+    });
+
+    if (!query.data) {
+        return <Loader />;
+    }
+
     return (
         <NotLoggedInPage>
             <MainContainer>
                 <TextContainer>
-                    <Typography variant="h5">
-                        <Markdown>{examDoneText}</Markdown>
-                    </Typography>
-                    {/* <Typography variant="h4">
-                        Réponses enregistrées, merci. Vous pouvez quitter la page.
-                    </Typography> */}
+                    <ExamDoneText examEndText={query.data.endText} />
                 </TextContainer>
             </MainContainer>
         </NotLoggedInPage>
@@ -28,7 +39,6 @@ const MainContainer = styled('div')({
 });
 
 const TextContainer = styled('div')({
-    textAlign: 'center',
     width: '50%',
 });
 

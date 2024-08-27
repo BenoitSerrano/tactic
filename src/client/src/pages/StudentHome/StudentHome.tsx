@@ -1,4 +1,4 @@
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
@@ -8,8 +8,7 @@ import { Loader } from '../../components/Loader';
 import { pathHandler } from '../../lib/pathHandler';
 import { computePathKeyToNavigateTo } from '../../lib/computePathKeyToNavigateTo';
 import { attemptActionEncoder } from '../../lib/attemptActionEncoder';
-import Markdown from 'react-markdown';
-import { examStartText } from './constants';
+import { ExamStartText } from '../ExamParameters/components/ExamStartText';
 
 type attemptApiType = {
     attempt:
@@ -24,6 +23,9 @@ type examApiType = {
     id: string;
     name: string;
     archivedAt: string | null;
+    startText: string | null;
+    endText: string | null;
+    duration: number | null;
 };
 
 function StudentHome() {
@@ -83,10 +85,11 @@ function StudentHome() {
     return (
         <NotLoggedInPage>
             <ContentContainer>
-                {examQuery.data && <Typography variant="h4">{examQuery.data.name}</Typography>}
-                <ExamStartText variant="h5">
-                    <Markdown>{examStartText}</Markdown>
-                </ExamStartText>
+                <ExamStartText
+                    name={examQuery.data.name}
+                    duration={examQuery.data.duration}
+                    examStartText={examQuery.data.startText}
+                />
                 <Button variant="contained" onClick={launchExam}>
                     Lancer l'examen
                 </Button>
@@ -105,10 +108,7 @@ const ContentContainer = styled('div')({
     width: '50%',
     margin: 'auto',
     display: 'flex',
-    textAlign: 'justify',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
 });
-
-const ExamStartText = styled(Typography)(({ theme }) => ({ marginBottom: theme.spacing(3) }));

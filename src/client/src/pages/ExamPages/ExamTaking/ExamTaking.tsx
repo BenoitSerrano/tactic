@@ -83,7 +83,9 @@ function ExamTaking() {
         return <Navigate to={pathToNavigateTo} />;
     }
 
-    const examDonePath = pathHandler.getRoutePath('EXAM_DONE', { studentId });
+    const examId = query.data.exam.id;
+
+    const examDonePath = pathHandler.getRoutePath('EXAM_DONE', { examId });
 
     const shouldNavigateToExamDone = computeShouldNavigateToExamDone(new Date(), {
         duration: query.data.exam.duration,
