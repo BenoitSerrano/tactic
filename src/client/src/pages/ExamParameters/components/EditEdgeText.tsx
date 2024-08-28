@@ -40,8 +40,9 @@ function EditEdgeText(props: { exam: examApiType; kind: edgeTextKind }) {
     return (
         <Container>
             <TextFieldContainer>
-                <TextField multiline fullWidth value={text} onChange={onChange} />
+                <StyledTextField multiline fullWidth value={text} onChange={onChange} />
                 <LoadingButton
+                    variant="outlined"
                     loading={mutation.isPending}
                     startIcon={<SaveIcon />}
                     onClick={saveEdgeText}
@@ -105,6 +106,7 @@ const TextFieldContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     borderRight: `dashed 2px ${theme.palette.divider}`,
 }));
+const StyledTextField = styled(TextField)(({ theme }) => ({ marginBottom: theme.spacing(1) }));
 const PreviewContainer = styled('div')(({ theme }) => ({
     flex: 1,
     paddingLeft: theme.spacing(2),
