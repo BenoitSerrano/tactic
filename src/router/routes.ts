@@ -6,6 +6,7 @@ import { questionRoutes } from './questionRoutes';
 import { resetPasswordRequestRoutes } from './resetPasswordRequestRoutes';
 import { studentRoutes } from './studentRoutes';
 import { routeType } from './types';
+import { userConfigurationRoutes } from './userConfigurationRoutes';
 import { userRoutes } from './userRoutes';
 
 const routes = buildRoutes();
@@ -20,6 +21,7 @@ function buildRoutes() {
     routes.push(...attemptRoutes);
     routes.push(...exerciseRoutes);
     routes.push(...resetPasswordRequestRoutes);
+    routes.push(...userConfigurationRoutes);
     return routes;
 }
 

@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { defaultEndText, defaultStartText } from './constants';
+import { User } from '../user/User.entity';
 
 @Entity()
 export class UserConfiguration {
@@ -11,4 +12,7 @@ export class UserConfiguration {
 
     @Column({ type: 'text', nullable: false, default: defaultEndText })
     defaultEndText: string;
+
+    @OneToOne(() => User, (user) => user.userConfiguration)
+    user: User;
 }

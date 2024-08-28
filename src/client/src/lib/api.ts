@@ -23,6 +23,7 @@ const api = {
     updateExamName,
     updateExamDuration,
     updateExamEdgeText,
+    updateDefaultEdgeText,
     fetchExams,
     fetchExamResults,
     deleteExam,
@@ -310,6 +311,11 @@ async function updateExamEdgeText({
     text: string;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/edgeText`;
+    return performApiCall(URL, 'PATCH', { kind, text });
+}
+
+async function updateDefaultEdgeText({ kind, text }: { kind: 'start' | 'end'; text: string }) {
+    const URL = `${BASE_URL}/user-configurations`;
     return performApiCall(URL, 'PATCH', { kind, text });
 }
 

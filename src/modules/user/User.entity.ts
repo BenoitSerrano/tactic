@@ -16,7 +16,9 @@ export class User {
     @ManyToOne(() => Plan, { nullable: false })
     plan: Plan;
 
-    @OneToOne(() => UserConfiguration, { nullable: false })
+    @OneToOne(() => UserConfiguration, (userConfiguration) => userConfiguration.user, {
+        nullable: false,
+    })
     @JoinColumn()
     userConfiguration: UserConfiguration;
 }
