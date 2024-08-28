@@ -24,7 +24,7 @@ function ExamParameters() {
     return (
         <Container>
             <Typography variant="h3">Paramètres</Typography>
-            <Section title="Durée">
+            <Section title="Durée de l'examen">
                 <EditableDuration exam={examQuery.data} />
             </Section>
             <Section title="Éditer le texte d'accueil de l'examen">

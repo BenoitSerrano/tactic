@@ -40,7 +40,7 @@ function EditEdgeText(props: { exam: examApiType; kind: edgeTextKind }) {
     return (
         <Container>
             <TextFieldContainer>
-                <TextField multiline fullWidth rows={5} value={text} onChange={onChange} />
+                <TextField multiline fullWidth value={text} onChange={onChange} />
                 <LoadingButton
                     loading={mutation.isPending}
                     startIcon={<SaveIcon />}
