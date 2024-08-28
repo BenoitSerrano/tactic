@@ -44,6 +44,7 @@ function HomeHeader() {
     return (
         <>
             <Header
+                key="header"
                 buttons={renderedButtons}
                 LeftContent={
                     <Link to="/">
@@ -51,7 +52,7 @@ function HomeHeader() {
                     </Link>
                 }
                 MiddleContent={
-                    <FullMenuContainer>
+                    <FullMenuContainer key="full-menu-container">
                         {[
                             NAV_LINKS.map((NAV_LINK) => (
                                 <LinkContainer key={`${NAV_LINK.to}`}>
@@ -64,7 +65,11 @@ function HomeHeader() {
                     </FullMenuContainer>
                 }
             />
-            <BurgerDrawer close={closeBurgerDrawer} isOpen={isBurgerDrawerOpen} />
+            <BurgerDrawer
+                key="burger-drawer"
+                close={closeBurgerDrawer}
+                isOpen={isBurgerDrawerOpen}
+            />
         </>
     );
 
@@ -75,7 +80,7 @@ function HomeHeader() {
     function renderButtons(buttons: headerButtonType[]): React.ReactNode[] {
         return [
             ...buttons.map(({ IconComponent, onClick, title, importance }) => (
-                <ButtonWithTextContainer>
+                <ButtonWithTextContainer key={`button-${title}`}>
                     <Button
                         onClick={onClick}
                         variant={importanceToVariantMapping[importance]}
@@ -86,7 +91,7 @@ function HomeHeader() {
                 </ButtonWithTextContainer>
             )),
             ...buttons.map(({ IconComponent, onClick, title, importance }) => (
-                <IconButtonContainer>
+                <IconButtonContainer key={`icon-button-${title}`}>
                     <IconButton
                         color={importanceToColorMapping[importance]}
                         title={title}
@@ -95,7 +100,7 @@ function HomeHeader() {
                     />
                 </IconButtonContainer>
             )),
-            <BurgerMenuContainer>
+            <BurgerMenuContainer key="burger-menu-container">
                 <BurgerMenu
                     toggleDrawer={setIsBurgerDrawerOpen}
                     isDrawerOpen={isBurgerDrawerOpen}
