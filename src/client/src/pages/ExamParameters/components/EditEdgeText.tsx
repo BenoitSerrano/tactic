@@ -1,7 +1,6 @@
 import { styled, TextField } from '@mui/material';
 import { useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
-import RestoreIcon from '@mui/icons-material/Restore';
 import { examApiType } from '../../ExamList/types';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -57,28 +56,19 @@ function EditEdgeText(props: { exam: examApiType; kind: edgeTextKind }) {
             <TextFieldContainer>
                 <StyledTextField multiline fullWidth value={text} onChange={onChange} />
                 <ButtonsContainer>
-                    <LeftContainer>
-                        <IconButton
-                            IconComponent={BookmarkAddIcon}
-                            onClick={saveDefaultEdgeText}
-                            title="Sauvegarder comme texte par défaut"
-                        />
-                        <IconButton
-                            IconComponent={RestoreIcon}
-                            onClick={() => {}}
-                            title="Annuler les modifications et restaurer le texte par défaut"
-                        />
-                    </LeftContainer>
-                    <RightContainer>
-                        <LoadingButton
-                            variant="outlined"
-                            loading={updateExamEdgeTextMutation.isPending}
-                            startIcon={<SaveIcon />}
-                            onClick={saveEdgeText}
-                        >
-                            Sauvegarder
-                        </LoadingButton>
-                    </RightContainer>
+                    <IconButton
+                        IconComponent={BookmarkAddIcon}
+                        onClick={saveDefaultEdgeText}
+                        title="Sauvegarder comme texte par défaut"
+                    />
+                    <LoadingButton
+                        variant="outlined"
+                        loading={updateExamEdgeTextMutation.isPending}
+                        startIcon={<SaveIcon />}
+                        onClick={saveEdgeText}
+                    >
+                        Sauvegarder
+                    </LoadingButton>
                 </ButtonsContainer>
             </TextFieldContainer>
             <PreviewContainer>{renderPreviewText()}</PreviewContainer>
@@ -138,10 +128,6 @@ const PreviewContainer = styled('div')(({ theme }) => ({
 const ButtonsContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-between',
-}));
-const LeftContainer = styled('div')(({ theme }) => ({}));
-const RightContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
 }));
 
 export { EditEdgeText };
