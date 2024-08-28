@@ -6,7 +6,7 @@ import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { EditEdgeText } from './components/EditEdgeText';
 import { examApiType } from '../ExamList/types';
-import { Section } from './components/Section';
+import { Section } from '../../components/Section';
 
 function ExamParameters() {
     const params = useParams();
