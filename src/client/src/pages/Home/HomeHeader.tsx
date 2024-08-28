@@ -1,4 +1,4 @@
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
@@ -56,9 +56,7 @@ function HomeHeader() {
                         {[
                             NAV_LINKS.map((NAV_LINK) => (
                                 <LinkContainer key={`${NAV_LINK.to}`}>
-                                    <TextLink to={NAV_LINK.to}>
-                                        <Typography variant="h5">{NAV_LINK.label}</Typography>
-                                    </TextLink>
+                                    <TextLink label={NAV_LINK.label} to={NAV_LINK.to} />
                                 </LinkContainer>
                             )),
                         ]}
