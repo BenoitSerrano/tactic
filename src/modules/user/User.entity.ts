@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Plan } from '../plan';
+import { UserConfiguration } from '../userConfiguration';
 
 @Entity()
 export class User {
@@ -14,4 +15,8 @@ export class User {
 
     @ManyToOne(() => Plan, { nullable: false })
     plan: Plan;
+
+    @OneToOne(() => UserConfiguration, { nullable: false })
+    @JoinColumn()
+    userConfiguration: UserConfiguration;
 }

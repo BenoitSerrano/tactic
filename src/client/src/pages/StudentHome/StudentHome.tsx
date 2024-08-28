@@ -23,8 +23,8 @@ type examApiType = {
     id: string;
     name: string;
     archivedAt: string | null;
-    startText: string | null;
-    endText: string | null;
+    startText: string;
+    endText: string;
     duration: number | null;
 };
 

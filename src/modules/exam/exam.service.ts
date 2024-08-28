@@ -42,6 +42,8 @@ function buildExamService() {
         exam.name = name;
         exam.duration = duration !== null ? duration : null;
         exam.user = user;
+        exam.startText = user.userConfiguration.defaultStartText;
+        exam.endText = user.userConfiguration.defaultEndText;
         const insertedExam = await examRepository.save(exam);
         return insertedExam;
     }
@@ -53,11 +55,7 @@ function buildExamService() {
         return newExam;
     }
 
-    async function updateExamEdgeText(
-        examId: Exam['id'],
-        kind: examEdgeTextKind,
-        text: string | null,
-    ) {
+    async function updateExamEdgeText(examId: Exam['id'], kind: examEdgeTextKind, text: string) {
         const exam = await examRepository.findOneOrFail({ where: { id: examId } });
         switch (kind) {
             case 'start':

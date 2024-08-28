@@ -45,7 +45,7 @@ function buildExamController() {
 
     async function updateExamEdgeText(params: {
         urlParams: { examId: Exam['id'] };
-        body: { kind: examEdgeTextKind; text: string | null };
+        body: { kind: examEdgeTextKind; text: string };
     }) {
         return examService.updateExamEdgeText(
             params.urlParams.examId,

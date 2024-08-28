@@ -42,9 +42,9 @@ export class Exam {
     @Column({ default: false })
     shouldDisplayRightAnswers: boolean;
 
-    @Column({ type: 'text', nullable: true })
-    startText: string | null;
+    @Column({ type: 'text' })
+    startText: string;
 
-    @Column({ type: 'text', nullable: true })
-    endText: string | null;
+    @Column({ type: 'text' })
+    endText: string;
 }

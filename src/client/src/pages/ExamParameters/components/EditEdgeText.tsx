@@ -2,7 +2,6 @@ import { styled, TextField } from '@mui/material';
 import { useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import { examApiType } from '../../ExamList/types';
-import { defaultEndText, defaultStartText } from '../../ExamPages/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
@@ -20,7 +19,7 @@ function EditEdgeText(props: { exam: examApiType; kind: edgeTextKind }) {
 
     const mutation = useMutation({
         mutationFn: api.updateExamEdgeText,
-        onSuccess: (data) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['exams', props.exam.id],
             });
@@ -76,24 +75,14 @@ function EditEdgeText(props: { exam: examApiType; kind: edgeTextKind }) {
     function computeInitialText(kind: edgeTextKind, exam: examApiType) {
         switch (kind) {
             case 'start':
-                return exam.startText !== null ? exam.startText : defaultStartText;
+                return exam.startText;
             case 'end':
-                return exam.endText !== null ? exam.endText : defaultEndText;
+                return exam.endText;
         }
     }
 
     function saveEdgeText() {
-        let newText: string | null = null;
-        switch (props.kind) {
-            case 'start':
-                newText = text === defaultStartText ? null : text;
-                break;
-            case 'end':
-                newText = text === defaultEndText ? null : text;
-                break;
-        }
-
-        mutation.mutate({ examId: props.exam.id, kind: props.kind, text: newText });
+        mutation.mutate({ examId: props.exam.id, kind: props.kind, text });
     }
 }
 

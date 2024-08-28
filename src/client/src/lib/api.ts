@@ -307,7 +307,7 @@ async function updateExamEdgeText({
 }: {
     examId: string;
     kind: 'start' | 'end';
-    text: string | null;
+    text: string;
 }) {
     const URL = `${BASE_URL}/exams/${examId}/edgeText`;
     return performApiCall(URL, 'PATCH', { kind, text });

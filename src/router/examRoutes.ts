@@ -96,7 +96,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         ]),
         schema: Joi.object({
             kind: Joi.string().valid('start', 'end'),
-            text: Joi.string().required().allow(null),
+            text: Joi.string().required(),
         }),
     },
     {
