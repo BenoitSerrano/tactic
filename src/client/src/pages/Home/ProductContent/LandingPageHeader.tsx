@@ -5,8 +5,10 @@ import { Button } from '../../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { pathHandler } from '../../../lib/pathHandler';
 
-const TITLES_WIDTH = '80%';
-const FORM_WIDTH = '30%';
+const TITLES_SM_UP_WIDTH = '80%';
+const TITLES_SM_DOWN_WIDTH = '90%';
+const FORM_MD_UP_WIDTH = '30%';
+const FORM_MD_DOWN_WIDTH = '80%';
 
 function LandingPageHeader() {
     const [newEmail, setNewEmail] = useState('');
@@ -52,16 +54,31 @@ const Container = styled('div')(({ theme }) => ({
 const Title = styled(Typography)(({ theme }) => ({
     marginBottom: theme.spacing(3),
     textAlign: 'center',
-    width: TITLES_WIDTH,
+    [theme.breakpoints.up('sm')]: {
+        width: TITLES_SM_UP_WIDTH,
+    },
+    [theme.breakpoints.down('sm')]: {
+        width: TITLES_SM_DOWN_WIDTH,
+    },
 }));
 const Subtitle = styled(Typography)(({ theme }) => ({
     textAlign: 'center',
     marginBottom: theme.spacing(3),
 
-    width: TITLES_WIDTH,
+    [theme.breakpoints.up('sm')]: {
+        width: TITLES_SM_UP_WIDTH,
+    },
+    [theme.breakpoints.down('sm')]: {
+        width: TITLES_SM_DOWN_WIDTH,
+    },
 }));
 const FormContainer = styled('form')(({ theme }) => ({
-    width: FORM_WIDTH,
+    [theme.breakpoints.up('md')]: {
+        width: FORM_MD_UP_WIDTH,
+    },
+    [theme.breakpoints.down('md')]: {
+        width: FORM_MD_DOWN_WIDTH,
+    },
     display: 'flex',
     flexDirection: 'column',
 }));

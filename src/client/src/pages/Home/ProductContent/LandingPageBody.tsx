@@ -5,17 +5,17 @@ const featureCardsContent = [
     {
         title: 'Rapide',
         description:
-            'Automatisez la correction de vos exercices (QCM, textes à trous, phrases à reconstituer, ...) pour gagner un maximum de temps',
+            'Automatisez la correction de vos exercices (QCM, textes à trous, phrases à reconstituer, ...) pour gagner un maximum de temps.',
     },
     {
         title: 'Sûr',
         description:
-            'Minimiser les risques de triche avec une détection en temps réel des comportements suspects',
+            'Minimisez les risques de triche avec une détection en temps réel des comportements suspects.',
     },
     {
         title: 'Efficace',
         description:
-            "Simplifier le passage de vos examens par vos élèves : pas d'inscription pour eux !",
+            "Simplifiez le passage de vos examens par vos élèves : pas d'inscription pour eux !",
     },
 ];
 
@@ -43,11 +43,18 @@ const Container = styled('div')(({ theme }) => ({
     paddingBottom: theme.spacing(6),
 }));
 const Title = styled(Typography)(({ theme }) => ({
-    marginBottom: theme.spacing(5),
+    marginBottom: theme.spacing(4),
+    padding: theme.spacing(2),
     textAlign: 'center',
 }));
 const CardsContainer = styled('div')(({ theme }) => ({
     display: 'flex',
-    justifyContent: 'space-evenly',
+    [theme.breakpoints.up('sm')]: {
+        justifyContent: 'space-around',
+    },
+    [theme.breakpoints.down('sm')]: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
 }));
 export { LandingPageBody };
