@@ -12,7 +12,19 @@ function FeatureCard(props: { title: string; description: string }) {
     );
 }
 
-const Title = styled(Typography)(({ theme }) => ({ marginBottom: theme.spacing(1) }));
+const Title = styled(Typography)(({ theme }) => ({
+    marginBottom: theme.spacing(1),
+}));
 const Description = styled(Typography)(({ theme }) => ({}));
-const CardContainer = styled('div')(({ theme }) => ({ display: 'flex', width: '25%' }));
+const CardContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    [theme.breakpoints.up('sm')]: {
+        width: '30%',
+    },
+    [theme.breakpoints.down('sm')]: {
+        width: '60%',
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+}));
 export { FeatureCard };

@@ -1,4 +1,4 @@
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
@@ -44,6 +44,7 @@ function HomeHeader() {
     return (
         <>
             <Header
+                key="header"
                 buttons={renderedButtons}
                 LeftContent={
                     <Link to="/">
@@ -51,20 +52,22 @@ function HomeHeader() {
                     </Link>
                 }
                 MiddleContent={
-                    <FullMenuContainer>
+                    <FullMenuContainer key="full-menu-container">
                         {[
                             NAV_LINKS.map((NAV_LINK) => (
                                 <LinkContainer key={`${NAV_LINK.to}`}>
-                                    <TextLink to={NAV_LINK.to}>
-                                        <Typography variant="h5">{NAV_LINK.label}</Typography>
-                                    </TextLink>
+                                    <TextLink label={NAV_LINK.label} to={NAV_LINK.to} />
                                 </LinkContainer>
                             )),
                         ]}
                     </FullMenuContainer>
                 }
             />
-            <BurgerDrawer close={closeBurgerDrawer} isOpen={isBurgerDrawerOpen} />
+            <BurgerDrawer
+                key="burger-drawer"
+                close={closeBurgerDrawer}
+                isOpen={isBurgerDrawerOpen}
+            />
         </>
     );
 
@@ -75,7 +78,7 @@ function HomeHeader() {
     function renderButtons(buttons: headerButtonType[]): React.ReactNode[] {
         return [
             ...buttons.map(({ IconComponent, onClick, title, importance }) => (
-                <ButtonWithTextContainer>
+                <ButtonWithTextContainer key={`button-${title}`}>
                     <Button
                         onClick={onClick}
                         variant={importanceToVariantMapping[importance]}
@@ -86,7 +89,7 @@ function HomeHeader() {
                 </ButtonWithTextContainer>
             )),
             ...buttons.map(({ IconComponent, onClick, title, importance }) => (
-                <IconButtonContainer>
+                <IconButtonContainer key={`icon-button-${title}`}>
                     <IconButton
                         color={importanceToColorMapping[importance]}
                         title={title}
@@ -95,7 +98,7 @@ function HomeHeader() {
                     />
                 </IconButtonContainer>
             )),
-            <BurgerMenuContainer>
+            <BurgerMenuContainer key="burger-menu-container">
                 <BurgerMenu
                     toggleDrawer={setIsBurgerDrawerOpen}
                     isDrawerOpen={isBurgerDrawerOpen}

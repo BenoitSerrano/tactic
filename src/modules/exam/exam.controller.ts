@@ -1,7 +1,7 @@
 import { User } from '../user';
 import { Exam } from './Exam.entity';
 import { buildExamService } from './exam.service';
-import { EXAM_FILTERS, examFilterType } from './types';
+import { EXAM_FILTERS, examEdgeTextKind, examFilterType } from './types';
 
 export { buildExamController };
 
@@ -11,6 +11,7 @@ function buildExamController() {
         createExam,
         updateExamDuration,
         updateExamName,
+        updateExamEdgeText,
         getExams,
         getExam,
         getExamWithoutAnswers,
@@ -40,6 +41,17 @@ function buildExamController() {
         body: { name: string };
     }) {
         return examService.updateExamName(params.urlParams.examId, params.body.name);
+    }
+
+    async function updateExamEdgeText(params: {
+        urlParams: { examId: Exam['id'] };
+        body: { kind: examEdgeTextKind; text: string };
+    }) {
+        return examService.updateExamEdgeText(
+            params.urlParams.examId,
+            params.body.kind,
+            params.body.text,
+        );
     }
 
     async function updateExamDuration(params: {

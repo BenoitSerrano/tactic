@@ -29,7 +29,10 @@ function buildAuthenticatedController<
         const userRepository = dataSource.getRepository(User);
         try {
             const userId = extractUserIdFromHeader(req);
-            user = await userRepository.findOneByOrFail({ id: userId });
+            user = await userRepository.findOneOrFail({
+                where: { id: userId },
+                relations: ['userConfiguration'],
+            });
         } catch (error) {
             logger.error(error);
             res.sendStatus(httpStatus.UNAUTHORIZED);

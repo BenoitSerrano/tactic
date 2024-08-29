@@ -22,6 +22,8 @@ const api = {
     fetchExamWithQuestions,
     updateExamName,
     updateExamDuration,
+    updateExamEdgeText,
+    updateDefaultEdgeText,
     fetchExams,
     fetchExamResults,
     deleteExam,
@@ -297,6 +299,24 @@ async function updateExamDuration({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/duration`;
     return performApiCall(URL, 'PATCH', { duration });
+}
+
+async function updateExamEdgeText({
+    examId,
+    kind,
+    text,
+}: {
+    examId: string;
+    kind: 'start' | 'end';
+    text: string;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/edgeText`;
+    return performApiCall(URL, 'PATCH', { kind, text });
+}
+
+async function updateDefaultEdgeText({ kind, text }: { kind: 'start' | 'end'; text: string }) {
+    const URL = `${BASE_URL}/user-configurations`;
+    return performApiCall(URL, 'PATCH', { kind, text });
 }
 
 async function createExercise(params: {

@@ -2,8 +2,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import TimerOffOutlinedIcon from '@mui/icons-material/TimerOffOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import { TextField, Tooltip, styled } from '@mui/material';
-import { FormEvent, useState } from 'react';
+import { TextField, Tooltip, Typography, styled } from '@mui/material';
+import { FormEvent, useEffect, useState } from 'react';
 import { time } from '../../lib/time';
 import { INTEGER_NUMBER_REGEX } from '../../constants';
 import { IconButton } from '../../components/IconButton';
@@ -18,6 +18,10 @@ function EditableDuration(props: { exam: examApiType }) {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
 
+    useEffect(() => {
+        setValue(props.exam.duration);
+    }, [props.exam.duration]);
+
     const updateExamDurationMutation = useMutation({
         mutationFn: api.updateExamDuration,
         onSuccess: (exam) => {
@@ -26,7 +30,9 @@ function EditableDuration(props: { exam: examApiType }) {
                 text: `L'examen "${exam.name}" a bien été modifié`,
             });
             setIsEditing(false);
+
             queryClient.invalidateQueries({ queryKey: ['exams-current'] });
+            queryClient.invalidateQueries({ queryKey: [`exams`, props.exam.id] });
         },
         onError: (error) => {
             console.error(error);
@@ -53,7 +59,7 @@ function EditableDuration(props: { exam: examApiType }) {
 
             return (
                 <Container>
-                    <span>{displayedValue}</span>
+                    <DisplayedValue>{displayedValue}</DisplayedValue>
                     <IconButton title="Éditer" IconComponent={EditIcon} onClick={activateEditing} />
                 </Container>
             );
@@ -66,7 +72,7 @@ function EditableDuration(props: { exam: examApiType }) {
         return (
             <Container onSubmit={handleSubmitDuration}>
                 <StyledTextField autoFocus variant="standard" value={value} onChange={onChange} />
-                minutes
+                <Typography>minutes</Typography>
                 <IconButton
                     isLoading={updateExamDurationMutation.isPending}
                     title="Valider"
@@ -85,7 +91,7 @@ function EditableDuration(props: { exam: examApiType }) {
         return (
             <Container onSubmit={handleSubmitDuration}>
                 <StyledTextField autoFocus variant="standard" value={value} onChange={onChange} />
-                minutes
+                <Typography>minutes</Typography>
                 <IconButton
                     title="Valider"
                     disabled={isConfirmDisabled}
@@ -147,6 +153,8 @@ const Container = styled('form')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
 }));
+
+const DisplayedValue = styled(Typography)(({ theme }) => ({}));
 
 const StyledTextField = styled(TextField)({ width: 40 });
 

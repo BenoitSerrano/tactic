@@ -41,4 +41,10 @@ export class Exam {
 
     @Column({ default: false })
     shouldDisplayRightAnswers: boolean;
+
+    @Column({ type: 'text' })
+    startText: string;
+
+    @Column({ type: 'text' })
+    endText: string;
 }

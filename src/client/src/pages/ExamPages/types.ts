@@ -72,6 +72,7 @@ type otherQuestionKindAnswersType = {
 };
 
 type examWithoutAnswersType = {
+    id: string;
     duration: number | null;
     extraTime: number;
     name: string;

@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
 import { computeExamBreadcrumbs } from './computeExamBreadcrumbs';
 import { Typography, styled } from '@mui/material';
-import { Link } from '../../Link';
 import { BreadcrumbsSelect } from './BreadcrumbsSelect';
+import { TextLink } from '../../TextLink';
 
 function ExamBreadcrumbs() {
     const location = useLocation();
@@ -23,18 +23,19 @@ function ExamBreadcrumbs() {
         }
         for (let i = 0; i < editingBreadcrumbs.length; i++) {
             const editingBreadcrumb = editingBreadcrumbs[i];
-            const renderedBreadcrumb = (
-                <BreadcrumbTypographyContainer key={`breadcrumb-editing-${i}`}>
-                    {editingBreadcrumb.label}
-                </BreadcrumbTypographyContainer>
-            );
             if (editingBreadcrumb.isActive || !editingBreadcrumb.href) {
-                renderedBreadcrumbs.push(renderedBreadcrumb);
+                renderedBreadcrumbs.push(
+                    <ActiveBreadcrumb key={`breadcrumb-editing-${i}`}>
+                        {editingBreadcrumb.label}
+                    </ActiveBreadcrumb>,
+                );
             } else {
                 renderedBreadcrumbs.push(
-                    <Link to={editingBreadcrumb.href} key={`breadcrumb-editing-${i}`}>
-                        {renderedBreadcrumb}
-                    </Link>,
+                    <TextLink
+                        label={editingBreadcrumb.label}
+                        to={editingBreadcrumb.href}
+                        key={`breadcrumb-editing-${i}`}
+                    />,
                 );
             }
 
@@ -50,9 +51,10 @@ function Chevron() {
     return <div>{'>'}</div>;
 }
 
-const BreadcrumbTypographyContainer = styled(Typography)(({ theme }) => ({
-    paddingRight: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
+const ActiveBreadcrumb = styled(Typography)(({ theme }) => ({
+    padding: theme.spacing(1),
+    color: theme.palette.primary.dark,
+    textShadow: `0px 0px 1px ${theme.palette.primary.dark}`,
 }));
 const BreadcrumbsContainer = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
