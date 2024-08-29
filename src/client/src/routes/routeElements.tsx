@@ -26,6 +26,8 @@ import { ROUTE_PATHS } from './routePaths';
 import { ExamParameters } from '../pages/ExamParameters';
 import { ExamCollect } from '../pages/ExamCollect';
 import { ExamConsult } from '../pages/ExamConsult';
+import { InitializePayment } from '../pages/PaymentPages/InitializePayment';
+import { Profile } from '../pages/Profile';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -109,6 +111,8 @@ const ROUTE_ELEMENTS: Record<
     TEACHER_HOME: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} /> },
     GROUPS: { isAdmin: true, element: <Groups /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
+    INITIALIZE_PAYMENT: { element: <InitializePayment />, isAdmin: true },
+    PROFILE: { element: <Profile />, isAdmin: true },
 };
 
 export { ROUTE_ELEMENTS };

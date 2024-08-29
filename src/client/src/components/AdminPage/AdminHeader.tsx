@@ -9,6 +9,7 @@ import { LogoutButton } from './LogoutButton';
 import { EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
 import { styled } from '@mui/material';
 import { IconLink } from '../IconLink';
+import { ProfileButton } from './ProfileButton';
 
 function AdminHeader() {
     const location = useLocation();
@@ -28,13 +29,14 @@ function AdminHeader() {
     );
 
     function computeRightButtons(currentPath: string) {
+        const profileButton = <ProfileButton key="profile-button" />;
         const logoutButton = <LogoutButton key="logout-button" />;
         const parsedPath = pathHandler.parsePath(currentPath);
         if (!parsedPath) {
-            return [logoutButton];
+            return [profileButton, logoutButton];
         }
         if (!EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
-            return [logoutButton];
+            return [profileButton, logoutButton];
         }
         const { parameters } = parsedPath;
         const examPreviewingLink = pathHandler.getRoutePath('EXAM_PREVIEWING', {
@@ -49,6 +51,7 @@ function AdminHeader() {
                     IconComponent={VisibilityIcon}
                 />
             </PreviewLinkContainer>,
+            profileButton,
             logoutButton,
         ];
     }

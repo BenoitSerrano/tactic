@@ -27,6 +27,8 @@ const ROUTE_KEYS = [
     'GROUPS',
     'EXAM_ARCHIVED',
     'ATTEMPT_NOT_CORRECTED',
+    'INITIALIZE_PAYMENT',
+    'PROFILE',
 ] as const;
 
 const EXAM_ROUTE_KEYS = [

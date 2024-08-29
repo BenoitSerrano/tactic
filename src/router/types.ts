@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { User } from '../modules/user';
 import { anonymousControllerType, authenticatedControllerType } from './lib/buildController/types';
+import httpStatus, { HttpStatus } from 'http-status';
 
 type methodType = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 type routeType<paramsT, queryT, bodyT> =
@@ -8,6 +9,7 @@ type routeType<paramsT, queryT, bodyT> =
           method: methodType;
           path: string;
           isAuthenticated: true;
+          redirectionStatus?: number;
           controller: authenticatedControllerType<paramsT, queryT, bodyT>;
           schema?: Joi.Schema;
           checkAuthorization?: (params: paramsT, user: User) => void | Promise<void>;

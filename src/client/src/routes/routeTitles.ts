@@ -29,6 +29,8 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     GROUPS: 'Groupes',
     EXAM_ARCHIVED: 'Erreur - examen archivé',
     ATTEMPT_NOT_CORRECTED: 'Erreur - copie non corrigée',
+    INITIALIZE_PAYMENT: 'Initialisation paiement',
+    PROFILE: 'Profil',
 };
 
 export { ROUTE_TITLES };

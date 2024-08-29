@@ -45,6 +45,7 @@
         "pg": "^8.8.0",
         "pg-connection-string": "^2.6.0",
         "reflect-metadata": "^0.1.13",
+        "stripe": "^16.8.0",
         "typeorm": "^0.3.16"
     },
     "engines": {

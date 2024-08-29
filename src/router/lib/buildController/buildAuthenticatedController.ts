@@ -19,6 +19,7 @@ function buildAuthenticatedController<
     ) => any | Promise<any>,
     options?: {
         schema?: Joi.Schema;
+        redirectionStatus?: number;
         checkAuthorization?: (params: paramsT, user: User) => void | Promise<void>;
     },
 ) {
@@ -67,8 +68,12 @@ function buildAuthenticatedController<
                 },
                 user,
             );
-            res.setHeader('Content-Type', 'application/json');
-            res.send(result);
+            if (options?.redirectionStatus !== undefined) {
+                res.redirect(options.redirectionStatus, result);
+            } else {
+                res.setHeader('Content-Type', 'application/json');
+                res.send(result);
+            }
         } catch (error) {
             logger.error(error);
             res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);

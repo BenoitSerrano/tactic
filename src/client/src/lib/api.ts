@@ -58,6 +58,7 @@ const api = {
     duplicateExam,
     fetchShouldDisplayRightAnswersForExamId,
     updateShouldDisplayRightAnswersForExamId,
+    createCheckoutSession,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -205,6 +206,11 @@ async function updateAttempt({
 }) {
     const URL = `${BASE_URL}/attempts/${attemptId}`;
     return performApiCall(URL, 'PUT', answers);
+}
+
+async function createCheckoutSession() {
+    const URL = `${BASE_URL}/checkout/sessions`;
+    return performApiCall(URL, 'POST');
 }
 
 async function updateAttemptCheatingSummary({
