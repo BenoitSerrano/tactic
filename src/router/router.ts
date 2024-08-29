@@ -1,6 +1,8 @@
-import Express from 'express';
+import Express, { Router } from 'express';
 import { buildAnonymousController, buildAuthenticatedController } from './lib/buildController';
 import { routes } from './routes';
+import { controllerType, methodType } from './types';
+import { webhooks } from './webhooks';
 
 const router = buildRouter();
 
@@ -13,26 +15,39 @@ function buildRouter() {
                   schema: route.schema,
               })
             : buildAnonymousController(route.controller, { schema: route.schema });
-        switch (route.method) {
-            case 'POST':
-                router.post(route.path, builtController);
-                break;
-            case 'GET':
-                router.get(route.path, builtController);
-                break;
-            case 'PATCH':
-                router.patch(route.path, builtController);
-                break;
-            case 'PUT':
-                router.put(route.path, builtController);
-                break;
-            case 'DELETE':
-                router.delete(route.path, builtController);
-                break;
-        }
+
+        addRouteToRouter(router, route.method, route.path, builtController);
     }
 
+    for (const webhook of webhooks) {
+        addRouteToRouter(router, webhook.method, webhook.path, webhook.controller);
+    }
     return router;
+}
+
+function addRouteToRouter(
+    router: Router,
+    method: methodType,
+    path: string,
+    controller: controllerType,
+) {
+    switch (method) {
+        case 'POST':
+            router.post(path, controller);
+            break;
+        case 'GET':
+            router.get(path, controller);
+            break;
+        case 'PATCH':
+            router.patch(path, controller);
+            break;
+        case 'PUT':
+            router.put(path, controller);
+            break;
+        case 'DELETE':
+            router.delete(path, controller);
+            break;
+    }
 }
 
 export { router };
