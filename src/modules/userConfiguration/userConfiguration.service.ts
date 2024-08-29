@@ -14,6 +14,7 @@ function buildUserConfigurationService() {
     const userConfigurationRepository = dataSource.getRepository(UserConfiguration);
 
     const userConfigurationService = {
+        createUserConfiguration,
         updateDefaultEdgeText,
     };
 
@@ -26,5 +27,11 @@ function buildUserConfigurationService() {
             { [column]: text },
         );
         return result.affected === 1;
+    }
+
+    async function createUserConfiguration() {
+        const result = await userConfigurationRepository.insert({});
+        const newUserConfigurationId = result.identifiers[0].id as UserConfiguration['id'];
+        return userConfigurationRepository.findOneByOrFail({ id: newUserConfigurationId });
     }
 }

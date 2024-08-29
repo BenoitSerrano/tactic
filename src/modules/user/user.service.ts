@@ -4,6 +4,7 @@ import { mailer } from '../../lib/mailer';
 import { mapEntities } from '../../lib/mapEntities';
 import { signer } from '../../lib/signer';
 import { Plan, buildPlanService } from '../plan';
+import { buildUserConfigurationService } from '../userConfiguration';
 import { User } from './User.entity';
 
 export { buildUserService };
@@ -11,6 +12,7 @@ export { buildUserService };
 function buildUserService() {
     const userRepository = dataSource.getRepository(User);
     const planService = buildPlanService();
+    const userConfigurationService = buildUserConfigurationService();
 
     const userService = {
         createUser,
@@ -25,9 +27,11 @@ function buildUserService() {
     return userService;
 
     async function createUser(email: string, password: string) {
+        const newUserConfiguration = await userConfigurationService.createUserConfiguration();
         const newUser = new User();
         newUser.email = email;
         newUser.hashedPassword = hasher.hash(password);
+        newUser.userConfiguration = newUserConfiguration;
 
         const freePlan = await planService.findFreePlan();
         newUser.plan = freePlan;
