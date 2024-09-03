@@ -1,3 +1,8 @@
 .exercise-markdown img {
     max-width: 100%;
 }
+
+@font-face {
+    font-family: 'quicksand';
+    src: local('quicksand'), url(./fonts/quicksand.ttf) format('truetype');
+}

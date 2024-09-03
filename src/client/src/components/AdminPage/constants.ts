@@ -1,11 +1,11 @@
 import { EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
 
 const editingExamLabelMapping: Record<(typeof EXAM_ROUTE_KEYS)[number], string> = {
-    EXAM_EDITING_CONTENT: 'Contenu',
-    EXAM_PARAMETERS: 'Paramètres',
-    EXAM_ATTEMPT_COLLECT: 'Collecte des réponses',
+    EXAM_EDITING_CONTENT: "Éditer l'examen",
+    EXAM_PARAMETERS: "Paramètres de l'examen",
+    EXAM_ATTEMPT_COLLECT: "Lien de l'examen",
     EXAM_RESULTS: 'Résultats',
-    EXAM_CONSULT: 'Consultation des copies',
+    EXAM_CONSULT: 'Accès aux copies corrigées',
 };
 
 export { editingExamLabelMapping };
