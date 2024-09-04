@@ -18,17 +18,17 @@ describe('computeExamBreadcrumbs', () => {
 
         expect(editingBreadcrumbs).toEqual([
             {
-                label: 'Contenu',
+                label: "Éditer l'examen",
                 isActive: true,
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId }),
             },
             {
-                label: 'Paramètres',
+                label: "Paramètres de l'examen",
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_PARAMETERS', { examId }),
             },
             {
-                label: 'Collecte des réponses',
+                label: "Lien de l'examen",
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_ATTEMPT_COLLECT', { examId }),
             },
@@ -38,7 +38,7 @@ describe('computeExamBreadcrumbs', () => {
                 href: pathHandler.getRoutePath('EXAM_RESULTS', { examId }),
             },
             {
-                label: 'Consultation des copies',
+                label: 'Accès aux copies corrigées',
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_CONSULT', { examId }),
             },
@@ -52,17 +52,17 @@ describe('computeExamBreadcrumbs', () => {
 
         expect(editingBreadcrumbs).toEqual([
             {
-                label: 'Contenu',
+                label: "Éditer l'examen",
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId }),
             },
             {
-                label: 'Paramètres',
+                label: "Paramètres de l'examen",
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_PARAMETERS', { examId }),
             },
             {
-                label: 'Collecte des réponses',
+                label: "Lien de l'examen",
                 isActive: true,
                 href: pathHandler.getRoutePath('EXAM_ATTEMPT_COLLECT', { examId }),
             },
@@ -72,7 +72,7 @@ describe('computeExamBreadcrumbs', () => {
                 href: pathHandler.getRoutePath('EXAM_RESULTS', { examId }),
             },
             {
-                label: 'Consultation des copies',
+                label: 'Accès aux copies corrigées',
                 isActive: false,
                 href: pathHandler.getRoutePath('EXAM_CONSULT', { examId }),
             },

@@ -8,7 +8,7 @@ function Offer(props: { title: string; features: string[]; price: number }) {
                 <Typography variant="h4">{props.title}</Typography>
             </TitleContainer>
             <Typography variant="h3">{props.price} €</Typography>
-            <Typography>par mois</Typography>
+            <Typography>{props.price > 0 && 'par mois'}&nbsp;</Typography>
             <List>
                 {props.features.map((feature) => (
                     <ListItem>

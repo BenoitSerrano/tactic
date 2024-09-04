@@ -3,24 +3,24 @@ import { createTheme } from '@mui/material';
 const theme = createTheme({
     palette: {
         primary: {
-            light: '#ece592',
-            dark: '#d06a00',
-            main: '#d8a916',
+            light: '#CADDDB',
+            dark: '#00606E',
+            main: '#3C8E8C',
         },
         secondary: {
             main: '#1647d8',
         },
         warning: { main: '#e87a00', light: '#f5b44d' },
-        common: { black: '#302505' },
-        background: { default: '#fcf7e9' },
-        divider: '#ece592',
+        common: { black: '#034D59' },
+        background: { default: '#CADDDB' },
+        divider: '##D0E0E3',
     },
     spacing: (value: number) => value * 8,
     components: {
         MuiDialogTitle: { styleOverrides: { root: { fontSize: '1.5rem', fontWeight: 'bold' } } },
     },
     typography: {
-        fontFamily: ['Trebuchet MS'].join(','),
+        fontFamily: ['quicksand', 'Trebuchet MS'].join(','),
 
         h1: {
             fontSize: '3rem',

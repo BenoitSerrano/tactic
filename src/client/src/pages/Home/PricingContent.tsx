@@ -18,19 +18,32 @@ function PricingContent() {
                     <CardContainer>
                         <Card style={{ flex: 1 }}>
                             <Offer
-                                title="FREE"
+                                title="ESSAI GRATUIT"
                                 price={0}
-                                features={['40 copies corrigées maximum', 'Un examen maximum']}
+                                features={['30 copies maximum', 'Un examen maximum']}
                             />
                         </Card>
                     </CardContainer>
                     <CardContainer>
                         <Card style={{ flex: 1 }}>
                             <Offer
-                                title="UNLIMITED"
-                                price={10}
+                                title="PRO"
+                                price={12}
                                 features={[
-                                    'Copies corrigées illimitées',
+                                    "Jusqu'à 200 copies par mois",
+                                    "Jusqu'à 5 examens par mois",
+                                    'Support réactif en moins de 24h',
+                                ]}
+                            />
+                        </Card>
+                    </CardContainer>
+                    <CardContainer>
+                        <Card style={{ flex: 1 }}>
+                            <Offer
+                                title="ILLIMITÉ"
+                                price={16}
+                                features={[
+                                    'Copies illimitées',
                                     'Examens illimités',
                                     'Support réactif en moins de 24h',
                                 ]}
