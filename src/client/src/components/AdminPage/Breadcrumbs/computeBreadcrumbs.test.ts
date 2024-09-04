@@ -53,7 +53,7 @@ describe('computeBreadcrumbs', () => {
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
             },
-            { label: 'Contenu', isActive: true },
+            { label: "Éditer l'examen", isActive: true },
         ]);
     });
     it("returns exams edit when you're on exam edit results page", () => {
@@ -83,7 +83,7 @@ describe('computeBreadcrumbs', () => {
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
             },
-            { label: 'Consultation des copies', isActive: true },
+            { label: 'Accès aux copies corrigées', isActive: true },
         ]);
     });
 
