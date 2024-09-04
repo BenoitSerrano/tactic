@@ -20,7 +20,7 @@ function PricingContent() {
                             <Offer
                                 title="ESSAI GRATUIT"
                                 price={0}
-                                features={['15 copies maximum', 'Un examen maximum']}
+                                features={['30 copies maximum', 'Un examen maximum']}
                             />
                         </Card>
                     </CardContainer>
