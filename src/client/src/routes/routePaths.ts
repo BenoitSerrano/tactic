@@ -75,6 +75,8 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     ATTEMPT_NOT_CORRECTED: { path: `/student/attempt-not-corrected` },
     INITIALIZE_PAYMENT: { path: `/teacher/payment/initialize` },
     PROFILE: { path: `/teacher/profile` },
+    PAYMENT_SUCCESS: { path: `/teacher/payment/success` },
+    PAYMENT_CANCELED: { path: `/teacher/payment/canceled` },
 };
 
 export { ROUTE_PATHS };

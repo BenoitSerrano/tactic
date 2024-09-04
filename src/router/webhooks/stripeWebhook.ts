@@ -1,5 +1,6 @@
 import { webhookType } from './types';
 import { buildPaymentService } from '../../modules/payment';
+import { logger } from '../../lib/logger';
 
 const stripeWebhook: webhookType = {
     method: 'POST',
@@ -15,9 +16,10 @@ const stripeWebhook: webhookType = {
         let sessionId: string | undefined;
 
         try {
-            sessionId = paymentService.extractSessionIdFromWebhookPayload(sig, payload);
+            paymentService.extractSessionIdFromWebhookPayload(sig, payload);
         } catch (err: any) {
-            res.status(400).send(err);
+            logger.error(err);
+            res.status(400).send();
             return;
         }
         if (sessionId) {

@@ -29,6 +29,8 @@ const ROUTE_KEYS = [
     'ATTEMPT_NOT_CORRECTED',
     'INITIALIZE_PAYMENT',
     'PROFILE',
+    'PAYMENT_CANCELED',
+    'PAYMENT_SUCCESS',
 ] as const;
 
 const EXAM_ROUTE_KEYS = [

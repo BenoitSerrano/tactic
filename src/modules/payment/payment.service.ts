@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import { config } from '../../config';
+import { logger } from '../../lib/logger';
 
 function buildPaymentService() {
     const stripe = new Stripe(config.STRIPE_SECRET_KEY);
@@ -9,7 +10,7 @@ function buildPaymentService() {
         extractSessionIdFromWebhookPayload,
     };
 
-    function extractSessionIdFromWebhookPayload(sig: string, payload: string): string | undefined {
+    function extractSessionIdFromWebhookPayload(sig: string, payload: string) {
         let event;
 
         try {
@@ -18,15 +19,31 @@ function buildPaymentService() {
                 sig,
                 config.STRIPE_WEBHOOK_ENDPOINT_SECRET,
             );
-        } catch (err: any) {
-            throw new Error(`Webhook Error: ${err.message}`);
+        } catch (err) {
+            logger.error(err);
+            throw new Error(`⚠️  Webhook signature verification failed.`);
         }
+        // Extract the object from the event.
+        const data = event.data;
+        const eventType = event.type;
 
-        if (
-            event.type === 'checkout.session.completed' ||
-            event.type === 'checkout.session.async_payment_succeeded'
-        ) {
-            return event.data.object.id;
+        switch (eventType) {
+            case 'checkout.session.completed':
+                // Payment is successful and the subscription is created.
+                // You should provision the subscription and save the customer ID to your database.
+                break;
+            case 'invoice.paid':
+                // Continue to provision the subscription as payments continue to be made.
+                // Store the status in your database and check when a user accesses your service.
+                // This approach helps you avoid hitting rate limits.
+                break;
+            case 'invoice.payment_failed':
+                // The payment failed or the customer does not have a valid payment method.
+                // The subscription becomes past_due. Notify your customer and send them to the
+                // customer portal to update their payment information.
+                break;
+            default:
+            // Unhandled event type
         }
     }
 
@@ -34,13 +51,13 @@ function buildPaymentService() {
         const session = await stripe.checkout.sessions.create({
             line_items: [
                 {
-                    price: 'price_1Pt9arChPUKuvtVnSI1CjE2K',
+                    price: 'price_1PvNU8ChPUKuvtVn8GoGM8Ua',
                     quantity: 1,
                 },
             ],
             mode: 'subscription',
-            success_url: `${config.CLIENT_URL}/teacher/payment/end?success=true`,
-            cancel_url: `${config.CLIENT_URL}/teacher/payment/end?canceled=true`,
+            success_url: `${config.CLIENT_URL}/teacher/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${config.CLIENT_URL}/teacher/payment/canceled`,
         });
         return { url: session.url };
     }

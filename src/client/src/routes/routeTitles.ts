@@ -31,6 +31,8 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     ATTEMPT_NOT_CORRECTED: 'Erreur - copie non corrigée',
     INITIALIZE_PAYMENT: 'Initialisation paiement',
     PROFILE: 'Profil',
+    PAYMENT_SUCCESS: 'Paiement réussi',
+    PAYMENT_CANCELED: 'Paiement annulé',
 };
 
 export { ROUTE_TITLES };

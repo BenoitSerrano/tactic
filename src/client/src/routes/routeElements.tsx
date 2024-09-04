@@ -28,6 +28,8 @@ import { ExamCollect } from '../pages/ExamCollect';
 import { ExamConsult } from '../pages/ExamConsult';
 import { InitializePayment } from '../pages/PaymentPages/InitializePayment';
 import { Profile } from '../pages/Profile';
+import { PaymentSuccess } from '../pages/PaymentPages/PaymentSuccess';
+import { PaymentCanceled } from '../pages/PaymentPages/PaymentCanceled';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -112,6 +114,8 @@ const ROUTE_ELEMENTS: Record<
     GROUPS: { isAdmin: true, element: <Groups /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
     INITIALIZE_PAYMENT: { element: <InitializePayment />, isAdmin: true },
+    PAYMENT_SUCCESS: { element: <PaymentSuccess />, isAdmin: true },
+    PAYMENT_CANCELED: { element: <PaymentCanceled />, isAdmin: true },
     PROFILE: { element: <Profile />, isAdmin: true },
 };
 
