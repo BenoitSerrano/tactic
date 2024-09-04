@@ -20,7 +20,7 @@ const theme = createTheme({
         MuiDialogTitle: { styleOverrides: { root: { fontSize: '1.5rem', fontWeight: 'bold' } } },
     },
     typography: {
-        fontFamily: ['quicksand'].join(','),
+        fontFamily: ['quicksand', 'Trebuchet MS'].join(','),
 
         h1: {
             fontSize: '3rem',
