@@ -16,6 +16,7 @@ const Container = styled('div')(({ theme }) => ({
     paddingLeft: theme.spacing(8),
     paddingRight: theme.spacing(8),
     paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
