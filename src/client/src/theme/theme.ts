@@ -1,20 +1,8 @@
 import { createTheme } from '@mui/material';
+import { palette } from './palette';
 
 const theme = createTheme({
-    palette: {
-        primary: {
-            light: '#CADDDB',
-            dark: '#00606E',
-            main: '#3C8E8C',
-        },
-        secondary: {
-            main: '#1647d8',
-        },
-        warning: { main: '#e87a00', light: '#f5b44d' },
-        common: { black: '#034D59' },
-        background: { default: '#CADDDB' },
-        divider: '##D0E0E3',
-    },
+    palette: palette,
     spacing: (value: number) => value * 8,
     components: {
         MuiDialogTitle: { styleOverrides: { root: { fontSize: '1.5rem', fontWeight: 'bold' } } },
