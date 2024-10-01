@@ -7,6 +7,8 @@ function buildStudentController() {
     const studentService = buildStudentService();
     const studentController = {
         createStudents,
+        getStudent,
+        updateStudentNames,
         getStudentsWithAttempts,
         fetchStudentByEmailForExam,
         deleteStudent,
@@ -32,6 +34,17 @@ function buildStudentController() {
 
     async function getStudentsWithAttempts(params: { urlParams: { groupId: string } }) {
         return studentService.getStudentsWithAttempts(params.urlParams.groupId);
+    }
+
+    async function getStudent(params: { urlParams: { studentId: string } }) {
+        return studentService.getStudent(params.urlParams.studentId);
+    }
+
+    async function updateStudentNames(params: {
+        urlParams: { studentId: string };
+        body: { firstName?: string; lastName?: string };
+    }) {
+        return studentService.updateStudentNames(params.urlParams.studentId, params.body);
     }
 
     async function fetchStudentByEmailForExam(params: {

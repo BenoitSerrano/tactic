@@ -26,6 +26,7 @@ import { ROUTE_PATHS } from './routePaths';
 import { ExamParameters } from '../pages/ExamParameters';
 import { ExamCollect } from '../pages/ExamCollect';
 import { ExamConsult } from '../pages/ExamConsult';
+import { StudentRegistration } from '../pages/StudentRegistration';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -59,6 +60,9 @@ const ROUTE_ELEMENTS: Record<
     },
     STUDENT_AUTHENTICATION: {
         element: <StudentAuthentication />,
+    },
+    STUDENT_REGISTRATION: {
+        element: <StudentRegistration />,
     },
     RESET_PASSWORD_FAILURE: {
         element: <ResetPasswordFailure />,

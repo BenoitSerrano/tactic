@@ -26,21 +26,10 @@ import { groupApiType } from '../types';
 import { ChangeGroupModal } from './ChangeGroupModal';
 import { Link } from '../../../components/Link';
 import { pathHandler } from '../../../lib/pathHandler';
+import { studentsSummaryType } from './types';
+import { computeShouldDisplayNameColumns } from './lib/computeShouldDisplayNameColumns';
 
-type sortColumnType = 'email' | 'createdDate' | string;
-
-type studentsSummaryType = {
-    students: Array<{
-        id: string;
-        email: string;
-        createdDate: string;
-        examStatus: Record<
-            string,
-            { attemptStatus: attemptStatusType; attemptId: string | undefined; mark: number }
-        >;
-    }>;
-    examInfos: Record<string, { name: string; totalPoints: number }>;
-};
+type sortColumnType = 'email' | 'lastName' | 'createdDate' | string;
 
 function Students() {
     const params = useParams();
@@ -87,6 +76,8 @@ function Students() {
 
     const sortedData = sortData(studentsQuery.data.students, activeSort, sortDirection);
     const groupsDifferentFromCurrent = groupsQuery.data.filter((group) => group.id !== groupId);
+
+    const shouldDisplayNameColumns = computeShouldDisplayNameColumns(studentsQuery.data);
     return (
         <>
             <Menu buttons={buttons} />
@@ -102,7 +93,7 @@ function Students() {
                     <TableRow>
                         <TableCell width={20}>N°</TableCell>
                         <TableCell width={100}>Actions</TableCell>
-                        <TableCell>
+                        <TableCell width={200}>
                             <TableSortLabel
                                 active={activeSort === 'email'}
                                 direction={sortDirection}
@@ -116,7 +107,26 @@ function Students() {
                                 Adresse e-mail
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell width={100}>
+
+                        {shouldDisplayNameColumns && (
+                            <TableCell width={150}>
+                                <TableSortLabel
+                                    active={activeSort === 'lastName'}
+                                    direction={sortDirection}
+                                    onClick={() => {
+                                        if (activeSort !== 'lastName') {
+                                            setActiveSort('lastName');
+                                        }
+                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                    }}
+                                >
+                                    Nom
+                                </TableSortLabel>
+                            </TableCell>
+                        )}
+                        {shouldDisplayNameColumns && <TableCell width={150}>Prénom</TableCell>}
+
+                        <TableCell>
                             <TableSortLabel
                                 active={activeSort === 'createdDate'}
                                 direction={sortDirection}
@@ -168,7 +178,10 @@ function Students() {
                                     </IconButton>
                                 </Tooltip>
                             </TableCell>
+
                             <TableCell>{student.email}</TableCell>
+                            {shouldDisplayNameColumns && <TableCell>{student.lastName}</TableCell>}
+                            {shouldDisplayNameColumns && <TableCell>{student.firstName}</TableCell>}
                             <TableCell>
                                 {time.formatToReadable(new Date(student.createdDate))}
                             </TableCell>
@@ -238,6 +251,9 @@ function Students() {
                     result =
                         new Date(resultA.createdDate).getTime() -
                         new Date(resultB.createdDate).getTime();
+                    break;
+                case 'lastName':
+                    result = resultA.lastName.localeCompare(resultB.lastName);
                     break;
                 default:
                     result =

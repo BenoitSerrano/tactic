@@ -11,47 +11,36 @@ import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
 import { LoadingIconButton } from '../../components/LoadingIconButton';
 
-type studentType = {
-    id: string;
-    firstName: string;
-    lastName: string;
-    attempts: Array<{ id: string; exam: { id: string } }>;
-};
-
-function StudentAuthentication() {
+function StudentRegistration() {
     const params = useParams();
     const examId = params.examId as string;
+    const studentId = params.studentId as string;
     const encodedAction = params.encodedAction as string;
-    const query = useQuery({ queryKey: ['exams', examId], queryFn: () => api.fetchExam(examId) });
+    const query = useQuery({
+        queryKey: ['students', studentId],
+        queryFn: () => api.fetchStudent({ studentId }),
+    });
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
 
-    const fetchStudentByEmailMutation = useMutation({
-        mutationFn: api.fetchStudentByEmailForExam,
-        onSuccess: (student: studentType) => {
-            const hasStudentAlreadyRegistered = student.firstName !== '' || student.lastName !== '';
-
-            const path = hasStudentAlreadyRegistered
-                ? pathHandler.getRoutePath('STUDENT_HOME', {
-                      examId,
-                      studentId: student.id,
-                      encodedAction,
-                  })
-                : pathHandler.getRoutePath('STUDENT_REGISTRATION', {
-                      examId,
-                      studentId: student.id,
-                      encodedAction,
-                  });
+    const updateStudentNamesMutation = useMutation({
+        mutationFn: api.updateStudentNames,
+        onSuccess: () => {
+            const path = pathHandler.getRoutePath('STUDENT_HOME', {
+                examId,
+                studentId,
+                encodedAction,
+            });
 
             navigate(path);
         },
-        onError: (error) => {
-            console.warn(error);
+        onError: () => {
             displayAlert({
-                text: `L'adresse "${email}" n'existe pas pour cet examen.`,
                 variant: 'error',
+                text: 'Une erreur est survenue. Veuillez réessayer de soumettre le formulaire.',
             });
         },
     });
@@ -67,23 +56,37 @@ function StudentAuthentication() {
             <ContentContainer>
                 <Card size="medium">
                     <TitleContainer>
-                        <Typography variant="h4">{query.data.name}</Typography>
+                        <Typography variant="h4">Inscription</Typography>
                     </TitleContainer>
+                    <SubtitleContainer>
+                        <Typography variant="h6">
+                            Avant de commencer, veuillez renseigner dans les champs ci-dessous votre
+                            prénom et nom.
+                        </Typography>
+                    </SubtitleContainer>
                     <Form onSubmit={handleSubmit}>
-                        <EmailTextField
+                        <StyledTextField
                             variant="outlined"
                             fullWidth
                             autoFocus
-                            label="Adresse e-mail"
-                            name="email"
-                            value={email}
-                            onChange={(event) => setEmail(event.target.value)}
+                            label="Prénom"
+                            name="firstName"
+                            value={firstName}
+                            onChange={(event) => setFirstName(event.target.value)}
+                        />
+                        <StyledTextField
+                            variant="outlined"
+                            fullWidth
+                            label="Nom de famille"
+                            name="lastName"
+                            value={lastName}
+                            onChange={(event) => setLastName(event.target.value)}
                         />
                         <LoadingIconButton
                             IconComponent={LoginIcon}
-                            isLoading={fetchStudentByEmailMutation.isPending}
-                            isDisabled={!email}
-                            label="Se connecter"
+                            isLoading={updateStudentNamesMutation.isPending}
+                            isDisabled={!firstName || !lastName}
+                            label="Aller à l'examen"
                             type="submit"
                         />
                     </Form>
@@ -93,12 +96,21 @@ function StudentAuthentication() {
     );
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        fetchStudentByEmailMutation.mutate({ email, examId });
+        updateStudentNamesMutation.mutate({ studentId, firstName, lastName });
         event.preventDefault();
     }
 }
 
 const TitleContainer = styled('div')(({ theme }) => ({
+    marginBottom: theme.spacing(3),
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
+}));
+
+const SubtitleContainer = styled('div')(({ theme }) => ({
     marginBottom: theme.spacing(3),
     display: 'flex',
     flexDirection: 'column',
@@ -114,7 +126,10 @@ const Form = styled('form')({
     flexDirection: 'column',
 });
 
-const EmailTextField = styled(TextField)(({ theme }) => ({ marginBottom: theme.spacing(1) }));
+const StyledTextField = styled(TextField)(({ theme }) => ({
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
+}));
 
 const ContentContainer = styled('div')({
     display: 'flex',
@@ -124,4 +139,4 @@ const ContentContainer = styled('div')({
     flex: 1,
 });
 
-export { StudentAuthentication };
+export { StudentRegistration };

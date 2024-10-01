@@ -22,6 +22,9 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_CONSULT: {
         path: '/teacher/exams/:examId/edit/consult',
     },
+    STUDENT_REGISTRATION: {
+        path: '/student/exams/:examId/students/:studentId/:encodedAction/register',
+    },
     STUDENT_HOME: {
         path: '/student/exams/:examId/students/:studentId/:encodedAction',
     },

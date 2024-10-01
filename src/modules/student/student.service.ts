@@ -16,6 +16,8 @@ function buildStudentService() {
         getAllStudents,
         createStudents,
         getStudents,
+        getStudent,
+        updateStudentNames,
         getStudentsWithAttempts,
         fetchStudentByEmailForExam,
         deleteStudent,
@@ -31,6 +33,24 @@ function buildStudentService() {
             select: { group: { id: true } },
         });
         return students;
+    }
+
+    async function getStudent(studentId: Student['id']) {
+        const student = await studentRepository.findOneOrFail({
+            where: { id: studentId },
+            select: { id: true, firstName: true, email: true, lastName: true },
+        });
+        return student;
+    }
+
+    async function updateStudentNames(
+        studentId: Student['id'],
+        names: { firstName?: string; lastName?: string },
+    ) {
+        return studentRepository.update(
+            { id: studentId },
+            { firstName: names.firstName, lastName: names.lastName },
+        );
     }
 
     async function getStudentsWithAttempts(groupId: Group['id']) {
@@ -87,7 +107,12 @@ function buildStudentService() {
                 email: criteria.email.trim().toLowerCase(),
                 group: { user: { id: examUserId } },
             },
-            select: { id: true, group: { id: true, user: { id: true } } },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                group: { id: true, user: { id: true } },
+            },
             relations: ['group', 'group.user'],
         });
     }

@@ -3,6 +3,7 @@ import { ROUTE_KEYS } from './routeKeys';
 const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     EXAM_TAKING: 'Examen en cours',
     STUDENT_HOME: 'Accueil étudiant',
+    STUDENT_REGISTRATION: 'Formulaire inscription étudiant',
     STUDENT_AUTHENTICATION: 'Connexion étudiant',
     RESET_PASSWORD_FAILURE: 'Échec de réinitialisation du mot de passe',
     RESET_PASSWORD_SUCCESS: 'Mot de passe réinitialisé',
