@@ -8,6 +8,9 @@ const theme = createTheme({
         MuiDialogTitle: { styleOverrides: { root: { fontSize: '1.5rem', fontWeight: 'bold' } } },
     },
     typography: {
+        button: {
+            textTransform: 'none',
+        },
         fontFamily: ['quicksand', 'Trebuchet MS'].join(','),
 
         h1: {

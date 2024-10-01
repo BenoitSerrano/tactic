@@ -11,7 +11,6 @@ function TexteLibreAnswering(props: {
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
     const [localAnswer, setLocalAnswer] = useState(props.currentAnswer || '');
-
     return (
         <Container>
             <TitleContainer>

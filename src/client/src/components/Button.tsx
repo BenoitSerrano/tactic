@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 function Button(props: {
     fullWidth?: boolean;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    onMouseDown?: React.MouseEventHandler<HTMLButtonElement>;
     children: string | ReactNode;
     variant?: 'contained' | 'outlined' | 'text';
     disabled?: boolean;
@@ -16,6 +17,7 @@ function Button(props: {
 }) {
     return (
         <MuiButton
+            onMouseDown={props.onMouseDown}
             color={props.color}
             autoFocus={props.autoFocus}
             title={props.title}
