@@ -40,6 +40,7 @@ const KeyboardContainer = styled('div')(({ theme }) => ({
     background: theme.palette.common.white,
     borderRadius: '2px',
     position: 'absolute',
+    zIndex: 1,
     boxShadow: theme.shadows[1],
     [theme.breakpoints.up('md')]: {
         marginLeft: '100%',
@@ -50,6 +51,10 @@ const KeyboardContainer = styled('div')(({ theme }) => ({
 }));
 const IconContainer = styled('div')(({ theme }) => ({
     position: 'absolute',
+    display: 'flex',
+    background: '#ffffffbb',
+    top: theme.spacing(1),
+
     [theme.breakpoints.up('md')]: {
         marginLeft: '100%',
     },

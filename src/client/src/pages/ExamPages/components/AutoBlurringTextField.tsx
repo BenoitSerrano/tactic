@@ -15,7 +15,7 @@ function AutoBlurringTextField(props: {
 
     const [isTextInputFocused, setIsTextInputFocused] = useState(false);
     return (
-        <Container>
+        <Container isFullWidth={props.isFullWidth} width={props.width}>
             <StyledTextField
                 inputRef={inputRef}
                 width={props.width}
@@ -78,10 +78,12 @@ const StyledTextField = styled(TextField)<{ width?: number }>((props) => ({
     },
 }));
 
-const Container = styled('div')(({ theme }) => ({
-    display: 'flex',
-    position: 'relative',
-    width: '100%',
-}));
+const Container = styled('div')<{ isFullWidth: boolean | undefined; width: number | undefined }>(
+    ({ theme, isFullWidth }) => ({
+        display: 'flex',
+        position: 'relative',
+        width: isFullWidth ? '100%' : undefined,
+    }),
+);
 
 export { AutoBlurringTextField };
