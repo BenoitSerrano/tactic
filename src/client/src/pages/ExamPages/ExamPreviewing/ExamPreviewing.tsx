@@ -5,7 +5,7 @@ import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
 import { QuestionsPreviewing } from './QuestionsPreviewing';
 import { examWithoutAnswersType } from '../types';
-import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
+import { StudentPage } from '../../../components/StudentPage';
 
 function ExamPreviewing() {
     const params = useParams();
@@ -23,7 +23,7 @@ function ExamPreviewing() {
     }
 
     return (
-        <NotLoggedInPage>
+        <StudentPage>
             <MainContainer>
                 <QuestionsPreviewing
                     title={query.data.name}
@@ -31,7 +31,7 @@ function ExamPreviewing() {
                     examId={examId}
                 />
             </MainContainer>
-        </NotLoggedInPage>
+        </StudentPage>
     );
 }
 

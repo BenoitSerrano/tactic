@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
 import { api } from '../../lib/api';
-import { NotLoggedInPage } from '../../components/NotLoggedInPage';
+import { StudentPage } from '../../components/StudentPage';
 import { Card } from '../../components/Card';
 import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
@@ -52,7 +52,7 @@ function StudentRegistration() {
     }
 
     return (
-        <NotLoggedInPage>
+        <StudentPage>
             <ContentContainer>
                 <Card size="medium">
                     <TitleContainer>
@@ -92,7 +92,7 @@ function StudentRegistration() {
                     </Form>
                 </Card>
             </ContentContainer>
-        </NotLoggedInPage>
+        </StudentPage>
     );
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {

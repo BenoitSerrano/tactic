@@ -1,5 +1,5 @@
 import { styled } from '@mui/material';
-import { NotLoggedInPage } from '../../components/NotLoggedInPage';
+import { StudentPage } from '../../components/StudentPage';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
@@ -21,13 +21,13 @@ function ExamDone() {
     }
 
     return (
-        <NotLoggedInPage>
+        <StudentPage>
             <MainContainer>
                 <TextContainer>
                     <ExamDoneText examEndText={query.data.endText} />
                 </TextContainer>
             </MainContainer>
-        </NotLoggedInPage>
+        </StudentPage>
     );
 }
 

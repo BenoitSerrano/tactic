@@ -2,6 +2,7 @@ import { TextField, styled } from '@mui/material';
 import { useRef, useState } from 'react';
 import { AccentVirtualKeyboard } from './AccentVirtualKeyboard/AccentVirtualKeyboard';
 import { addCharacterAtPosition } from './AccentVirtualKeyboard/lib/addCharacterAtPosition';
+import { useStudentConfig } from '../../../lib/studentConfig';
 
 function AutoBlurringTextField(props: {
     isMultiline?: boolean;
@@ -14,6 +15,7 @@ function AutoBlurringTextField(props: {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [isTextInputFocused, setIsTextInputFocused] = useState(false);
+    const { studentConfig } = useStudentConfig();
     return (
         <Container isFullWidth={props.isFullWidth} width={props.width}>
             <StyledTextField
@@ -29,7 +31,9 @@ function AutoBlurringTextField(props: {
                 value={props.value}
                 onChange={onChange}
             />
-            {isTextInputFocused && <AccentVirtualKeyboard onAddCharacter={onAddCharacter} />}
+            {studentConfig.shouldDisplayAccentKeyboard && isTextInputFocused && (
+                <AccentVirtualKeyboard onAddCharacter={onAddCharacter} />
+            )}
         </Container>
     );
 

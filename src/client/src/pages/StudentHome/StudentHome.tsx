@@ -2,7 +2,7 @@ import { styled } from '@mui/material';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
-import { NotLoggedInPage } from '../../components/NotLoggedInPage';
+import { StudentPage } from '../../components/StudentPage';
 import { Button } from '../../components/Button';
 import { Loader } from '../../components/Loader';
 import { pathHandler } from '../../lib/pathHandler';
@@ -83,7 +83,7 @@ function StudentHome() {
     }
 
     return (
-        <NotLoggedInPage>
+        <StudentPage>
             <ContentContainer>
                 <ExamStartText
                     name={examQuery.data.name}
@@ -94,7 +94,7 @@ function StudentHome() {
                     Lancer l'examen
                 </Button>
             </ContentContainer>
-        </NotLoggedInPage>
+        </StudentPage>
     );
 
     function launchExam() {

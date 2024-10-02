@@ -1,9 +1,9 @@
 import { Typography, styled } from '@mui/material';
-import { NotLoggedInPage } from '../components/NotLoggedInPage';
+import { StudentPage } from '../components/StudentPage';
 
 function AttemptNotCorrected() {
     return (
-        <NotLoggedInPage>
+        <StudentPage>
             <MainContainer>
                 <TextContainer>
                     <Typography variant="h4">
@@ -11,7 +11,7 @@ function AttemptNotCorrected() {
                     </Typography>
                 </TextContainer>
             </MainContainer>
-        </NotLoggedInPage>
+        </StudentPage>
     );
 }
 
