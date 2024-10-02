@@ -1,8 +1,9 @@
 import { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
+import { localStorage, studentOptionType } from './localStorage';
 
 type studentConfigHandlerType = {
     studentConfig: studentConfigType;
-    setStudentConfig: (config: studentConfigType) => void;
+    setStudentOption: (key: studentOptionType, value: boolean) => void;
 };
 
 type studentConfigType = {
@@ -11,16 +12,19 @@ type studentConfigType = {
 
 const StudentConfigHandlerContext = createContext<studentConfigHandlerType>({
     studentConfig: { shouldDisplayAccentKeyboard: false },
-    setStudentConfig: () => {},
+    setStudentOption: () => {},
 });
 
 function StudentConfigHandlerContextProvider(props: { children: ReactNode }): ReactElement {
+    const initialShouldDisplayAccentKeyboard = localStorage.studentConfigHandler.get(
+        'shouldDisplayAccentKeyboard',
+    );
     const [studentConfig, setStudentConfig] = useState<studentConfigType>({
-        shouldDisplayAccentKeyboard: false,
+        shouldDisplayAccentKeyboard: initialShouldDisplayAccentKeyboard,
     });
     const studentConfigHandler = {
         studentConfig,
-        setStudentConfig,
+        setStudentOption: setAndStoreStudentOption,
     };
 
     return (
@@ -28,6 +32,11 @@ function StudentConfigHandlerContextProvider(props: { children: ReactNode }): Re
             {props.children}
         </StudentConfigHandlerContext.Provider>
     );
+
+    function setAndStoreStudentOption(key: studentOptionType, value: boolean) {
+        localStorage.studentConfigHandler.set(key, value);
+        setStudentConfig({ ...studentConfig, [key]: value });
+    }
 }
 
 function useStudentConfig() {

@@ -6,7 +6,7 @@ import { useStudentConfig } from '../../lib/studentConfig';
 
 function SettingsIconButton() {
     const [areSettingsOpen, setAreSettingsOpen] = useState(false);
-    const { studentConfig, setStudentConfig } = useStudentConfig();
+    const { studentConfig, setStudentOption } = useStudentConfig();
     const options = buildOptions();
     return (
         <>
@@ -35,7 +35,7 @@ function SettingsIconButton() {
     }
 
     function onChangeShouldDisplayAccentKeyboard(isChecked: boolean) {
-        setStudentConfig({ ...studentConfig, shouldDisplayAccentKeyboard: isChecked });
+        setStudentOption('shouldDisplayAccentKeyboard', isChecked);
     }
 
     function openSettingsDrawer() {
