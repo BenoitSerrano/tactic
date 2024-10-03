@@ -3,6 +3,8 @@ import { attemptStatusType } from '../../types';
 type examResultApiType = {
     id: string;
     email: string;
+    firstName: string;
+    lastName: string;
     attemptId: string;
     startedAt: string;
     isTimeLimitExceeded: boolean;

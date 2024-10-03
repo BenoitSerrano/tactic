@@ -2,10 +2,12 @@ import { computeRoundMark } from '../../../lib/computeRoundMark';
 import { CONVERSION_DENOMINATOR, convertMark } from '../../../lib/convertMark';
 import { formatNumber } from '../../../lib/formatNumber';
 import { time } from '../../../lib/time';
-import { examResultsApiType } from '../types';
+import { examResultApiType, examResultsApiType } from '../types';
 
 const COLUMNS = [
     'email',
+    'firstName',
+    'lastName',
     'totalMark',
     'convertedMark',
     'actualDuration',
@@ -23,6 +25,8 @@ function createCsv(
     const roundedTotalPoints = computeRoundMark(examResultsApi.totalPoints);
     const HEADERS: Record<columnType, string> = {
         email: 'E-mail',
+        lastName: 'Nom de famille',
+        firstName: 'Prénom',
         convertedMark: `Note (/ ${CONVERSION_DENOMINATOR})`,
         totalMark: `Note (/ ${roundedTotalPoints})`,
         actualDuration: 'Durée',
@@ -36,47 +40,8 @@ function createCsv(
     for (const examResult of examResultsApi.results) {
         const row: string[] = [];
         for (const column of columns) {
-            switch (column) {
-                case 'email':
-                    row.push(examResult.email);
-                    break;
-                case 'convertedMark':
-                    const { roundedConvertedMark } = convertMark({
-                        totalMark: examResult.mark,
-                        totalPoints: examResultsApi.totalPoints,
-                    });
-
-                    row.push(formatNumber(Number(roundedConvertedMark)));
-                    break;
-                case 'totalMark':
-                    const { roundedTotalMark } = convertMark({
-                        totalMark: examResult.mark,
-                        totalPoints: examResultsApi.totalPoints,
-                    });
-                    row.push(formatNumber(Number(roundedTotalMark)));
-                    break;
-                case 'actualDuration':
-                    if (examResult.actualDuration === undefined) {
-                        row.push('-');
-                    } else {
-                        const readableActualDuration = time.formatToClock(
-                            examResult.actualDuration,
-                        );
-                        row.push(readableActualDuration);
-                    }
-                    break;
-                case 'roundTrips':
-                    row.push(`${examResult.roundTrips}`);
-                    break;
-                case 'timeSpentOutside':
-                    const timeSpentOutside = time.formatToClock(
-                        Math.floor(examResult.timeSpentOutside / 1000),
-                        {
-                            hideHours: true,
-                        },
-                    );
-                    row.push(timeSpentOutside);
-            }
+            const value = getValueForColumn(examResult, examResultsApi.totalPoints, column);
+            row.push(value);
         }
 
         rows.push(row);
@@ -94,6 +59,51 @@ function createCsv(
         csv.push(row);
     }
     return csv;
+}
+
+function getValueForColumn(
+    examResult: examResultApiType,
+    totalPoints: number,
+    column: columnType,
+): string {
+    switch (column) {
+        case 'email':
+            return examResult.email;
+        case 'convertedMark':
+            const { roundedConvertedMark } = convertMark({
+                totalMark: examResult.mark,
+                totalPoints: totalPoints,
+            });
+
+            return formatNumber(Number(roundedConvertedMark));
+        case 'totalMark':
+            const { roundedTotalMark } = convertMark({
+                totalMark: examResult.mark,
+                totalPoints: totalPoints,
+            });
+            return formatNumber(Number(roundedTotalMark));
+        case 'actualDuration':
+            if (examResult.actualDuration === undefined) {
+                return '-';
+            } else {
+                const readableActualDuration = time.formatToClock(examResult.actualDuration);
+                return readableActualDuration;
+            }
+        case 'roundTrips':
+            return `${examResult.roundTrips}`;
+        case 'timeSpentOutside':
+            const timeSpentOutside = time.formatToClock(
+                Math.floor(examResult.timeSpentOutside / 1000),
+                {
+                    hideHours: true,
+                },
+            );
+            return timeSpentOutside;
+        case 'lastName':
+            return examResult.lastName;
+        case 'firstName':
+            return examResult.firstName;
+    }
 }
 
 export { createCsv };

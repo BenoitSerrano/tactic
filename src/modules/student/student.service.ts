@@ -92,7 +92,7 @@ function buildStudentService() {
     async function getStudents(studentIds: Student['id'][]) {
         const students = await studentRepository.find({
             where: { id: In(studentIds) },
-            select: { id: true, email: true },
+            select: { id: true, email: true, firstName: true, lastName: true },
         });
         return students.reduce((acc, student) => {
             return { ...acc, [student.id]: student };

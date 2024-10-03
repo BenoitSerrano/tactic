@@ -6,6 +6,8 @@ describe('createCsv', () => {
             {
                 id: 'truc',
                 email: 'benoit.s@truc.fr',
+                firstName: 'Benoit',
+                lastName: 'S.',
                 attemptId: 'truc',
                 startedAt: '2023-07-24 07:00:00.000 +0200',
                 isTimeLimitExceeded: true,
@@ -18,6 +20,8 @@ describe('createCsv', () => {
             {
                 id: 'machin',
                 email: 'bartholome.g@truc.fr',
+                firstName: 'Bartholomé',
+                lastName: 'G.',
                 attemptId: 'machin',
                 startedAt: '2023-07-25 07:00:00.000 +0200',
                 isTimeLimitExceeded: true,
@@ -34,14 +38,20 @@ describe('createCsv', () => {
             examName: 'ESAJ - LEVEL 3 - FINAL EXAM',
             examDuration: 60,
         };
-        const columns = ['email' as const, 'totalMark' as const, 'convertedMark' as const];
+        const columns = [
+            'email' as const,
+            'lastName' as const,
+            'firstName' as const,
+            'totalMark' as const,
+            'convertedMark' as const,
+        ];
 
         const csv = createCsv(examResults, columns, { sortBy: 'email' });
 
         expect(csv).toEqual([
-            ['E-mail', 'Note (/ 65)', 'Note (/ 20)'],
-            ['bartholome.g@truc.fr', '52.5', '16.25'],
-            ['benoit.s@truc.fr', '30.75', '9.5'],
+            ['E-mail', 'Nom de famille', 'Prénom', 'Note (/ 65)', 'Note (/ 20)'],
+            ['bartholome.g@truc.fr', 'G.', 'Bartholomé', '52.5', '16.25'],
+            ['benoit.s@truc.fr', 'S.', 'Benoit', '30.75', '9.5'],
         ]);
     });
 });
