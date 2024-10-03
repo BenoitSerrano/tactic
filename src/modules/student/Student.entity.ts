@@ -20,6 +20,12 @@ export class Student implements StudentInterface {
     @Column({ default: '' })
     email: string;
 
+    @Column({ default: '' })
+    firstName: string;
+
+    @Column({ default: '' })
+    lastName: string;
+
     @OneToMany('Attempt', 'student')
     attempts: AttemptInterface[];
 

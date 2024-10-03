@@ -14,6 +14,8 @@ const api = {
     updateAttemptCheatingSummary,
     deleteAttempt,
     fetchStudents,
+    fetchStudent,
+    updateStudentNames,
     fetchStudentByEmailForExam,
     createStudents,
     deleteStudent,
@@ -238,6 +240,20 @@ async function deleteStudent(params: { studentId: string; groupId: string }) {
 async function fetchStudents(params: { groupId: string }) {
     const URL = `${BASE_URL}/groups/${params.groupId}/students`;
     return performApiCall(URL, 'GET');
+}
+
+async function fetchStudent(params: { studentId: string }) {
+    const URL = `${BASE_URL}/students/${params.studentId}`;
+    return performApiCall(URL, 'GET');
+}
+
+async function updateStudentNames(params: {
+    studentId: string;
+    firstName?: string;
+    lastName?: string;
+}) {
+    const URL = `${BASE_URL}/students/${params.studentId}/names`;
+    return performApiCall(URL, 'PATCH', { firstName: params.firstName, lastName: params.lastName });
 }
 
 async function createStudents(params: { emails: string[]; groupId: string }) {

@@ -23,6 +23,19 @@ const studentRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
+        path: '/students/:studentId',
+        isAuthenticated: false,
+        controller: studentController.getStudent,
+    },
+    {
+        method: 'PATCH',
+        path: '/students/:studentId/names',
+        isAuthenticated: false,
+        controller: studentController.updateStudentNames,
+        schema: Joi.object({ firstName: Joi.string(), lastName: Joi.string() }),
+    },
+    {
+        method: 'GET',
         path: '/exams/:examId/students/:email',
         isAuthenticated: false,
         controller: studentController.fetchStudentByEmailForExam,

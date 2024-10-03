@@ -19,6 +19,6 @@ const StyledLink = styled(ReactRouterLink)(({ theme }) => ({
     textDecoration: 'none',
     padding: theme.spacing(1),
     '&:hover': {
-        color: theme.palette.primary.dark,
+        textShadow: `0px 0px 1px ${theme.palette.primary.dark}`,
     },
 }));

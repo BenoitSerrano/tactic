@@ -7,6 +7,7 @@ function IconButton(props: {
     isLoading?: boolean;
     color?: 'success' | 'warning' | 'error' | 'primary' | 'default';
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
+    onMouseEnter?: (event: React.MouseEvent<HTMLElement>) => void;
     IconComponent: React.ElementType;
     disabled?: boolean;
     placement?: 'top' | 'bottom';
@@ -26,6 +27,7 @@ function IconButton(props: {
         return (
             <MuiIconButton
                 size={size}
+                onMouseEnter={props.onMouseEnter}
                 disabled={props.disabled}
                 onClick={props.onClick}
                 color={props.color}

@@ -399,6 +399,8 @@ function ExamResults() {
     function downloadResultsCsv(examResultsApi: examResultsApiType) {
         const csv = createCsv(examResultsApi, [
             'email',
+            'lastName',
+            'firstName',
             'totalMark',
             'convertedMark',
             'actualDuration',

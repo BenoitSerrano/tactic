@@ -1,16 +1,16 @@
 import { Typography, styled } from '@mui/material';
-import { questionWithoutAnswerType } from '../types';
+import { questionWithoutAnswerType } from '../../types';
 import { useState } from 'react';
-import { AutoBlurringTextField } from './AutoBlurringTextField';
+import { AutoBlurringTextField } from '../AutoBlurringTextField';
+import { WordCount } from './WordCount';
 
 function TexteLibreAnswering(props: {
     question: questionWithoutAnswerType;
     index: number;
-    currentAnswer: string;
+    currentAnswer: string | undefined;
     setCurrentAnswer: (newAnswer: string) => void;
 }) {
-    const [localAnswer, setLocalAnswer] = useState(props.currentAnswer);
-
+    const [localAnswer, setLocalAnswer] = useState(props.currentAnswer || '');
     return (
         <Container>
             <TitleContainer>
@@ -18,12 +18,16 @@ function TexteLibreAnswering(props: {
                     <IndexContainer>{props.index}</IndexContainer>. {props.question.title}
                 </Typography>
             </TitleContainer>
-            <AutoBlurringTextField
-                onBlur={onBlur}
-                onChange={setLocalAnswer}
-                isMultiline
-                value={localAnswer}
-            />
+            <TextFieldContainer>
+                <AutoBlurringTextField
+                    isFullWidth
+                    onBlur={onBlur}
+                    onChange={setLocalAnswer}
+                    isMultiline
+                    value={localAnswer}
+                />
+                <WordCount text={localAnswer} />
+            </TextFieldContainer>
         </Container>
     );
 
@@ -43,4 +47,10 @@ const Container = styled('div')({
     justifyContent: 'center',
     width: '100%',
 });
+
+const TextFieldContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+}));
 export { TexteLibreAnswering };

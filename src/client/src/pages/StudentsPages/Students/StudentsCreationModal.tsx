@@ -36,6 +36,7 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean; grou
             isOpen={props.isOpen}
             title="Ajouter des élèves"
             close={props.close}
+            size="small"
             confirmButtonLabel="Ajouter"
         >
             <TextField

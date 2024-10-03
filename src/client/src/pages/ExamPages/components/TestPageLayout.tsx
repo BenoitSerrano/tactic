@@ -112,8 +112,11 @@ const TitleContainer = styled('div')(({ theme }) => ({
 
 const Container = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
-        width: '60%',
-        padding: theme.spacing(3),
+        width: '65%',
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
+        paddingLeft: theme.spacing(6),
+        paddingRight: theme.spacing(6),
     },
     [theme.breakpoints.down('md')]: {
         width: '90%',

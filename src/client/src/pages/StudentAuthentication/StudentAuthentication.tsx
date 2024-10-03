@@ -13,6 +13,8 @@ import { LoadingIconButton } from '../../components/LoadingIconButton';
 
 type studentType = {
     id: string;
+    firstName: string;
+    lastName: string;
     attempts: Array<{ id: string; exam: { id: string } }>;
 };
 
@@ -29,11 +31,19 @@ function StudentAuthentication() {
     const fetchStudentByEmailMutation = useMutation({
         mutationFn: api.fetchStudentByEmailForExam,
         onSuccess: (student: studentType) => {
-            const path = pathHandler.getRoutePath('STUDENT_HOME', {
-                examId,
-                studentId: student.id,
-                encodedAction,
-            });
+            const hasStudentAlreadyRegistered = student.firstName !== '' || student.lastName !== '';
+
+            const path = hasStudentAlreadyRegistered
+                ? pathHandler.getRoutePath('STUDENT_HOME', {
+                      examId,
+                      studentId: student.id,
+                      encodedAction,
+                  })
+                : pathHandler.getRoutePath('STUDENT_REGISTRATION', {
+                      examId,
+                      studentId: student.id,
+                      encodedAction,
+                  });
 
             navigate(path);
         },

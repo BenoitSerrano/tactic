@@ -1,7 +1,7 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Typography, styled } from '@mui/material';
-import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
+import { StudentPage } from '../../../components/StudentPage';
 import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
 import { QuestionsAnswering } from './QuestionsAnswering';
@@ -68,9 +68,9 @@ function ExamTaking() {
 
     if (!query.data) {
         return (
-            <NotLoggedInPage>
+            <StudentPage>
                 <Loader />
-            </NotLoggedInPage>
+            </StudentPage>
         );
     }
     const pathKeyToNavigateTo = computePathKeyToNavigateTo(query.data, 'take');
@@ -110,7 +110,7 @@ function ExamTaking() {
     );
 
     return (
-        <NotLoggedInPage
+        <StudentPage
             title={
                 examCaption ? (
                     <TitleContainer>
@@ -131,7 +131,7 @@ function ExamTaking() {
                     onExamDone={onExamDone}
                 />
             </ExamPageContainer>
-        </NotLoggedInPage>
+        </StudentPage>
     );
 
     function onExamDone() {

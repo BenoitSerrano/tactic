@@ -21,12 +21,15 @@ function Modal(props: {
     return (
         <StyledModal open={props.isOpen} onClose={props.close}>
             <ModalComponent>
-                {!!props.title && (
-                    <ModalHeader>
-                        <Typography variant="h2">{props.title}</Typography>
-                    </ModalHeader>
-                )}
-                <ModalBody>{props.children}</ModalBody>
+                <div>
+                    {!!props.title && (
+                        <ModalHeader>
+                            <Typography variant="h2">{props.title}</Typography>
+                        </ModalHeader>
+                    )}
+                    <ModalBody>{props.children}</ModalBody>
+                </div>
+
                 <ModalFooter>
                     <Button color="inherit" onClick={onCancel}>
                         {props.cancelButtonLabel || 'Annuler'}
@@ -80,6 +83,7 @@ const modalDefaultProperties = {
     transform: 'translate(-50%, -50%)',
     display: 'flex',
     flexDirection: 'column' as const,
+    justifyContent: 'space-between',
     paddingLeft: '16px',
     paddingRight: '16px',
     overflow: 'auto',

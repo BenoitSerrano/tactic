@@ -11,7 +11,7 @@ const examAdaptator = {
 
 function convertExamWithAttemptsToResults(
     attempts: Attempt[],
-    students: Record<Student['id'], Pick<Student, 'id' | 'email'>>,
+    students: Record<Student['id'], Pick<Student, 'id' | 'email' | 'firstName' | 'lastName'>>,
     exam: {
         name: Exam['name'];
         duration: Exam['duration'];
@@ -50,6 +50,8 @@ function convertExamWithAttemptsToResults(
         const result = {
             id: student.id,
             email: student.email,
+            firstName: student.firstName,
+            lastName: student.lastName,
             startedAt: attempt.startedAt,
             actualDuration,
             attemptId: attempt.id,

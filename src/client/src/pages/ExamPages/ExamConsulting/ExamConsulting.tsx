@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Navigate, useParams } from 'react-router-dom';
 import { attemptWithAnswersApiType } from '../types';
 import { QuestionsConsulting } from './QuestionsConsulting';
-import { NotLoggedInPage } from '../../../components/NotLoggedInPage';
+import { StudentPage } from '../../../components/StudentPage';
 import { computePathKeyToNavigateTo } from '../../../lib/computePathKeyToNavigateTo';
 import { pathHandler } from '../../../lib/pathHandler';
 
@@ -36,7 +36,7 @@ function ExamConsulting() {
     }
 
     return (
-        <NotLoggedInPage>
+        <StudentPage>
             <MainContainer>
                 <QuestionsConsulting
                     studentEmail={attemptWithAnswersQuery.data.studentEmail}
@@ -44,7 +44,7 @@ function ExamConsulting() {
                     exam={attemptWithAnswersQuery.data.exam}
                 />
             </MainContainer>
-        </NotLoggedInPage>
+        </StudentPage>
     );
 }
 

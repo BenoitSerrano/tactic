@@ -16,6 +16,8 @@ function formatStudentsIntoStudentsSummary(
         return {
             id: studentWithAttempts.id,
             email: studentWithAttempts.email,
+            firstName: studentWithAttempts.firstName,
+            lastName: studentWithAttempts.lastName,
             createdDate: studentWithAttempts.createdDate,
             examStatus: computeExamStatus(
                 exams,
