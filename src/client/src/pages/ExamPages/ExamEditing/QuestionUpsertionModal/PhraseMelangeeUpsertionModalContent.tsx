@@ -49,10 +49,12 @@ function PhraseMelangeeUpsertionModalContent(props: {
                         subtitle={`Cliquez sur le bouton "Mélanger" pour changer l'ordre des mots à afficher à l'élève`}
                     >
                         <RowContainer>
-                            <Typography>
+                            <Title>
                                 <strong>{props.title}</strong>
-                            </Typography>
-                            <Button onClick={shufflePhrase}>Mélanger</Button>
+                            </Title>
+                            <Button variant="outlined" onClick={shufflePhrase}>
+                                Mélanger
+                            </Button>
                         </RowContainer>
                     </QuestionInputContainer>
                     <QuestionInputContainer
@@ -173,6 +175,8 @@ function PhraseMelangeeUpsertionModalContent(props: {
         props.setAcceptableAnswers([[{ grade: 'A', answer: newOriginalPhrase }]]);
     }
 }
+
+const Title = styled(Typography)(({ theme }) => ({ marginRight: theme.spacing(2) }));
 
 const MainContainer = styled('div')({ width: '100%' });
 
