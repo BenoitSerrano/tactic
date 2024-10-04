@@ -140,19 +140,21 @@ function PhraseMelangeeUpsertionModalContent(props: {
     }
 
     function shufflePhrase() {
-        setOriginalPhrase(originalPhrase.trim());
-        const shuffledPhrase = computeShuffledPhrase(originalPhrase);
+        const newOriginalPhrase = punctuationSpacesHandler.addSpaces(originalPhrase.trim());
+        setOriginalPhrase(newOriginalPhrase);
+
+        const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
         props.setTitle(shuffledPhrase);
     }
 
     function computeShuffledPhrase(originalPhrase: string) {
         const words = textSplitter.split(originalPhrase.trim());
         const shuffledCombination = combinator.generate(words.length);
-        const IsolatedWords = [];
+        const isolatedWords = [];
         for (let i = 0; i < shuffledCombination.length; i++) {
-            IsolatedWords.push(words[shuffledCombination[i]]);
+            isolatedWords.push(words[shuffledCombination[i]]);
         }
-        return IsolatedWords.join(' ');
+        return isolatedWords.join(' ');
     }
 
     function buildDeleteRightAnswer(index: number) {
@@ -164,13 +166,11 @@ function PhraseMelangeeUpsertionModalContent(props: {
     }
 
     function onChangeOriginalPhrase(event: React.ChangeEvent<HTMLInputElement>) {
+        setOriginalPhrase(event.target.value);
         const newOriginalPhrase = punctuationSpacesHandler.addSpaces(event.target.value);
+        props.setTitle(newOriginalPhrase);
 
-        setOriginalPhrase(newOriginalPhrase);
-        const shuffledPhrase = computeShuffledPhrase(newOriginalPhrase);
-
-        props.setTitle(shuffledPhrase);
-        props.setAcceptableAnswers([[{ grade: 'A', answer: newOriginalPhrase.trim() }]]);
+        props.setAcceptableAnswers([[{ grade: 'A', answer: newOriginalPhrase }]]);
     }
 }
 
