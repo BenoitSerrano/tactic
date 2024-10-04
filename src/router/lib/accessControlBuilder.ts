@@ -19,7 +19,7 @@ function assertHasRightPlanForCreation(entity: 'exam') {
                     return;
                 }
                 throw new Error(
-                    `Votre formule actuelle ("${plan.name}") ne vous permet pas de créer un examen supplémentaire.`,
+                    `Votre formule actuelle ("${plan.name}") ne vous permet pas de créer un examen supplémentaire. Veuillez écrire à benoit.serrano10@gmail.com pour passer au plan PRO ou UNLIMITED.`,
                 );
         }
     };
