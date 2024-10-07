@@ -35,7 +35,7 @@ import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 import { examResultsApiType } from './types';
 import { createCsv } from './lib/createCsv';
 
-type sortColumnType = 'email' | 'mark' | 'startedAt';
+type sortColumnType = 'email' | 'mark' | 'lastName' | 'firstName' | 'startedAt';
 
 function ExamResults() {
     const queryClient = useQueryClient();
@@ -52,7 +52,7 @@ function ExamResults() {
     });
 
     const [activeSort, setActiveSort] = useState<sortColumnType>('startedAt');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const { displayAlert } = useAlert();
     const deleteAttemptMutation = useMutation({
         mutationFn: api.deleteAttempt,
@@ -154,8 +154,10 @@ function ExamResults() {
                                 onClick={() => {
                                     if (activeSort !== 'startedAt') {
                                         setActiveSort('startedAt');
+                                        setSortDirection('asc');
+                                    } else {
+                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                     }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                 }}
                             >
                                 Heure début
@@ -171,11 +173,45 @@ function ExamResults() {
                                 onClick={() => {
                                     if (activeSort !== 'email') {
                                         setActiveSort('email');
+                                        setSortDirection('asc');
+                                    } else {
+                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                     }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                 }}
                             >
                                 Adresse e-mail
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell sortDirection={sortDirection}>
+                            <TableSortLabel
+                                active={activeSort === 'lastName'}
+                                direction={sortDirection}
+                                onClick={() => {
+                                    if (activeSort !== 'lastName') {
+                                        setActiveSort('lastName');
+                                        setSortDirection('asc');
+                                    } else {
+                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                    }
+                                }}
+                            >
+                                Nom de famille
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell sortDirection={sortDirection}>
+                            <TableSortLabel
+                                active={activeSort === 'firstName'}
+                                direction={sortDirection}
+                                onClick={() => {
+                                    if (activeSort !== 'firstName') {
+                                        setActiveSort('firstName');
+                                        setSortDirection('asc');
+                                    } else {
+                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                    }
+                                }}
+                            >
+                                Prénom
                             </TableSortLabel>
                         </TableCell>
                         <TableCell width={40}>
@@ -185,8 +221,10 @@ function ExamResults() {
                                 onClick={() => {
                                     if (activeSort !== 'mark') {
                                         setActiveSort('mark');
+                                        setSortDirection('asc');
+                                    } else {
+                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                     }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
                                 }}
                             >
                                 Note
@@ -262,6 +300,8 @@ function ExamResults() {
                                         {result.email}
                                     </Link>
                                 </TableCell>
+                                <TableCell>{result.lastName}</TableCell>
+                                <TableCell>{result.firstName}</TableCell>
                                 <TableCell>
                                     <MarksContainer>
                                         <div>
@@ -349,6 +389,8 @@ function ExamResults() {
         return data.map((result) => {
             return {
                 email: result.email,
+                firstName: result.firstName,
+                lastName: result.lastName,
                 attemptId: result.attemptId,
                 startedAt: result.startedAt,
                 isTimeLimitExceeded: result.isTimeLimitExceeded,
@@ -366,11 +408,15 @@ function ExamResults() {
         });
     }
 
-    function sortData<T extends { email: string; mark: number; startedAt: string }>(
-        data: Array<T>,
-        activeSort: sortColumnType,
-        sortDirection: 'asc' | 'desc',
-    ): Array<T> {
+    function sortData<
+        T extends {
+            email: string;
+            firstName: string;
+            lastName: string;
+            mark: number;
+            startedAt: string;
+        },
+    >(data: Array<T>, activeSort: sortColumnType, sortDirection: 'asc' | 'desc'): Array<T> {
         return data.sort((resultA, resultB) => {
             let result = 0;
             switch (activeSort) {
@@ -384,6 +430,13 @@ function ExamResults() {
                     result =
                         new Date(resultA.startedAt).getTime() -
                         new Date(resultB.startedAt).getTime();
+                    break;
+                case 'firstName':
+                    result = resultA.firstName.localeCompare(resultB.firstName);
+                    break;
+                case 'lastName':
+                    result = resultA.lastName.localeCompare(resultB.lastName);
+                    break;
             }
             if (sortDirection === 'asc') {
                 return result;
