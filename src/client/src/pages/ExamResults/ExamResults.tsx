@@ -5,6 +5,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
+import AddToDriveIcon from '@mui/icons-material/AddToDrive';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
 import { api } from '../../lib/api';
@@ -33,8 +34,8 @@ import { computeRoundMark } from '../../lib/computeRoundMark';
 import { IconLink } from '../../components/IconLink';
 import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 import { examResultsApiType } from './types';
-import { ExportModal } from './ExportModal';
 import { attemptStatusMapping } from './constants';
+import { downloadResultsToCsv } from './lib/downloadResultsToCsv';
 
 type sortColumnType =
     | 'email'
@@ -114,8 +115,6 @@ function ExamResults() {
         },
     });
 
-    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-
     if (!resultsQuery.data || !attemptsCountQuery.data) {
         if (resultsQuery.isLoading || !attemptsCountQuery.isLoading) {
             return <Loader />;
@@ -132,9 +131,21 @@ function ExamResults() {
     const menuButtons = [
         {
             title: 'Exporter les résultats',
-            onClick: openExportModal,
+            onClick: () => {},
             IconComponent: DownloadIcon,
             shape: 'outlined' as const,
+            popupMenu: [
+                {
+                    IconComponent: AddToDriveIcon,
+                    onClick: () => {},
+                    label: 'Exporter vers Google Sheets',
+                },
+                {
+                    IconComponent: DownloadIcon,
+                    onClick: () => downloadResultsToCsv(resultsQuery.data),
+                    label: 'Télécharger le .csv',
+                },
+            ],
         },
         {
             title: 'Actualiser',
@@ -153,11 +164,7 @@ function ExamResults() {
                 <Typography variant="h4">{subtite}</Typography>
             </TitleContainer>
             <Menu buttons={menuButtons} />
-            <ExportModal
-                isOpen={isExportModalOpen}
-                close={closeExportModal}
-                examResultsApi={resultsQuery.data}
-            />
+
             <Table>
                 <TableHead>
                     <TableRow>
@@ -293,10 +300,6 @@ function ExamResults() {
         </>
     );
 
-    function openExportModal() {
-        setIsExportModalOpen(true);
-    }
-
     function renderSortLabel(label: string, sortColumn: sortColumnType) {
         return (
             <TableSortLabel
@@ -314,10 +317,6 @@ function ExamResults() {
                 {label}
             </TableSortLabel>
         );
-    }
-
-    function closeExportModal() {
-        setIsExportModalOpen(false);
     }
 
     function computeDisplayedMark(mark: number, totalPoints: number, denominator: denominatorType) {
