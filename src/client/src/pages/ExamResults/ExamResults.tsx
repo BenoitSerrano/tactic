@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
-import { attemptsCountByAttemptStatusApiType } from '../../types';
+import { attemptsCountByAttemptStatusApiType, attemptStatusType } from '../../types';
 import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
 import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
@@ -34,8 +34,18 @@ import { IconLink } from '../../components/IconLink';
 import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 import { examResultsApiType } from './types';
 import { ExportModal } from './ExportModal';
+import { attemptStatusMapping } from './constants';
 
-type sortColumnType = 'email' | 'mark' | 'lastName' | 'firstName' | 'startedAt';
+type sortColumnType =
+    | 'email'
+    | 'mark'
+    | 'lastName'
+    | 'firstName'
+    | 'attemptStatus'
+    | 'startedAt'
+    | 'roundTrips'
+    | 'actualDuration'
+    | 'timeSpentOutside';
 
 function ExamResults() {
     const queryClient = useQueryClient();
@@ -154,92 +164,33 @@ function ExamResults() {
                         <TableCell width={20}>N°</TableCell>
                         <TableCell width={60}>Actions</TableCell>
                         <TableCell width={90}>
-                            <TableSortLabel
-                                active={activeSort === 'startedAt'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'startedAt') {
-                                        setActiveSort('startedAt');
-                                        setSortDirection('asc');
-                                    } else {
-                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                    }
-                                }}
-                            >
-                                Heure début
-                            </TableSortLabel>
+                            {renderSortLabel('Heure début', 'startedAt')}
                         </TableCell>
                         {!!resultsQuery.data.examDuration && (
                             <TableCell width={90}>Heure limite</TableCell>
                         )}
                         <TableCell sortDirection={sortDirection}>
-                            <TableSortLabel
-                                active={activeSort === 'email'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'email') {
-                                        setActiveSort('email');
-                                        setSortDirection('asc');
-                                    } else {
-                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                    }
-                                }}
-                            >
-                                Adresse e-mail
-                            </TableSortLabel>
+                            {renderSortLabel('Adresse e-mail', 'email')}
                         </TableCell>
                         <TableCell sortDirection={sortDirection}>
-                            <TableSortLabel
-                                active={activeSort === 'lastName'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'lastName') {
-                                        setActiveSort('lastName');
-                                        setSortDirection('asc');
-                                    } else {
-                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                    }
-                                }}
-                            >
-                                Nom de famille
-                            </TableSortLabel>
+                            {renderSortLabel('Nom de famille', 'lastName')}
                         </TableCell>
                         <TableCell sortDirection={sortDirection}>
-                            <TableSortLabel
-                                active={activeSort === 'firstName'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'firstName') {
-                                        setActiveSort('firstName');
-                                        setSortDirection('asc');
-                                    } else {
-                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                    }
-                                }}
-                            >
-                                Prénom
-                            </TableSortLabel>
+                            {renderSortLabel('Prénom', 'firstName')}
                         </TableCell>
-                        <TableCell width={40}>
-                            <TableSortLabel
-                                active={activeSort === 'mark'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'mark') {
-                                        setActiveSort('mark');
-                                        setSortDirection('asc');
-                                    } else {
-                                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                    }
-                                }}
-                            >
-                                Note
-                            </TableSortLabel>
+                        <TableCell width={40}>{renderSortLabel('Note', 'mark')}</TableCell>
+                        <TableCell width={80}>
+                            {renderSortLabel('Statut', 'attemptStatus')}
                         </TableCell>
-                        <TableCell width={80}>Statut</TableCell>
-                        <TableCell width={50}>Durée</TableCell>
-                        <TableCell width={50}>Sorties d'examen</TableCell>
-                        <TableCell width={50}>Temps total hors examen</TableCell>
+                        <TableCell width={50}>
+                            {renderSortLabel('Durée', 'actualDuration')}
+                        </TableCell>
+                        <TableCell width={50}>
+                            {renderSortLabel("Sorties d'examen", 'roundTrips')}
+                        </TableCell>
+                        <TableCell width={50}>
+                            {renderSortLabel('Temps total hors examen', 'timeSpentOutside')}
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -346,6 +297,25 @@ function ExamResults() {
         setIsExportModalOpen(true);
     }
 
+    function renderSortLabel(label: string, sortColumn: sortColumnType) {
+        return (
+            <TableSortLabel
+                active={activeSort === sortColumn}
+                direction={sortDirection}
+                onClick={() => {
+                    if (activeSort !== sortColumn) {
+                        setActiveSort(sortColumn);
+                        setSortDirection('asc');
+                    } else {
+                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                    }
+                }}
+            >
+                {label}
+            </TableSortLabel>
+        );
+    }
+
     function closeExportModal() {
         setIsExportModalOpen(false);
     }
@@ -429,29 +399,15 @@ function ExamResults() {
             lastName: string;
             mark: number;
             startedAt: string;
+            actualDuration: string;
+            attemptStatus: attemptStatusType;
+            roundTrips: number;
+            timeSpentOutside: string;
         },
     >(data: Array<T>, activeSort: sortColumnType, sortDirection: 'asc' | 'desc'): Array<T> {
         return data.sort((resultA, resultB) => {
-            let result = 0;
-            switch (activeSort) {
-                case 'email':
-                    result = resultA.email.localeCompare(resultB.email);
-                    break;
-                case 'mark':
-                    result = resultA.mark - resultB.mark;
-                    break;
-                case 'startedAt':
-                    result =
-                        new Date(resultA.startedAt).getTime() -
-                        new Date(resultB.startedAt).getTime();
-                    break;
-                case 'firstName':
-                    result = resultA.firstName.localeCompare(resultB.firstName);
-                    break;
-                case 'lastName':
-                    result = resultA.lastName.localeCompare(resultB.lastName);
-                    break;
-            }
+            const result = getCompareValue(activeSort, resultA, resultB);
+
             if (sortDirection === 'asc') {
                 return result;
             } else {
@@ -461,6 +417,35 @@ function ExamResults() {
                 return result > 0 ? -1 : 1;
             }
         });
+
+        function getCompareValue(activeSort: sortColumnType, resultA: T, resultB: T): number {
+            switch (activeSort) {
+                case 'email':
+                    return resultA.email.localeCompare(resultB.email);
+                case 'mark':
+                    return resultA.mark - resultB.mark;
+                case 'startedAt':
+                    return (
+                        new Date(resultA.startedAt).getTime() -
+                        new Date(resultB.startedAt).getTime()
+                    );
+                case 'firstName':
+                    return resultA.firstName.localeCompare(resultB.firstName);
+                case 'lastName':
+                    return resultA.lastName.localeCompare(resultB.lastName);
+                case 'attemptStatus':
+                    return (
+                        attemptStatusMapping[resultA.attemptStatus] -
+                        attemptStatusMapping[resultB.attemptStatus]
+                    );
+                case 'roundTrips':
+                    return resultA.roundTrips - resultB.roundTrips;
+                case 'timeSpentOutside':
+                    return resultA.timeSpentOutside.localeCompare(resultB.timeSpentOutside);
+                case 'actualDuration':
+                    return resultA.actualDuration.localeCompare(resultB.actualDuration);
+            }
+        }
     }
 }
 
