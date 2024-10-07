@@ -47,12 +47,14 @@ const MenuContainer = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(3),
 }));
 
-const ButtonContainer = styled('div')({
+const ButtonContainer = styled('div')(({ theme }) => ({
     minWidth: BUTTON_CONTAINER_HEIGHT,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-});
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+}));
 
 export { Menu };
