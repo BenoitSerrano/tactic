@@ -33,7 +33,7 @@ import { computeRoundMark } from '../../lib/computeRoundMark';
 import { IconLink } from '../../components/IconLink';
 import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 import { examResultsApiType } from './types';
-import { createCsv } from './lib/createCsv';
+import { ExportModal } from './ExportModal';
 
 type sortColumnType = 'email' | 'mark' | 'lastName' | 'firstName' | 'startedAt';
 
@@ -104,6 +104,8 @@ function ExamResults() {
         },
     });
 
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+
     if (!resultsQuery.data || !attemptsCountQuery.data) {
         if (resultsQuery.isLoading || !attemptsCountQuery.isLoading) {
             return <Loader />;
@@ -119,8 +121,8 @@ function ExamResults() {
     const subtite = computeSubtitle(attemptsCountQuery.data);
     const menuButtons = [
         {
-            title: 'Télécharger les résultats',
-            onClick: () => downloadResultsCsv(resultsQuery.data),
+            title: 'Exporter les résultats',
+            onClick: openExportModal,
             IconComponent: DownloadIcon,
             shape: 'outlined' as const,
         },
@@ -141,7 +143,11 @@ function ExamResults() {
                 <Typography variant="h4">{subtite}</Typography>
             </TitleContainer>
             <Menu buttons={menuButtons} />
-
+            <ExportModal
+                isOpen={isExportModalOpen}
+                close={closeExportModal}
+                examResultsApi={resultsQuery.data}
+            />
             <Table>
                 <TableHead>
                     <TableRow>
@@ -336,6 +342,14 @@ function ExamResults() {
         </>
     );
 
+    function openExportModal() {
+        setIsExportModalOpen(true);
+    }
+
+    function closeExportModal() {
+        setIsExportModalOpen(false);
+    }
+
     function computeDisplayedMark(mark: number, totalPoints: number, denominator: denominatorType) {
         switch (denominator) {
             case '20':
@@ -447,26 +461,6 @@ function ExamResults() {
                 return result > 0 ? -1 : 1;
             }
         });
-    }
-
-    function downloadResultsCsv(examResultsApi: examResultsApiType) {
-        const csv = createCsv(examResultsApi, [
-            'email',
-            'lastName',
-            'firstName',
-            'totalMark',
-            'convertedMark',
-            'actualDuration',
-            'roundTrips',
-            'timeSpentOutside',
-        ]);
-        const data = csv.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
-        const blob = new Blob([data], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Résultats - ${examResultsApi.examName}.csv`;
-        a.click();
     }
 }
 
