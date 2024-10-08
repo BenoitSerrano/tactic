@@ -137,7 +137,9 @@ function ExamResults() {
             popupMenu: [
                 {
                     IconComponent: AddToDriveIcon,
-                    onClick: () => {},
+                    onClick: () => {
+                        alert('Pas encore implémenté');
+                    },
                     label: 'Exporter vers Google Sheets',
                 },
                 {
