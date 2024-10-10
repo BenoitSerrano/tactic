@@ -4,6 +4,8 @@ import { Button } from './Button';
 
 type modalSizeType = 'small' | 'large';
 
+type buttonType = { label: string; IconComponent: React.ElementType; onClick: () => void };
+
 function Modal(props: {
     isConfirmDisabled?: boolean;
     children: React.ReactElement | Array<React.ReactElement | boolean>;
@@ -13,6 +15,7 @@ function Modal(props: {
     onCancel?: () => void;
     confirmButtonLabel?: string;
     cancelButtonLabel?: string;
+    buttons?: buttonType[];
     isConfirmLoading?: boolean;
     title?: string;
     size?: 'small' | 'large';
@@ -31,17 +34,32 @@ function Modal(props: {
                 </div>
 
                 <ModalFooter>
-                    <Button color="inherit" onClick={onCancel}>
-                        {props.cancelButtonLabel || 'Annuler'}
-                    </Button>
-                    <LoadingButton
-                        disabled={props.isConfirmDisabled}
-                        loading={props.isConfirmLoading}
-                        variant="contained"
-                        onClick={props.onConfirm}
-                    >
-                        {props.confirmButtonLabel || 'Confirmer'}
-                    </LoadingButton>
+                    <ButtonContainer>
+                        <Button color="inherit" onClick={onCancel}>
+                            {props.cancelButtonLabel || 'Annuler'}
+                        </Button>
+                    </ButtonContainer>
+                    {props.buttons?.map(({ IconComponent, label, onClick }) => (
+                        <ButtonContainer>
+                            <Button
+                                variant="outlined"
+                                onClick={onClick}
+                                startIcon={<IconComponent />}
+                            >
+                                {label}
+                            </Button>
+                        </ButtonContainer>
+                    ))}
+                    <ButtonContainer>
+                        <LoadingButton
+                            disabled={props.isConfirmDisabled}
+                            loading={props.isConfirmLoading}
+                            variant="contained"
+                            onClick={props.onConfirm}
+                        >
+                            {props.confirmButtonLabel || 'Confirmer'}
+                        </LoadingButton>
+                    </ButtonContainer>
                 </ModalFooter>
             </ModalComponent>
         </StyledModal>
@@ -90,6 +108,10 @@ const modalDefaultProperties = {
 
     backgroundColor: 'white',
 };
+const ButtonContainer = styled('div')(({ theme }) => ({
+    paddingRight: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+}));
 
 const SmallModalContent = styled('div')({
     ...modalDefaultProperties,

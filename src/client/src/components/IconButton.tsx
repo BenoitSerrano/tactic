@@ -6,7 +6,7 @@ function IconButton(props: {
     size?: 'small' | 'medium' | 'large';
     isLoading?: boolean;
     color?: 'success' | 'warning' | 'error' | 'primary' | 'default';
-    onClick: (event: React.MouseEvent<HTMLElement>) => void;
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onMouseEnter?: (event: React.MouseEvent<HTMLElement>) => void;
     IconComponent: React.ElementType;
     disabled?: boolean;

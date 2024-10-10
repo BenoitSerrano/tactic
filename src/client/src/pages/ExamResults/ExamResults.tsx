@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
-import { attemptsCountByAttemptStatusApiType } from '../../types';
+import { attemptsCountByAttemptStatusApiType, attemptStatusType } from '../../types';
 import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
 import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
@@ -33,9 +33,19 @@ import { computeRoundMark } from '../../lib/computeRoundMark';
 import { IconLink } from '../../components/IconLink';
 import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 import { examResultsApiType } from './types';
-import { createCsv } from './lib/createCsv';
+import { attemptStatusMapping } from './constants';
+import { downloadResultsToCsv } from './lib/downloadResultsToCsv';
 
-type sortColumnType = 'email' | 'mark' | 'startedAt';
+type sortColumnType =
+    | 'email'
+    | 'mark'
+    | 'lastName'
+    | 'firstName'
+    | 'attemptStatus'
+    | 'startedAt'
+    | 'roundTrips'
+    | 'actualDuration'
+    | 'timeSpentOutside';
 
 function ExamResults() {
     const queryClient = useQueryClient();
@@ -52,7 +62,7 @@ function ExamResults() {
     });
 
     const [activeSort, setActiveSort] = useState<sortColumnType>('startedAt');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const { displayAlert } = useAlert();
     const deleteAttemptMutation = useMutation({
         mutationFn: api.deleteAttempt,
@@ -119,10 +129,17 @@ function ExamResults() {
     const subtite = computeSubtitle(attemptsCountQuery.data);
     const menuButtons = [
         {
-            title: 'Télécharger les résultats',
-            onClick: () => downloadResultsCsv(resultsQuery.data),
+            title: 'Exporter les résultats',
+            onClick: () => {},
             IconComponent: DownloadIcon,
             shape: 'outlined' as const,
+            popupMenu: [
+                {
+                    IconComponent: DownloadIcon,
+                    onClick: () => downloadResultsToCsv(resultsQuery.data),
+                    label: 'Télécharger le .csv',
+                },
+            ],
         },
         {
             title: 'Actualiser',
@@ -148,54 +165,33 @@ function ExamResults() {
                         <TableCell width={20}>N°</TableCell>
                         <TableCell width={60}>Actions</TableCell>
                         <TableCell width={90}>
-                            <TableSortLabel
-                                active={activeSort === 'startedAt'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'startedAt') {
-                                        setActiveSort('startedAt');
-                                    }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                }}
-                            >
-                                Heure début
-                            </TableSortLabel>
+                            {renderSortLabel('Heure début', 'startedAt')}
                         </TableCell>
                         {!!resultsQuery.data.examDuration && (
                             <TableCell width={90}>Heure limite</TableCell>
                         )}
                         <TableCell sortDirection={sortDirection}>
-                            <TableSortLabel
-                                active={activeSort === 'email'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'email') {
-                                        setActiveSort('email');
-                                    }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                }}
-                            >
-                                Adresse e-mail
-                            </TableSortLabel>
+                            {renderSortLabel('Adresse e-mail', 'email')}
                         </TableCell>
-                        <TableCell width={40}>
-                            <TableSortLabel
-                                active={activeSort === 'mark'}
-                                direction={sortDirection}
-                                onClick={() => {
-                                    if (activeSort !== 'mark') {
-                                        setActiveSort('mark');
-                                    }
-                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                }}
-                            >
-                                Note
-                            </TableSortLabel>
+                        <TableCell sortDirection={sortDirection}>
+                            {renderSortLabel('Nom de famille', 'lastName')}
                         </TableCell>
-                        <TableCell width={80}>Statut</TableCell>
-                        <TableCell width={50}>Durée</TableCell>
-                        <TableCell width={50}>Sorties d'examen</TableCell>
-                        <TableCell width={50}>Temps total hors examen</TableCell>
+                        <TableCell sortDirection={sortDirection}>
+                            {renderSortLabel('Prénom', 'firstName')}
+                        </TableCell>
+                        <TableCell width={40}>{renderSortLabel('Note', 'mark')}</TableCell>
+                        <TableCell width={80}>
+                            {renderSortLabel('Statut', 'attemptStatus')}
+                        </TableCell>
+                        <TableCell width={50}>
+                            {renderSortLabel('Durée', 'actualDuration')}
+                        </TableCell>
+                        <TableCell width={50}>
+                            {renderSortLabel("Sorties d'examen", 'roundTrips')}
+                        </TableCell>
+                        <TableCell width={50}>
+                            {renderSortLabel('Temps total hors examen', 'timeSpentOutside')}
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -262,6 +258,8 @@ function ExamResults() {
                                         {result.email}
                                     </Link>
                                 </TableCell>
+                                <TableCell>{result.lastName}</TableCell>
+                                <TableCell>{result.firstName}</TableCell>
                                 <TableCell>
                                     <MarksContainer>
                                         <div>
@@ -295,6 +293,25 @@ function ExamResults() {
             </Table>
         </>
     );
+
+    function renderSortLabel(label: string, sortColumn: sortColumnType) {
+        return (
+            <TableSortLabel
+                active={activeSort === sortColumn}
+                direction={sortDirection}
+                onClick={() => {
+                    if (activeSort !== sortColumn) {
+                        setActiveSort(sortColumn);
+                        setSortDirection('asc');
+                    } else {
+                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                    }
+                }}
+            >
+                {label}
+            </TableSortLabel>
+        );
+    }
 
     function computeDisplayedMark(mark: number, totalPoints: number, denominator: denominatorType) {
         switch (denominator) {
@@ -349,6 +366,8 @@ function ExamResults() {
         return data.map((result) => {
             return {
                 email: result.email,
+                firstName: result.firstName,
+                lastName: result.lastName,
                 attemptId: result.attemptId,
                 startedAt: result.startedAt,
                 isTimeLimitExceeded: result.isTimeLimitExceeded,
@@ -366,25 +385,22 @@ function ExamResults() {
         });
     }
 
-    function sortData<T extends { email: string; mark: number; startedAt: string }>(
-        data: Array<T>,
-        activeSort: sortColumnType,
-        sortDirection: 'asc' | 'desc',
-    ): Array<T> {
+    function sortData<
+        T extends {
+            email: string;
+            firstName: string;
+            lastName: string;
+            mark: number;
+            startedAt: string;
+            actualDuration: string;
+            attemptStatus: attemptStatusType;
+            roundTrips: number;
+            timeSpentOutside: string;
+        },
+    >(data: Array<T>, activeSort: sortColumnType, sortDirection: 'asc' | 'desc'): Array<T> {
         return data.sort((resultA, resultB) => {
-            let result = 0;
-            switch (activeSort) {
-                case 'email':
-                    result = resultA.email.localeCompare(resultB.email);
-                    break;
-                case 'mark':
-                    result = resultA.mark - resultB.mark;
-                    break;
-                case 'startedAt':
-                    result =
-                        new Date(resultA.startedAt).getTime() -
-                        new Date(resultB.startedAt).getTime();
-            }
+            const result = getCompareValue(activeSort, resultA, resultB);
+
             if (sortDirection === 'asc') {
                 return result;
             } else {
@@ -394,26 +410,35 @@ function ExamResults() {
                 return result > 0 ? -1 : 1;
             }
         });
-    }
 
-    function downloadResultsCsv(examResultsApi: examResultsApiType) {
-        const csv = createCsv(examResultsApi, [
-            'email',
-            'lastName',
-            'firstName',
-            'totalMark',
-            'convertedMark',
-            'actualDuration',
-            'roundTrips',
-            'timeSpentOutside',
-        ]);
-        const data = csv.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
-        const blob = new Blob([data], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Résultats - ${examResultsApi.examName}.csv`;
-        a.click();
+        function getCompareValue(activeSort: sortColumnType, resultA: T, resultB: T): number {
+            switch (activeSort) {
+                case 'email':
+                    return resultA.email.localeCompare(resultB.email);
+                case 'mark':
+                    return resultA.mark - resultB.mark;
+                case 'startedAt':
+                    return (
+                        new Date(resultA.startedAt).getTime() -
+                        new Date(resultB.startedAt).getTime()
+                    );
+                case 'firstName':
+                    return resultA.firstName.localeCompare(resultB.firstName);
+                case 'lastName':
+                    return resultA.lastName.localeCompare(resultB.lastName);
+                case 'attemptStatus':
+                    return (
+                        attemptStatusMapping[resultA.attemptStatus] -
+                        attemptStatusMapping[resultB.attemptStatus]
+                    );
+                case 'roundTrips':
+                    return resultA.roundTrips - resultB.roundTrips;
+                case 'timeSpentOutside':
+                    return resultA.timeSpentOutside.localeCompare(resultB.timeSpentOutside);
+                case 'actualDuration':
+                    return resultA.actualDuration.localeCompare(resultB.actualDuration);
+            }
+        }
     }
 }
 

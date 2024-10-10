@@ -6,8 +6,8 @@ import { examResultApiType, examResultsApiType } from '../types';
 
 const COLUMNS = [
     'email',
-    'firstName',
     'lastName',
+    'firstName',
     'totalMark',
     'convertedMark',
     'actualDuration',
@@ -106,4 +106,5 @@ function getValueForColumn(
     }
 }
 
-export { createCsv };
+export type { columnType };
+export { createCsv, COLUMNS };

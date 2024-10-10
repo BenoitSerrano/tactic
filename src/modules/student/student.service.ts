@@ -49,7 +49,7 @@ function buildStudentService() {
     ) {
         return studentRepository.update(
             { id: studentId },
-            { firstName: names.firstName, lastName: names.lastName },
+            { firstName: names.firstName, lastName: names.lastName?.toUpperCase() },
         );
     }
 
