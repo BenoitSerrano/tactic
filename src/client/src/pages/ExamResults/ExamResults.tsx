@@ -5,7 +5,6 @@ import HistoryIcon from '@mui/icons-material/History';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmailerrorred';
 import LockIcon from '@mui/icons-material/Lock';
-import AddToDriveIcon from '@mui/icons-material/AddToDrive';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
 import { api } from '../../lib/api';
@@ -135,13 +134,6 @@ function ExamResults() {
             IconComponent: DownloadIcon,
             shape: 'outlined' as const,
             popupMenu: [
-                {
-                    IconComponent: AddToDriveIcon,
-                    onClick: () => {
-                        alert('Pas encore implémenté');
-                    },
-                    label: 'Exporter vers Google Sheets',
-                },
                 {
                     IconComponent: DownloadIcon,
                     onClick: () => downloadResultsToCsv(resultsQuery.data),
