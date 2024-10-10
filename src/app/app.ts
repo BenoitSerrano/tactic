@@ -18,12 +18,18 @@ async function runApp() {
     const app = Express();
 
     app.use('/api', cors({ origin: config.CLIENT_URL }), bodyParser.json(), router);
-    app.use('/static', Express.static(path.join(__dirname, '..', '..', '..', 'public')));
+    app.use(
+        '/static',
+        cors({ origin: config.CLIENT_URL }),
+        Express.static(path.join(__dirname, '..', '..', '..', 'public')),
+    );
 
     app.use(Express.static(path.join(__dirname, '..', '..', '..', 'src', 'client', 'build')));
 
     app.get('/*', securityResponseHeaderHandler, (_, res: Response) => {
-        res.sendFile(path.join(__dirname, '..', '..', '..', 'src', 'client', 'build', 'index.html'));
+        res.sendFile(
+            path.join(__dirname, '..', '..', '..', 'src', 'client', 'build', 'index.html'),
+        );
     });
 
     app.listen(config.PORT, async () => {
