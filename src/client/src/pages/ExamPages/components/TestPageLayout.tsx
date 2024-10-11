@@ -1,5 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import { ReactNode } from 'react';
+import { QuickScrollArrows } from './QuickScrollArrows';
 
 function TestPageLayout(props: {
     title: string;
@@ -19,6 +20,8 @@ function TestPageLayout(props: {
         : BasicContainer;
     return (
         <Container>
+            <QuickScrollArrows />
+
             <TitleContainer>
                 <Title variant="h2">{props.title}</Title>
                 {!!props.subtitle && <Subtitle variant="h5">{props.subtitle}</Subtitle>}
