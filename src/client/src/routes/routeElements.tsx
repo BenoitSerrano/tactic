@@ -28,6 +28,7 @@ import { ExamCollect } from '../pages/ExamCollect';
 import { ExamConsult } from '../pages/ExamConsult';
 import { StudentRegistration } from '../pages/StudentRegistration';
 import { NotFound } from '../pages/NotFound';
+import { StudentAuthenticationExamTakingRedirection } from '../pages/StudentAuthenticationExamTakingRedirection';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -114,6 +115,9 @@ const ROUTE_ELEMENTS: Record<
     TEACHER_HOME: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} /> },
     GROUPS: { isAdmin: true, element: <Groups /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
+    STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: {
+        element: <StudentAuthenticationExamTakingRedirection />,
+    },
     NOT_FOUND: { element: <NotFound /> },
 };
 

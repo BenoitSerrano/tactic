@@ -1,5 +1,4 @@
 import { styled, Typography } from '@mui/material';
-import { attemptActionEncoder } from '../lib/attemptActionEncoder';
 import { pathHandler } from '../lib/pathHandler';
 import { useAlert } from '../lib/alert';
 import { config } from '../config';
@@ -50,10 +49,8 @@ function ExamCollect() {
     }
 
     function computeUrl(examId: string) {
-        const encodedAction = attemptActionEncoder.encode('take');
-        const path = pathHandler.getRoutePath('STUDENT_AUTHENTICATION', {
+        const path = pathHandler.getRoutePath('STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED', {
             examId,
-            encodedAction,
         });
         const url = `${config.HOST_URL}${path}`;
         return url;

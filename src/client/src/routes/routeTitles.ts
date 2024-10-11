@@ -2,6 +2,7 @@ import { ROUTE_KEYS } from './routeKeys';
 
 const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     EXAM_TAKING: 'Examen en cours',
+    STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: 'Connexion étudiant',
     STUDENT_HOME: 'Accueil étudiant',
     STUDENT_REGISTRATION: 'Formulaire inscription étudiant',
     STUDENT_AUTHENTICATION: 'Connexion étudiant',

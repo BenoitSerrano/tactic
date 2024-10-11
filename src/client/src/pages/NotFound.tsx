@@ -1,8 +1,8 @@
 import { Typography, styled } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { Button } from '../components/Button';
 import { config } from '../config';
-import { useNavigate } from 'react-router-dom';
 import { pathHandler } from '../lib/pathHandler';
 
 function NotFound() {

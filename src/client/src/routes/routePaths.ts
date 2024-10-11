@@ -76,6 +76,7 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     },
     TEACHER_HOME: { path: `/teacher` },
     ATTEMPT_NOT_CORRECTED: { path: `/student/attempt-not-corrected` },
+    STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: { path: `/t/:examId` },
     NOT_FOUND: { path: '/*' },
 };
 
