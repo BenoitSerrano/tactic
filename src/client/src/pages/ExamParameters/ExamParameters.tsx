@@ -7,6 +7,7 @@ import { Loader } from '../../components/Loader';
 import { EditEdgeText } from './components/EditEdgeText';
 import { examApiType } from '../ExamList/types';
 import { Section } from '../../components/Section';
+import { ExamPageTitle } from '../../components/ExamPageTitle';
 
 function ExamParameters() {
     const params = useParams();
@@ -21,8 +22,11 @@ function ExamParameters() {
             return <div />;
         }
     }
+    const examName = examQuery.data.name;
     return (
         <Container>
+            <ExamPageTitle examName={examName} />
+
             <Typography variant="h3">Paramètres</Typography>
             <Section title="Durée de l'examen">
                 <EditableDuration exam={examQuery.data} />

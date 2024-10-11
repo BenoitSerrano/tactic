@@ -6,13 +6,32 @@ import { useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Link } from '../components/Link';
 import { Section } from '../components/Section';
+import { examApiType } from './ExamList/types';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../lib/api';
+import { Loader } from '../components/Loader';
+import { ExamPageTitle } from '../components/ExamPageTitle';
 
 function ExamCollect() {
     const { displayAlert } = useAlert();
     const params = useParams();
     const url = computeUrl(params.examId as string);
+    const examQuery = useQuery<examApiType>({
+        queryKey: [`exams`, params.examId],
+        queryFn: () => api.fetchExam(params.examId as string),
+    });
+    if (!examQuery.data) {
+        if (examQuery.isLoading) {
+            return <Loader />;
+        } else {
+            return <div />;
+        }
+    }
+    const examName = examQuery.data.name;
     return (
         <Container>
+            <ExamPageTitle examName={examName} />
+
             <Typography variant="h3">Collecte des réponses</Typography>
             <Section title="Adresse de passage de l'examen">
                 <Typography variant="h6">
