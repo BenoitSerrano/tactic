@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { NotFound } from '../pages/NotFound';
 import { AdminPage } from '../components/AdminPage';
 
 import { ROUTE_ELEMENTS } from './routeElements';
@@ -37,8 +36,6 @@ function Router() {
                     />
                 );
             })}
-
-            <Route path="/*" element={<NotFound />} />
         </Routes>
     );
 }

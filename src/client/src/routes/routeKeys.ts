@@ -28,6 +28,7 @@ const ROUTE_KEYS = [
     'GROUPS',
     'EXAM_ARCHIVED',
     'ATTEMPT_NOT_CORRECTED',
+    'NOT_FOUND',
 ] as const;
 
 const EXAM_ROUTE_KEYS = [
