@@ -33,8 +33,6 @@ const specificCspDirectives = {
         'storage.crisp.chat',
         'wss://stream.relay.crisp.chat',
         '*.ingest.sentry.io',
-        'cdn.jsdelivr.net',
-        'unpkg.com',
     ],
     'worker-src': ["'self'", 'blob:'],
 };

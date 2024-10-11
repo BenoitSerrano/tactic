@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material';
 import { palette } from './palette';
 
 const theme = createTheme({
-    palette: palette,
+    palette,
     spacing: (value: number) => value * 8,
     components: {
         MuiDialogTitle: { styleOverrides: { root: { fontSize: '1.5rem', fontWeight: 'bold' } } },
