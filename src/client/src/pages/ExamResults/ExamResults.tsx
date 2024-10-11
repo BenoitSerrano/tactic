@@ -35,6 +35,7 @@ import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
 import { examResultsApiType } from './types';
 import { attemptStatusMapping } from './constants';
 import { downloadResultsToCsv } from './lib/downloadResultsToCsv';
+import { ExamPageTitle } from '../../components/ExamPageTitle';
 
 type sortColumnType =
     | 'email'
@@ -125,7 +126,6 @@ function ExamResults() {
 
     const sortedData = sortData(formattedData, activeSort, sortDirection);
     const sortedAttemptIds = sortedData.map(({ attemptId }) => attemptId);
-    const title = resultsQuery.data.examName;
     const subtite = computeSubtitle(attemptsCountQuery.data);
     const menuButtons = [
         {
@@ -154,7 +154,7 @@ function ExamResults() {
     return (
         <>
             <TitleContainer>
-                <Typography variant="h3">{title}</Typography>
+                <ExamPageTitle examName={resultsQuery.data.examName} />
                 <Typography variant="h4">{subtite}</Typography>
             </TitleContainer>
             <Menu buttons={menuButtons} />

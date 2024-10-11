@@ -8,6 +8,9 @@ import { Button } from '../components/Button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Section } from '../components/Section';
+import { ExamPageTitle } from '../components/ExamPageTitle';
+import { examApiType } from './ExamList/types';
+import { Loader } from '../components/Loader';
 
 type shouldDisplayRightAnswersApiType = { shouldDisplayRightAnswers: boolean };
 
@@ -21,6 +24,11 @@ function ExamConsult() {
         queryKey: ['exams', examId, 'shouldDisplayRightAnswers'],
         queryFn: () => api.fetchShouldDisplayRightAnswersForExamId({ examId }),
     });
+    const examQuery = useQuery<examApiType>({
+        queryKey: [`exams`, params.examId],
+        queryFn: () => api.fetchExam(params.examId as string),
+    });
+
     const updateShouldDisplayRightAnswersMutation = useMutation({
         mutationFn: api.updateShouldDisplayRightAnswersForExamId,
         onSuccess: () => {
@@ -37,8 +45,18 @@ function ExamConsult() {
         },
     });
 
+    if (!examQuery.data) {
+        if (examQuery.isLoading) {
+            return <Loader />;
+        } else {
+            return <div />;
+        }
+    }
+    const examName = examQuery.data.name;
+
     return (
         <Container>
+            <ExamPageTitle examName={examName} />
             <Typography variant="h3">Consultation des copies</Typography>
             <Section title="Adresse de consultation de la copie">
                 <Typography variant="h6">
