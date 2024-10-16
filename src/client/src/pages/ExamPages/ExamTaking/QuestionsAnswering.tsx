@@ -16,6 +16,7 @@ import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { LastUpdatedAtIndication } from './LastUpdatedAtIndication';
 import { useExerciseIndex } from '../lib/useExerciseIndex';
 import { EmptyExam } from '../components/EmptyExam';
+import { ExercisesSummary } from '../components/ExercisesSummary';
 
 const DELAY_BETWEEN_SHOWING_ALERT_AND_END_OF_EXAM = 30 * 1000;
 
@@ -111,6 +112,7 @@ function QuestionsAnswering(props: {
 
     return (
         <>
+            {/* <ExercisesSummary /> */}
             <TestPageLayout
                 shouldPreventTextSelection
                 highlightedResult={totalResult}

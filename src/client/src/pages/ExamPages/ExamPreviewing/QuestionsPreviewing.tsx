@@ -10,6 +10,8 @@ import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { useExerciseIndex } from '../lib/useExerciseIndex';
 import { EmptyExam } from '../components/EmptyExam';
+import { ExercisesSummary } from '../components/ExercisesSummary';
+import { computeExercisesSummary } from '../lib/computeExercisesSummary';
 
 function QuestionsPreviewing(props: {
     title: string;
@@ -19,15 +21,14 @@ function QuestionsPreviewing(props: {
     const [currentAnswers, setCurrentAnswers] = useState<Record<number, string>>({});
     const totalResult = computeTotalPoints(props.exercises);
     const exerciseIndexes = useExerciseIndex(props.exercises);
-    const exercise =
-        exerciseIndexes.current !== undefined
-            ? props.exercises[exerciseIndexes.current]
-            : undefined;
-    if (!exercise) {
+    const current = exerciseIndexes.current;
+    const exercise = current !== undefined ? props.exercises[current] : undefined;
+    if (current === undefined || !exercise) {
         return <EmptyExam title={props.title} />;
     }
+    const exercisesSummary = computeExercisesSummary(props.exercises, currentAnswers);
 
-    const progress = computeExerciseProgress(exercise.questions, currentAnswers);
+    const progress = exercisesSummary[current].progress;
     const exerciseIndication = {
         progress,
         hideMark: true,
@@ -35,6 +36,7 @@ function QuestionsPreviewing(props: {
 
     return (
         <>
+            <ExercisesSummary currentExerciseIndex={current} exercisesSummary={exercisesSummary} />
             <TestPageLayout studentEmail="-" title={props.title} highlightedResult={totalResult}>
                 <>
                     <ExerciseContainer

@@ -1,4 +1,4 @@
-import { LinearProgress, Typography, styled, Tooltip } from '@mui/material';
+import { Typography, styled, Tooltip } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import { ReactNode } from 'react';
 import Markdown from 'react-markdown';
@@ -9,9 +9,9 @@ import {
     exerciseIndicationType,
 } from '../lib/computeExerciseIndication';
 import { computeHash, exerciseIndexesType } from '../lib/useExerciseIndex';
-import { IconButton } from '../../../components/IconButton';
 import { Button } from '../../../components/Button';
 import { useNavigate } from 'react-router-dom';
+import { ProgressBar } from './ProgressBar';
 
 const EXERCISE_ACCORDION_SUMMARY_HEIGHT = 52;
 
@@ -42,14 +42,7 @@ function ExerciseContainer<
                         </ExercisePointsContainer>
                         <Typography variant="h3">{props.exercise.name}</Typography>
                     </ExerciseHeaderContainer>
-                    {progress !== undefined && (
-                        <ProgressWithLabelContainer>
-                            <Typography variant="body2">{progress}%</Typography>
-                            <ProgressContainer>
-                                <LinearProgress variant="determinate" value={progress} />
-                            </ProgressContainer>
-                        </ProgressWithLabelContainer>
-                    )}
+                    {progress !== undefined && <ProgressBar progress={progress} />}
                 </TitleContainer>
             </AccordionSummary>
 
@@ -104,17 +97,6 @@ const Container = styled('div')(({ theme }) => ({
     flex: 1,
     boxShadow: 'none' as const,
     elevation: 0,
-}));
-
-const ProgressWithLabelContainer = styled('div')({
-    width: '15%',
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-});
-
-const ProgressContainer = styled('div')(({ theme }) => ({
-    width: '100%',
 }));
 
 const AccordionContent = styled('div')({ padding: 0 });
