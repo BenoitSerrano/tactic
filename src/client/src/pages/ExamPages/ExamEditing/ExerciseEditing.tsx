@@ -6,7 +6,7 @@ import {
     OnDragEndResponder,
 } from 'react-beautiful-dnd';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import { ExerciseContainer } from '../components/ExerciseContainer';
+import { ExerciseAccordionContainer } from '../components/ExerciseAccordionContainer';
 import { exerciseWithQuestionsType, questionType, questionUpsertionModalStatusType } from './types';
 import { tableHandler } from '../../../lib/tableHandler';
 import { useEffect, useState } from 'react';
@@ -47,7 +47,7 @@ function ExerciseEditing(props: {
         setOrderedQuestionIds(newOrderedQuestionIds);
     }, [props.exercise]);
     return (
-        <ExerciseContainer
+        <ExerciseAccordionContainer
             isExpanded={props.isExpanded}
             onChangeExpanded={props.onExerciseExpandedChange}
             key={`exercise-${props.exercise.id}`}
@@ -125,7 +125,7 @@ function ExerciseEditing(props: {
                     exerciseId={props.exercise.id}
                 />
             )}
-        </ExerciseContainer>
+        </ExerciseAccordionContainer>
     );
 
     function openQuestionEditingModal(question: questionType) {
