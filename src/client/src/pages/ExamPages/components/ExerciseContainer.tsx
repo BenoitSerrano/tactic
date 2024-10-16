@@ -1,12 +1,17 @@
 import { LinearProgress, Typography, styled, Tooltip } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import { ReactNode } from 'react';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Markdown from 'react-markdown';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
     computeExerciseIndication,
     exerciseIndicationType,
 } from '../lib/computeExerciseIndication';
+import { computeHash, exerciseIndexesType } from '../lib/useExerciseIndex';
+import { IconButton } from '../../../components/IconButton';
+import { Button } from '../../../components/Button';
+import { useNavigate } from 'react-router-dom';
 
 const EXERCISE_ACCORDION_SUMMARY_HEIGHT = 52;
 
@@ -14,11 +19,13 @@ function ExerciseContainer<
     questionT extends { points: number; mark?: number | undefined },
     exerciseT extends { id: number; name: string; instruction: string; questions: questionT[] },
 >(props: {
+    exerciseIndexes: exerciseIndexesType;
     exercise: exerciseT;
     children: ReactNode;
     warningToDisplay?: string;
     indication?: exerciseIndicationType;
 }) {
+    const navigate = useNavigate();
     const { result, progress } = computeExerciseIndication(props.exercise, props.indication);
     return (
         <Container>
@@ -52,8 +59,40 @@ function ExerciseContainer<
                 </Typography>
                 {props.children}
             </AccordionContent>
+            <FooterContainer>
+                <Button
+                    disabled={props.exerciseIndexes.previous === undefined}
+                    onClick={onPreviousExerciseClick}
+                    startIcon={<ArrowBackIcon />}
+                >
+                    Exercice précédent
+                </Button>
+                <Button
+                    disabled={props.exerciseIndexes.next === undefined}
+                    onClick={onNextExerciseClick}
+                    endIcon={<ArrowForwardIcon />}
+                >
+                    Exercice suivant
+                </Button>
+            </FooterContainer>
         </Container>
     );
+
+    function onPreviousExerciseClick() {
+        if (props.exerciseIndexes.previous === undefined) {
+            return;
+        }
+        const hash = computeHash(props.exerciseIndexes.previous);
+        navigate(hash);
+    }
+
+    function onNextExerciseClick() {
+        if (props.exerciseIndexes.next === undefined) {
+            return;
+        }
+        const hash = computeHash(props.exerciseIndexes.next);
+        navigate(hash);
+    }
 }
 
 export { ExerciseContainer, EXERCISE_ACCORDION_SUMMARY_HEIGHT };
@@ -103,3 +142,7 @@ const AccordionSummary = styled('div')({
 
 const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center' });
 const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
+const FooterContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'space-between',
+}));
