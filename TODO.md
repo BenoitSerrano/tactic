@@ -1,2 +1,4 @@
--   renommer en AccordionExerciseContainer et créer ExerciseContainer
--
+-   ajouter calcul de prevIndex et nextIndex pour tableau d'exercises, les envoyer à exerciseContainer
+-   ajouter bouton Suivant et Précédent à ExerciseContainer, qui pointe vers la même URL mais avec un index différent en #
+-   créer un composant ExamSummary qui prend en params tous les exercices
+-   créer une fonction qui computeExamSummary et qui renvoie le pourcentage pour chaque exo, les noms
