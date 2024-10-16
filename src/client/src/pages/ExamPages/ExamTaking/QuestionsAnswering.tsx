@@ -89,7 +89,6 @@ function QuestionsAnswering(props: {
             initialCurrentAnswers[question.id] = question.currentAnswer;
         }
     }
-    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
     const totalResult = computeTotalPoints(props.exercises);
@@ -128,12 +127,7 @@ function QuestionsAnswering(props: {
 
                     return (
                         <Fragment key={`exercise-${exercise.id}`}>
-                            <ExerciseContainer
-                                isExpanded={currentExerciseExpanded === exercise.id}
-                                onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                                exercise={exercise}
-                                indication={exerciseIndication}
-                            >
+                            <ExerciseContainer exercise={exercise} indication={exerciseIndication}>
                                 {exercise.questions.map((question, index) => {
                                     const isLastQuestion = index === exercise.questions.length - 1;
                                     return (
@@ -218,12 +212,6 @@ function QuestionsAnswering(props: {
             attemptId: props.attemptId,
             answers: newCurrentAnswers,
         });
-    }
-
-    function buildOnExerciseExpandedChange(exerciseId: number) {
-        return (_: any, isExpanded: boolean) => {
-            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
-        };
     }
 }
 

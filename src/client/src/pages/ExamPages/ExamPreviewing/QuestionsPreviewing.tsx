@@ -15,7 +15,6 @@ function QuestionsPreviewing(props: {
     exercises: Array<exerciseWithoutAnswersType>;
 }) {
     const [currentAnswers, setCurrentAnswers] = useState<Record<number, string>>({});
-    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
     const totalResult = computeTotalPoints(props.exercises);
 
     return (
@@ -32,8 +31,6 @@ function QuestionsPreviewing(props: {
                     return (
                         <>
                             <ExerciseContainer
-                                isExpanded={currentExerciseExpanded === exercise.id}
-                                onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
                                 key={`exercise-${exercise.id}`}
                                 exercise={exercise}
                                 indication={exerciseIndication}
@@ -71,11 +68,6 @@ function QuestionsPreviewing(props: {
             </TestPageLayout>
         </>
     );
-    function buildOnExerciseExpandedChange(exerciseId: number) {
-        return (_: any, isExpanded: boolean) => {
-            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
-        };
-    }
 }
 
 const QuestionIndicatorsContainer = styled('div')({

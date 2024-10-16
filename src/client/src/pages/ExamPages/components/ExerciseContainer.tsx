@@ -1,12 +1,4 @@
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary as MuiAccordionSummary,
-    LinearProgress,
-    Typography,
-    styled,
-    Tooltip,
-} from '@mui/material';
+import { LinearProgress, Typography, styled, Tooltip } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import { ReactNode } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -24,25 +16,13 @@ function ExerciseContainer<
 >(props: {
     exercise: exerciseT;
     children: ReactNode;
-    isExpanded: boolean;
     warningToDisplay?: string;
-    onChangeExpanded: (_: any, isExpanded: boolean) => void;
     indication?: exerciseIndicationType;
 }) {
     const { result, progress } = computeExerciseIndication(props.exercise, props.indication);
     return (
-        <Container
-            onChange={props.onChangeExpanded}
-            expanded={props.isExpanded}
-            disableGutters
-            key={'exercise-' + props.exercise.id}
-            sx={{
-                '&:before': {
-                    display: 'none',
-                },
-            }}
-        >
-            <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />}>
+        <Container>
+            <AccordionSummary>
                 <TitleContainer>
                     <ExerciseHeaderContainer>
                         {!!props.warningToDisplay && (
@@ -78,7 +58,7 @@ function ExerciseContainer<
 
 export { ExerciseContainer, EXERCISE_ACCORDION_SUMMARY_HEIGHT };
 
-const Container = styled(Accordion)(({ theme }) => ({
+const Container = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -98,7 +78,7 @@ const ProgressContainer = styled('div')(({ theme }) => ({
     width: '100%',
 }));
 
-const AccordionContent = styled(AccordionDetails)({ padding: 0 });
+const AccordionContent = styled('div')({ padding: 0 });
 
 const TitleContainer = styled('div')({
     display: 'flex',
@@ -116,7 +96,7 @@ const WarningIconContainer = styled(Tooltip)(({ theme }) => ({
     height: '100%',
 }));
 
-const AccordionSummary = styled(MuiAccordionSummary)({
+const AccordionSummary = styled('div')({
     padding: 0,
     height: EXERCISE_ACCORDION_SUMMARY_HEIGHT,
 });
