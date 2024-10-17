@@ -54,6 +54,7 @@ function ExerciseContainer<
             </AccordionContent>
             <FooterContainer>
                 <Button
+                    variant="outlined"
                     disabled={props.exerciseIndexes.previous === undefined}
                     onClick={onPreviousExerciseClick}
                     startIcon={<ArrowBackIcon />}
@@ -61,6 +62,7 @@ function ExerciseContainer<
                     Exercice précédent
                 </Button>
                 <Button
+                    variant="outlined"
                     disabled={props.exerciseIndexes.next === undefined}
                     onClick={onNextExerciseClick}
                     endIcon={<ArrowForwardIcon />}
@@ -126,5 +128,6 @@ const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'ce
 const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
 const FooterContainer = styled('div')(({ theme }) => ({
     display: 'flex',
+    paddingTop: theme.spacing(2),
     justifyContent: 'space-between',
 }));

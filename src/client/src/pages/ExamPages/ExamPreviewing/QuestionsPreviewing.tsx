@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { QuestionAnswering } from '../components/QuestionAnswering';
 import { exerciseWithoutAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
-import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
@@ -29,6 +28,7 @@ function QuestionsPreviewing(props: {
     const exercisesSummary = computeExercisesSummary(props.exercises, currentAnswers);
 
     const progress = exercisesSummary[current].progress;
+    console.log(progress);
     const exerciseIndication = {
         progress,
         hideMark: true,
