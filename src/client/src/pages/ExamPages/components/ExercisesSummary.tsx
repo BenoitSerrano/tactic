@@ -1,21 +1,17 @@
 import { styled, Typography } from '@mui/material';
-import { exerciseSummaryType } from '../lib/computeExercisesSummary';
 import { TextLink } from '../../../components/TextLink';
 import { computeHash } from '../lib/useExerciseIndex';
 import { HEADER_HEIGHT } from '../../../constants';
 import { ActiveText } from '../../../components/ActiveText';
 
-function ExercisesSummary(props: {
-    currentExerciseIndex: number;
-    exercisesSummary: exerciseSummaryType[];
-}) {
+function ExercisesSummary(props: { currentExerciseIndex: number; progresses: number[] }) {
     return (
         <Container>
             <ExerciseList>
-                {props.exercisesSummary.map((exerciseSummary, exerciseIndex) => {
+                {props.progresses.map((progress, exerciseIndex) => {
                     const hash = computeHash(exerciseIndex);
                     const label = `Exercice ${exerciseIndex + 1}`;
-                    const formattedProgress = `${Math.floor(exerciseSummary.progress * 100)} %`;
+                    const formattedProgress = `${Math.floor(progress * 100)} %`;
                     const TextComponent =
                         exerciseIndex === props.currentExerciseIndex ? (
                             <ActiveText>{label}</ActiveText>

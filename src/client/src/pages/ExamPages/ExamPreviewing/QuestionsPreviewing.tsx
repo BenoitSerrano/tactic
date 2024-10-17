@@ -10,7 +10,7 @@ import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { useExerciseIndex } from '../lib/useExerciseIndex';
 import { EmptyExam } from '../components/EmptyExam';
 import { ExercisesSummary } from '../components/ExercisesSummary';
-import { computeExercisesSummary } from '../lib/computeExercisesSummary';
+import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 
 function QuestionsPreviewing(props: {
     title: string;
@@ -25,10 +25,10 @@ function QuestionsPreviewing(props: {
     if (current === undefined || !exercise) {
         return <EmptyExam title={props.title} />;
     }
-    const exercisesSummary = computeExercisesSummary(props.exercises, currentAnswers);
-
-    const progress = exercisesSummary[current].progress;
-    console.log(progress);
+    const progresses = props.exercises.map((exercise) =>
+        computeExerciseProgress(exercise.questions, currentAnswers),
+    );
+    const progress = progresses[current];
     const exerciseIndication = {
         progress,
         hideMark: true,
@@ -36,7 +36,7 @@ function QuestionsPreviewing(props: {
 
     return (
         <>
-            <ExercisesSummary currentExerciseIndex={current} exercisesSummary={exercisesSummary} />
+            <ExercisesSummary currentExerciseIndex={current} progresses={progresses} />
             <TestPageLayout studentEmail="-" title={props.title} highlightedResult={totalResult}>
                 <>
                     <ExerciseContainer
