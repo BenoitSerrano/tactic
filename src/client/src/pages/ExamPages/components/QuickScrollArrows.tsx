@@ -9,14 +9,14 @@ function QuickScrollArrows() {
             <IconContainer>
                 <IconButton
                     title="Aller en haut"
-                    placement="top"
+                    placement="left"
                     onClick={scrollToTop}
                     IconComponent={ArrowUpwardIcon}
                 />
             </IconContainer>
             <IconContainer>
                 <IconButton
-                    placement="bottom"
+                    placement="left"
                     title="Aller en bas"
                     onClick={scrollToBottom}
                     IconComponent={ArrowDownwardIcon}
@@ -38,12 +38,12 @@ export { QuickScrollArrows };
 
 const Container = styled('div')(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
-        left: theme.spacing(2),
+        right: theme.spacing(2),
     },
     [theme.breakpoints.up('md')]: {
-        left: '8vw',
+        right: 34,
     },
     position: 'fixed',
-    bottom: theme.spacing(6),
+    bottom: 88,
 }));
 const IconContainer = styled('div')({});
