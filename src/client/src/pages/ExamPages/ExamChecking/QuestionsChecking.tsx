@@ -22,7 +22,7 @@ import { pathHandler } from '../../../lib/pathHandler';
 import { AttemptsCount } from './AttemptsCount';
 import { Dialog } from '../../../components/Dialog';
 import { Button } from '../../../components/Button';
-import { ExerciseContainer } from '../components/ExerciseContainer';
+import { ExerciseAccordionContainer } from '../components/ExerciseAccordionContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
@@ -182,7 +182,7 @@ function QuestionsChecking(props: {
                         : undefined;
                     return (
                         <>
-                            <ExerciseContainer
+                            <ExerciseAccordionContainer
                                 isExpanded={currentExerciseExpanded === exercise.id}
                                 onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
                                 key={'exercise-' + exercise.id}
@@ -239,7 +239,7 @@ function QuestionsChecking(props: {
                                         </>
                                     );
                                 })}
-                            </ExerciseContainer>
+                            </ExerciseAccordionContainer>
                             {!isLastExercise && <HorizontalDivider />}
                         </>
                     );

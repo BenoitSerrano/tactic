@@ -1,8 +1,9 @@
 import { useLocation } from 'react-router-dom';
 import { computeExamBreadcrumbs } from './computeExamBreadcrumbs';
-import { Typography, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { BreadcrumbsSelect } from './BreadcrumbsSelect';
 import { TextLink } from '../../TextLink';
+import { ActiveText } from '../../ActiveText';
 
 function ExamBreadcrumbs() {
     const location = useLocation();
@@ -25,9 +26,9 @@ function ExamBreadcrumbs() {
             const editingBreadcrumb = editingBreadcrumbs[i];
             if (editingBreadcrumb.isActive || !editingBreadcrumb.href) {
                 renderedBreadcrumbs.push(
-                    <ActiveBreadcrumb key={`breadcrumb-editing-${i}`}>
+                    <ActiveText key={`breadcrumb-editing-${i}`}>
                         {editingBreadcrumb.label}
-                    </ActiveBreadcrumb>,
+                    </ActiveText>,
                 );
             } else {
                 renderedBreadcrumbs.push(
@@ -51,11 +52,6 @@ function Chevron() {
     return <div>{'>'}</div>;
 }
 
-const ActiveBreadcrumb = styled(Typography)(({ theme }) => ({
-    padding: theme.spacing(1),
-    color: theme.palette.primary.dark,
-    textShadow: `0px 0px 1px ${theme.palette.primary.dark}`,
-}));
 const BreadcrumbsContainer = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
         display: 'flex',

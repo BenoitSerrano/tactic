@@ -4,10 +4,13 @@ import { useState } from 'react';
 import { QuestionAnswering } from '../components/QuestionAnswering';
 import { exerciseWithoutAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
-import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
+import { useExerciseIndex } from '../lib/useExerciseIndex';
+import { EmptyExam } from '../components/EmptyExam';
+import { ExercisesSummary } from '../components/ExercisesSummary';
+import { computeExerciseProgress } from '../lib/computeExerciseProgress';
 
 function QuestionsPreviewing(props: {
     title: string;
@@ -15,67 +18,63 @@ function QuestionsPreviewing(props: {
     exercises: Array<exerciseWithoutAnswersType>;
 }) {
     const [currentAnswers, setCurrentAnswers] = useState<Record<number, string>>({});
-    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
     const totalResult = computeTotalPoints(props.exercises);
+    const exerciseIndexes = useExerciseIndex(props.exercises);
+    const current = exerciseIndexes.current;
+    const exercise = current !== undefined ? props.exercises[current] : undefined;
+    if (current === undefined || !exercise) {
+        return <EmptyExam title={props.title} />;
+    }
+    const progresses = props.exercises.map((exercise) =>
+        computeExerciseProgress(exercise.questions, currentAnswers),
+    );
+    const progress = progresses[current];
+    const exerciseIndication = {
+        progress,
+        hideMark: true,
+    };
 
     return (
         <>
+            <ExercisesSummary currentExerciseIndex={current} progresses={progresses} />
             <TestPageLayout studentEmail="-" title={props.title} highlightedResult={totalResult}>
-                {props.exercises.map((exercise, exerciseIndex) => {
-                    const progress = computeExerciseProgress(exercise.questions, currentAnswers);
-                    const exerciseIndication = {
-                        progress,
-                        hideMark: true,
-                    };
-                    const isLastExercise = exerciseIndex === props.exercises.length - 1;
+                <>
+                    <ExerciseContainer
+                        exerciseIndexes={exerciseIndexes}
+                        key={`exercise-${exercise.id}`}
+                        exercise={exercise}
+                        indication={exerciseIndication}
+                    >
+                        {exercise.questions.map((question, index) => {
+                            const isLastQuestion = index === exercise.questions.length - 1;
 
-                    return (
-                        <>
-                            <ExerciseContainer
-                                isExpanded={currentExerciseExpanded === exercise.id}
-                                onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                                key={`exercise-${exercise.id}`}
-                                exercise={exercise}
-                                indication={exerciseIndication}
-                            >
-                                {exercise.questions.map((question, index) => {
-                                    const isLastQuestion = index === exercise.questions.length - 1;
-
-                                    return (
-                                        <>
-                                            <QuestionContainer key={`question-${question.id}`}>
-                                                <QuestionIndicatorsContainer>
-                                                    <Typography>/ {question.points}</Typography>
-                                                </QuestionIndicatorsContainer>
-                                                <QuestionAnswering
-                                                    currentAnswer={currentAnswers[question.id]}
-                                                    setCurrentAnswer={(newAnswer: string) =>
-                                                        setCurrentAnswers({
-                                                            ...currentAnswers,
-                                                            [question.id]: newAnswer,
-                                                        })
-                                                    }
-                                                    question={question}
-                                                    index={index + 1}
-                                                />
-                                            </QuestionContainer>
-                                            {!isLastQuestion && <HorizontalDivider />}
-                                        </>
-                                    );
-                                })}
-                            </ExerciseContainer>
-                            {!isLastExercise && <HorizontalDivider />}
-                        </>
-                    );
-                })}
+                            return (
+                                <>
+                                    <QuestionContainer key={`question-${question.id}`}>
+                                        <QuestionIndicatorsContainer>
+                                            <Typography>/ {question.points}</Typography>
+                                        </QuestionIndicatorsContainer>
+                                        <QuestionAnswering
+                                            currentAnswer={currentAnswers[question.id]}
+                                            setCurrentAnswer={(newAnswer: string) =>
+                                                setCurrentAnswers({
+                                                    ...currentAnswers,
+                                                    [question.id]: newAnswer,
+                                                })
+                                            }
+                                            question={question}
+                                            index={index + 1}
+                                        />
+                                    </QuestionContainer>
+                                    {!isLastQuestion && <HorizontalDivider />}
+                                </>
+                            );
+                        })}
+                    </ExerciseContainer>
+                </>
             </TestPageLayout>
         </>
     );
-    function buildOnExerciseExpandedChange(exerciseId: number) {
-        return (_: any, isExpanded: boolean) => {
-            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
-        };
-    }
 }
 
 const QuestionIndicatorsContainer = styled('div')({

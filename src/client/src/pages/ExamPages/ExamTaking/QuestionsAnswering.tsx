@@ -14,6 +14,9 @@ import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { LastUpdatedAtIndication } from './LastUpdatedAtIndication';
+import { useExerciseIndex } from '../lib/useExerciseIndex';
+import { EmptyExam } from '../components/EmptyExam';
+import { ExercisesSummary } from '../components/ExercisesSummary';
 
 const DELAY_BETWEEN_SHOWING_ALERT_AND_END_OF_EXAM = 30 * 1000;
 
@@ -89,13 +92,27 @@ function QuestionsAnswering(props: {
             initialCurrentAnswers[question.id] = question.currentAnswer;
         }
     }
-    const [currentExerciseExpanded, setCurrentExerciseExpanded] = useState<number | undefined>();
 
     const [currentAnswers, setCurrentAnswers] = useState(initialCurrentAnswers);
     const totalResult = computeTotalPoints(props.exercises);
 
+    const exerciseIndexes = useExerciseIndex(props.exercises);
+    const exercise =
+        exerciseIndexes.current !== undefined
+            ? props.exercises[exerciseIndexes.current]
+            : undefined;
+    if (!exercise) {
+        return <EmptyExam title={props.title} />;
+    }
+    const progress = computeExerciseProgress(exercise.questions, currentAnswers);
+    const exerciseIndication = {
+        progress,
+        hideMark: true,
+    };
+
     return (
         <>
+            {/* <ExercisesSummary /> */}
             <TestPageLayout
                 shouldPreventTextSelection
                 highlightedResult={totalResult}
@@ -118,48 +135,35 @@ function QuestionsAnswering(props: {
                     </LoadingButton>,
                 ]}
             >
-                {props.exercises.map((exercise, exerciseIndex) => {
-                    const progress = computeExerciseProgress(exercise.questions, currentAnswers);
-                    const exerciseIndication = {
-                        progress,
-                        hideMark: true,
-                    };
-                    const isLastExercise = exerciseIndex === props.exercises.length - 1;
-
-                    return (
-                        <Fragment key={`exercise-${exercise.id}`}>
-                            <ExerciseContainer
-                                isExpanded={currentExerciseExpanded === exercise.id}
-                                onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                                exercise={exercise}
-                                indication={exerciseIndication}
-                            >
-                                {exercise.questions.map((question, index) => {
-                                    const isLastQuestion = index === exercise.questions.length - 1;
-                                    return (
-                                        <Fragment key={`question-${question.id}`}>
-                                            <QuestionContainer>
-                                                <QuestionIndicatorsContainer>
-                                                    <Typography>/ {question.points}</Typography>
-                                                </QuestionIndicatorsContainer>
-                                                <QuestionAnswering
-                                                    currentAnswer={currentAnswers[question.id]}
-                                                    setCurrentAnswer={buildSetCurrentAnswersAndSave(
-                                                        question.id,
-                                                    )}
-                                                    question={question}
-                                                    index={index + 1}
-                                                />
-                                            </QuestionContainer>
-                                            {!isLastQuestion && <HorizontalDivider />}
-                                        </Fragment>
-                                    );
-                                })}
-                            </ExerciseContainer>
-                            {!isLastExercise && <HorizontalDivider />}
-                        </Fragment>
-                    );
-                })}
+                <Fragment key={`exercise-${exercise.id}`}>
+                    <ExerciseContainer
+                        exerciseIndexes={exerciseIndexes}
+                        exercise={exercise}
+                        indication={exerciseIndication}
+                    >
+                        {exercise.questions.map((question, index) => {
+                            const isLastQuestion = index === exercise.questions.length - 1;
+                            return (
+                                <Fragment key={`question-${question.id}`}>
+                                    <QuestionContainer>
+                                        <QuestionIndicatorsContainer>
+                                            <Typography>/ {question.points}</Typography>
+                                        </QuestionIndicatorsContainer>
+                                        <QuestionAnswering
+                                            currentAnswer={currentAnswers[question.id]}
+                                            setCurrentAnswer={buildSetCurrentAnswersAndSave(
+                                                question.id,
+                                            )}
+                                            question={question}
+                                            index={index + 1}
+                                        />
+                                    </QuestionContainer>
+                                    {!isLastQuestion && <HorizontalDivider />}
+                                </Fragment>
+                            );
+                        })}
+                    </ExerciseContainer>
+                </Fragment>
             </TestPageLayout>
             <Modal
                 size="small"
@@ -218,12 +222,6 @@ function QuestionsAnswering(props: {
             attemptId: props.attemptId,
             answers: newCurrentAnswers,
         });
-    }
-
-    function buildOnExerciseExpandedChange(exerciseId: number) {
-        return (_: any, isExpanded: boolean) => {
-            setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
-        };
     }
 }
 

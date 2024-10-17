@@ -5,7 +5,7 @@ import { examWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { computeResults } from '../lib/computeResults';
 import { QuestionChecking } from '../ExamChecking/QuestionChecking';
-import { ExerciseContainer } from '../components/ExerciseContainer';
+import { ExerciseAccordionContainer } from '../components/ExerciseAccordionContainer';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { computeDisplayedMark } from '../ExamChecking/lib/computeDisplayedMark';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
@@ -31,7 +31,7 @@ function QuestionsConsulting(props: {
 
                     return (
                         <>
-                            <ExerciseContainer
+                            <ExerciseAccordionContainer
                                 isExpanded={currentExerciseExpanded === exercise.id}
                                 onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
                                 key={`exercise-${exercise.id}`}
@@ -71,7 +71,7 @@ function QuestionsConsulting(props: {
                                         </>
                                     );
                                 })}
-                            </ExerciseContainer>
+                            </ExerciseAccordionContainer>
                             {!isLastExercise && <HorizontalDivider />}
                         </>
                     );

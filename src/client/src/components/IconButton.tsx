@@ -10,7 +10,7 @@ function IconButton(props: {
     onMouseEnter?: (event: React.MouseEvent<HTMLElement>) => void;
     IconComponent: React.ElementType;
     disabled?: boolean;
-    placement?: 'top' | 'bottom';
+    placement?: 'top' | 'bottom' | 'left' | 'right';
 }) {
     const { IconComponent } = props;
     const size = props.size || 'medium';

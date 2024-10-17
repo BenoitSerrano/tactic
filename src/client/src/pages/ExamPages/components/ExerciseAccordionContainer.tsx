@@ -1,35 +1,48 @@
-import { Typography, styled, Tooltip } from '@mui/material';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary as MuiAccordionSummary,
+    LinearProgress,
+    Typography,
+    styled,
+    Tooltip,
+} from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import { ReactNode } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Markdown from 'react-markdown';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
     computeExerciseIndication,
     exerciseIndicationType,
 } from '../lib/computeExerciseIndication';
-import { computeHash, exerciseIndexesType } from '../lib/useExerciseIndex';
-import { Button } from '../../../components/Button';
-import { useNavigate } from 'react-router-dom';
-import { ProgressBar } from './ProgressBar';
 
 const EXERCISE_ACCORDION_SUMMARY_HEIGHT = 52;
 
-function ExerciseContainer<
+function ExerciseAccordionContainer<
     questionT extends { points: number; mark?: number | undefined },
     exerciseT extends { id: number; name: string; instruction: string; questions: questionT[] },
 >(props: {
-    exerciseIndexes: exerciseIndexesType;
     exercise: exerciseT;
     children: ReactNode;
+    isExpanded: boolean;
     warningToDisplay?: string;
+    onChangeExpanded: (_: any, isExpanded: boolean) => void;
     indication?: exerciseIndicationType;
 }) {
-    const navigate = useNavigate();
     const { result, progress } = computeExerciseIndication(props.exercise, props.indication);
     return (
-        <Container>
-            <AccordionSummary>
+        <Container
+            onChange={props.onChangeExpanded}
+            expanded={props.isExpanded}
+            disableGutters
+            key={'exercise-' + props.exercise.id}
+            sx={{
+                '&:before': {
+                    display: 'none',
+                },
+            }}
+        >
+            <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />}>
                 <TitleContainer>
                     <ExerciseHeaderContainer>
                         {!!props.warningToDisplay && (
@@ -42,7 +55,14 @@ function ExerciseContainer<
                         </ExercisePointsContainer>
                         <Typography variant="h3">{props.exercise.name}</Typography>
                     </ExerciseHeaderContainer>
-                    {progress !== undefined && <ProgressBar progress={progress} />}
+                    {progress !== undefined && (
+                        <ProgressWithLabelContainer>
+                            <Typography variant="body2">{progress}%</Typography>
+                            <ProgressContainer>
+                                <LinearProgress variant="determinate" value={progress} />
+                            </ProgressContainer>
+                        </ProgressWithLabelContainer>
+                    )}
                 </TitleContainer>
             </AccordionSummary>
 
@@ -52,47 +72,13 @@ function ExerciseContainer<
                 </Typography>
                 {props.children}
             </AccordionContent>
-            <FooterContainer>
-                <Button
-                    variant="outlined"
-                    disabled={props.exerciseIndexes.previous === undefined}
-                    onClick={onPreviousExerciseClick}
-                    startIcon={<ArrowBackIcon />}
-                >
-                    Exercice précédent
-                </Button>
-                <Button
-                    variant="outlined"
-                    disabled={props.exerciseIndexes.next === undefined}
-                    onClick={onNextExerciseClick}
-                    endIcon={<ArrowForwardIcon />}
-                >
-                    Exercice suivant
-                </Button>
-            </FooterContainer>
         </Container>
     );
-
-    function onPreviousExerciseClick() {
-        if (props.exerciseIndexes.previous === undefined) {
-            return;
-        }
-        const hash = computeHash(props.exerciseIndexes.previous);
-        navigate(hash);
-    }
-
-    function onNextExerciseClick() {
-        if (props.exerciseIndexes.next === undefined) {
-            return;
-        }
-        const hash = computeHash(props.exerciseIndexes.next);
-        navigate(hash);
-    }
 }
 
-export { ExerciseContainer, EXERCISE_ACCORDION_SUMMARY_HEIGHT };
+export { ExerciseAccordionContainer, EXERCISE_ACCORDION_SUMMARY_HEIGHT };
 
-const Container = styled('div')(({ theme }) => ({
+const Container = styled(Accordion)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -101,7 +87,18 @@ const Container = styled('div')(({ theme }) => ({
     elevation: 0,
 }));
 
-const AccordionContent = styled('div')({ padding: 0 });
+const ProgressWithLabelContainer = styled('div')({
+    width: '15%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+});
+
+const ProgressContainer = styled('div')(({ theme }) => ({
+    width: '100%',
+}));
+
+const AccordionContent = styled(AccordionDetails)({ padding: 0 });
 
 const TitleContainer = styled('div')({
     display: 'flex',
@@ -119,15 +116,10 @@ const WarningIconContainer = styled(Tooltip)(({ theme }) => ({
     height: '100%',
 }));
 
-const AccordionSummary = styled('div')({
+const AccordionSummary = styled(MuiAccordionSummary)({
     padding: 0,
     height: EXERCISE_ACCORDION_SUMMARY_HEIGHT,
 });
 
 const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center' });
 const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
-const FooterContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
-    paddingTop: theme.spacing(2),
-    justifyContent: 'space-between',
-}));
