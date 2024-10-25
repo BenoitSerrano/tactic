@@ -71,14 +71,20 @@ function EditableDuration(props: { exam: examApiType }) {
     if (props.exam.duration === null) {
         return (
             <Container onSubmit={handleSubmitDuration}>
-                <StyledTextField autoFocus variant="standard" value={value} onChange={onChange} />
+                <StyledTextField
+                    autoFocus
+                    variant="standard"
+                    value={value}
+                    onChange={onChange}
+                    onClick={onTextInputClick}
+                />
                 <Typography>minutes</Typography>
                 <IconButton
                     isLoading={updateExamDurationMutation.isPending}
                     title="Valider"
                     disabled={isConfirmDisabled}
                     IconComponent={CheckIcon}
-                    onClick={confirmChanges}
+                    onClick={onValidateChanges}
                 />
                 <IconButton
                     title="Annuler"
@@ -90,7 +96,13 @@ function EditableDuration(props: { exam: examApiType }) {
     } else {
         return (
             <Container onSubmit={handleSubmitDuration}>
-                <StyledTextField autoFocus variant="standard" value={value} onChange={onChange} />
+                <StyledTextField
+                    onClick={onTextInputClick}
+                    autoFocus
+                    variant="standard"
+                    value={value}
+                    onChange={onChange}
+                />
                 <Typography>minutes</Typography>
                 <IconButton
                     title="Valider"
@@ -121,6 +133,10 @@ function EditableDuration(props: { exam: examApiType }) {
         confirmChanges();
     }
 
+    function onTextInputClick(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
+    }
+
     function confirmChanges() {
         updateExamDurationMutation.mutate({ examId: props.exam.id, duration: value });
     }
@@ -131,7 +147,8 @@ function EditableDuration(props: { exam: examApiType }) {
         updateExamDurationMutation.mutate({ examId: props.exam.id, duration: null });
     }
 
-    function cancelEditing() {
+    function cancelEditing(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
         setValue(props.exam.duration);
         setIsEditing(false);
     }

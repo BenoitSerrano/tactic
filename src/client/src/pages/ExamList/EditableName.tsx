@@ -39,6 +39,7 @@ function EditableName(props: { exam: examApiType }) {
         return (
             <Container onSubmit={handleSubmitText}>
                 <TextField
+                    onClick={onTextInputClick}
                     autoFocus
                     variant="standard"
                     value={name}
@@ -61,6 +62,10 @@ function EditableName(props: { exam: examApiType }) {
             <IconButton IconComponent={EditIcon} onClick={activateEditing} title="Éditer" />
         </Container>
     );
+
+    function onTextInputClick(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
+    }
 
     function handleSubmitText(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
