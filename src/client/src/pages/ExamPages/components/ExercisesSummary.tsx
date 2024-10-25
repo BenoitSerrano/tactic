@@ -16,7 +16,7 @@ function ExercisesSummary(props: { currentExerciseIndex: number; progresses: num
                         exerciseIndex === props.currentExerciseIndex ? (
                             <ActiveText>{label}</ActiveText>
                         ) : (
-                            <TextLink label={label} to={hash} />
+                            <TextLink onClick={scrollToTop} label={label} to={hash} />
                         );
                     return (
                         <ExerciseSummaryContainer>
@@ -29,6 +29,10 @@ function ExercisesSummary(props: { currentExerciseIndex: number; progresses: num
             </ExerciseList>
         </Container>
     );
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
 export { ExercisesSummary };

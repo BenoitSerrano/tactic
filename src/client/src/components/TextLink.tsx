@@ -1,11 +1,16 @@
 import { styled, Typography } from '@mui/material';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
-function TextLink(props: { to: string; label: string; opensNewTab?: boolean }) {
+function TextLink(props: {
+    to: string;
+    label: string;
+    opensNewTab?: boolean;
+    onClick?: () => void;
+}) {
     const target = props.opensNewTab ? '_blank' : undefined;
 
     return (
-        <StyledLink target={target} to={props.to}>
+        <StyledLink target={target} to={props.to} onClick={props.onClick}>
             <Typography>{props.label}</Typography>
         </StyledLink>
     );
