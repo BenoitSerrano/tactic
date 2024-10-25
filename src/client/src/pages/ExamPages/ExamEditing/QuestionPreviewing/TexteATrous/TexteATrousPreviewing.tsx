@@ -5,7 +5,6 @@ import { PlainText } from './components/PlainText';
 import { Typography, styled } from '@mui/material';
 import { Caption } from '../../../components/Caption';
 import { converter } from '../../../lib/converter';
-import { AcceptableAnswersPreviewing } from '../AcceptableAnswersPreviewing';
 
 function TexteATrousPreviewing(props: {
     index: number;
@@ -39,7 +38,7 @@ function TexteATrousPreviewing(props: {
                 })}
             </TitleContainer>
 
-            {/* <RightAnswerContainer>
+            <RightAnswerContainer>
                 <CaptionContainer>
                     <Caption>Réponse correcte</Caption> :
                 </CaptionContainer>
@@ -56,8 +55,7 @@ function TexteATrousPreviewing(props: {
                             return undefined;
                     }
                 })}
-            </RightAnswerContainer> */}
-            <AcceptableAnswersPreviewing acceptableAnswers={props.acceptableAnswers} />
+            </RightAnswerContainer>
             <PointsPerBlankContainer>
                 <CaptionContainer>
                     <Caption>Nombre de points par trou</Caption> :
@@ -78,17 +76,17 @@ const TitleContainer = styled(Typography)(({ theme }) => ({
     marginBottom: theme.spacing(2),
 }));
 
-// const RightAnswerText = styled('span')(({ theme }) => ({
-//     color: theme.palette.success.main,
-//     marginRight: theme.spacing(1),
-//     fontWeight: 'bold',
-// }));
+const RightAnswerText = styled('span')(({ theme }) => ({
+    color: theme.palette.success.main,
+    marginRight: theme.spacing(1),
+    fontWeight: 'bold',
+}));
 
-// const RightAnswerContainer = styled(Typography)(({ theme }) => ({
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//     alignItems: 'baseline',
-// }));
+const RightAnswerContainer = styled(Typography)(({ theme }) => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+}));
 
 const CaptionContainer = styled('span')(({ theme }) => ({
     marginRight: theme.spacing(1),
