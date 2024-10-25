@@ -97,14 +97,17 @@ function QuestionsAnswering(props: {
     const totalResult = computeTotalPoints(props.exercises);
 
     const exerciseIndexes = useExerciseIndex(props.exercises);
-    const exercise =
-        exerciseIndexes.current !== undefined
-            ? props.exercises[exerciseIndexes.current]
-            : undefined;
-    if (!exercise) {
+    const current = exerciseIndexes.current;
+
+    const exercise = current !== undefined ? props.exercises[current] : undefined;
+    if (current === undefined || !exercise) {
         return <EmptyExam title={props.title} />;
     }
-    const progress = computeExerciseProgress(exercise.questions, currentAnswers);
+    const progresses = props.exercises.map((exercise) =>
+        computeExerciseProgress(exercise.questions, currentAnswers),
+    );
+    const progress = progresses[current];
+
     const exerciseIndication = {
         progress,
         hideMark: true,
@@ -112,7 +115,7 @@ function QuestionsAnswering(props: {
 
     return (
         <>
-            {/* <ExercisesSummary /> */}
+            <ExercisesSummary progresses={progresses} currentExerciseIndex={current} />
             <TestPageLayout
                 shouldPreventTextSelection
                 highlightedResult={totalResult}
