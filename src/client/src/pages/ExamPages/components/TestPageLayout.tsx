@@ -134,8 +134,11 @@ const Container = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.common.white,
 }));
 
-const BasicContainer = styled('div')({});
-const SelectionLessContainer = styled('div')({ userSelect: 'none' });
+const BasicContainer = styled('div')(({ theme }) => ({ paddingTop: theme.spacing(3) }));
+const SelectionLessContainer = styled('div')(({ theme }) => ({
+    paddingTop: theme.spacing(3),
+    userSelect: 'none',
+}));
 const ResultContainer = styled('div')({
     display: 'flex',
     flexDirection: 'column',

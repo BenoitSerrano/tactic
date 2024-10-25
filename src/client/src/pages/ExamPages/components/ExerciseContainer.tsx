@@ -39,7 +39,7 @@ function ExerciseContainer<
                             </WarningIconContainer>
                         )}
                         <ExerciseTitle variant="h3">
-                            Exercice {props.currentExerciseIndex}
+                            Exercice {props.currentExerciseIndex + 1}
                         </ExerciseTitle>
                         {progress !== undefined && <ProgressBar progress={progress} />}
                     </ExerciseHeaderContainer>
