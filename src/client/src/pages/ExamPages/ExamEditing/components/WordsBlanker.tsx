@@ -12,7 +12,8 @@ function WordsBlanker(props: {
     pointsPerBlank: number;
     setPoints: (points: number) => void;
 }) {
-    const words = textSplitter.split(props.title);
+    const title = props.title.replace(/ {2,}/g, ' ');
+    const words = textSplitter.split(title);
     return (
         <Container>
             {words.map((word, wordIndex) => (
@@ -26,7 +27,7 @@ function WordsBlanker(props: {
     function buildOnClickOnWord(wordIndex: number) {
         return () => {
             const nextState = computeTexteATrousState(wordIndex, {
-                title: props.title,
+                title,
                 rightAnswers: props.acceptableAnswers.map(
                     (acceptableAnswersPerBlank) => acceptableAnswersPerBlank[0].answer,
                 ),
