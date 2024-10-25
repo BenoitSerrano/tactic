@@ -19,6 +19,7 @@ function ExerciseContainer<
     questionT extends { points: number; mark?: number | undefined },
     exerciseT extends { id: number; name: string; instruction: string; questions: questionT[] },
 >(props: {
+    currentExerciseIndex: number;
     exerciseIndexes: exerciseIndexesType;
     exercise: exerciseT;
     children: ReactNode;
@@ -29,7 +30,7 @@ function ExerciseContainer<
     const { result, progress } = computeExerciseIndication(props.exercise, props.indication);
     return (
         <Container>
-            <AccordionSummary>
+            <HeaderContainer>
                 <TitleContainer>
                     <ExerciseHeaderContainer>
                         {!!props.warningToDisplay && (
@@ -37,21 +38,25 @@ function ExerciseContainer<
                                 <PriorityHighIcon fontSize="small" color="error" />
                             </WarningIconContainer>
                         )}
-                        <ExercisePointsContainer>
-                            <Typography variant="h4">( {result})</Typography>
-                        </ExercisePointsContainer>
-                        <Typography variant="h3">{props.exercise.name}</Typography>
+                        <ExerciseTitle variant="h3">
+                            Exercice {props.currentExerciseIndex}
+                        </ExerciseTitle>
+                        {progress !== undefined && <ProgressBar progress={progress} />}
                     </ExerciseHeaderContainer>
-                    {progress !== undefined && <ProgressBar progress={progress} />}
-                </TitleContainer>
-            </AccordionSummary>
 
-            <AccordionContent>
+                    <TitleRightPartContainer>
+                        <Typography variant="h4">( {result})</Typography>
+                    </TitleRightPartContainer>
+                </TitleContainer>
+            </HeaderContainer>
+            <Typography variant="h4">{props.exercise.name}</Typography>
+
+            <ContentContainer>
                 <Typography>
                     <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
                 </Typography>
                 {props.children}
-            </AccordionContent>
+            </ContentContainer>
             <FooterContainer>
                 <Button
                     variant="outlined"
@@ -101,7 +106,7 @@ const Container = styled('div')(({ theme }) => ({
     elevation: 0,
 }));
 
-const AccordionContent = styled('div')({ padding: 0 });
+const ContentContainer = styled('div')({ padding: 0 });
 
 const TitleContainer = styled('div')({
     display: 'flex',
@@ -119,13 +124,14 @@ const WarningIconContainer = styled(Tooltip)(({ theme }) => ({
     height: '100%',
 }));
 
-const AccordionSummary = styled('div')({
-    padding: 0,
-    height: EXERCISE_ACCORDION_SUMMARY_HEIGHT,
-});
+const HeaderContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(1) }));
+const ExerciseTitle = styled(Typography)(({ theme }) => ({
+    marginRight: theme.spacing(2),
+    textDecoration: 'underline',
+}));
 
-const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center' });
-const ExercisePointsContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
+const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center', flex: 1 });
+const TitleRightPartContainer = styled('div')(({ theme }) => ({ display: 'flex' }));
 const FooterContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     paddingTop: theme.spacing(2),

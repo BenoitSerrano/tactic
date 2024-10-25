@@ -20,15 +20,16 @@ function QuestionsPreviewing(props: {
     const [currentAnswers, setCurrentAnswers] = useState<Record<number, string>>({});
     const totalResult = computeTotalPoints(props.exercises);
     const exerciseIndexes = useExerciseIndex(props.exercises);
-    const current = exerciseIndexes.current;
-    const exercise = current !== undefined ? props.exercises[current] : undefined;
-    if (current === undefined || !exercise) {
+    const currentExerciseIndex = exerciseIndexes.current;
+    const exercise =
+        currentExerciseIndex !== undefined ? props.exercises[currentExerciseIndex] : undefined;
+    if (currentExerciseIndex === undefined || !exercise) {
         return <EmptyExam title={props.title} />;
     }
     const progresses = props.exercises.map((exercise) =>
         computeExerciseProgress(exercise.questions, currentAnswers),
     );
-    const progress = progresses[current];
+    const progress = progresses[currentExerciseIndex];
     const exerciseIndication = {
         progress,
         hideMark: true,
@@ -36,10 +37,11 @@ function QuestionsPreviewing(props: {
 
     return (
         <>
-            <ExercisesSummary currentExerciseIndex={current} progresses={progresses} />
+            <ExercisesSummary currentExerciseIndex={currentExerciseIndex} progresses={progresses} />
             <TestPageLayout studentEmail="-" title={props.title} highlightedResult={totalResult}>
                 <>
                     <ExerciseContainer
+                        currentExerciseIndex={currentExerciseIndex}
                         exerciseIndexes={exerciseIndexes}
                         key={`exercise-${exercise.id}`}
                         exercise={exercise}

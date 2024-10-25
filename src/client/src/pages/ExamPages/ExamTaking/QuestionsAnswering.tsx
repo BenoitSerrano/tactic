@@ -97,16 +97,17 @@ function QuestionsAnswering(props: {
     const totalResult = computeTotalPoints(props.exercises);
 
     const exerciseIndexes = useExerciseIndex(props.exercises);
-    const current = exerciseIndexes.current;
+    const currentExerciseIndex = exerciseIndexes.current;
 
-    const exercise = current !== undefined ? props.exercises[current] : undefined;
-    if (current === undefined || !exercise) {
+    const exercise =
+        currentExerciseIndex !== undefined ? props.exercises[currentExerciseIndex] : undefined;
+    if (currentExerciseIndex === undefined || !exercise) {
         return <EmptyExam title={props.title} />;
     }
     const progresses = props.exercises.map((exercise) =>
         computeExerciseProgress(exercise.questions, currentAnswers),
     );
-    const progress = progresses[current];
+    const progress = progresses[currentExerciseIndex];
 
     const exerciseIndication = {
         progress,
@@ -115,7 +116,7 @@ function QuestionsAnswering(props: {
 
     return (
         <>
-            <ExercisesSummary progresses={progresses} currentExerciseIndex={current} />
+            <ExercisesSummary progresses={progresses} currentExerciseIndex={currentExerciseIndex} />
             <TestPageLayout
                 shouldPreventTextSelection
                 highlightedResult={totalResult}
@@ -140,6 +141,7 @@ function QuestionsAnswering(props: {
             >
                 <Fragment key={`exercise-${exercise.id}`}>
                     <ExerciseContainer
+                        currentExerciseIndex={currentExerciseIndex}
                         exerciseIndexes={exerciseIndexes}
                         exercise={exercise}
                         indication={exerciseIndication}

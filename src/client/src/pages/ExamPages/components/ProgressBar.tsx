@@ -12,7 +12,7 @@ function ProgressBar(props: { progress: number }) {
 }
 
 const ProgressWithLabelContainer = styled('div')({
-    width: '15%',
+    width: '20%',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
