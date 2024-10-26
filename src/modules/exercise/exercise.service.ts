@@ -10,6 +10,7 @@ export { buildExerciseService };
 
 function buildExerciseService() {
     const exerciseRepository = dataSource.getRepository(Exercise);
+    const questionService = buildQuestionService();
     const exerciseService = {
         createExercise,
         updateExercise,
@@ -27,7 +28,7 @@ function buildExerciseService() {
         body: {
             name: string;
             instruction: string;
-            defaultPoints: number;
+            defaultPoints: number | null;
             defaultQuestionKind: Question['kind'];
         },
     ) {
@@ -66,10 +67,17 @@ function buildExerciseService() {
         body: {
             name: string;
             instruction: string;
-            defaultPoints: number;
+            defaultPoints: number | null;
             defaultQuestionKind: questionKindType;
         },
     ) {
+        if (body.defaultPoints !== null) {
+            await questionService.updateQuestionsPointsByExerciseId(
+                criteria.examId,
+                criteria.exerciseId,
+                body.defaultPoints,
+            );
+        }
         return exerciseRepository.update(
             { exam: { id: criteria.examId }, id: criteria.exerciseId },
             {

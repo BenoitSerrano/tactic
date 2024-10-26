@@ -1,11 +1,13 @@
 import { TextField } from '@mui/material';
 import { QuestionInputContainer } from './QuestionInputContainer';
+import { PointsTextField } from '../components/PointsTextField';
 
 function TexteLibreUpsertionModalContent(props: {
     title: string;
     setTitle: (title: string) => void;
     points: string;
     setPoints: (points: string) => void;
+    canEditPoints: boolean;
 }) {
     return (
         <>
@@ -21,10 +23,10 @@ function TexteLibreUpsertionModalContent(props: {
                 />
             </QuestionInputContainer>
             <QuestionInputContainer isLastItem title="Nombre de points attribués à la question">
-                <TextField
-                    value={props.points}
-                    onChange={(event) => props.setPoints(event.target.value)}
-                    label="Point(s)"
+                <PointsTextField
+                    canEdit={props.canEditPoints}
+                    points={props.points}
+                    setPoints={props.setPoints}
                 />
             </QuestionInputContainer>
         </>

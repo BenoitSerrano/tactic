@@ -1,3 +1,4 @@
+import { Equal, Not } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../exam';
 import { Exercise, buildExerciseService } from '../exercise';
@@ -35,6 +36,7 @@ function buildAttemptService() {
         updateAttemptCorrectedAt,
         deleteAttemptCorrectedAt,
         fetchAttemptsCountByCorrectionStatus,
+        convertAttemptQuestionsPoints,
     };
 
     return attemptService;
@@ -119,6 +121,43 @@ function buildAttemptService() {
         );
 
         return result;
+    }
+
+    async function convertAttemptQuestionsPoints({
+        nextPoints,
+        questions,
+        examId,
+    }: {
+        questions: Question[];
+        nextPoints: number;
+        examId: Exam['id'];
+    }) {
+        const attempts = await attemptRepository.find({
+            where: { exam: { id: examId }, manualMarks: Not(Equal('')) },
+        });
+        const updatedAttempts: Attempt[] = [];
+        for (const attempt of attempts) {
+            let updatedAttempt = attempt;
+            const previousMarks = attemptUtils.decodeManualMarks(attempt.manualMarks);
+            let nextMarks = previousMarks;
+            for (const question of questions) {
+                const previousMark = previousMarks[question.id];
+                if (previousMark !== undefined) {
+                    const convertedMark = attemptUtils.convertMark({
+                        previousPoints: question.points,
+                        nextPoints,
+                        previousMark,
+                    });
+                    nextMarks = { ...nextMarks, [question.id]: convertedMark };
+                }
+            }
+            updatedAttempt = {
+                ...attempt,
+                manualMarks: attemptUtils.encodeManualMarks(nextMarks),
+            };
+            updatedAttempts.push(updatedAttempt);
+        }
+        return attemptRepository.save(updatedAttempts);
     }
 
     async function convertAttemptQuestionPoints({

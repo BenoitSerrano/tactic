@@ -3,6 +3,7 @@ import { ChangeEvent } from 'react';
 import { SPLITTING_CHARACTER_FOR_ANSWERS } from '../constants';
 import { QuestionInputContainer } from './QuestionInputContainer';
 import { acceptableAnswerType } from '../../../../types';
+import { PointsTextField } from '../components/PointsTextField';
 
 function QuestionReponseUpsertionModalContent(props: {
     title: string;
@@ -11,6 +12,7 @@ function QuestionReponseUpsertionModalContent(props: {
     setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
+    canEditPoints: boolean;
 }) {
     const rightAnswers = props.acceptableAnswers.length
         ? props.acceptableAnswers[0]
@@ -41,10 +43,10 @@ function QuestionReponseUpsertionModalContent(props: {
                 />
             </QuestionInputContainer>
             <QuestionInputContainer isLastItem title="Nombre de points attribués à la question">
-                <TextField
-                    value={props.points}
-                    onChange={(event) => props.setPoints(event.target.value)}
-                    label="Point(s)"
+                <PointsTextField
+                    canEdit={props.canEditPoints}
+                    points={props.points}
+                    setPoints={props.setPoints}
                 />
             </QuestionInputContainer>
         </>

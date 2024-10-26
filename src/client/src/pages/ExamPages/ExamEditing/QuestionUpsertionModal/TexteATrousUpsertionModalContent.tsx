@@ -15,6 +15,7 @@ function TexteATrousUpsertionModalContent(props: {
     setAcceptableAnswers: (newAcceptableAnswerWithPoints: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
+    canEditPoints: boolean;
 }) {
     const initialPointsPerBlank = props.acceptableAnswers.length
         ? Number(props.points) / props.acceptableAnswers.length
@@ -73,6 +74,7 @@ function TexteATrousUpsertionModalContent(props: {
                     pointsPerBlank={pointsPerBlank}
                     setPoints={props.setPoints}
                     setPointsPerBlank={setPointsPerBlank}
+                    canEdit={props.canEditPoints}
                 />
             </QuestionInputContainer>
         </>

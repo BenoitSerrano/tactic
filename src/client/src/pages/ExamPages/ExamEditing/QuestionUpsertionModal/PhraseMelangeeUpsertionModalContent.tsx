@@ -9,6 +9,7 @@ import { combinator } from '../../../../lib/combinator';
 import { WordsShuffler } from '../../components/WordsShuffler';
 import { computeShuffledAnswerState } from '../../lib/computeShuffledAnswerState';
 import { punctuationSpacesHandler } from '../lib/punctationSpacesHandler';
+import { PointsTextField } from '../components/PointsTextField';
 
 function PhraseMelangeeUpsertionModalContent(props: {
     title: string;
@@ -17,6 +18,7 @@ function PhraseMelangeeUpsertionModalContent(props: {
     setAcceptableAnswers: (acceptableAnswers: acceptableAnswerType[][]) => void;
     points: string;
     setPoints: (points: string) => void;
+    canEditPoints: boolean;
 }) {
     const initialAcceptableAnswers = props.acceptableAnswers.length
         ? props.acceptableAnswers[0][0].answer
@@ -96,10 +98,10 @@ function PhraseMelangeeUpsertionModalContent(props: {
                 </MainContainer>
             )}
             <QuestionInputContainer isLastItem title="Nombre de points attribués à la question">
-                <TextField
-                    value={props.points}
-                    onChange={(event) => props.setPoints(event.target.value)}
-                    label="Point(s)"
+                <PointsTextField
+                    canEdit={props.canEditPoints}
+                    points={props.points}
+                    setPoints={props.setPoints}
                 />
             </QuestionInputContainer>
         </>

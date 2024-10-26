@@ -2,17 +2,17 @@ import { config } from '../config';
 
 const developmentPalette = {
     primary: {
-        light: '#A288A6',
-        dark: '#654F69',
-        main: '#89678C',
+        light: '#BCED09',
+        dark: '#7D9D06',
+        main: '#9CC507',
     },
     secondary: {
         main: '#1647d8',
     },
     warning: { main: '#e87a00', light: '#f5b44d' },
-    common: { black: '#221A23' },
-    background: { default: '#DAD0DC' },
-    divider: '#C8B9CA',
+    common: { black: '#1F2701' },
+    background: { default: '#FAFEEB' },
+    divider: '#F5FED8',
 };
 
 const defaultPalette = {

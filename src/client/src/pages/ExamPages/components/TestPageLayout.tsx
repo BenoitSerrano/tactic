@@ -73,15 +73,14 @@ const CenterFooterPart = styled('div')({
     alignItems: 'center',
 });
 
-const RightFooterPart = styled('div')({
+const RightFooterPart = styled('div')(({ theme }) => ({
     height: '100%',
     flex: 1,
-    paddingRight: 10,
+    paddingRight: theme.spacing(1),
     display: 'flex',
-
     justifyContent: 'flex-end',
     alignItems: 'center',
-});
+}));
 
 const LeftFooterPart = styled('div')({
     height: '100%',
@@ -115,14 +114,14 @@ const TitleContainer = styled('div')(({ theme }) => ({
 
 const Container = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
-        width: '65%',
+        width: '55%',
         paddingTop: theme.spacing(3),
         paddingBottom: theme.spacing(3),
-        paddingLeft: theme.spacing(6),
-        paddingRight: theme.spacing(6),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
     },
     [theme.breakpoints.down('md')]: {
-        width: '90%',
+        width: '85%',
         padding: theme.spacing(1),
     },
     marginBottom: FOOTER_HEIGHT,
