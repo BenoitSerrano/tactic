@@ -66,7 +66,7 @@ function EditableDuration(props: { exam: examApiType }) {
         }
     }
 
-    const isConfirmDisabled = value === null;
+    const isConfirmDisabled = !value;
 
     if (props.exam.duration === null) {
         return (
