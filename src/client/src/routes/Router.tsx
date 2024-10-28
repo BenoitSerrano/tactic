@@ -1,12 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { AdminPage } from '../components/AdminPage';
-
 import { ROUTE_ELEMENTS } from './routeElements';
 import { ROUTE_KEYS } from './routeKeys';
 import { ROUTE_PATHS } from './routePaths';
 import { TitleWrapper } from './TitleWrapper';
 import { ROUTE_TITLES } from './routeTitles';
+import { TeacherPage } from '../components/TeacherPage';
 
 function Router() {
     return (
@@ -21,9 +20,9 @@ function Router() {
                         key={path}
                         path={path}
                         element={
-                            <AdminPage>
+                            <TeacherPage>
                                 <TitleWrapper documentTitle={documentTitle}>{element}</TitleWrapper>
-                            </AdminPage>
+                            </TeacherPage>
                         }
                     />
                 ) : (

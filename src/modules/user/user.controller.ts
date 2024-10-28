@@ -7,6 +7,7 @@ function buildUserController() {
     const userController = {
         createUser,
         login,
+        getUsersSummary,
     };
 
     return userController;
@@ -17,5 +18,9 @@ function buildUserController() {
 
     async function login(params: { body: { email: string; password: string } }) {
         return userService.login(params.body.email, params.body.password);
+    }
+
+    async function getUsersSummary() {
+        return userService.getUsersSummary();
     }
 }

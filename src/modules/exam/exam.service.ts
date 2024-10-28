@@ -136,7 +136,7 @@ function buildExamService() {
 
     async function getExams(criteria: { filter: examFilterType }, user: User) {
         return examRepository.find({
-            where: { user, archivedAt: getArchivedWhereFilter() },
+            where: { user: { id: user.id }, archivedAt: getArchivedWhereFilter() },
             order: { createdAt: 'DESC' },
         });
 
@@ -260,7 +260,7 @@ function buildExamService() {
     async function duplicateExam(criteria: { examId: Exam['id']; user: User }) {
         const exerciseService = buildExerciseService();
         const { id, exercises, attempts, ...partialExam } = await examRepository.findOneOrFail({
-            where: { id: criteria.examId, user: criteria.user },
+            where: { id: criteria.examId, user: { id: criteria.user.id } },
             relations: ['exercises', 'exercises.questions', 'user'],
         });
 
@@ -303,7 +303,7 @@ function buildExamService() {
     }
 
     async function countExamsForUser(user: User) {
-        const examCount = await examRepository.count({ where: { user } });
+        const examCount = await examRepository.count({ where: { user: { id: user.id } } });
         return examCount;
     }
 }

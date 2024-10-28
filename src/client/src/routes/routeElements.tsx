@@ -29,6 +29,7 @@ import { ExamConsult } from '../pages/ExamConsult';
 import { StudentRegistration } from '../pages/StudentRegistration';
 import { NotFound } from '../pages/NotFound';
 import { StudentAuthenticationExamTakingRedirection } from '../pages/StudentAuthenticationExamTakingRedirection';
+import { AdminDashboard } from '../pages/AdminDashboard';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -119,6 +120,7 @@ const ROUTE_ELEMENTS: Record<
         element: <StudentAuthenticationExamTakingRedirection />,
     },
     NOT_FOUND: { element: <NotFound /> },
+    ADMIN_DASHBOARD: { element: <AdminDashboard /> },
 };
 
 export { ROUTE_ELEMENTS };

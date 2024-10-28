@@ -65,7 +65,7 @@ function buildResetPasswordRequestService() {
         const THRESHOLD_DATE = new Date();
         THRESHOLD_DATE.setTime(now.getTime() - PERIOD_ALLOWED_FOR_RESET_PASSWORD_REQUEST);
         const resetPasswordRequests = await resetPasswordRequestRepository.find({
-            where: { user, createdAt: MoreThan(THRESHOLD_DATE.toISOString()) },
+            where: { user: { id: user.id }, createdAt: MoreThan(THRESHOLD_DATE.toISOString()) },
         });
 
         if (resetPasswordRequests.length > 0) {
@@ -86,7 +86,7 @@ function buildResetPasswordRequestService() {
         const now = new Date();
         assertIsResetPasswordRequestRecent(resetPasswordRequest, now);
         await userService.changePassword(resetPasswordRequest.user, password);
-        await resetPasswordRequestRepository.delete({ user: resetPasswordRequest.user });
+        await resetPasswordRequestRepository.delete({ user: { id: resetPasswordRequest.user.id } });
         return true;
     }
 }

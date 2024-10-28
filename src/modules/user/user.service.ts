@@ -22,6 +22,7 @@ function buildUserService() {
         bulkInsertUsers,
         changePassword,
         findPlanForUser,
+        getUsersSummary,
     };
 
     return userService;
@@ -29,6 +30,7 @@ function buildUserService() {
     async function createUser(email: string, password: string) {
         const newUserConfiguration = await userConfigurationService.createUserConfiguration();
         const newUser = new User();
+        newUser.role = 'teacher';
         newUser.email = email;
         newUser.hashedPassword = hasher.hash(password);
         newUser.userConfiguration = newUserConfiguration;
@@ -44,8 +46,12 @@ function buildUserService() {
         }
 
         await mailer.registerContact(email);
-        const token = signer.sign({ userId: result.identifiers[0].id });
+        const token = createJwt({ userId: result.identifiers[0].id, email, role: newUser.role });
         return { token };
+    }
+
+    function createJwt(params: { userId: User['id']; email: User['email']; role: User['role'] }) {
+        return signer.sign(params);
     }
 
     async function findUserByEmail(email: User['email']) {
@@ -58,7 +64,7 @@ function buildUserService() {
         const isPasswordCorrect = hasher.verify(password, user.hashedPassword);
 
         if (isPasswordCorrect) {
-            const token = signer.sign({ userId: user.id });
+            const token = createJwt({ userId: user.id, email: user.email, role: user.role });
             return { token };
         } else {
             throw new Error(`The password sent does not match the hashed stored password`);
@@ -88,5 +94,25 @@ function buildUserService() {
             select: ['id', 'plan'],
         });
         return plan;
+    }
+
+    async function getUsersSummary() {
+        const users = await userRepository.find({
+            relations: ['plan', 'exams'],
+            select: {
+                id: true,
+                email: true,
+                role: true,
+                plan: { id: true, name: true },
+                exams: { id: true },
+            },
+        });
+        return users.map(({ id, email, role, plan, exams }) => ({
+            id,
+            email,
+            role,
+            plan,
+            examsCount: exams.length,
+        }));
     }
 }
