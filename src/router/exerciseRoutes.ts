@@ -18,7 +18,7 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
         schema: Joi.object({
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
-            defaultPoints: Joi.number().required(),
+            defaultPoints: Joi.number().allow(null),
             defaultQuestionKind: Joi.string().valid(...questionKinds),
         }),
     },
@@ -48,7 +48,7 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
         schema: Joi.object({
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
-            defaultPoints: Joi.number().required(),
+            defaultPoints: Joi.number().allow(null),
             defaultQuestionKind: Joi.string().valid(...questionKinds),
         }),
     },

@@ -1,4 +1,4 @@
-import { In } from 'typeorm';
+import { Any, In, Not } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Question } from './Question.entity';
 import { buildAttemptService } from '../attempt';
@@ -11,11 +11,13 @@ import { addAcceptableAnswerToTexteATrousQuestion } from './lib/addAcceptableAns
 import { removeOkAnswerFromQuestionFromTexteATrousQuestion } from './lib/removeOkAnswerFromQuestionFromTexteATrousQuestion';
 import { Exam } from '../exam';
 import { logger } from '../../lib/logger';
+import { computeBlankCount } from './lib/computeBlankCount';
 
 export { buildQuestionService };
 
 function buildQuestionService() {
     const questionRepository = dataSource.getRepository(Question);
+    const attemptService = buildAttemptService();
     const questionService = {
         createQuestion,
         updateQuestion,
@@ -32,6 +34,7 @@ function buildQuestionService() {
         getQuestionsByExamId,
         duplicateQuestions,
         duplicateQuestion,
+        updateQuestionsPointsByExerciseId,
     };
 
     return questionService;
@@ -63,6 +66,41 @@ function buildQuestionService() {
             }),
         );
         return { id: newQuestion.id };
+    }
+
+    async function updateQuestionsPointsByExerciseId(
+        examId: Exam['id'],
+        exerciseId: Exercise['id'],
+        points: number,
+    ) {
+        const texteLibreQuestions = await questionRepository.find({
+            where: { exercise: { id: exerciseId }, kind: 'texteLibre' },
+        });
+        if (texteLibreQuestions.length > 0) {
+            await attemptService.convertAttemptQuestionsPoints({
+                examId,
+                nextPoints: points,
+                questions: texteLibreQuestions,
+            });
+        }
+        await questionRepository.update(
+            {
+                exercise: { id: exerciseId },
+                kind: Not('texteATrous'),
+            },
+            { points },
+        );
+
+        const tatQuestions = await questionRepository.find({
+            where: { exercise: { id: exerciseId }, kind: 'texteATrous' },
+        });
+        await Promise.all(
+            tatQuestions.map((tatQuestion) => {
+                const blankCount = computeBlankCount(tatQuestion.title);
+                const totalPoints = blankCount * points;
+                return questionRepository.update({ id: tatQuestion.id }, { points: totalPoints });
+            }),
+        );
     }
 
     async function getHighestQuestionOrder(exerciseId: Exercise['id']) {

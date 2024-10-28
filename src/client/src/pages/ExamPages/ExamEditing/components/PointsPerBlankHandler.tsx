@@ -1,7 +1,8 @@
-import { TextField, Typography, styled } from '@mui/material';
+import { TextField, Tooltip, Typography, styled } from '@mui/material';
 import { Caption } from '../../components/Caption';
 import { FLOATING_NUMBER_REGEX } from '../../../../constants';
 import { FormHelperText } from '../../../../components/FormHelperText';
+import { CANNOT_EDIT_POINTS_TOOLTIP_TEXT } from '../constants';
 
 const POINTS_TEXT_FIELD_WIDTH = 100;
 
@@ -10,6 +11,7 @@ function PointsPerBlankHandler(props: {
     setPointsPerBlank: (pointsPerBlank: string) => void;
     setPoints: (points: string) => void;
     blankCount: number;
+    canEdit: boolean;
     errorMessage?: string;
     mode: 'editing' | 'previewing';
 }) {
@@ -25,19 +27,31 @@ function PointsPerBlankHandler(props: {
     function renderPointsPerBlank() {
         switch (props.mode) {
             case 'editing':
+                if (props.canEdit) {
+                    return renderPointsTextField(false);
+                }
                 return (
-                    <PointsTextField
-                        error={!!props.errorMessage}
-                        helperText={<FormHelperText label={props.errorMessage} />}
-                        label="Point(s) par trou"
-                        variant="standard"
-                        value={`${props.pointsPerBlank}`}
-                        onChange={onChangePointPerBlank}
-                    />
+                    <Tooltip title={CANNOT_EDIT_POINTS_TOOLTIP_TEXT}>
+                        {renderPointsTextField(true)}
+                    </Tooltip>
                 );
             case 'previewing':
                 return props.pointsPerBlank;
         }
+    }
+
+    function renderPointsTextField(isDisabled: boolean) {
+        return (
+            <PointsTextField
+                error={!!props.errorMessage}
+                disabled={isDisabled}
+                helperText={<FormHelperText label={props.errorMessage} />}
+                label="Point(s) par trou"
+                variant="standard"
+                value={`${props.pointsPerBlank}`}
+                onChange={onChangePointPerBlank}
+            />
+        );
     }
 
     function onChangePointPerBlank(event: React.ChangeEvent<HTMLInputElement>) {

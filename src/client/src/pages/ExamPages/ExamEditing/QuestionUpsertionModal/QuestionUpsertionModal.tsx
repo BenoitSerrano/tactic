@@ -20,13 +20,15 @@ function QuestionUpsertionModal(props: {
     modalStatus: questionUpsertionModalStatusType;
     examId: string;
     exerciseId: number;
-    defaultPoints: number;
+    defaultPoints: number | null;
     onCreateQuestion: (exerciseId: number, questionId: number) => void;
 }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
     const [currentQuestionKind, setCurrentQuestionKind] = useState<questionKindType>(
-        props.defaultQuestionKind,
+        props.modalStatus.kind === 'creating'
+            ? props.defaultQuestionKind
+            : props.modalStatus.question.kind,
     );
 
     const updateQuestionMutation = useMutation({
@@ -50,15 +52,12 @@ function QuestionUpsertionModal(props: {
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });
         },
     });
-
     const QuestionUpsertionModalContentComponent =
         questionUpsertionModalContentComponentMapping[currentQuestionKind];
 
-    const [points, setPoints] = useState(
-        props.modalStatus.kind === 'editing'
-            ? `${props.modalStatus.question.points}`
-            : `${props.defaultPoints}`,
-    );
+    const initialPoints = computeInitialPoints();
+
+    const [points, setPoints] = useState(initialPoints);
 
     const [title, setTitle] = useState(
         props.modalStatus.kind === 'editing' ? `${props.modalStatus.question.title}` : '',
@@ -105,6 +104,7 @@ function QuestionUpsertionModal(props: {
                 )}
 
                 <QuestionUpsertionModalContentComponent
+                    canEditPoints={props.defaultPoints === null}
                     title={title}
                     setTitle={setTitle}
                     acceptableAnswers={acceptableAnswers}
@@ -136,6 +136,19 @@ function QuestionUpsertionModal(props: {
         setPossibleAnswers(DEFAULT_POSSIBLE_ANSWERS);
         setTitle('');
         setPoints(`${props.defaultPoints}`);
+    }
+
+    function computeInitialPoints() {
+        switch (props.modalStatus.kind) {
+            case 'creating':
+                if (props.defaultPoints === null) {
+                    return '';
+                } else {
+                    return `${props.defaultPoints}`;
+                }
+            case 'editing':
+                return `${props.modalStatus.question.points}`;
+        }
     }
 
     function saveQuestion() {

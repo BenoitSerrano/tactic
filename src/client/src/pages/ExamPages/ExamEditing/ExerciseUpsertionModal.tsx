@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { Editable, useEditor } from '@wysimark/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TextField, styled } from '@mui/material';
+import {
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Radio,
+    TextField,
+    Typography,
+    styled,
+} from '@mui/material';
 import { config } from '../../../config';
 import { useAlert } from '../../../lib/alert';
 import { questionKindType } from '../../../types';
@@ -10,6 +18,8 @@ import { Modal } from '../../../components/Modal';
 import { QuestionKindSelect } from '../components/QuestionKindSelect';
 import { FLOATING_NUMBER_REGEX } from '../../../constants';
 import { exerciseUpsertionModalStatusType } from './types';
+
+type pointsModeType = 'individually' | 'allAtOnce';
 
 function ExerciseUpsertionModal(props: {
     close: () => void;
@@ -58,16 +68,17 @@ function ExerciseUpsertionModal(props: {
         props.modalStatus.kind === 'editing' ? props.modalStatus.exercise.instruction : '',
     );
 
-    const [defaultPoints, setDefaultPoints] = useState(
-        props.modalStatus.kind === 'editing' ? `${props.modalStatus.exercise.defaultPoints}` : '1',
-    );
+    const initialDefaultPoints = computeInitialDefaultPoints();
+    const [defaultPoints, setDefaultPoints] = useState(initialDefaultPoints);
+    const initialPointMode = computeInitialPointMode();
+    const [pointsMode, setPointsMode] = useState<pointsModeType>(initialPointMode);
 
     const isUpdating = updateExerciseMutation.isPending;
     const isCreating = createExerciseMutation.isPending;
 
     const confirmButtonLabel = props.modalStatus.kind === 'creating' ? 'Ajouter' : 'Modifier';
     const titlePrefix = props.modalStatus.kind === 'creating' ? 'Création' : 'Édition';
-    const isConfirmDisabled = !name || !defaultPoints;
+    const isConfirmDisabled = computeIsConfirmDisabled();
 
     return (
         <Modal
@@ -81,12 +92,14 @@ function ExerciseUpsertionModal(props: {
             isConfirmDisabled={isConfirmDisabled}
         >
             <>
-                <RowContainer>
-                    <QuestionKindSelect
-                        currentQuestionKind={defaultQuestionKind}
-                        onSelect={setDefaultQuestionKind}
-                    />
-                </RowContainer>
+                {props.modalStatus.kind === 'creating' && (
+                    <RowContainer>
+                        <QuestionKindSelect
+                            currentQuestionKind={defaultQuestionKind}
+                            onSelect={setDefaultQuestionKind}
+                        />
+                    </RowContainer>
+                )}
                 <RowContainer>
                     <TextField
                         autoFocus
@@ -101,12 +114,50 @@ function ExerciseUpsertionModal(props: {
                     <Editable editor={editor} value={instruction} onChange={setInstruction} />
                 </RowContainer>
                 <RowContainer>
-                    <TextField
-                        name="defaultPoints"
-                        label="Nombre de points par question par défaut"
-                        value={defaultPoints}
-                        onChange={onChangeDefaultPoints}
-                    />
+                    <FormControl>
+                        <FormLabel id="demo-radio-buttons-group-label">
+                            Points attribués à chaque question
+                        </FormLabel>
+
+                        <FormControlLabel
+                            control={
+                                <Radio
+                                    checked={pointsMode === 'allAtOnce'}
+                                    onChange={(_event, checked) =>
+                                        setPointsMode(checked ? 'allAtOnce' : 'individually')
+                                    }
+                                />
+                            }
+                            label={
+                                <LabelContainer>
+                                    <Label>
+                                        Attribuer le même nombre de points pour toutes les questions
+                                        de cet exercice :
+                                    </Label>
+                                    <PointsTextField
+                                        disabled={pointsMode === 'individually'}
+                                        variant="standard"
+                                        name="defaultPoints"
+                                        value={defaultPoints}
+                                        onChange={onChangeDefaultPoints}
+                                    />
+                                    <Typography>point(s)</Typography>
+                                </LabelContainer>
+                            }
+                        />
+                        <FormControlLabel
+                            value="individually"
+                            control={
+                                <Radio
+                                    checked={pointsMode === 'individually'}
+                                    onChange={(_event, checked) =>
+                                        setPointsMode(checked ? 'individually' : 'allAtOnce')
+                                    }
+                                />
+                            }
+                            label="Définir le nombre de points pour chaque question individuellement"
+                        />
+                    </FormControl>
                 </RowContainer>
             </>
         </Modal>
@@ -119,6 +170,44 @@ function ExerciseUpsertionModal(props: {
         }
     }
 
+    function computeIsConfirmDisabled(): boolean {
+        if (!name) {
+            return true;
+        }
+        switch (pointsMode) {
+            case 'individually':
+                return false;
+            case 'allAtOnce':
+                return !defaultPoints;
+        }
+    }
+
+    function computeInitialPointMode(): pointsModeType {
+        switch (props.modalStatus.kind) {
+            case 'creating':
+                return 'allAtOnce';
+            case 'editing':
+                if (props.modalStatus.exercise.defaultPoints === null) {
+                    return 'individually';
+                } else {
+                    return 'allAtOnce';
+                }
+        }
+    }
+
+    function computeInitialDefaultPoints(): string {
+        switch (props.modalStatus.kind) {
+            case 'creating':
+                return '1';
+            case 'editing':
+                if (props.modalStatus.exercise.defaultPoints === null) {
+                    return '';
+                } else {
+                    return `${props.modalStatus.exercise.defaultPoints}`;
+                }
+        }
+    }
+
     function saveExercise() {
         const { modalStatus } = props;
         if (!modalStatus) {
@@ -127,7 +216,7 @@ function ExerciseUpsertionModal(props: {
         const newExercise = {
             name,
             instruction,
-            defaultPoints: Number(defaultPoints),
+            defaultPoints: pointsMode === 'allAtOnce' ? Number(defaultPoints) : null,
             defaultQuestionKind,
         };
         if (modalStatus.kind === 'editing') {
@@ -151,5 +240,12 @@ const RowContainer = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
 }));
+
+const PointsTextField = styled(TextField)(({ theme }) => ({
+    width: 50,
+    marginRight: theme.spacing(1),
+}));
+const LabelContainer = styled('div')({ display: 'flex', alignItems: 'center' });
+const Label = styled(Typography)(({ theme }) => ({ marginRight: theme.spacing(1) }));
 
 export { ExerciseUpsertionModal };

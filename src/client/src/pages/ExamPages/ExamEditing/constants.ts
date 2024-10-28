@@ -11,6 +11,9 @@ import { QuestionReponsePreviewing } from './QuestionPreviewing/QuestionReponseP
 import { PhraseMelangeePreviewing } from './QuestionPreviewing/PhraseMelangeePreviewing';
 import { TexteATrousPreviewing } from './QuestionPreviewing/TexteATrous';
 
+const CANNOT_EDIT_POINTS_TOOLTIP_TEXT =
+    "Vous ne pouvez pas éditer le nombre de points pour cette question. Pour modifier individuellement le nombre de points, il vous faut modifier la valeur dans la modale d'édition de l'exercice en cours.";
+
 const questionUpsertionModalContentComponentMapping: Record<questionKindType, ElementType> = {
     qcm: QCMUpsertionModalContent,
     questionReponse: QuestionReponseUpsertionModalContent,
@@ -30,6 +33,7 @@ const questionPreviewingComponentMapping: Record<questionKindType, ElementType> 
 const SPLITTING_CHARACTER_FOR_ANSWERS = ';';
 
 export {
+    CANNOT_EDIT_POINTS_TOOLTIP_TEXT,
     questionUpsertionModalContentComponentMapping,
     questionPreviewingComponentMapping,
     SPLITTING_CHARACTER_FOR_ANSWERS,

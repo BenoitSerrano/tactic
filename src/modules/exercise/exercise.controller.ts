@@ -21,7 +21,7 @@ function buildExerciseController() {
         body: {
             name: string;
             instruction: string;
-            defaultPoints: number;
+            defaultPoints: number | null;
             defaultQuestionKind: Question['kind'];
         };
     }) {
@@ -33,7 +33,7 @@ function buildExerciseController() {
         body: {
             name: string;
             instruction: string;
-            defaultPoints: number;
+            defaultPoints: number | null;
             defaultQuestionKind: questionKindType;
         };
     }) {

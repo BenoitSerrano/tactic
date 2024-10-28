@@ -14,8 +14,8 @@ export class Exercise {
     @Column()
     instruction: string;
 
-    @Column('float', { default: 1 })
-    defaultPoints: number;
+    @Column('float', { nullable: true })
+    defaultPoints: number | null;
 
     @Column('float')
     order: number;

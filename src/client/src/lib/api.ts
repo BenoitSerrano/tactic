@@ -339,7 +339,7 @@ async function createExercise(params: {
     examId: string;
     name: string;
     instruction: string;
-    defaultPoints: number;
+    defaultPoints: number | null;
     defaultQuestionKind: questionKindType;
     order?: number;
 }) {
@@ -358,7 +358,7 @@ async function updateExercise(params: {
     exerciseId: number;
     name: string;
     instruction: string;
-    defaultPoints: number;
+    defaultPoints: number | null;
     defaultQuestionKind: questionKindType;
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;

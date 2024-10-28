@@ -10,7 +10,7 @@ type exerciseWithQuestionsType = {
     id: number;
     instruction: string;
     name: string;
-    defaultPoints: number;
+    defaultPoints: number | null;
     defaultQuestionKind: questionKindType;
     order: number;
     questions: Array<questionType>;
@@ -33,7 +33,7 @@ type exerciseUpsertionModalStatusType =
 type exerciseDefaultType = {
     id: number;
     defaultQuestionKind: questionKindType;
-    defaultPoints: number;
+    defaultPoints: number | null;
 };
 
 type questionUpsertionModalStatusType =

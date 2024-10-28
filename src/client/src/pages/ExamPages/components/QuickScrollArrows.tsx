@@ -38,7 +38,7 @@ export { QuickScrollArrows };
 
 const Container = styled('div')(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
-        right: theme.spacing(2),
+        right: theme.spacing(1),
     },
     [theme.breakpoints.up('md')]: {
         right: 34,

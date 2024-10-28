@@ -30,6 +30,7 @@ function AutoBlurringTextField(props: {
                 placeholder="..."
                 value={props.value}
                 onChange={onChange}
+                variant="standard"
             />
             {studentConfig.shouldDisplayAccentKeyboard && isTextInputFocused && (
                 <AccentVirtualKeyboard onAddCharacter={onAddCharacter} />
@@ -86,6 +87,8 @@ const Container = styled('div')<{ isFullWidth: boolean | undefined; width: numbe
     ({ theme, isFullWidth }) => ({
         display: 'flex',
         position: 'relative',
+        marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
         width: isFullWidth ? '100%' : undefined,
     }),
 );
