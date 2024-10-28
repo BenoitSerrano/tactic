@@ -22,6 +22,12 @@ const userRoutes: Array<routeType<any, any, any>> = [
         isAuthenticated: false,
         controller: userController.login,
     },
+    {
+        method: 'GET',
+        path: '/users-summary',
+        isAuthenticated: true,
+        controller: userController.getUsersSummary,
+    },
 ];
 
 export { userRoutes };

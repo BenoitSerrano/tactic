@@ -10,7 +10,7 @@ import { EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
 import { styled } from '@mui/material';
 import { IconLink } from '../IconLink';
 
-function AdminHeader() {
+function TeacherHeader() {
     const location = useLocation();
 
     const buttons = computeRightButtons(location.pathname);
@@ -56,4 +56,4 @@ function AdminHeader() {
 
 const PreviewLinkContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(2) }));
 
-export { AdminHeader };
+export { TeacherHeader };

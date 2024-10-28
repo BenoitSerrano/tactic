@@ -3,9 +3,9 @@ import { localStorage } from '../../lib/localStorage';
 import { Navigate } from 'react-router-dom';
 import { Breadcrumbs } from './Breadcrumbs';
 import { HEADER_HEIGHT } from '../../constants';
-import { AdminHeader } from './AdminHeader';
+import { TeacherHeader } from './TeacherHeader';
 
-function AdminPage(props: { children: React.ReactNode | null }) {
+function TeacherPage(props: { children: React.ReactNode | null }) {
     const token = localStorage.jwtTokenHandler.get();
 
     if (!token) {
@@ -14,7 +14,7 @@ function AdminPage(props: { children: React.ReactNode | null }) {
 
     return (
         <Container>
-            <AdminHeader />
+            <TeacherHeader />
 
             <ContentContainer>
                 <Breadcrumbs />
@@ -39,4 +39,4 @@ const ContentContainer = styled('div')({
 });
 const ChildrenContainer = styled('div')({ flex: 1, display: 'flex', flexDirection: 'column' });
 
-export { AdminPage };
+export { TeacherPage };

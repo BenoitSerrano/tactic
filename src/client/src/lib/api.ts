@@ -60,6 +60,7 @@ const api = {
     duplicateExam,
     fetchShouldDisplayRightAnswersForExamId,
     updateShouldDisplayRightAnswersForExamId,
+    fetchUsersSummary,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -102,6 +103,11 @@ async function performApiCall(
         }
     }
     return response.json();
+}
+
+async function fetchUsersSummary() {
+    const URL = `${BASE_URL}/users-summary`;
+    return performApiCall(URL, 'GET');
 }
 
 async function createUser(params: { email: string; password: string }) {
