@@ -82,8 +82,10 @@ function ExerciseContainer<
         if (props.exerciseIndexes.previous === undefined) {
             return;
         }
+
         const hash = computeHash(props.exerciseIndexes.previous);
         navigate(hash);
+        scrollToTop();
     }
 
     function onNextExerciseClick() {
@@ -92,6 +94,11 @@ function ExerciseContainer<
         }
         const hash = computeHash(props.exerciseIndexes.next);
         navigate(hash);
+        scrollToTop();
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
