@@ -68,11 +68,11 @@ function buildExamController() {
                 `Query filter "${params.query.filter}" is neither "archived" nor "current"`,
             );
         }
-        return examService.getExams(user, { filter: params.query.filter });
+        return examService.getExams(user.id, { filter: params.query.filter });
     }
 
-    async function getExamsForUser(params: {}, user: User) {
-        return examService.getExams(user);
+    async function getExamsForUser(params: { urlParams: { userId: string } }) {
+        return examService.getExams(params.urlParams.userId);
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {

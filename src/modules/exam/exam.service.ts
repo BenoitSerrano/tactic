@@ -134,18 +134,18 @@ function buildExamService() {
         };
     }
 
-    async function getExams(user: User, criteria?: { filter: examFilterType }) {
+    async function getExams(userId: User['id'], criteria?: { filter: examFilterType }) {
         if (criteria) {
             return examRepository.find({
                 where: {
-                    user: { id: user.id },
+                    user: { id: userId },
                     archivedAt: getArchivedWhereFilter(criteria.filter),
                 },
                 order: { createdAt: 'DESC' },
             });
         }
         return examRepository.find({
-            where: { user: { id: user.id } },
+            where: { user: { id: userId } },
             order: { createdAt: 'DESC' },
         });
 
