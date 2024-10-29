@@ -14,6 +14,12 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
+        path: '/users/:userId/exams',
+        isAuthenticated: true,
+        controller: examController.getExamsForUser,
+    },
+    {
+        method: 'GET',
         path: '/all-exams',
         isAuthenticated: false,
         controller: examController.getAllExams,

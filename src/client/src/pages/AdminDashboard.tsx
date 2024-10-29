@@ -2,6 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { IconButton } from '../components/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useNavigate } from 'react-router-dom';
+import { pathHandler } from '../lib/pathHandler';
 
 type userRoleType = 'teacher' | 'admin';
 type planType = { id: string; name: string };
@@ -14,6 +18,7 @@ type userSummaryApiType = {
 };
 
 function AdminDashboard() {
+    const navigate = useNavigate();
     const query = useQuery<userSummaryApiType[]>({
         queryKey: ['users-summary'],
         queryFn: api.fetchUsersSummary,
@@ -31,16 +36,29 @@ function AdminDashboard() {
                 <TableCell>Rôle</TableCell>
                 <TableCell>Plan</TableCell>
                 <TableCell>Nombre d'examens</TableCell>
+                <TableCell width={20}></TableCell>
             </TableHead>
             <TableBody>
-                {query.data.map((user) => (
-                    <TableRow key={user.id}>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>{user.role}</TableCell>
-                        <TableCell>{user.plan.name}</TableCell>
-                        <TableCell>{user.examsCount}</TableCell>
-                    </TableRow>
-                ))}
+                {query.data.map((user) => {
+                    const detailPath = pathHandler.getRoutePath('ADMIN_TEACHER_EXAMS', {
+                        userId: user.id,
+                    });
+                    return (
+                        <TableRow key={user.id}>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.role}</TableCell>
+                            <TableCell>{user.plan.name}</TableCell>
+                            <TableCell>{user.examsCount}</TableCell>
+                            <TableCell>
+                                <IconButton
+                                    IconComponent={VisibilityIcon}
+                                    title="Voir le détail"
+                                    onClick={() => navigate(detailPath)}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
             </TableBody>
         </Table>
     );
