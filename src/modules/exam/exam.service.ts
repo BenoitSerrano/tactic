@@ -134,14 +134,23 @@ function buildExamService() {
         };
     }
 
-    async function getExams(criteria: { filter: examFilterType }, user: User) {
+    async function getExams(user: User, criteria?: { filter: examFilterType }) {
+        if (criteria) {
+            return examRepository.find({
+                where: {
+                    user: { id: user.id },
+                    archivedAt: getArchivedWhereFilter(criteria.filter),
+                },
+                order: { createdAt: 'DESC' },
+            });
+        }
         return examRepository.find({
-            where: { user: { id: user.id }, archivedAt: getArchivedWhereFilter() },
+            where: { user: { id: user.id } },
             order: { createdAt: 'DESC' },
         });
 
-        function getArchivedWhereFilter() {
-            switch (criteria.filter) {
+        function getArchivedWhereFilter(filter: examFilterType) {
+            switch (filter) {
                 case 'current':
                     return IsNull();
                 case 'archived':

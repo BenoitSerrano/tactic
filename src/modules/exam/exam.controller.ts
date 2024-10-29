@@ -13,6 +13,7 @@ function buildExamController() {
         updateExamName,
         updateExamEdgeText,
         getExams,
+        getExamsForUser,
         getExam,
         getExamWithoutAnswers,
         getAllExams,
@@ -67,7 +68,11 @@ function buildExamController() {
                 `Query filter "${params.query.filter}" is neither "archived" nor "current"`,
             );
         }
-        return examService.getExams({ filter: params.query.filter }, user);
+        return examService.getExams(user, { filter: params.query.filter });
+    }
+
+    async function getExamsForUser(params: {}, user: User) {
+        return examService.getExams(user);
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {

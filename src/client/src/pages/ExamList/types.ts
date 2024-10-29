@@ -4,6 +4,8 @@ type examApiType = {
     duration: number | null;
     startText: string;
     endText: string;
+    createdAt: string;
+    archivedAt: string | null;
 };
 
 export type { examApiType };

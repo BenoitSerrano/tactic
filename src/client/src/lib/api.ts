@@ -61,6 +61,7 @@ const api = {
     fetchShouldDisplayRightAnswersForExamId,
     updateShouldDisplayRightAnswersForExamId,
     fetchUsersSummary,
+    fetchUserExams,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -107,6 +108,11 @@ async function performApiCall(
 
 async function fetchUsersSummary() {
     const URL = `${BASE_URL}/users-summary`;
+    return performApiCall(URL, 'GET');
+}
+
+async function fetchUserExams(userId: string) {
+    const URL = `${BASE_URL}/users/${userId}/exams`;
     return performApiCall(URL, 'GET');
 }
 

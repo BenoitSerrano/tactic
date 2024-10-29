@@ -33,6 +33,7 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     ATTEMPT_NOT_CORRECTED: 'Erreur - copie non corrigée',
     NOT_FOUND: 'Page non trouvée',
     ADMIN_DASHBOARD: "Tableau d'administration",
+    ADMIN_TEACHER_EXAMS: 'Examens',
 };
 
 export { ROUTE_TITLES };
