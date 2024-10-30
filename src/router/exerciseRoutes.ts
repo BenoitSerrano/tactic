@@ -10,7 +10,8 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PUT',
         path: `/exams/:examId/exercises/:exerciseId`,
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: exerciseController.updateExercise,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
@@ -25,7 +26,8 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/exams/:examId/exercises/order',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: exerciseController.updateExercisesOrder,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -40,7 +42,8 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: `/exams/:examId/exercises`,
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: exerciseController.createExercise,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
@@ -55,7 +58,8 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'DELETE',
         path: `/exams/:examId/exercises/:exerciseId`,
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: exerciseController.deleteExercise,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },

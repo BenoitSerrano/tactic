@@ -1,23 +1,22 @@
 import { styled } from '@mui/material';
 import { Navigate } from 'react-router-dom';
-import { Breadcrumbs } from './Breadcrumbs';
 import { HEADER_HEIGHT } from '../../constants';
-import { TeacherHeader } from './TeacherHeader';
 import { localSessionHandler } from '../../lib/localSessionHandler';
+import { Header } from '../Header';
+import { Logo } from '../Logo';
 
-function TeacherPage(props: { children: React.ReactNode | null }) {
+function AdminPage(props: { children: React.ReactNode | null }) {
     const userRoles = localSessionHandler.getUserRoles();
 
-    if (!userRoles || !userRoles.includes('teacher')) {
+    if (!userRoles || !userRoles.includes('admin')) {
         return <Navigate to="/sign-in" />;
     }
 
     return (
         <Container>
-            <TeacherHeader />
+            <Header buttons={[]} LeftContent={<Logo variant="full" />} MiddleContent={<></>} />
 
             <ContentContainer>
-                <Breadcrumbs />
                 <ChildrenContainer>{props.children}</ChildrenContainer>
             </ContentContainer>
         </Container>
@@ -39,4 +38,4 @@ const ContentContainer = styled('div')({
 });
 const ChildrenContainer = styled('div')({ flex: 1, display: 'flex', flexDirection: 'column' });
 
-export { TeacherPage };
+export { AdminPage };

@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Plan } from '../plan';
 import { UserConfiguration } from '../userConfiguration';
-import { USER_ROLES, userRoleType } from './constants';
+import { userRoleType } from './constants';
 import { Exam } from '../exam';
 
 @Entity()
@@ -23,8 +23,8 @@ export class User {
     @Column()
     hashedPassword: string;
 
-    @Column('enum', { enum: USER_ROLES, default: 'teacher' as userRoleType })
-    role: userRoleType;
+    @Column('simple-array', { default: 'teacher' })
+    roles: userRoleType[];
 
     @ManyToOne(() => Plan, { nullable: false })
     plan: Plan;

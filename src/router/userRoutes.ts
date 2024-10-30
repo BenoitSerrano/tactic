@@ -7,25 +7,26 @@ const userRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/users',
-        isAuthenticated: false,
+        kind: 'public',
         controller: userController.createUser,
     },
     {
         method: 'POST',
         path: '/login',
-        isAuthenticated: false,
+        kind: 'public',
         controller: userController.login,
     },
     {
         method: 'POST',
         path: '/login',
-        isAuthenticated: false,
+        kind: 'public',
         controller: userController.login,
     },
     {
         method: 'GET',
         path: '/users-summary',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['admin'],
         controller: userController.getUsersSummary,
     },
 ];

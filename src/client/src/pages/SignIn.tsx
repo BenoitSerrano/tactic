@@ -3,16 +3,20 @@ import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { FormEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
-import { localStorage } from '../lib/localStorage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Card } from '../components/Card';
 import { Link } from '../components/Link';
 import { pathHandler } from '../lib/pathHandler';
 import { LoadingButton } from '@mui/lab';
+import { localSessionHandler } from '../lib/localSessionHandler';
+import { userInfoType } from '../constants';
 
 function SignIn(props: {
     shouldDisplayResetPasswordLink?: boolean;
-    apiCall: (params: { email: string; password: string }) => Promise<{ token: string }>;
+    apiCall: (params: {
+        email: string;
+        password: string;
+    }) => Promise<{ token: string; userInfo: userInfoType }>;
     title: string;
 }) {
     const [searchParams] = useSearchParams();
@@ -26,8 +30,10 @@ function SignIn(props: {
     const mutation = useMutation({
         mutationFn: props.apiCall,
         onSuccess: (data) => {
-            const { token } = data;
-            localStorage.jwtTokenHandler.set(token);
+            const { token, userInfo } = data;
+            localSessionHandler.setToken(token);
+            localSessionHandler.setUserInfo(userInfo);
+
             navigate(pathHandler.getRoutePath('TEACHER_HOME'));
         },
         onError: () => {

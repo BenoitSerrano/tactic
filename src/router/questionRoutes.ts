@@ -9,7 +9,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PUT',
         path: '/exams/:examId/exercises/:exerciseId/questions/:questionId',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.updateQuestion,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
@@ -35,7 +36,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: `/exams/:examId/exercises/:exerciseId/questions/order`,
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.updateQuestionsOrder,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
@@ -47,7 +49,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/exams/:examId/questions/:questionId/acceptable-answers',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.addQuestionAcceptableAnswer,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -67,7 +70,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/exams/:examId/questions/:questionId/tat-acceptable-answers',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.addQuestionAcceptableAnswerToTexteATrous,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -88,7 +92,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/exams/:examId/exercises/:exerciseId/questions',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.createQuestion,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -118,7 +123,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/exams/:examId/exercises/:exerciseId/questions/:questionId/duplicate',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.duplicateQuestion,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -130,7 +136,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'DELETE',
         path: '/exams/:examId/questions/:questionId/ok-answers',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.removeOkAnswer,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -143,7 +150,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'DELETE',
         path: '/exams/:examId/questions/:questionId/tat-ok-answers',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.removeOkAnswerFromTexteATrous,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -159,7 +167,8 @@ const questionRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'DELETE',
         path: `/exams/:examId/questions/:questionId`,
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: questionController.deleteQuestion,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {

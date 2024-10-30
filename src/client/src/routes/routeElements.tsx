@@ -31,32 +31,33 @@ import { NotFound } from '../pages/NotFound';
 import { StudentAuthenticationExamTakingRedirection } from '../pages/StudentAuthenticationExamTakingRedirection';
 import { AdminDashboard } from '../pages/AdminDashboard';
 import { AdminTeacherExams } from '../pages/AdminTeacherExams';
+import { userRoleType } from '../constants';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
-    { element: JSX.Element; isAdmin?: boolean }
+    { element: JSX.Element; authorizedRole?: userRoleType }
 > = {
     EXAM_TAKING: {
         element: <ExamTaking />,
     },
     EXAM_EDITING_CONTENT: {
-        isAdmin: true,
+        authorizedRole: 'teacher',
         element: <ExamEditing />,
     },
     EXAM_PARAMETERS: {
-        isAdmin: true,
+        authorizedRole: 'teacher',
         element: <ExamParameters />,
     },
     EXAM_ATTEMPT_COLLECT: {
-        isAdmin: true,
+        authorizedRole: 'teacher',
         element: <ExamCollect />,
     },
     EXAM_RESULTS: {
-        isAdmin: true,
+        authorizedRole: 'teacher',
         element: <ExamResults />,
     },
     EXAM_CONSULT: {
-        isAdmin: true,
+        authorizedRole: 'teacher',
         element: <ExamConsult />,
     },
     STUDENT_HOME: {
@@ -101,28 +102,34 @@ const ROUTE_ELEMENTS: Record<
     EXAM_ARCHIVED: {
         element: <ExamArchived />,
     },
-    EXAM_LIST: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST_CURRENT.path} /> },
-    EXAM_LIST_ARCHIVED: { isAdmin: true, element: <ExamList filter="archived" /> },
-    EXAM_LIST_CURRENT: { isAdmin: true, element: <ExamList filter="current" /> },
-    STUDENTS: { isAdmin: true, element: <Students /> },
+    EXAM_LIST: {
+        authorizedRole: 'teacher',
+        element: <Navigate to={ROUTE_PATHS.EXAM_LIST_CURRENT.path} />,
+    },
+    EXAM_LIST_ARCHIVED: { authorizedRole: 'teacher', element: <ExamList filter="archived" /> },
+    EXAM_LIST_CURRENT: { authorizedRole: 'teacher', element: <ExamList filter="current" /> },
+    STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
     EXAM_PREVIEWING: {
-        isAdmin: false,
+        authorizedRole: 'teacher',
         element: <ExamPreviewing />,
     },
     EXAM_CHECKING: {
-        isAdmin: true,
+        authorizedRole: 'teacher',
 
         element: <ExamChecking />,
     },
-    TEACHER_HOME: { isAdmin: true, element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} /> },
-    GROUPS: { isAdmin: true, element: <Groups /> },
+    TEACHER_HOME: {
+        authorizedRole: 'teacher',
+        element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} />,
+    },
+    GROUPS: { authorizedRole: 'teacher', element: <Groups /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
     STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: {
         element: <StudentAuthenticationExamTakingRedirection />,
     },
     NOT_FOUND: { element: <NotFound /> },
-    ADMIN_DASHBOARD: { element: <AdminDashboard /> },
-    ADMIN_TEACHER_EXAMS: { element: <AdminTeacherExams /> },
+    ADMIN_DASHBOARD: { element: <AdminDashboard />, authorizedRole: 'admin' },
+    ADMIN_TEACHER_EXAMS: { element: <AdminTeacherExams />, authorizedRole: 'admin' },
 };
 
 export { ROUTE_ELEMENTS };

@@ -6,34 +6,57 @@ import { ROUTE_PATHS } from './routePaths';
 import { TitleWrapper } from './TitleWrapper';
 import { ROUTE_TITLES } from './routeTitles';
 import { TeacherPage } from '../components/TeacherPage';
+import { AdminPage } from '../components/TeacherPage/AdminPage';
 
 function Router() {
     return (
         <Routes>
             {ROUTE_KEYS.map((routeKey) => {
-                const { isAdmin, element } = ROUTE_ELEMENTS[routeKey];
+                const { authorizedRole, element } = ROUTE_ELEMENTS[routeKey];
                 const { path } = ROUTE_PATHS[routeKey];
                 const documentTitle = ROUTE_TITLES[routeKey];
-
-                return isAdmin ? (
-                    <Route
-                        key={path}
-                        path={path}
-                        element={
-                            <TeacherPage>
+                if (!authorizedRole) {
+                    return (
+                        <Route
+                            key={path}
+                            path={path}
+                            element={
                                 <TitleWrapper documentTitle={documentTitle}>{element}</TitleWrapper>
-                            </TeacherPage>
-                        }
-                    />
-                ) : (
-                    <Route
-                        key={path}
-                        path={path}
-                        element={
-                            <TitleWrapper documentTitle={documentTitle}>{element}</TitleWrapper>
-                        }
-                    />
-                );
+                            }
+                        />
+                    );
+                }
+
+                switch (authorizedRole) {
+                    case 'teacher':
+                        return (
+                            <Route
+                                key={path}
+                                path={path}
+                                element={
+                                    <TeacherPage>
+                                        <TitleWrapper documentTitle={documentTitle}>
+                                            {element}
+                                        </TitleWrapper>
+                                    </TeacherPage>
+                                }
+                            />
+                        );
+                    case 'admin':
+                        return (
+                            <Route
+                                key={path}
+                                path={path}
+                                element={
+                                    <AdminPage>
+                                        <TitleWrapper documentTitle={documentTitle}>
+                                            {element}
+                                        </TitleWrapper>
+                                    </AdminPage>
+                                }
+                            />
+                        );
+                }
             })}
         </Routes>
     );

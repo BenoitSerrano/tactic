@@ -9,13 +9,14 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/all-attempts',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.getAllAttempts,
     },
     {
         method: 'GET',
         path: '/exams/:examId/attempts/count-by-correction-status',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: attemptController.fetchAttemptsCountByCorrectionStatus,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -27,26 +28,26 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/exams/:examId/students/:studentId/attempts',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.searchAttempt,
     },
     {
         method: 'GET',
         path: '/attempts/:attemptId/with-answers',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.fetchAttemptWithAnswers,
     },
 
     {
         method: 'GET',
         path: '/attempts/:attemptId/without-answers',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.fetchAttemptWithoutAnswers,
     },
     {
         method: 'PUT',
         path: '/attempts/:attemptId',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.updateAttempt,
         schema: Joi.object<Record<string, string>>({}).pattern(
             Joi.string().allow(''),
@@ -56,7 +57,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/attempts/:attemptId/cheating-summary',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.updateAttemptCheatingSummary,
         schema: Joi.object({
             roundTrips: Joi.number().required(),
@@ -66,7 +67,8 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/exams/:examId/attempts/:attemptId/questions/:questionId/manual-mark',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: attemptController.updateManualMark,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -81,13 +83,14 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/attempts/:attemptId/endedAt',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.updateAttemptEndedAt,
     },
     {
         method: 'PATCH',
         path: '/exams/:examId/attempts/:attemptId/correctedAt',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: attemptController.updateAttemptCorrectedAt,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -99,13 +102,14 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/exams/:examId/students/:studentId/attempts',
-        isAuthenticated: false,
+        kind: 'public',
         controller: attemptController.createAttempt,
     },
     {
         method: 'DELETE',
         path: '/exams/:examId/attempts/:attemptId/endedAt',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: attemptController.deleteAttemptEndedAt,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -117,7 +121,8 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'DELETE',
         path: '/exams/:examId/attempts/:attemptId',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: attemptController.deleteAttempt,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -129,7 +134,8 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'DELETE',
         path: '/exams/:examId/attempts/:attemptId/correctedAt',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: attemptController.deleteAttemptCorrectedAt,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {

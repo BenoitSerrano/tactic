@@ -17,6 +17,13 @@ const manualQuestionKinds = ['texteLibre'];
 
 const localeInfo = { locale: 'fr-FR', timeZone: 'Europe/Paris' };
 
+type userRoleType = 'teacher' | 'admin';
+type userInfoType = {
+    email: string;
+    roles: userRoleType[];
+    plan: 'string';
+};
+
 const questionSpecificityMapping: Record<
     questionKindType,
     {
@@ -67,3 +74,5 @@ export {
     manualQuestionKinds,
     TAT_BLANK_STRING,
 };
+
+export type { userRoleType, userInfoType };
