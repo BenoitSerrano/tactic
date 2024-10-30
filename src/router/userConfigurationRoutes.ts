@@ -8,7 +8,8 @@ const userConfigurationRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/user-configurations',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: userConfigurationController.updateDefaultEdgeText,
         schema: Joi.object({
             kind: Joi.string().valid('start', 'end'),

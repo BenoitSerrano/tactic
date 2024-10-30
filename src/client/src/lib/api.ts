@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { acceptableAnswerType, examFilterType, questionKindType } from '../types';
-import { localStorage } from './localStorage';
+import { localSessionHandler } from './localSessionHandler';
 
 const api = {
     login,
@@ -72,7 +72,7 @@ async function performApiCall(
     body?: Object,
 ) {
     let response: Response;
-    const token = localStorage.jwtTokenHandler.get();
+    const token = localSessionHandler.getToken();
 
     if (method === 'GET') {
         response = await fetch(url, { method, headers: { Authorization: `Bearer ${token}` } });
@@ -92,7 +92,7 @@ async function performApiCall(
     }
     if (!response.ok) {
         if (response.status === 401) {
-            localStorage.jwtTokenHandler.remove();
+            localSessionHandler.logout();
         }
         let message = response.statusText;
         try {

@@ -9,43 +9,47 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/exams',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.getExams,
     },
     {
         method: 'GET',
         path: '/users/:userId/exams',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['admin'],
         controller: examController.getExamsForUser,
     },
     {
         method: 'GET',
         path: '/all-exams',
-        isAuthenticated: false,
+        kind: 'public',
         controller: examController.getAllExams,
     },
     {
         method: 'GET',
         path: '/exams/:examId',
-        isAuthenticated: false,
+        kind: 'public',
         controller: examController.getExam,
     },
     {
         method: 'GET',
         path: '/exams/:examId/with-questions',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.getExamWithQuestions,
     },
     {
         method: 'GET',
         path: '/exams/:examId/without-answers',
-        isAuthenticated: false,
+        kind: 'public',
         controller: examController.getExamWithoutAnswers,
     },
     {
         method: 'GET',
         path: '/exams/:examId/results',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.getExamResults,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -57,7 +61,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/exams',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.createExam,
         schema: Joi.object({
             name: Joi.string().required(),
@@ -68,7 +73,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'POST',
         path: '/exams/:examId/duplicate',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.duplicateExam,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
@@ -77,7 +83,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/exams/:examId/name',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.updateExamName,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -92,7 +99,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/exams/:examId/edgeText',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.updateExamEdgeText,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -108,7 +116,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/exams/:examId/duration',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.updateExamDuration,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -123,7 +132,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/exams/:examId/archivedAt',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.updateExamArchivedAt,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -138,7 +148,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'DELETE',
         path: '/exams/:examId',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.deleteExam,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'exam', key: 'examId' },
@@ -147,7 +158,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/exams/:examId/shouldDisplayRightAnswers',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.fetchShouldDisplayRightAnswersForExamId,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
@@ -159,7 +171,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'PATCH',
         path: '/exams/:examId/shouldDisplayRightAnswers',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: examController.updateShouldDisplayRightAnswersForExamId,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {

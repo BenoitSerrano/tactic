@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
-import { localStorage } from '../../lib/localStorage';
 import { Link } from '../../components/Link';
 import { Button } from '../../components/Button';
 import { Logo } from '../../components/Logo';
@@ -15,6 +14,7 @@ import { NAV_LINKS } from './constants';
 import { BurgerDrawer } from './BurgerDrawer';
 import { useState } from 'react';
 import { TextLink } from '../../components/TextLink';
+import { localSessionHandler } from '../../lib/localSessionHandler';
 
 type headerButtonType = {
     title: string;
@@ -36,9 +36,9 @@ const importanceToColorMapping = {
 function HomeHeader() {
     const navigate = useNavigate();
     const [isBurgerDrawerOpen, setIsBurgerDrawerOpen] = useState(false);
-    const jwtToken = localStorage.jwtTokenHandler.get();
+    const isAuthenticated = localSessionHandler.getIsAuthenticated();
 
-    const buttons = computeButtons(jwtToken);
+    const buttons = computeButtons(isAuthenticated);
     const renderedButtons = renderButtons(buttons);
 
     return (
@@ -107,8 +107,8 @@ function HomeHeader() {
         ];
     }
 
-    function computeButtons(jwtToken: string | undefined): Array<headerButtonType> {
-        if (jwtToken) {
+    function computeButtons(isAuthenticated: boolean): Array<headerButtonType> {
+        if (isAuthenticated) {
             return [
                 {
                     IconComponent: LeaderboardIcon,

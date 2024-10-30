@@ -5,6 +5,7 @@ import { extractUserIdFromHeader } from './extractUserIdFromHeader';
 import { logger } from '../../../lib/logger';
 import { User } from '../../../modules/user';
 import { dataSource } from '../../../dataSource';
+import { userRoleType } from '../../../modules/user/constants';
 
 export { buildAuthenticatedController };
 
@@ -18,6 +19,7 @@ function buildAuthenticatedController<
         user: User,
     ) => any | Promise<any>,
     options?: {
+        authorizedRoles?: userRoleType[];
         schema?: Joi.Schema;
         checkAuthorization?: (params: paramsT, user: User) => void | Promise<void>;
     },
@@ -37,6 +39,21 @@ function buildAuthenticatedController<
             logger.error(error);
             res.sendStatus(httpStatus.UNAUTHORIZED);
             return;
+        }
+
+        if (options?.authorizedRoles) {
+            if (
+                options.authorizedRoles.every(
+                    (authorizedRole) => !user.roles.includes(authorizedRole),
+                )
+            ) {
+                const message = `Your roles (${user.roles.join(
+                    ', ',
+                )}) are not allowed to call this route (${options.authorizedRoles.join(', ')})`;
+                logger.error(message);
+                res.status(httpStatus.FORBIDDEN).send(message);
+                return;
+            }
         }
 
         if (options?.checkAuthorization) {

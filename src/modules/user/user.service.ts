@@ -30,7 +30,7 @@ function buildUserService() {
     async function createUser(email: string, password: string) {
         const newUserConfiguration = await userConfigurationService.createUserConfiguration();
         const newUser = new User();
-        newUser.role = 'teacher';
+        newUser.roles = ['teacher'];
         newUser.email = email;
         newUser.hashedPassword = hasher.hash(password);
         newUser.userConfiguration = newUserConfiguration;
@@ -46,11 +46,12 @@ function buildUserService() {
         }
 
         await mailer.registerContact(email);
-        const token = createJwt({ userId: result.identifiers[0].id, email, role: newUser.role });
-        return { token };
+        const token = createJwt({ userId: result.identifiers[0].id, email, roles: newUser.roles });
+        const userInfo = { email, roles: newUser.roles, plan: newUser.plan.name };
+        return { token, userInfo };
     }
 
-    function createJwt(params: { userId: User['id']; email: User['email']; role: User['role'] }) {
+    function createJwt(params: { userId: User['id']; email: User['email']; roles: User['roles'] }) {
         return signer.sign(params);
     }
 
@@ -59,13 +60,15 @@ function buildUserService() {
     }
 
     async function login(email: string, password: string) {
-        const user = await userRepository.findOneByOrFail({ email });
+        const user = await userRepository.findOneOrFail({ where: { email }, relations: ['plan'] });
 
         const isPasswordCorrect = hasher.verify(password, user.hashedPassword);
 
         if (isPasswordCorrect) {
-            const token = createJwt({ userId: user.id, email: user.email, role: user.role });
-            return { token };
+            const token = createJwt({ userId: user.id, email: user.email, roles: user.roles });
+            const userInfo = { email, roles: user.roles, plan: user.plan.name };
+
+            return { token, userInfo };
         } else {
             throw new Error(`The password sent does not match the hashed stored password`);
         }
@@ -102,15 +105,15 @@ function buildUserService() {
             select: {
                 id: true,
                 email: true,
-                role: true,
+                roles: true,
                 plan: { id: true, name: true },
                 exams: { id: true },
             },
         });
-        return users.map(({ id, email, role, plan, exams }) => ({
+        return users.map(({ id, email, roles, plan, exams }) => ({
             id,
             email,
-            role,
+            roles,
             plan,
             examsCount: exams.length,
         }));

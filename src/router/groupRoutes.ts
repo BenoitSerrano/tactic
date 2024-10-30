@@ -9,26 +9,29 @@ const groupRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
         path: '/all-groups',
-        isAuthenticated: false,
+        kind: 'public',
         controller: groupController.getAllGroups,
     },
     {
         method: 'GET',
         path: '/groups',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: groupController.fetchGroups,
     },
     {
         method: 'POST',
         path: '/groups',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: groupController.createGroup,
         schema: Joi.object({ name: Joi.string().required() }),
     },
     {
         method: 'DELETE',
         path: '/groups/:groupId',
-        isAuthenticated: true,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
         controller: groupController.deleteGroup,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'group', key: 'groupId' },

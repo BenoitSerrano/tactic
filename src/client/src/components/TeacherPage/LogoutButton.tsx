@@ -1,10 +1,10 @@
 import LogoutIcon from '@mui/icons-material/Logout';
-import { localStorage } from '../../lib/localStorage';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../Button';
 import { pathHandler } from '../../lib/pathHandler';
 import { styled } from '@mui/material';
 import { IconButton } from '../IconButton';
+import { localSessionHandler } from '../../lib/localSessionHandler';
 
 function LogoutButton() {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ function LogoutButton() {
     );
 
     function onClick() {
-        localStorage.jwtTokenHandler.remove();
+        localSessionHandler.logout();
         navigate(pathHandler.getRoutePath('SIGN_IN'));
     }
 }
