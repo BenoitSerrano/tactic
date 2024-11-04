@@ -13,7 +13,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         authorizedRoles: ['teacher'],
         controller: studentController.getStudentsWithAttempts,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
+            { entity: 'classe', key: 'groupId' },
         ]),
     },
     {
@@ -48,7 +48,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         authorizedRoles: ['teacher'],
         controller: studentController.createStudents,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
+            { entity: 'classe', key: 'groupId' },
         ]),
         schema: Joi.object({
             emails: Joi.array().items(Joi.string()),
@@ -61,8 +61,8 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         authorizedRoles: ['teacher'],
         controller: studentController.changeGroup,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
-            { entity: 'group', key: 'newGroupId' },
+            { entity: 'classe', key: 'groupId' },
+            { entity: 'classe', key: 'newGroupId' },
         ]),
     },
     {
@@ -72,7 +72,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         authorizedRoles: ['teacher'],
         controller: studentController.deleteStudent,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
+            { entity: 'classe', key: 'groupId' },
         ]),
     },
 ];

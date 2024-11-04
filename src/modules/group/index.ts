@@ -1,4 +1,4 @@
-import { Group } from './Group.entity';
+import { Classe } from './Classe.entity';
 import { buildGroupController } from './group.controller';
 
-export { Group, buildGroupController };
+export { Classe, buildGroupController };

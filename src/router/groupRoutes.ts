@@ -34,7 +34,7 @@ const groupRoutes: Array<routeType<any, any, any>> = [
         authorizedRoles: ['teacher'],
         controller: groupController.deleteGroup,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
+            { entity: 'classe', key: 'groupId' },
         ]),
     },
 ];

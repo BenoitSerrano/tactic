@@ -1,6 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../../modules/exam';
-import { Group } from '../../modules/group';
+import { Classe } from '../../modules/group';
 import { User, buildUserService } from '../../modules/user';
 
 function assertHasRightPlanForCreation(entity: 'exam') {
@@ -25,7 +25,7 @@ function assertHasRightPlanForCreation(entity: 'exam') {
     };
 }
 
-function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: string }>) {
+function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'classe'; key: string }>) {
     return async (params: Record<string, string>, user: User) => {
         for (const resource of resources) {
             const { entity, key } = resource;
@@ -43,9 +43,9 @@ function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'group';
                         );
                     }
                     break;
-                case 'group':
+                case 'classe':
                     const groupId = params[key];
-                    const groupRepository = dataSource.getRepository(Group);
+                    const groupRepository = dataSource.getRepository(Classe);
                     const group = await groupRepository.findOneOrFail({
                         where: { id: groupId },
                         relations: ['user'],

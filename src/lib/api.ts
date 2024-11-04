@@ -1,6 +1,6 @@
 import { Attempt } from '../modules/attempt';
 import { Exam } from '../modules/exam';
-import { Group } from '../modules/group';
+import { Classe } from '../modules/group';
 import { Student } from '../modules/student';
 
 const api = {
@@ -26,7 +26,7 @@ async function fetchAllStudents(): Promise<Student[]> {
     return parsedData;
 }
 
-async function fetchAllGroups(): Promise<Group[]> {
+async function fetchAllGroups(): Promise<Classe[]> {
     const URL = `https://tactic-app.fr/api/all-groups`;
 
     const response = await fetch(URL);

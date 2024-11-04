@@ -3,7 +3,7 @@ import { api } from '../lib/api';
 import { Attempt } from '../modules/attempt';
 import { Exam } from '../modules/exam';
 import { Exercise } from '../modules/exercise';
-import { Group } from '../modules/group';
+import { Classe } from '../modules/group';
 import { Question } from '../modules/question';
 import { Student } from '../modules/student';
 import { User } from '../modules/user';
@@ -19,7 +19,7 @@ async function importDb() {
     const exerciseRepository = dataSource.getRepository(Exercise);
     const studentRepository = dataSource.getRepository(Student);
     const attemptRepository = dataSource.getRepository(Attempt);
-    const groupRepository = dataSource.getRepository(Group);
+    const groupRepository = dataSource.getRepository(Classe);
     const questionRepository = dataSource.getRepository(Question);
     const user = await userRepository.findOneOrFail({ where: {} });
 

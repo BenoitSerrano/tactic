@@ -9,10 +9,10 @@ import {
 } from 'typeorm';
 import { StudentInterface } from './student.interface';
 import { AttemptInterface } from '../attempt/attempt.interface';
-import { Group } from '../group';
+import { Classe } from '../group';
 
 @Entity()
-@Unique('Students are unique by group', ['email', 'group'])
+@Unique('Students are unique by classe', ['email', 'classe'])
 export class Student implements StudentInterface {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -29,8 +29,8 @@ export class Student implements StudentInterface {
     @OneToMany('Attempt', 'student')
     attempts: AttemptInterface[];
 
-    @ManyToOne(() => Group, { onDelete: 'CASCADE', nullable: false })
-    group: Group;
+    @ManyToOne(() => Classe, { onDelete: 'CASCADE', nullable: false })
+    classe: Classe;
 
     @CreateDateColumn()
     createdDate: string;
