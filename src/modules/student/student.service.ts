@@ -3,8 +3,8 @@ import { dataSource } from '../../dataSource';
 import { Student } from './Student.entity';
 import { studentAdaptator } from './student.adaptator';
 import { Exam, buildExamService } from '../exam';
-import { Group } from '../group';
-import { buildGroupService } from '../group/group.service';
+import { Classe } from '../classe';
+import { buildClasseService } from '../classe/classe.service';
 import { buildQuestionService } from '../question';
 
 export { buildStudentService };
@@ -22,15 +22,15 @@ function buildStudentService() {
         fetchStudentByEmailForExam,
         deleteStudent,
         bulkInsertStudents,
-        changeGroup,
+        changeClasse,
     };
 
     return studentService;
 
     async function getAllStudents() {
         const students = await studentRepository.find({
-            relations: ['group'],
-            select: { group: { id: true } },
+            relations: ['classe'],
+            select: { classe: { id: true } },
         });
         return students;
     }
@@ -53,10 +53,10 @@ function buildStudentService() {
         );
     }
 
-    async function getStudentsWithAttempts(groupId: Group['id']) {
+    async function getStudentsWithAttempts(classeId: Classe['id']) {
         const questionService = buildQuestionService();
         const studentsWithAttempts = await studentRepository.find({
-            where: { group: { id: groupId } },
+            where: { classe: { id: classeId } },
             select: {
                 attempts: {
                     id: true,
@@ -66,9 +66,9 @@ function buildStudentService() {
                     manualMarks: true,
                     exam: { id: true },
                 },
-                group: { id: true },
+                classe: { id: true },
             },
-            relations: ['attempts', 'attempts.exam', 'group'],
+            relations: ['attempts', 'attempts.exam', 'classe'],
         });
         const examIds: Array<Exam['id']> = [];
         for (const student of studentsWithAttempts) {
@@ -105,30 +105,30 @@ function buildStudentService() {
         return studentRepository.findOneOrFail({
             where: {
                 email: criteria.email.trim().toLowerCase(),
-                group: { user: { id: examUserId } },
+                classe: { user: { id: examUserId } },
             },
             select: {
                 id: true,
                 firstName: true,
                 lastName: true,
-                group: { id: true, user: { id: true } },
+                classe: { id: true, user: { id: true } },
             },
-            relations: ['group', 'group.user'],
+            relations: ['classe', 'classe.user'],
         });
     }
 
-    async function createStudents(criteria: { groupId: Group['id'] }, emails: string[]) {
-        const { groupId } = criteria;
+    async function createStudents(criteria: { classeId: Classe['id'] }, emails: string[]) {
+        const { classeId } = criteria;
 
-        const groupService = buildGroupService();
-        const group = await groupService.getGroup(groupId);
+        const classeService = buildClasseService();
+        const classe = await classeService.getClasse(classeId);
         const students = emails.map((email) => {
             const student = new Student();
             student.email = email.trim().toLowerCase();
-            student.group = group;
+            student.classe = classe;
             return student;
         });
-        return studentRepository.upsert(students, ['email', 'group']);
+        return studentRepository.upsert(students, ['email', 'classe']);
     }
 
     async function deleteStudent(studentId: Student['id']) {
@@ -140,13 +140,16 @@ function buildStudentService() {
         return studentRepository.insert(students);
     }
 
-    async function changeGroup(
+    async function changeClasse(
         criteria: { studentId: Student['id'] },
-        body: { newGroupId: Group['id'] },
+        body: { newClasseId: Classe['id'] },
     ) {
-        const groupService = buildGroupService();
-        const group = await groupService.getGroup(body.newGroupId);
-        const result = await studentRepository.update({ id: criteria.studentId }, { group });
+        const classeService = buildClasseService();
+        const classe = await classeService.getClasse(body.newClasseId);
+        const result = await studentRepository.update(
+            { id: criteria.studentId },
+            { classe: classe },
+        );
         return result.affected === 1;
     }
 }

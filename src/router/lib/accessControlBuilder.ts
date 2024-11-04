@@ -1,6 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../../modules/exam';
-import { Group } from '../../modules/group';
+import { Classe } from '../../modules/classe';
 import { User, buildUserService } from '../../modules/user';
 
 function assertHasRightPlanForCreation(entity: 'exam') {
@@ -25,7 +25,7 @@ function assertHasRightPlanForCreation(entity: 'exam') {
     };
 }
 
-function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'group'; key: string }>) {
+function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'classe'; key: string }>) {
     return async (params: Record<string, string>, user: User) => {
         for (const resource of resources) {
             const { entity, key } = resource;
@@ -43,16 +43,16 @@ function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'group';
                         );
                     }
                     break;
-                case 'group':
-                    const groupId = params[key];
-                    const groupRepository = dataSource.getRepository(Group);
-                    const group = await groupRepository.findOneOrFail({
-                        where: { id: groupId },
+                case 'classe':
+                    const classeId = params[key];
+                    const classeRepository = dataSource.getRepository(Classe);
+                    const classe = await classeRepository.findOneOrFail({
+                        where: { id: classeId },
                         relations: ['user'],
                     });
-                    if (group.user.id !== user.id) {
+                    if (classe.user.id !== user.id) {
                         throw new Error(
-                            `group.user.id "${group.user.id}" does not match user.id ${user.id}`,
+                            `classe.user.id "${classe.user.id}" does not match user.id ${user.id}`,
                         );
                     }
                     break;

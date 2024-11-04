@@ -28,7 +28,7 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     EXAM_CONSULT: "Paramètres de consultation des copies de l'examen",
     EXAM_CHECKING: 'Correction de copie',
     TEACHER_HOME: 'Accueil professeur',
-    GROUPS: 'Groupes',
+    CLASSES: 'Classes',
     EXAM_ARCHIVED: 'Erreur - examen archivé',
     ATTEMPT_NOT_CORRECTED: 'Erreur - copie non corrigée',
     NOT_FOUND: 'Page non trouvée',

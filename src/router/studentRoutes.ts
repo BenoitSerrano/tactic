@@ -8,12 +8,12 @@ const studentController = buildStudentController();
 const studentRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
-        path: '/groups/:groupId/students',
+        path: '/classes/:classeId/students',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: studentController.getStudentsWithAttempts,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
+            { entity: 'classe', key: 'classeId' },
         ]),
     },
     {
@@ -43,12 +43,12 @@ const studentRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'POST',
-        path: '/groups/:groupId/students',
+        path: '/classes/:classeId/students',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: studentController.createStudents,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
+            { entity: 'classe', key: 'classeId' },
         ]),
         schema: Joi.object({
             emails: Joi.array().items(Joi.string()),
@@ -56,23 +56,23 @@ const studentRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'PATCH',
-        path: '/groups/:groupId/students/:studentId/new-group/:newGroupId',
+        path: '/classes/:classeId/students/:studentId/new-classe/:newClasseId',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: studentController.changeGroup,
+        controller: studentController.changeClasse,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
-            { entity: 'group', key: 'newGroupId' },
+            { entity: 'classe', key: 'classeId' },
+            { entity: 'classe', key: 'newClasseId' },
         ]),
     },
     {
         method: 'DELETE',
-        path: '/groups/:groupId/students/:studentId',
+        path: '/classes/:classeId/students/:studentId',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: studentController.deleteStudent,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'group', key: 'groupId' },
+            { entity: 'classe', key: 'classeId' },
         ]),
     },
 ];

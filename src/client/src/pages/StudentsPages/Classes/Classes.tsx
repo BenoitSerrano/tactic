@@ -16,33 +16,33 @@ import {
 import { Loader } from '../../../components/Loader';
 import { useNavigate } from 'react-router-dom';
 import { pathHandler } from '../../../lib/pathHandler';
-import { GroupCreationModal } from './GroupCreationModal';
+import { ClasseCreationModal } from './ClasseCreationModal';
 import { useState } from 'react';
 import { Menu } from '../../../components/Menu';
-import { groupApiType } from '../types';
+import { classeApiType } from '../types';
 import { useAlert } from '../../../lib/alert';
 import { AdminSideMenu } from '../../../components/AdminSideMenu';
 import { PageTitle } from '../../../components/PageTitle';
 
-function Groups() {
-    const query = useQuery<groupApiType[]>({
-        queryKey: ['groups'],
-        queryFn: api.fetchGroups,
+function Classes() {
+    const query = useQuery<classeApiType[]>({
+        queryKey: ['classes'],
+        queryFn: api.fetchClasses,
     });
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
-    const [isGroupCreationModalOpen, setIsGroupCreationModalOpen] = useState(false);
-    const deleteGroupMutation = useMutation({
-        mutationFn: api.deleteGroup,
+    const [isClasseCreationModalOpen, setIsClasseCreationModalOpen] = useState(false);
+    const deleteClasseMutation = useMutation({
+        mutationFn: api.deleteClasse,
         onSuccess: () => {
-            displayAlert({ variant: 'success', text: 'Le groupe a été supprimé.' });
-            queryClient.invalidateQueries({ queryKey: ['groups'] });
+            displayAlert({ variant: 'success', text: 'La classe a été supprimé.' });
+            queryClient.invalidateQueries({ queryKey: ['classes'] });
         },
         onError: (error) => {
             console.error(error);
             displayAlert({
                 variant: 'error',
-                text: "Une erreur est survenue. Le groupe n'a pas pu être supprimé.",
+                text: "Une erreur est survenue. La classe n'a pas pu être supprimé.",
             });
         },
     });
@@ -55,23 +55,26 @@ function Groups() {
         return <div />;
     }
 
-    const groups = query.data;
+    const classes = query.data;
     const buttons = [
         {
             IconComponent: AddCircleOutlineIcon,
-            onClick: openGroupCreationModal,
-            title: 'Créer un groupe',
+            onClick: openClasseCreationModal,
+            title: 'Créer une classe',
         },
     ];
 
     return (
         <>
-            <GroupCreationModal isOpen={isGroupCreationModalOpen} close={closeGroupCreationModal} />
+            <ClasseCreationModal
+                isOpen={isClasseCreationModalOpen}
+                close={closeClasseCreationModal}
+            />
             <Menu buttons={buttons} />
             <ContentContainer>
                 <AdminSideMenu />
                 <TableContainer>
-                    <PageTitle title="Mes groupes" />
+                    <PageTitle title="Mes classes" />
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -80,21 +83,23 @@ function Groups() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {groups.map((group) => (
-                                <TableRow key={group.id}>
+                            {classes.map((classe) => (
+                                <TableRow key={classe.id}>
                                     <TableCell>
                                         <Tooltip title="Accéder à la liste des étudiants">
-                                            <IconButton onClick={buildNavigateToStudents(group.id)}>
+                                            <IconButton
+                                                onClick={buildNavigateToStudents(classe.id)}
+                                            >
                                                 <FormatListBulletedIcon />
                                             </IconButton>
                                         </Tooltip>
-                                        <Tooltip title="Supprimer le groupe">
-                                            <IconButton onClick={buildDeleteGroup(group.id)}>
+                                        <Tooltip title="Supprimer la classe">
+                                            <IconButton onClick={buildDeleteClasse(classe.id)}>
                                                 <DeleteForeverIcon />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>
-                                    <TableCell>{group.name}</TableCell>
+                                    <TableCell>{classe.name}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -104,28 +109,28 @@ function Groups() {
         </>
     );
 
-    function openGroupCreationModal() {
-        setIsGroupCreationModalOpen(true);
+    function openClasseCreationModal() {
+        setIsClasseCreationModalOpen(true);
     }
 
-    function closeGroupCreationModal() {
-        setIsGroupCreationModalOpen(false);
+    function closeClasseCreationModal() {
+        setIsClasseCreationModalOpen(false);
     }
 
-    function buildNavigateToStudents(groupId: string) {
+    function buildNavigateToStudents(classeId: string) {
         return () => {
-            navigate(pathHandler.getRoutePath('STUDENTS', { groupId }));
+            navigate(pathHandler.getRoutePath('STUDENTS', { classeId }));
         };
     }
 
-    function buildDeleteGroup(groupId: string) {
+    function buildDeleteClasse(classeId: string) {
         return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
-                'Souhaitez-vous réellement supprimer ce groupe ? Les étudiants et leurs résultats aux examens seront supprimés.',
+                'Souhaitez-vous réellement supprimer cette classe ? Les étudiants et leurs résultats aux examens seront supprimés.',
             );
             if (hasConfirmed) {
-                deleteGroupMutation.mutate({ groupId });
+                deleteClasseMutation.mutate({ classeId });
             }
         };
     }
@@ -134,4 +139,4 @@ function Groups() {
 const ContentContainer = styled('div')({ display: 'flex' });
 const TableContainer = styled('div')({});
 
-export { Groups };
+export { Classes };

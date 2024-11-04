@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } f
 import { User } from '../user';
 
 @Entity()
-export class Group {
+export class Classe {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

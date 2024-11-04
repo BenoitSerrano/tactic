@@ -5,18 +5,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField } from '@mui/material';
 import { useAlert } from '../../../lib/alert';
 
-function GroupCreationModal(props: { close: () => void; isOpen: boolean }) {
+function ClasseCreationModal(props: { close: () => void; isOpen: boolean }) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
     const [name, setName] = useState('');
 
-    const createGroupMutation = useMutation({
-        mutationFn: api.createGroup,
+    const createClasseMutation = useMutation({
+        mutationFn: api.createClasse,
         onSuccess: () => {
             setName('');
-            queryClient.invalidateQueries({ queryKey: ['groups'] });
+            queryClient.invalidateQueries({ queryKey: ['classes'] });
             displayAlert({
-                text: `Le groupe "${name}" a bien été créé`,
+                text: `La classe "${name}" a bien été créé`,
                 variant: 'success',
             });
             props.close();
@@ -25,33 +25,33 @@ function GroupCreationModal(props: { close: () => void; isOpen: boolean }) {
             console.error(error);
             displayAlert({
                 variant: 'error',
-                text: "Une erreur est survenue. Le groupe n'a pas pu être créé.",
+                text: "Une erreur est survenue. La classe n'a pas pu être créé.",
             });
         },
     });
     return (
         <Modal
             size="small"
-            onConfirm={createGroup}
+            onConfirm={createClasse}
             isOpen={props.isOpen}
-            title="Créer un groupe"
+            title="Créer une classe"
             close={props.close}
             confirmButtonLabel="Créer"
         >
             <TextField
                 autoFocus
-                label="Nom du groupe"
+                label="Nom de la classe"
                 fullWidth
-                name="group-name"
+                name="classe-name"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
             />
         </Modal>
     );
 
-    async function createGroup() {
-        createGroupMutation.mutate({ name });
+    async function createClasse() {
+        createClasseMutation.mutate({ name });
     }
 }
 
-export { GroupCreationModal };
+export { ClasseCreationModal };

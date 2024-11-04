@@ -122,27 +122,27 @@ describe('computeBreadcrumbs', () => {
         ]);
     });
 
-    it("returns groups when you're on students page", () => {
-        const pathname = pathHandler.getRoutePath('GROUPS');
+    it("returns classes when you're on students page", () => {
+        const pathname = pathHandler.getRoutePath('CLASSES');
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes groupes', isActive: true },
+            { label: 'Mes classes', isActive: true },
         ]);
     });
 
     it("returns students when you're on students page", () => {
         const pathname = pathHandler.getRoutePath('STUDENTS', {
-            groupId: 'groupId',
+            classeId: 'classeId',
         });
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes groupes', href: pathHandler.getRoutePath('GROUPS') },
+            { label: 'Mes classes', href: pathHandler.getRoutePath('CLASSES') },
             { label: 'Liste des étudiants', isActive: true },
         ]);
     });

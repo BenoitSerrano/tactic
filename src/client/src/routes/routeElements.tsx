@@ -6,7 +6,7 @@ import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamResults } from '../pages/ExamResults';
 import { ExamList } from '../pages/ExamList';
-import { Groups } from '../pages/StudentsPages/Groups';
+import { Classes } from '../pages/StudentsPages/Classes';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
 import { ResetPassword } from '../pages/ResetPassword';
@@ -122,7 +122,7 @@ const ROUTE_ELEMENTS: Record<
         authorizedRole: 'teacher',
         element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} />,
     },
-    GROUPS: { authorizedRole: 'teacher', element: <Groups /> },
+    CLASSES: { authorizedRole: 'teacher', element: <Classes /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
     STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: {
         element: <StudentAuthenticationExamTakingRedirection />,

@@ -115,7 +115,7 @@ function ExerciseUpsertionModal(props: {
                 </RowContainer>
                 <RowContainer>
                     <FormControl>
-                        <FormLabel id="demo-radio-buttons-group-label">
+                        <FormLabel id="demo-radio-buttons-classe-label">
                             Points attribués à chaque question
                         </FormLabel>
 

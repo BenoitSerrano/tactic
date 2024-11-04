@@ -43,8 +43,8 @@ function ExamCollect() {
                 </Button>
                 <Typography variant="h6">
                     Vos étudiant.es arriveront sur une page où iels devront rentrer leur email
-                    d'identification. Pour gérer vos groupes d'étudiant.es, cliquez{' '}
-                    <Link to={pathHandler.getRoutePath('GROUPS')}>ici</Link>.
+                    d'identification. Pour gérer vos classes d'étudiant.es, cliquez{' '}
+                    <Link to={pathHandler.getRoutePath('CLASSES')}>ici</Link>.
                 </Typography>
             </Section>
         </Container>

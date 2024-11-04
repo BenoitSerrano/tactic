@@ -29,9 +29,9 @@ function AdminSideMenu() {
             />
             <SideItemMenu
                 level="high"
-                title="Mes groupes"
+                title="Mes classes"
                 IconComponent={Diversity3Icon}
-                path={pathHandler.getRoutePath('GROUPS')}
+                path={pathHandler.getRoutePath('CLASSES')}
             />
         </Container>
     );
