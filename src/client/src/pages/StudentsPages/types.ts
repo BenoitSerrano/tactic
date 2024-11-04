@@ -1,6 +1,6 @@
-type groupApiType = {
+type classeApiType = {
     id: string;
     name: string;
 };
 
-export type { groupApiType };
+export type { classeApiType };

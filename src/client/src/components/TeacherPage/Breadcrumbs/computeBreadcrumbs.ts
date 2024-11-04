@@ -15,9 +15,9 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             breadcrumbs.push({ label: 'Accueil', href: '/teacher' });
             breadcrumbs.push({ label: 'Mes examens', isActive: true });
             break;
-        case 'GROUPS':
+        case 'CLASSES':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes groupes', isActive: true });
+            breadcrumbs.push({ label: 'Mes classes', isActive: true });
             break;
         case 'TEACHER_HOME':
             breadcrumbs.push({ label: 'Accueil', isActive: true });
@@ -109,7 +109,7 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             break;
         case 'STUDENTS':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes groupes', href: pathHandler.getRoutePath('GROUPS') });
+            breadcrumbs.push({ label: 'Mes classes', href: pathHandler.getRoutePath('CLASSES') });
             breadcrumbs.push({ label: 'Liste des étudiants', isActive: true });
             break;
     }

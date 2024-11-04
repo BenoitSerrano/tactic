@@ -53,10 +53,10 @@ const api = {
     fetchResetPasswordRequestUser,
     resetPassword,
     fetchAttemptsCountByCorrectionStatus,
-    fetchGroups,
-    createGroup,
-    deleteGroup,
-    changeGroup,
+    fetchClasses,
+    createClasse,
+    deleteClasse,
+    changeClasse,
     duplicateExam,
     fetchShouldDisplayRightAnswersForExamId,
     updateShouldDisplayRightAnswersForExamId,
@@ -244,13 +244,13 @@ async function fetchStudentByEmailForExam(params: { email: string; examId: strin
     return performApiCall(URL, 'GET');
 }
 
-async function deleteStudent(params: { studentId: string; groupId: string }) {
-    const URL = `${BASE_URL}/groups/${params.groupId}/students/${params.studentId}`;
+async function deleteStudent(params: { studentId: string; classeId: string }) {
+    const URL = `${BASE_URL}/classes/${params.classeId}/students/${params.studentId}`;
     return performApiCall(URL, 'DELETE');
 }
 
-async function fetchStudents(params: { groupId: string }) {
-    const URL = `${BASE_URL}/groups/${params.groupId}/students`;
+async function fetchStudents(params: { classeId: string }) {
+    const URL = `${BASE_URL}/classes/${params.classeId}/students`;
     return performApiCall(URL, 'GET');
 }
 
@@ -268,8 +268,8 @@ async function updateStudentNames(params: {
     return performApiCall(URL, 'PATCH', { firstName: params.firstName, lastName: params.lastName });
 }
 
-async function createStudents(params: { emails: string[]; groupId: string }) {
-    const URL = `${BASE_URL}/groups/${params.groupId}/students`;
+async function createStudents(params: { emails: string[]; classeId: string }) {
+    const URL = `${BASE_URL}/classes/${params.classeId}/students`;
     return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
@@ -518,23 +518,23 @@ async function fetchAttemptsCountByCorrectionStatus(params: { examId: string }) 
     return performApiCall(URL, 'GET');
 }
 
-async function fetchGroups() {
-    const URL = `${BASE_URL}/groups`;
+async function fetchClasses() {
+    const URL = `${BASE_URL}/classes`;
     return performApiCall(URL, 'GET');
 }
 
-async function createGroup(params: { name: string }) {
-    const URL = `${BASE_URL}/groups`;
+async function createClasse(params: { name: string }) {
+    const URL = `${BASE_URL}/classes`;
     return performApiCall(URL, 'POST', { name: params.name });
 }
 
-async function deleteGroup(params: { groupId: string }) {
-    const URL = `${BASE_URL}/groups/${params.groupId}`;
+async function deleteClasse(params: { classeId: string }) {
+    const URL = `${BASE_URL}/classes/${params.classeId}`;
     return performApiCall(URL, 'DELETE');
 }
 
-async function changeGroup(params: { groupId: string; studentId: string; newGroupId: string }) {
-    const URL = `${BASE_URL}/groups/${params.groupId}/students/${params.studentId}/new-group/${params.newGroupId}`;
+async function changeClasse(params: { classeId: string; studentId: string; newClasseId: string }) {
+    const URL = `${BASE_URL}/classes/${params.classeId}/students/${params.studentId}/new-classe/${params.newClasseId}`;
     return performApiCall(URL, 'PATCH');
 }
 
