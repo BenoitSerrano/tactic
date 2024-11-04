@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { StudentInterface } from './student.interface';
 import { AttemptInterface } from '../attempt/attempt.interface';
-import { Classe } from '../group';
+import { Classe } from '../classe';
 
 @Entity()
 @Unique('Students are unique by classe', ['email', 'classe'])

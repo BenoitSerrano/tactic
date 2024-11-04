@@ -12,7 +12,7 @@ function buildStudentController() {
         getStudentsWithAttempts,
         fetchStudentByEmailForExam,
         deleteStudent,
-        changeGroup,
+        changeClasse,
         getAllStudents,
     };
 
@@ -23,17 +23,17 @@ function buildStudentController() {
     }
 
     async function createStudents(params: {
-        urlParams: { groupId: string };
+        urlParams: { classeId: string };
         body: { emails: string[] };
     }) {
         return studentService.createStudents(
-            { groupId: params.urlParams.groupId },
+            { classeId: params.urlParams.classeId },
             params.body.emails,
         );
     }
 
-    async function getStudentsWithAttempts(params: { urlParams: { groupId: string } }) {
-        return studentService.getStudentsWithAttempts(params.urlParams.groupId);
+    async function getStudentsWithAttempts(params: { urlParams: { classeId: string } }) {
+        return studentService.getStudentsWithAttempts(params.urlParams.classeId);
     }
 
     async function getStudent(params: { urlParams: { studentId: string } }) {
@@ -60,10 +60,10 @@ function buildStudentController() {
         return studentService.deleteStudent(params.urlParams.studentId);
     }
 
-    async function changeGroup(params: { urlParams: { studentId: string; newGroupId: string } }) {
-        return studentService.changeGroup(
+    async function changeClasse(params: { urlParams: { studentId: string; newClasseId: string } }) {
+        return studentService.changeClasse(
             { studentId: params.urlParams.studentId },
-            { newGroupId: params.urlParams.newGroupId },
+            { newClasseId: params.urlParams.newClasseId },
         );
     }
 }

@@ -1,42 +1,42 @@
 import Joi from 'joi';
-import { buildGroupController } from '../modules/group';
+import { buildClasseController } from '../modules/classe';
 import { routeType } from './types';
 import { accessControlBuilder } from './lib/accessControlBuilder';
 
-const groupController = buildGroupController();
+const classeController = buildClasseController();
 
-const groupRoutes: Array<routeType<any, any, any>> = [
+const classeRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
-        path: '/all-groups',
+        path: '/all-classes',
         kind: 'public',
-        controller: groupController.getAllGroups,
+        controller: classeController.getAllClasses,
     },
     {
         method: 'GET',
-        path: '/groups',
+        path: '/classes',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: groupController.fetchGroups,
+        controller: classeController.fetchClasses,
     },
     {
         method: 'POST',
-        path: '/groups',
+        path: '/classes',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: groupController.createGroup,
+        controller: classeController.createClasse,
         schema: Joi.object({ name: Joi.string().required() }),
     },
     {
         method: 'DELETE',
-        path: '/groups/:groupId',
+        path: '/classes/:classeId',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: groupController.deleteGroup,
+        controller: classeController.deleteClasse,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            { entity: 'classe', key: 'groupId' },
+            { entity: 'classe', key: 'classeId' },
         ]),
     },
 ];
 
-export { groupRoutes };
+export { classeRoutes };

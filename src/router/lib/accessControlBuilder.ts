@@ -1,6 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../../modules/exam';
-import { Classe } from '../../modules/group';
+import { Classe } from '../../modules/classe';
 import { User, buildUserService } from '../../modules/user';
 
 function assertHasRightPlanForCreation(entity: 'exam') {
@@ -44,15 +44,15 @@ function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'classe'
                     }
                     break;
                 case 'classe':
-                    const groupId = params[key];
-                    const groupRepository = dataSource.getRepository(Classe);
-                    const group = await groupRepository.findOneOrFail({
-                        where: { id: groupId },
+                    const classeId = params[key];
+                    const classeRepository = dataSource.getRepository(Classe);
+                    const classe = await classeRepository.findOneOrFail({
+                        where: { id: classeId },
                         relations: ['user'],
                     });
-                    if (group.user.id !== user.id) {
+                    if (classe.user.id !== user.id) {
                         throw new Error(
-                            `group.user.id "${group.user.id}" does not match user.id ${user.id}`,
+                            `classe.user.id "${classe.user.id}" does not match user.id ${user.id}`,
                         );
                     }
                     break;

@@ -1,7 +1,7 @@
 import { attemptRoutes } from './attemptRoutes';
 import { examRoutes } from './examRoutes';
 import { exerciseRoutes } from './exerciseRoutes';
-import { groupRoutes } from './groupRoutes';
+import { classeRoutes } from './classeRoutes';
 import { questionRoutes } from './questionRoutes';
 import { resetPasswordRequestRoutes } from './resetPasswordRequestRoutes';
 import { studentRoutes } from './studentRoutes';
@@ -16,7 +16,7 @@ function buildRoutes() {
     routes.push(...userRoutes);
     routes.push(...examRoutes);
     routes.push(...studentRoutes);
-    routes.push(...groupRoutes);
+    routes.push(...classeRoutes);
     routes.push(...questionRoutes);
     routes.push(...attemptRoutes);
     routes.push(...exerciseRoutes);

@@ -3,7 +3,7 @@ import { api } from '../lib/api';
 import { Attempt } from '../modules/attempt';
 import { Exam } from '../modules/exam';
 import { Exercise } from '../modules/exercise';
-import { Classe } from '../modules/group';
+import { Classe } from '../modules/classe';
 import { Question } from '../modules/question';
 import { Student } from '../modules/student';
 import { User } from '../modules/user';
@@ -19,14 +19,14 @@ async function importDb() {
     const exerciseRepository = dataSource.getRepository(Exercise);
     const studentRepository = dataSource.getRepository(Student);
     const attemptRepository = dataSource.getRepository(Attempt);
-    const groupRepository = dataSource.getRepository(Classe);
+    const classeRepository = dataSource.getRepository(Classe);
     const questionRepository = dataSource.getRepository(Question);
     const user = await userRepository.findOneOrFail({ where: {} });
 
     console.log('Erasing local database...');
 
     await examRepository.delete({});
-    await groupRepository.delete({});
+    await classeRepository.delete({});
 
     console.log('Fetching exams...');
     const allExams = await api.fetchAllExams();
@@ -49,17 +49,17 @@ async function importDb() {
             }
         }
     }
-    console.log('Exams inserted! Now fetching groups...');
+    console.log('Exams inserted! Now fetching classes...');
 
-    const allGroups = await api.fetchAllGroups();
+    const allClasses = await api.fetchAllClasses();
 
-    console.log(`${allGroups.length} groups fetched! Inserting them in database...`);
+    console.log(`${allClasses.length} classes fetched! Inserting them in database...`);
 
-    for (const group of allGroups) {
-        await groupRepository.insert({ ...group, user });
+    for (const classe of allClasses) {
+        await classeRepository.insert({ ...classe, user });
     }
 
-    console.log('Groups inserted! Now fetching students...');
+    console.log('Classes inserted! Now fetching students...');
 
     const allStudents = await api.fetchAllStudents();
 
