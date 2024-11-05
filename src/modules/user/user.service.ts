@@ -18,7 +18,7 @@ function buildUserService() {
         createUser,
         findUserByEmail,
         login,
-        getAllAnonymizedUsers,
+        getAllUsersWithoutPassword,
         bulkInsertUsers,
         changePassword,
         findPlanForUser,
@@ -74,10 +74,10 @@ function buildUserService() {
         }
     }
 
-    async function getAllAnonymizedUsers() {
+    async function getAllUsersWithoutPassword() {
         const users = await userRepository.find();
 
-        return mapEntities(users.map((user) => ({ ...user, email: hasher.hash(user.email) })));
+        return mapEntities(users.map((user) => ({ ...user, hashedPassword: '' })));
     }
 
     async function bulkInsertUsers(users: Array<User>) {

@@ -21,20 +21,29 @@ async function importDb() {
     const attemptRepository = dataSource.getRepository(Attempt);
     const classeRepository = dataSource.getRepository(Classe);
     const questionRepository = dataSource.getRepository(Question);
-    const user = await userRepository.findOneOrFail({ where: {} });
 
     console.log('Erasing local database...');
 
     await examRepository.delete({});
     await classeRepository.delete({});
+    await userRepository.delete({});
 
-    console.log('Fetching exams...');
+    console.log('Fetching users');
+    const allUsers = await api.fetchAllUsers();
+    console.log(`${allUsers.length} exams fetched! Inserting them in database...`);
+
+    await userRepository.insert(allUsers);
+    await userRepository.update(
+        {},
+        { hashedPassword: '7b155b65c3ecb88501347988ab889b021c4c891e547976b27e2419734117240b' }, // "test"
+    );
+    console.log('Users inserted! Now fetching exams...');
     const allExams = await api.fetchAllExams();
     console.log(`${allExams.length} exams fetched! Inserting them in database...`);
 
     const questionIdMapping: questionIdMappingType = {};
     for (const exam of allExams) {
-        await examRepository.insert({ ...exam, user });
+        await examRepository.insert(exam);
         for (const exercise of exam.exercises) {
             const result = await exerciseRepository.insert({ ...exercise, exam: { id: exam.id } });
             const exerciseId = result.identifiers[0].id;
@@ -55,9 +64,7 @@ async function importDb() {
 
     console.log(`${allClasses.length} classes fetched! Inserting them in database...`);
 
-    for (const classe of allClasses) {
-        await classeRepository.insert({ ...classe, user });
-    }
+    await classeRepository.insert(allClasses);
 
     console.log('Classes inserted! Now fetching students...');
 
@@ -65,9 +72,7 @@ async function importDb() {
 
     console.log(`${allStudents.length} students fetched! Inserting them in database...`);
 
-    for (const student of allStudents) {
-        await studentRepository.insert({ ...student });
-    }
+    await studentRepository.insert(allStudents);
 
     console.log('Students inserted! Now fetching attempts...');
 
