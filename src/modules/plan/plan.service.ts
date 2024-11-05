@@ -8,6 +8,7 @@ function buildPlanService() {
 
     const planService = {
         findFreePlan,
+        getAllPlans,
     };
 
     return planService;
@@ -15,5 +16,8 @@ function buildPlanService() {
     async function findFreePlan(): Promise<Plan> {
         const freePlan = planRepository.findOneOrFail({ where: { name: 'FREE' } });
         return freePlan;
+    }
+    async function getAllPlans() {
+        return planRepository.find({});
     }
 }

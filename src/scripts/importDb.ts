@@ -8,6 +8,7 @@ import { Question } from '../modules/question';
 import { Student } from '../modules/student';
 import { User } from '../modules/user';
 import { UserConfiguration } from '../modules/userConfiguration';
+import { Plan } from '../modules/plan';
 
 type questionIdMappingType = Record<number, number>;
 
@@ -23,6 +24,7 @@ async function importDb() {
     const classeRepository = dataSource.getRepository(Classe);
     const questionRepository = dataSource.getRepository(Question);
     const userConfigurationRepository = dataSource.getRepository(UserConfiguration);
+    const planRepository = dataSource.getRepository(Plan);
 
     console.log('Erasing local database...');
 
@@ -30,19 +32,25 @@ async function importDb() {
     await classeRepository.delete({});
     await userRepository.delete({});
     await userConfigurationRepository.delete({});
+    await planRepository.delete({});
 
-    console.log('Fetching user configurations');
+    console.log('Fetching plans...');
+    const allPlans = await api.fetchAllPlans();
+    console.log(`${allPlans.length} plans fetched! Inserting them in database...`);
+
+    await planRepository.insert(allPlans);
+
+    console.log(`Plans inserted! Now fetching user configurations...`);
+
     const allUserConfigurations = await api.fetchAllUserConfigurations();
-    console.log(allUserConfigurations);
     console.log(
         `${allUserConfigurations.length} user configurations fetched! Inserting them in database...`,
     );
 
     await userConfigurationRepository.insert(allUserConfigurations);
 
-    console.log('User configurations inserted! Now fetching users');
+    console.log('User configurations inserted! Now fetching users...');
     const allUsers = await api.fetchAllUsers();
-    console.log(allUsers);
     console.log(`${allUsers.length} users fetched! Inserting them in database...`);
 
     await userRepository.insert(allUsers);

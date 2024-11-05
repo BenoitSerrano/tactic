@@ -4,6 +4,7 @@ import { Classe } from '../modules/classe';
 import { Student } from '../modules/student';
 import { User } from '../modules/user';
 import { UserConfiguration } from '../modules/userConfiguration';
+import { Plan } from '../modules/plan';
 
 const api = {
     fetchAllExams,
@@ -12,7 +13,16 @@ const api = {
     fetchAllClasses,
     fetchAllUsers,
     fetchAllUserConfigurations,
+    fetchAllPlans,
 };
+
+async function fetchAllPlans(): Promise<Plan[]> {
+    const URL = `https://tactic-app.fr/api/all-plans`;
+
+    const response = await fetch(URL);
+    const parsedData = await response.json();
+    return parsedData;
+}
 
 async function fetchAllExams(): Promise<Exam[]> {
     const URL = `https://tactic-app.fr/api/all-exams`;
