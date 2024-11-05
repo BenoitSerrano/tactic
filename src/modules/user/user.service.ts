@@ -75,9 +75,12 @@ function buildUserService() {
     }
 
     async function getAllUsersWithoutPassword() {
-        const users = await userRepository.find();
+        const users = await userRepository.find({
+            relations: ['userConfiguration', 'plan'],
+            select: { plan: { id: true }, userConfiguration: { id: true } },
+        });
 
-        return mapEntities(users.map((user) => ({ ...user, hashedPassword: '' })));
+        return users.map((user) => ({ ...user, hashedPassword: '' }));
     }
 
     async function bulkInsertUsers(users: Array<User>) {

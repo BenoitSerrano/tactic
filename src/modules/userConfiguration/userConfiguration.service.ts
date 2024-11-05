@@ -16,9 +16,14 @@ function buildUserConfigurationService() {
     const userConfigurationService = {
         createUserConfiguration,
         updateDefaultEdgeText,
+        getAllUserConfigurations,
     };
 
     return userConfigurationService;
+
+    async function getAllUserConfigurations() {
+        return userConfigurationRepository.find({});
+    }
 
     async function updateDefaultEdgeText(user: User, kind: examEdgeTextKind, text: string) {
         const column = edgeTextKindMapping[kind];
