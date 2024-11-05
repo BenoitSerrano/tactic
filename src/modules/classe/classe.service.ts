@@ -27,9 +27,11 @@ function buildClasseService() {
     }
 
     async function fetchClasses(user: User) {
-        const classes = await classeRepository.find({
-            where: { user: { id: user.id } },
-        });
+        // TODO
+        // const classes = await classeRepository.find({
+        //     where: { user: { id: user.id } },
+        // });
+        const classes: any[] = [];
         return classes;
     }
 
@@ -42,8 +44,10 @@ function buildClasseService() {
 
     async function createClasse(criteria: { user: User }, params: { name: Classe['name'] }) {
         const { user } = criteria;
+        //TODO
 
-        await classeRepository.insert({ user, name: params.name });
+        // await classeRepository.insert({ user, name: params.name });
+        await classeRepository.insert({ name: params.name });
         return true;
     }
 

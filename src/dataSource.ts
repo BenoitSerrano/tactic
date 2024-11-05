@@ -10,6 +10,7 @@ import { ResetPasswordRequest } from './modules/resetPasswordRequest';
 import { Classe } from './modules/classe';
 import { Plan } from './modules/plan';
 import { UserConfiguration } from './modules/userConfiguration';
+import { Establishment } from './modules/establishment';
 
 const dataSource = new DataSource({
     type: 'postgres',
@@ -31,6 +32,7 @@ const dataSource = new DataSource({
         Classe,
         Plan,
         UserConfiguration,
+        Establishment,
     ],
     subscribers: [],
     migrations: ['**/migrations/*.js'],

@@ -50,11 +50,12 @@ function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'classe'
                         where: { id: classeId },
                         relations: ['user'],
                     });
-                    if (classe.user.id !== user.id) {
-                        throw new Error(
-                            `classe.user.id "${classe.user.id}" does not match user.id ${user.id}`,
-                        );
-                    }
+                    //  TODO
+                    // if (classe.user.id !== user.id) {
+                    //     throw new Error(
+                    //         `classe.user.id "${classe.user.id}" does not match user.id ${user.id}`,
+                    //     );
+                    // }
                     break;
             }
         }
