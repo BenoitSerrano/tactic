@@ -8,6 +8,7 @@ function buildUserController() {
         createUser,
         login,
         getUsersSummary,
+        getAllUsers,
     };
 
     return userController;
@@ -22,5 +23,9 @@ function buildUserController() {
 
     async function getUsersSummary() {
         return userService.getUsersSummary();
+    }
+
+    async function getAllUsers() {
+        return userService.getAllUsersWithoutPassword();
     }
 }

@@ -2,16 +2,26 @@ import { Attempt } from '../modules/attempt';
 import { Exam } from '../modules/exam';
 import { Classe } from '../modules/classe';
 import { Student } from '../modules/student';
+import { User } from '../modules/user';
 
 const api = {
     fetchAllExams,
     fetchAllAttempts,
     fetchAllStudents,
     fetchAllClasses,
+    fetchAllUsers,
 };
 
 async function fetchAllExams(): Promise<Exam[]> {
     const URL = `https://tactic-app.fr/api/all-exams`;
+
+    const response = await fetch(URL);
+    const parsedData = await response.json();
+    return parsedData;
+}
+
+async function fetchAllUsers(): Promise<User[]> {
+    const URL = `https://tactic-app.fr/api/all-users`;
 
     const response = await fetch(URL);
     const parsedData = await response.json();

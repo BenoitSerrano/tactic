@@ -29,6 +29,7 @@ const userRoutes: Array<routeType<any, any, any>> = [
         authorizedRoles: ['admin'],
         controller: userController.getUsersSummary,
     },
+    { method: 'GET', path: '/all-users', kind: 'public', controller: userController.getAllUsers },
 ];
 
 export { userRoutes };
