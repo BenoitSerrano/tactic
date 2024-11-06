@@ -260,7 +260,8 @@ function buildExamService() {
 
     async function getAllExams() {
         const exams = await examRepository.find({
-            relations: ['exercises', 'exercises.questions'],
+            select: { user: { id: true } },
+            relations: ['exercises', 'exercises.questions', 'user'],
         });
 
         return exams;

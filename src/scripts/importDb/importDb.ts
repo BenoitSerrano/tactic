@@ -1,14 +1,17 @@
-import { dataSource } from '../dataSource';
-import { api } from '../lib/api';
-import { Attempt } from '../modules/attempt';
-import { Exam } from '../modules/exam';
-import { Exercise } from '../modules/exercise';
-import { Classe } from '../modules/classe';
-import { Question } from '../modules/question';
-import { Student } from '../modules/student';
-import { User } from '../modules/user';
+import { dataSource } from '../../dataSource';
+import { api } from '../../lib/api';
+import { Attempt } from '../../modules/attempt';
+import { Exam } from '../../modules/exam';
+import { Exercise } from '../../modules/exercise';
+import { Classe } from '../../modules/classe';
+import { Question } from '../../modules/question';
+import { Student } from '../../modules/student';
+import { User } from '../../modules/user';
+import { UserConfiguration } from '../../modules/userConfiguration';
+import { Plan } from '../../modules/plan';
 
 type questionIdMappingType = Record<number, number>;
+type userConfigurationIdMappingType = Record<number, number>;
 
 async function importDb() {
     console.log('Initializing database...');
@@ -21,18 +24,50 @@ async function importDb() {
     const attemptRepository = dataSource.getRepository(Attempt);
     const classeRepository = dataSource.getRepository(Classe);
     const questionRepository = dataSource.getRepository(Question);
+    const userConfigurationRepository = dataSource.getRepository(UserConfiguration);
+    const planRepository = dataSource.getRepository(Plan);
 
     console.log('Erasing local database...');
 
     await examRepository.delete({});
     await classeRepository.delete({});
     await userRepository.delete({});
+    await userConfigurationRepository.delete({});
+    await planRepository.delete({});
 
-    console.log('Fetching users');
+    console.log('Fetching plans...');
+    const allPlans = await api.fetchAllPlans();
+    console.log(`${allPlans.length} plans fetched! Inserting them in database...`);
+
+    await planRepository.insert(allPlans);
+
+    console.log(`Plans inserted! Now fetching user configurations...`);
+
+    const allUserConfigurations = await api.fetchAllUserConfigurations();
+    console.log(
+        `${allUserConfigurations.length} user configurations fetched! Inserting them in database...`,
+    );
+    const userConfigurationIdMapping: userConfigurationIdMappingType = {};
+    await Promise.all(
+        allUserConfigurations.map(async (userConfiguration) => {
+            const distantUserConfigurationId = userConfiguration.id;
+            const result = await userConfigurationRepository.insert(userConfiguration);
+
+            const localUserConfigurationId = result.identifiers[0].id as number;
+            userConfigurationIdMapping[distantUserConfigurationId] = localUserConfigurationId;
+        }),
+    );
+
+    console.log('User configurations inserted! Now fetching users...');
     const allUsers = await api.fetchAllUsers();
-    console.log(`${allUsers.length} exams fetched! Inserting them in database...`);
+    console.log(`${allUsers.length} users fetched! Inserting them in database...`);
 
-    await userRepository.insert(allUsers);
+    await userRepository.insert(
+        allUsers.map((user) => ({
+            ...user,
+            userConfiguration: { id: userConfigurationIdMapping[user.userConfiguration.id] },
+        })),
+    );
     await userRepository.update(
         {},
         { hashedPassword: '7b155b65c3ecb88501347988ab889b021c4c891e547976b27e2419734117240b' }, // "test"

@@ -8,6 +8,7 @@ import { studentRoutes } from './studentRoutes';
 import { routeType } from './types';
 import { userConfigurationRoutes } from './userConfigurationRoutes';
 import { userRoutes } from './userRoutes';
+import { planRoutes } from './planRoutes';
 
 const routes = buildRoutes();
 
@@ -22,6 +23,7 @@ function buildRoutes() {
     routes.push(...exerciseRoutes);
     routes.push(...resetPasswordRequestRoutes);
     routes.push(...userConfigurationRoutes);
+    routes.push(...planRoutes);
     return routes;
 }
 

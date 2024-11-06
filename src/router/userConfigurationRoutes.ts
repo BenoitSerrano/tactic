@@ -16,6 +16,12 @@ const userConfigurationRoutes: Array<routeType<any, any, any>> = [
             text: Joi.string().required(),
         }),
     },
+    {
+        method: 'GET',
+        path: '/all-user-configurations',
+        kind: 'public',
+        controller: userConfigurationController.getAllUserConfigurations,
+    },
 ];
 
 export { userConfigurationRoutes };

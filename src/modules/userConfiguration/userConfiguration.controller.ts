@@ -8,6 +8,7 @@ function buildUserConfigurationController() {
     const userConfigurationService = buildUserConfigurationService();
     const userConfigurationController = {
         updateDefaultEdgeText,
+        getAllUserConfigurations,
     };
 
     return userConfigurationController;
@@ -21,5 +22,9 @@ function buildUserConfigurationController() {
             params.body.kind,
             params.body.text,
         );
+    }
+
+    async function getAllUserConfigurations() {
+        return userConfigurationService.getAllUserConfigurations();
     }
 }
