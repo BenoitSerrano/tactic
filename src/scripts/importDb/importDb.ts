@@ -1,16 +1,17 @@
-import { dataSource } from '../dataSource';
-import { api } from '../lib/api';
-import { Attempt } from '../modules/attempt';
-import { Exam } from '../modules/exam';
-import { Exercise } from '../modules/exercise';
-import { Classe } from '../modules/classe';
-import { Question } from '../modules/question';
-import { Student } from '../modules/student';
-import { User } from '../modules/user';
-import { UserConfiguration } from '../modules/userConfiguration';
-import { Plan } from '../modules/plan';
+import { dataSource } from '../../dataSource';
+import { api } from '../../lib/api';
+import { Attempt } from '../../modules/attempt';
+import { Exam } from '../../modules/exam';
+import { Exercise } from '../../modules/exercise';
+import { Classe } from '../../modules/classe';
+import { Question } from '../../modules/question';
+import { Student } from '../../modules/student';
+import { User } from '../../modules/user';
+import { UserConfiguration } from '../../modules/userConfiguration';
+import { Plan } from '../../modules/plan';
 
 type questionIdMappingType = Record<number, number>;
+type userConfigurationIdMappingType = Record<number, number>;
 
 async function importDb() {
     console.log('Initializing database...');
@@ -46,14 +47,27 @@ async function importDb() {
     console.log(
         `${allUserConfigurations.length} user configurations fetched! Inserting them in database...`,
     );
+    const userConfigurationIdMapping: userConfigurationIdMappingType = {};
+    await Promise.all(
+        allUserConfigurations.map(async (userConfiguration) => {
+            const distantUserConfigurationId = userConfiguration.id;
+            const result = await userConfigurationRepository.insert(userConfiguration);
 
-    await userConfigurationRepository.insert(allUserConfigurations);
+            const localUserConfigurationId = result.identifiers[0].id as number;
+            userConfigurationIdMapping[distantUserConfigurationId] = localUserConfigurationId;
+        }),
+    );
 
     console.log('User configurations inserted! Now fetching users...');
     const allUsers = await api.fetchAllUsers();
     console.log(`${allUsers.length} users fetched! Inserting them in database...`);
 
-    await userRepository.insert(allUsers);
+    await userRepository.insert(
+        allUsers.map((user) => ({
+            ...user,
+            userConfiguration: { id: userConfigurationIdMapping[user.userConfiguration.id] },
+        })),
+    );
     await userRepository.update(
         {},
         { hashedPassword: '7b155b65c3ecb88501347988ab889b021c4c891e547976b27e2419734117240b' }, // "test"
