@@ -34,7 +34,12 @@ function buildExamController() {
     async function createExam(
         params: {
             urlParams: { classeId: string };
-            body: { name: string; duration: number | null; extraTime: number };
+            body: {
+                name: string;
+                duration: number | null;
+                startDateTime: number;
+                endDateTime: number | null;
+            };
         },
         user: User,
     ) {
@@ -43,6 +48,8 @@ function buildExamController() {
             duration: params.body.duration,
             classeId: params.urlParams.classeId,
             user,
+            startDateTime: params.body.startDateTime,
+            endDateTime: params.body.endDateTime,
         });
     }
 

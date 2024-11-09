@@ -5,8 +5,16 @@ describe('computeIsConfirmDisabled', () => {
         const name = '';
         const duration = '60';
         const selectedClasseId = 'classeId';
+        const startDateTime = 1731183529267;
+        const endDateTime = Infinity;
 
-        const isConfirmDisabled = computeIsConfirmDisabled({ name, duration, selectedClasseId });
+        const isConfirmDisabled = computeIsConfirmDisabled({
+            name,
+            duration,
+            selectedClasseId,
+            startDateTime,
+            endDateTime,
+        });
 
         expect(isConfirmDisabled).toBe(true);
     });
@@ -15,8 +23,16 @@ describe('computeIsConfirmDisabled', () => {
         const name = 'exam name';
         const duration = '';
         const selectedClasseId = 'classeId';
+        const startDateTime = 1731183529267;
+        const endDateTime = Infinity;
 
-        const isConfirmDisabled = computeIsConfirmDisabled({ name, duration, selectedClasseId });
+        const isConfirmDisabled = computeIsConfirmDisabled({
+            name,
+            duration,
+            selectedClasseId,
+            startDateTime,
+            endDateTime,
+        });
 
         expect(isConfirmDisabled).toBe(true);
     });
@@ -25,8 +41,16 @@ describe('computeIsConfirmDisabled', () => {
         const name = 'exam name';
         const duration = '00';
         const selectedClasseId = 'classeId';
+        const startDateTime = 1731183529267;
+        const endDateTime = Infinity;
 
-        const isConfirmDisabled = computeIsConfirmDisabled({ name, duration, selectedClasseId });
+        const isConfirmDisabled = computeIsConfirmDisabled({
+            name,
+            duration,
+            selectedClasseId,
+            startDateTime,
+            endDateTime,
+        });
 
         expect(isConfirmDisabled).toBe(true);
     });
@@ -35,8 +59,16 @@ describe('computeIsConfirmDisabled', () => {
         const name = 'exam name';
         const duration = '60';
         const selectedClasseId = 'classeId';
+        const startDateTime = 1731183529267;
+        const endDateTime = Infinity;
 
-        const isConfirmDisabled = computeIsConfirmDisabled({ name, duration, selectedClasseId });
+        const isConfirmDisabled = computeIsConfirmDisabled({
+            name,
+            duration,
+            selectedClasseId,
+            startDateTime,
+            endDateTime,
+        });
 
         expect(isConfirmDisabled).toBe(false);
     });

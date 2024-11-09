@@ -8,6 +8,7 @@ import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { EXAM_DEFAULT_DURATION } from './constants';
 import { useAlert } from '../../lib/alert';
 import { SelectClasseByEstablishment } from '../../components/SelectClasseByEstablishment';
+import { SelectExamExtremums } from './SelectExamExtremums';
 
 function ExamCreationModal(props: {
     close: () => void;
@@ -18,6 +19,8 @@ function ExamCreationModal(props: {
     const [name, setName] = useState('');
     const [selectedClasseId, setSelectedClasseId] = useState<string | undefined>();
 
+    const [startDateTime, setStartDateTime] = useState<number | undefined>();
+    const [endDateTime, setEndDateTime] = useState<number | undefined>();
     const [duration, setDuration] = useState(`${EXAM_DEFAULT_DURATION}`);
     const [isThereDuration, setIsThereDuration] = useState(true);
     const { displayAlert } = useAlert();
@@ -28,6 +31,8 @@ function ExamCreationModal(props: {
             setDuration(`${EXAM_DEFAULT_DURATION}`);
             setName('');
             setIsThereDuration(true);
+            setStartDateTime(undefined);
+            setEndDateTime(undefined);
             props.onExamCreated(exam.id);
             props.close();
         },
@@ -36,12 +41,18 @@ function ExamCreationModal(props: {
         },
     });
 
-    const isConfirmDisabled = computeIsConfirmDisabled({ name, duration, selectedClasseId });
+    const isConfirmDisabled = computeIsConfirmDisabled({
+        name,
+        duration,
+        selectedClasseId,
+        startDateTime,
+        endDateTime,
+    });
     const isCreating = createExamMutation.isPending;
 
     return (
         <Modal
-            size="small"
+            size="large"
             isOpen={props.isOpen}
             close={props.close}
             onConfirm={saveExam}
@@ -59,13 +70,6 @@ function ExamCreationModal(props: {
                         fullWidth
                         value={name}
                         onChange={(event) => setName(event.target.value)}
-                    />
-                </FieldContainer>
-                <FieldContainer>
-                    <SelectClasseByEstablishment
-                        establishmentId={props.establishmentId}
-                        selectedClasseId={selectedClasseId}
-                        setSelectedClasseId={setSelectedClasseId}
                     />
                 </FieldContainer>
                 <FieldContainer>
@@ -93,6 +97,22 @@ function ExamCreationModal(props: {
                         />
                     </StyledRadioGroup>
                 </FieldContainer>
+                <FieldContainer>
+                    <SelectClasseByEstablishment
+                        establishmentId={props.establishmentId}
+                        selectedClasseId={selectedClasseId}
+                        setSelectedClasseId={setSelectedClasseId}
+                    />
+                </FieldContainer>
+
+                <FieldContainer>
+                    <SelectExamExtremums
+                        startDateTime={startDateTime}
+                        endDateTime={endDateTime}
+                        setStartDateTime={setStartDateTime}
+                        setEndDateTime={setEndDateTime}
+                    />
+                </FieldContainer>
             </>
         </Modal>
     );
@@ -109,13 +129,16 @@ function ExamCreationModal(props: {
     }
 
     function saveExam() {
-        if (!selectedClasseId) {
+        if (!selectedClasseId || !startDateTime || !endDateTime) {
             return;
         }
+        console.log(endDateTime);
         createExamMutation.mutate({
             duration: isThereDuration ? Number(duration) : undefined,
             name,
             classeId: selectedClasseId,
+            startDateTime,
+            endDateTime,
         });
     }
 }
@@ -132,7 +155,6 @@ const StyledRadioGroup = styled(RadioGroup)({
     display: 'flex',
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
 });
 
 export { ExamCreationModal };

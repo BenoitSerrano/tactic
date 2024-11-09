@@ -67,6 +67,8 @@ const examRoutes: Array<routeType<any, any, any>> = [
         schema: Joi.object({
             name: Joi.string().required(),
             duration: Joi.number(),
+            startDateTime: Joi.number().required(),
+            endDateTime: Joi.number().allow(null),
         }),
         checkAuthorization: accessControlBuilder.assertHasRightPlanForCreation('exam'),
     },

@@ -347,13 +347,22 @@ async function createExam({
     name,
     duration,
     classeId,
+    startDateTime,
+    endDateTime,
 }: {
     name: string;
     duration: number | undefined;
     classeId: string;
+    startDateTime: number;
+    endDateTime: number;
 }) {
     const URL = `${BASE_URL}/classes/${classeId}/exams`;
-    return performApiCall(URL, 'POST', { name, duration });
+    return performApiCall(URL, 'POST', {
+        name,
+        duration,
+        startDateTime,
+        endDateTime: endDateTime === Infinity ? null : endDateTime,
+    });
 }
 
 async function updateExamName({ examId, name }: { examId: string; name: string }) {

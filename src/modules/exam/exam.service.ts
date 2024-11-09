@@ -57,6 +57,8 @@ function buildExamService() {
         duration: number | null;
         classeId: Classe['id'];
         user: User;
+        startDateTime: number;
+        endDateTime: number | null;
     }) {
         const classeService = buildClasseService();
         const exam = new Exam();
@@ -64,6 +66,9 @@ function buildExamService() {
         exam.duration = params.duration !== null ? params.duration : null;
         exam.classe = await classeService.getClasse(params.classeId);
         exam.user = params.user;
+        exam.startTime = new Date(params.startDateTime).toISOString();
+        exam.endTime =
+            params.endDateTime === null ? null : new Date(params.endDateTime).toISOString();
         exam.startText = params.user.userConfiguration.defaultStartText;
         exam.endText = params.user.userConfiguration.defaultEndText;
         const insertedExam = await examRepository.save(exam);

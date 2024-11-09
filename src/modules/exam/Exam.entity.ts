@@ -39,7 +39,7 @@ export class Exam {
     startTime: string;
 
     @Column({ type: 'timestamptz', nullable: true })
-    endTime: string;
+    endTime: string | null;
 
     @Column({ default: 2 })
     extraTime: number;

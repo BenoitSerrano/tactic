@@ -9,4 +9,11 @@ function debounce(callback: Function, delay = 500) {
     };
 }
 
-export { debounce };
+function range(count: number) {
+    return ' '
+        .repeat(count)
+        .split('')
+        .map((_, index) => index);
+}
+
+export { debounce, range };
