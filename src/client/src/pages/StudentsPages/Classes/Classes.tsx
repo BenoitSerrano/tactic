@@ -14,7 +14,7 @@ import {
     styled,
 } from '@mui/material';
 import { Loader } from '../../../components/Loader';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { pathHandler } from '../../../lib/pathHandler';
 import { ClasseCreationModal } from './ClasseCreationModal';
 import { useState } from 'react';
@@ -25,9 +25,11 @@ import { AdminSideMenu } from '../../../components/AdminSideMenu';
 import { PageTitle } from '../../../components/PageTitle';
 
 function Classes() {
+    const params = useParams();
+    const establishmentId = params.establishmentId as string;
     const query = useQuery<classeApiType[]>({
         queryKey: ['classes'],
-        queryFn: api.fetchClasses,
+        queryFn: () => api.fetchClassesByEstablishment(establishmentId),
     });
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
@@ -72,7 +74,7 @@ function Classes() {
             />
             <Menu buttons={buttons} />
             <ContentContainer>
-                <AdminSideMenu />
+                <AdminSideMenu currentEstablishmentId={establishmentId} />
                 <TableContainer>
                     <PageTitle title="Mes classes" />
                     <Table>
@@ -119,7 +121,7 @@ function Classes() {
 
     function buildNavigateToStudents(classeId: string) {
         return () => {
-            navigate(pathHandler.getRoutePath('STUDENTS', { classeId }));
+            navigate(pathHandler.getRoutePath('STUDENTS', { classeId, establishmentId }));
         };
     }
 

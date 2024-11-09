@@ -14,10 +14,10 @@ const classeRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
-        path: '/classes',
+        path: '/establishment/:establishmentId/classes',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: classeController.fetchClasses,
+        controller: classeController.getClassesByEstablishment,
     },
     {
         method: 'POST',

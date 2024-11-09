@@ -1,6 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { Classe } from './Classe.entity';
-import { User } from '../user';
+import { Establishment } from '../establishment';
 
 export { buildClasseService };
 
@@ -9,7 +9,7 @@ function buildClasseService() {
 
     const classeService = {
         getAllClasses,
-        fetchClasses,
+        getClassesByEstablishment,
         getClasse,
         createClasse,
         deleteClasse,
@@ -26,15 +26,6 @@ function buildClasseService() {
         return classes;
     }
 
-    async function fetchClasses(user: User) {
-        // TODO
-        // const classes = await classeRepository.find({
-        //     where: { user: { id: user.id } },
-        // });
-        const classes: any[] = [];
-        return classes;
-    }
-
     async function getClasse(classeId: Classe['id']) {
         const classe = await classeRepository.findOneOrFail({
             where: { id: classeId },
@@ -42,12 +33,25 @@ function buildClasseService() {
         return classe;
     }
 
-    async function createClasse(criteria: { user: User }, params: { name: Classe['name'] }) {
-        const { user } = criteria;
-        //TODO
+    async function getClassesByEstablishment(establishmentId: Establishment['id']) {
+        const classes = await classeRepository.find({
+            where: { establishment: { id: establishmentId } },
+            relations: { establishment: true },
+            select: { establishment: { id: true } },
+        });
+        return classes;
+    }
 
-        // await classeRepository.insert({ user, name: params.name });
-        await classeRepository.insert({ name: params.name });
+    async function createClasse(params: {
+        className: Classe['name'];
+        establishmentId: Establishment['id'];
+    }) {
+        const { establishmentId, className } = params;
+
+        await classeRepository.insert({
+            name: className,
+            establishment: { id: establishmentId },
+        });
         return true;
     }
 

@@ -1,3 +1,4 @@
+import { Establishment } from '../establishment';
 import { User } from '../user';
 import { buildClasseService } from './classe.service';
 
@@ -6,10 +7,10 @@ export { buildClasseController };
 function buildClasseController() {
     const classeService = buildClasseService();
     const classeController = {
-        fetchClasses,
         createClasse,
         deleteClasse,
         getAllClasses,
+        getClassesByEstablishment,
     };
 
     return classeController;
@@ -18,12 +19,20 @@ function buildClasseController() {
         return classeService.getAllClasses();
     }
 
-    async function fetchClasses(_params: {}, user: User) {
-        return classeService.fetchClasses(user);
+    async function getClassesByEstablishment(params: {
+        urlParams: { establishmentId: Establishment['id'] };
+    }) {
+        return classeService.getClassesByEstablishment(params.urlParams.establishmentId);
     }
 
-    async function createClasse(params: { body: { name: string } }, user: User) {
-        return classeService.createClasse({ user }, { name: params.body.name });
+    async function createClasse(params: {
+        body: { name: string };
+        urlParams: { establishmentId: Establishment['id'] };
+    }) {
+        return classeService.createClasse({
+            className: params.body.name,
+            establishmentId: params.urlParams.establishmentId,
+        });
     }
 
     async function deleteClasse(params: { urlParams: { classeId: string } }) {

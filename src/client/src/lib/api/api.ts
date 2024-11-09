@@ -1,6 +1,6 @@
-import { config } from '../config';
-import { acceptableAnswerType, examFilterType, questionKindType } from '../types';
-import { localSessionHandler } from './localSessionHandler';
+import { config } from '../../config';
+import { acceptableAnswerType, examFilterType, questionKindType } from '../../types';
+import { localSessionHandler } from '../localSessionHandler';
 
 const api = {
     login,
@@ -53,7 +53,7 @@ const api = {
     fetchResetPasswordRequestUser,
     resetPassword,
     fetchAttemptsCountByCorrectionStatus,
-    fetchClasses,
+    fetchClassesByEstablishment,
     createClasse,
     deleteClasse,
     changeClasse,
@@ -62,6 +62,8 @@ const api = {
     updateShouldDisplayRightAnswersForExamId,
     fetchUsersSummary,
     fetchUserExams,
+    fetchEstablishments,
+    createEstablishment,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -104,6 +106,16 @@ async function performApiCall(
         }
     }
     return response.json();
+}
+
+async function fetchEstablishments(): Promise<Array<{ id: string; name: string }>> {
+    const URL = `${BASE_URL}/establishments`;
+    return performApiCall(URL, 'GET');
+}
+
+async function createEstablishment(name: string): Promise<{ id: string; name: string }> {
+    const URL = `${BASE_URL}/establishments`;
+    return performApiCall(URL, 'POST', { name });
 }
 
 async function fetchUsersSummary() {
@@ -273,8 +285,8 @@ async function createStudents(params: { emails: string[]; classeId: string }) {
     return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
-async function fetchExams(filter: examFilterType) {
-    const URL = `${BASE_URL}/exams?filter=${filter}`;
+async function fetchExams(params: { filter: examFilterType; establishmentId: string }) {
+    const URL = `${BASE_URL}/establishments/${params.establishmentId}/exams?filter=${params.filter}`;
     return performApiCall(URL, 'GET');
 }
 
@@ -518,8 +530,8 @@ async function fetchAttemptsCountByCorrectionStatus(params: { examId: string }) 
     return performApiCall(URL, 'GET');
 }
 
-async function fetchClasses() {
-    const URL = `${BASE_URL}/classes`;
+async function fetchClassesByEstablishment(establishmentId: string) {
+    const URL = `${BASE_URL}/establishment/${establishmentId}/classes`;
     return performApiCall(URL, 'GET');
 }
 

@@ -13,7 +13,6 @@ import {
     styled,
 } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import MoveDownIcon from '@mui/icons-material/MoveDown';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../../components/Loader';
 import { StudentsCreationModal } from './StudentsCreationModal';
@@ -22,8 +21,6 @@ import { time } from '../../../lib/time';
 import { computeAttemptStatusIcon } from '../../../lib/computeAttemptStatusIcon';
 import { attemptStatusType } from '../../../types';
 import { useParams } from 'react-router-dom';
-import { classeApiType } from '../types';
-import { ChangeClasseModal } from './ChangeClasseModal';
 import { Link } from '../../../components/Link';
 import { pathHandler } from '../../../lib/pathHandler';
 import { studentsSummaryType } from './types';
@@ -42,25 +39,18 @@ function Students() {
         queryFn: () => api.fetchStudents({ classeId }),
     });
 
-    const classesQuery = useQuery<classeApiType[]>({
-        queryKey: ['classes'],
-        queryFn: api.fetchClasses,
-    });
-
     const deleteStudentMutation = useMutation({
         mutationFn: api.deleteStudent,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['classes', classeId, 'students'] });
         },
     });
-    const [studentIdToChangeClasse, setStudentIdToChangeClasse] = useState<string | undefined>(
-        undefined,
-    );
+
     const [activeSort, setActiveSort] = useState<sortColumnType>('email');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-    if (!studentsQuery.data || !classesQuery.data) {
-        if (studentsQuery.isLoading || classesQuery.isLoading) {
+    if (!studentsQuery.data) {
+        if (studentsQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
@@ -75,21 +65,12 @@ function Students() {
     ];
 
     const sortedData = sortData(studentsQuery.data.students, activeSort, sortDirection);
-    const classesDifferentFromCurrent = classesQuery.data.filter(
-        (classe) => classe.id !== classeId,
-    );
 
     const shouldDisplayNameColumns = computeShouldDisplayNameColumns(studentsQuery.data);
     return (
         <>
             <Menu buttons={buttons} />
-            <ChangeClasseModal
-                classeId={classeId}
-                studentId={studentIdToChangeClasse}
-                isOpen={!!studentIdToChangeClasse}
-                classes={classesDifferentFromCurrent}
-                close={closeClasseCreationModal}
-            />
+
             <Table>
                 <TableHead>
                     <TableRow>
@@ -165,13 +146,6 @@ function Students() {
                         <TableRow key={student.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>
-                                {classesDifferentFromCurrent.length > 0 && (
-                                    <Tooltip title="Changer de classe">
-                                        <IconButton onClick={buildChangeClasseStudent(student.id)}>
-                                            <MoveDownIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                )}
                                 <Tooltip title="Supprimer">
                                     <IconButton
                                         onClick={buildDeleteStudent(student.id, student.email)}
@@ -224,12 +198,6 @@ function Students() {
             />
         </>
     );
-
-    function buildChangeClasseStudent(studentId: string) {
-        return () => {
-            setStudentIdToChangeClasse(studentId);
-        };
-    }
 
     function computePathForAttempt(examId: string, attemptId: string | undefined) {
         if (attemptId === undefined) {
@@ -284,10 +252,6 @@ function Students() {
                 deleteStudentMutation.mutate({ studentId, classeId });
             }
         };
-    }
-
-    function closeClasseCreationModal() {
-        setStudentIdToChangeClasse(undefined);
     }
 }
 

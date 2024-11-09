@@ -1,3 +1,4 @@
+import { Establishment } from '../establishment';
 import { User } from '../user';
 import { Exam } from './Exam.entity';
 import { buildExamService } from './exam.service';
@@ -12,8 +13,8 @@ function buildExamController() {
         updateExamDuration,
         updateExamName,
         updateExamEdgeText,
-        getExams,
-        getExamsForUser,
+        getExamsByEstablishment,
+        getExamsByUser,
         getExam,
         getExamWithoutAnswers,
         getAllExams,
@@ -62,17 +63,27 @@ function buildExamController() {
         return examService.updateExamDuration(params.urlParams.examId, params.body.duration);
     }
 
-    async function getExams(params: { query: { filter: examFilterType } }, user: User) {
+    async function getExamsByEstablishment(
+        params: {
+            query: { filter: examFilterType };
+            urlParams: { establishmentId: Establishment['id'] };
+        },
+        user: User,
+    ) {
         if (!EXAM_FILTERS.includes(params.query.filter)) {
             throw new Error(
                 `Query filter "${params.query.filter}" is neither "archived" nor "current"`,
             );
         }
-        return examService.getExams(user.id, { filter: params.query.filter });
+        return examService.getExamsByEstablishment({
+            userId: user.id,
+            filter: params.query.filter,
+            establishmentId: params.urlParams.establishmentId,
+        });
     }
 
-    async function getExamsForUser(params: { urlParams: { userId: string } }) {
-        return examService.getExams(params.urlParams.userId);
+    async function getExamsByUser(params: { urlParams: { userId: string } }) {
+        return examService.getExamsByUser(params.urlParams.userId);
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {

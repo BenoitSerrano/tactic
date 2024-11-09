@@ -5,33 +5,43 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import { styled } from '@mui/material';
 import { pathHandler } from '../../lib/pathHandler';
 import { SideItemMenu } from './SideItemMenu';
+import { ChangeEstablishmentMenu } from './ChangeEstablishmentMenu';
 
-function AdminSideMenu() {
+function AdminSideMenu(props: { currentEstablishmentId: string }) {
     return (
         <Container>
+            <ChangeEstablishmentMenu currentEstablishmentId={props.currentEstablishmentId} />
             <SideItemMenu
                 level="high"
                 title="Mes examens"
                 IconComponent={ArticleIcon}
-                path={pathHandler.getRoutePath('EXAM_LIST')}
+                path={pathHandler.getRoutePath('EXAM_LIST', {
+                    establishmentId: props.currentEstablishmentId,
+                })}
             />
             <SideItemMenu
                 level="low"
                 title="En cours"
                 IconComponent={HistoryEduIcon}
-                path={pathHandler.getRoutePath('EXAM_LIST_CURRENT')}
+                path={pathHandler.getRoutePath('EXAM_LIST_CURRENT', {
+                    establishmentId: props.currentEstablishmentId,
+                })}
             />
             <SideItemMenu
                 level="low"
                 title="Archivés"
                 IconComponent={InventoryIcon}
-                path={pathHandler.getRoutePath('EXAM_LIST_ARCHIVED')}
+                path={pathHandler.getRoutePath('EXAM_LIST_ARCHIVED', {
+                    establishmentId: props.currentEstablishmentId,
+                })}
             />
             <SideItemMenu
                 level="high"
                 title="Mes classes"
                 IconComponent={Diversity3Icon}
-                path={pathHandler.getRoutePath('CLASSES')}
+                path={pathHandler.getRoutePath('CLASSES', {
+                    establishmentId: props.currentEstablishmentId,
+                })}
             />
         </Container>
     );

@@ -108,8 +108,12 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             breadcrumbs.push({ label: 'Correction de copie', isActive: true });
             break;
         case 'STUDENTS':
+            const { establishmentId } = parsedPath.parameters;
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes classes', href: pathHandler.getRoutePath('CLASSES') });
+            breadcrumbs.push({
+                label: 'Mes classes',
+                href: pathHandler.getRoutePath('CLASSES', { establishmentId }),
+            });
             breadcrumbs.push({ label: 'Liste des étudiants', isActive: true });
             break;
     }

@@ -8,17 +8,17 @@ const examController = buildExamController();
 const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
-        path: '/exams',
+        path: '/establishments/:establishmentId/exams',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: examController.getExams,
+        controller: examController.getExamsByEstablishment,
     },
     {
         method: 'GET',
         path: '/users/:userId/exams',
         kind: 'authenticated',
         authorizedRoles: ['admin'],
-        controller: examController.getExamsForUser,
+        controller: examController.getExamsByUser,
     },
     {
         method: 'GET',

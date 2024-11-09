@@ -9,6 +9,7 @@ import {
 import { Attempt } from '../attempt';
 import { User } from '../user';
 import { Exercise } from '../exercise';
+import { Classe } from '../classe';
 
 @Entity()
 export class Exam {
@@ -20,6 +21,9 @@ export class Exam {
 
     @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: false })
     user: User;
+
+    @ManyToOne(() => Classe, { onDelete: 'CASCADE', nullable: false })
+    classe: Classe;
 
     @OneToMany(() => Exercise, (exercise) => exercise.exam)
     exercises: Exercise[];

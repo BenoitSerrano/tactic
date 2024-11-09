@@ -21,8 +21,6 @@ import { ROUTE_KEYS } from './routeKeys';
 import { ExamEditing } from '../pages/ExamPages/ExamEditing';
 import { ExamArchived } from '../pages/ExamArchived';
 import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
-import { Navigate } from 'react-router-dom';
-import { ROUTE_PATHS } from './routePaths';
 import { ExamParameters } from '../pages/ExamParameters';
 import { ExamCollect } from '../pages/ExamCollect';
 import { ExamConsult } from '../pages/ExamConsult';
@@ -32,6 +30,8 @@ import { StudentAuthenticationExamTakingRedirection } from '../pages/StudentAuth
 import { AdminDashboard } from '../pages/AdminDashboard';
 import { AdminTeacherExams } from '../pages/AdminTeacherExams';
 import { userRoleType } from '../constants';
+import { TeacherHome } from '../pages/TeacherHome';
+import { FilteredExamList } from '../pages/ExamList/FilteredExamList';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -104,10 +104,16 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAM_LIST: {
         authorizedRole: 'teacher',
-        element: <Navigate to={ROUTE_PATHS.EXAM_LIST_CURRENT.path} />,
+        element: <ExamList />,
     },
-    EXAM_LIST_ARCHIVED: { authorizedRole: 'teacher', element: <ExamList filter="archived" /> },
-    EXAM_LIST_CURRENT: { authorizedRole: 'teacher', element: <ExamList filter="current" /> },
+    EXAM_LIST_ARCHIVED: {
+        authorizedRole: 'teacher',
+        element: <FilteredExamList filter="archived" />,
+    },
+    EXAM_LIST_CURRENT: {
+        authorizedRole: 'teacher',
+        element: <FilteredExamList filter="current" />,
+    },
     STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
     EXAM_PREVIEWING: {
         authorizedRole: 'teacher',
@@ -120,7 +126,7 @@ const ROUTE_ELEMENTS: Record<
     },
     TEACHER_HOME: {
         authorizedRole: 'teacher',
-        element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} />,
+        element: <TeacherHome />,
     },
     CLASSES: { authorizedRole: 'teacher', element: <Classes /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },

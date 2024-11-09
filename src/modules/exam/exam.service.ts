@@ -8,6 +8,8 @@ import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
 import { buildExerciseService } from '../exercise';
 import { examEdgeTextKind, examFilterType } from './types';
+import { Establishment } from '../establishment';
+import { buildClasseService } from '../classe';
 
 export { buildExamService };
 
@@ -18,7 +20,8 @@ function buildExamService() {
         updateExamName,
         updateExamDuration,
         updateExamEdgeText,
-        getExams,
+        getExamsByEstablishment,
+        getExamsByUser,
         getExamWithQuestions,
         getAllExams,
         getExam,
@@ -134,7 +137,25 @@ function buildExamService() {
         };
     }
 
-    async function getExams(userId: User['id'], criteria?: { filter: examFilterType }) {
+    async function getExamsByEstablishment(criteria: {
+        filter: examFilterType;
+        establishmentId: Establishment['id'];
+        userId: User['id'];
+    }) {
+        const classeService = buildClasseService();
+        const classes = await classeService.getClassesByEstablishment(criteria.establishmentId);
+        const classeIds = classes.map((classe) => classe.id);
+        return examRepository.find({
+            where: {
+                classe: { id: In(classeIds) },
+                user: { id: criteria.userId },
+                archivedAt: getArchivedWhereFilter(criteria.filter),
+            },
+            order: { createdAt: 'DESC' },
+        });
+    }
+
+    async function getExamsByUser(userId: User['id'], criteria?: { filter: examFilterType }) {
         if (criteria) {
             return examRepository.find({
                 where: {
@@ -315,5 +336,14 @@ function buildExamService() {
     async function countExamsForUser(user: User) {
         const examCount = await examRepository.count({ where: { user: { id: user.id } } });
         return examCount;
+    }
+}
+
+function getArchivedWhereFilter(filter: examFilterType) {
+    switch (filter) {
+        case 'current':
+            return IsNull();
+        case 'archived':
+            return Not(IsNull());
     }
 }

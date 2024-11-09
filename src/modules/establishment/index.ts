@@ -1,4 +1,4 @@
 import { Establishment } from './Establishment.entity';
-import { buildEstablishmentService } from './plan.service';
+import { buildEstablishmentController } from './establishment.controller';
 
-export { Establishment, buildEstablishmentService };
+export { Establishment, buildEstablishmentController };
