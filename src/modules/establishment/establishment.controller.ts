@@ -9,6 +9,7 @@ function buildEstablishmentController() {
     const establishmentController = {
         getEstablishments,
         createEstablishment,
+        updateEstablishment,
     };
 
     return establishmentController;
@@ -22,5 +23,14 @@ function buildEstablishmentController() {
         user: User,
     ) {
         return establishmentService.createEstablishment({ user, name: params.body.name });
+    }
+
+    async function updateEstablishment(params: {
+        body: { name: Establishment['name'] };
+        urlParams: { establishmentId: string };
+    }) {
+        return establishmentService.updateEstablishment(params.urlParams.establishmentId, {
+            name: params.body.name,
+        });
     }
 }

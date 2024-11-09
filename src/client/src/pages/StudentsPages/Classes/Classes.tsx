@@ -1,16 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../lib/api';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {
-    IconButton,
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
+    Menu as MuiMenu,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
-    Tooltip,
     styled,
 } from '@mui/material';
 import { Loader } from '../../../components/Loader';
@@ -23,6 +25,7 @@ import { classeApiType } from '../types';
 import { useAlert } from '../../../lib/alert';
 import { AdminSideMenu } from '../../../components/AdminSideMenu';
 import { PageTitle } from '../../../components/PageTitle';
+import { IconButton } from '../../../components/IconButton';
 
 function Classes() {
     const params = useParams();
@@ -31,6 +34,14 @@ function Classes() {
         queryKey: ['classes'],
         queryFn: () => api.fetchClassesByEstablishment(establishmentId),
     });
+    const [currentOptionMenu, setCurrentOptionMenu] = useState<
+        | {
+              element: HTMLElement;
+              classeId: string;
+          }
+        | undefined
+    >(undefined);
+
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const [isClasseCreationModalOpen, setIsClasseCreationModalOpen] = useState(false);
@@ -68,6 +79,18 @@ function Classes() {
 
     return (
         <>
+            <MuiMenu
+                anchorEl={currentOptionMenu?.element}
+                open={!!currentOptionMenu}
+                onClose={closeCurrentOptionMenu}
+            >
+                <ImportantMenuItem onClick={buildDeleteClasse(currentOptionMenu?.classeId)}>
+                    <ListItemIcon>
+                        <DeleteForeverIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Supprimer</ListItemText>
+                </ImportantMenuItem>
+            </MuiMenu>
             <ClasseCreationModal
                 isOpen={isClasseCreationModalOpen}
                 close={closeClasseCreationModal}
@@ -86,23 +109,20 @@ function Classes() {
                         </TableHead>
                         <TableBody>
                             {classes.map((classe) => (
-                                <TableRow key={classe.id}>
+                                <ClickableTableRow
+                                    hover
+                                    key={classe.id}
+                                    onClick={handleRowClick(classe.id)}
+                                >
                                     <TableCell>
-                                        <Tooltip title="Accéder à la liste des étudiants">
-                                            <IconButton
-                                                onClick={buildNavigateToStudents(classe.id)}
-                                            >
-                                                <FormatListBulletedIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title="Supprimer la classe">
-                                            <IconButton onClick={buildDeleteClasse(classe.id)}>
-                                                <DeleteForeverIcon />
-                                            </IconButton>
-                                        </Tooltip>
+                                        <IconButton
+                                            title="Actions"
+                                            IconComponent={MoreHorizIcon}
+                                            onClick={buildOpenOptionMenu(classe.id)}
+                                        />
                                     </TableCell>
                                     <TableCell>{classe.name}</TableCell>
-                                </TableRow>
+                                </ClickableTableRow>
                             ))}
                         </TableBody>
                     </Table>
@@ -110,6 +130,24 @@ function Classes() {
             </ContentContainer>
         </>
     );
+
+    function handleRowClick(classeId: string) {
+        return () => {
+            navigate(pathHandler.getRoutePath('STUDENTS', { classeId, establishmentId }));
+        };
+    }
+
+    function buildOpenOptionMenu(classeId: string) {
+        return (event: React.MouseEvent<HTMLElement>) => {
+            event.stopPropagation();
+
+            setCurrentOptionMenu({ element: event.currentTarget, classeId });
+        };
+    }
+
+    function closeCurrentOptionMenu() {
+        setCurrentOptionMenu(undefined);
+    }
 
     function openClasseCreationModal() {
         setIsClasseCreationModalOpen(true);
@@ -119,14 +157,13 @@ function Classes() {
         setIsClasseCreationModalOpen(false);
     }
 
-    function buildNavigateToStudents(classeId: string) {
+    function buildDeleteClasse(classeId: string | undefined) {
         return () => {
-            navigate(pathHandler.getRoutePath('STUDENTS', { classeId, establishmentId }));
-        };
-    }
+            if (!classeId) {
+                return;
+            }
+            closeCurrentOptionMenu();
 
-    function buildDeleteClasse(classeId: string) {
-        return () => {
             // eslint-disable-next-line no-restricted-globals
             const hasConfirmed = confirm(
                 'Souhaitez-vous réellement supprimer cette classe ? Les étudiants et leurs résultats aux examens seront supprimés.',
@@ -140,5 +177,10 @@ function Classes() {
 
 const ContentContainer = styled('div')({ display: 'flex' });
 const TableContainer = styled('div')({});
+const ClickableTableRow = styled(TableRow)({ cursor: 'pointer' });
+const ImportantMenuItem = styled(MenuItem)(({ theme }) => ({
+    color: theme.palette.error.main,
+    '.MuiListItemIcon-root': { color: theme.palette.error.main },
+}));
 
 export { Classes };

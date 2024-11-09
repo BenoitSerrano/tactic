@@ -6,7 +6,11 @@ export { buildEstablishmentService };
 
 function buildEstablishmentService() {
     const establishmentRepository = dataSource.getRepository(Establishment);
-    const establishmentService = { getEstablishmentsByUser, createEstablishment };
+    const establishmentService = {
+        getEstablishmentsByUser,
+        createEstablishment,
+        updateEstablishment,
+    };
 
     return establishmentService;
 
@@ -25,5 +29,20 @@ function buildEstablishmentService() {
         establishment.user = params.user;
         const insertedEstablishment = await establishmentRepository.save(establishment);
         return insertedEstablishment;
+    }
+    async function updateEstablishment(
+        establishmentId: Establishment['id'],
+        params: { name: Establishment['name'] },
+    ) {
+        const result = await establishmentRepository.update(
+            { id: establishmentId },
+            { name: params.name },
+        );
+        if (result.affected !== 1) {
+            throw new Error(
+                `Error: couldn't find establishment ${establishmentId} (results.affected = ${result.affected})`,
+            );
+        }
+        return true;
     }
 }

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { ChangeEstablishmentModal } from './ChangeEstablishmentModal';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
-import { CreateEstablishmentModal } from './CreateEstablishmentModal';
+import { UpsertEstablishmentModal } from './UpsertEstablishmentModal';
+import { establishmentUpsertionModalStatusType } from './types';
 
 type modalCoordinatesType = { x: number; y: number };
 
@@ -12,7 +13,9 @@ function ChangeEstablishmentMenu(props: { currentEstablishmentId: string }) {
     const [modalChangeEstablishmentCoordinates, setChangeEstablishmentModalCoordinates] = useState<
         modalCoordinatesType | undefined
     >(undefined);
-    const [isCreateEstablishmentModalOpen, setIsCreateEstablishmentModalOpen] = useState(false);
+    const [establishmentUpsertionModalStatus, setEstablishmentUpsertionModalStatus] = useState<
+        establishmentUpsertionModalStatusType | undefined
+    >(undefined);
 
     const query = useQuery({ queryKey: ['establishments'], queryFn: api.fetchEstablishments });
     const currentEstablishment = query.data
@@ -21,12 +24,14 @@ function ChangeEstablishmentMenu(props: { currentEstablishmentId: string }) {
         : undefined;
     return (
         <Container>
-            <CreateEstablishmentModal
-                close={closeCreateEstablishmentModal}
-                isOpen={isCreateEstablishmentModalOpen}
-            />
+            {!!establishmentUpsertionModalStatus && (
+                <UpsertEstablishmentModal
+                    close={closeUpsertEstablishmentModal}
+                    modalStatus={establishmentUpsertionModalStatus}
+                />
+            )}
             <ChangeEstablishmentModal
-                openCreateEstablishmentModal={openCreateEstablishmentModal}
+                setEstablishmentUpsertionModalStatus={setEstablishmentUpsertionModalStatus}
                 establishments={query.data}
                 currentEstablishmentId={props.currentEstablishmentId}
                 coordinates={modalChangeEstablishmentCoordinates}
@@ -41,12 +46,8 @@ function ChangeEstablishmentMenu(props: { currentEstablishmentId: string }) {
         </Container>
     );
 
-    function closeCreateEstablishmentModal() {
-        setIsCreateEstablishmentModalOpen(false);
-    }
-
-    function openCreateEstablishmentModal() {
-        setIsCreateEstablishmentModalOpen(true);
+    function closeUpsertEstablishmentModal() {
+        setEstablishmentUpsertionModalStatus(undefined);
     }
 
     function openChangeEstablishmentModal(event: React.MouseEvent<HTMLDivElement>) {

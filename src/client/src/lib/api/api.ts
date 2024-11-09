@@ -64,6 +64,7 @@ const api = {
     fetchUserExams,
     fetchEstablishments,
     createEstablishment,
+    updateEstablishment,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -113,9 +114,19 @@ async function fetchEstablishments(): Promise<Array<{ id: string; name: string }
     return performApiCall(URL, 'GET');
 }
 
-async function createEstablishment(name: string): Promise<{ id: string; name: string }> {
+async function createEstablishment(params: {
+    name: string;
+}): Promise<{ id: string; name: string }> {
     const URL = `${BASE_URL}/establishments`;
-    return performApiCall(URL, 'POST', { name });
+    return performApiCall(URL, 'POST', { name: params.name });
+}
+
+async function updateEstablishment(params: {
+    establishmentId: string;
+    name: string;
+}): Promise<{ id: string; name: string }> {
+    const URL = `${BASE_URL}/establishments/${params.establishmentId}`;
+    return performApiCall(URL, 'PUT', { name: params.name });
 }
 
 async function fetchUsersSummary() {

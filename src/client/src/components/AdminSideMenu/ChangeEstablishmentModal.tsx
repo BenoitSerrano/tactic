@@ -2,13 +2,16 @@ import { Button } from '../Button';
 import { Loader } from '../Loader';
 import { ChangeEstablishmentItem } from './ChangeEstablishmentItem';
 import { Modal, styled } from '@mui/material';
+import { establishmentType, establishmentUpsertionModalStatusType } from './types';
 
 function ChangeEstablishmentModal(props: {
     coordinates?: { x: number; y: number };
     currentEstablishmentId: string;
-    establishments: Array<{ id: string; name: string }> | undefined;
+    establishments: Array<establishmentType> | undefined;
     close: () => void;
-    openCreateEstablishmentModal: () => void;
+    setEstablishmentUpsertionModalStatus: (
+        modalStatus: establishmentUpsertionModalStatusType,
+    ) => void;
 }) {
     return (
         <Modal onClose={props.close} open={!!props.coordinates}>
@@ -17,11 +20,11 @@ function ChangeEstablishmentModal(props: {
                     <EstablishmentList>
                         {props.establishments.map((establishment) => (
                             <ChangeEstablishmentItem
+                                onEditClick={onClickOnEditEstablishment}
                                 closeModal={props.close}
                                 isSelected={establishment.id === props.currentEstablishmentId}
                                 key={establishment.id}
-                                id={establishment.id}
-                                name={establishment.name}
+                                establishment={establishment}
                             />
                         ))}
                     </EstablishmentList>
@@ -42,7 +45,12 @@ function ChangeEstablishmentModal(props: {
     );
 
     function onClickOnCreateEstablishment() {
-        props.openCreateEstablishmentModal();
+        props.setEstablishmentUpsertionModalStatus({ kind: 'creating' });
+        props.close();
+    }
+
+    function onClickOnEditEstablishment(establishment: establishmentType) {
+        props.setEstablishmentUpsertionModalStatus({ kind: 'editing', establishment });
         props.close();
     }
 }
