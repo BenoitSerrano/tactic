@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../../components/Modal';
 import { api } from '../../../lib/api';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
@@ -15,9 +15,13 @@ function ChangeEstablishmentForClasseModal(props: {
     const [selectedEstablishmentId, setSelectedEstablishmentId] = useState(
         props.currentEstablishmentId,
     );
+    const queryClient = useQueryClient();
     const updateEstablishmentIdMutation = useMutation({
         mutationFn: api.updateEstablishmentId,
         onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['establishment', props.currentEstablishmentId, 'classes'],
+            });
             props.close();
         },
         onError: (error) => {

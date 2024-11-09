@@ -1,3 +1,4 @@
+import { Classe } from '../classe';
 import { Establishment } from '../establishment';
 import { User } from '../user';
 import { Exam } from './Exam.entity';
@@ -25,6 +26,7 @@ function buildExamController() {
         updateExamArchivedAt,
         fetchShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
+        updateClasseId,
     };
 
     return examController;
@@ -134,6 +136,16 @@ function buildExamController() {
         return examService.updateShouldDisplayRightAnswersForExamId(
             params.urlParams.examId,
             params.body.shouldDisplayRightAnswers,
+        );
+    }
+
+    async function updateClasseId(params: {
+        body: { classeId: Classe['id'] };
+        urlParams: { examId: Exam['id'] };
+    }) {
+        return examService.updateClasseId(
+            { examId: params.urlParams.examId },
+            params.body.classeId,
         );
     }
 }

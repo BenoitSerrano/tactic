@@ -33,7 +33,7 @@ function Classes() {
     const params = useParams();
     const establishmentId = params.establishmentId as string;
     const query = useQuery<classeApiType[]>({
-        queryKey: ['classes'],
+        queryKey: ['establishment', establishmentId, 'classes'],
         queryFn: () => api.fetchClassesByEstablishment(establishmentId),
     });
     const [currentOptionMenu, setCurrentOptionMenu] = useState<
@@ -182,6 +182,7 @@ function Classes() {
             if (!classeId) {
                 return;
             }
+            closeCurrentOptionMenu();
             setCurrentClasseIdToChange(classeId);
         };
     }

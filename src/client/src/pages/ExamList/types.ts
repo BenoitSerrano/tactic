@@ -6,6 +6,12 @@ type examApiType = {
     endText: string;
     createdAt: string;
     archivedAt: string | null;
+    classe: classeType | undefined;
+};
+
+type classeType = {
+    id: string;
+    name: string;
 };
 
 export type { examApiType };

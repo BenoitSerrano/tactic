@@ -66,6 +66,7 @@ const api = {
     createEstablishment,
     updateEstablishment,
     updateEstablishmentId,
+    updateClasseId,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -133,6 +134,11 @@ async function updateEstablishment(params: {
 async function updateEstablishmentId(params: { establishmentId: string; classeId: string }) {
     const URL = `${BASE_URL}/classes/${params.classeId}/establishmentId`;
     return performApiCall(URL, 'PATCH', { establishmentId: params.establishmentId });
+}
+
+async function updateClasseId(params: { classeId: string; examId: string }) {
+    const URL = `${BASE_URL}/exams/${params.examId}/classeId`;
+    return performApiCall(URL, 'PATCH', { classeId: params.classeId });
 }
 
 async function fetchUsersSummary() {

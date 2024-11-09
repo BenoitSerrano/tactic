@@ -9,7 +9,7 @@ import { Question, buildQuestionService } from '../question';
 import { buildExerciseService } from '../exercise';
 import { examEdgeTextKind, examFilterType } from './types';
 import { Establishment } from '../establishment';
-import { buildClasseService } from '../classe';
+import { buildClasseService, Classe } from '../classe';
 
 export { buildExamService };
 
@@ -36,9 +36,21 @@ function buildExamService() {
         fetchShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
         countExamsForUser,
+        updateClasseId,
     };
 
     return examService;
+
+    async function updateClasseId(criteria: { examId: Exam['id'] }, classeId: Classe['id']) {
+        const result = await examRepository.update(
+            { id: criteria.examId },
+            { classe: { id: classeId } },
+        );
+        if (result.affected !== 1) {
+            throw new Error(`Could not update classe Id for exam ${criteria.examId}`);
+        }
+        return true;
+    }
 
     async function createExam(name: Exam['name'], duration: number | null, user: User) {
         const exam = new Exam();
@@ -151,33 +163,16 @@ function buildExamService() {
                 user: { id: criteria.userId },
                 archivedAt: getArchivedWhereFilter(criteria.filter),
             },
+            relations: ['classe'],
             order: { createdAt: 'DESC' },
         });
     }
 
-    async function getExamsByUser(userId: User['id'], criteria?: { filter: examFilterType }) {
-        if (criteria) {
-            return examRepository.find({
-                where: {
-                    user: { id: userId },
-                    archivedAt: getArchivedWhereFilter(criteria.filter),
-                },
-                order: { createdAt: 'DESC' },
-            });
-        }
+    async function getExamsByUser(userId: User['id']) {
         return examRepository.find({
             where: { user: { id: userId } },
             order: { createdAt: 'DESC' },
         });
-
-        function getArchivedWhereFilter(filter: examFilterType) {
-            switch (filter) {
-                case 'current':
-                    return IsNull();
-                case 'archived':
-                    return Not(IsNull());
-            }
-        }
     }
 
     async function getUserIdForExam(examId: Exam['id']): Promise<User['id']> {

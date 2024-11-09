@@ -184,6 +184,22 @@ const examRoutes: Array<routeType<any, any, any>> = [
             shouldDisplayRightAnswers: Joi.boolean(),
         }),
     },
+    {
+        method: 'PATCH',
+        path: '/exams/:examId/classeId',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: examController.updateClasseId,
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            classeId: Joi.string().required(),
+        }),
+    },
 ];
 
 export { examRoutes };

@@ -14,6 +14,7 @@ import {
     TableRow,
     styled,
 } from '@mui/material';
+import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import ScannerIcon from '@mui/icons-material/Scanner';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArchiveIcon from '@mui/icons-material/Archive';
@@ -32,9 +33,11 @@ import { IconButton } from '../../components/IconButton';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { PageTitle } from '../../components/PageTitle';
 import { examFilterType } from '../../types';
+import { ChangeClasseForExamModal } from './ChangeClasseForExamModal';
 
 function FilteredExamList(props: { filter: examFilterType }) {
     const params = useParams();
+
     const establishmentId = params.establishmentId as string;
     const examListQuery = useQuery<Array<examApiType>>({
         queryKey: ['establishments', establishmentId, `exams-${props.filter}`],
@@ -118,6 +121,10 @@ function FilteredExamList(props: { filter: examFilterType }) {
         },
     });
 
+    const [currentExamIdToChange, setCurrentExamIdToChange] = useState<string | undefined>(
+        undefined,
+    );
+
     if (!examListQuery.data) {
         if (examListQuery.isLoading) {
             return <Loader />;
@@ -143,6 +150,12 @@ function FilteredExamList(props: { filter: examFilterType }) {
                 <MenuItem onClick={buildArchiveExamAction(currentOptionMenu?.examId)}>
                     {renderArchiveListItem()}
                 </MenuItem>
+                <MenuItem onClick={buildChangeClasseForExam(currentOptionMenu?.examId)}>
+                    <ListItemIcon>
+                        <ChangeCircleOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Changer de classe</ListItemText>
+                </MenuItem>
                 <ImportantMenuItem onClick={buildDeleteExam(currentOptionMenu?.examId)}>
                     <ListItemIcon>
                         <DeleteForeverIcon fontSize="small" />
@@ -150,7 +163,11 @@ function FilteredExamList(props: { filter: examFilterType }) {
                     <ListItemText>Supprimer</ListItemText>
                 </ImportantMenuItem>
             </MuiMenu>
-
+            <ChangeClasseForExamModal
+                close={closeChangeEstablishmentModal}
+                establishmentId={establishmentId}
+                examId={currentExamIdToChange}
+            />
             <ContentContainer>
                 <AdminSideMenu currentEstablishmentId={establishmentId} />
 
@@ -238,6 +255,10 @@ function FilteredExamList(props: { filter: examFilterType }) {
         setIsCreateExamModalOpen(true);
     }
 
+    function closeChangeEstablishmentModal() {
+        setCurrentExamIdToChange(undefined);
+    }
+
     function computeTitle(filter: examFilterType) {
         switch (filter) {
             case 'current':
@@ -273,6 +294,16 @@ function FilteredExamList(props: { filter: examFilterType }) {
             }
             closeEditionMenu();
             duplicateExamMutation.mutate({ examId });
+        };
+    }
+
+    function buildChangeClasseForExam(examId: string | undefined) {
+        return () => {
+            if (!examId) {
+                return;
+            }
+            closeEditionMenu();
+            setCurrentExamIdToChange(examId);
         };
     }
 
