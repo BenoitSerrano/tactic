@@ -33,11 +33,17 @@ function buildExamController() {
 
     async function createExam(
         params: {
+            urlParams: { classeId: string };
             body: { name: string; duration: number | null; extraTime: number };
         },
         user: User,
     ) {
-        return examService.createExam(params.body.name, params.body.duration, user);
+        return examService.createExam({
+            name: params.body.name,
+            duration: params.body.duration,
+            classeId: params.urlParams.classeId,
+            user,
+        });
     }
 
     async function updateExamName(params: {

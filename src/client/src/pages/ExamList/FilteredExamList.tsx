@@ -218,6 +218,7 @@ function FilteredExamList(props: { filter: examFilterType }) {
             </ContentContainer>
 
             <ExamCreationModal
+                establishmentId={establishmentId}
                 isOpen={isCreateExamModalOpen}
                 onExamCreated={onExamCreated}
                 close={() => setIsCreateExamModalOpen(false)}

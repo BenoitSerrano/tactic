@@ -52,13 +52,20 @@ function buildExamService() {
         return true;
     }
 
-    async function createExam(name: Exam['name'], duration: number | null, user: User) {
+    async function createExam(params: {
+        name: Exam['name'];
+        duration: number | null;
+        classeId: Classe['id'];
+        user: User;
+    }) {
+        const classeService = buildClasseService();
         const exam = new Exam();
-        exam.name = name;
-        exam.duration = duration !== null ? duration : null;
-        exam.user = user;
-        exam.startText = user.userConfiguration.defaultStartText;
-        exam.endText = user.userConfiguration.defaultEndText;
+        exam.name = params.name;
+        exam.duration = params.duration !== null ? params.duration : null;
+        exam.classe = await classeService.getClasse(params.classeId);
+        exam.user = params.user;
+        exam.startText = params.user.userConfiguration.defaultStartText;
+        exam.endText = params.user.userConfiguration.defaultEndText;
         const insertedExam = await examRepository.save(exam);
         return insertedExam;
     }

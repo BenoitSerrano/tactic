@@ -343,8 +343,16 @@ async function fetchExamWithQuestions(examId: string) {
     return performApiCall(URL, 'GET');
 }
 
-async function createExam({ name, duration }: { name: string; duration: number | undefined }) {
-    const URL = `${BASE_URL}/exams`;
+async function createExam({
+    name,
+    duration,
+    classeId,
+}: {
+    name: string;
+    duration: number | undefined;
+    classeId: string;
+}) {
+    const URL = `${BASE_URL}/classes/${classeId}/exams`;
     return performApiCall(URL, 'POST', { name, duration });
 }
 

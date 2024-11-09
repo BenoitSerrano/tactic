@@ -33,7 +33,7 @@ function Classes() {
     const params = useParams();
     const establishmentId = params.establishmentId as string;
     const query = useQuery<classeApiType[]>({
-        queryKey: ['establishment', establishmentId, 'classes'],
+        queryKey: ['establishments', establishmentId, 'classes'],
         queryFn: () => api.fetchClassesByEstablishment(establishmentId),
     });
     const [currentOptionMenu, setCurrentOptionMenu] = useState<

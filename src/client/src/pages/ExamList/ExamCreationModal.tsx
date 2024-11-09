@@ -7,13 +7,17 @@ import { INTEGER_NUMBER_REGEX } from '../../constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { EXAM_DEFAULT_DURATION } from './constants';
 import { useAlert } from '../../lib/alert';
+import { SelectClasseByEstablishment } from '../../components/SelectClasseByEstablishment';
 
 function ExamCreationModal(props: {
     close: () => void;
     isOpen: boolean;
+    establishmentId: string;
     onExamCreated: (examId: string) => void;
 }) {
     const [name, setName] = useState('');
+    const [selectedClasseId, setSelectedClasseId] = useState<string | undefined>();
+
     const [duration, setDuration] = useState(`${EXAM_DEFAULT_DURATION}`);
     const [isThereDuration, setIsThereDuration] = useState(true);
     const { displayAlert } = useAlert();
@@ -32,7 +36,7 @@ function ExamCreationModal(props: {
         },
     });
 
-    const isConfirmDisabled = computeIsConfirmDisabled({ name, duration });
+    const isConfirmDisabled = computeIsConfirmDisabled({ name, duration, selectedClasseId });
     const isCreating = createExamMutation.isPending;
 
     return (
@@ -55,6 +59,13 @@ function ExamCreationModal(props: {
                         fullWidth
                         value={name}
                         onChange={(event) => setName(event.target.value)}
+                    />
+                </FieldContainer>
+                <FieldContainer>
+                    <SelectClasseByEstablishment
+                        establishmentId={props.establishmentId}
+                        selectedClasseId={selectedClasseId}
+                        setSelectedClasseId={setSelectedClasseId}
                     />
                 </FieldContainer>
                 <FieldContainer>
@@ -98,12 +109,13 @@ function ExamCreationModal(props: {
     }
 
     function saveExam() {
-        const newExam = {
+        if (!selectedClasseId) {
+            return;
+        }
+        createExamMutation.mutate({
             duration: isThereDuration ? Number(duration) : undefined,
             name,
-        };
-        createExamMutation.mutate({
-            ...newExam,
+            classeId: selectedClasseId,
         });
     }
 }

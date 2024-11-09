@@ -60,7 +60,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'POST',
-        path: '/exams',
+        path: '/classes/:classeId/exams',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: examController.createExam,
