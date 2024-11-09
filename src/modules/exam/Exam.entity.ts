@@ -31,8 +31,15 @@ export class Exam {
     @OneToMany(() => Attempt, (attempt) => attempt.exam)
     attempts: Attempt[];
 
+    // Duration in minutes
     @Column({ type: 'int', nullable: true })
     duration: number | null;
+
+    @Column({ type: 'timestamptz', nullable: false })
+    startTime: string;
+
+    @Column({ type: 'timestamptz', nullable: true })
+    endTime: string;
 
     @Column({ default: 2 })
     extraTime: number;
