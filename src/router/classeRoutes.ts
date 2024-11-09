@@ -28,6 +28,17 @@ const classeRoutes: Array<routeType<any, any, any>> = [
         schema: Joi.object({ name: Joi.string().required() }),
     },
     {
+        method: 'PATCH',
+        path: '/classes/:classeId/establishmentId',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
+            { entity: 'classe', key: 'classeId' },
+        ]),
+        controller: classeController.updateEstablishmentId,
+        schema: Joi.object({ establishmentId: Joi.string().required() }),
+    },
+    {
         method: 'DELETE',
         path: '/classes/:classeId',
         kind: 'authenticated',

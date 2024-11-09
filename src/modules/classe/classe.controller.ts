@@ -1,5 +1,6 @@
 import { Establishment } from '../establishment';
 import { User } from '../user';
+import { Classe } from './Classe.entity';
 import { buildClasseService } from './classe.service';
 
 export { buildClasseController };
@@ -11,6 +12,7 @@ function buildClasseController() {
         deleteClasse,
         getAllClasses,
         getClassesByEstablishment,
+        updateEstablishmentId,
     };
 
     return classeController;
@@ -23,6 +25,16 @@ function buildClasseController() {
         urlParams: { establishmentId: Establishment['id'] };
     }) {
         return classeService.getClassesByEstablishment(params.urlParams.establishmentId);
+    }
+
+    async function updateEstablishmentId(params: {
+        body: { establishmentId: Establishment['id'] };
+        urlParams: { classeId: Classe['id'] };
+    }) {
+        return classeService.updateEstablishmentId(
+            { classeId: params.urlParams.classeId },
+            params.body.establishmentId,
+        );
     }
 
     async function createClasse(params: {

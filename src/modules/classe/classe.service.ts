@@ -13,6 +13,7 @@ function buildClasseService() {
         getClasse,
         createClasse,
         deleteClasse,
+        updateEstablishmentId,
     };
 
     return classeService;
@@ -58,5 +59,19 @@ function buildClasseService() {
     async function deleteClasse(criteria: { classeId: Classe['id'] }) {
         const result = await classeRepository.delete({ id: criteria.classeId });
         return result.affected == 1;
+    }
+
+    async function updateEstablishmentId(
+        critera: { classeId: Classe['id'] },
+        newEstablishmentId: Establishment['id'],
+    ) {
+        const result = await classeRepository.update(
+            { id: critera.classeId },
+            { establishment: { id: newEstablishmentId } },
+        );
+        if (result.affected !== 1) {
+            throw new Error(`Could not update classe ${critera.classeId}`);
+        }
+        return true;
     }
 }

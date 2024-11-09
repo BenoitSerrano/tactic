@@ -65,6 +65,7 @@ const api = {
     fetchEstablishments,
     createEstablishment,
     updateEstablishment,
+    updateEstablishmentId,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -127,6 +128,11 @@ async function updateEstablishment(params: {
 }): Promise<{ id: string; name: string }> {
     const URL = `${BASE_URL}/establishments/${params.establishmentId}`;
     return performApiCall(URL, 'PUT', { name: params.name });
+}
+
+async function updateEstablishmentId(params: { establishmentId: string; classeId: string }) {
+    const URL = `${BASE_URL}/classes/${params.classeId}/establishmentId`;
+    return performApiCall(URL, 'PATCH', { establishmentId: params.establishmentId });
 }
 
 async function fetchUsersSummary() {
