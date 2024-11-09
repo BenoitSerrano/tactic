@@ -19,6 +19,7 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     EXAM_LIST: 'Examens',
     EXAM_LIST_ARCHIVED: 'Examens archivés',
     EXAM_LIST_CURRENT: 'Examens actifs',
+    EXAM_LIST_ALL: 'Examens',
     STUDENTS: 'Étudiants',
     EXAM_PREVIEWING: "Prévisualisation d'examen",
     EXAM_EDITING_CONTENT: "Édition de l'examen",

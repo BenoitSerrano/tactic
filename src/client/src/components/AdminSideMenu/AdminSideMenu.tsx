@@ -1,5 +1,6 @@
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import ArticleIcon from '@mui/icons-material/Article';
+import ListIcon from '@mui/icons-material/List';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import { styled } from '@mui/material';
@@ -16,6 +17,14 @@ function AdminSideMenu(props: { currentEstablishmentId: string }) {
                 title="Mes examens"
                 IconComponent={ArticleIcon}
                 path={pathHandler.getRoutePath('EXAM_LIST', {
+                    establishmentId: props.currentEstablishmentId,
+                })}
+            />
+            <SideItemMenu
+                level="low"
+                title="Tous"
+                IconComponent={ListIcon}
+                path={pathHandler.getRoutePath('EXAM_LIST_ALL', {
                     establishmentId: props.currentEstablishmentId,
                 })}
             />

@@ -18,7 +18,7 @@ type acceptableAnswerType = { grade: gradeType; answer: string };
 
 type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'corrected';
 
-type examFilterType = 'archived' | 'current';
+type examFilterType = 'archived' | 'current' | 'all';
 
 export { questionKinds };
 

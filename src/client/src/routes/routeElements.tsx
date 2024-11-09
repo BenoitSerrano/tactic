@@ -114,6 +114,10 @@ const ROUTE_ELEMENTS: Record<
         authorizedRole: 'teacher',
         element: <FilteredExamList filter="current" />,
     },
+    EXAM_LIST_ALL: {
+        authorizedRole: 'teacher',
+        element: <FilteredExamList filter="all" />,
+    },
     STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
     EXAM_PREVIEWING: {
         authorizedRole: 'teacher',

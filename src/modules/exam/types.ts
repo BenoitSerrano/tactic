@@ -3,7 +3,7 @@ import { Exam } from './Exam.entity';
 
 type examDtoType = Omit<Exam, 'exercises'> & { exercises: exerciseDtoType[] };
 
-const EXAM_FILTERS = ['archived', 'current'] as const;
+const EXAM_FILTERS = ['archived', 'current', 'all'] as const;
 type examFilterType = (typeof EXAM_FILTERS)[number];
 
 const EXAM_EDGE_TEXT_KINDS = ['start', 'end'] as const;

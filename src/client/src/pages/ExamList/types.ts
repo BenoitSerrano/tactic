@@ -9,9 +9,15 @@ type examApiType = {
     classe: classeType | undefined;
 };
 
+type sortedExamsApiType = {
+    toCome: examApiType[];
+    current: examApiType[];
+    past: examApiType[];
+};
+
 type classeType = {
     id: string;
     name: string;
 };
 
-export type { examApiType };
+export type { examApiType, sortedExamsApiType };

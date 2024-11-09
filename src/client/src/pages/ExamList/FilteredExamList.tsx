@@ -2,21 +2,9 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../lib/api';
-import {
-    ListItemIcon,
-    ListItemText,
-    MenuItem,
-    Menu as MuiMenu,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    styled,
-} from '@mui/material';
+import { ListItemIcon, ListItemText, MenuItem, Menu as MuiMenu, styled } from '@mui/material';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import ScannerIcon from '@mui/icons-material/Scanner';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -25,21 +13,19 @@ import { Loader } from '../../components/Loader';
 import { ExamCreationModal } from './ExamCreationModal';
 import { Menu } from '../../components/Menu';
 import { useAlert } from '../../lib/alert';
-import { examApiType } from './types';
+import { sortedExamsApiType } from './types';
 import { pathHandler } from '../../lib/pathHandler';
-import { EditableName } from './EditableName';
-import { EditableDuration } from './EditableDuration';
-import { IconButton } from '../../components/IconButton';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { PageTitle } from '../../components/PageTitle';
 import { examFilterType } from '../../types';
 import { ChangeClasseForExamModal } from './ChangeClasseForExamModal';
+import { ExamTable } from './ExamTable';
 
 function FilteredExamList(props: { filter: examFilterType }) {
     const params = useParams();
 
     const establishmentId = params.establishmentId as string;
-    const examListQuery = useQuery<Array<examApiType>>({
+    const examListQuery = useQuery<sortedExamsApiType>({
         queryKey: ['establishments', establishmentId, `exams-${props.filter}`],
         queryFn: () => api.fetchExams({ establishmentId, filter: props.filter }),
     });
@@ -182,38 +168,27 @@ function FilteredExamList(props: { filter: examFilterType }) {
                             },
                         ]}
                     />
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell width={10}></TableCell>
-                                <TableCell>Nom de l'examen</TableCell>
-                                <TableCell width={170}>Durée</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {examListQuery.data.map((exam) => (
-                                <ClickableTableRow
-                                    hover
-                                    key={exam.id}
-                                    onClick={handleRowClick(exam.id)}
-                                >
-                                    <TableCell>
-                                        <IconButton
-                                            title="Actions"
-                                            IconComponent={MoreHorizIcon}
-                                            onClick={buildOpenOptionMenu(exam.id)}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <EditableName exam={exam} />
-                                    </TableCell>
-                                    <TableCell>
-                                        <EditableDuration exam={exam} />
-                                    </TableCell>
-                                </ClickableTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    {examListQuery.data.toCome.length > 0 && (
+                        <ExamTable
+                            title="À venir"
+                            exams={examListQuery.data.toCome}
+                            setCurrentOptionMenu={setCurrentOptionMenu}
+                        />
+                    )}
+                    {examListQuery.data.current.length > 0 && (
+                        <ExamTable
+                            title="En cours"
+                            exams={examListQuery.data.current}
+                            setCurrentOptionMenu={setCurrentOptionMenu}
+                        />
+                    )}
+                    {examListQuery.data.past.length > 0 && (
+                        <ExamTable
+                            title="Passés"
+                            exams={examListQuery.data.past}
+                            setCurrentOptionMenu={setCurrentOptionMenu}
+                        />
+                    )}
                 </TableContainer>
             </ContentContainer>
 
@@ -225,13 +200,6 @@ function FilteredExamList(props: { filter: examFilterType }) {
             />
         </>
     );
-
-    function handleRowClick(examId: string) {
-        return () => {
-            const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
-            navigate(path);
-        };
-    }
 
     function renderArchiveListItem() {
         switch (props.filter) {
@@ -260,21 +228,15 @@ function FilteredExamList(props: { filter: examFilterType }) {
         setCurrentExamIdToChange(undefined);
     }
 
-    function computeTitle(filter: examFilterType) {
+    function computeTitle(filter: examFilterType): string {
         switch (filter) {
             case 'current':
                 return 'Mes examens en cours';
             case 'archived':
                 return 'Mes examens archivés';
+            case 'all':
+                return 'Tous mes examens';
         }
-    }
-
-    function buildOpenOptionMenu(examId: string) {
-        return (event: React.MouseEvent<HTMLElement>) => {
-            event.stopPropagation();
-
-            setCurrentOptionMenu({ element: event.currentTarget, examId });
-        };
     }
 
     function onExamCreated(examId: string) {
@@ -353,6 +315,5 @@ const ImportantMenuItem = styled(MenuItem)(({ theme }) => ({
     color: theme.palette.error.main,
     '.MuiListItemIcon-root': { color: theme.palette.error.main },
 }));
-const ClickableTableRow = styled(TableRow)({ cursor: 'pointer' });
 
 export { FilteredExamList };

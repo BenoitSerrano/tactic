@@ -11,6 +11,7 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
     switch (parsedPath.routeKey) {
         case 'EXAM_LIST':
         case 'EXAM_LIST_CURRENT':
+        case 'EXAM_LIST_ALL':
         case 'EXAM_LIST_ARCHIVED':
             breadcrumbs.push({ label: 'Accueil', href: '/teacher' });
             breadcrumbs.push({ label: 'Mes examens', isActive: true });

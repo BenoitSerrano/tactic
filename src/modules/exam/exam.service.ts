@@ -10,6 +10,7 @@ import { buildExerciseService } from '../exercise';
 import { examEdgeTextKind, examFilterType } from './types';
 import { Establishment } from '../establishment';
 import { buildClasseService, Classe } from '../classe';
+import { sortExamsByDateTime } from './lib/sortExamsByDateTime';
 
 export { buildExamService };
 
@@ -169,15 +170,29 @@ function buildExamService() {
         const classeService = buildClasseService();
         const classes = await classeService.getClassesByEstablishment(criteria.establishmentId);
         const classeIds = classes.map((classe) => classe.id);
-        return examRepository.find({
-            where: {
-                classe: { id: In(classeIds) },
-                user: { id: criteria.userId },
-                archivedAt: getArchivedWhereFilter(criteria.filter),
-            },
-            relations: ['classe'],
-            order: { createdAt: 'DESC' },
-        });
+        let exams: Exam[] = [];
+        if (criteria.filter === 'all') {
+            exams = await examRepository.find({
+                where: {
+                    classe: { id: In(classeIds) },
+                    user: { id: criteria.userId },
+                },
+                relations: ['classe'],
+                order: { startTime: 'DESC' },
+            });
+        } else {
+            exams = await examRepository.find({
+                where: {
+                    classe: { id: In(classeIds) },
+                    user: { id: criteria.userId },
+                    archivedAt: getArchivedWhereFilter(criteria.filter),
+                },
+                relations: ['classe'],
+                order: { startTime: 'DESC' },
+            });
+        }
+
+        return sortExamsByDateTime(exams);
     }
 
     async function getExamsByUser(userId: User['id']) {
