@@ -3,7 +3,7 @@ import { Card } from '../../components/Card';
 import GradingIcon from '@mui/icons-material/Grading';
 import GroupIcon from '@mui/icons-material/Group';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import GroupsIcon from '@mui/icons-material/Groups';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { Button } from '../../components/Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../lib/api';
@@ -24,13 +24,13 @@ function ClasseHeader(props: {
         mutationFn: api.deleteClasse,
         onSuccess: () => {
             displayAlert({ variant: 'success', text: 'La classe a été supprimée.' });
-            queryClient.invalidateQueries({ queryKey: ['establishments', props.establishment.id] });
+            queryClient.invalidateQueries({ queryKey: ['establishments'] });
         },
         onError: (error) => {
             console.error(error);
             displayAlert({
                 variant: 'error',
-                text: "Une erreur est survenue. La classe n'a pas pu être supprimé.",
+                text: "Une erreur est survenue. La classe n'a pas pu être supprimée.",
             });
         },
     });
@@ -43,9 +43,11 @@ function ClasseHeader(props: {
                     <Typography variant="h5">{props.establishment.name}</Typography>
                     <StudentInfoContainer>
                         <IconContainer title="Nombre d'élèves">
-                            <GroupsIcon />
+                            <GroupIcon />
                         </IconContainer>
-                        <Typography>{props.studentsCount}</Typography>
+                        <Typography>
+                            {props.studentsCount} élève{props.studentsCount > 1 && 's'}
+                        </Typography>
                     </StudentInfoContainer>
                 </InfoContainer>
                 <ButtonsContainer>
@@ -53,7 +55,7 @@ function ClasseHeader(props: {
                         <Button
                             onClick={navigateToStudents}
                             variant="outlined"
-                            startIcon={<GroupIcon />}
+                            startIcon={<GroupAddIcon />}
                         >
                             Ajouter / supprimer des élèves
                         </Button>
@@ -89,7 +91,7 @@ function ClasseHeader(props: {
     function onDeleteClick() {
         // eslint-disable-next-line no-restricted-globals
         const hasConfirmed = confirm(
-            'Souhaitez-vous réellement supprimer cette classe ? Les étudiants et leurs résultats aux examens seront supprimés.',
+            'Souhaitez-vous réellement supprimer cette classe ? Les élèves et leurs résultats aux examens seront supprimés.',
         );
         if (hasConfirmed) {
             deleteClasseMutation.mutate({ classeId: props.classe.id });
