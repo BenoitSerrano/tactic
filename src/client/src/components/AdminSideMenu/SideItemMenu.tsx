@@ -1,6 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import { Link } from '../Link';
-import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
+import GroupsIcon from '@mui/icons-material/Groups';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import { pathHandler } from '../../lib/pathHandler';
 
@@ -39,7 +39,7 @@ function ClasseSideItemMenu(props: {
     establishmentId: string;
     classe: { id: string; name: string };
 }) {
-    const path = pathHandler.getRoutePath('EXAM_LIST_FOR_CLASSE', {
+    const path = pathHandler.getRoutePath('CLASSE', {
         establishmentId: props.establishmentId,
         classeId: props.classe.id,
     });
@@ -48,7 +48,7 @@ function ClasseSideItemMenu(props: {
             <Link to={path}>
                 <LinkContent>
                     <IconContainer>
-                        <FolderOutlinedIcon fontSize="small" />
+                        <GroupsIcon fontSize="small" />
                     </IconContainer>
                     <Typography variant="h6">{props.classe.name}</Typography>
                 </LinkContent>

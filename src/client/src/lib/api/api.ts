@@ -63,9 +63,10 @@ const api = {
     fetchUserExams,
     fetchEstablishments,
     createEstablishment,
-    updateEstablishment,
+    updateClasseName,
     updateEstablishmentId,
     updateClasseId,
+    countStudentsByClasse,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -123,19 +124,16 @@ async function fetchEstablishments(): Promise<Array<establishmentWithClassesType
     return performApiCall(URL, 'GET');
 }
 
+async function countStudentsByClasse(classeId: string): Promise<{ studentsCount: number }> {
+    const URL = `${BASE_URL}/classes/${classeId}/studentsCount`;
+    return performApiCall(URL, 'GET');
+}
+
 async function createEstablishment(params: {
     name: string;
 }): Promise<{ id: string; name: string }> {
     const URL = `${BASE_URL}/establishments`;
     return performApiCall(URL, 'POST', { name: params.name });
-}
-
-async function updateEstablishment(params: {
-    establishmentId: string;
-    name: string;
-}): Promise<{ id: string; name: string }> {
-    const URL = `${BASE_URL}/establishments/${params.establishmentId}`;
-    return performApiCall(URL, 'PUT', { name: params.name });
 }
 
 async function updateEstablishmentId(params: { establishmentId: string; classeId: string }) {
@@ -323,11 +321,8 @@ async function fetchExams(params: {
     return performApiCall(URL, 'GET');
 
     function computeUrl() {
-        if (params.establishmentId === undefined) {
+        if (params.establishmentId === undefined || params.establishmentId === undefined) {
             return `${BASE_URL}/exams`;
-        }
-        if (params.classeId === undefined) {
-            return `${BASE_URL}/establishments/${params.establishmentId}/exams`;
         }
         return `${BASE_URL}/establishments/${params.establishmentId}/classes/${params.classeId}/exams`;
     }
@@ -387,6 +382,11 @@ async function updateEstablishmentName({
     name: string;
 }) {
     const URL = `${BASE_URL}/establishments/${establishmentId}/name`;
+    return performApiCall(URL, 'PATCH', { name });
+}
+
+async function updateClasseName({ classeId, name }: { classeId: string; name: string }) {
+    const URL = `${BASE_URL}/classes/${classeId}/name`;
     return performApiCall(URL, 'PATCH', { name });
 }
 

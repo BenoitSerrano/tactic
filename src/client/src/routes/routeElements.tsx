@@ -30,6 +30,7 @@ import { userRoleType } from '../constants';
 import { TeacherHome } from '../pages/TeacherHome';
 import { ExamList } from '../pages/ExamList/ExamList';
 import { Establishment } from '../pages/Establishment';
+import { Classe } from '../pages/Classe';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -97,9 +98,9 @@ const ROUTE_ELEMENTS: Record<
     EXAM_DONE: {
         element: <ExamDone />,
     },
-    EXAM_LIST_FOR_CLASSE: {
+    CLASSE: {
         authorizedRole: 'teacher',
-        element: <ExamList />,
+        element: <Classe />,
     },
     EXAM_LIST_FOR_ALL: {
         authorizedRole: 'teacher',

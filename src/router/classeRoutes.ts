@@ -39,6 +39,14 @@ const classeRoutes: Array<routeType<any, any, any>> = [
         schema: Joi.object({ establishmentId: Joi.string().required() }),
     },
     {
+        method: 'PATCH',
+        path: '/classes/:classeId/name',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: classeController.updateClasseName,
+        schema: Joi.object({ name: Joi.string().required() }),
+    },
+    {
         method: 'DELETE',
         path: '/classes/:classeId',
         kind: 'authenticated',

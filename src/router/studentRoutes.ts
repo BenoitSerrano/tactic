@@ -18,6 +18,13 @@ const studentRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
+        path: '/classes/:classeId/studentsCount',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: studentController.countStudentForClasse,
+    },
+    {
+        method: 'GET',
         path: '/all-students',
         kind: 'public',
         controller: studentController.getAllStudents,

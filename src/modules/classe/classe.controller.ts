@@ -13,6 +13,7 @@ function buildClasseController() {
         getAllClasses,
         getClassesByEstablishment,
         updateEstablishmentId,
+        updateClasseName,
     };
 
     return classeController;
@@ -34,6 +35,15 @@ function buildClasseController() {
         return classeService.updateEstablishmentId(
             { classeId: params.urlParams.classeId },
             params.body.establishmentId,
+        );
+    }
+    async function updateClasseName(params: {
+        body: { name: Classe['name'] };
+        urlParams: { classeId: Classe['id'] };
+    }) {
+        return classeService.updateClasseName(
+            { classeId: params.urlParams.classeId },
+            params.body.name,
         );
     }
 

@@ -1,4 +1,8 @@
 import {
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
     styled,
     Table,
     TableBody,
@@ -8,22 +12,86 @@ import {
     Typography,
 } from '@mui/material';
 import { IconButton } from '../../IconButton';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ScannerIcon from '@mui/icons-material/Scanner';
+
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { EditableName } from './EditableName';
 import { EditableExamDuration } from '../../EditableExamDuration';
 import { examApiType } from '../../../pages/ExamList/types';
 import { pathHandler } from '../../../lib/pathHandler';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { api } from '../../../lib/api';
+import { useAlert } from '../../../lib/alert';
 
-function ExamTable(props: {
-    exams: examApiType[];
-    title: string;
-    setCurrentOptionMenu: (params: { element: HTMLElement; examId: string }) => void;
-}) {
+function ExamTable(props: { exams: examApiType[]; title: string; examsQueryKey: string[] }) {
+    const { displayAlert } = useAlert();
+    const queryClient = useQueryClient();
+
     const navigate = useNavigate();
+    const deleteExamMutation = useMutation({
+        mutationFn: api.deleteExam,
+        onSuccess: () => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen a bien été supprimé.`,
+            });
+            queryClient.invalidateQueries({ queryKey: props.examsQueryKey });
+        },
+        onError: () => {
+            displayAlert({
+                variant: 'error',
+                text: `Une erreur est survenue. L'examen n'a pas pu être supprimé`,
+            });
+        },
+    });
+
+    const duplicateExamMutation = useMutation({
+        mutationFn: api.duplicateExam,
+        onSuccess: (exam) => {
+            displayAlert({
+                variant: 'success',
+                text: `L'examen "${exam.name}" a bien été dupliqué`,
+            });
+            queryClient.invalidateQueries({ queryKey: props.examsQueryKey });
+        },
+        onError: (error) => {
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. L'examen n'a pas pu être dupliqué",
+            });
+        },
+    });
+
+    const [currentOptionMenu, setCurrentOptionMenu] = useState<{
+        element: HTMLElement;
+        examId: string;
+    } | null>(null);
 
     return (
         <Container>
+            <Menu
+                anchorEl={currentOptionMenu?.element}
+                open={!!currentOptionMenu}
+                onClose={closeEditionMenu}
+            >
+                <MenuItem onClick={buildDuplicateExam(currentOptionMenu?.examId)}>
+                    <ListItemIcon>
+                        <ScannerIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Dupliquer</ListItemText>
+                </MenuItem>
+
+                <ImportantMenuItem onClick={buildDeleteExam(currentOptionMenu?.examId)}>
+                    <ListItemIcon>
+                        <DeleteForeverIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Supprimer</ListItemText>
+                </ImportantMenuItem>
+            </Menu>
             <Typography>{props.title}</Typography>
             <Table>
                 <TableHead>
@@ -55,6 +123,35 @@ function ExamTable(props: {
             </Table>
         </Container>
     );
+    function closeEditionMenu() {
+        setCurrentOptionMenu(null);
+    }
+
+    function buildDuplicateExam(examId: string | undefined) {
+        return () => {
+            if (!examId) {
+                return;
+            }
+            closeEditionMenu();
+            duplicateExamMutation.mutate({ examId });
+        };
+    }
+
+    function buildDeleteExam(examId: string | undefined) {
+        return () => {
+            if (!examId) {
+                return;
+            }
+            closeEditionMenu();
+            // eslint-disable-next-line no-restricted-globals
+            const hasConfirmed = confirm(
+                'Souhaitez-vous réellement supprimer cet examen ? Tous les résultats liés à cet examen seront supprimés.',
+            );
+            if (hasConfirmed) {
+                deleteExamMutation.mutate(examId);
+            }
+        };
+    }
 
     function handleRowClick(examId: string) {
         return () => {
@@ -67,11 +164,14 @@ function ExamTable(props: {
         return (event: React.MouseEvent<HTMLElement>) => {
             event.stopPropagation();
 
-            props.setCurrentOptionMenu({ element: event.currentTarget, examId });
+            setCurrentOptionMenu({ element: event.currentTarget, examId });
         };
     }
 }
-
+const ImportantMenuItem = styled(MenuItem)(({ theme }) => ({
+    color: theme.palette.error.main,
+    '.MuiListItemIcon-root': { color: theme.palette.error.main },
+}));
 const ClickableTableRow = styled(TableRow)({ cursor: 'pointer' });
 const Container = styled('div')(({ theme }) => ({}));
 export { ExamTable };

@@ -16,7 +16,7 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     HOME: 'Accueil',
     EXAM_CONSULTING: 'Consultation de copie',
     EXAM_DONE: 'Examen terminé',
-    EXAM_LIST_FOR_CLASSE: 'Examens par classe',
+    CLASSE: 'Classe',
     EXAM_LIST_FOR_ALL: 'Tous mes examens',
     STUDENTS: 'Étudiants',
     EXAM_PREVIEWING: "Prévisualisation d'examen",

@@ -14,7 +14,6 @@ function buildExamController() {
         updateExamDuration,
         updateExamName,
         updateExamEdgeText,
-        getExamsByEstablishment,
         getExamsByClasse,
         getExams,
         getExamsByUser,
@@ -77,18 +76,6 @@ function buildExamController() {
         body: { duration: number | null };
     }) {
         return examService.updateExamDuration(params.urlParams.examId, params.body.duration);
-    }
-
-    async function getExamsByEstablishment(
-        params: {
-            urlParams: { establishmentId: Establishment['id'] };
-        },
-        user: User,
-    ) {
-        return examService.getExamsByEstablishment({
-            userId: user.id,
-            establishmentId: params.urlParams.establishmentId,
-        });
     }
 
     async function getExamsByClasse(

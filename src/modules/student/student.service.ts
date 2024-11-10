@@ -23,9 +23,19 @@ function buildStudentService() {
         deleteStudent,
         bulkInsertStudents,
         changeClasse,
+        countStudentForClasse,
     };
 
     return studentService;
+
+    async function countStudentForClasse(classeId: Classe['id']) {
+        const studentsCount = await studentRepository.count({
+            where: { classe: { id: classeId } },
+            relations: { classe: true },
+            select: { classe: { id: true } },
+        });
+        return { studentsCount };
+    }
 
     async function getAllStudents() {
         const students = await studentRepository.find({

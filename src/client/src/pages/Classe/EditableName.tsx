@@ -7,15 +7,15 @@ import { useAlert } from '../../lib/alert';
 import { api } from '../../lib/api';
 import { IconButton } from '../../components/IconButton';
 
-function EditableName(props: { establishment: { id: string; name: string } }) {
+function EditableName(props: { classe: { id: string; name: string } }) {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
-    const updateEstablishmentNameMutation = useMutation({
-        mutationFn: api.updateEstablishmentName,
+    const updateClasseNameMutation = useMutation({
+        mutationFn: api.updateClasseName,
         onSuccess: () => {
             displayAlert({
                 variant: 'success',
-                text: `L'établissement "${props.establishment.name}" a bien été modifié`,
+                text: `La classe "${props.classe.name}" a bien été modifiée`,
             });
             setIsEditing(false);
             queryClient.invalidateQueries({ queryKey: ['establishments'] });
@@ -29,15 +29,15 @@ function EditableName(props: { establishment: { id: string; name: string } }) {
             });
         },
     });
-    const [name, setName] = useState(props.establishment.name);
+    const [name, setName] = useState(props.classe.name);
 
     useEffect(() => {
-        setName(props.establishment.name);
-    }, [props.establishment.name]);
+        setName(props.classe.name);
+    }, [props.classe.name]);
     const [isEditing, setIsEditing] = useState(false);
 
     if (isEditing) {
-        const isConfirmButtonLoading = updateEstablishmentNameMutation.isPending;
+        const isConfirmButtonLoading = updateClasseNameMutation.isPending;
         const isConfirmButtonDisabled = name === '';
         return (
             <Container onSubmit={handleSubmitText}>
@@ -76,9 +76,9 @@ function EditableName(props: { establishment: { id: string; name: string } }) {
     }
 
     function confirmChanges() {
-        if (props.establishment.name !== name) {
-            updateEstablishmentNameMutation.mutate({
-                establishmentId: props.establishment.id,
+        if (props.classe.name !== name) {
+            updateClasseNameMutation.mutate({
+                classeId: props.classe.id,
                 name,
             });
         } else {

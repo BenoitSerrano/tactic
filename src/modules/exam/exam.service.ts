@@ -22,7 +22,6 @@ function buildExamService() {
         updateExamName,
         updateExamDuration,
         updateExamEdgeText,
-        getExamsByEstablishment,
         getExamsByClasse,
         getExams,
         getExamsByUser,
@@ -162,26 +161,6 @@ function buildExamService() {
                 })),
             })),
         };
-    }
-
-    async function getExamsByEstablishment(criteria: {
-        establishmentId: Establishment['id'];
-        userId: User['id'];
-    }) {
-        const classeService = buildClasseService();
-        const classes = await classeService.getClasseIdsByEstablishment(criteria.establishmentId);
-        const classeIds = classes.map((classe) => classe.id);
-
-        const exams = await examRepository.find({
-            where: {
-                classe: { id: In(classeIds) },
-                user: { id: criteria.userId },
-            },
-            relations: ['classe'],
-            order: { startTime: 'DESC' },
-        });
-
-        return sortExamsByDateTime(exams);
     }
 
     async function getExamsByClasse(criteria: {

@@ -47,8 +47,8 @@ function Establishment() {
     const deleteClasseMutation = useMutation({
         mutationFn: api.deleteClasse,
         onSuccess: () => {
-            displayAlert({ variant: 'success', text: 'La classe a été supprimé.' });
-            queryClient.invalidateQueries({ queryKey: ['classes'] });
+            displayAlert({ variant: 'success', text: 'La classe a été supprimée.' });
+            queryClient.invalidateQueries({ queryKey: ['establishments', establishmentId] });
         },
         onError: (error) => {
             console.error(error);

@@ -140,22 +140,22 @@ function ExamList() {
                     {examListQuery.data.toCome.length > 0 && (
                         <ExamTable
                             title="À venir"
+                            examsQueryKey={examsQueryKey}
                             exams={examListQuery.data.toCome}
-                            setCurrentOptionMenu={setCurrentOptionMenu}
                         />
                     )}
                     {examListQuery.data.current.length > 0 && (
                         <ExamTable
                             title="En cours"
+                            examsQueryKey={examsQueryKey}
                             exams={examListQuery.data.current}
-                            setCurrentOptionMenu={setCurrentOptionMenu}
                         />
                     )}
                     {examListQuery.data.past.length > 0 && (
                         <ExamTable
                             title="Passés"
+                            examsQueryKey={examsQueryKey}
                             exams={examListQuery.data.past}
-                            setCurrentOptionMenu={setCurrentOptionMenu}
                         />
                     )}
                 </TableContainer>

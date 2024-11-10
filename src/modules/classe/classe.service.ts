@@ -15,6 +15,7 @@ function buildClasseService() {
         createClasse,
         deleteClasse,
         updateEstablishmentId,
+        updateClasseName,
     };
 
     return classeService;
@@ -79,6 +80,13 @@ function buildClasseService() {
             { id: critera.classeId },
             { establishment: { id: newEstablishmentId } },
         );
+        if (result.affected !== 1) {
+            throw new Error(`Could not update classe ${critera.classeId}`);
+        }
+        return true;
+    }
+    async function updateClasseName(critera: { classeId: Classe['id'] }, name: Classe['name']) {
+        const result = await classeRepository.update({ id: critera.classeId }, { name });
         if (result.affected !== 1) {
             throw new Error(`Could not update classe ${critera.classeId}`);
         }
