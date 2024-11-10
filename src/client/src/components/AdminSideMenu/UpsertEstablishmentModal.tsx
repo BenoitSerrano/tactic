@@ -23,7 +23,11 @@ function UpsertEstablishmentModal(props: {
             queryClient.invalidateQueries({
                 queryKey: ['establishments'],
             });
-            navigate(pathHandler.getRoutePath('EXAM_LIST', { establishmentId: establishment.id }));
+            navigate(
+                pathHandler.getRoutePath('EXAM_LIST_FOR_ESTABLISHMENT', {
+                    establishmentId: establishment.id,
+                }),
+            );
             props.close();
         },
         onError: (error) => {

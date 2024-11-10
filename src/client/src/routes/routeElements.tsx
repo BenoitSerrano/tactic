@@ -5,7 +5,6 @@ import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
 import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamResults } from '../pages/ExamResults';
-import { ExamList } from '../pages/ExamList';
 import { Classes } from '../pages/StudentsPages/Classes';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
@@ -30,7 +29,7 @@ import { AdminDashboard } from '../pages/AdminDashboard';
 import { AdminTeacherExams } from '../pages/AdminTeacherExams';
 import { userRoleType } from '../constants';
 import { TeacherHome } from '../pages/TeacherHome';
-import { FilteredExamList } from '../pages/ExamList/FilteredExamList';
+import { ExamList } from '../pages/ExamList/ExamList';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -98,13 +97,17 @@ const ROUTE_ELEMENTS: Record<
     EXAM_DONE: {
         element: <ExamDone />,
     },
-    EXAM_LIST: {
+    EXAM_LIST_FOR_ESTABLISHMENT: {
         authorizedRole: 'teacher',
         element: <ExamList />,
     },
-    EXAM_LIST_ALL: {
+    EXAM_LIST_FOR_CLASSE: {
         authorizedRole: 'teacher',
-        element: <FilteredExamList filter="all" />,
+        element: <ExamList />,
+    },
+    EXAM_LIST_FOR_ALL: {
+        authorizedRole: 'teacher',
+        element: <ExamList />,
     },
     STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
     EXAM_PREVIEWING: {

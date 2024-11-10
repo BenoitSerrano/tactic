@@ -11,7 +11,7 @@ const establishmentRoutes: Array<routeType<any, any, any>> = [
         path: '/establishments',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: establishmentController.getEstablishments,
+        controller: establishmentController.getEstablishmentsWithClasses,
     },
     {
         method: 'POST',

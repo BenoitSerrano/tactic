@@ -10,6 +10,7 @@ function buildClasseService() {
     const classeService = {
         getAllClasses,
         getClassesByEstablishment,
+        getClasseIdsByEstablishment,
         getClasse,
         createClasse,
         deleteClasse,
@@ -39,6 +40,15 @@ function buildClasseService() {
             where: { establishment: { id: establishmentId } },
             relations: { establishment: true },
             select: { establishment: { id: true } },
+        });
+        return classes;
+    }
+
+    async function getClasseIdsByEstablishment(establishmentId: Establishment['id']) {
+        const classes = await classeRepository.find({
+            where: { establishment: { id: establishmentId } },
+            relations: { establishment: true },
+            select: { id: true, establishment: { id: true } },
         });
         return classes;
     }

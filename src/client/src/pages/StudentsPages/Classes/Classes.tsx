@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../lib/api';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import MoveDownIcon from '@mui/icons-material/MoveDown';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {
@@ -27,7 +26,6 @@ import { useAlert } from '../../../lib/alert';
 import { AdminSideMenu } from '../../../components/AdminSideMenu';
 import { PageTitle } from '../../../components/PageTitle';
 import { IconButton } from '../../../components/IconButton';
-import { ChangeEstablishmentForClasseModal } from './ChangeEstablishmentForClasseModal';
 
 function Classes() {
     const params = useParams();
@@ -62,9 +60,6 @@ function Classes() {
         },
     });
     const navigate = useNavigate();
-    const [currentClasseIdToChange, setCurrentClasseIdToChange] = useState<string | undefined>(
-        undefined,
-    );
 
     if (!query.data) {
         if (query.isLoading) {
@@ -89,12 +84,6 @@ function Classes() {
                 open={!!currentOptionMenu}
                 onClose={closeCurrentOptionMenu}
             >
-                <MenuItem onClick={buildChangeEstablishment(currentOptionMenu?.classeId)}>
-                    <ListItemIcon>
-                        <MoveDownIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Changer d'établissement</ListItemText>
-                </MenuItem>
                 <ImportantMenuItem onClick={buildDeleteClasse(currentOptionMenu?.classeId)}>
                     <ListItemIcon>
                         <DeleteForeverIcon fontSize="small" />
@@ -102,18 +91,14 @@ function Classes() {
                     <ListItemText>Supprimer</ListItemText>
                 </ImportantMenuItem>
             </MuiMenu>
-            <ChangeEstablishmentForClasseModal
-                classeId={currentClasseIdToChange}
-                close={closeChangeEstablishmentModal}
-                currentEstablishmentId={establishmentId}
-            />
+
             <ClasseCreationModal
                 isOpen={isClasseCreationModalOpen}
                 close={closeClasseCreationModal}
             />
             <Menu buttons={buttons} />
             <ContentContainer>
-                <AdminSideMenu currentEstablishmentId={establishmentId} />
+                <AdminSideMenu />
                 <TableContainer>
                     <PageTitle title="Mes classes" />
                     <Table>
@@ -147,10 +132,6 @@ function Classes() {
         </>
     );
 
-    function closeChangeEstablishmentModal() {
-        setCurrentClasseIdToChange(undefined);
-    }
-
     function handleRowClick(classeId: string) {
         return () => {
             navigate(pathHandler.getRoutePath('STUDENTS', { classeId, establishmentId }));
@@ -175,16 +156,6 @@ function Classes() {
 
     function closeClasseCreationModal() {
         setIsClasseCreationModalOpen(false);
-    }
-
-    function buildChangeEstablishment(classeId: string | undefined) {
-        return () => {
-            if (!classeId) {
-                return;
-            }
-            closeCurrentOptionMenu();
-            setCurrentClasseIdToChange(classeId);
-        };
     }
 
     function buildDeleteClasse(classeId: string | undefined) {

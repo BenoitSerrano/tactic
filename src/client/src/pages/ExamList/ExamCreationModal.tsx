@@ -13,7 +13,8 @@ import { SelectExamExtremums } from './SelectExamExtremums';
 function ExamCreationModal(props: {
     close: () => void;
     isOpen: boolean;
-    establishmentId: string;
+    establishmentId: string | undefined;
+    classeId: string | undefined;
     onExamCreated: (examId: string) => void;
 }) {
     const [name, setName] = useState('');
@@ -97,13 +98,14 @@ function ExamCreationModal(props: {
                         />
                     </StyledRadioGroup>
                 </FieldContainer>
-                <FieldContainer>
+                {/*  TODO */}
+                {/* <FieldContainer>
                     <SelectClasseByEstablishment
                         establishmentId={props.establishmentId}
                         selectedClasseId={selectedClasseId}
                         setSelectedClasseId={setSelectedClasseId}
                     />
-                </FieldContainer>
+                </FieldContainer> */}
 
                 <FieldContainer>
                     <SelectExamExtremums

@@ -10,7 +10,7 @@ describe('computeBreadcrumbs', () => {
         expect(breadcrumbs).toEqual([{ label: 'Accueil', isActive: true }]);
     });
     it("returns exams when you're on exam page", () => {
-        const pathname = pathHandler.getRoutePath('EXAM_LIST');
+        const pathname = pathHandler.getRoutePath('EXAM_LIST_FOR_ALL');
 
         const breadcrumbs = computeBreadcrumbs(pathname);
 
@@ -27,7 +27,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL') },
             {
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
@@ -42,7 +42,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL') },
             {
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
@@ -57,7 +57,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL') },
             {
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),
@@ -73,7 +73,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL') },
             { label: 'Prévisualisation', isActive: true },
         ]);
     });
@@ -88,7 +88,7 @@ describe('computeBreadcrumbs', () => {
 
         expect(breadcrumbs).toEqual([
             { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') },
+            { label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL') },
             {
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId: 'examId' }),

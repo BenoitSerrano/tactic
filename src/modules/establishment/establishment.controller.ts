@@ -7,15 +7,15 @@ export { buildEstablishmentController };
 function buildEstablishmentController() {
     const establishmentService = buildEstablishmentService();
     const establishmentController = {
-        getEstablishments,
+        getEstablishmentsWithClasses,
         createEstablishment,
         updateEstablishment,
     };
 
     return establishmentController;
 
-    async function getEstablishments(_params: {}, user: User) {
-        return establishmentService.getEstablishmentsByUser(user);
+    async function getEstablishmentsWithClasses(_params: {}, user: User) {
+        return establishmentService.getEstablishmentsWithClasses(user);
     }
 
     async function createEstablishment(

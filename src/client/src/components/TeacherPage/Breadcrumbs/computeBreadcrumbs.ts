@@ -9,8 +9,7 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
         return breadcrumbs;
     }
     switch (parsedPath.routeKey) {
-        case 'EXAM_LIST':
-        case 'EXAM_LIST_ALL':
+        case 'EXAM_LIST_FOR_ALL':
             breadcrumbs.push({ label: 'Accueil', href: '/teacher' });
             breadcrumbs.push({ label: 'Mes examens', isActive: true });
             break;
@@ -24,7 +23,10 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
 
         case 'EXAM_EDITING_CONTENT':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Mes examens',
+                href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL'),
+            });
             breadcrumbs.push({
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
@@ -36,7 +38,10 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             break;
         case 'EXAM_PARAMETERS':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Mes examens',
+                href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL'),
+            });
             breadcrumbs.push({
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
@@ -48,7 +53,10 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             break;
         case 'EXAM_ATTEMPT_COLLECT':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Mes examens',
+                href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL'),
+            });
             breadcrumbs.push({
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
@@ -60,7 +68,10 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             break;
         case 'EXAM_RESULTS':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Mes examens',
+                href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL'),
+            });
             breadcrumbs.push({
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
@@ -72,7 +83,10 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
             break;
         case 'EXAM_CONSULT':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Mes examens',
+                href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL'),
+            });
             breadcrumbs.push({
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', parsedPath.parameters),
@@ -85,12 +99,18 @@ function computeBreadcrumbs(pathname: string): Array<breadcrumbItemType> {
 
         case 'EXAM_PREVIEWING':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Mes examens',
+                href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL'),
+            });
             breadcrumbs.push({ label: 'Prévisualisation', isActive: true });
             break;
         case 'EXAM_CHECKING':
             breadcrumbs.push({ label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') });
-            breadcrumbs.push({ label: 'Mes examens', href: pathHandler.getRoutePath('EXAM_LIST') });
+            breadcrumbs.push({
+                label: 'Mes examens',
+                href: pathHandler.getRoutePath('EXAM_LIST_FOR_ALL'),
+            });
             breadcrumbs.push({
                 label: 'Édition',
                 href: pathHandler.getRoutePath('EXAM_EDITING_CONTENT', {

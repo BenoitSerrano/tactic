@@ -2,48 +2,42 @@ import { Typography, styled } from '@mui/material';
 import { ElementType } from 'react';
 import { Link } from '../Link';
 
-const HighItemContainer = styled('div')(({ theme }) => ({
-    paddingLeft: theme.spacing(0),
-    marginTop: theme.spacing(2),
-}));
-const LowItemContainer = styled('div')(({ theme }) => ({
-    paddingLeft: theme.spacing(2),
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-}));
-
 const levelMapping = {
     high: {
-        ContainerComponent: HighItemContainer,
         typographyVariant: 'h5' as const,
         iconSize: 'large',
     },
-    low: {
-        ContainerComponent: LowItemContainer,
-        typographyVariant: 'h6' as const,
+    medium: {
+        typographyVariant: 'h5' as const,
         iconSize: 'medium',
+    },
+    low: {
+        typographyVariant: 'h6' as const,
+        iconSize: 'small',
     },
 };
 
 function SideItemMenu(props: {
-    IconComponent: ElementType;
+    IconComponent?: ElementType;
     title: string;
     path: string;
-    level: 'high' | 'low';
+    level: 'high' | 'medium' | 'low';
 }) {
     const { IconComponent, title, path } = props;
-    const { ContainerComponent, typographyVariant, iconSize } = levelMapping[props.level];
+    const { typographyVariant, iconSize } = levelMapping[props.level];
     return (
-        <ContainerComponent>
+        <Container>
             <Link to={path}>
                 <LinkContent>
-                    <IconContainer>
-                        <IconComponent fontSize={iconSize} />
-                    </IconContainer>
+                    {!!IconComponent && (
+                        <IconContainer>
+                            <IconComponent fontSize={iconSize} />
+                        </IconContainer>
+                    )}
                     <Typography variant={typographyVariant}>{title}</Typography>
                 </LinkContent>
             </Link>
-        </ContainerComponent>
+        </Container>
     );
 }
 
@@ -59,3 +53,8 @@ const LinkContent = styled('div')({
     display: 'flex',
     alignItems: 'center',
 });
+
+const Container = styled('div')(({ theme }) => ({
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+}));

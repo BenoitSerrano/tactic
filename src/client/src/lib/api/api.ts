@@ -1,5 +1,5 @@
 import { config } from '../../config';
-import { acceptableAnswerType, examFilterType, questionKindType } from '../../types';
+import { acceptableAnswerType, questionKindType } from '../../types';
 import { localSessionHandler } from '../localSessionHandler';
 
 const api = {
@@ -109,7 +109,9 @@ async function performApiCall(
     return response.json();
 }
 
-async function fetchEstablishments(): Promise<Array<{ id: string; name: string }>> {
+async function fetchEstablishments(): Promise<
+    Array<{ id: string; name: string; classes: Array<{ id: string; name: string }> }>
+> {
     const URL = `${BASE_URL}/establishments`;
     return performApiCall(URL, 'GET');
 }
@@ -306,9 +308,22 @@ async function createStudents(params: { emails: string[]; classeId: string }) {
     return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
-async function fetchExams(params: { filter: examFilterType; establishmentId: string }) {
-    const URL = `${BASE_URL}/establishments/${params.establishmentId}/exams`;
+async function fetchExams(params: {
+    establishmentId: string | undefined;
+    classeId: string | undefined;
+}) {
+    const URL = computeUrl();
     return performApiCall(URL, 'GET');
+
+    function computeUrl() {
+        if (params.establishmentId === undefined) {
+            return `${BASE_URL}/exams`;
+        }
+        if (params.classeId === undefined) {
+            return `${BASE_URL}/establishments/${params.establishmentId}/exams`;
+        }
+        return `${BASE_URL}/establishments/${params.establishmentId}/classes/${params.classeId}/exams`;
+    }
 }
 
 async function deleteExam(examId: string) {

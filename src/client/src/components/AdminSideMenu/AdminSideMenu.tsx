@@ -1,40 +1,52 @@
-import Diversity3Icon from '@mui/icons-material/Diversity3';
-import ArticleIcon from '@mui/icons-material/Article';
-import ListIcon from '@mui/icons-material/List';
 import { styled } from '@mui/material';
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import { pathHandler } from '../../lib/pathHandler';
 import { SideItemMenu } from './SideItemMenu';
-import { ChangeEstablishmentMenu } from './ChangeEstablishmentMenu';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../../lib/api';
+import { Loader } from '../Loader';
 
-function AdminSideMenu(props: { currentEstablishmentId: string }) {
+function AdminSideMenu() {
+    const establishmentsQuery = useQuery({
+        queryKey: ['establishments'],
+        queryFn: api.fetchEstablishments,
+    });
+    if (!establishmentsQuery.data) {
+        return <Loader />;
+    }
     return (
         <Container>
-            <ChangeEstablishmentMenu currentEstablishmentId={props.currentEstablishmentId} />
             <SideItemMenu
                 level="high"
-                title="Mes examens"
-                IconComponent={ArticleIcon}
-                path={pathHandler.getRoutePath('EXAM_LIST', {
-                    establishmentId: props.currentEstablishmentId,
-                })}
+                title="Tous mes examens"
+                path={pathHandler.getRoutePath('EXAM_LIST_FOR_ALL')}
             />
-            <SideItemMenu
-                level="low"
-                title="Tous"
-                IconComponent={ListIcon}
-                path={pathHandler.getRoutePath('EXAM_LIST_ALL', {
-                    establishmentId: props.currentEstablishmentId,
-                })}
-            />
-
-            <SideItemMenu
-                level="high"
-                title="Mes classes"
-                IconComponent={Diversity3Icon}
-                path={pathHandler.getRoutePath('CLASSES', {
-                    establishmentId: props.currentEstablishmentId,
-                })}
-            />
+            {establishmentsQuery.data.map((establishment) => (
+                <SideItemContainer key={establishment.id}>
+                    <SideItemMenu
+                        level="medium"
+                        title={establishment.name}
+                        IconComponent={AccountBalanceOutlinedIcon}
+                        path={pathHandler.getRoutePath('EXAM_LIST_FOR_ESTABLISHMENT', {
+                            establishmentId: establishment.id,
+                        })}
+                    />
+                    {establishment.classes.map((classe) => (
+                        <SideItemContainer>
+                            <SideItemMenu
+                                level="low"
+                                title={classe.name}
+                                IconComponent={FolderOutlinedIcon}
+                                path={pathHandler.getRoutePath('EXAM_LIST_FOR_CLASSE', {
+                                    establishmentId: establishment.id,
+                                    classeId: classe.id,
+                                })}
+                            />
+                        </SideItemContainer>
+                    ))}
+                </SideItemContainer>
+            ))}
         </Container>
     );
 }
@@ -44,6 +56,11 @@ const Container = styled('div')(({ theme }) => ({
     width: '25%',
     paddingLeft: theme.spacing(2),
     flexDirection: 'column',
+}));
+const SideItemContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    paddingLeft: theme.spacing(2),
 }));
 
 export { AdminSideMenu };

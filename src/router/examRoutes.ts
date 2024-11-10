@@ -15,6 +15,20 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
+        path: '/establishments/:establishmentId/classes/:classeId/exams',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: examController.getExamsByClasse,
+    },
+    {
+        method: 'GET',
+        path: '/exams',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: examController.getExams,
+    },
+    {
+        method: 'GET',
         path: '/users/:userId/exams',
         kind: 'authenticated',
         authorizedRoles: ['admin'],
@@ -131,7 +145,6 @@ const examRoutes: Array<routeType<any, any, any>> = [
             duration: Joi.number().allow(null),
         }),
     },
-
     {
         method: 'DELETE',
         path: '/exams/:examId',

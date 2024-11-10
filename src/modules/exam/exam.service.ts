@@ -11,6 +11,7 @@ import { examEdgeTextKind } from './types';
 import { Establishment } from '../establishment';
 import { buildClasseService, Classe } from '../classe';
 import { sortExamsByDateTime } from './lib/sortExamsByDateTime';
+import { buildEstablishmentService } from '../establishment/establishment.service';
 
 export { buildExamService };
 
@@ -22,6 +23,8 @@ function buildExamService() {
         updateExamDuration,
         updateExamEdgeText,
         getExamsByEstablishment,
+        getExamsByClasse,
+        getExams,
         getExamsByUser,
         getExamWithQuestions,
         getAllExams,
@@ -166,16 +169,44 @@ function buildExamService() {
         userId: User['id'];
     }) {
         const classeService = buildClasseService();
-        const classes = await classeService.getClassesByEstablishment(criteria.establishmentId);
+        const classes = await classeService.getClasseIdsByEstablishment(criteria.establishmentId);
         const classeIds = classes.map((classe) => classe.id);
-        let exams: Exam[] = [];
 
-        exams = await examRepository.find({
+        const exams = await examRepository.find({
             where: {
                 classe: { id: In(classeIds) },
                 user: { id: criteria.userId },
             },
             relations: ['classe'],
+            order: { startTime: 'DESC' },
+        });
+
+        return sortExamsByDateTime(exams);
+    }
+
+    async function getExamsByClasse(criteria: {
+        establishmentId: Establishment['id'];
+        classeId: Classe['id'];
+        userId: User['id'];
+    }) {
+        const exams = await examRepository.find({
+            where: {
+                classe: { id: criteria.classeId },
+            },
+            relations: ['classe'],
+            order: { startTime: 'DESC' },
+        });
+
+        return sortExamsByDateTime(exams);
+    }
+
+    async function getExams(criteria: { userId: User['id'] }) {
+        const establishmentService = buildEstablishmentService();
+        const examIds = await establishmentService.getExamIdsByUser(criteria.userId);
+        const exams = await examRepository.find({
+            where: {
+                id: In(examIds),
+            },
             order: { startTime: 'DESC' },
         });
 

@@ -15,6 +15,8 @@ function buildExamController() {
         updateExamName,
         updateExamEdgeText,
         getExamsByEstablishment,
+        getExamsByClasse,
+        getExams,
         getExamsByUser,
         getExam,
         getExamWithoutAnswers,
@@ -86,6 +88,25 @@ function buildExamController() {
         return examService.getExamsByEstablishment({
             userId: user.id,
             establishmentId: params.urlParams.establishmentId,
+        });
+    }
+
+    async function getExamsByClasse(
+        params: {
+            urlParams: { establishmentId: Establishment['id']; classeId: Classe['id'] };
+        },
+        user: User,
+    ) {
+        return examService.getExamsByClasse({
+            userId: user.id,
+            establishmentId: params.urlParams.establishmentId,
+            classeId: params.urlParams.classeId,
+        });
+    }
+
+    async function getExams(_params: {}, user: User) {
+        return examService.getExams({
+            userId: user.id,
         });
     }
 
