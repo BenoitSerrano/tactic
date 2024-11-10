@@ -29,8 +29,6 @@ const api = {
     fetchExams,
     fetchExamResults,
     deleteExam,
-    archiveExam,
-    unarchiveExam,
     createQuestion,
     createExercise,
     updateExercise,
@@ -309,23 +307,13 @@ async function createStudents(params: { emails: string[]; classeId: string }) {
 }
 
 async function fetchExams(params: { filter: examFilterType; establishmentId: string }) {
-    const URL = `${BASE_URL}/establishments/${params.establishmentId}/exams?filter=${params.filter}`;
+    const URL = `${BASE_URL}/establishments/${params.establishmentId}/exams`;
     return performApiCall(URL, 'GET');
 }
 
 async function deleteExam(examId: string) {
     const URL = `${BASE_URL}/exams/${examId}`;
     return performApiCall(URL, 'DELETE');
-}
-
-async function archiveExam(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/archivedAt`;
-    return performApiCall(URL, 'PATCH', { archive: true });
-}
-
-async function unarchiveExam(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/archivedAt`;
-    return performApiCall(URL, 'PATCH', { archive: false });
 }
 
 async function fetchExamResults(examId: string) {

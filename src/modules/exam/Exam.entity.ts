@@ -47,9 +47,6 @@ export class Exam {
     @CreateDateColumn({ type: 'timestamptz' })
     createdAt: string;
 
-    @Column({ type: 'timestamptz', nullable: true })
-    archivedAt: string | null;
-
     @Column({ default: false })
     shouldDisplayRightAnswers: boolean;
 

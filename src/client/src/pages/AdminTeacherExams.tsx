@@ -29,7 +29,6 @@ function AdminTeacherExams() {
             <TableHead>
                 <TableCell>Nom</TableCell>
                 <TableCell>Durée</TableCell>
-                <TableCell>Statut</TableCell>
                 <TableCell>Date de création</TableCell>
                 <TableCell width={20}></TableCell>
             </TableHead>
@@ -50,7 +49,6 @@ function AdminTeacherExams() {
                                     </Tooltip>
                                 )}
                             </TableCell>
-                            <TableCell>{exam.archivedAt ? 'Actif' : 'Archivé'}</TableCell>
                             <TableCell>{time.formatToReadable(new Date(exam.createdAt))}</TableCell>
                             <TableCell>
                                 <IconButton

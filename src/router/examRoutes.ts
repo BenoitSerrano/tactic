@@ -131,22 +131,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
             duration: Joi.number().allow(null),
         }),
     },
-    {
-        method: 'PATCH',
-        path: '/exams/:examId/archivedAt',
-        kind: 'authenticated',
-        authorizedRoles: ['teacher'],
-        controller: examController.updateExamArchivedAt,
-        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({
-            archive: Joi.boolean(),
-        }),
-    },
+
     {
         method: 'DELETE',
         path: '/exams/:examId',

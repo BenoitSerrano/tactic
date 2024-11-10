@@ -3,7 +3,7 @@ import { Establishment } from '../establishment';
 import { User } from '../user';
 import { Exam } from './Exam.entity';
 import { buildExamService } from './exam.service';
-import { EXAM_FILTERS, examEdgeTextKind, examFilterType } from './types';
+import { examEdgeTextKind } from './types';
 
 export { buildExamController };
 
@@ -23,7 +23,6 @@ function buildExamController() {
         deleteExam,
         duplicateExam,
         getExamWithQuestions,
-        updateExamArchivedAt,
         fetchShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
         updateClasseId,
@@ -80,19 +79,12 @@ function buildExamController() {
 
     async function getExamsByEstablishment(
         params: {
-            query: { filter: examFilterType };
             urlParams: { establishmentId: Establishment['id'] };
         },
         user: User,
     ) {
-        if (!EXAM_FILTERS.includes(params.query.filter)) {
-            throw new Error(
-                `Query filter "${params.query.filter}" is neither "archived" nor "current"`,
-            );
-        }
         return examService.getExamsByEstablishment({
             userId: user.id,
-            filter: params.query.filter,
             establishmentId: params.urlParams.establishmentId,
         });
     }
@@ -127,13 +119,6 @@ function buildExamController() {
 
     async function duplicateExam(params: { urlParams: { examId: string } }, user: User) {
         return examService.duplicateExam({ examId: params.urlParams.examId, user });
-    }
-
-    async function updateExamArchivedAt(params: {
-        urlParams: { examId: string };
-        body: { archive: boolean };
-    }) {
-        return examService.updateExamArchivedAt(params.urlParams.examId, params.body.archive);
     }
 
     async function fetchShouldDisplayRightAnswersForExamId(params: {

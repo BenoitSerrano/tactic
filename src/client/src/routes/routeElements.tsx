@@ -19,7 +19,6 @@ import { StudentHome } from '../pages/StudentHome';
 import { Students } from '../pages/StudentsPages/Students';
 import { ROUTE_KEYS } from './routeKeys';
 import { ExamEditing } from '../pages/ExamPages/ExamEditing';
-import { ExamArchived } from '../pages/ExamArchived';
 import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
 import { ExamParameters } from '../pages/ExamParameters';
 import { ExamCollect } from '../pages/ExamCollect';
@@ -99,20 +98,9 @@ const ROUTE_ELEMENTS: Record<
     EXAM_DONE: {
         element: <ExamDone />,
     },
-    EXAM_ARCHIVED: {
-        element: <ExamArchived />,
-    },
     EXAM_LIST: {
         authorizedRole: 'teacher',
         element: <ExamList />,
-    },
-    EXAM_LIST_ARCHIVED: {
-        authorizedRole: 'teacher',
-        element: <FilteredExamList filter="archived" />,
-    },
-    EXAM_LIST_CURRENT: {
-        authorizedRole: 'teacher',
-        element: <FilteredExamList filter="current" />,
     },
     EXAM_LIST_ALL: {
         authorizedRole: 'teacher',

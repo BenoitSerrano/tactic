@@ -5,8 +5,6 @@ import { api } from '../../lib/api';
 import { ListItemIcon, ListItemText, MenuItem, Menu as MuiMenu, styled } from '@mui/material';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import ScannerIcon from '@mui/icons-material/Scanner';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../components/Loader';
@@ -55,40 +53,7 @@ function FilteredExamList(props: { filter: examFilterType }) {
             });
         },
     });
-    const archiveExamMutation = useMutation({
-        mutationFn: api.archiveExam,
-        onSuccess: () => {
-            displayAlert({
-                variant: 'success',
-                text: `L'examen a bien été archivé.`,
-            });
-            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
-            queryClient.invalidateQueries({ queryKey: ['exams-archived'] });
-        },
-        onError: () => {
-            displayAlert({
-                variant: 'error',
-                text: `Une erreur est survenue. L'examen n'a pas pu être archivé`,
-            });
-        },
-    });
-    const unarchiveExamMutation = useMutation({
-        mutationFn: api.unarchiveExam,
-        onSuccess: () => {
-            displayAlert({
-                variant: 'success',
-                text: `L'examen a bien été désarchivé.`,
-            });
-            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
-            queryClient.invalidateQueries({ queryKey: ['exams-archived'] });
-        },
-        onError: () => {
-            displayAlert({
-                variant: 'error',
-                text: `Une erreur est survenue. L'examen n'a pas pu être désarchivé`,
-            });
-        },
-    });
+
     const duplicateExamMutation = useMutation({
         mutationFn: api.duplicateExam,
         onSuccess: (exam) => {
@@ -133,9 +98,7 @@ function FilteredExamList(props: { filter: examFilterType }) {
                     </ListItemIcon>
                     <ListItemText>Dupliquer</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={buildArchiveExamAction(currentOptionMenu?.examId)}>
-                    {renderArchiveListItem()}
-                </MenuItem>
+
                 <MenuItem onClick={buildChangeClasseForExam(currentOptionMenu?.examId)}>
                     <ListItemIcon>
                         <ChangeCircleOutlinedIcon fontSize="small" />
@@ -201,25 +164,6 @@ function FilteredExamList(props: { filter: examFilterType }) {
         </>
     );
 
-    function renderArchiveListItem() {
-        switch (props.filter) {
-            case 'current':
-                return [
-                    <ListItemIcon key="archive-filter-icon">
-                        <ArchiveIcon fontSize="small" />
-                    </ListItemIcon>,
-                    <ListItemText key="archive-filter-text">Archiver</ListItemText>,
-                ];
-            case 'archived':
-                return [
-                    <ListItemIcon key="unarchive-filter-icon">
-                        <UnarchiveIcon fontSize="small" />
-                    </ListItemIcon>,
-                    <ListItemText key="unarchive-filter-text">Désarchiver</ListItemText>,
-                ];
-        }
-    }
-
     function openCreationModal() {
         setIsCreateExamModalOpen(true);
     }
@@ -230,10 +174,6 @@ function FilteredExamList(props: { filter: examFilterType }) {
 
     function computeTitle(filter: examFilterType): string {
         switch (filter) {
-            case 'current':
-                return 'Mes examens en cours';
-            case 'archived':
-                return 'Mes examens archivés';
             case 'all':
                 return 'Tous mes examens';
         }
@@ -267,28 +207,6 @@ function FilteredExamList(props: { filter: examFilterType }) {
             }
             closeEditionMenu();
             setCurrentExamIdToChange(examId);
-        };
-    }
-
-    function buildArchiveExamAction(examId: string | undefined) {
-        return () => {
-            if (!examId) {
-                return;
-            }
-            closeEditionMenu();
-            switch (props.filter) {
-                case 'archived':
-                    unarchiveExamMutation.mutate(examId);
-                    break;
-                case 'current':
-                    // eslint-disable-next-line no-restricted-globals
-                    const hasConfirmed = confirm(
-                        "Souhaitez-vous réellement archiver cet examen ? Les étudiant·es n'y auront plus accès.",
-                    );
-                    if (hasConfirmed) {
-                        archiveExamMutation.mutate(examId);
-                    }
-            }
         };
     }
 

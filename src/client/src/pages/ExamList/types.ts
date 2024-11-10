@@ -5,7 +5,6 @@ type examApiType = {
     startText: string;
     endText: string;
     createdAt: string;
-    archivedAt: string | null;
     classe: classeType | undefined;
 };
 
