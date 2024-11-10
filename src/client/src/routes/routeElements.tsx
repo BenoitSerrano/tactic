@@ -5,7 +5,6 @@ import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
 import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamResults } from '../pages/ExamResults';
-import { Classes } from '../pages/StudentsPages/Classes';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
 import { ResetPassword } from '../pages/ResetPassword';
@@ -30,6 +29,7 @@ import { AdminTeacherExams } from '../pages/AdminTeacherExams';
 import { userRoleType } from '../constants';
 import { TeacherHome } from '../pages/TeacherHome';
 import { ExamList } from '../pages/ExamList/ExamList';
+import { Establishment } from '../pages/Establishment';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -97,10 +97,6 @@ const ROUTE_ELEMENTS: Record<
     EXAM_DONE: {
         element: <ExamDone />,
     },
-    EXAM_LIST_FOR_ESTABLISHMENT: {
-        authorizedRole: 'teacher',
-        element: <ExamList />,
-    },
     EXAM_LIST_FOR_CLASSE: {
         authorizedRole: 'teacher',
         element: <ExamList />,
@@ -123,7 +119,7 @@ const ROUTE_ELEMENTS: Record<
         authorizedRole: 'teacher',
         element: <TeacherHome />,
     },
-    CLASSES: { authorizedRole: 'teacher', element: <Classes /> },
+    ESTABLISHMENT: { authorizedRole: 'teacher', element: <Establishment /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
     STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: {
         element: <StudentAuthenticationExamTakingRedirection />,

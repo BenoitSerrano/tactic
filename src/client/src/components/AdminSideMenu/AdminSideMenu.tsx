@@ -1,47 +1,19 @@
 import { styled } from '@mui/material';
-import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
-import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import { pathHandler } from '../../lib/pathHandler';
-import { SideItemMenu } from './SideItemMenu';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '../../lib/api';
-import { Loader } from '../Loader';
+import { ClasseSideItemMenu, EstablishmentSideItemMenu, OverallSideItemMenu } from './SideItemMenu';
+import { establishmentWithClassesType } from '../../lib/api/api';
 
-function AdminSideMenu() {
-    const establishmentsQuery = useQuery({
-        queryKey: ['establishments'],
-        queryFn: api.fetchEstablishments,
-    });
-    if (!establishmentsQuery.data) {
-        return <Loader />;
-    }
+function AdminSideMenu(props: { establishments: Array<establishmentWithClassesType> }) {
     return (
         <Container>
-            <SideItemMenu
-                level="high"
-                title="Tous mes examens"
-                path={pathHandler.getRoutePath('EXAM_LIST_FOR_ALL')}
-            />
-            {establishmentsQuery.data.map((establishment) => (
+            <OverallSideItemMenu />
+            {props.establishments.map((establishment) => (
                 <SideItemContainer key={establishment.id}>
-                    <SideItemMenu
-                        level="medium"
-                        title={establishment.name}
-                        IconComponent={AccountBalanceOutlinedIcon}
-                        path={pathHandler.getRoutePath('EXAM_LIST_FOR_ESTABLISHMENT', {
-                            establishmentId: establishment.id,
-                        })}
-                    />
+                    <EstablishmentSideItemMenu establishment={establishment} />
                     {establishment.classes.map((classe) => (
                         <SideItemContainer>
-                            <SideItemMenu
-                                level="low"
-                                title={classe.name}
-                                IconComponent={FolderOutlinedIcon}
-                                path={pathHandler.getRoutePath('EXAM_LIST_FOR_CLASSE', {
-                                    establishmentId: establishment.id,
-                                    classeId: classe.id,
-                                })}
+                            <ClasseSideItemMenu
+                                establishmentId={establishment.id}
+                                classe={classe}
                             />
                         </SideItemContainer>
                     ))}

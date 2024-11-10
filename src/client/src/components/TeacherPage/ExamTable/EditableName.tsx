@@ -1,12 +1,12 @@
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField, styled } from '@mui/material';
 import { FormEvent, useState } from 'react';
-import { examApiType } from './types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAlert } from '../../lib/alert';
-import { api } from '../../lib/api';
-import { IconButton } from '../../components/IconButton';
+import { examApiType } from '../../../pages/ExamList/types';
+import { useAlert } from '../../../lib/alert';
+import { api } from '../../../lib/api';
+import { IconButton } from '../../IconButton';
 
 function EditableName(props: { exam: examApiType }) {
     const { displayAlert } = useAlert();

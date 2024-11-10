@@ -22,6 +22,7 @@ const api = {
     createExam,
     fetchExam,
     fetchExamWithQuestions,
+    updateEstablishmentName,
     updateExamName,
     updateExamDuration,
     updateExamEdgeText,
@@ -51,7 +52,7 @@ const api = {
     fetchResetPasswordRequestUser,
     resetPassword,
     fetchAttemptsCountByCorrectionStatus,
-    fetchClassesByEstablishment,
+    fetchEstablishmentWithClasses,
     createClasse,
     deleteClasse,
     changeClasse,
@@ -109,9 +110,15 @@ async function performApiCall(
     return response.json();
 }
 
-async function fetchEstablishments(): Promise<
-    Array<{ id: string; name: string; classes: Array<{ id: string; name: string }> }>
-> {
+type classeType = { id: string; name: string };
+
+type establishmentWithClassesType = {
+    id: string;
+    name: string;
+    classes: Array<classeType>;
+};
+
+async function fetchEstablishments(): Promise<Array<establishmentWithClassesType>> {
     const URL = `${BASE_URL}/establishments`;
     return performApiCall(URL, 'GET');
 }
@@ -372,6 +379,16 @@ async function updateExamName({ examId, name }: { examId: string; name: string }
     const URL = `${BASE_URL}/exams/${examId}/name`;
     return performApiCall(URL, 'PATCH', { name });
 }
+async function updateEstablishmentName({
+    establishmentId,
+    name,
+}: {
+    establishmentId: string;
+    name: string;
+}) {
+    const URL = `${BASE_URL}/establishments/${establishmentId}/name`;
+    return performApiCall(URL, 'PATCH', { name });
+}
 
 async function updateExamDuration({
     examId,
@@ -573,8 +590,10 @@ async function fetchAttemptsCountByCorrectionStatus(params: { examId: string }) 
     return performApiCall(URL, 'GET');
 }
 
-async function fetchClassesByEstablishment(establishmentId: string) {
-    const URL = `${BASE_URL}/establishment/${establishmentId}/classes`;
+async function fetchEstablishmentWithClasses(
+    establishmentId: string,
+): Promise<establishmentWithClassesType> {
+    const URL = `${BASE_URL}/establishments/${establishmentId}`;
     return performApiCall(URL, 'GET');
 }
 
@@ -614,3 +633,4 @@ async function updateShouldDisplayRightAnswersForExamId(params: {
 }
 
 export { api };
+export type { establishmentWithClassesType };

@@ -24,7 +24,7 @@ function UpsertEstablishmentModal(props: {
                 queryKey: ['establishments'],
             });
             navigate(
-                pathHandler.getRoutePath('EXAM_LIST_FOR_ESTABLISHMENT', {
+                pathHandler.getRoutePath('ESTABLISHMENT', {
                     establishmentId: establishment.id,
                 }),
             );

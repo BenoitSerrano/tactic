@@ -22,11 +22,11 @@ const establishmentRoutes: Array<routeType<any, any, any>> = [
         schema: Joi.object({ name: Joi.string().required() }),
     },
     {
-        method: 'PUT',
-        path: '/establishments/:establishmentId',
+        method: 'PATCH',
+        path: '/establishments/:establishmentId/name',
         authorizedRoles: ['teacher'],
         kind: 'authenticated',
-        controller: establishmentController.updateEstablishment,
+        controller: establishmentController.updateEstablishmentName,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'establishment',

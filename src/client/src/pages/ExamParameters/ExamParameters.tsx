@@ -1,5 +1,4 @@
 import { styled, Typography } from '@mui/material';
-import { EditableDuration } from '../ExamList/EditableDuration';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { api } from '../../lib/api';
@@ -8,6 +7,7 @@ import { EditEdgeText } from './components/EditEdgeText';
 import { examApiType } from '../ExamList/types';
 import { Section } from '../../components/Section';
 import { ExamPageTitle } from '../../components/ExamPageTitle';
+import { EditableExamDuration } from '../../components/EditableExamDuration';
 
 function ExamParameters() {
     const params = useParams();
@@ -29,7 +29,7 @@ function ExamParameters() {
 
             <Typography variant="h3">Paramètres</Typography>
             <Section title="Durée de l'examen">
-                <EditableDuration exam={examQuery.data} />
+                <EditableExamDuration exam={examQuery.data} />
             </Section>
             <Section title="Éditer le texte d'accueil de l'examen">
                 <EditEdgeText exam={examQuery.data} kind="start" />

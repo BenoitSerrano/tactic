@@ -61,7 +61,6 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_LIST_FOR_CLASSE: {
         path: `/teacher/establishments/:establishmentId/classes/:classeId/exams`,
     },
-    EXAM_LIST_FOR_ESTABLISHMENT: { path: `/teacher/establishments/:establishmentId/exams` },
     EXAM_LIST_FOR_ALL: { path: `/teacher/exams` },
     STUDENTS: { path: `/teacher/establishments/:establishmentId/classes/:classeId/students` },
     EXAM_PREVIEWING: {
@@ -70,8 +69,8 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     EXAM_CHECKING: {
         path: `/teacher/exams/:examId/results/:attemptId`,
     },
-    CLASSES: {
-        path: `/teacher/establishments/:establishmentId/classes`,
+    ESTABLISHMENT: {
+        path: `/teacher/establishments/:establishmentId`,
     },
     TEACHER_HOME: { path: `/teacher` },
     ATTEMPT_NOT_CORRECTED: { path: `/student/attempt-not-corrected` },

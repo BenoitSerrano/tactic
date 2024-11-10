@@ -10,7 +10,7 @@ function buildEstablishmentService() {
     const establishmentService = {
         getEstablishmentsWithClasses,
         createEstablishment,
-        updateEstablishment,
+        updateEstablishmentName,
         getExamIdsByUser,
     };
 
@@ -19,6 +19,7 @@ function buildEstablishmentService() {
     async function getEstablishmentsWithClasses(user: User) {
         const establishments = await establishmentRepository.find({
             where: { user: { id: user.id } },
+            order: { name: 'ASC' },
             relations: { user: true, classes: true },
             select: { id: true, name: true, classes: { id: true, name: true }, user: { id: true } },
         });
@@ -33,7 +34,6 @@ function buildEstablishmentService() {
         });
         let examIds: Exam['id'][] = [];
         for (const establishment of establishments) {
-            console.log(establishment);
             for (const classe of establishment.classes) {
                 for (const exam of classe.exams) {
                     examIds.push(exam.id);
@@ -50,7 +50,8 @@ function buildEstablishmentService() {
         const insertedEstablishment = await establishmentRepository.save(establishment);
         return insertedEstablishment;
     }
-    async function updateEstablishment(
+
+    async function updateEstablishmentName(
         establishmentId: Establishment['id'],
         params: { name: Establishment['name'] },
     ) {

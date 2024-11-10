@@ -4,15 +4,16 @@ import TimerOffOutlinedIcon from '@mui/icons-material/TimerOffOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { TextField, Tooltip, Typography, styled } from '@mui/material';
 import { FormEvent, useEffect, useState } from 'react';
-import { time } from '../../lib/time';
-import { INTEGER_NUMBER_REGEX } from '../../constants';
-import { IconButton } from '../../components/IconButton';
-import { examApiType } from './types';
-import { api } from '../../lib/api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAlert } from '../../lib/alert';
 
-function EditableDuration(props: { exam: examApiType }) {
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { examApiType } from '../pages/ExamList/types';
+import { useAlert } from '../lib/alert';
+import { api } from '../lib/api';
+import { IconButton } from './IconButton';
+import { time } from '../lib/time';
+import { INTEGER_NUMBER_REGEX } from '../constants';
+
+function EditableExamDuration(props: { exam: examApiType }) {
     const [value, setValue] = useState<number | null>(props.exam.duration);
     const [isEditing, setIsEditing] = useState(false);
     const { displayAlert } = useAlert();
@@ -177,4 +178,4 @@ const StyledTextField = styled(TextField)({ width: 40 });
 
 const NoDurationCellContent = styled('div')({ display: 'flex', alignItems: 'center' });
 
-export { EditableDuration };
+export { EditableExamDuration };

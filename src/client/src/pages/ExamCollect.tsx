@@ -44,7 +44,7 @@ function ExamCollect() {
                 <Typography variant="h6">
                     Vos étudiant.es arriveront sur une page où iels devront rentrer leur email
                     d'identification. Pour gérer vos classes d'étudiant.es, cliquez{' '}
-                    <Link to={pathHandler.getRoutePath('CLASSES')}>ici</Link>.
+                    <Link to={pathHandler.getRoutePath('ESTABLISHMENT')}>ici</Link>.
                 </Typography>
             </Section>
         </Container>

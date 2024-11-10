@@ -134,7 +134,6 @@ function ExamCreationModal(props: {
         if (!selectedClasseId || !startDateTime || !endDateTime) {
             return;
         }
-        console.log(endDateTime);
         createExamMutation.mutate({
             duration: isThereDuration ? Number(duration) : undefined,
             name,

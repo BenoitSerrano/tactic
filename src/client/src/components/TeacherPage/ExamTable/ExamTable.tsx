@@ -7,12 +7,12 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import { IconButton } from '../../components/IconButton';
+import { IconButton } from '../../IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { EditableName } from './EditableName';
-import { EditableDuration } from './EditableDuration';
-import { examApiType } from './types';
-import { pathHandler } from '../../lib/pathHandler';
+import { EditableExamDuration } from '../../EditableExamDuration';
+import { examApiType } from '../../../pages/ExamList/types';
+import { pathHandler } from '../../../lib/pathHandler';
 import { useNavigate } from 'react-router-dom';
 
 function ExamTable(props: {
@@ -47,7 +47,7 @@ function ExamTable(props: {
                                 <EditableName exam={exam} />
                             </TableCell>
                             <TableCell>
-                                <EditableDuration exam={exam} />
+                                <EditableExamDuration exam={exam} />
                             </TableCell>
                         </ClickableTableRow>
                     ))}

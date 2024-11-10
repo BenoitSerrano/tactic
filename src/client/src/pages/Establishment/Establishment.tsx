@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../lib/api';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -15,22 +14,24 @@ import {
     TableRow,
     styled,
 } from '@mui/material';
-import { Loader } from '../../../components/Loader';
 import { useNavigate, useParams } from 'react-router-dom';
-import { pathHandler } from '../../../lib/pathHandler';
-import { ClasseCreationModal } from './ClasseCreationModal';
 import { useState } from 'react';
-import { Menu } from '../../../components/Menu';
-import { useAlert } from '../../../lib/alert';
-import { PageTitle } from '../../../components/PageTitle';
-import { IconButton } from '../../../components/IconButton';
+import { api } from '../../lib/api';
+import { useAlert } from '../../lib/alert';
+import { Loader } from '../../components/Loader';
+import { ClasseCreationModal } from './ClasseCreationModal';
+import { Menu } from '../../components/Menu';
+import { IconButton } from '../../components/IconButton';
+import { pathHandler } from '../../lib/pathHandler';
+import { AdminSideMenu } from '../../components/AdminSideMenu';
+import { EditableName } from './EditableName';
 
-function Classes() {
+function Establishment() {
     const params = useParams();
     const establishmentId = params.establishmentId as string;
-    const query = useQuery({
-        queryKey: ['establishments', establishmentId, 'classes'],
-        queryFn: () => api.fetchEstablishmentWithClasses(establishmentId),
+    const establishmentsQuery = useQuery({
+        queryKey: ['establishments'],
+        queryFn: api.fetchEstablishments,
     });
     const [currentOptionMenu, setCurrentOptionMenu] = useState<
         | {
@@ -59,14 +60,20 @@ function Classes() {
     });
     const navigate = useNavigate();
 
-    if (!query.data) {
-        if (query.isLoading) {
+    if (!establishmentsQuery.data) {
+        if (establishmentsQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
     }
 
-    const classes = query.data.classes;
+    const establishments = establishmentsQuery.data;
+    const establishment = establishments.find(
+        (establishment) => establishmentId === establishment.id,
+    );
+    if (!establishment) {
+        return <div />;
+    }
     const buttons = [
         {
             IconComponent: AddCircleOutlineIcon,
@@ -96,8 +103,9 @@ function Classes() {
             />
             <Menu buttons={buttons} />
             <ContentContainer>
+                <AdminSideMenu establishments={establishments} />
                 <TableContainer>
-                    <PageTitle title="Mes classes" />
+                    <EditableName establishment={establishment} />
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -106,7 +114,7 @@ function Classes() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {classes.map((classe) => (
+                            {establishment.classes.map((classe) => (
                                 <ClickableTableRow
                                     hover
                                     key={classe.id}
@@ -181,4 +189,4 @@ const ImportantMenuItem = styled(MenuItem)(({ theme }) => ({
     '.MuiListItemIcon-root': { color: theme.palette.error.main },
 }));
 
-export { Classes };
+export { Establishment };

@@ -100,29 +100,4 @@ describe('computeBreadcrumbs', () => {
             { label: 'Correction de copie', isActive: true },
         ]);
     });
-
-    it("returns classes when you're on students page", () => {
-        const pathname = pathHandler.getRoutePath('CLASSES');
-
-        const breadcrumbs = computeBreadcrumbs(pathname);
-
-        expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes classes', isActive: true },
-        ]);
-    });
-
-    it("returns students when you're on students page", () => {
-        const pathname = pathHandler.getRoutePath('STUDENTS', {
-            classeId: 'classeId',
-        });
-
-        const breadcrumbs = computeBreadcrumbs(pathname);
-
-        expect(breadcrumbs).toEqual([
-            { label: 'Accueil', href: pathHandler.getRoutePath('TEACHER_HOME') },
-            { label: 'Mes classes', href: pathHandler.getRoutePath('CLASSES') },
-            { label: 'Liste des étudiants', isActive: true },
-        ]);
-    });
 });

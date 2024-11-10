@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../lib/api';
 import { ListItemIcon, ListItemText, MenuItem, Menu as MuiMenu, styled } from '@mui/material';
 import ScannerIcon from '@mui/icons-material/Scanner';
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Loader } from '../../components/Loader';
@@ -14,7 +16,9 @@ import { sortedExamsApiType } from './types';
 import { pathHandler } from '../../lib/pathHandler';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { PageTitle } from '../../components/PageTitle';
-import { ExamTable } from './ExamTable';
+import { ExamTable } from '../../components/TeacherPage/ExamTable/ExamTable';
+import { TableHeader } from './TableHeader';
+import { establishmentWithClassesType } from '../../lib/api/api';
 
 function ExamList() {
     const params = useParams();
@@ -25,6 +29,10 @@ function ExamList() {
     const examListQuery = useQuery<sortedExamsApiType>({
         queryKey: examsQueryKey,
         queryFn: () => api.fetchExams({ establishmentId, classeId }),
+    });
+    const establishmentsQuery = useQuery({
+        queryKey: ['establishments'],
+        queryFn: api.fetchEstablishments,
     });
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
@@ -71,14 +79,23 @@ function ExamList() {
         },
     });
 
-    if (!examListQuery.data) {
-        if (examListQuery.isLoading) {
+    if (!examListQuery.data || !establishmentsQuery.data) {
+        if (examListQuery.isLoading || establishmentsQuery.isLoading) {
             return <Loader />;
         }
         return <div />;
     }
 
-    const title = 'Mes examens';
+    const titleWithIcon =
+        computeTitleWithIcon({
+            establishmentId,
+            classeId,
+            establishmentsWithClasses: establishmentsQuery.data,
+        }) || '';
+
+    if (!titleWithIcon) {
+        return <Navigate to={pathHandler.getRoutePath('EXAM_LIST_FOR_ALL')} />;
+    }
 
     return (
         <>
@@ -103,10 +120,13 @@ function ExamList() {
             </MuiMenu>
 
             <ContentContainer>
-                <AdminSideMenu />
+                <AdminSideMenu establishments={establishmentsQuery.data} />
 
                 <TableContainer>
-                    <PageTitle title={title} />
+                    <PageTitle
+                        title={titleWithIcon.title}
+                        IconComponent={titleWithIcon.IconComponent}
+                    />
                     <Menu
                         buttons={[
                             {
@@ -116,6 +136,7 @@ function ExamList() {
                             },
                         ]}
                     />
+                    <TableHeader classeId={classeId} establishmentId={establishmentId} />
                     {examListQuery.data.toCome.length > 0 && (
                         <ExamTable
                             title="À venir"
@@ -190,6 +211,42 @@ function ExamList() {
             }
         };
     }
+}
+
+function computeTitleWithIcon(params: {
+    establishmentId: string | undefined;
+    classeId: string | undefined;
+    establishmentsWithClasses: Array<establishmentWithClassesType>;
+}) {
+    if (!params.establishmentId) {
+        return { title: 'Tous mes examens' };
+    }
+
+    const establishment = params.establishmentsWithClasses.find(
+        (establishment) => establishment.id === params.establishmentId,
+    );
+
+    if (!establishment) {
+        return undefined;
+    }
+
+    if (!params.classeId) {
+        return {
+            title: establishment.name,
+            IconComponent: <AccountBalanceOutlinedIcon fontSize="large" />,
+        };
+    }
+
+    const classe = establishment.classes.find((classe) => classe.id === params.classeId);
+
+    if (!classe) {
+        return undefined;
+    }
+
+    return {
+        title: `${establishment.name} - ${classe.name}`,
+        IconComponent: <FolderOutlinedIcon fontSize="large" />,
+    };
 }
 
 function computeExamsQueryKey(establishmentId: string | undefined, classeId: string | undefined) {

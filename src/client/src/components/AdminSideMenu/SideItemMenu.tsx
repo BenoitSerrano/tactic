@@ -1,47 +1,63 @@
 import { Typography, styled } from '@mui/material';
-import { ElementType } from 'react';
 import { Link } from '../Link';
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import { pathHandler } from '../../lib/pathHandler';
 
-const levelMapping = {
-    high: {
-        typographyVariant: 'h5' as const,
-        iconSize: 'large',
-    },
-    medium: {
-        typographyVariant: 'h5' as const,
-        iconSize: 'medium',
-    },
-    low: {
-        typographyVariant: 'h6' as const,
-        iconSize: 'small',
-    },
-};
-
-function SideItemMenu(props: {
-    IconComponent?: ElementType;
-    title: string;
-    path: string;
-    level: 'high' | 'medium' | 'low';
-}) {
-    const { IconComponent, title, path } = props;
-    const { typographyVariant, iconSize } = levelMapping[props.level];
+function OverallSideItemMenu() {
+    const path = pathHandler.getRoutePath('EXAM_LIST_FOR_ALL');
     return (
         <Container>
             <Link to={path}>
                 <LinkContent>
-                    {!!IconComponent && (
-                        <IconContainer>
-                            <IconComponent fontSize={iconSize} />
-                        </IconContainer>
-                    )}
-                    <Typography variant={typographyVariant}>{title}</Typography>
+                    <Typography variant="h5">Tous mes examens</Typography>
                 </LinkContent>
             </Link>
         </Container>
     );
 }
 
-export { SideItemMenu };
+function EstablishmentSideItemMenu(props: { establishment: { id: string; name: string } }) {
+    const path = pathHandler.getRoutePath('ESTABLISHMENT', {
+        establishmentId: props.establishment.id,
+    });
+    return (
+        <Container>
+            <Link to={path}>
+                <LinkContent>
+                    <IconContainer>
+                        <AccountBalanceOutlinedIcon fontSize={'medium'} />
+                    </IconContainer>
+                    <Typography variant="h5">{props.establishment.name}</Typography>
+                </LinkContent>
+            </Link>
+        </Container>
+    );
+}
+
+function ClasseSideItemMenu(props: {
+    establishmentId: string;
+    classe: { id: string; name: string };
+}) {
+    const path = pathHandler.getRoutePath('EXAM_LIST_FOR_CLASSE', {
+        establishmentId: props.establishmentId,
+        classeId: props.classe.id,
+    });
+    return (
+        <Container>
+            <Link to={path}>
+                <LinkContent>
+                    <IconContainer>
+                        <FolderOutlinedIcon fontSize="small" />
+                    </IconContainer>
+                    <Typography variant="h6">{props.classe.name}</Typography>
+                </LinkContent>
+            </Link>
+        </Container>
+    );
+}
+
+export { EstablishmentSideItemMenu, ClasseSideItemMenu, OverallSideItemMenu };
 
 const IconContainer = styled('div')(({ theme }) => ({
     marginRight: theme.spacing(2),
@@ -56,5 +72,9 @@ const LinkContent = styled('div')({
 
 const Container = styled('div')(({ theme }) => ({
     paddingTop: theme.spacing(1),
+    paddingRight: theme.spacing(2),
     paddingBottom: theme.spacing(1),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
 }));

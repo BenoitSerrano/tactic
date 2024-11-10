@@ -9,7 +9,7 @@ function SelectClasseByEstablishment(props: {
     setSelectedClasseId: (selectedClasseId: string) => void;
 }) {
     const query = useQuery({
-        queryFn: () => api.fetchClassesByEstablishment(props.establishmentId),
+        queryFn: () => api.fetchEstablishmentWithClasses(props.establishmentId),
         queryKey: ['establishments', props.establishmentId, 'classes'],
     });
     if (!query.data) {
@@ -24,7 +24,7 @@ function SelectClasseByEstablishment(props: {
             label="Sélectionner une classe"
             onChange={onSelectClasseId}
         >
-            {query.data.map((classe: any) => (
+            {query.data.classes.map((classe: any) => (
                 <MenuItem key={classe.id} value={classe.id}>
                     {classe.name}
                 </MenuItem>
