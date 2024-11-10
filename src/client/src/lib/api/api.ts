@@ -597,8 +597,8 @@ async function fetchEstablishmentWithClasses(
     return performApiCall(URL, 'GET');
 }
 
-async function createClasse(params: { name: string }) {
-    const URL = `${BASE_URL}/classes`;
+async function createClasse(params: { name: string; establishmentId: string }) {
+    const URL = `${BASE_URL}/establishments/${params.establishmentId}/classes`;
     return performApiCall(URL, 'POST', { name: params.name });
 }
 

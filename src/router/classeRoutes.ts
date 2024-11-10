@@ -21,7 +21,7 @@ const classeRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'POST',
-        path: '/classes',
+        path: '/establishments/:establishmentId/classes',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: classeController.createClasse,

@@ -1,6 +1,7 @@
 import { dataSource } from '../../dataSource';
 import { Classe } from './Classe.entity';
 import { Establishment } from '../establishment';
+import { User } from '../user';
 
 export { buildClasseService };
 
@@ -57,12 +58,14 @@ function buildClasseService() {
     async function createClasse(params: {
         className: Classe['name'];
         establishmentId: Establishment['id'];
+        user: User;
     }) {
         const { establishmentId, className } = params;
 
         await classeRepository.insert({
             name: className,
             establishment: { id: establishmentId },
+            user: params.user,
         });
         return true;
     }

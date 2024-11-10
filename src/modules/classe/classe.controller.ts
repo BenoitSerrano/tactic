@@ -47,13 +47,17 @@ function buildClasseController() {
         );
     }
 
-    async function createClasse(params: {
-        body: { name: string };
-        urlParams: { establishmentId: Establishment['id'] };
-    }) {
+    async function createClasse(
+        params: {
+            body: { name: string };
+            urlParams: { establishmentId: Establishment['id'] };
+        },
+        user: User,
+    ) {
         return classeService.createClasse({
             className: params.body.name,
             establishmentId: params.urlParams.establishmentId,
+            user,
         });
     }
 

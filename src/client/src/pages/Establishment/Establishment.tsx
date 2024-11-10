@@ -39,6 +39,7 @@ function Establishment() {
     return (
         <>
             <ClasseCreationModal
+                establishmentId={establishmentId}
                 isOpen={isClasseCreationModalOpen}
                 close={closeClasseCreationModal}
             />

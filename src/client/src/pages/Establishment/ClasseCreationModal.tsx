@@ -5,7 +5,11 @@ import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { Modal } from '../../components/Modal';
 
-function ClasseCreationModal(props: { close: () => void; isOpen: boolean }) {
+function ClasseCreationModal(props: {
+    close: () => void;
+    isOpen: boolean;
+    establishmentId: string;
+}) {
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
     const [name, setName] = useState('');
@@ -14,7 +18,7 @@ function ClasseCreationModal(props: { close: () => void; isOpen: boolean }) {
         mutationFn: api.createClasse,
         onSuccess: () => {
             setName('');
-            queryClient.invalidateQueries({ queryKey: ['classes'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments'] });
             displayAlert({
                 text: `La classe "${name}" a bien été créé`,
                 variant: 'success',
@@ -50,7 +54,7 @@ function ClasseCreationModal(props: { close: () => void; isOpen: boolean }) {
     );
 
     async function createClasse() {
-        createClasseMutation.mutate({ name });
+        createClasseMutation.mutate({ name, establishmentId: props.establishmentId });
     }
 }
 
