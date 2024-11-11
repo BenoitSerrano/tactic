@@ -6,7 +6,7 @@ import { localSessionHandler } from '../../lib/localSessionHandler';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { Loader } from '../Loader';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../../lib/api';
+import { api } from '../../lib/api/api';
 
 function TeacherPage(props: { children: React.ReactNode | null }) {
     const userRoles = localSessionHandler.getUserRoles();
