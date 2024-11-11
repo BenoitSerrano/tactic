@@ -20,7 +20,7 @@ function ClasseCreationModal(props: {
             setName('');
             queryClient.invalidateQueries({ queryKey: ['establishments'] });
             displayAlert({
-                text: `La classe "${name}" a bien été créé`,
+                text: `La classe "${name}" a bien été créée`,
                 variant: 'success',
             });
             props.close();
@@ -29,7 +29,7 @@ function ClasseCreationModal(props: {
             console.error(error);
             displayAlert({
                 variant: 'error',
-                text: "Une erreur est survenue. La classe n'a pas pu être créé.",
+                text: "Une erreur est survenue. La classe n'a pas pu être créée.",
             });
         },
     });
