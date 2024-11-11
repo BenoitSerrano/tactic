@@ -52,6 +52,8 @@ function ExamResults() {
     const queryClient = useQueryClient();
     const params = useParams();
     const examId = params.examId as string;
+    const classeId = params.classeId as string;
+    const establishmentId = params.establishmentId as string;
     const resultsQuery = useQuery<examResultsApiType>({
         queryKey: ['exam-results', examId],
         queryFn: () => api.fetchExamResults(examId),
@@ -357,7 +359,7 @@ function ExamResults() {
     function computeAttemptRoute(attemptId: string) {
         return pathHandler.getRoutePath(
             'EXAM_CHECKING',
-            { examId, attemptId },
+            { examId, attemptId, establishmentId, classeId },
             { attemptIds: sortedAttemptIds.join(',') },
         );
     }

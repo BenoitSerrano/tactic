@@ -139,9 +139,7 @@ function computeBreadcrumbs(
 
             breadcrumbs.push({
                 label: 'Résultats',
-                href: pathHandler.getRoutePath('EXAM_RESULTS', {
-                    examId: parsedPath.parameters.examId,
-                }),
+                href: pathHandler.getRoutePath('EXAM_RESULTS', parsedPath.parameters),
             });
 
             breadcrumbs.push({ label: 'Correction de copie', isActive: true });

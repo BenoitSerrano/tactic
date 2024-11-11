@@ -31,6 +31,7 @@ type sortColumnType = 'email' | 'lastName' | 'createdDate' | string;
 function Students() {
     const params = useParams();
     const classeId = params.classeId as string;
+    const establishmentId = params.establishmentId as string;
     const [isStudentsCreationModalOpen, setIsStudentsCreationModalOpen] = useState(false);
     const queryClient = useQueryClient();
 
@@ -203,7 +204,12 @@ function Students() {
         if (attemptId === undefined) {
             return undefined;
         }
-        return pathHandler.getRoutePath('EXAM_CHECKING', { examId, attemptId });
+        return pathHandler.getRoutePath('EXAM_CHECKING', {
+            examId,
+            attemptId,
+            establishmentId,
+            classeId,
+        });
     }
 
     function sortData(
