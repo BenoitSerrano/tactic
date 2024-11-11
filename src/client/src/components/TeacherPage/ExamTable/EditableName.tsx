@@ -3,7 +3,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField, styled } from '@mui/material';
 import { FormEvent, useState } from 'react';
-import { examApiType } from '../../../pages/ExamList/types';
+import { examApiType } from '../../../pages/Classe/types';
 import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { IconButton } from '../../IconButton';

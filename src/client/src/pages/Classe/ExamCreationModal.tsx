@@ -5,20 +5,18 @@ import { Modal } from '../../components/Modal';
 import { api } from '../../lib/api';
 import { INTEGER_NUMBER_REGEX } from '../../constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
-import { EXAM_DEFAULT_DURATION } from './constants';
+import { EXAM_DEFAULT_DURATION } from '../ExamList/constants';
 import { useAlert } from '../../lib/alert';
-import { SelectClasseByEstablishment } from '../../components/SelectClasseByEstablishment';
 import { SelectExamExtremums } from './SelectExamExtremums';
 
 function ExamCreationModal(props: {
     close: () => void;
     isOpen: boolean;
-    establishmentId: string | undefined;
-    classeId: string | undefined;
+    establishmentId: string;
+    classeId: string;
     onExamCreated: (examId: string) => void;
 }) {
     const [name, setName] = useState('');
-    const [selectedClasseId, setSelectedClasseId] = useState<string | undefined>();
 
     const [startDateTime, setStartDateTime] = useState<number | undefined>();
     const [endDateTime, setEndDateTime] = useState<number | undefined>();
@@ -45,7 +43,6 @@ function ExamCreationModal(props: {
     const isConfirmDisabled = computeIsConfirmDisabled({
         name,
         duration,
-        selectedClasseId,
         startDateTime,
         endDateTime,
     });
@@ -98,14 +95,6 @@ function ExamCreationModal(props: {
                         />
                     </StyledRadioGroup>
                 </FieldContainer>
-                {/*  TODO */}
-                {/* <FieldContainer>
-                    <SelectClasseByEstablishment
-                        establishmentId={props.establishmentId}
-                        selectedClasseId={selectedClasseId}
-                        setSelectedClasseId={setSelectedClasseId}
-                    />
-                </FieldContainer> */}
 
                 <FieldContainer>
                     <SelectExamExtremums
@@ -131,13 +120,13 @@ function ExamCreationModal(props: {
     }
 
     function saveExam() {
-        if (!selectedClasseId || !startDateTime || !endDateTime) {
+        if (!startDateTime || !endDateTime) {
             return;
         }
         createExamMutation.mutate({
             duration: isThereDuration ? Number(duration) : undefined,
             name,
-            classeId: selectedClasseId,
+            classeId: props.classeId,
             startDateTime,
             endDateTime,
         });

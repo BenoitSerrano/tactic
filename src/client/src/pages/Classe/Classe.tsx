@@ -10,11 +10,14 @@ import { pathHandler } from '../../lib/pathHandler';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { ExamTable } from '../../components/TeacherPage/ExamTable/ExamTable';
 import { establishmentWithClassesType } from '../../lib/api/api';
-import { sortedExamsApiType } from '../ExamList/types';
-import { ExamCreationModal } from '../ExamList/ExamCreationModal';
+import { sortedExamsApiType } from './types';
+import { ExamCreationModal } from './ExamCreationModal';
 import { ClasseHeader } from './ClasseHeader';
+import { useStoreCurrentLocation } from '../../lib/useStoreCurrentLocation';
 
 function Classe() {
+    useStoreCurrentLocation();
+
     const params = useParams();
 
     const establishmentId = params.establishmentId as string;
@@ -57,7 +60,7 @@ function Classe() {
     });
 
     if (!headerInfo) {
-        return <Navigate to={pathHandler.getRoutePath('EXAM_LIST_FOR_ALL')} />;
+        return <Navigate to={pathHandler.getRoutePath('TEACHER_HOME')} />;
     }
     const { classe, establishment } = headerInfo;
 

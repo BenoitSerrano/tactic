@@ -1,7 +1,7 @@
 import { styled, TextField } from '@mui/material';
 import { useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
-import { examApiType } from '../../ExamList/types';
+import { examApiType } from '../../Classe/types';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../lib/api';

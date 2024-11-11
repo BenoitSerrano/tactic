@@ -7,7 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import TimerOffOutlinedIcon from '@mui/icons-material/TimerOffOutlined';
 import { useNavigate, useParams } from 'react-router-dom';
 import { pathHandler } from '../lib/pathHandler';
-import { examApiType } from './ExamList/types';
+import { examApiType } from './Classe/types';
 import { time } from '../lib/time';
 
 function AdminTeacherExams() {

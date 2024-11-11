@@ -18,7 +18,7 @@ import ScannerIcon from '@mui/icons-material/Scanner';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { EditableName } from './EditableName';
 import { EditableExamDuration } from '../../EditableExamDuration';
-import { examApiType } from '../../../pages/ExamList/types';
+import { examApiType } from '../../../pages/Classe/types';
 import { pathHandler } from '../../../lib/pathHandler';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';

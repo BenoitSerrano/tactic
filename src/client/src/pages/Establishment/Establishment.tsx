@@ -10,8 +10,10 @@ import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { EditableName } from './EditableName';
 import { ClasseRow } from './ClasseRow';
 import { Button } from '../../components/Button';
+import { useStoreCurrentLocation } from '../../lib/useStoreCurrentLocation';
 
 function Establishment() {
+    useStoreCurrentLocation();
     const params = useParams();
     const establishmentId = params.establishmentId as string;
     const establishmentsQuery = useQuery({

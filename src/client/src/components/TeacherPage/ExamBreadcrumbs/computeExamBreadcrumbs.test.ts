@@ -3,13 +3,6 @@ import { computeExamBreadcrumbs } from './computeExamBreadcrumbs';
 
 describe('computeExamBreadcrumbs', () => {
     const examId = 'EXAMEN_1';
-    it('should return empty array if on exam list', () => {
-        const currentPath = pathHandler.getRoutePath('EXAM_LIST_FOR_ALL');
-
-        const editingBreadcrumbs = computeExamBreadcrumbs(currentPath);
-
-        expect(editingBreadcrumbs).toEqual([]);
-    });
 
     it('should return first active if exam editing content', () => {
         const currentPath = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });

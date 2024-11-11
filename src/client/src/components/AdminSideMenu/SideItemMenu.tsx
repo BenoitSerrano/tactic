@@ -4,19 +4,6 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import { pathHandler } from '../../lib/pathHandler';
 
-function OverallSideItemMenu() {
-    const path = pathHandler.getRoutePath('EXAM_LIST_FOR_ALL');
-    return (
-        <Container>
-            <Link to={path}>
-                <LinkContent>
-                    <Typography variant="h5">Tous mes examens</Typography>
-                </LinkContent>
-            </Link>
-        </Container>
-    );
-}
-
 function EstablishmentSideItemMenu(props: { establishment: { id: string; name: string } }) {
     const path = pathHandler.getRoutePath('ESTABLISHMENT', {
         establishmentId: props.establishment.id,
@@ -57,7 +44,7 @@ function ClasseSideItemMenu(props: {
     );
 }
 
-export { EstablishmentSideItemMenu, ClasseSideItemMenu, OverallSideItemMenu };
+export { EstablishmentSideItemMenu, ClasseSideItemMenu };
 
 const IconContainer = styled('div')(({ theme }) => ({
     marginRight: theme.spacing(2),

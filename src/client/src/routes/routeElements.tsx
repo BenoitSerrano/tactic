@@ -28,9 +28,9 @@ import { AdminDashboard } from '../pages/AdminDashboard';
 import { AdminTeacherExams } from '../pages/AdminTeacherExams';
 import { userRoleType } from '../constants';
 import { TeacherHome } from '../pages/TeacherHome';
-import { ExamList } from '../pages/ExamList/ExamList';
 import { Establishment } from '../pages/Establishment';
 import { Classe } from '../pages/Classe';
+import { Onboarding } from '../pages/Onboarding';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -102,10 +102,6 @@ const ROUTE_ELEMENTS: Record<
         authorizedRole: 'teacher',
         element: <Classe />,
     },
-    EXAM_LIST_FOR_ALL: {
-        authorizedRole: 'teacher',
-        element: <ExamList />,
-    },
     STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
     EXAM_PREVIEWING: {
         authorizedRole: 'teacher',
@@ -128,6 +124,7 @@ const ROUTE_ELEMENTS: Record<
     NOT_FOUND: { element: <NotFound /> },
     ADMIN_DASHBOARD: { element: <AdminDashboard />, authorizedRole: 'admin' },
     ADMIN_TEACHER_EXAMS: { element: <AdminTeacherExams />, authorizedRole: 'admin' },
+    ONBOARDING: { element: <Onboarding />, authorizedRole: 'teacher' },
 };
 
 export { ROUTE_ELEMENTS };

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { EditEdgeText } from './components/EditEdgeText';
-import { examApiType } from '../ExamList/types';
+import { examApiType } from '../Classe/types';
 import { Section } from '../../components/Section';
 import { ExamPageTitle } from '../../components/ExamPageTitle';
 import { EditableExamDuration } from '../../components/EditableExamDuration';

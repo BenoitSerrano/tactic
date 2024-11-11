@@ -1,13 +1,11 @@
 function computeIsConfirmDisabled({
     name,
     duration,
-    selectedClasseId,
     startDateTime,
     endDateTime,
 }: {
     name: string;
     duration: string;
-    selectedClasseId: string | undefined;
     startDateTime: number | undefined;
     endDateTime: number | undefined;
 }) {
@@ -16,7 +14,6 @@ function computeIsConfirmDisabled({
         !duration ||
         isNaN(Number(duration)) ||
         Number(duration) === 0 ||
-        !selectedClasseId ||
         endDateTime === undefined ||
         startDateTime === undefined
     ) {

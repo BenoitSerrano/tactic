@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Link } from '../components/Link';
 import { Section } from '../components/Section';
-import { examApiType } from './ExamList/types';
+import { examApiType } from './Classe/types';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Loader } from '../components/Loader';

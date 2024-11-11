@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import { ClasseSideItemMenu, EstablishmentSideItemMenu, OverallSideItemMenu } from './SideItemMenu';
+import { ClasseSideItemMenu, EstablishmentSideItemMenu } from './SideItemMenu';
 import { establishmentWithClassesType } from '../../lib/api/api';
 import { Button } from '../Button';
 import { EstablishmentCreationModal } from './EstablishmentCreationModal';
@@ -14,7 +14,6 @@ function AdminSideMenu(props: { establishments: Array<establishmentWithClassesTy
                 close={closeEstablishmentCreationModal}
                 isOpen={isEstablishmentCreationModalOpen}
             />
-            <OverallSideItemMenu />
             {props.establishments.map((establishment) => (
                 <SideItemContainer key={establishment.id}>
                     <EstablishmentSideItemMenu establishment={establishment} />

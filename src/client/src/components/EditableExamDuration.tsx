@@ -6,7 +6,7 @@ import { TextField, Tooltip, Typography, styled } from '@mui/material';
 import { FormEvent, useEffect, useState } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { examApiType } from '../pages/ExamList/types';
+import { examApiType } from '../pages/Classe/types';
 import { useAlert } from '../lib/alert';
 import { api } from '../lib/api';
 import { IconButton } from './IconButton';
