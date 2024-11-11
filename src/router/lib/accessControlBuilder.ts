@@ -2,6 +2,7 @@ import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../../modules/exam';
 import { Classe } from '../../modules/classe';
 import { User, buildUserService } from '../../modules/user';
+import { Establishment } from '../../modules/establishment';
 
 function assertHasRightPlanForCreation(entity: 'exam') {
     const userService = buildUserService();
@@ -25,7 +26,9 @@ function assertHasRightPlanForCreation(entity: 'exam') {
     };
 }
 
-function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'classe'; key: string }>) {
+function assertHasAccessToResources(
+    resources: Array<{ entity: 'exam' | 'classe' | 'establishment'; key: string }>,
+) {
     return async (params: Record<string, string>, user: User) => {
         for (const resource of resources) {
             const { entity, key } = resource;
@@ -50,9 +53,24 @@ function assertHasAccessToResources(resources: Array<{ entity: 'exam' | 'classe'
                         where: { id: classeId },
                         relations: ['user'],
                     });
-                    if (classe.user.id !== user.id) {
+                    //  TODO
+                    // if (classe.user.id !== user.id) {
+                    //     throw new Error(
+                    //         `classe.user.id "${classe.user.id}" does not match user.id ${user.id}`,
+                    //     );
+                    // }
+                    break;
+                case 'establishment':
+                    const establishmentId = params[key];
+                    const establishmentRepository = dataSource.getRepository(Establishment);
+                    const establishment = await establishmentRepository.findOneOrFail({
+                        where: { id: establishmentId },
+                        relations: ['user'],
+                        select: { id: true, user: { id: true } },
+                    });
+                    if (establishment.user.id !== user.id) {
                         throw new Error(
-                            `classe.user.id "${classe.user.id}" does not match user.id ${user.id}`,
+                            `establishment.user.id "${establishment.user.id}" does not match user.id ${user.id}`,
                         );
                     }
                     break;

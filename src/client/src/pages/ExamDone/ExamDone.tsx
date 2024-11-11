@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
-import { examApiType } from '../ExamList/types';
+import { examApiType } from '../Classe/types';
 import { ExamDoneText } from '../ExamParameters/components/ExamDoneText';
 
 function ExamDone() {

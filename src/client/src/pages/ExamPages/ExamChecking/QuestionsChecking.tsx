@@ -29,6 +29,8 @@ import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrecti
 import { DisplayedMark } from './DisplayedMark';
 
 function QuestionsChecking(props: {
+    establishmentId: string;
+    classeId: string;
     refetch: () => void;
     exercises: Array<exerciseWithAnswersType>;
     examName: string;
@@ -357,7 +359,12 @@ function QuestionsChecking(props: {
     function navigateToNewAttempt(newAttemptId: string) {
         const path = pathHandler.getRoutePath(
             'EXAM_CHECKING',
-            { examId: props.examId, attemptId: newAttemptId },
+            {
+                examId: props.examId,
+                attemptId: newAttemptId,
+                establishmentId: props.establishmentId,
+                classeId: props.classeId,
+            },
             { attemptIds },
         );
         navigate(path);

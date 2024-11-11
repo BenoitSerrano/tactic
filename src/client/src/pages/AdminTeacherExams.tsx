@@ -7,7 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import TimerOffOutlinedIcon from '@mui/icons-material/TimerOffOutlined';
 import { useNavigate, useParams } from 'react-router-dom';
 import { pathHandler } from '../lib/pathHandler';
-import { examApiType } from './ExamList/types';
+import { examApiType } from './Classe/types';
 import { time } from '../lib/time';
 
 function AdminTeacherExams() {
@@ -29,7 +29,6 @@ function AdminTeacherExams() {
             <TableHead>
                 <TableCell>Nom</TableCell>
                 <TableCell>Durée</TableCell>
-                <TableCell>Statut</TableCell>
                 <TableCell>Date de création</TableCell>
                 <TableCell width={20}></TableCell>
             </TableHead>
@@ -50,8 +49,11 @@ function AdminTeacherExams() {
                                     </Tooltip>
                                 )}
                             </TableCell>
-                            <TableCell>{exam.archivedAt ? 'Actif' : 'Archivé'}</TableCell>
-                            <TableCell>{time.formatToReadable(new Date(exam.createdAt))}</TableCell>
+                            <TableCell>
+                                {time.formatToReadable(new Date(exam.createdAt), {
+                                    shouldDisplayTime: true,
+                                })}
+                            </TableCell>
                             <TableCell>
                                 <IconButton
                                     IconComponent={VisibilityIcon}

@@ -23,9 +23,19 @@ function buildStudentService() {
         deleteStudent,
         bulkInsertStudents,
         changeClasse,
+        countStudentForClasse,
     };
 
     return studentService;
+
+    async function countStudentForClasse(classeId: Classe['id']) {
+        const studentsCount = await studentRepository.count({
+            where: { classe: { id: classeId } },
+            relations: { classe: true },
+            select: { classe: { id: true } },
+        });
+        return { studentsCount };
+    }
 
     async function getAllStudents() {
         const students = await studentRepository.find({
@@ -105,13 +115,15 @@ function buildStudentService() {
         return studentRepository.findOneOrFail({
             where: {
                 email: criteria.email.trim().toLowerCase(),
-                classe: { user: { id: examUserId } },
+                // TODO
+                // classe: { user: { id: examUserId } },
             },
             select: {
                 id: true,
                 firstName: true,
                 lastName: true,
-                classe: { id: true, user: { id: true } },
+                // TODO
+                // classe: { id: true, user: { id: true } },
             },
             relations: ['classe', 'classe.user'],
         });

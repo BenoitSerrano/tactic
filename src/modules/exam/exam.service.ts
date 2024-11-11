@@ -7,7 +7,11 @@ import { buildStudentService } from '../student';
 import { mapEntities } from '../../lib/mapEntities';
 import { Question, buildQuestionService } from '../question';
 import { buildExerciseService } from '../exercise';
-import { examEdgeTextKind, examFilterType } from './types';
+import { examEdgeTextKind } from './types';
+import { Establishment } from '../establishment';
+import { buildClasseService, Classe } from '../classe';
+import { sortExamsByDateTime } from './lib/sortExamsByDateTime';
+import { buildEstablishmentService } from '../establishment/establishment.service';
 
 export { buildExamService };
 
@@ -18,7 +22,9 @@ function buildExamService() {
         updateExamName,
         updateExamDuration,
         updateExamEdgeText,
+        getExamsByClasse,
         getExams,
+        getExamsByUser,
         getExamWithQuestions,
         getAllExams,
         getExam,
@@ -29,21 +35,44 @@ function buildExamService() {
         deleteExam,
         getExamResults,
         duplicateExam,
-        updateExamArchivedAt,
         fetchShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
         countExamsForUser,
+        updateClasseId,
     };
 
     return examService;
 
-    async function createExam(name: Exam['name'], duration: number | null, user: User) {
+    async function updateClasseId(criteria: { examId: Exam['id'] }, classeId: Classe['id']) {
+        const result = await examRepository.update(
+            { id: criteria.examId },
+            { classe: { id: classeId } },
+        );
+        if (result.affected !== 1) {
+            throw new Error(`Could not update classe Id for exam ${criteria.examId}`);
+        }
+        return true;
+    }
+
+    async function createExam(params: {
+        name: Exam['name'];
+        duration: number | null;
+        classeId: Classe['id'];
+        user: User;
+        startDateTime: number;
+        endDateTime: number | null;
+    }) {
+        const classeService = buildClasseService();
         const exam = new Exam();
-        exam.name = name;
-        exam.duration = duration !== null ? duration : null;
-        exam.user = user;
-        exam.startText = user.userConfiguration.defaultStartText;
-        exam.endText = user.userConfiguration.defaultEndText;
+        exam.name = params.name;
+        exam.duration = params.duration !== null ? params.duration : null;
+        exam.classe = await classeService.getClasse(params.classeId);
+        exam.user = params.user;
+        exam.startTime = new Date(params.startDateTime).toISOString();
+        exam.endTime =
+            params.endDateTime === null ? null : new Date(params.endDateTime).toISOString();
+        exam.startText = params.user.userConfiguration.defaultStartText;
+        exam.endText = params.user.userConfiguration.defaultEndText;
         const insertedExam = await examRepository.save(exam);
         return insertedExam;
     }
@@ -134,29 +163,41 @@ function buildExamService() {
         };
     }
 
-    async function getExams(userId: User['id'], criteria?: { filter: examFilterType }) {
-        if (criteria) {
-            return examRepository.find({
-                where: {
-                    user: { id: userId },
-                    archivedAt: getArchivedWhereFilter(criteria.filter),
-                },
-                order: { createdAt: 'DESC' },
-            });
-        }
+    async function getExamsByClasse(criteria: {
+        establishmentId: Establishment['id'];
+        classeId: Classe['id'];
+        userId: User['id'];
+    }) {
+        const exams = await examRepository.find({
+            where: {
+                classe: { id: criteria.classeId },
+            },
+            relations: ['classe'],
+            select: { classe: { id: true } },
+            order: { startTime: 'DESC' },
+        });
+
+        return sortExamsByDateTime(exams);
+    }
+
+    async function getExams(criteria: { userId: User['id'] }) {
+        const establishmentService = buildEstablishmentService();
+        const examIds = await establishmentService.getExamIdsByUser(criteria.userId);
+        const exams = await examRepository.find({
+            where: {
+                id: In(examIds),
+            },
+            order: { startTime: 'DESC' },
+        });
+
+        return sortExamsByDateTime(exams);
+    }
+
+    async function getExamsByUser(userId: User['id']) {
         return examRepository.find({
             where: { user: { id: userId } },
             order: { createdAt: 'DESC' },
         });
-
-        function getArchivedWhereFilter(filter: examFilterType) {
-            switch (filter) {
-                case 'current':
-                    return IsNull();
-                case 'archived':
-                    return Not(IsNull());
-            }
-        }
     }
 
     async function getUserIdForExam(examId: Exam['id']): Promise<User['id']> {
@@ -283,15 +324,6 @@ function buildExamService() {
         await exerciseService.duplicateExercises(newExam, exercises);
 
         return newExam;
-    }
-
-    async function updateExamArchivedAt(examId: Exam['id'], archive: boolean) {
-        if (archive) {
-            await examRepository.update({ id: examId }, { archivedAt: () => 'CURRENT_TIMESTAMP' });
-        } else {
-            await examRepository.update({ id: examId }, { archivedAt: null });
-        }
-        return true;
     }
 
     async function fetchShouldDisplayRightAnswersForExamId(examId: Exam['id']) {

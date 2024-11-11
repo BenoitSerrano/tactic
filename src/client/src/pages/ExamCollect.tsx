@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Link } from '../components/Link';
 import { Section } from '../components/Section';
-import { examApiType } from './ExamList/types';
+import { examApiType } from './Classe/types';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
@@ -44,7 +44,7 @@ function ExamCollect() {
                 <Typography variant="h6">
                     Vos étudiant.es arriveront sur une page où iels devront rentrer leur email
                     d'identification. Pour gérer vos classes d'étudiant.es, cliquez{' '}
-                    <Link to={pathHandler.getRoutePath('CLASSES')}>ici</Link>.
+                    <Link to={pathHandler.getRoutePath('ESTABLISHMENT')}>ici</Link>.
                 </Typography>
             </Section>
         </Container>

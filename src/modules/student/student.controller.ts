@@ -1,3 +1,4 @@
+import { Classe } from '../classe';
 import { User } from '../user';
 import { buildStudentService } from './student.service';
 
@@ -14,9 +15,14 @@ function buildStudentController() {
         deleteStudent,
         changeClasse,
         getAllStudents,
+        countStudentForClasse,
     };
 
     return studentController;
+
+    async function countStudentForClasse(params: { urlParams: { classeId: Classe['id'] } }) {
+        return studentService.countStudentForClasse(params.urlParams.classeId);
+    }
 
     async function getAllStudents() {
         return studentService.getAllStudents();

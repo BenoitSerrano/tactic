@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Section } from '../components/Section';
 import { ExamPageTitle } from '../components/ExamPageTitle';
-import { examApiType } from './ExamList/types';
+import { examApiType } from './Classe/types';
 import { Loader } from '../components/Loader';
 
 type shouldDisplayRightAnswersApiType = { shouldDisplayRightAnswers: boolean };

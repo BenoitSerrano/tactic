@@ -1,6 +1,6 @@
 import { gradeConverter } from '../../../lib/gradeConverter';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { okGradeType, rightGradeType } from '../ExamEditing/QuestionPreviewing/constants';
+import { okGradeType, rightGradeType } from '../ExamEditingContent/QuestionPreviewing/constants';
 import { Tooltip } from '@mui/material';
 
 function GradeExplanationIcon(props: { grade: okGradeType | rightGradeType }) {

@@ -1,7 +1,9 @@
+import { Classe } from '../classe';
+import { Establishment } from '../establishment';
 import { User } from '../user';
 import { Exam } from './Exam.entity';
 import { buildExamService } from './exam.service';
-import { EXAM_FILTERS, examEdgeTextKind, examFilterType } from './types';
+import { examEdgeTextKind } from './types';
 
 export { buildExamController };
 
@@ -12,8 +14,9 @@ function buildExamController() {
         updateExamDuration,
         updateExamName,
         updateExamEdgeText,
+        getExamsByClasse,
         getExams,
-        getExamsForUser,
+        getExamsByUser,
         getExam,
         getExamWithoutAnswers,
         getAllExams,
@@ -21,20 +24,33 @@ function buildExamController() {
         deleteExam,
         duplicateExam,
         getExamWithQuestions,
-        updateExamArchivedAt,
         fetchShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
+        updateClasseId,
     };
 
     return examController;
 
     async function createExam(
         params: {
-            body: { name: string; duration: number | null; extraTime: number };
+            urlParams: { classeId: string };
+            body: {
+                name: string;
+                duration: number | null;
+                startDateTime: number;
+                endDateTime: number | null;
+            };
         },
         user: User,
     ) {
-        return examService.createExam(params.body.name, params.body.duration, user);
+        return examService.createExam({
+            name: params.body.name,
+            duration: params.body.duration,
+            classeId: params.urlParams.classeId,
+            user,
+            startDateTime: params.body.startDateTime,
+            endDateTime: params.body.endDateTime,
+        });
     }
 
     async function updateExamName(params: {
@@ -62,17 +78,27 @@ function buildExamController() {
         return examService.updateExamDuration(params.urlParams.examId, params.body.duration);
     }
 
-    async function getExams(params: { query: { filter: examFilterType } }, user: User) {
-        if (!EXAM_FILTERS.includes(params.query.filter)) {
-            throw new Error(
-                `Query filter "${params.query.filter}" is neither "archived" nor "current"`,
-            );
-        }
-        return examService.getExams(user.id, { filter: params.query.filter });
+    async function getExamsByClasse(
+        params: {
+            urlParams: { establishmentId: Establishment['id']; classeId: Classe['id'] };
+        },
+        user: User,
+    ) {
+        return examService.getExamsByClasse({
+            userId: user.id,
+            establishmentId: params.urlParams.establishmentId,
+            classeId: params.urlParams.classeId,
+        });
     }
 
-    async function getExamsForUser(params: { urlParams: { userId: string } }) {
-        return examService.getExams(params.urlParams.userId);
+    async function getExams(_params: {}, user: User) {
+        return examService.getExams({
+            userId: user.id,
+        });
+    }
+
+    async function getExamsByUser(params: { urlParams: { userId: string } }) {
+        return examService.getExamsByUser(params.urlParams.userId);
     }
 
     async function getExam(params: { urlParams: { examId: string } }) {
@@ -103,13 +129,6 @@ function buildExamController() {
         return examService.duplicateExam({ examId: params.urlParams.examId, user });
     }
 
-    async function updateExamArchivedAt(params: {
-        urlParams: { examId: string };
-        body: { archive: boolean };
-    }) {
-        return examService.updateExamArchivedAt(params.urlParams.examId, params.body.archive);
-    }
-
     async function fetchShouldDisplayRightAnswersForExamId(params: {
         urlParams: { examId: Exam['id'] };
     }) {
@@ -123,6 +142,16 @@ function buildExamController() {
         return examService.updateShouldDisplayRightAnswersForExamId(
             params.urlParams.examId,
             params.body.shouldDisplayRightAnswers,
+        );
+    }
+
+    async function updateClasseId(params: {
+        body: { classeId: Classe['id'] };
+        urlParams: { examId: Exam['id'] };
+    }) {
+        return examService.updateClasseId(
+            { examId: params.urlParams.examId },
+            params.body.classeId,
         );
     }
 }

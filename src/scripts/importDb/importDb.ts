@@ -99,7 +99,10 @@ async function importDb() {
 
     console.log(`${allClasses.length} classes fetched! Inserting them in database...`);
 
-    await classeRepository.insert(allClasses);
+    for (const classe of allClasses) {
+        // TODO
+        // await classeRepository.insert({ ...classe, user });
+    }
 
     console.log('Classes inserted! Now fetching students...');
 

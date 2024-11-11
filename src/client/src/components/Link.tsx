@@ -12,5 +12,9 @@ function Link(props: { children: React.ReactNode | string; to: string; opensNewT
 
 const StyledLink = styled(ReactRouterLink)(({ theme }) => ({
     color: theme.palette.common.black,
+    textDecoration: 'none',
+    '&:hover': {
+        textShadow: `0px 0px 1px ${theme.palette.common.black}`,
+    },
 }));
 export { Link };

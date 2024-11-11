@@ -11,6 +11,8 @@ function ExamChecking() {
     const params = useParams();
     const attemptId = params.attemptId as string;
     const examId = params.examId as string;
+    const establishmentId = params.establishmentId as string;
+    const classeId = params.classeId as string;
     const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
         queryKey: ['attempts', attemptId],
         queryFn: () => api.fetchAttemptWithAnswers({ attemptId }),
@@ -30,6 +32,8 @@ function ExamChecking() {
     return (
         <MainContainer>
             <QuestionsChecking
+                establishmentId={establishmentId}
+                classeId={classeId}
                 refetch={attemptWithAnswersQuery.refetch}
                 studentEmail={attemptWithAnswersQuery.data.studentEmail}
                 attemptId={attemptId}

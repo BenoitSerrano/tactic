@@ -17,7 +17,7 @@ const developmentPalette = {
 
 const defaultPalette = {
     primary: {
-        light: '#CADDDB',
+        light: '#A4CFCF',
         dark: '#00606E',
         main: '#3C8E8C',
     },
@@ -30,6 +30,6 @@ const defaultPalette = {
     divider: '#D0E0E3',
 };
 
-const palette = config.NODE_ENV === 'development' ? developmentPalette : defaultPalette;
+const palette = config.NODE_ENV !== 'development' ? developmentPalette : defaultPalette;
 
 export { palette };

@@ -5,8 +5,6 @@ import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
 import { ExamPreviewing } from '../pages/ExamPages/ExamPreviewing';
 import { ExamTaking } from '../pages/ExamPages/ExamTaking';
 import { ExamResults } from '../pages/ExamResults';
-import { ExamList } from '../pages/ExamList';
-import { Classes } from '../pages/StudentsPages/Classes';
 import { Home } from '../pages/Home';
 import { RequestResetPassword } from '../pages/RequestResetPassword';
 import { ResetPassword } from '../pages/ResetPassword';
@@ -18,11 +16,8 @@ import { StudentAuthentication } from '../pages/StudentAuthentication';
 import { StudentHome } from '../pages/StudentHome';
 import { Students } from '../pages/StudentsPages/Students';
 import { ROUTE_KEYS } from './routeKeys';
-import { ExamEditing } from '../pages/ExamPages/ExamEditing';
-import { ExamArchived } from '../pages/ExamArchived';
+import { ExamEditingContent } from '../pages/ExamPages/ExamEditingContent';
 import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
-import { Navigate } from 'react-router-dom';
-import { ROUTE_PATHS } from './routePaths';
 import { ExamParameters } from '../pages/ExamParameters';
 import { ExamCollect } from '../pages/ExamCollect';
 import { ExamConsult } from '../pages/ExamConsult';
@@ -32,6 +27,10 @@ import { StudentAuthenticationExamTakingRedirection } from '../pages/StudentAuth
 import { AdminDashboard } from '../pages/AdminDashboard';
 import { AdminTeacherExams } from '../pages/AdminTeacherExams';
 import { userRoleType } from '../constants';
+import { TeacherHome } from '../pages/TeacherHome';
+import { Establishment } from '../pages/Establishment';
+import { Classe } from '../pages/Classe';
+import { Onboarding } from '../pages/Onboarding';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -42,7 +41,7 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAM_EDITING_CONTENT: {
         authorizedRole: 'teacher',
-        element: <ExamEditing />,
+        element: <ExamEditingContent />,
     },
     EXAM_PARAMETERS: {
         authorizedRole: 'teacher',
@@ -99,15 +98,10 @@ const ROUTE_ELEMENTS: Record<
     EXAM_DONE: {
         element: <ExamDone />,
     },
-    EXAM_ARCHIVED: {
-        element: <ExamArchived />,
-    },
-    EXAM_LIST: {
+    CLASSE: {
         authorizedRole: 'teacher',
-        element: <Navigate to={ROUTE_PATHS.EXAM_LIST_CURRENT.path} />,
+        element: <Classe />,
     },
-    EXAM_LIST_ARCHIVED: { authorizedRole: 'teacher', element: <ExamList filter="archived" /> },
-    EXAM_LIST_CURRENT: { authorizedRole: 'teacher', element: <ExamList filter="current" /> },
     STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
     EXAM_PREVIEWING: {
         authorizedRole: 'teacher',
@@ -120,9 +114,9 @@ const ROUTE_ELEMENTS: Record<
     },
     TEACHER_HOME: {
         authorizedRole: 'teacher',
-        element: <Navigate to={ROUTE_PATHS.EXAM_LIST.path} />,
+        element: <TeacherHome />,
     },
-    CLASSES: { authorizedRole: 'teacher', element: <Classes /> },
+    ESTABLISHMENT: { authorizedRole: 'teacher', element: <Establishment /> },
     ATTEMPT_NOT_CORRECTED: { element: <AttemptNotCorrected /> },
     STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: {
         element: <StudentAuthenticationExamTakingRedirection />,
@@ -130,6 +124,7 @@ const ROUTE_ELEMENTS: Record<
     NOT_FOUND: { element: <NotFound /> },
     ADMIN_DASHBOARD: { element: <AdminDashboard />, authorizedRole: 'admin' },
     ADMIN_TEACHER_EXAMS: { element: <AdminTeacherExams />, authorizedRole: 'admin' },
+    ONBOARDING: { element: <Onboarding />, authorizedRole: 'teacher' },
 };
 
 export { ROUTE_ELEMENTS };

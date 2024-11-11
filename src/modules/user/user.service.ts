@@ -1,7 +1,6 @@
 import { dataSource } from '../../dataSource';
 import { hasher } from '../../lib/hasher';
 import { mailer } from '../../lib/mailer';
-import { mapEntities } from '../../lib/mapEntities';
 import { signer } from '../../lib/signer';
 import { Plan, buildPlanService } from '../plan';
 import { buildUserConfigurationService } from '../userConfiguration';

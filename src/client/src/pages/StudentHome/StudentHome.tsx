@@ -22,7 +22,6 @@ type attemptApiType = {
 type examApiType = {
     id: string;
     name: string;
-    archivedAt: string | null;
     startText: string;
     endText: string;
     duration: number | null;
@@ -62,11 +61,6 @@ function StudentHome() {
             return <Loader />;
         }
         return <div />;
-    }
-
-    if (!!examQuery.data.archivedAt) {
-        const pathToNavigateTo = pathHandler.getRoutePath('EXAM_ARCHIVED');
-        return <Navigate to={pathToNavigateTo} />;
     }
 
     const pathKeyToNavigateTo = computePathKeyToNavigateTo(

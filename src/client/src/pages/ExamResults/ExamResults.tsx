@@ -52,6 +52,8 @@ function ExamResults() {
     const queryClient = useQueryClient();
     const params = useParams();
     const examId = params.examId as string;
+    const classeId = params.classeId as string;
+    const establishmentId = params.establishmentId as string;
     const resultsQuery = useQuery<examResultsApiType>({
         queryKey: ['exam-results', examId],
         queryFn: () => api.fetchExamResults(examId),
@@ -206,7 +208,9 @@ function ExamResults() {
                             result.startedAt,
                             resultsQuery.data.examDuration * 60,
                         );
-                        const readableDeadlineDate = time.formatToReadable(deadlineDate);
+                        const readableDeadlineDate = time.formatToReadable(deadlineDate, {
+                            shouldDisplayTime: true,
+                        });
                         return (
                             <TableRow key={result.attemptId}>
                                 <TableCell>{index + 1}</TableCell>
@@ -248,7 +252,9 @@ function ExamResults() {
                                     </TableCellContent>
                                 </TableCell>
                                 <TableCell>
-                                    {time.formatToReadable(new Date(result.startedAt))}
+                                    {time.formatToReadable(new Date(result.startedAt), {
+                                        shouldDisplayTime: true,
+                                    })}
                                 </TableCell>
                                 {!!resultsQuery.data.examDuration && (
                                     <TableCell>{readableDeadlineDate}</TableCell>
@@ -357,7 +363,7 @@ function ExamResults() {
     function computeAttemptRoute(attemptId: string) {
         return pathHandler.getRoutePath(
             'EXAM_CHECKING',
-            { examId, attemptId },
+            { examId, attemptId, establishmentId, classeId },
             { attemptIds: sortedAttemptIds.join(',') },
         );
     }

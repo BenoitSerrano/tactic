@@ -8,6 +8,13 @@ const examController = buildExamController();
 const examRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
+        path: '/establishments/:establishmentId/classes/:classeId/exams',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: examController.getExamsByClasse,
+    },
+    {
+        method: 'GET',
         path: '/exams',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
@@ -18,7 +25,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/users/:userId/exams',
         kind: 'authenticated',
         authorizedRoles: ['admin'],
-        controller: examController.getExamsForUser,
+        controller: examController.getExamsByUser,
     },
     {
         method: 'GET',
@@ -60,13 +67,15 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'POST',
-        path: '/exams',
+        path: '/classes/:classeId/exams',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: examController.createExam,
         schema: Joi.object({
             name: Joi.string().required(),
             duration: Joi.number(),
+            startDateTime: Joi.number().required(),
+            endDateTime: Joi.number().allow(null),
         }),
         checkAuthorization: accessControlBuilder.assertHasRightPlanForCreation('exam'),
     },
@@ -130,22 +139,6 @@ const examRoutes: Array<routeType<any, any, any>> = [
         }),
     },
     {
-        method: 'PATCH',
-        path: '/exams/:examId/archivedAt',
-        kind: 'authenticated',
-        authorizedRoles: ['teacher'],
-        controller: examController.updateExamArchivedAt,
-        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-        schema: Joi.object({
-            archive: Joi.boolean(),
-        }),
-    },
-    {
         method: 'DELETE',
         path: '/exams/:examId',
         kind: 'authenticated',
@@ -182,6 +175,22 @@ const examRoutes: Array<routeType<any, any, any>> = [
         ]),
         schema: Joi.object({
             shouldDisplayRightAnswers: Joi.boolean(),
+        }),
+    },
+    {
+        method: 'PATCH',
+        path: '/exams/:examId/classeId',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: examController.updateClasseId,
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            classeId: Joi.string().required(),
         }),
     },
 ];
