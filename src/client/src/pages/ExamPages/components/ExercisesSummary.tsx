@@ -1,7 +1,7 @@
 import { styled, Typography } from '@mui/material';
 import { TextLink } from '../../../components/TextLink';
 import { computeHash } from '../lib/useExerciseIndex';
-import { HEADER_HEIGHT } from '../../../constants';
+import { BREADCRUMBS_HEIGHT, HEADER_HEIGHT } from '../../../constants';
 import { ActiveText } from '../../../components/ActiveText';
 
 function ExercisesSummary(props: { currentExerciseIndex: number; progresses: number[] }) {
@@ -42,7 +42,7 @@ const Container = styled('div')(({ theme }) => ({
     position: 'fixed',
     zIndex: 100,
     left: 0,
-    top: HEADER_HEIGHT,
+    top: HEADER_HEIGHT + BREADCRUMBS_HEIGHT,
     padding: theme.spacing(1),
     margin: theme.spacing(1),
     borderRadius: '2px',

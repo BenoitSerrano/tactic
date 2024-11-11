@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-
 import { ROUTE_ELEMENTS } from './routeElements';
 import { ROUTE_KEYS } from './routeKeys';
 import { ROUTE_PATHS } from './routePaths';

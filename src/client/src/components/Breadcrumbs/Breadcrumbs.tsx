@@ -2,8 +2,7 @@ import { Breadcrumbs as MuiBreadcrumbs, Typography, styled } from '@mui/material
 import { Link, useLocation } from 'react-router-dom';
 import { computeBreadcrumbs } from './computeBreadcrumbs';
 import { establishmentWithClassesType } from '../../lib/api/api';
-
-const HEIGHT = 60;
+import { BREADCRUMBS_HEIGHT } from '../../constants';
 
 function Breadcrumbs(props: { establishments: establishmentWithClassesType[] }) {
     const location = useLocation();
@@ -27,10 +26,10 @@ function Breadcrumbs(props: { establishments: establishmentWithClassesType[] }) 
     );
 }
 
-const Placeholder = styled('div')({ height: HEIGHT });
+const Placeholder = styled('div')({ height: BREADCRUMBS_HEIGHT });
 const MainContainer = styled('div')(({ theme }) => ({
-    maxHeight: HEIGHT,
-    minHeight: HEIGHT,
+    maxHeight: BREADCRUMBS_HEIGHT,
+    minHeight: BREADCRUMBS_HEIGHT,
     flex: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),

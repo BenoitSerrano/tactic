@@ -12,6 +12,7 @@ const TAT_BLANK_STRING = '....';
 
 const TEXTE_A_TROU_REGEX = /(\.{4})/g;
 const HEADER_HEIGHT = 60;
+const BREADCRUMBS_HEIGHT = 60;
 
 const manualQuestionKinds = ['texteLibre'];
 
@@ -72,6 +73,7 @@ export {
     HEADER_HEIGHT,
     localeInfo,
     manualQuestionKinds,
+    BREADCRUMBS_HEIGHT,
     TAT_BLANK_STRING,
 };
 

@@ -37,9 +37,7 @@ function TeacherHeader() {
             return [logoutButton];
         }
         const { parameters } = parsedPath;
-        const examPreviewingLink = pathHandler.getRoutePath('EXAM_PREVIEWING', {
-            examId: parameters.examId,
-        });
+        const examPreviewingLink = pathHandler.getRoutePath('EXAM_PREVIEWING', parameters);
 
         return [
             <PreviewLinkContainer key="preview-link-button">
