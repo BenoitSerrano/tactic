@@ -14,35 +14,11 @@ function SelectExamExtremums(props: {
     const [startRangeTime, setStartRangeTime] = useState<string>('');
     const [endRangeDate, setEndRangeDate] = useState<string>('');
     const [endRangeTime, setEndRangeTime] = useState<string>('');
-    const [isThereEndDate, setIsThereEndDate] = useState(false);
+    const [isThereEndDate, setIsThereEndDate] = useState(true);
     return (
         <Container>
             <Typography>Cet examen aura lieu...</Typography>
             <RadioGroup value={isThereEndDate ? '1' : '0'} onChange={onChangeIsThereEndDate}>
-                <StyledFormControlLabel
-                    value="0"
-                    control={<Radio />}
-                    label={
-                        <DateTimeContainer>
-                            <Text>À partir du</Text>
-                            <TextField
-                                variant="outlined"
-                                disabled={isThereEndDate}
-                                type="date"
-                                value={startDate}
-                                onChange={onChangeStartDate}
-                            />
-                            <Text>à</Text>
-                            <TextField
-                                variant="outlined"
-                                disabled={isThereEndDate}
-                                type="time"
-                                value={startTime}
-                                onChange={onChangeStartTime}
-                            />
-                        </DateTimeContainer>
-                    }
-                />
                 <StyledFormControlLabel
                     value="1"
                     label={
@@ -82,6 +58,30 @@ function SelectExamExtremums(props: {
                         </DateTimeContainer>
                     }
                     control={<Radio />}
+                />
+                <StyledFormControlLabel
+                    value="0"
+                    control={<Radio />}
+                    label={
+                        <DateTimeContainer>
+                            <Text>À partir du</Text>
+                            <TextField
+                                variant="outlined"
+                                disabled={isThereEndDate}
+                                type="date"
+                                value={startDate}
+                                onChange={onChangeStartDate}
+                            />
+                            <Text>à</Text>
+                            <TextField
+                                variant="outlined"
+                                disabled={isThereEndDate}
+                                type="time"
+                                value={startTime}
+                                onChange={onChangeStartTime}
+                            />
+                        </DateTimeContainer>
+                    }
                 />
             </RadioGroup>
         </Container>

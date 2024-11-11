@@ -88,7 +88,7 @@ function Classe() {
                         <ExamTable
                             classeId={classeId}
                             establishmentId={establishmentId}
-                            title="À venir"
+                            title="Examens à venir"
                             exams={examListQuery.data.toCome}
                             examsQueryKey={examsQueryKey}
                         />
@@ -97,7 +97,7 @@ function Classe() {
                         <ExamTable
                             classeId={classeId}
                             establishmentId={establishmentId}
-                            title="En cours"
+                            title="Examens en cours"
                             exams={examListQuery.data.current}
                             examsQueryKey={examsQueryKey}
                         />
@@ -106,7 +106,7 @@ function Classe() {
                         <ExamTable
                             classeId={classeId}
                             establishmentId={establishmentId}
-                            title="Passés"
+                            title="Examens passés"
                             exams={examListQuery.data.past}
                             examsQueryKey={examsQueryKey}
                         />
@@ -130,7 +130,11 @@ function Classe() {
 
     function onExamCreated(examId: string) {
         queryClient.invalidateQueries({ queryKey: examsQueryKey });
-        const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
+        const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', {
+            examId,
+            classeId,
+            establishmentId,
+        });
 
         navigate(path);
     }

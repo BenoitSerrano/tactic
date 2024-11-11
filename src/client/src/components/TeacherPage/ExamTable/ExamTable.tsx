@@ -98,7 +98,9 @@ function ExamTable(props: {
                     <ListItemText>Supprimer</ListItemText>
                 </ImportantMenuItem>
             </Menu>
-            <Typography>{props.title}</Typography>
+            <TitleContainer>
+                <Typography variant="h3">{props.title}</Typography>
+            </TitleContainer>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -178,6 +180,11 @@ function ExamTable(props: {
         };
     }
 }
+
+const TitleContainer = styled(Typography)(({ theme }) => ({
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+}));
 const ImportantMenuItem = styled(MenuItem)(({ theme }) => ({
     color: theme.palette.error.main,
     '.MuiListItemIcon-root': { color: theme.palette.error.main },
