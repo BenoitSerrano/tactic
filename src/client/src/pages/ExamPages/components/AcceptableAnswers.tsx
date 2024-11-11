@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { okGradeType, rightGradeType } from '../ExamEditing/QuestionPreviewing/constants';
+import { okGradeType, rightGradeType } from '../ExamEditingContent/QuestionPreviewing/constants';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { textComponentMapping } from '../constants';
 import { Caption } from './Caption';

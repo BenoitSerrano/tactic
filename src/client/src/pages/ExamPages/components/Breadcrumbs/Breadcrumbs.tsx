@@ -1,10 +1,11 @@
 import { Breadcrumbs as MuiBreadcrumbs, Typography, styled } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { computeBreadcrumbs } from './computeBreadcrumbs';
+import { establishmentWithClassesType } from '../../../../lib/api/api';
 
-function Breadcrumbs() {
+function Breadcrumbs(props: { establishments: establishmentWithClassesType[] }) {
     const location = useLocation();
-    const breadcrumbs = computeBreadcrumbs(location.pathname);
+    const breadcrumbs = computeBreadcrumbs(location.pathname, props.establishments);
     return (
         <MainContainer>
             <MuiBreadcrumbs>
@@ -22,5 +23,5 @@ function Breadcrumbs() {
     );
 }
 
-const MainContainer = styled('div')({ padding: 20 });
+const MainContainer = styled('div')({ padding: 20, flex: 1, background: 'blue' });
 export { Breadcrumbs };

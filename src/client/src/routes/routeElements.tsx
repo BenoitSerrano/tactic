@@ -16,7 +16,7 @@ import { StudentAuthentication } from '../pages/StudentAuthentication';
 import { StudentHome } from '../pages/StudentHome';
 import { Students } from '../pages/StudentsPages/Students';
 import { ROUTE_KEYS } from './routeKeys';
-import { ExamEditing } from '../pages/ExamPages/ExamEditing';
+import { ExamEditingContent } from '../pages/ExamPages/ExamEditingContent';
 import { AttemptNotCorrected } from '../pages/AttemptNotCorrected';
 import { ExamParameters } from '../pages/ExamParameters';
 import { ExamCollect } from '../pages/ExamCollect';
@@ -41,7 +41,7 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAM_EDITING_CONTENT: {
         authorizedRole: 'teacher',
-        element: <ExamEditing />,
+        element: <ExamEditingContent />,
     },
     EXAM_PARAMETERS: {
         authorizedRole: 'teacher',

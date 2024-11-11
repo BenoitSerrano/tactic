@@ -1,6 +1,5 @@
 import { styled } from '@mui/material';
 import { Navigate } from 'react-router-dom';
-import { Breadcrumbs } from './Breadcrumbs';
 import { HEADER_HEIGHT } from '../../constants';
 import { TeacherHeader } from './TeacherHeader';
 import { localSessionHandler } from '../../lib/localSessionHandler';
@@ -17,7 +16,6 @@ function TeacherPage(props: { children: React.ReactNode | null }) {
             <TeacherHeader />
 
             <ContentContainer>
-                <Breadcrumbs />
                 <ChildrenContainer>{props.children}</ChildrenContainer>
             </ContentContainer>
         </Container>

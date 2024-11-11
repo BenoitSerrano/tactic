@@ -85,7 +85,12 @@ function ClasseHeader(props: {
     );
 
     function navigateToStudents() {
-        navigate(pathHandler.getRoutePath('STUDENTS', { classeId: props.classe.id }));
+        navigate(
+            pathHandler.getRoutePath('STUDENTS', {
+                classeId: props.classe.id,
+                establishmentId: props.establishment.id,
+            }),
+        );
     }
 
     function onDeleteClick() {
