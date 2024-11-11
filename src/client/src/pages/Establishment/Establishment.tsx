@@ -87,6 +87,6 @@ const ButtonContainer = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 const ContentContainer = styled('div')({ display: 'flex' });
-const TableContainer = styled('div')({ width: '50%' });
+const TableContainer = styled('div')({ width: '65%' });
 
 export { Establishment };

@@ -208,7 +208,9 @@ function ExamResults() {
                             result.startedAt,
                             resultsQuery.data.examDuration * 60,
                         );
-                        const readableDeadlineDate = time.formatToReadable(deadlineDate);
+                        const readableDeadlineDate = time.formatToReadable(deadlineDate, {
+                            shouldDisplayTime: true,
+                        });
                         return (
                             <TableRow key={result.attemptId}>
                                 <TableCell>{index + 1}</TableCell>
@@ -250,7 +252,9 @@ function ExamResults() {
                                     </TableCellContent>
                                 </TableCell>
                                 <TableCell>
-                                    {time.formatToReadable(new Date(result.startedAt))}
+                                    {time.formatToReadable(new Date(result.startedAt), {
+                                        shouldDisplayTime: true,
+                                    })}
                                 </TableCell>
                                 {!!resultsQuery.data.examDuration && (
                                     <TableCell>{readableDeadlineDate}</TableCell>

@@ -14,7 +14,7 @@ function addSeconds(date: string, seconds: number) {
     return parsedDate;
 }
 
-function formatToReadable(date: Date) {
+function formatToReadable(date: Date, options?: { shouldDisplayTime?: boolean }) {
     let result = '';
     const now = new Date();
 
@@ -26,18 +26,19 @@ function formatToReadable(date: Date) {
             timeZone: localeInfo.timeZone,
         })
     ) {
-        result += "Aujourd'hui - ";
+        result += "Aujourd'hui ";
     } else {
-        result +=
-            date.toLocaleDateString(localeInfo.locale, {
-                timeZone: localeInfo.timeZone,
-            }) + ' - ';
+        result += date.toLocaleDateString(localeInfo.locale, {
+            timeZone: localeInfo.timeZone,
+        });
     }
 
-    result += date.toLocaleTimeString(localeInfo.locale, {
-        timeZone: localeInfo.timeZone,
-        timeStyle: 'short',
-    });
+    if (options?.shouldDisplayTime) {
+        result += date.toLocaleTimeString(localeInfo.locale, {
+            timeZone: localeInfo.timeZone,
+            timeStyle: 'short',
+        });
+    }
 
     return result;
 }

@@ -5,6 +5,8 @@ type examApiType = {
     startText: string;
     endText: string;
     createdAt: string;
+    startTime: string;
+    endTime: string | null;
     classe: classeType | undefined;
 };
 
@@ -16,7 +18,6 @@ type sortedExamsApiType = {
 
 type classeType = {
     id: string;
-    name: string;
 };
 
 export type { examApiType, sortedExamsApiType };

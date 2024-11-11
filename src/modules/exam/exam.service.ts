@@ -173,6 +173,7 @@ function buildExamService() {
                 classe: { id: criteria.classeId },
             },
             relations: ['classe'],
+            select: { classe: { id: true } },
             order: { startTime: 'DESC' },
         });
 

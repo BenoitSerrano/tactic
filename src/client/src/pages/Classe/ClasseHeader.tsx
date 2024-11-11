@@ -36,7 +36,7 @@ function ClasseHeader(props: {
     });
 
     return (
-        <Card style={{ width: '100%' }}>
+        <Card>
             <ContentContainer>
                 <InfoContainer>
                     <EditableName classe={props.classe} />

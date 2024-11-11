@@ -49,7 +49,11 @@ function AdminTeacherExams() {
                                     </Tooltip>
                                 )}
                             </TableCell>
-                            <TableCell>{time.formatToReadable(new Date(exam.createdAt))}</TableCell>
+                            <TableCell>
+                                {time.formatToReadable(new Date(exam.createdAt), {
+                                    shouldDisplayTime: true,
+                                })}
+                            </TableCell>
                             <TableCell>
                                 <IconButton
                                     IconComponent={VisibilityIcon}

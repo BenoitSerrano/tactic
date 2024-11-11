@@ -160,7 +160,9 @@ function Students() {
                             {shouldDisplayNameColumns && <TableCell>{student.lastName}</TableCell>}
                             {shouldDisplayNameColumns && <TableCell>{student.firstName}</TableCell>}
                             <TableCell>
-                                {time.formatToReadable(new Date(student.createdDate))}
+                                {time.formatToReadable(new Date(student.createdDate), {
+                                    shouldDisplayTime: true,
+                                })}
                             </TableCell>
                             {Object.keys(studentsQuery.data.examInfos).map((examId) => {
                                 const attemptPath = computePathForAttempt(

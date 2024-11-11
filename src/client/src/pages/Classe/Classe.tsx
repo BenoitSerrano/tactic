@@ -22,7 +22,7 @@ function Classe() {
 
     const establishmentId = params.establishmentId as string;
     const classeId = params.classeId as string;
-    const examsQueryKey = computeExamsQueryKey(establishmentId, classeId);
+    const examsQueryKey = ['establishments', establishmentId, 'classes', classeId, 'exams'];
     const examListQuery = useQuery<sortedExamsApiType>({
         queryKey: examsQueryKey,
         queryFn: () => api.fetchExams({ establishmentId, classeId }),
@@ -90,7 +90,6 @@ function Classe() {
                             establishmentId={establishmentId}
                             title="Examens à venir"
                             exams={examListQuery.data.toCome}
-                            examsQueryKey={examsQueryKey}
                         />
                     )}
                     {examListQuery.data.current.length > 0 && (
@@ -99,7 +98,6 @@ function Classe() {
                             establishmentId={establishmentId}
                             title="Examens en cours"
                             exams={examListQuery.data.current}
-                            examsQueryKey={examsQueryKey}
                         />
                     )}
                     {examListQuery.data.past.length > 0 && (
@@ -108,7 +106,6 @@ function Classe() {
                             establishmentId={establishmentId}
                             title="Examens passés"
                             exams={examListQuery.data.past}
-                            examsQueryKey={examsQueryKey}
                         />
                     )}
                 </TableContainer>
@@ -162,17 +159,7 @@ function computeHeaderInfo(params: {
     return { establishment: { id: establishment.id, name: establishment.name }, classe };
 }
 
-function computeExamsQueryKey(establishmentId: string | undefined, classeId: string | undefined) {
-    if (establishmentId === undefined) {
-        return ['exams'];
-    }
-    if (classeId === undefined) {
-        return ['establishment', establishmentId, 'exams'];
-    }
-    return ['establishment', establishmentId, 'classes', classeId, 'exams'];
-}
-
 const ContentContainer = styled('div')({ display: 'flex' });
-const TableContainer = styled('div')({ width: '50%' });
+const TableContainer = styled('div')({ width: '65%' });
 
 export { Classe };

@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TextField, styled } from '@mui/material';
+import { TextField, Typography, styled } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { examApiType } from '../../../pages/Classe/types';
 import { useAlert } from '../../../lib/alert';
@@ -58,8 +58,12 @@ function EditableName(props: { exam: examApiType }) {
     }
     return (
         <Container>
-            <span>{name}</span>
-            <IconButton IconComponent={EditIcon} onClick={activateEditing} title="Éditer" />
+            <Typography variant="h4">{name}</Typography>
+            <IconButton
+                IconComponent={EditIcon}
+                onClick={activateEditing}
+                title="Éditer le nom de l'examen"
+            />
         </Container>
     );
 

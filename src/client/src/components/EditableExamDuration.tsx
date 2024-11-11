@@ -52,7 +52,11 @@ function EditableExamDuration(props: { exam: examApiType }) {
                     <Tooltip title="Cet examen n'a pas de durée">
                         <TimerOffOutlinedIcon />
                     </Tooltip>
-                    <IconButton title="Éditer" IconComponent={EditIcon} onClick={activateEditing} />
+                    <IconButton
+                        title="Éditer la durée de l'examen"
+                        IconComponent={EditIcon}
+                        onClick={activateEditing}
+                    />
                 </NoDurationCellContent>
             );
         } else {
@@ -61,7 +65,11 @@ function EditableExamDuration(props: { exam: examApiType }) {
             return (
                 <Container>
                     <DisplayedValue>{displayedValue}</DisplayedValue>
-                    <IconButton title="Éditer" IconComponent={EditIcon} onClick={activateEditing} />
+                    <IconButton
+                        title="Éditer la durée de l'examen"
+                        IconComponent={EditIcon}
+                        onClick={activateEditing}
+                    />
                 </Container>
             );
         }
