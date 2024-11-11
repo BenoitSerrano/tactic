@@ -2,7 +2,7 @@ import { styled, Typography } from '@mui/material';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import GradingIcon from '@mui/icons-material/Grading';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-
+import GroupsIcon from '@mui/icons-material/Groups';
 import { IconButton } from '../../components/IconButton';
 import { pathHandler } from '../../lib/pathHandler';
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +32,12 @@ function ClasseRow(props: { classe: { id: string; name: string } }) {
     return (
         <Card>
             <Container>
-                <Name>{props.classe.name}</Name>
+                <Name>
+                    <IconContainer>
+                        <GroupsIcon />
+                    </IconContainer>
+                    {props.classe.name}
+                </Name>
                 <ButtonsContainer>
                     <ButtonContainer>
                         <IconButton
@@ -76,7 +81,11 @@ function ClasseRow(props: { classe: { id: string; name: string } }) {
     }
 }
 
-const Name = styled(Typography)(({ theme }) => ({ flex: 1 }));
+const IconContainer = styled('div')(({ theme }) => ({ marginRight: theme.spacing(1) }));
+const Name = styled(Typography)(({ theme }) => ({
+    flex: 1,
+    display: 'flex',
+}));
 const Container = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
