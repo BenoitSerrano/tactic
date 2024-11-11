@@ -23,5 +23,5 @@ function Breadcrumbs(props: { establishments: establishmentWithClassesType[] }) 
     );
 }
 
-const MainContainer = styled('div')({ padding: 20, flex: 1, background: 'blue' });
+const MainContainer = styled('div')(({ theme }) => ({ padding: theme.spacing(2), flex: 1 }));
 export { Breadcrumbs };

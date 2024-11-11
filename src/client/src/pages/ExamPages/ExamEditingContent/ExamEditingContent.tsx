@@ -5,7 +5,6 @@ import { Loader } from '../../../components/Loader';
 import { api } from '../../../lib/api';
 import { examWithQuestionsApiType } from './types';
 import { ExercisesEditing } from './ExercisesEditing';
-import { Breadcrumbs } from '../components/Breadcrumbs';
 
 function ExamEditingContent() {
     const params = useParams();
@@ -14,13 +13,9 @@ function ExamEditingContent() {
         queryKey: ['exam-with-questions', examId],
         queryFn: () => api.fetchExamWithQuestions(examId),
     });
-    const establishmentsQuery = useQuery({
-        queryKey: ['establishments'],
-        queryFn: api.fetchEstablishments,
-    });
 
-    if (!query.data || !establishmentsQuery.data) {
-        if (query.isLoading || establishmentsQuery.isLoading) {
+    if (!query.data) {
+        if (query.isLoading) {
             return <Loader />;
         }
         return <div />;
@@ -28,14 +23,11 @@ function ExamEditingContent() {
 
     return (
         <MainContainer>
-            <Breadcrumbs establishments={establishmentsQuery.data} />
-            <PageContainer>
-                <ExercisesEditing
-                    title={query.data.name}
-                    exercises={query.data.exercises}
-                    examId={examId}
-                />
-            </PageContainer>
+            <ExercisesEditing
+                title={query.data.name}
+                exercises={query.data.exercises}
+                examId={examId}
+            />
         </MainContainer>
     );
 }
@@ -43,17 +35,10 @@ function ExamEditingContent() {
 const MainContainer = styled('div')({
     display: 'flex',
 
-    background: 'red',
     flexDirection: 'column',
-    // alignItems: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
 });
-
-const PageContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-}));
 
 export { ExamEditingContent };

@@ -26,7 +26,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 
-function ExamTable(props: { exams: examApiType[]; title: string; examsQueryKey: string[] }) {
+function ExamTable(props: {
+    establishmentId: string;
+    classeId: string;
+    exams: examApiType[];
+    title: string;
+    examsQueryKey: string[];
+}) {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
 
@@ -155,7 +161,11 @@ function ExamTable(props: { exams: examApiType[]; title: string; examsQueryKey: 
 
     function handleRowClick(examId: string) {
         return () => {
-            const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
+            const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', {
+                examId,
+                establishmentId: props.establishmentId,
+                classeId: props.classeId,
+            });
             navigate(path);
         };
     }

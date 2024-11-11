@@ -86,6 +86,8 @@ function Classe() {
                     />
                     {examListQuery.data.toCome.length > 0 && (
                         <ExamTable
+                            classeId={classeId}
+                            establishmentId={establishmentId}
                             title="À venir"
                             exams={examListQuery.data.toCome}
                             examsQueryKey={examsQueryKey}
@@ -93,6 +95,8 @@ function Classe() {
                     )}
                     {examListQuery.data.current.length > 0 && (
                         <ExamTable
+                            classeId={classeId}
+                            establishmentId={establishmentId}
                             title="En cours"
                             exams={examListQuery.data.current}
                             examsQueryKey={examsQueryKey}
@@ -100,6 +104,8 @@ function Classe() {
                     )}
                     {examListQuery.data.past.length > 0 && (
                         <ExamTable
+                            classeId={classeId}
+                            establishmentId={establishmentId}
                             title="Passés"
                             exams={examListQuery.data.past}
                             examsQueryKey={examsQueryKey}

@@ -8,19 +8,19 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
         path: '/student/students/:studentId/attempts/:attemptId/consult',
     },
     EXAM_EDITING_CONTENT: {
-        path: '/teacher/exams/:examId/edit/content',
+        path: '/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/edit/content',
     },
     EXAM_PARAMETERS: {
-        path: '/teacher/exams/:examId/edit/parameters',
+        path: '/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/edit/parameters',
     },
     EXAM_ATTEMPT_COLLECT: {
-        path: '/teacher/exams/:examId/edit/collect',
+        path: '/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/edit/collect',
     },
     EXAM_RESULTS: {
-        path: '/teacher/exams/:examId/edit/results',
+        path: '/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/edit/results',
     },
     EXAM_CONSULT: {
-        path: '/teacher/exams/:examId/edit/consult',
+        path: '/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/edit/consult',
     },
     STUDENT_REGISTRATION: {
         path: '/student/exams/:examId/students/:studentId/:encodedAction/register',
@@ -64,10 +64,10 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     ONBOARDING: { path: `/teacher/onboarding` },
     STUDENTS: { path: `/teacher/establishments/:establishmentId/classes/:classeId/students` },
     EXAM_PREVIEWING: {
-        path: `/teacher/exams/:examId/preview`,
+        path: `/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/preview`,
     },
     EXAM_CHECKING: {
-        path: `/teacher/exams/:examId/results/:attemptId`,
+        path: `/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/results/:attemptId`,
     },
     ESTABLISHMENT: {
         path: `/teacher/establishments/:establishmentId`,
