@@ -4,7 +4,10 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import { pathHandler } from '../../lib/pathHandler';
 
-function EstablishmentSideItemMenu(props: { establishment: { id: string; name: string } }) {
+function EstablishmentSideItemMenu(props: {
+    establishment: { id: string; name: string };
+    isActive: boolean;
+}) {
     const path = pathHandler.getRoutePath('ESTABLISHMENT', {
         establishmentId: props.establishment.id,
     });
@@ -15,7 +18,9 @@ function EstablishmentSideItemMenu(props: { establishment: { id: string; name: s
                     <IconContainer>
                         <AccountBalanceOutlinedIcon fontSize={'medium'} />
                     </IconContainer>
-                    <Typography variant="h5">{props.establishment.name}</Typography>
+                    <Text isActive={props.isActive} variant="h5">
+                        {props.establishment.name}
+                    </Text>
                 </LinkContent>
             </Link>
         </Container>
@@ -25,6 +30,7 @@ function EstablishmentSideItemMenu(props: { establishment: { id: string; name: s
 function ClasseSideItemMenu(props: {
     establishmentId: string;
     classe: { id: string; name: string };
+    isActive: boolean;
 }) {
     const path = pathHandler.getRoutePath('CLASSE', {
         establishmentId: props.establishmentId,
@@ -37,7 +43,9 @@ function ClasseSideItemMenu(props: {
                     <IconContainer>
                         <GroupsIcon fontSize="small" />
                     </IconContainer>
-                    <Typography variant="h6">{props.classe.name}</Typography>
+                    <Text isActive={props.isActive} variant="h6">
+                        {props.classe.name}
+                    </Text>
                 </LinkContent>
             </Link>
         </Container>
@@ -50,6 +58,10 @@ const IconContainer = styled('div')(({ theme }) => ({
     marginRight: theme.spacing(2),
     display: 'flex',
     alignItems: 'center',
+}));
+
+const Text = styled(Typography)<{ isActive: boolean }>(({ theme, isActive }) => ({
+    fontWeight: isActive ? 'bold' : undefined,
 }));
 
 const LinkContent = styled('div')({

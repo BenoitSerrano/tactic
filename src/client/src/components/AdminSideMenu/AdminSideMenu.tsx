@@ -5,8 +5,10 @@ import { establishmentWithClassesType } from '../../lib/api/api';
 import { Button } from '../Button';
 import { EstablishmentCreationModal } from './EstablishmentCreationModal';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 function AdminSideMenu(props: { establishments: Array<establishmentWithClassesType> }) {
+    const { establishmentId, classeId } = useParams();
     const [isEstablishmentCreationModalOpen, setIsEstablishmentCreationModalOpen] = useState(false);
     return (
         <Container>
@@ -16,10 +18,14 @@ function AdminSideMenu(props: { establishments: Array<establishmentWithClassesTy
             />
             {props.establishments.map((establishment) => (
                 <SideItemContainer key={establishment.id}>
-                    <EstablishmentSideItemMenu establishment={establishment} />
+                    <EstablishmentSideItemMenu
+                        isActive={establishment.id === establishmentId}
+                        establishment={establishment}
+                    />
                     {establishment.classes.map((classe) => (
                         <SideItemContainer>
                             <ClasseSideItemMenu
+                                isActive={classe.id === classeId}
                                 establishmentId={establishment.id}
                                 classe={classe}
                             />
