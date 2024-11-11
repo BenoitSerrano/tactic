@@ -3,19 +3,32 @@ import { Navigate } from 'react-router-dom';
 import { HEADER_HEIGHT } from '../../constants';
 import { TeacherHeader } from './TeacherHeader';
 import { localSessionHandler } from '../../lib/localSessionHandler';
+import { Breadcrumbs } from '../Breadcrumbs';
+import { Loader } from '../Loader';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../../lib/api';
 
 function TeacherPage(props: { children: React.ReactNode | null }) {
     const userRoles = localSessionHandler.getUserRoles();
-
+    const establishmentsQuery = useQuery({
+        queryKey: ['establishments'],
+        queryFn: api.fetchEstablishments,
+    });
     if (!userRoles || !userRoles.includes('teacher')) {
         return <Navigate to="/sign-in" />;
+    }
+    if (!establishmentsQuery.data) {
+        if (establishmentsQuery.isLoading) {
+            return <Loader />;
+        }
+        return <div />;
     }
 
     return (
         <Container>
             <TeacherHeader />
-
             <ContentContainer>
+                <Breadcrumbs establishments={establishmentsQuery.data} />
                 <ChildrenContainer>{props.children}</ChildrenContainer>
             </ContentContainer>
         </Container>

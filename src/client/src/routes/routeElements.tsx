@@ -31,7 +31,6 @@ import { TeacherHome } from '../pages/TeacherHome';
 import { Establishment } from '../pages/Establishment';
 import { Classe } from '../pages/Classe';
 import { Onboarding } from '../pages/Onboarding';
-import { ExamEditingPage } from '../pages/ExamPages/components/ExamEditingPage';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -42,43 +41,23 @@ const ROUTE_ELEMENTS: Record<
     },
     EXAM_EDITING_CONTENT: {
         authorizedRole: 'teacher',
-        element: (
-            <ExamEditingPage>
-                <ExamEditingContent />
-            </ExamEditingPage>
-        ),
+        element: <ExamEditingContent />,
     },
     EXAM_PARAMETERS: {
         authorizedRole: 'teacher',
-        element: (
-            <ExamEditingPage>
-                <ExamParameters />
-            </ExamEditingPage>
-        ),
+        element: <ExamParameters />,
     },
     EXAM_ATTEMPT_COLLECT: {
         authorizedRole: 'teacher',
-        element: (
-            <ExamEditingPage>
-                <ExamCollect />
-            </ExamEditingPage>
-        ),
+        element: <ExamCollect />,
     },
     EXAM_RESULTS: {
         authorizedRole: 'teacher',
-        element: (
-            <ExamEditingPage>
-                <ExamResults />
-            </ExamEditingPage>
-        ),
+        element: <ExamResults />,
     },
     EXAM_CONSULT: {
         authorizedRole: 'teacher',
-        element: (
-            <ExamEditingPage>
-                <ExamConsult />
-            </ExamEditingPage>
-        ),
+        element: <ExamConsult />,
     },
     STUDENT_HOME: {
         element: <StudentHome />,

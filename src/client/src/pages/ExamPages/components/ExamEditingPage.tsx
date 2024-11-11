@@ -1,8 +1,8 @@
 import { styled } from '@mui/material';
-import { Breadcrumbs } from './Breadcrumbs';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../../lib/api';
 import { Loader } from '../../../components/Loader';
+import { Breadcrumbs } from '../../../components/Breadcrumbs';
 
 function ExamEditingPage(props: { children: React.ReactNode }) {
     const establishmentsQuery = useQuery({

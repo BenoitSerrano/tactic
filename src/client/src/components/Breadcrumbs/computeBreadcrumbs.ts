@@ -1,7 +1,7 @@
-import { establishmentWithClassesType } from '../../../../lib/api/api';
-import { pathHandler } from '../../../../lib/pathHandler';
-import { editingExamLabelMapping } from '../../../../components/TeacherPage/constants';
-import { breadcrumbItemType } from '../../../../components/TeacherPage/types';
+import { establishmentWithClassesType } from '../../lib/api/api';
+import { pathHandler } from '../../lib/pathHandler';
+import { editingExamLabelMapping } from './constants';
+import { breadcrumbItemType } from './types';
 
 function computeBreadcrumbs(
     pathname: string,
