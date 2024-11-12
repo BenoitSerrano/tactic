@@ -113,7 +113,7 @@ function Classe() {
 
             <ExamCreationModal
                 establishmentId={establishmentId}
-                classeId={classeId}
+                classe={classe}
                 isOpen={isCreateExamModalOpen}
                 onExamCreated={onExamCreated}
                 close={() => setIsCreateExamModalOpen(false)}

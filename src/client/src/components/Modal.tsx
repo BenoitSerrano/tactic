@@ -18,6 +18,7 @@ function Modal(props: {
     buttons?: buttonType[];
     isConfirmLoading?: boolean;
     title?: string;
+    subtitle?: string;
     size?: 'small' | 'large';
 }) {
     const ModalComponent = modalComponentMapping[props.size || 'large'];
@@ -27,9 +28,13 @@ function Modal(props: {
                 <div>
                     {!!props.title && (
                         <ModalHeader>
-                            <Typography variant="h2">{props.title}</Typography>
+                            <Title variant="h2">{props.title}</Title>
+                            {!!props.subtitle && (
+                                <Typography variant="h3">{props.subtitle}</Typography>
+                            )}
                         </ModalHeader>
                     )}
+
                     <ModalBody>{props.children}</ModalBody>
                 </div>
 
@@ -142,6 +147,7 @@ const ModalBody = styled('div')(({ theme }) => ({
     justifyContent: 'center',
     alignItems: 'center',
 }));
+const Title = styled(Typography)(({ theme }) => ({ marginBottom: theme.spacing(1) }));
 
 const StyledModal = styled(MuiModal)({ zIndex: 999 });
 

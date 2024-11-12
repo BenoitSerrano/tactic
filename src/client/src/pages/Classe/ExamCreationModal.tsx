@@ -13,7 +13,7 @@ function ExamCreationModal(props: {
     close: () => void;
     isOpen: boolean;
     establishmentId: string;
-    classeId: string;
+    classe: { id: string; name: string };
     onExamCreated: (examId: string) => void;
 }) {
     const [name, setName] = useState('');
@@ -59,6 +59,7 @@ function ExamCreationModal(props: {
             isConfirmDisabled={isConfirmDisabled}
             isConfirmLoading={isCreating}
             title="Création d'un examen"
+            subtitle={props.classe.name}
         >
             <>
                 <FieldContainer>
@@ -126,7 +127,7 @@ function ExamCreationModal(props: {
         createExamMutation.mutate({
             duration: isThereDuration ? Number(duration) : undefined,
             name,
-            classeId: props.classeId,
+            classeId: props.classe.id,
             startDateTime,
             endDateTime,
         });
