@@ -13,11 +13,22 @@ import { IconButton } from './IconButton';
 import { time } from '../lib/time';
 import { INTEGER_NUMBER_REGEX } from '../constants';
 
-function EditableExamDuration(props: { exam: examApiType }) {
+function EditableExamDuration(props: {
+    exam: examApiType;
+    establishmentId: string;
+    classeId: string;
+}) {
     const [value, setValue] = useState<number | null>(props.exam.duration);
     const [isEditing, setIsEditing] = useState(false);
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
+    const examsQueryKey = [
+        'establishments',
+        props.establishmentId,
+        'classes',
+        props.classeId,
+        'exams',
+    ];
 
     useEffect(() => {
         setValue(props.exam.duration);
@@ -32,7 +43,7 @@ function EditableExamDuration(props: { exam: examApiType }) {
             });
             setIsEditing(false);
 
-            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
+            queryClient.invalidateQueries({ queryKey: examsQueryKey });
             queryClient.invalidateQueries({ queryKey: [`exams`, props.exam.id] });
         },
         onError: (error) => {

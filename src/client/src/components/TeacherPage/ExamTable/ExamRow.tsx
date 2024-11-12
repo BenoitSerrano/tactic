@@ -81,7 +81,11 @@ function ExamRow(props: { exam: examApiType; classeId: string; establishmentId: 
                         <IconContainer>
                             <TimerIcon fontSize="small" />
                         </IconContainer>
-                        <EditableExamDuration exam={props.exam} />
+                        <EditableExamDuration
+                            exam={props.exam}
+                            classeId={props.classeId}
+                            establishmentId={props.establishmentId}
+                        />
                     </SubinfoContainer>
                 </SubtitleContainer>
             </InfoContainer>

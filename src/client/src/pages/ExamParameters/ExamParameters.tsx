@@ -11,9 +11,12 @@ import { EditableExamDuration } from '../../components/EditableExamDuration';
 
 function ExamParameters() {
     const params = useParams();
+    const examId = params.examId as string;
+    const classeId = params.classeId as string;
+    const establishmentId = params.establishmentId as string;
     const examQuery = useQuery<examApiType>({
-        queryKey: [`exams`, params.examId],
-        queryFn: () => api.fetchExam(params.examId as string),
+        queryKey: [`exams`, examId],
+        queryFn: () => api.fetchExam(examId as string),
     });
     if (!examQuery.data) {
         if (examQuery.isLoading) {
@@ -29,7 +32,11 @@ function ExamParameters() {
 
             <Typography variant="h3">Paramètres</Typography>
             <Section title="Durée de l'examen">
-                <EditableExamDuration exam={examQuery.data} />
+                <EditableExamDuration
+                    exam={examQuery.data}
+                    classeId={classeId}
+                    establishmentId={establishmentId}
+                />
             </Section>
             <Section title="Éditer le texte d'accueil de l'examen">
                 <EditEdgeText exam={examQuery.data} kind="start" />
