@@ -1,6 +1,7 @@
 import { FormControlLabel, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { computeDateTime } from './lib/computeDateTimeExtremums';
+import { time } from '../../lib/time';
 
 function SelectExamExtremums(props: {
     startDateTime: number | undefined;
@@ -8,13 +9,17 @@ function SelectExamExtremums(props: {
     setStartDateTime: (startDateTime: number | undefined) => void;
     setEndDateTime: (endDateTime: number | undefined) => void;
 }) {
-    const [startDate, setStartDate] = useState<string>('');
-    const [startTime, setStartTime] = useState<string>('');
-    const [startRangeDate, setStartRangeDate] = useState<string>('');
-    const [startRangeTime, setStartRangeTime] = useState<string>('');
-    const [endRangeDate, setEndRangeDate] = useState<string>('');
-    const [endRangeTime, setEndRangeTime] = useState<string>('');
-    const [isThereEndDate, setIsThereEndDate] = useState(true);
+    const initialDateTimes = computeInitialDateTimes();
+    const [startDate, setStartDate] = useState<string>(initialDateTimes.startDate);
+    const [startTime, setStartTime] = useState<string>(initialDateTimes.startTime);
+
+    const [startRangeDate, setStartRangeDate] = useState<string>(initialDateTimes.startRangeDate);
+    const [startRangeTime, setStartRangeTime] = useState<string>(initialDateTimes.startRangeTime);
+    const [endRangeDate, setEndRangeDate] = useState<string>(initialDateTimes.endRangeDate);
+    const [endRangeTime, setEndRangeTime] = useState<string>(initialDateTimes.endRangeTime);
+    const [isThereEndDate, setIsThereEndDate] = useState(
+        props.endDateTime !== undefined && props.endDateTime !== Infinity,
+    );
     return (
         <Container>
             <Typography>Cet examen aura lieu...</Typography>
@@ -86,6 +91,33 @@ function SelectExamExtremums(props: {
             </RadioGroup>
         </Container>
     );
+
+    function computeInitialDateTimes() {
+        const initialDateTimes = {
+            startDate: '',
+            startTime: '',
+            startRangeDate: '',
+            startRangeTime: '',
+            endRangeDate: '',
+            endRangeTime: '',
+        };
+        if (props.startDateTime === undefined || props.endDateTime === undefined) {
+            return initialDateTimes;
+        }
+        const isoStartDateTime = time.formatToIsoFormat(props.startDateTime);
+        if (props.endDateTime === Infinity) {
+            initialDateTimes.startDate = isoStartDateTime.date;
+            initialDateTimes.startTime = isoStartDateTime.time;
+        } else {
+            const isoEndDateTime = time.formatToIsoFormat(props.endDateTime);
+            initialDateTimes.startRangeDate = isoStartDateTime.date;
+            initialDateTimes.startRangeTime = isoStartDateTime.time;
+            initialDateTimes.endRangeDate = isoEndDateTime.date;
+            initialDateTimes.endRangeTime = isoEndDateTime.time;
+        }
+
+        return initialDateTimes;
+    }
 
     function onChangeIsThereEndDate(event: React.ChangeEvent<HTMLInputElement>) {
         setIsThereEndDate(event.target.value === '1');

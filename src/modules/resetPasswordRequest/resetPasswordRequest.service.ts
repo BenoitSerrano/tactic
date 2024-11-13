@@ -62,8 +62,7 @@ function buildResetPasswordRequestService() {
         const now = new Date();
         const PERIOD_ALLOWED_FOR_RESET_PASSWORD_REQUEST =
             MINUTES_ALLOWED_FOR_RESET_PASSWORD_REQUEST * 60 * 1000;
-        const THRESHOLD_DATE = new Date();
-        THRESHOLD_DATE.setTime(now.getTime() - PERIOD_ALLOWED_FOR_RESET_PASSWORD_REQUEST);
+        const THRESHOLD_DATE = new Date(now.getTime() - PERIOD_ALLOWED_FOR_RESET_PASSWORD_REQUEST);
         const resetPasswordRequests = await resetPasswordRequestRepository.find({
             where: { user: { id: user.id }, createdAt: MoreThan(THRESHOLD_DATE.toISOString()) },
         });

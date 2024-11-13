@@ -27,6 +27,7 @@ function buildExamController() {
         fetchShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
         updateClasseId,
+        updateExamDateTimeRange,
     };
 
     return examController;
@@ -153,5 +154,12 @@ function buildExamController() {
             { examId: params.urlParams.examId },
             params.body.classeId,
         );
+    }
+
+    async function updateExamDateTimeRange(params: {
+        urlParams: { examId: Exam['id'] };
+        body: { startDateTime: number; endDateTime: number | null };
+    }) {
+        return examService.updateExamDateTimeRange(params.urlParams.examId, params.body);
     }
 }

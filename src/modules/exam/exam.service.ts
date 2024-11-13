@@ -39,6 +39,7 @@ function buildExamService() {
         updateShouldDisplayRightAnswersForExamId,
         countExamsForUser,
         updateClasseId,
+        updateExamDateTimeRange,
     };
 
     return examService;
@@ -347,5 +348,19 @@ function buildExamService() {
     async function countExamsForUser(user: User) {
         const examCount = await examRepository.count({ where: { user: { id: user.id } } });
         return examCount;
+    }
+
+    async function updateExamDateTimeRange(
+        examId: Exam['id'],
+        params: { startDateTime: number; endDateTime: number | null },
+    ) {
+        const startTime = new Date(params.startDateTime).toISOString();
+        const endTime =
+            params.endDateTime === null ? null : new Date(params.endDateTime).toISOString();
+        const result = await examRepository.update({ id: examId }, { startTime, endTime });
+        if (result.affected !== 1) {
+            throw new Error(`Could not update exam ${examId}`);
+        }
+        return true;
     }
 }

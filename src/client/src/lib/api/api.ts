@@ -67,6 +67,7 @@ const api = {
     updateEstablishmentId,
     updateClasseId,
     countStudentsByClasse,
+    updateExamDateTimeRange,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -374,6 +375,23 @@ async function updateExamName({ examId, name }: { examId: string; name: string }
     const URL = `${BASE_URL}/exams/${examId}/name`;
     return performApiCall(URL, 'PATCH', { name });
 }
+
+async function updateExamDateTimeRange({
+    examId,
+    startDateTime,
+    endDateTime,
+}: {
+    examId: string;
+    startDateTime: number;
+    endDateTime: number;
+}) {
+    const URL = `${BASE_URL}/exams/${examId}/dateTimeRange`;
+    return performApiCall(URL, 'PATCH', {
+        startDateTime,
+        endDateTime: endDateTime === Infinity ? null : endDateTime,
+    });
+}
+
 async function updateEstablishmentName({
     establishmentId,
     name,

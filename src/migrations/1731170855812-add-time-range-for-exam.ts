@@ -50,8 +50,7 @@ export class AddTimeRangeForExam1731170855812 implements MigrationInterface {
         for (const exam of exams) {
             const extremum = extremums[exam.id];
             if (extremum) {
-                let startDate = new Date();
-                startDate.setTime(extremum.min);
+                let startDate = new Date(extremum.min);
                 await queryRunner.query(
                     `UPDATE "exam" SET "startTime"='${startDate.toISOString()}' WHERE "id"='${
                         exam.id

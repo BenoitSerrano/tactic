@@ -107,6 +107,23 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'PATCH',
+        path: '/exams/:examId/dateTimeRange',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: examController.updateExamDateTimeRange,
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
+            {
+                entity: 'exam',
+                key: 'examId',
+            },
+        ]),
+        schema: Joi.object({
+            startDateTime: Joi.number().required(),
+            endDateTime: Joi.number().allow(null),
+        }),
+    },
+    {
+        method: 'PATCH',
         path: '/exams/:examId/edgeText',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],

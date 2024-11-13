@@ -11,10 +11,11 @@ function Section(props: { children: React.ReactNode; title: string }) {
 
 const Container = styled('div')(({ theme }) => ({
     padding: theme.spacing(2),
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    margin: theme.spacing(1),
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: 10,
+    flex: 1,
+    boxShadow: theme.shadows[1],
     backgroundColor: theme.palette.background.paper,
 }));
 

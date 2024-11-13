@@ -6,12 +6,21 @@ const time = {
     formatToReadableTime,
     addSeconds,
     formatToReadable,
+    formatToIsoFormat,
 };
 
 function addSeconds(date: string, seconds: number) {
     const parsedDate = new Date(date);
     parsedDate.setTime(parsedDate.getTime() + seconds * 1000);
     return parsedDate;
+}
+
+function formatToIsoFormat(timestamp: number) {
+    const date = new Date(timestamp);
+    const isoDate = date.toISOString().slice(0, 10);
+    const isoTime = date.toLocaleTimeString().slice(0, 5);
+
+    return { date: isoDate, time: isoTime };
 }
 
 function formatToReadable(date: Date, options?: { shouldDisplayTime?: boolean }) {
