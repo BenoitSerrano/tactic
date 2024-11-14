@@ -25,18 +25,13 @@ function Modal(props: {
     return (
         <StyledModal open={props.isOpen} onClose={props.close}>
             <ModalComponent>
-                <div>
-                    {!!props.title && (
-                        <ModalHeader>
-                            <Title variant="h2">{props.title}</Title>
-                            {!!props.subtitle && (
-                                <Typography variant="h3">{props.subtitle}</Typography>
-                            )}
-                        </ModalHeader>
-                    )}
-
-                    <ModalBody>{props.children}</ModalBody>
-                </div>
+                {!!props.title && (
+                    <ModalHeader>
+                        <Title variant="h2">{props.title}</Title>
+                        {!!props.subtitle && <Typography variant="h3">{props.subtitle}</Typography>}
+                    </ModalHeader>
+                )}
+                <ModalBody>{props.children}</ModalBody>
 
                 <ModalFooter>
                     <ButtonContainer>

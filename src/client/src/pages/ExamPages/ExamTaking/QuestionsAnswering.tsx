@@ -9,7 +9,6 @@ import { TestPageLayout } from '../components/TestPageLayout';
 import { exerciseWithoutAnswersType, attemptAnswersType } from '../types';
 import { ExerciseContainer } from '../components/ExerciseContainer';
 import { computeExerciseProgress } from '../lib/computeExerciseProgress';
-import { Modal } from '../../../components/Modal';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
@@ -17,6 +16,7 @@ import { LastUpdatedAtIndication } from './LastUpdatedAtIndication';
 import { useExerciseIndex } from '../lib/useExerciseIndex';
 import { EmptyExam } from '../components/EmptyExam';
 import { ExercisesSummary } from '../components/ExercisesSummary';
+import { FinishExamModal } from './FinishExamModal';
 
 const DELAY_BETWEEN_SHOWING_ALERT_AND_END_OF_EXAM = 30 * 1000;
 
@@ -170,24 +170,14 @@ function QuestionsAnswering(props: {
                     </ExerciseContainer>
                 </Fragment>
             </TestPageLayout>
-            <Modal
-                size="small"
-                isOpen={isConfirmFinishExamModalOpen}
+            <FinishExamModal
+                progresses={progresses}
                 close={closeConfirmFinishExamModal}
-                onConfirm={finishExam}
-                onCancel={cancelFinishExamModal}
                 isConfirmLoading={finishExamMutation.isPending}
-                title="Terminer l'examen ?"
-            >
-                <>
-                    <Typography>
-                        Souhaitez-vous valider vos réponses et mettre fin à l'examen ?
-                    </Typography>
-                    <Typography>
-                        Vous ne pourrez plus revenir en arrière et modifier vos réponses.
-                    </Typography>
-                </>
-            </Modal>
+                isOpen={isConfirmFinishExamModalOpen}
+                onCancel={cancelFinishExamModal}
+                onConfirm={finishExam}
+            />
         </>
     );
 

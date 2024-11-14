@@ -206,6 +206,7 @@ function ExercisesEditing(props: {
     function onCreateExercise(createdExerciseId: number) {
         const newOrderedExerciseIds = [...orderedExerciseIds, createdExerciseId];
         setOrderedExerciseIds(newOrderedExerciseIds);
+        setCurrentExerciseExpanded(createdExerciseId);
     }
 
     function buildDeleteExercise(exerciseId: number, exerciseName: string) {
