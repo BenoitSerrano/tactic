@@ -55,15 +55,16 @@ function TestPageLayout(props: {
 
 const FOOTER_HEIGHT = 50;
 
-const FooterContainer = styled('div')({
+const FooterContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     height: FOOTER_HEIGHT,
     position: 'fixed',
     width: '100%',
     backgroundColor: 'white',
+    borderTop: `1px solid ${theme.palette.common.black}`,
     bottom: 0,
     left: 0,
-});
+}));
 
 const CenterFooterPart = styled('div')({
     height: '100%',
