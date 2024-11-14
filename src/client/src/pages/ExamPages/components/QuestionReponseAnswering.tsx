@@ -17,7 +17,7 @@ function QuestionReponseAnswering(props: {
             </Title>
             <AutoBlurringTextField
                 isFullWidth
-                value={localAnswer}
+                value={localAnswer || ''}
                 onBlur={onBlur}
                 onChange={setLocalAnswer}
             />

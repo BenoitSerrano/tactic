@@ -4,7 +4,7 @@ import { styled } from '@mui/material';
 import { AccentKey } from './AccentKey';
 import { IconButton } from '../../../../components/IconButton';
 
-const ACCENTS = ['à', 'â', 'é', 'è', 'ê', 'î', 'ï', 'ô', 'û', 'ù'];
+const ACCENTS = ['à', 'â', 'é', 'è', 'ê', 'î', 'ï', 'ô', 'û', 'ù', 'ç'];
 
 function AccentVirtualKeyboard(props: { onAddCharacter: (character: string) => void }) {
     const [isOpen, setIsOpen] = useState(false);
