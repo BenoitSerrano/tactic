@@ -6,10 +6,11 @@ function IconButton(props: {
     size?: 'small' | 'medium' | 'large';
     isLoading?: boolean;
     color?: 'success' | 'warning' | 'error' | 'primary' | 'default';
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onMouseEnter?: (event: React.MouseEvent<HTMLElement>) => void;
     IconComponent: React.ElementType;
     disabled?: boolean;
+    type?: 'submit';
     placement?: 'top' | 'bottom' | 'left' | 'right';
 }) {
     const { IconComponent } = props;
@@ -31,6 +32,7 @@ function IconButton(props: {
                 disabled={props.disabled}
                 onClick={props.onClick}
                 color={props.color}
+                type={props.type}
             >
                 {props.isLoading ? <Loader size={size} /> : <IconComponent fontSize={size} />}
             </MuiIconButton>

@@ -2,6 +2,7 @@ import { dataSource } from '../../dataSource';
 import { Classe } from './Classe.entity';
 import { Establishment } from '../establishment';
 import { User } from '../user';
+import { buildEstablishmentService } from '../establishment/establishment.service';
 
 export { buildClasseService };
 
@@ -60,14 +61,15 @@ function buildClasseService() {
         establishmentId: Establishment['id'];
         user: User;
     }) {
-        const { establishmentId, className } = params;
-
-        await classeRepository.insert({
-            name: className,
-            establishment: { id: establishmentId },
-            user: params.user,
-        });
-        return true;
+        const establishmentService = buildEstablishmentService();
+        const { establishmentId, className, user } = params;
+        const establishment = await establishmentService.getEstablishment(establishmentId);
+        const classe = new Classe();
+        classe.name = className;
+        classe.establishment = establishment;
+        classe.user = user;
+        const insertedClasse = await classeRepository.save(classe);
+        return insertedClasse;
     }
 
     async function deleteClasse(criteria: { classeId: Classe['id'] }) {

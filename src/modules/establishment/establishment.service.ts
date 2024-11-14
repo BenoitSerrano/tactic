@@ -12,6 +12,7 @@ function buildEstablishmentService() {
         createEstablishment,
         updateEstablishmentName,
         getExamIdsByUser,
+        getEstablishment,
     };
 
     return establishmentService;
@@ -24,6 +25,10 @@ function buildEstablishmentService() {
             select: { id: true, name: true, classes: { id: true, name: true }, user: { id: true } },
         });
         return establishments;
+    }
+
+    async function getEstablishment(establishmentId: Establishment['id']) {
+        return establishmentRepository.findOneOrFail({ where: { id: establishmentId } });
     }
 
     async function getExamIdsByUser(userId: User['id']) {

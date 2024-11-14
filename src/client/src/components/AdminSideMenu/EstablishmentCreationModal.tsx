@@ -9,7 +9,7 @@ function EstablishmentCreationModal(props: { isOpen: boolean; close: () => void 
     const [name, setName] = useState('');
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
-    const createClasseMutation = useMutation({
+    const createEstablishmentMutation = useMutation({
         mutationFn: api.createEstablishment,
         onSuccess: () => {
             setName('');
@@ -47,7 +47,7 @@ function EstablishmentCreationModal(props: { isOpen: boolean; close: () => void 
     }
 
     function onConfirm() {
-        createClasseMutation.mutate({ name });
+        createEstablishmentMutation.mutate({ name });
     }
 }
 

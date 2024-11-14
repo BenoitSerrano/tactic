@@ -15,6 +15,11 @@ function set(ROUTE_KEY: (typeof ROUTE_KEYS)[number], parameters: Record<string, 
     localStorage.setItem(PARAMETERS_KEY, JSON.stringify(parameters));
 }
 
+function remove() {
+    localStorage.removeItem(ROUTE_KEY_KEY);
+    localStorage.removeItem(PARAMETERS_KEY);
+}
+
 function parseRoute(storedRouteKey: string | null, storedParameters: string | null) {
     if (!storedRouteKey || !ROUTE_KEYS.includes(storedRouteKey as (typeof ROUTE_KEYS)[number])) {
         return undefined;
@@ -24,6 +29,6 @@ function parseRoute(storedRouteKey: string | null, storedParameters: string | nu
     return { ROUTE_KEY, parameters: storedParameters ? JSON.parse(storedParameters) : {} };
 }
 
-const lastPageVisitedHandler = { get, set };
+const lastPageVisitedHandler = { get, set, remove };
 
 export { lastPageVisitedHandler };

@@ -35,7 +35,9 @@ function getUserRoles(): userRoleType[] | undefined {
 }
 
 function logout() {
+    localStorage.userInfoHandler.remove();
     localStorage.jwtTokenHandler.remove();
+    localStorage.lastPageVisitedHandler.remove();
 }
 
 export { localSessionHandler };
