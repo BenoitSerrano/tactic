@@ -17,12 +17,6 @@ const userRoutes: Array<routeType<any, any, any>> = [
         controller: userController.login,
     },
     {
-        method: 'POST',
-        path: '/login',
-        kind: 'public',
-        controller: userController.login,
-    },
-    {
         method: 'GET',
         path: '/users-summary',
         kind: 'authenticated',

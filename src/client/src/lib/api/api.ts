@@ -3,8 +3,6 @@ import { acceptableAnswerType, questionKindType } from '../../types';
 import { localSessionHandler } from '../localSessionHandler';
 
 const api = {
-    login,
-    createUser,
     fetchStudents,
     fetchStudent,
     updateStudentNames,
@@ -33,7 +31,6 @@ const api = {
     createClasse,
     deleteClasse,
     changeClasse,
-    fetchUsersSummary,
     fetchUserExams,
     fetchEstablishments,
     createEstablishment,
@@ -114,24 +111,9 @@ async function updateEstablishmentId(params: { establishmentId: string; classeId
     return performApiCall(URL, 'PATCH', { establishmentId: params.establishmentId });
 }
 
-async function fetchUsersSummary() {
-    const URL = `${BASE_URL}/users-summary`;
-    return performApiCall(URL, 'GET');
-}
-
 async function fetchUserExams(userId: string) {
     const URL = `${BASE_URL}/users/${userId}/exams`;
     return performApiCall(URL, 'GET');
-}
-
-async function createUser(params: { email: string; password: string }) {
-    const URL = `${BASE_URL}/users`;
-    return performApiCall(URL, 'POST', { email: params.email, password: params.password });
-}
-
-async function login(params: { email: string; password: string }) {
-    const URL = `${BASE_URL}/login`;
-    return performApiCall(URL, 'POST', { email: params.email, password: params.password });
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
