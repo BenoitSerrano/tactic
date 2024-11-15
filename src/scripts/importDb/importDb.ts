@@ -9,6 +9,7 @@ import { Student } from '../../modules/student';
 import { User } from '../../modules/user';
 import { UserConfiguration } from '../../modules/userConfiguration';
 import { Plan } from '../../modules/plan';
+import { Establishment } from '../../modules/establishment';
 
 type questionIdMappingType = Record<number, number>;
 type userConfigurationIdMappingType = Record<number, number>;
@@ -26,10 +27,12 @@ async function importDb() {
     const questionRepository = dataSource.getRepository(Question);
     const userConfigurationRepository = dataSource.getRepository(UserConfiguration);
     const planRepository = dataSource.getRepository(Plan);
+    const establishmentRepository = dataSource.getRepository(Establishment);
 
     console.log('Erasing local database...');
 
     await examRepository.delete({});
+    await establishmentRepository.delete({});
     await classeRepository.delete({});
     await userRepository.delete({});
     await userConfigurationRepository.delete({});
@@ -93,16 +96,23 @@ async function importDb() {
             }
         }
     }
-    console.log('Exams inserted! Now fetching classes...');
+    console.log('Exams inserted! Now fetching establishments...');
+
+    const allEstablishments = await api.fetchAllEstablishments();
+
+    console.log(
+        `${allEstablishments.length} establishments fetched! Inserting them in database...`,
+    );
+
+    await establishmentRepository.insert(allEstablishments);
+
+    console.log('Establishments inserted! Now fetching classes...');
 
     const allClasses = await api.fetchAllClasses();
 
     console.log(`${allClasses.length} classes fetched! Inserting them in database...`);
 
-    for (const classe of allClasses) {
-        // TODO
-        // await classeRepository.insert({ ...classe, user });
-    }
+    await classeRepository.insert(allClasses);
 
     console.log('Classes inserted! Now fetching students...');
 

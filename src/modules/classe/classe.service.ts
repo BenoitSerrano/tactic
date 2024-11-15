@@ -24,7 +24,7 @@ function buildClasseService() {
 
     async function getAllClasses() {
         const classes = await classeRepository.find({
-            relations: ['user'],
+            relations: ['user', 'establishment'],
             select: { user: { id: true } },
         });
 

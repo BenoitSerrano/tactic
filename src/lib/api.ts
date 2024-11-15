@@ -6,9 +6,11 @@ import { User } from '../modules/user';
 import { UserConfiguration } from '../modules/userConfiguration';
 import { Plan } from '../modules/plan';
 import { writeFile, readFile } from 'fs/promises';
+import { Establishment } from '../modules/establishment';
 
 const api = {
     fetchAllExams,
+    fetchAllEstablishments,
     fetchAllAttempts,
     fetchAllStudents,
     fetchAllClasses,
@@ -53,6 +55,20 @@ async function fetchAllExams(): Promise<Exam[]> {
     const response = await fetch(URL);
     const parsedData = await response.json();
     await saveJson('exams', parsedData);
+
+    return parsedData;
+}
+
+async function fetchAllEstablishments(): Promise<Establishment[]> {
+    const establishments = await getJson<Establishment>('establishments');
+    if (establishments) {
+        return establishments;
+    }
+    const URL = `https://tactic-app.fr/api/all-establishments`;
+
+    const response = await fetch(URL);
+    const parsedData = await response.json();
+    await saveJson('establishments', parsedData);
 
     return parsedData;
 }

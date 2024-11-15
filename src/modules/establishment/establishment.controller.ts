@@ -10,9 +10,14 @@ function buildEstablishmentController() {
         getEstablishmentsWithClasses,
         createEstablishment,
         updateEstablishmentName,
+        getAllEstablishments,
     };
 
     return establishmentController;
+
+    async function getAllEstablishments() {
+        return establishmentService.getAllEstablishments();
+    }
 
     async function getEstablishmentsWithClasses(_params: {}, user: User) {
         return establishmentService.getEstablishmentsWithClasses(user);

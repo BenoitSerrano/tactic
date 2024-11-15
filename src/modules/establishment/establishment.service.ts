@@ -13,6 +13,7 @@ function buildEstablishmentService() {
         updateEstablishmentName,
         getExamIdsByUser,
         getEstablishment,
+        getAllEstablishments,
     };
 
     return establishmentService;
@@ -24,6 +25,14 @@ function buildEstablishmentService() {
             relations: { user: true, classes: true },
             select: { id: true, name: true, classes: { id: true, name: true }, user: { id: true } },
         });
+        return establishments;
+    }
+
+    async function getAllEstablishments() {
+        const establishments = await establishmentRepository.find({
+            relations: ['user'],
+        });
+
         return establishments;
     }
 

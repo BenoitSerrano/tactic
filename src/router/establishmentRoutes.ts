@@ -14,6 +14,12 @@ const establishmentRoutes: Array<routeType<any, any, any>> = [
         controller: establishmentController.getEstablishmentsWithClasses,
     },
     {
+        method: 'GET',
+        path: '/all-establishments',
+        kind: 'public',
+        controller: establishmentController.getAllEstablishments,
+    },
+    {
         method: 'POST',
         path: '/establishments',
         kind: 'authenticated',
