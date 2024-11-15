@@ -9,6 +9,7 @@ import { pathHandler } from '../../lib/pathHandler';
 import { computePathKeyToNavigateTo } from '../../lib/computePathKeyToNavigateTo';
 import { attemptActionEncoder } from '../../lib/attemptActionEncoder';
 import { ExamStartText } from '../ExamParameters/components/ExamStartText';
+import { examsApi } from '../../lib/api/examsApi';
 
 type attemptApiType = {
     attempt:
@@ -42,7 +43,7 @@ function StudentHome() {
 
     const examQuery = useQuery<examApiType>({
         queryKey: ['exams', examId],
-        queryFn: () => api.fetchExam(examId),
+        queryFn: () => examsApi.getExam(examId),
     });
 
     const createAttemptMutation = useMutation({

@@ -36,6 +36,7 @@ import { examResultsApiType } from './types';
 import { attemptStatusMapping } from './constants';
 import { downloadResultsToCsv } from './lib/downloadResultsToCsv';
 import { ExamPageTitle } from '../../components/ExamPageTitle';
+import { examsApi } from '../../lib/api/examsApi';
 
 type sortColumnType =
     | 'email'
@@ -55,8 +56,8 @@ function ExamResults() {
     const classeId = params.classeId as string;
     const establishmentId = params.establishmentId as string;
     const resultsQuery = useQuery<examResultsApiType>({
-        queryKey: ['exam-results', examId],
-        queryFn: () => api.fetchExamResults(examId),
+        queryKey: ['exams', examId, 'results'],
+        queryFn: () => examsApi.getExamResults(examId),
     });
 
     const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({

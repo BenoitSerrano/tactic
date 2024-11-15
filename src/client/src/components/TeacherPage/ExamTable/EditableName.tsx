@@ -5,14 +5,14 @@ import { TextField, Typography, styled } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { examApiType } from '../../../pages/Classe/types';
 import { useAlert } from '../../../lib/alert';
-import { api } from '../../../lib/api';
 import { IconButton } from '../../IconButton';
+import { examsApi } from '../../../lib/api/examsApi';
 
 function EditableName(props: { exam: examApiType }) {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const updateExamNameMutation = useMutation({
-        mutationFn: api.updateExamName,
+        mutationFn: examsApi.updateExamName,
         onSuccess: (exam) => {
             displayAlert({
                 variant: 'success',

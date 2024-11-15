@@ -7,7 +7,7 @@ import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material';
 import { useAlert } from '../../../lib/alert';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../lib/api/api';
+import { examsApi } from '../../../lib/api/examsApi';
 
 function SelectExamExtremumsSection(props: { exam: examApiType }) {
     const initialStartDateTime = new Date(props.exam.startTime).getTime();
@@ -21,7 +21,7 @@ function SelectExamExtremumsSection(props: { exam: examApiType }) {
     const queryClient = useQueryClient();
 
     const updateExamDurationMutation = useMutation({
-        mutationFn: api.updateExamDateTimeRange,
+        mutationFn: examsApi.updateExamDateTimeRange,
         onSuccess: () => {
             displayAlert({
                 variant: 'success',

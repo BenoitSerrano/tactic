@@ -13,6 +13,7 @@ import { establishmentWithClassesType } from '../../lib/api/api';
 import { sortedExamsApiType } from './types';
 import { ExamCreationModal } from './ExamCreationModal';
 import { ClasseHeader } from './ClasseHeader';
+import { examsApi } from '../../lib/api/examsApi';
 
 function Classe() {
     const params = useParams();
@@ -22,7 +23,7 @@ function Classe() {
     const examsQueryKey = ['establishments', establishmentId, 'classes', classeId, 'exams'];
     const examListQuery = useQuery<sortedExamsApiType>({
         queryKey: examsQueryKey,
-        queryFn: () => api.fetchExams({ establishmentId, classeId }),
+        queryFn: () => examsApi.getExamsByClasse({ establishmentId, classeId }),
     });
     const establishmentsQuery = useQuery({
         queryKey: ['establishments'],

@@ -9,7 +9,6 @@ const api = {
     createAttempt,
     fetchAttemptWithAnswers,
     fetchAttemptWithoutAnswers,
-    fetchExamWithoutAnswers,
     updateAttempt,
     updateAttemptCheatingSummary,
     deleteAttempt,
@@ -19,17 +18,8 @@ const api = {
     fetchStudentByEmailForExam,
     createStudents,
     deleteStudent,
-    createExam,
-    fetchExam,
-    fetchExamWithQuestions,
     updateEstablishmentName,
-    updateExamName,
-    updateExamDuration,
-    updateExamEdgeText,
     updateDefaultEdgeText,
-    fetchExams,
-    fetchExamResults,
-    deleteExam,
     createQuestion,
     createExercise,
     updateExercise,
@@ -56,18 +46,13 @@ const api = {
     createClasse,
     deleteClasse,
     changeClasse,
-    duplicateExam,
-    fetchShouldDisplayRightAnswersForExamId,
-    updateShouldDisplayRightAnswersForExamId,
     fetchUsersSummary,
     fetchUserExams,
     fetchEstablishments,
     createEstablishment,
     updateClasseName,
     updateEstablishmentId,
-    updateClasseId,
     countStudentsByClasse,
-    updateExamDateTimeRange,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -142,11 +127,6 @@ async function updateEstablishmentId(params: { establishmentId: string; classeId
     return performApiCall(URL, 'PATCH', { establishmentId: params.establishmentId });
 }
 
-async function updateClasseId(params: { classeId: string; examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/classeId`;
-    return performApiCall(URL, 'PATCH', { classeId: params.classeId });
-}
-
 async function fetchUsersSummary() {
     const URL = `${BASE_URL}/users-summary`;
     return performApiCall(URL, 'GET');
@@ -179,11 +159,6 @@ async function createAttempt({ examId, studentId }: { examId: string; studentId:
 
 async function fetchAttemptWithAnswers(params: { attemptId: string }) {
     const URL = `${BASE_URL}/attempts/${params.attemptId}/with-answers`;
-    return performApiCall(URL, 'GET');
-}
-
-async function fetchExamWithoutAnswers(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/without-answers`;
     return performApiCall(URL, 'GET');
 }
 
@@ -314,84 +289,6 @@ async function createStudents(params: { emails: string[]; classeId: string }) {
     return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
-async function fetchExams(params: {
-    establishmentId: string | undefined;
-    classeId: string | undefined;
-}) {
-    const URL = computeUrl();
-    return performApiCall(URL, 'GET');
-
-    function computeUrl() {
-        if (params.establishmentId === undefined || params.establishmentId === undefined) {
-            return `${BASE_URL}/exams`;
-        }
-        return `${BASE_URL}/establishments/${params.establishmentId}/classes/${params.classeId}/exams`;
-    }
-}
-
-async function deleteExam(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}`;
-    return performApiCall(URL, 'DELETE');
-}
-
-async function fetchExamResults(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/results`;
-    return performApiCall(URL, 'GET');
-}
-
-async function fetchExam(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}`;
-    return performApiCall(URL, 'GET');
-}
-
-async function fetchExamWithQuestions(examId: string) {
-    const URL = `${BASE_URL}/exams/${examId}/with-questions`;
-    return performApiCall(URL, 'GET');
-}
-
-async function createExam({
-    name,
-    duration,
-    classeId,
-    startDateTime,
-    endDateTime,
-}: {
-    name: string;
-    duration: number | undefined;
-    classeId: string;
-    startDateTime: number;
-    endDateTime: number;
-}) {
-    const URL = `${BASE_URL}/classes/${classeId}/exams`;
-    return performApiCall(URL, 'POST', {
-        name,
-        duration,
-        startDateTime,
-        endDateTime: endDateTime === Infinity ? null : endDateTime,
-    });
-}
-
-async function updateExamName({ examId, name }: { examId: string; name: string }) {
-    const URL = `${BASE_URL}/exams/${examId}/name`;
-    return performApiCall(URL, 'PATCH', { name });
-}
-
-async function updateExamDateTimeRange({
-    examId,
-    startDateTime,
-    endDateTime,
-}: {
-    examId: string;
-    startDateTime: number;
-    endDateTime: number;
-}) {
-    const URL = `${BASE_URL}/exams/${examId}/dateTimeRange`;
-    return performApiCall(URL, 'PATCH', {
-        startDateTime,
-        endDateTime: endDateTime === Infinity ? null : endDateTime,
-    });
-}
-
 async function updateEstablishmentName({
     establishmentId,
     name,
@@ -406,30 +303,6 @@ async function updateEstablishmentName({
 async function updateClasseName({ classeId, name }: { classeId: string; name: string }) {
     const URL = `${BASE_URL}/classes/${classeId}/name`;
     return performApiCall(URL, 'PATCH', { name });
-}
-
-async function updateExamDuration({
-    examId,
-    duration,
-}: {
-    examId: string;
-    duration: number | null;
-}) {
-    const URL = `${BASE_URL}/exams/${examId}/duration`;
-    return performApiCall(URL, 'PATCH', { duration });
-}
-
-async function updateExamEdgeText({
-    examId,
-    kind,
-    text,
-}: {
-    examId: string;
-    kind: 'start' | 'end';
-    text: string;
-}) {
-    const URL = `${BASE_URL}/exams/${examId}/edgeText`;
-    return performApiCall(URL, 'PATCH', { kind, text });
 }
 
 async function updateDefaultEdgeText({ kind, text }: { kind: 'start' | 'end'; text: string }) {
@@ -631,26 +504,6 @@ async function deleteClasse(params: { classeId: string }) {
 async function changeClasse(params: { classeId: string; studentId: string; newClasseId: string }) {
     const URL = `${BASE_URL}/classes/${params.classeId}/students/${params.studentId}/new-classe/${params.newClasseId}`;
     return performApiCall(URL, 'PATCH');
-}
-
-async function duplicateExam(params: { examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/duplicate`;
-    return performApiCall(URL, 'POST');
-}
-
-async function fetchShouldDisplayRightAnswersForExamId(params: { examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/shouldDisplayRightAnswers`;
-    return performApiCall(URL, 'GET');
-}
-
-async function updateShouldDisplayRightAnswersForExamId(params: {
-    examId: string;
-    shouldDisplayRightAnswers: boolean;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/shouldDisplayRightAnswers`;
-    return performApiCall(URL, 'PATCH', {
-        shouldDisplayRightAnswers: params.shouldDisplayRightAnswers,
-    });
 }
 
 export { api };

@@ -11,7 +11,6 @@ import { examEdgeTextKind } from './types';
 import { Establishment } from '../establishment';
 import { buildClasseService, Classe } from '../classe';
 import { sortExamsByDateTime } from './lib/sortExamsByDateTime';
-import { buildEstablishmentService } from '../establishment/establishment.service';
 
 export { buildExamService };
 
@@ -23,7 +22,6 @@ function buildExamService() {
         updateExamDuration,
         updateExamEdgeText,
         getExamsByClasse,
-        getExams,
         getExamsByUser,
         getExamWithQuestions,
         getAllExams,
@@ -35,7 +33,7 @@ function buildExamService() {
         deleteExam,
         getExamResults,
         duplicateExam,
-        fetchShouldDisplayRightAnswersForExamId,
+        getShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
         countExamsForUser,
         updateClasseId,
@@ -50,7 +48,7 @@ function buildExamService() {
             { classe: { id: classeId } },
         );
         if (result.affected !== 1) {
-            throw new Error(`Could not update classe Id for exam ${criteria.examId}`);
+            throw new Error(`Could not update classeId for exam ${criteria.examId}`);
         }
         return true;
     }
@@ -175,19 +173,6 @@ function buildExamService() {
             },
             relations: ['classe'],
             select: { classe: { id: true } },
-            order: { startTime: 'DESC' },
-        });
-
-        return sortExamsByDateTime(exams);
-    }
-
-    async function getExams(criteria: { userId: User['id'] }) {
-        const establishmentService = buildEstablishmentService();
-        const examIds = await establishmentService.getExamIdsByUser(criteria.userId);
-        const exams = await examRepository.find({
-            where: {
-                id: In(examIds),
-            },
             order: { startTime: 'DESC' },
         });
 
@@ -327,7 +312,7 @@ function buildExamService() {
         return newExam;
     }
 
-    async function fetchShouldDisplayRightAnswersForExamId(examId: Exam['id']) {
+    async function getShouldDisplayRightAnswersForExamId(examId: Exam['id']) {
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },
             select: { shouldDisplayRightAnswers: true },

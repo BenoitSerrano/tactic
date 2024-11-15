@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { FormControlLabel, Radio, RadioGroup, TextField, styled } from '@mui/material';
 import { Modal } from '../../components/Modal';
-import { api } from '../../lib/api';
 import { INTEGER_NUMBER_REGEX } from '../../constants';
 import { computeIsConfirmDisabled } from './lib/computeIsConfirmDisabled';
 import { EXAM_DEFAULT_DURATION } from '../ExamList/constants';
 import { useAlert } from '../../lib/alert';
 import { SelectExamExtremums } from './SelectExamExtremums';
+import { examsApi } from '../../lib/api/examsApi';
 
 function ExamCreationModal(props: {
     close: () => void;
@@ -25,7 +25,7 @@ function ExamCreationModal(props: {
     const { displayAlert } = useAlert();
 
     const createExamMutation = useMutation({
-        mutationFn: api.createExam,
+        mutationFn: examsApi.createExam,
         onSuccess: (exam) => {
             setDuration(`${EXAM_DEFAULT_DURATION}`);
             setName('');

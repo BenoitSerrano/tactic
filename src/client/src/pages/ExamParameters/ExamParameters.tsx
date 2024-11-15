@@ -1,7 +1,6 @@
 import { styled, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { EditEdgeText } from './components/EditEdgeText';
 import { examApiType } from '../Classe/types';
@@ -9,6 +8,7 @@ import { Section } from '../../components/Section';
 import { ExamPageTitle } from '../../components/ExamPageTitle';
 import { EditableExamDuration } from '../../components/EditableExamDuration';
 import { SelectExamExtremumsSection } from './components/SelectExamExtremumsSection';
+import { examsApi } from '../../lib/api/examsApi';
 
 function ExamParameters() {
     const params = useParams();
@@ -18,7 +18,7 @@ function ExamParameters() {
 
     const examQuery = useQuery<examApiType>({
         queryKey: [`exams`, examId],
-        queryFn: () => api.fetchExam(examId as string),
+        queryFn: () => examsApi.getExam(examId as string),
     });
     if (!examQuery.data) {
         if (examQuery.isLoading) {

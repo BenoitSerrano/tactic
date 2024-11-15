@@ -8,9 +8,9 @@ import { Link } from '../components/Link';
 import { Section } from '../components/Section';
 import { examApiType } from './Classe/types';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
 import { ExamPageTitle } from '../components/ExamPageTitle';
+import { examsApi } from '../lib/api/examsApi';
 
 function ExamCollect() {
     const { displayAlert } = useAlert();
@@ -18,7 +18,7 @@ function ExamCollect() {
     const url = computeUrl(params.examId as string);
     const examQuery = useQuery<examApiType>({
         queryKey: [`exams`, params.examId],
-        queryFn: () => api.fetchExam(params.examId as string),
+        queryFn: () => examsApi.getExam(params.examId as string),
     });
     if (!examQuery.data) {
         if (examQuery.isLoading) {

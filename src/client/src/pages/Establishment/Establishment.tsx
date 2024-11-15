@@ -59,7 +59,7 @@ function Establishment() {
                             startIcon={<AddCircleOutlineIcon />}
                             variant="contained"
                         >
-                            Ajouter une classe{' '}
+                            Ajouter une classe
                         </Button>
                     </ButtonContainer>
                 </TableContainer>

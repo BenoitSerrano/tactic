@@ -10,6 +10,7 @@ import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
 import { LoadingIconButton } from '../../components/LoadingIconButton';
+import { examsApi } from '../../lib/api/examsApi';
 
 type studentType = {
     id: string;
@@ -22,7 +23,10 @@ function StudentAuthentication() {
     const params = useParams();
     const examId = params.examId as string;
     const encodedAction = params.encodedAction as string;
-    const query = useQuery({ queryKey: ['exams', examId], queryFn: () => api.fetchExam(examId) });
+    const query = useQuery({
+        queryKey: ['exams', examId],
+        queryFn: () => examsApi.getExam(examId),
+    });
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
 

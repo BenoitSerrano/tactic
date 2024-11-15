@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab';
 import { ExamDoneText } from './ExamDoneText';
 import { ExamStartText } from './ExamStartText';
 import { IconButton } from '../../../components/IconButton';
+import { examsApi } from '../../../lib/api/examsApi';
 
 type edgeTextKind = 'start' | 'end';
 
@@ -20,7 +21,7 @@ function EditEdgeText(props: { exam: examApiType; kind: edgeTextKind }) {
     const queryClient = useQueryClient();
 
     const updateExamEdgeTextMutation = useMutation({
-        mutationFn: api.updateExamEdgeText,
+        mutationFn: examsApi.updateExamEdgeText,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['exams', props.exam.id],
