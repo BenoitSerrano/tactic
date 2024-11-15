@@ -1,6 +1,5 @@
 import { Navigate } from 'react-router-dom';
 import { pathHandler } from '../lib/pathHandler';
-import { localStorage } from '../lib/localStorage';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
@@ -10,17 +9,7 @@ function TeacherHome() {
         queryKey: ['establishments'],
         queryFn: api.fetchEstablishments,
     });
-    const previouslyStoredNavigation = localStorage.lastPageVisitedHandler.get();
-    if (previouslyStoredNavigation) {
-        return (
-            <Navigate
-                to={pathHandler.getRoutePath(
-                    previouslyStoredNavigation.ROUTE_KEY,
-                    previouslyStoredNavigation.parameters,
-                )}
-            />
-        );
-    }
+
     if (!establishmentsQuery.data) {
         if (establishmentsQuery.isLoading) {
             return <Loader />;

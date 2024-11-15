@@ -13,11 +13,8 @@ import { establishmentWithClassesType } from '../../lib/api/api';
 import { sortedExamsApiType } from './types';
 import { ExamCreationModal } from './ExamCreationModal';
 import { ClasseHeader } from './ClasseHeader';
-import { useStoreCurrentLocation } from '../../lib/useStoreCurrentLocation';
 
 function Classe() {
-    useStoreCurrentLocation();
-
     const params = useParams();
 
     const establishmentId = params.establishmentId as string;
