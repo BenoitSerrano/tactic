@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { Typography, styled } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LoadingButton } from '@mui/lab';
-import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { QuestionAnswering } from '../components/QuestionAnswering';
 import { TestPageLayout } from '../components/TestPageLayout';
@@ -17,6 +16,7 @@ import { useExerciseIndex } from '../lib/useExerciseIndex';
 import { EmptyExam } from '../components/EmptyExam';
 import { ExercisesSummary } from '../components/ExercisesSummary';
 import { FinishExamModal } from './FinishExamModal';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 const DELAY_BETWEEN_SHOWING_ALERT_AND_END_OF_EXAM = 30 * 1000;
 
@@ -54,7 +54,7 @@ function QuestionsAnswering(props: {
         }
     }, []);
     const saveDraftMutation = useMutation({
-        mutationFn: api.updateAttempt,
+        mutationFn: attemptsApi.updateAttempt,
         retry: 2,
         onSuccess: () => {
             queryClient.invalidateQueries({
@@ -73,8 +73,8 @@ function QuestionsAnswering(props: {
 
     const finishExamMutation = useMutation({
         mutationFn: async ({ attemptId }: { attemptId: string }) => {
-            await api.updateAttempt({ attemptId, answers: currentAnswers });
-            return api.updateEndedAt({ attemptId });
+            await attemptsApi.updateAttempt({ attemptId, answers: currentAnswers });
+            return attemptsApi.updateAttemptEndedAt({ attemptId });
         },
         onSuccess: () => {
             props.onExamDone();

@@ -17,7 +17,7 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/attempts/count-by-correction-status',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: attemptController.fetchAttemptsCountByCorrectionStatus,
+        controller: attemptController.getAttemptsCountByCorrectionStatus,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
@@ -35,14 +35,13 @@ const attemptRoutes: Array<routeType<any, any, any>> = [
         method: 'GET',
         path: '/attempts/:attemptId/with-answers',
         kind: 'public',
-        controller: attemptController.fetchAttemptWithAnswers,
+        controller: attemptController.getAttemptWithAnswers,
     },
-
     {
         method: 'GET',
         path: '/attempts/:attemptId/without-answers',
         kind: 'public',
-        controller: attemptController.fetchAttemptWithoutAnswers,
+        controller: attemptController.getAttemptWithoutAnswers,
     },
     {
         method: 'PUT',

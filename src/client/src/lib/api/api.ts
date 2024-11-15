@@ -5,13 +5,6 @@ import { localSessionHandler } from '../localSessionHandler';
 const api = {
     login,
     createUser,
-    searchAttempt,
-    createAttempt,
-    fetchAttemptWithAnswers,
-    fetchAttemptWithoutAnswers,
-    updateAttempt,
-    updateAttemptCheatingSummary,
-    deleteAttempt,
     fetchStudents,
     fetchStudent,
     updateStudentNames,
@@ -32,16 +25,10 @@ const api = {
     deleteQuestion,
     duplicateQuestion,
     updateQuestionsOrder,
-    updateManualMark,
     updateExercisesOrder,
-    updateEndedAt,
-    deleteEndedAt,
-    updateCorrectedAt,
-    deleteCorrectedAt,
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
     resetPassword,
-    fetchAttemptsCountByCorrectionStatus,
     fetchEstablishmentWithClasses,
     createClasse,
     deleteClasse,
@@ -147,26 +134,6 @@ async function login(params: { email: string; password: string }) {
     return performApiCall(URL, 'POST', { email: params.email, password: params.password });
 }
 
-async function searchAttempt({ examId, studentId }: { examId: string; studentId: string }) {
-    const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
-    return performApiCall(URL, 'GET');
-}
-
-async function createAttempt({ examId, studentId }: { examId: string; studentId: string }) {
-    const URL = `${BASE_URL}/exams/${examId}/students/${studentId}/attempts`;
-    return performApiCall(URL, 'POST', {});
-}
-
-async function fetchAttemptWithAnswers(params: { attemptId: string }) {
-    const URL = `${BASE_URL}/attempts/${params.attemptId}/with-answers`;
-    return performApiCall(URL, 'GET');
-}
-
-async function fetchAttemptWithoutAnswers(attemptId: string) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/without-answers`;
-    return performApiCall(URL, 'GET');
-}
-
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
 async function addQuestionAcceptableAnswer({
     examId,
@@ -224,35 +191,6 @@ async function removeOkAnswerFromTexteATrous({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-ok-answers`;
     return performApiCall(URL, 'DELETE', { okAnswer, blankIndex });
-}
-
-async function updateAttempt({
-    attemptId,
-    answers,
-}: {
-    attemptId: string;
-    answers: Record<number, string>;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}`;
-    return performApiCall(URL, 'PUT', answers);
-}
-
-async function updateAttemptCheatingSummary({
-    attemptId,
-    roundTrips,
-    timeSpentOutside,
-}: {
-    attemptId: string;
-    roundTrips: number;
-    timeSpentOutside: number;
-}) {
-    const URL = `${BASE_URL}/attempts/${attemptId}/cheating-summary`;
-    return performApiCall(URL, 'PATCH', { roundTrips, timeSpentOutside });
-}
-
-async function deleteAttempt(params: { attemptId: string; examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}`;
-    return performApiCall(URL, 'DELETE');
 }
 
 async function fetchStudentByEmailForExam(params: { email: string; examId: string }) {
@@ -423,38 +361,6 @@ async function updateQuestionsOrder(params: {
     });
 }
 
-async function updateManualMark(params: {
-    examId: string;
-    attemptId: string;
-    questionId: number;
-    manualMark: number;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/questions/${params.questionId}/manual-mark`;
-    return performApiCall(URL, 'PATCH', {
-        manualMark: params.manualMark,
-    });
-}
-
-async function updateEndedAt(params: { attemptId: string }) {
-    const URL = `${BASE_URL}/attempts/${params.attemptId}/endedAt`;
-    return performApiCall(URL, 'PATCH');
-}
-
-async function deleteEndedAt(params: { attemptId: string; examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/endedAt`;
-    return performApiCall(URL, 'DELETE');
-}
-
-async function updateCorrectedAt(params: { attemptId: string; examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/correctedAt`;
-    return performApiCall(URL, 'PATCH');
-}
-
-async function deleteCorrectedAt(params: { attemptId: string; examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/${params.attemptId}/correctedAt`;
-    return performApiCall(URL, 'DELETE');
-}
-
 async function deleteQuestion(params: { examId: string; questionId: number }) {
     const URL = `${BASE_URL}/exams/${params.examId}/questions/${params.questionId}`;
     return performApiCall(URL, 'DELETE');
@@ -474,11 +380,6 @@ async function updateExercisesOrder(params: { examId: string; orderedIds: number
     return performApiCall(URL, 'PATCH', {
         orderedIds: params.orderedIds,
     });
-}
-
-async function fetchAttemptsCountByCorrectionStatus(params: { examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/attempts/count-by-correction-status`;
-    return performApiCall(URL, 'GET');
 }
 
 async function fetchEstablishmentWithClasses(

@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
-import { api } from '../../../lib/api';
 import { Loader } from '../../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
 import { attemptWithAnswersApiType } from '../types';
 import { attemptsCountByAttemptStatusApiType } from '../../../types';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function ExamChecking() {
     const params = useParams();
@@ -14,11 +14,11 @@ function ExamChecking() {
     const establishmentId = params.establishmentId as string;
     const classeId = params.classeId as string;
     const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
-        queryKey: ['attempts', attemptId],
-        queryFn: () => api.fetchAttemptWithAnswers({ attemptId }),
+        queryKey: ['attempts', attemptId, 'with-answers'],
+        queryFn: () => attemptsApi.getAttemptWithAnswers({ attemptId }),
     });
     const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
-        queryFn: () => api.fetchAttemptsCountByCorrectionStatus({ examId }),
+        queryFn: () => attemptsApi.getAttemptsCountByCorrectionStatus({ examId }),
         queryKey: ['attempts-count-by-attempt-status', examId],
     });
 

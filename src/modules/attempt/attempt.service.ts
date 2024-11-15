@@ -20,8 +20,8 @@ function buildAttemptService() {
         searchAttempt,
         createAttempt,
         updateAttempt,
-        fetchAttemptWithAnswers,
-        fetchAttemptWithoutAnswers,
+        getAttemptWithAnswers,
+        getAttemptWithoutAnswers,
         deleteAttempt,
         assertIsTimeLimitNotExceeded,
         updateAttemptDuration,
@@ -35,7 +35,7 @@ function buildAttemptService() {
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
         deleteAttemptCorrectedAt,
-        fetchAttemptsCountByCorrectionStatus,
+        getAttemptsCountByCorrectionStatus,
         convertAttemptQuestionsPoints,
     };
 
@@ -91,7 +91,7 @@ function buildAttemptService() {
         return true;
     }
 
-    async function fetchAttemptWithAnswers(attemptId: Attempt['id']) {
+    async function getAttemptWithAnswers(attemptId: Attempt['id']) {
         const examService = buildExamService();
 
         const attempt = await attemptRepository.findOneOrFail({
@@ -195,7 +195,7 @@ function buildAttemptService() {
         return attemptRepository.save(updatedAttempts);
     }
 
-    async function fetchAttemptWithoutAnswers(attemptId: Attempt['id']) {
+    async function getAttemptWithoutAnswers(attemptId: Attempt['id']) {
         const examService = buildExamService();
 
         const attempt = await attemptRepository.findOneOrFail({
@@ -356,7 +356,7 @@ function buildAttemptService() {
         }
     }
 
-    async function fetchAttemptsCountByCorrectionStatus(examId: Exam['id']) {
+    async function getAttemptsCountByCorrectionStatus(examId: Exam['id']) {
         const attempts = await attemptRepository.find({
             select: {
                 id: true,

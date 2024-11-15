@@ -1,6 +1,5 @@
 import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
-import { api } from '../../../lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { Navigate, useParams } from 'react-router-dom';
 import { attemptWithAnswersApiType } from '../types';
@@ -8,14 +7,15 @@ import { QuestionsConsulting } from './QuestionsConsulting';
 import { StudentPage } from '../../../components/StudentPage';
 import { computePathKeyToNavigateTo } from '../../../lib/computePathKeyToNavigateTo';
 import { pathHandler } from '../../../lib/pathHandler';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function ExamConsulting() {
     const params = useParams();
     const attemptId = params.attemptId as string;
     const studentId = params.studentId as string;
     const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
-        queryKey: ['attempts', attemptId],
-        queryFn: () => api.fetchAttemptWithAnswers({ attemptId }),
+        queryKey: ['attempts', attemptId, 'with-answers'],
+        queryFn: () => attemptsApi.getAttemptWithAnswers({ attemptId }),
     });
 
     if (!attemptWithAnswersQuery.data) {

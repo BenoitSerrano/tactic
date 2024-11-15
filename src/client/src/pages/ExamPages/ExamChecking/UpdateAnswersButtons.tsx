@@ -9,6 +9,7 @@ import { attemptStatusType, gradeType } from '../../../types';
 import { attributeGradeToAnswerActions } from './constants';
 import { IconButton } from '../../../components/IconButton';
 import { gradeConverter } from '../../../lib/gradeConverter';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function UpdateAnswersButtons(props: {
     attemptStatus: attemptStatusType;
@@ -49,7 +50,7 @@ function UpdateAnswersButtons(props: {
     });
 
     const saveManualMarkMutation = useMutation({
-        mutationFn: api.updateManualMark,
+        mutationFn: attemptsApi.updateManualMark,
         onSuccess: () => {
             props.refetch();
         },

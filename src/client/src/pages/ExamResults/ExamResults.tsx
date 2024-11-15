@@ -7,7 +7,6 @@ import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmail
 import LockIcon from '@mui/icons-material/Lock';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
-import { api } from '../../lib/api';
 import {
     IconButton,
     Table,
@@ -37,6 +36,7 @@ import { attemptStatusMapping } from './constants';
 import { downloadResultsToCsv } from './lib/downloadResultsToCsv';
 import { ExamPageTitle } from '../../components/ExamPageTitle';
 import { examsApi } from '../../lib/api/examsApi';
+import { attemptsApi } from '../../lib/api/attemptsApi';
 
 type sortColumnType =
     | 'email'
@@ -61,7 +61,7 @@ function ExamResults() {
     });
 
     const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
-        queryFn: () => api.fetchAttemptsCountByCorrectionStatus({ examId }),
+        queryFn: () => attemptsApi.getAttemptsCountByCorrectionStatus({ examId }),
         queryKey: ['attempts-count-by-attempt-status', examId],
     });
 
@@ -69,7 +69,7 @@ function ExamResults() {
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const { displayAlert } = useAlert();
     const deleteAttemptMutation = useMutation({
-        mutationFn: api.deleteAttempt,
+        mutationFn: attemptsApi.deleteAttempt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exam-results'] });
         },
@@ -83,7 +83,7 @@ function ExamResults() {
     });
 
     const lockAttemptMutation = useMutation({
-        mutationFn: api.updateEndedAt,
+        mutationFn: attemptsApi.updateAttemptEndedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exam-results'] });
             displayAlert({
@@ -101,7 +101,7 @@ function ExamResults() {
     });
 
     const unlockAttemptMutation = useMutation({
-        mutationFn: api.deleteEndedAt,
+        mutationFn: attemptsApi.deleteAttemptEndedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exam-results'] });
             displayAlert({
