@@ -75,7 +75,38 @@ async function importDb() {
         {},
         { hashedPassword: '7b155b65c3ecb88501347988ab889b021c4c891e547976b27e2419734117240b' }, // "test"
     );
-    console.log('Users inserted! Now fetching exams...');
+    console.log('Users inserted!');
+
+    console.log('Now fetching establishments...');
+
+    const allEstablishments = await api.fetchAllEstablishments();
+
+    console.log(
+        `${allEstablishments.length} establishments fetched! Inserting them in database...`,
+    );
+
+    await establishmentRepository.insert(allEstablishments);
+
+    console.log('Establishments inserted!');
+    console.log('Now fetching classes...');
+
+    const allClasses = await api.fetchAllClasses();
+
+    console.log(`${allClasses.length} classes fetched! Inserting them in database...`);
+
+    await classeRepository.insert(allClasses);
+
+    console.log('Classes inserted!');
+    console.log('Now fetching students...');
+
+    const allStudents = await api.fetchAllStudents();
+
+    console.log(`${allStudents.length} students fetched! Inserting them in database...`);
+
+    await studentRepository.insert(allStudents);
+
+    console.log('Students inserted!');
+    console.log('Now fetching exams...');
     const allExams = await api.fetchAllExams();
     console.log(`${allExams.length} exams fetched! Inserting them in database...`);
 
@@ -96,33 +127,8 @@ async function importDb() {
             }
         }
     }
-    console.log('Exams inserted! Now fetching establishments...');
-
-    const allEstablishments = await api.fetchAllEstablishments();
-
-    console.log(
-        `${allEstablishments.length} establishments fetched! Inserting them in database...`,
-    );
-
-    await establishmentRepository.insert(allEstablishments);
-
-    console.log('Establishments inserted! Now fetching classes...');
-
-    const allClasses = await api.fetchAllClasses();
-
-    console.log(`${allClasses.length} classes fetched! Inserting them in database...`);
-
-    await classeRepository.insert(allClasses);
-
-    console.log('Classes inserted! Now fetching students...');
-
-    const allStudents = await api.fetchAllStudents();
-
-    console.log(`${allStudents.length} students fetched! Inserting them in database...`);
-
-    await studentRepository.insert(allStudents);
-
-    console.log('Students inserted! Now fetching attempts...');
+    console.log('Exams inserted!');
+    console.log('Now fetching attempts...');
 
     const allAttempts = await api.fetchAllAttempts();
 
