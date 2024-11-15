@@ -31,7 +31,6 @@ const api = {
     createClasse,
     deleteClasse,
     changeClasse,
-    fetchUserExams,
     fetchEstablishments,
     createEstablishment,
     updateClasseName,
@@ -109,11 +108,6 @@ async function createEstablishment(params: {
 async function updateEstablishmentId(params: { establishmentId: string; classeId: string }) {
     const URL = `${BASE_URL}/classes/${params.classeId}/establishmentId`;
     return performApiCall(URL, 'PATCH', { establishmentId: params.establishmentId });
-}
-
-async function fetchUserExams(userId: string) {
-    const URL = `${BASE_URL}/users/${userId}/exams`;
-    return performApiCall(URL, 'GET');
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde

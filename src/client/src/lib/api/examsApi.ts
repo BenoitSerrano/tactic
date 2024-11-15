@@ -3,6 +3,7 @@ import { performApiCall } from './lib/performApiCall';
 
 const examsApi = {
     getExamsByClasse,
+    getExamsByUser,
     getExam,
     getExamWithQuestions,
     getExamWithoutAnswers,
@@ -32,6 +33,11 @@ async function getExamsByClasse(params: {
         }
         return `${BASE_URL}/establishments/${params.establishmentId}/classes/${params.classeId}/exams`;
     }
+}
+
+async function getExamsByUser(userId: string) {
+    const URL = `${BASE_URL}/users/${userId}/exams`;
+    return performApiCall(URL, 'GET');
 }
 
 async function getExam(examId: string) {
