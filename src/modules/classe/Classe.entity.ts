@@ -21,7 +21,7 @@ export class Classe {
     @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: false })
     user: User;
 
-    @ManyToOne(() => Establishment, { onDelete: 'CASCADE', nullable: true })
+    @ManyToOne(() => Establishment, { onDelete: 'CASCADE', nullable: false })
     establishment: Establishment;
 
     @OneToMany(() => Exam, (exam) => exam.classe)
