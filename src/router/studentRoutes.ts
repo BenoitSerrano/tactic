@@ -8,7 +8,7 @@ const studentController = buildStudentController();
 const studentRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
-        path: '/classes/:classeId/students',
+        path: '/classes/:classeId/students/with-attempts',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: studentController.getStudentsWithAttempts,
@@ -18,10 +18,10 @@ const studentRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
-        path: '/classes/:classeId/studentsCount',
+        path: '/classes/:classeId/students-count',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: studentController.countStudentForClasse,
+        controller: studentController.countStudentByClasse,
     },
     {
         method: 'GET',
@@ -46,7 +46,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         method: 'GET',
         path: '/exams/:examId/students/:email',
         kind: 'public',
-        controller: studentController.fetchStudentByEmailForExam,
+        controller: studentController.getStudentByEmailForExam,
     },
     {
         method: 'POST',
@@ -66,7 +66,7 @@ const studentRoutes: Array<routeType<any, any, any>> = [
         path: '/classes/:classeId/students/:studentId/new-classe/:newClasseId',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: studentController.changeClasse,
+        controller: studentController.updateStudentClasse,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'classe', key: 'classeId' },
             { entity: 'classe', key: 'newClasseId' },

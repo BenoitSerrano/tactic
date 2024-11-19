@@ -14,6 +14,7 @@ import { sortedExamsApiType } from './types';
 import { ExamCreationModal } from './ExamCreationModal';
 import { ClasseHeader } from './ClasseHeader';
 import { examsApi } from '../../lib/api/examsApi';
+import { studentsApi } from '../../lib/api/studentsApi';
 
 function Classe() {
     const params = useParams();
@@ -30,8 +31,8 @@ function Classe() {
         queryFn: api.fetchEstablishments,
     });
     const studentsCountQuery = useQuery({
-        queryKey: ['classes', classeId, 'studentsCount'],
-        queryFn: () => api.countStudentsByClasse(classeId),
+        queryKey: ['classes', classeId, 'students-count'],
+        queryFn: () => studentsApi.countStudentsByClasse(classeId),
     });
 
     const queryClient = useQueryClient();

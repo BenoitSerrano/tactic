@@ -3,12 +3,6 @@ import { acceptableAnswerType, questionKindType } from '../../types';
 import { localSessionHandler } from '../localSessionHandler';
 
 const api = {
-    fetchStudents,
-    fetchStudent,
-    updateStudentNames,
-    fetchStudentByEmailForExam,
-    createStudents,
-    deleteStudent,
     updateEstablishmentName,
     updateDefaultEdgeText,
     createQuestion,
@@ -30,12 +24,10 @@ const api = {
     fetchEstablishmentWithClasses,
     createClasse,
     deleteClasse,
-    changeClasse,
     fetchEstablishments,
     createEstablishment,
     updateClasseName,
     updateEstablishmentId,
-    countStudentsByClasse,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -90,11 +82,6 @@ type establishmentWithClassesType = {
 
 async function fetchEstablishments(): Promise<Array<establishmentWithClassesType>> {
     const URL = `${BASE_URL}/establishments`;
-    return performApiCall(URL, 'GET');
-}
-
-async function countStudentsByClasse(classeId: string): Promise<{ studentsCount: number }> {
-    const URL = `${BASE_URL}/classes/${classeId}/studentsCount`;
     return performApiCall(URL, 'GET');
 }
 
@@ -167,40 +154,6 @@ async function removeOkAnswerFromTexteATrous({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-ok-answers`;
     return performApiCall(URL, 'DELETE', { okAnswer, blankIndex });
-}
-
-async function fetchStudentByEmailForExam(params: { email: string; examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/students/${params.email}`;
-    return performApiCall(URL, 'GET');
-}
-
-async function deleteStudent(params: { studentId: string; classeId: string }) {
-    const URL = `${BASE_URL}/classes/${params.classeId}/students/${params.studentId}`;
-    return performApiCall(URL, 'DELETE');
-}
-
-async function fetchStudents(params: { classeId: string }) {
-    const URL = `${BASE_URL}/classes/${params.classeId}/students`;
-    return performApiCall(URL, 'GET');
-}
-
-async function fetchStudent(params: { studentId: string }) {
-    const URL = `${BASE_URL}/students/${params.studentId}`;
-    return performApiCall(URL, 'GET');
-}
-
-async function updateStudentNames(params: {
-    studentId: string;
-    firstName?: string;
-    lastName?: string;
-}) {
-    const URL = `${BASE_URL}/students/${params.studentId}/names`;
-    return performApiCall(URL, 'PATCH', { firstName: params.firstName, lastName: params.lastName });
-}
-
-async function createStudents(params: { emails: string[]; classeId: string }) {
-    const URL = `${BASE_URL}/classes/${params.classeId}/students`;
-    return performApiCall(URL, 'POST', { emails: params.emails });
 }
 
 async function updateEstablishmentName({
@@ -376,11 +329,6 @@ async function createClasse(params: {
 async function deleteClasse(params: { classeId: string }) {
     const URL = `${BASE_URL}/classes/${params.classeId}`;
     return performApiCall(URL, 'DELETE');
-}
-
-async function changeClasse(params: { classeId: string; studentId: string; newClasseId: string }) {
-    const URL = `${BASE_URL}/classes/${params.classeId}/students/${params.studentId}/new-classe/${params.newClasseId}`;
-    return performApiCall(URL, 'PATCH');
 }
 
 export { api };

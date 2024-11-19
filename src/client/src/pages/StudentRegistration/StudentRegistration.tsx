@@ -1,24 +1,25 @@
 import { FormEvent, useState } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
-import { api } from '../../lib/api';
 import { StudentPage } from '../../components/StudentPage';
 import { Card } from '../../components/Card';
 import { Loader } from '../../components/Loader';
 import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
 import { LoadingIconButton } from '../../components/LoadingIconButton';
+import { studentsApi } from '../../lib/api/studentsApi';
 
 function StudentRegistration() {
     const params = useParams();
     const examId = params.examId as string;
     const studentId = params.studentId as string;
     const encodedAction = params.encodedAction as string;
+    const queryClient = useQueryClient();
     const query = useQuery({
         queryKey: ['students', studentId],
-        queryFn: () => api.fetchStudent({ studentId }),
+        queryFn: () => studentsApi.getStudent({ studentId }),
     });
     const { displayAlert } = useAlert();
     const navigate = useNavigate();
@@ -27,8 +28,10 @@ function StudentRegistration() {
     const [lastName, setLastName] = useState('');
 
     const updateStudentNamesMutation = useMutation({
-        mutationFn: api.updateStudentNames,
+        mutationFn: studentsApi.updateStudentNames,
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [`exams`, examId] });
+
             const path = pathHandler.getRoutePath('STUDENT_HOME', {
                 examId,
                 studentId,

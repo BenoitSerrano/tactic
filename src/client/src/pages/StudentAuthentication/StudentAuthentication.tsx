@@ -3,7 +3,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
-import { api } from '../../lib/api';
 import { NotLoggedInPage } from '../../components/NotLoggedInPage';
 import { Card } from '../../components/Card';
 import { Loader } from '../../components/Loader';
@@ -11,6 +10,7 @@ import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
 import { LoadingIconButton } from '../../components/LoadingIconButton';
 import { examsApi } from '../../lib/api/examsApi';
+import { studentsApi } from '../../lib/api/studentsApi';
 
 type studentType = {
     id: string;
@@ -33,7 +33,7 @@ function StudentAuthentication() {
     const [email, setEmail] = useState('');
 
     const fetchStudentByEmailMutation = useMutation({
-        mutationFn: api.fetchStudentByEmailForExam,
+        mutationFn: studentsApi.getStudentByEmailForExam,
         onSuccess: (student: studentType) => {
             const hasStudentAlreadyRegistered = student.firstName !== '' || student.lastName !== '';
 

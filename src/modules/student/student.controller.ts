@@ -11,17 +11,17 @@ function buildStudentController() {
         getStudent,
         updateStudentNames,
         getStudentsWithAttempts,
-        fetchStudentByEmailForExam,
+        getStudentByEmailForExam,
         deleteStudent,
-        changeClasse,
+        updateStudentClasse,
         getAllStudents,
-        countStudentForClasse,
+        countStudentByClasse,
     };
 
     return studentController;
 
-    async function countStudentForClasse(params: { urlParams: { classeId: Classe['id'] } }) {
-        return studentService.countStudentForClasse(params.urlParams.classeId);
+    async function countStudentByClasse(params: { urlParams: { classeId: Classe['id'] } }) {
+        return studentService.countStudentByClasse(params.urlParams.classeId);
     }
 
     async function getAllStudents() {
@@ -53,10 +53,11 @@ function buildStudentController() {
         return studentService.updateStudentNames(params.urlParams.studentId, params.body);
     }
 
-    async function fetchStudentByEmailForExam(params: {
+    async function getStudentByEmailForExam(params: {
         urlParams: { email: string; examId: string };
     }) {
-        return studentService.fetchStudentByEmailForExam({
+        //TODO add controll ASSERT IS STUDENT ALLOWED TO EXAM
+        return studentService.getStudentByEmailForExam({
             email: params.urlParams.email,
             examId: params.urlParams.examId,
         });
@@ -66,8 +67,10 @@ function buildStudentController() {
         return studentService.deleteStudent(params.urlParams.studentId);
     }
 
-    async function changeClasse(params: { urlParams: { studentId: string; newClasseId: string } }) {
-        return studentService.changeClasse(
+    async function updateStudentClasse(params: {
+        urlParams: { studentId: string; newClasseId: string };
+    }) {
+        return studentService.updateStudentClasse(
             { studentId: params.urlParams.studentId },
             { newClasseId: params.urlParams.newClasseId },
         );

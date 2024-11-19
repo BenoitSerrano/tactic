@@ -19,16 +19,16 @@ function buildStudentService() {
         getStudent,
         updateStudentNames,
         getStudentsWithAttempts,
-        fetchStudentByEmailForExam,
+        getStudentByEmailForExam,
         deleteStudent,
         bulkInsertStudents,
-        changeClasse,
-        countStudentForClasse,
+        updateStudentClasse,
+        countStudentByClasse,
     };
 
     return studentService;
 
-    async function countStudentForClasse(classeId: Classe['id']) {
+    async function countStudentByClasse(classeId: Classe['id']) {
         const studentsCount = await studentRepository.count({
             where: { classe: { id: classeId } },
             relations: { classe: true },
@@ -109,7 +109,7 @@ function buildStudentService() {
         }, {} as Record<string, Student>);
     }
 
-    async function fetchStudentByEmailForExam(criteria: { examId: Exam['id']; email: string }) {
+    async function getStudentByEmailForExam(criteria: { examId: Exam['id']; email: string }) {
         const examService = buildExamService();
         const examUserId = await examService.getUserIdForExam(criteria.examId);
         return studentRepository.findOneOrFail({
@@ -152,7 +152,7 @@ function buildStudentService() {
         return studentRepository.insert(students);
     }
 
-    async function changeClasse(
+    async function updateStudentClasse(
         criteria: { studentId: Student['id'] },
         body: { newClasseId: Classe['id'] },
     ) {
