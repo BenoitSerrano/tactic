@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField } from '@mui/material';
-import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { Modal } from '../../components/Modal';
+import { classesApi } from '../../lib/api/classesApi';
 
 function ClasseCreationModal(props: {
     close: () => void;
@@ -15,10 +15,10 @@ function ClasseCreationModal(props: {
     const [name, setName] = useState('');
 
     const createClasseMutation = useMutation({
-        mutationFn: api.createClasse,
+        mutationFn: classesApi.createClasse,
         onSuccess: () => {
             setName('');
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
             displayAlert({
                 text: `La classe "${name}" a bien été créée`,
                 variant: 'success',

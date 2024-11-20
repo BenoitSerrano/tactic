@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { api } from '../../lib/api';
 import { styled } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { Loader } from '../../components/Loader';
@@ -9,12 +8,12 @@ import { Menu } from '../../components/Menu';
 import { pathHandler } from '../../lib/pathHandler';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { ExamTable } from '../../components/TeacherPage/ExamTable/ExamTable';
-import { establishmentWithClassesType } from '../../lib/api/api';
 import { sortedExamsApiType } from './types';
 import { ExamCreationModal } from './ExamCreationModal';
 import { ClasseHeader } from './ClasseHeader';
 import { examsApi } from '../../lib/api/examsApi';
 import { studentsApi } from '../../lib/api/studentsApi';
+import { establishmentsApi, establishmentWithClassesType } from '../../lib/api/establishmentsApi';
 
 function Classe() {
     const params = useParams();
@@ -27,8 +26,8 @@ function Classe() {
         queryFn: () => examsApi.getExamsByClasse({ establishmentId, classeId }),
     });
     const establishmentsQuery = useQuery({
-        queryKey: ['establishments'],
-        queryFn: api.fetchEstablishments,
+        queryKey: ['establishments', 'with-classes'],
+        queryFn: establishmentsApi.getEstablishmentsWithClasses,
     });
     const studentsCountQuery = useQuery({
         queryKey: ['classes', classeId, 'students-count'],

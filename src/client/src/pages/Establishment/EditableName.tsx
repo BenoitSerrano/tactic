@@ -4,21 +4,21 @@ import { TextField, Typography, styled } from '@mui/material';
 import { FormEvent, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAlert } from '../../lib/alert';
-import { api } from '../../lib/api';
 import { IconButton } from '../../components/IconButton';
+import { establishmentsApi } from '../../lib/api/establishmentsApi';
 
 function EditableName(props: { establishment: { id: string; name: string } }) {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const updateEstablishmentNameMutation = useMutation({
-        mutationFn: api.updateEstablishmentName,
+        mutationFn: establishmentsApi.updateEstablishmentName,
         onSuccess: () => {
             displayAlert({
                 variant: 'success',
                 text: `L'établissement "${props.establishment.name}" a bien été modifié`,
             });
             setIsEditing(false);
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
         },
         onError: (error) => {
             setIsEditing(false);

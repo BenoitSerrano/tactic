@@ -1,5 +1,4 @@
 import { Slide, styled, TextField, Typography } from '@mui/material';
-import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -7,6 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { IconButton } from '../../components/IconButton';
 import { establishmentType } from './types';
+import { establishmentsApi } from '../../lib/api/establishmentsApi';
 
 function EstablishmentSlide(props: {
     isDisplayed: boolean;
@@ -16,10 +16,10 @@ function EstablishmentSlide(props: {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const createEstablishmentMutation = useMutation({
-        mutationFn: api.createEstablishment,
+        mutationFn: establishmentsApi.createEstablishment,
         onSuccess: (establishment) => {
             setName('');
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
             props.goToNextSlide(establishment);
         },
         onError: (error) => {

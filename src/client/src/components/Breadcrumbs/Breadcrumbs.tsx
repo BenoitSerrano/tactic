@@ -1,8 +1,8 @@
 import { Breadcrumbs as MuiBreadcrumbs, Typography, styled } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { computeBreadcrumbs } from './computeBreadcrumbs';
-import { establishmentWithClassesType } from '../../lib/api/api';
 import { BREADCRUMBS_HEIGHT } from '../../constants';
+import { establishmentWithClassesType } from '../../lib/api/establishmentsApi';
 
 function Breadcrumbs(props: { establishments: establishmentWithClassesType[] }) {
     const location = useLocation();

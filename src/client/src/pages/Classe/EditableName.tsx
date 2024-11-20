@@ -18,7 +18,7 @@ function EditableName(props: { classe: { id: string; name: string } }) {
                 text: `La classe "${props.classe.name}" a bien été modifiée`,
             });
             setIsEditing(false);
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
         },
         onError: (error) => {
             setIsEditing(false);

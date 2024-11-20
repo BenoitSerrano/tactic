@@ -3,7 +3,6 @@ import { acceptableAnswerType, questionKindType } from '../../types';
 import { localSessionHandler } from '../localSessionHandler';
 
 const api = {
-    updateEstablishmentName,
     updateDefaultEdgeText,
     createQuestion,
     createExercise,
@@ -21,11 +20,7 @@ const api = {
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
     resetPassword,
-    fetchEstablishmentWithClasses,
-    createClasse,
     deleteClasse,
-    fetchEstablishments,
-    createEstablishment,
     updateClasseName,
     updateEstablishmentId,
 };
@@ -70,26 +65,6 @@ async function performApiCall(
         }
     }
     return response.json();
-}
-
-type classeType = { id: string; name: string };
-
-type establishmentWithClassesType = {
-    id: string;
-    name: string;
-    classes: Array<classeType>;
-};
-
-async function fetchEstablishments(): Promise<Array<establishmentWithClassesType>> {
-    const URL = `${BASE_URL}/establishments`;
-    return performApiCall(URL, 'GET');
-}
-
-async function createEstablishment(params: {
-    name: string;
-}): Promise<{ id: string; name: string }> {
-    const URL = `${BASE_URL}/establishments`;
-    return performApiCall(URL, 'POST', { name: params.name });
 }
 
 async function updateEstablishmentId(params: { establishmentId: string; classeId: string }) {
@@ -154,17 +129,6 @@ async function removeOkAnswerFromTexteATrous({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-ok-answers`;
     return performApiCall(URL, 'DELETE', { okAnswer, blankIndex });
-}
-
-async function updateEstablishmentName({
-    establishmentId,
-    name,
-}: {
-    establishmentId: string;
-    name: string;
-}) {
-    const URL = `${BASE_URL}/establishments/${establishmentId}/name`;
-    return performApiCall(URL, 'PATCH', { name });
 }
 
 async function updateClasseName({ classeId, name }: { classeId: string; name: string }) {
@@ -311,25 +275,9 @@ async function updateExercisesOrder(params: { examId: string; orderedIds: number
     });
 }
 
-async function fetchEstablishmentWithClasses(
-    establishmentId: string,
-): Promise<establishmentWithClassesType> {
-    const URL = `${BASE_URL}/establishments/${establishmentId}`;
-    return performApiCall(URL, 'GET');
-}
-
-async function createClasse(params: {
-    name: string;
-    establishmentId: string;
-}): Promise<classeType> {
-    const URL = `${BASE_URL}/establishments/${params.establishmentId}/classes`;
-    return performApiCall(URL, 'POST', { name: params.name });
-}
-
 async function deleteClasse(params: { classeId: string }) {
     const URL = `${BASE_URL}/classes/${params.classeId}`;
     return performApiCall(URL, 'DELETE');
 }
 
 export { api };
-export type { establishmentWithClassesType };

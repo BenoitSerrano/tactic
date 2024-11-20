@@ -1,5 +1,4 @@
 import { Slide, styled, TextField, Typography } from '@mui/material';
-import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -7,6 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { IconButton } from '../../components/IconButton';
 import { classeType, establishmentType } from './types';
+import { classesApi } from '../../lib/api/classesApi';
 
 function ClasseSlide(props: {
     currentEstablishment: establishmentType | undefined;
@@ -19,13 +19,13 @@ function ClasseSlide(props: {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const createClasseMutation = useMutation({
-        mutationFn: api.createClasse,
+        mutationFn: classesApi.createClasse,
         onSuccess: (classe) => {
             if (!props.currentEstablishment) {
                 return;
             }
             setName('');
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
             props.finishOnboarding(props.currentEstablishment.id, classe.id);
         },
         onError: (error) => {

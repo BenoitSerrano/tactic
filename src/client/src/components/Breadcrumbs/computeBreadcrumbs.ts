@@ -1,4 +1,4 @@
-import { establishmentWithClassesType } from '../../lib/api/api';
+import { establishmentWithClassesType } from '../../lib/api/establishmentsApi';
 import { pathHandler } from '../../lib/pathHandler';
 import { editingExamLabelMapping } from './constants';
 import { breadcrumbItemType } from './types';

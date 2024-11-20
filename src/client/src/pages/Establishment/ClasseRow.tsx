@@ -19,7 +19,7 @@ function ClasseRow(props: { classe: { id: string; name: string } }) {
         mutationFn: api.deleteClasse,
         onSuccess: () => {
             displayAlert({ variant: 'success', text: 'La classe a été supprimée.' });
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
         },
         onError: (error) => {
             console.error(error);
