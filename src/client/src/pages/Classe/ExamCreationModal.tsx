@@ -19,7 +19,7 @@ function ExamCreationModal(props: {
     const [name, setName] = useState('');
 
     const [startDateTime, setStartDateTime] = useState<number | undefined>();
-    const [endDateTime, setEndDateTime] = useState<number | undefined>();
+    const [endDateTime, setEndDateTime] = useState<number | undefined>(Infinity);
     const [duration, setDuration] = useState(`${EXAM_DEFAULT_DURATION}`);
     const [isThereDuration, setIsThereDuration] = useState(true);
     const { displayAlert } = useAlert();
