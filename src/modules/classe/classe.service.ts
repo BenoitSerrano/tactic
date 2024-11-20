@@ -11,12 +11,11 @@ function buildClasseService() {
 
     const classeService = {
         getAllClasses,
-        getClassesByEstablishment,
         getClasseIdsByEstablishment,
         getClasse,
         createClasse,
         deleteClasse,
-        updateEstablishmentId,
+        updateClasseEstablishmentId,
         updateClasseName,
     };
 
@@ -36,15 +35,6 @@ function buildClasseService() {
             where: { id: classeId },
         });
         return classe;
-    }
-
-    async function getClassesByEstablishment(establishmentId: Establishment['id']) {
-        const classes = await classeRepository.find({
-            where: { establishment: { id: establishmentId } },
-            relations: { establishment: true },
-            select: { establishment: { id: true } },
-        });
-        return classes;
     }
 
     async function getClasseIdsByEstablishment(establishmentId: Establishment['id']) {
@@ -77,7 +67,7 @@ function buildClasseService() {
         return result.affected == 1;
     }
 
-    async function updateEstablishmentId(
+    async function updateClasseEstablishmentId(
         critera: { classeId: Classe['id'] },
         newEstablishmentId: Establishment['id'],
     ) {

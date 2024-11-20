@@ -6,11 +6,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { Button } from '../../components/Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { useNavigate } from 'react-router-dom';
 import { pathHandler } from '../../lib/pathHandler';
 import { EditableName } from './EditableName';
+import { classesApi } from '../../lib/api/classesApi';
 
 function ClasseHeader(props: {
     studentsCount: number;
@@ -21,7 +21,7 @@ function ClasseHeader(props: {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const deleteClasseMutation = useMutation({
-        mutationFn: api.deleteClasse,
+        mutationFn: classesApi.deleteClasse,
         onSuccess: () => {
             displayAlert({ variant: 'success', text: 'La classe a été supprimée.' });
             queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });

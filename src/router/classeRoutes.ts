@@ -13,13 +13,6 @@ const classeRoutes: Array<routeType<any, any, any>> = [
         controller: classeController.getAllClasses,
     },
     {
-        method: 'GET',
-        path: '/establishment/:establishmentId/classes',
-        kind: 'authenticated',
-        authorizedRoles: ['teacher'],
-        controller: classeController.getClassesByEstablishment,
-    },
-    {
         method: 'POST',
         path: '/establishments/:establishmentId/classes',
         kind: 'authenticated',
@@ -35,7 +28,7 @@ const classeRoutes: Array<routeType<any, any, any>> = [
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             { entity: 'classe', key: 'classeId' },
         ]),
-        controller: classeController.updateEstablishmentId,
+        controller: classeController.updateClasseEstablishmentId,
         schema: Joi.object({ establishmentId: Joi.string().required() }),
     },
     {

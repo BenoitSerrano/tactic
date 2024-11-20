@@ -20,9 +20,6 @@ const api = {
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
     resetPassword,
-    deleteClasse,
-    updateClasseName,
-    updateEstablishmentId,
 };
 
 const BASE_URL = `${config.API_URL}/api`;
@@ -65,11 +62,6 @@ async function performApiCall(
         }
     }
     return response.json();
-}
-
-async function updateEstablishmentId(params: { establishmentId: string; classeId: string }) {
-    const URL = `${BASE_URL}/classes/${params.classeId}/establishmentId`;
-    return performApiCall(URL, 'PATCH', { establishmentId: params.establishmentId });
 }
 
 // TODO: ajouter l'exerciseId pour s'assurer qu'on est pas en train de faire de la merde
@@ -129,11 +121,6 @@ async function removeOkAnswerFromTexteATrous({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-ok-answers`;
     return performApiCall(URL, 'DELETE', { okAnswer, blankIndex });
-}
-
-async function updateClasseName({ classeId, name }: { classeId: string; name: string }) {
-    const URL = `${BASE_URL}/classes/${classeId}/name`;
-    return performApiCall(URL, 'PATCH', { name });
 }
 
 async function updateDefaultEdgeText({ kind, text }: { kind: 'start' | 'end'; text: string }) {
@@ -273,11 +260,6 @@ async function updateExercisesOrder(params: { examId: string; orderedIds: number
     return performApiCall(URL, 'PATCH', {
         orderedIds: params.orderedIds,
     });
-}
-
-async function deleteClasse(params: { classeId: string }) {
-    const URL = `${BASE_URL}/classes/${params.classeId}`;
-    return performApiCall(URL, 'DELETE');
 }
 
 export { api };
