@@ -4,13 +4,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import { examApiType } from '../../Classe/types';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { LoadingButton } from '@mui/lab';
 import { ExamDoneText } from './ExamDoneText';
 import { ExamStartText } from './ExamStartText';
 import { IconButton } from '../../../components/IconButton';
 import { examsApi } from '../../../lib/api/examsApi';
+import { userConfigurationsApi } from '../../../lib/api/userConfigurationsApi';
 
 type edgeTextKind = 'start' | 'end';
 
@@ -40,7 +40,7 @@ function EditEdgeText(props: { exam: examApiType; kind: edgeTextKind }) {
     });
 
     const updateDefaultEdgeTextMutation = useMutation({
-        mutationFn: api.updateDefaultEdgeText,
+        mutationFn: userConfigurationsApi.updateDefaultEdgeText,
         onSuccess: () => {
             saveEdgeText();
         },

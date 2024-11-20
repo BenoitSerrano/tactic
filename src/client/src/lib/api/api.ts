@@ -3,7 +3,6 @@ import { acceptableAnswerType, questionKindType } from '../../types';
 import { localSessionHandler } from '../localSessionHandler';
 
 const api = {
-    updateDefaultEdgeText,
     createQuestion,
     updateQuestion,
     addQuestionAcceptableAnswer,
@@ -117,11 +116,6 @@ async function removeOkAnswerFromTexteATrous({
 }) {
     const URL = `${BASE_URL}/exams/${examId}/questions/${questionId}/tat-ok-answers`;
     return performApiCall(URL, 'DELETE', { okAnswer, blankIndex });
-}
-
-async function updateDefaultEdgeText({ kind, text }: { kind: 'start' | 'end'; text: string }) {
-    const URL = `${BASE_URL}/user-configurations`;
-    return performApiCall(URL, 'PATCH', { kind, text });
 }
 
 async function createResetPasswordRequest(email: string) {
