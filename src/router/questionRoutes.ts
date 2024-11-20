@@ -51,7 +51,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/questions/:questionId/acceptable-answers',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: questionController.addQuestionAcceptableAnswer,
+        controller: questionController.addAcceptableAnswerToQuestion,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
@@ -72,7 +72,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/questions/:questionId/tat-acceptable-answers',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: questionController.addQuestionAcceptableAnswerToTexteATrous,
+        controller: questionController.addAcceptableAnswerToQuestionTexteATrous,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
@@ -121,19 +121,6 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         }),
     },
     {
-        method: 'POST',
-        path: '/exams/:examId/exercises/:exerciseId/questions/:questionId/duplicate',
-        kind: 'authenticated',
-        authorizedRoles: ['teacher'],
-        controller: questionController.duplicateQuestion,
-        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
-            {
-                entity: 'exam',
-                key: 'examId',
-            },
-        ]),
-    },
-    {
         method: 'DELETE',
         path: '/exams/:examId/questions/:questionId/ok-answers',
         kind: 'authenticated',
@@ -152,7 +139,7 @@ const questionRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/questions/:questionId/tat-ok-answers',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: questionController.removeOkAnswerFromTexteATrous,
+        controller: questionController.removeOkAnswerFromQuestionTexteATrous,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',

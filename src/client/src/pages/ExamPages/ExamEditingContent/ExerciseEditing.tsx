@@ -16,9 +16,9 @@ import { QuestionPreviewing } from './QuestionPreviewing/QuestionPreviewing';
 import { LightHorizontalDivider } from '../../../components/HorizontalDivider';
 import { HorizontalDividerToAddQuestion } from './HorizontalDividers';
 import { QuestionUpsertionModal } from './QuestionUpsertionModal/QuestionUpsertionModal';
-import { useMutation } from '@tanstack/react-query';
-import { api } from '../../../lib/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
+import { questionsApi } from '../../../lib/api/questionsApi';
 
 function ExerciseEditing(props: {
     isExpanded: boolean;
@@ -32,9 +32,13 @@ function ExerciseEditing(props: {
     const [questionUpsertionModalStatus, setQuestionUpsertionModalStatus] = useState<
         questionUpsertionModalStatusType | undefined
     >();
+    const queryClient = useQueryClient();
     const [orderedQuestionIds, setOrderedQuestionIds] = useState(initialOrderedQuestionIds);
     const updateQuestionsOrderMutation = useMutation({
-        mutationFn: api.updateQuestionsOrder,
+        mutationFn: questionsApi.updateQuestionsOrder,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['exams', props.examId, 'with-questions'] });
+        },
         onError: () => {
             displayAlert({
                 variant: 'error',

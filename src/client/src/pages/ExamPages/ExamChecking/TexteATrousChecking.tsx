@@ -3,7 +3,6 @@ import { Menu, Typography, styled } from '@mui/material';
 import { displayedAnswerType } from '../lib/computeDisplayedAnswer';
 import { attributeGradeToAnswerActions } from './constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { computeCanTexteATrousAnswerBeAttributed } from './lib/computeCanTexteATrousAnswerBeAttributed';
 import { computeIsTexteATrousUpdateAnswerButtonLoading } from './lib/computeIsTexteATrousUpdateAnswerButtonLoading';
@@ -13,6 +12,7 @@ import { gradeConverter } from '../../../lib/gradeConverter';
 import { IconButton } from '../../../components/IconButton';
 import { TAT_BLANK_STRING } from '../../../constants';
 import { AcceptableAnswers } from '../components/AcceptableAnswers';
+import { questionsApi } from '../../../lib/api/questionsApi';
 
 const styledContainerMapping = {
     right: styled('span')(({ theme }) => ({
@@ -44,8 +44,8 @@ function TexteATrousChecking(props: {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
 
-    const addQuestionAcceptableAnswerToTexteATrousMutation = useMutation({
-        mutationFn: api.addQuestionAcceptableAnswerToTexteATrous,
+    const addAcceptableAnswerToQuestionToTexteATrousMutation = useMutation({
+        mutationFn: questionsApi.addAcceptableAnswerToQuestionTexteATrous,
         onSuccess: () => {
             closeChunkMenu();
             queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
@@ -60,7 +60,7 @@ function TexteATrousChecking(props: {
     });
 
     const removeOkAnswerFromTexteATrousMutation = useMutation({
-        mutationFn: api.removeOkAnswerFromTexteATrous,
+        mutationFn: questionsApi.removeOkAnswerFromQuestionTexteATrous,
         onSuccess: () => {
             closeChunkMenu();
             queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
@@ -120,8 +120,8 @@ function TexteATrousChecking(props: {
                                             );
                                         const loadingInfo = {
                                             addAcceptableAnswer:
-                                                addQuestionAcceptableAnswerToTexteATrousMutation.isPending
-                                                    ? addQuestionAcceptableAnswerToTexteATrousMutation
+                                                addAcceptableAnswerToQuestionToTexteATrousMutation.isPending
+                                                    ? addAcceptableAnswerToQuestionToTexteATrousMutation
                                                           .variables.acceptableAnswer.grade
                                                     : undefined,
                                             removeOkAnswer:
@@ -213,7 +213,7 @@ function TexteATrousChecking(props: {
                     blankIndex,
                 });
             } else {
-                addQuestionAcceptableAnswerToTexteATrousMutation.mutate({
+                addAcceptableAnswerToQuestionToTexteATrousMutation.mutate({
                     examId: props.examId,
                     questionId: props.question.id,
                     acceptableAnswer: { grade: body.grade, answer },

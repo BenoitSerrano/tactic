@@ -3,10 +3,10 @@ import { styled } from '@mui/material';
 import { QuestionContainer } from '../../components/QuestionContainer';
 import { questionType } from '../types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../../lib/api';
 import { useAlert } from '../../../../lib/alert';
 import { EditionActionMenu } from '../EditionActionMenu';
 import { PointsPreviewing } from './PointsPreviewing';
+import { questionsApi } from '../../../../lib/api/questionsApi';
 
 function QuestionPreviewing(props: {
     question: questionType;
@@ -20,7 +20,7 @@ function QuestionPreviewing(props: {
     const queryClient = useQueryClient();
 
     const deleteQuestionMutation = useMutation({
-        mutationFn: api.deleteQuestion,
+        mutationFn: questionsApi.deleteQuestion,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['exams', props.examId, 'with-questions'],
