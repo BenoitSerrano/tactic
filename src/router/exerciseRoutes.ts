@@ -20,7 +20,6 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
             name: Joi.string().required(),
             instruction: Joi.string().required().allow(''),
             defaultPoints: Joi.number().allow(null),
-            defaultQuestionKind: Joi.string().valid(...questionKinds),
         }),
     },
     {

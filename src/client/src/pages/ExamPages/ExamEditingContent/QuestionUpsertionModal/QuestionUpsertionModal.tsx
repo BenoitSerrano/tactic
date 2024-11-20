@@ -35,7 +35,7 @@ function QuestionUpsertionModal(props: {
         mutationFn: api.updateQuestion,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['exam-with-questions', props.examId],
+                queryKey: ['exams', props.examId, 'with-questions'],
             });
             props.close();
             displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
@@ -46,7 +46,7 @@ function QuestionUpsertionModal(props: {
         mutationFn: api.createQuestion,
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ['exam-with-questions', props.examId],
+                queryKey: ['exams', props.examId, 'with-questions'],
             });
             props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });

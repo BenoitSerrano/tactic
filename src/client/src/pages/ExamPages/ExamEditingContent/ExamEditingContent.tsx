@@ -10,7 +10,7 @@ function ExamEditingContent() {
     const params = useParams();
     const examId = params.examId as string;
     const query = useQuery<examWithQuestionsApiType>({
-        queryKey: ['exam-with-questions', examId],
+        queryKey: ['exams', examId, 'with-questions'],
         queryFn: () => examsApi.getExamWithQuestions(examId),
     });
 

@@ -5,9 +5,6 @@ import { localSessionHandler } from '../localSessionHandler';
 const api = {
     updateDefaultEdgeText,
     createQuestion,
-    createExercise,
-    updateExercise,
-    deleteExercise,
     updateQuestion,
     addQuestionAcceptableAnswer,
     addQuestionAcceptableAnswerToTexteATrous,
@@ -16,7 +13,6 @@ const api = {
     deleteQuestion,
     duplicateQuestion,
     updateQuestionsOrder,
-    updateExercisesOrder,
     createResetPasswordRequest,
     fetchResetPasswordRequestUser,
     resetPassword,
@@ -128,46 +124,6 @@ async function updateDefaultEdgeText({ kind, text }: { kind: 'start' | 'end'; te
     return performApiCall(URL, 'PATCH', { kind, text });
 }
 
-async function createExercise(params: {
-    examId: string;
-    name: string;
-    instruction: string;
-    defaultPoints: number | null;
-    defaultQuestionKind: questionKindType;
-    order?: number;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/exercises`;
-    return performApiCall(URL, 'POST', {
-        name: params.name,
-        instruction: params.instruction,
-        defaultPoints: params.defaultPoints,
-        defaultQuestionKind: params.defaultQuestionKind,
-        order: params.order,
-    });
-}
-
-async function updateExercise(params: {
-    examId: string;
-    exerciseId: number;
-    name: string;
-    instruction: string;
-    defaultPoints: number | null;
-    defaultQuestionKind: questionKindType;
-}) {
-    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
-    return performApiCall(URL, 'PUT', {
-        name: params.name,
-        instruction: params.instruction,
-        defaultPoints: params.defaultPoints,
-        defaultQuestionKind: params.defaultQuestionKind,
-    });
-}
-
-async function deleteExercise(params: { examId: string; exerciseId: number }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}`;
-    return performApiCall(URL, 'DELETE');
-}
-
 async function createResetPasswordRequest(email: string) {
     const URL = `${BASE_URL}/reset-password-requests`;
     return performApiCall(URL, 'POST', {
@@ -253,13 +209,6 @@ async function duplicateQuestion(params: {
 }) {
     const URL = `${BASE_URL}/exams/${params.examId}/exercises/${params.exerciseId}/questions/${params.questionId}/duplicate`;
     return performApiCall(URL, 'POST');
-}
-
-async function updateExercisesOrder(params: { examId: string; orderedIds: number[] }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/exercises/order`;
-    return performApiCall(URL, 'PATCH', {
-        orderedIds: params.orderedIds,
-    });
 }
 
 export { api };

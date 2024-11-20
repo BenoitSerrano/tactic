@@ -23,7 +23,7 @@ function QuestionPreviewing(props: {
         mutationFn: api.deleteQuestion,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['exam-with-questions', props.examId],
+                queryKey: ['exams', props.examId, 'with-questions'],
             });
             displayAlert({ variant: 'success', text: 'La question a été supprimée.' });
         },

@@ -1,0 +1,3 @@
+const questionsApi = {};
+
+export { questionsApi };

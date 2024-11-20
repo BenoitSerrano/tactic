@@ -13,11 +13,11 @@ import {
 import { config } from '../../../config';
 import { useAlert } from '../../../lib/alert';
 import { questionKindType } from '../../../types';
-import { api } from '../../../lib/api';
 import { Modal } from '../../../components/Modal';
 import { QuestionKindSelect } from '../components/QuestionKindSelect';
 import { FLOATING_NUMBER_REGEX } from '../../../constants';
 import { exerciseUpsertionModalStatusType } from './types';
+import { exercisesApi } from '../../../lib/api/exercisesApi';
 
 type pointsModeType = 'individually' | 'allAtOnce';
 
@@ -39,24 +39,24 @@ function ExerciseUpsertionModal(props: {
         useState<questionKindType>(initialQuestionKind);
 
     const updateExerciseMutation = useMutation({
-        mutationFn: api.updateExercise,
+        mutationFn: exercisesApi.updateExercise,
         onSuccess: () => {
             props.close();
             displayAlert({ text: "L'exercice a bien été modifié.", variant: 'success' });
             queryClient.invalidateQueries({
-                queryKey: ['exam-with-questions', props.examId],
+                queryKey: ['exams', props.examId, 'with-questions'],
             });
         },
     });
 
     const createExerciseMutation = useMutation({
-        mutationFn: api.createExercise,
+        mutationFn: exercisesApi.createExercise,
         onSuccess: (createdExercise: { id: number }) => {
             props.onCreateExercise(createdExercise.id);
             props.close();
             displayAlert({ text: "L'exercice a bien été créé.", variant: 'success' });
             queryClient.invalidateQueries({
-                queryKey: ['exam-with-questions', props.examId],
+                queryKey: ['exams', props.examId, 'with-questions'],
             });
         },
     });
@@ -217,17 +217,18 @@ function ExerciseUpsertionModal(props: {
             name,
             instruction,
             defaultPoints: pointsMode === 'allAtOnce' ? Number(defaultPoints) : null,
-            defaultQuestionKind,
         };
         if (modalStatus.kind === 'editing') {
             updateExerciseMutation.mutate({
                 examId: props.examId,
                 exerciseId: modalStatus.exercise.id,
+
                 ...newExercise,
             });
         } else {
             createExerciseMutation.mutate({
                 examId: props.examId,
+                defaultQuestionKind,
                 ...newExercise,
             });
         }
