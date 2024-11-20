@@ -5,6 +5,7 @@ const specificCspDirectives = {
     'img-src': [
         "'self'",
         'data:',
+        'blob:',
         'tactic-app.fr',
         'files.portive.com',
         'client.crisp.chat',
@@ -33,6 +34,7 @@ const specificCspDirectives = {
         'storage.crisp.chat',
         'wss://stream.relay.crisp.chat',
         '*.ingest.sentry.io',
+        'api.portive.com',
     ],
     'worker-src': ["'self'", 'blob:'],
 };
