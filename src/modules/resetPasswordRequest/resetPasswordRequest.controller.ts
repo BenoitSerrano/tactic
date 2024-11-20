@@ -7,7 +7,7 @@ function buildResetPasswordRequestController() {
     const resetPasswordRequestService = buildResetPasswordRequestService();
     const resetPasswordRequestController = {
         createResetPasswordRequest,
-        fetchResetPasswordRequestUser,
+        getResetPasswordRequestWithUser,
         resetPassword,
     };
 
@@ -17,10 +17,10 @@ function buildResetPasswordRequestController() {
         return resetPasswordRequestService.createResetPasswordRequest(params.body.email);
     }
 
-    async function fetchResetPasswordRequestUser(params: {
+    async function getResetPasswordRequestWithUser(params: {
         urlParams: { resetPasswordRequestId: ResetPasswordRequest['id'] };
     }) {
-        return resetPasswordRequestService.fetchResetPasswordRequestUser(
+        return resetPasswordRequestService.getResetPasswordRequestWithUser(
             params.urlParams.resetPasswordRequestId,
         );
     }
