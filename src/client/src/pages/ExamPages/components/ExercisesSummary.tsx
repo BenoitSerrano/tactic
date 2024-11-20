@@ -46,6 +46,9 @@ const Container = styled('div')(({ theme }) => ({
     padding: theme.spacing(1),
     margin: theme.spacing(1),
     borderRadius: '2px',
+    [theme.breakpoints.down('md')]: {
+        display: 'none',
+    },
 }));
 const ExerciseSummaryContainer = styled('div')(({ theme }) => ({
     display: 'flex',
