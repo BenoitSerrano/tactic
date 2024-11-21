@@ -8,7 +8,7 @@ import { useAlert } from '../../../lib/alert';
 import { api } from '../../../lib/api';
 import { IconButton } from '../../IconButton';
 
-function EditableName(props: { exam: examApiType }) {
+function EditableName(props: { exam: examApiType; examsQueryKey: string[] }) {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const updateExamNameMutation = useMutation({
@@ -19,7 +19,7 @@ function EditableName(props: { exam: examApiType }) {
                 text: `L'examen "${exam.name}" a bien été modifié`,
             });
             setIsEditing(false);
-            queryClient.invalidateQueries({ queryKey: ['exams-current'] });
+            queryClient.invalidateQueries({ queryKey: props.examsQueryKey });
         },
         onError: (error) => {
             setIsEditing(false);
