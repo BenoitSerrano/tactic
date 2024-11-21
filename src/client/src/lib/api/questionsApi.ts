@@ -13,6 +13,16 @@ const questionsApi = {
     deleteQuestion,
 };
 
+type questionType = {
+    id: number;
+    kind: questionKindType;
+    title: string;
+    points: number;
+    order: number;
+    acceptableAnswers: acceptableAnswerType[][];
+    possibleAnswers: string[];
+};
+
 async function updateQuestionsOrder(params: {
     examId: string;
     exerciseId: number;
@@ -128,3 +138,4 @@ async function deleteQuestion(params: { examId: string; questionId: number }) {
 }
 
 export { questionsApi };
+export type { questionType };

@@ -1,4 +1,5 @@
 import { BASE_URL } from './constants';
+import { exerciseWithQuestionsType } from './exercisesApi';
 import { performApiCall } from './lib/performApiCall';
 
 const examsApi = {
@@ -45,7 +46,13 @@ async function getExam(examId: string) {
     return performApiCall(URL, 'GET');
 }
 
-async function getExamWithQuestions(examId: string) {
+type examWithQuestionsApiType = {
+    id: string;
+    name: string;
+    exercises: Array<exerciseWithQuestionsType>;
+};
+
+async function getExamWithQuestions(examId: string): Promise<examWithQuestionsApiType> {
     const URL = `${BASE_URL}/exams/${examId}/with-questions`;
     return performApiCall(URL, 'GET');
 }

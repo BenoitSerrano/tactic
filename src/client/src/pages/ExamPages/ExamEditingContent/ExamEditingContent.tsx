@@ -2,14 +2,13 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
-import { examWithQuestionsApiType } from './types';
 import { ExercisesEditing } from './ExercisesEditing';
 import { examsApi } from '../../../lib/api/examsApi';
 
 function ExamEditingContent() {
     const params = useParams();
     const examId = params.examId as string;
-    const query = useQuery<examWithQuestionsApiType>({
+    const query = useQuery({
         queryKey: ['exams', examId, 'with-questions'],
         queryFn: () => examsApi.getExamWithQuestions(examId),
     });

@@ -1,6 +1,7 @@
 import { questionKindType } from '../../types';
 import { BASE_URL } from './constants';
 import { performApiCall } from './lib/performApiCall';
+import { questionType } from './questionsApi';
 
 const exercisesApi = {
     updateExercisesOrder,
@@ -31,6 +32,16 @@ async function updateExercise(params: {
     });
 }
 
+type exerciseWithQuestionsType = {
+    id: number;
+    instruction: string;
+    name: string;
+    defaultPoints: number | null;
+    defaultQuestionKind: questionKindType;
+    order: number;
+    questions: Array<questionType>;
+};
+
 async function createExercise(params: {
     examId: string;
     name: string;
@@ -55,3 +66,4 @@ async function deleteExercise(params: { examId: string; exerciseId: number }) {
 }
 
 export { exercisesApi };
+export type { exerciseWithQuestionsType };

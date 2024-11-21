@@ -1,11 +1,5 @@
 import { acceptableAnswerType, questionKindType } from '../../../types';
 
-type examWithQuestionsApiType = {
-    id: string;
-    name: string;
-    exercises: Array<exerciseWithQuestionsType>;
-};
-
 type exerciseWithQuestionsType = {
     id: number;
     instruction: string;
@@ -46,7 +40,6 @@ type questionUpsertionModalStatusType =
       };
 
 export type {
-    examWithQuestionsApiType,
     exerciseWithQuestionsType,
     questionType,
     exerciseUpsertionModalStatusType,
