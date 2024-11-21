@@ -68,7 +68,7 @@ function ExamRow(props: { exam: examApiType; classeId: string; establishmentId: 
         <Row onClick={handleRowClick}>
             <InfoContainer>
                 <TitleContainer>
-                    <EditableName exam={props.exam} />
+                    <EditableName exam={props.exam} examsQueryKey={examsQueryKey} />
                 </TitleContainer>
                 <SubtitleContainer>
                     <SubinfoContainer>

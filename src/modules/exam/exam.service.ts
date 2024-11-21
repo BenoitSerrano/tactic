@@ -29,7 +29,7 @@ function buildExamService() {
         getExamWithoutAnswers,
         getExamQuestions,
         getExamsByIds,
-        getUserIdForExam,
+        getClasseIdForExam,
         deleteExam,
         getExamResults,
         duplicateExam,
@@ -186,13 +186,13 @@ function buildExamService() {
         });
     }
 
-    async function getUserIdForExam(examId: Exam['id']): Promise<User['id']> {
+    async function getClasseIdForExam(examId: Exam['id']): Promise<Classe['id']> {
         const exam = await examRepository.findOneOrFail({
             where: { id: examId },
-            select: { id: true, user: { id: true } },
-            relations: ['user'],
+            select: { id: true, classe: { id: true } },
+            relations: ['classe'],
         });
-        return exam.user.id;
+        return exam.classe.id;
     }
 
     async function getExamsByIds(examIds: Array<Exam['id']>) {
