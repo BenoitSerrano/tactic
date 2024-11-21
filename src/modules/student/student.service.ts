@@ -111,21 +111,18 @@ function buildStudentService() {
 
     async function fetchStudentByEmailForExam(criteria: { examId: Exam['id']; email: string }) {
         const examService = buildExamService();
-        const examUserId = await examService.getUserIdForExam(criteria.examId);
+        const examClasseId = await examService.getClasseIdForExam(criteria.examId);
         return studentRepository.findOneOrFail({
             where: {
                 email: criteria.email.trim().toLowerCase(),
-                // TODO
-                // classe: { user: { id: examUserId } },
+                classe: { id: examClasseId },
             },
             select: {
                 id: true,
                 firstName: true,
                 lastName: true,
-                // TODO
-                // classe: { id: true, user: { id: true } },
             },
-            relations: ['classe', 'classe.user'],
+            relations: ['classe'],
         });
     }
 
