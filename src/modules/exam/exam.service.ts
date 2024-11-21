@@ -313,7 +313,7 @@ function buildExamService() {
         const exerciseService = buildExerciseService();
         const { id, exercises, attempts, ...partialExam } = await examRepository.findOneOrFail({
             where: { id: criteria.examId, user: { id: criteria.user.id } },
-            relations: ['exercises', 'exercises.questions', 'user'],
+            relations: ['exercises', 'exercises.questions', 'user', 'classe'],
         });
 
         const result = await examRepository.insert({
