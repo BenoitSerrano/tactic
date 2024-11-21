@@ -9,11 +9,10 @@ function buildQuestionController() {
     const questionController = {
         createQuestion,
         updateQuestion,
-        duplicateQuestion,
-        addQuestionAcceptableAnswer,
-        addQuestionAcceptableAnswerToTexteATrous,
+        addAcceptableAnswerToQuestion,
+        addAcceptableAnswerToQuestionTexteATrous,
         removeOkAnswer,
-        removeOkAnswerFromTexteATrous,
+        removeOkAnswerFromQuestionTexteATrous,
         deleteQuestion,
         updateQuestionsOrder,
     };
@@ -48,11 +47,11 @@ function buildQuestionController() {
         );
     }
 
-    async function addQuestionAcceptableAnswerToTexteATrous(params: {
+    async function addAcceptableAnswerToQuestionTexteATrous(params: {
         urlParams: { questionId: string };
         body: { blankIndex: number; acceptableAnswer: acceptableAnswerType };
     }) {
-        return questionService.addQuestionAcceptableAnswerToTexteATrous(
+        return questionService.addAcceptableAnswerToQuestionTexteATrous(
             {
                 questionId: Number(params.urlParams.questionId),
             },
@@ -60,11 +59,11 @@ function buildQuestionController() {
         );
     }
 
-    async function addQuestionAcceptableAnswer(params: {
+    async function addAcceptableAnswerToQuestion(params: {
         urlParams: { questionId: string };
         body: { acceptableAnswer: acceptableAnswerType };
     }) {
-        return questionService.addQuestionAcceptableAnswer(
+        return questionService.addAcceptableAnswerToQuestion(
             {
                 questionId: Number(params.urlParams.questionId),
             },
@@ -86,11 +85,11 @@ function buildQuestionController() {
         );
     }
 
-    async function removeOkAnswerFromTexteATrous(params: {
+    async function removeOkAnswerFromQuestionTexteATrous(params: {
         urlParams: { questionId: string };
         body: { okAnswer: string; blankIndex: number };
     }) {
-        return questionService.removeOkAnswerFromTexteATrous(
+        return questionService.removeOkAnswerFromQuestionTexteATrous(
             {
                 questionId: Number(params.urlParams.questionId),
             },
@@ -104,14 +103,5 @@ function buildQuestionController() {
 
     async function updateQuestionsOrder(params: { body: { orderedIds: Question['id'][] } }) {
         return questionService.updateQuestionsOrder(params.body.orderedIds);
-    }
-
-    async function duplicateQuestion(params: {
-        urlParams: { questionId: string; exerciseId: number };
-    }) {
-        return questionService.duplicateQuestion(
-            params.urlParams.exerciseId,
-            Number(params.urlParams.questionId),
-        );
     }
 }

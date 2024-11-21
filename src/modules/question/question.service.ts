@@ -4,10 +4,10 @@ import { Question } from './Question.entity';
 import { buildAttemptService } from '../attempt';
 import { Exercise, buildExerciseService } from '../exercise';
 import { questionEncoder } from './lib/questionEncoder';
-import { addAcceptableAnswerToQuestion } from './lib/addAcceptableAnswerToQuestion';
+import { computeQuestionWithNewAcceptableAnswer } from './lib/computeQuestionWithNewAcceptableAnswer';
 import { removeOkAnswerFromQuestion } from './lib/removeOkAnswerFromQuestion';
 import { acceptableAnswerType, questionDtoType } from './types';
-import { addAcceptableAnswerToTexteATrousQuestion } from './lib/addAcceptableAnswerToTexteATrousQuestion';
+import { computeTexteATrousQuestionWithNewAcceptableAnswer } from './lib/computeTexteATrousQuestionWithNewAcceptableAnswer';
 import { removeOkAnswerFromQuestionFromTexteATrousQuestion } from './lib/removeOkAnswerFromQuestionFromTexteATrousQuestion';
 import { Exam } from '../exam';
 import { logger } from '../../lib/logger';
@@ -21,10 +21,10 @@ function buildQuestionService() {
     const questionService = {
         createQuestion,
         updateQuestion,
-        addQuestionAcceptableAnswer,
-        addQuestionAcceptableAnswerToTexteATrous,
+        addAcceptableAnswerToQuestion,
+        addAcceptableAnswerToQuestionTexteATrous,
         removeOkAnswer,
-        removeOkAnswerFromTexteATrous,
+        removeOkAnswerFromQuestionTexteATrous,
         getQuestions,
         deleteQuestion,
         updateQuestionsOrder,
@@ -150,7 +150,7 @@ function buildQuestionService() {
         );
     }
 
-    async function addQuestionAcceptableAnswer(
+    async function addAcceptableAnswerToQuestion(
         criteria: {
             questionId: Question['id'];
         },
@@ -159,12 +159,15 @@ function buildQuestionService() {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
-        const updatedQuestion = addAcceptableAnswerToQuestion(question, body.acceptableAnswer);
+        const updatedQuestion = computeQuestionWithNewAcceptableAnswer(
+            question,
+            body.acceptableAnswer,
+        );
         await questionRepository.save(updatedQuestion);
         return true;
     }
 
-    async function addQuestionAcceptableAnswerToTexteATrous(
+    async function addAcceptableAnswerToQuestionTexteATrous(
         criteria: {
             questionId: Question['id'];
         },
@@ -173,7 +176,7 @@ function buildQuestionService() {
         const question = await questionRepository.findOneOrFail({
             where: { id: criteria.questionId },
         });
-        const updatedQuestion = addAcceptableAnswerToTexteATrousQuestion(question, body);
+        const updatedQuestion = computeTexteATrousQuestionWithNewAcceptableAnswer(question, body);
         await questionRepository.save(updatedQuestion);
         return true;
     }
@@ -192,7 +195,7 @@ function buildQuestionService() {
         return true;
     }
 
-    async function removeOkAnswerFromTexteATrous(
+    async function removeOkAnswerFromQuestionTexteATrous(
         criteria: {
             questionId: Question['id'];
         },

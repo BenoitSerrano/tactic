@@ -8,7 +8,6 @@ import { LoadingButton } from '@mui/lab';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QuestionChecking } from './QuestionChecking';
 import { TestPageLayout } from '../components/TestPageLayout';
-import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
@@ -27,6 +26,7 @@ import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
 import { DisplayedMark } from './DisplayedMark';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function QuestionsChecking(props: {
     establishmentId: string;
@@ -50,7 +50,7 @@ function QuestionsChecking(props: {
     const attemptIds = searchParams.get('attemptIds') || '';
 
     const lockAttemptMutation = useMutation({
-        mutationFn: api.updateEndedAt,
+        mutationFn: attemptsApi.updateAttemptEndedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exam-results'] });
             displayAlert({
@@ -68,7 +68,7 @@ function QuestionsChecking(props: {
     });
 
     const markAsCorrectedMutation = useMutation({
-        mutationFn: api.updateCorrectedAt,
+        mutationFn: attemptsApi.updateAttemptCorrectedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
             queryClient.invalidateQueries({
@@ -89,7 +89,7 @@ function QuestionsChecking(props: {
     });
 
     const markAsUncorrectedMutation = useMutation({
-        mutationFn: api.deleteCorrectedAt,
+        mutationFn: attemptsApi.deleteAttemptCorrectedAt,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
             queryClient.invalidateQueries({

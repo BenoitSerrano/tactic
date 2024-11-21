@@ -1,11 +1,11 @@
 import { styled } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { ClasseSideItemMenu, EstablishmentSideItemMenu } from './SideItemMenu';
-import { establishmentWithClassesType } from '../../lib/api/api';
 import { Button } from '../Button';
 import { EstablishmentCreationModal } from './EstablishmentCreationModal';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { establishmentWithClassesType } from '../../lib/api/establishmentsApi';
 
 function AdminSideMenu(props: { establishments: Array<establishmentWithClassesType> }) {
     const { establishmentId, classeId } = useParams();

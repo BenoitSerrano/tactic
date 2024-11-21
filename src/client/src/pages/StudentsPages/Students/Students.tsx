@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../lib/api';
 import {
     IconButton,
     Table,
@@ -25,6 +24,7 @@ import { Link } from '../../../components/Link';
 import { pathHandler } from '../../../lib/pathHandler';
 import { studentsSummaryType } from './types';
 import { computeShouldDisplayNameColumns } from './lib/computeShouldDisplayNameColumns';
+import { studentsApi } from '../../../lib/api/studentsApi';
 
 type sortColumnType = 'email' | 'lastName' | 'createdDate' | string;
 
@@ -36,14 +36,16 @@ function Students() {
     const queryClient = useQueryClient();
 
     const studentsQuery = useQuery<studentsSummaryType>({
-        queryKey: ['classes', classeId, 'students'],
-        queryFn: () => api.fetchStudents({ classeId }),
+        queryKey: ['classes', classeId, 'students', 'with-attempts'],
+        queryFn: () => studentsApi.getStudentsWithAttempts({ classeId }),
     });
 
     const deleteStudentMutation = useMutation({
-        mutationFn: api.deleteStudent,
+        mutationFn: studentsApi.deleteStudent,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['classes', classeId, 'students'] });
+            queryClient.invalidateQueries({
+                queryKey: ['classes', classeId, 'students', 'with-attempts'],
+            });
         },
     });
 

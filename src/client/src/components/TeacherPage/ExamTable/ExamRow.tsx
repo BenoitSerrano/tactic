@@ -9,11 +9,11 @@ import { EditableName } from './EditableName';
 import { EditableExamDuration } from '../../EditableExamDuration';
 import { IconButton } from '../../IconButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { pathHandler } from '../../../lib/pathHandler';
 import { useNavigate } from 'react-router-dom';
 import { time } from '../../../lib/time';
+import { examsApi } from '../../../lib/api/examsApi';
 
 function ExamRow(props: { exam: examApiType; classeId: string; establishmentId: string }) {
     const { displayAlert } = useAlert();
@@ -28,7 +28,7 @@ function ExamRow(props: { exam: examApiType; classeId: string; establishmentId: 
     ];
 
     const duplicateExamMutation = useMutation({
-        mutationFn: api.duplicateExam,
+        mutationFn: examsApi.duplicateExam,
         onSuccess: (exam) => {
             displayAlert({
                 variant: 'success',
@@ -46,7 +46,7 @@ function ExamRow(props: { exam: examApiType; classeId: string; establishmentId: 
     });
 
     const deleteExamMutation = useMutation({
-        mutationFn: api.deleteExam,
+        mutationFn: examsApi.deleteExam,
         onSuccess: () => {
             displayAlert({
                 variant: 'success',

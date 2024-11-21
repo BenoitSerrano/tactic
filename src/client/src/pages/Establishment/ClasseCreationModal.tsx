@@ -1,29 +1,38 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField } from '@mui/material';
-import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
 import { Modal } from '../../components/Modal';
+import { classesApi } from '../../lib/api/classesApi';
+import { useNavigate } from 'react-router-dom';
+import { pathHandler } from '../../lib/pathHandler';
 
 function ClasseCreationModal(props: {
     close: () => void;
     isOpen: boolean;
     establishmentId: string;
 }) {
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
     const [name, setName] = useState('');
 
     const createClasseMutation = useMutation({
-        mutationFn: api.createClasse,
-        onSuccess: () => {
+        mutationFn: classesApi.createClasse,
+        onSuccess: (classe) => {
             setName('');
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
             displayAlert({
                 text: `La classe "${name}" a bien été créée`,
                 variant: 'success',
             });
             props.close();
+            navigate(
+                pathHandler.getRoutePath('CLASSE', {
+                    establishmentId: props.establishmentId,
+                    classeId: classe.id,
+                }),
+            );
         },
         onError: (error) => {
             console.error(error);

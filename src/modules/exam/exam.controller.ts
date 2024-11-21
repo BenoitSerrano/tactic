@@ -15,7 +15,6 @@ function buildExamController() {
         updateExamName,
         updateExamEdgeText,
         getExamsByClasse,
-        getExams,
         getExamsByUser,
         getExam,
         getExamWithoutAnswers,
@@ -24,7 +23,7 @@ function buildExamController() {
         deleteExam,
         duplicateExam,
         getExamWithQuestions,
-        fetchShouldDisplayRightAnswersForExamId,
+        getShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
         updateClasseId,
         updateExamDateTimeRange,
@@ -92,12 +91,6 @@ function buildExamController() {
         });
     }
 
-    async function getExams(_params: {}, user: User) {
-        return examService.getExams({
-            userId: user.id,
-        });
-    }
-
     async function getExamsByUser(params: { urlParams: { userId: string } }) {
         return examService.getExamsByUser(params.urlParams.userId);
     }
@@ -130,10 +123,10 @@ function buildExamController() {
         return examService.duplicateExam({ examId: params.urlParams.examId, user });
     }
 
-    async function fetchShouldDisplayRightAnswersForExamId(params: {
+    async function getShouldDisplayRightAnswersForExamId(params: {
         urlParams: { examId: Exam['id'] };
     }) {
-        return examService.fetchShouldDisplayRightAnswersForExamId(params.urlParams.examId);
+        return examService.getShouldDisplayRightAnswersForExamId(params.urlParams.examId);
     }
 
     async function updateShouldDisplayRightAnswersForExamId(params: {
@@ -147,12 +140,11 @@ function buildExamController() {
     }
 
     async function updateClasseId(params: {
-        body: { classeId: Classe['id'] };
-        urlParams: { examId: Exam['id'] };
+        urlParams: { examId: Exam['id']; newClasseId: Classe['id'] };
     }) {
         return examService.updateClasseId(
             { examId: params.urlParams.examId },
-            params.body.classeId,
+            params.urlParams.newClasseId,
         );
     }
 

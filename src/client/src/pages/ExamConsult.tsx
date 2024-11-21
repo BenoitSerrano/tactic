@@ -6,11 +6,11 @@ import { config } from '../config';
 import { useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../lib/api';
 import { Section } from '../components/Section';
 import { ExamPageTitle } from '../components/ExamPageTitle';
 import { examApiType } from './Classe/types';
 import { Loader } from '../components/Loader';
+import { examsApi } from '../lib/api/examsApi';
 
 type shouldDisplayRightAnswersApiType = { shouldDisplayRightAnswers: boolean };
 
@@ -22,15 +22,15 @@ function ExamConsult() {
     const queryClient = useQueryClient();
     const query = useQuery<shouldDisplayRightAnswersApiType>({
         queryKey: ['exams', examId, 'shouldDisplayRightAnswers'],
-        queryFn: () => api.fetchShouldDisplayRightAnswersForExamId({ examId }),
+        queryFn: () => examsApi.getShouldDisplayRightAnswersForExamId({ examId }),
     });
     const examQuery = useQuery<examApiType>({
         queryKey: [`exams`, params.examId],
-        queryFn: () => api.fetchExam(params.examId as string),
+        queryFn: () => examsApi.getExam(params.examId as string),
     });
 
     const updateShouldDisplayRightAnswersMutation = useMutation({
-        mutationFn: api.updateShouldDisplayRightAnswersForExamId,
+        mutationFn: examsApi.updateShouldDisplayRightAnswersForExamId,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['exams', examId, 'shouldDisplayRightAnswers'],

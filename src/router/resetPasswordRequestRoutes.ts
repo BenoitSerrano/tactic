@@ -14,10 +14,11 @@ const resetPasswordRequestRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
-        path: '/reset-password-requests/:resetPasswordRequestId/user',
+        path: '/reset-password-requests/:resetPasswordRequestId/with-user',
         kind: 'public',
-        controller: resetPasswordRequestController.fetchResetPasswordRequestUser,
+        controller: resetPasswordRequestController.getResetPasswordRequestWithUser,
     },
+    //TODO déplacer vers userRoutes
     {
         method: 'PATCH',
         path: '/reset-password-requests/:resetPasswordRequestId/user/password',

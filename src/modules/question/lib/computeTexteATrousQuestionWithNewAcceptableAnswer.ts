@@ -3,7 +3,7 @@ import { Question } from '../Question.entity';
 import { acceptableAnswerType } from '../types';
 import { questionEncoder } from './questionEncoder';
 
-function addAcceptableAnswerToTexteATrousQuestion(
+function computeTexteATrousQuestionWithNewAcceptableAnswer(
     question: Question,
     body: { acceptableAnswer: acceptableAnswerType; blankIndex: number },
 ) {
@@ -48,4 +48,4 @@ function addAcceptableAnswerToTexteATrousQuestion(
     return reEncodedQuestion;
 }
 
-export { addAcceptableAnswerToTexteATrousQuestion };
+export { computeTexteATrousQuestionWithNewAcceptableAnswer };

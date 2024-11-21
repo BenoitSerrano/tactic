@@ -6,20 +6,20 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import { IconButton } from '../../components/IconButton';
 import { pathHandler } from '../../lib/pathHandler';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAlert } from '../../lib/alert';
 import { Card } from '../../components/Card';
+import { classesApi } from '../../lib/api/classesApi';
 
 function ClasseRow(props: { classe: { id: string; name: string } }) {
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const deleteClasseMutation = useMutation({
-        mutationFn: api.deleteClasse,
+        mutationFn: classesApi.deleteClasse,
         onSuccess: () => {
             displayAlert({ variant: 'success', text: 'La classe a été supprimée.' });
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
         },
         onError: (error) => {
             console.error(error);

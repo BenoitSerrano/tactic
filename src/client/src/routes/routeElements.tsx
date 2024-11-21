@@ -1,4 +1,3 @@
-import { api } from '../lib/api';
 import { ExamDone } from '../pages/ExamDone';
 import { ExamChecking } from '../pages/ExamPages/ExamChecking';
 import { ExamConsulting } from '../pages/ExamPages/ExamConsulting';
@@ -31,6 +30,7 @@ import { TeacherHome } from '../pages/TeacherHome';
 import { Establishment } from '../pages/Establishment';
 import { Classe } from '../pages/Classe';
 import { Onboarding } from '../pages/Onboarding';
+import { usersApi } from '../lib/api/usersApi';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -84,10 +84,12 @@ const ROUTE_ELEMENTS: Record<
         element: <RequestResetPassword />,
     },
     SIGN_IN: {
-        element: <SignIn shouldDisplayResetPasswordLink apiCall={api.login} title="Se connecter" />,
+        element: (
+            <SignIn shouldDisplayResetPasswordLink apiCall={usersApi.login} title="Se connecter" />
+        ),
     },
     SIGN_UP: {
-        element: <SignIn apiCall={api.createUser} title="Créer un compte" />,
+        element: <SignIn apiCall={usersApi.createUser} title="Créer un compte" />,
     },
     HOME: {
         element: <Home />,

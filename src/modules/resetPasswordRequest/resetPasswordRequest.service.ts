@@ -14,13 +14,13 @@ function buildResetPasswordRequestService() {
     const userService = buildUserService();
     const resetPasswordRequestService = {
         createResetPasswordRequest,
-        fetchResetPasswordRequestUser,
+        getResetPasswordRequestWithUser,
         resetPassword,
     };
 
     return resetPasswordRequestService;
 
-    async function fetchResetPasswordRequestUser(
+    async function getResetPasswordRequestWithUser(
         resetPasswordRequestId: ResetPasswordRequest['id'],
     ) {
         const resetPasswordRequest = await resetPasswordRequestRepository.findOneOrFail({
@@ -32,8 +32,8 @@ function buildResetPasswordRequestService() {
         const now = new Date();
         assertIsResetPasswordRequestRecent(resetPasswordRequest, now);
         return {
-            id: resetPasswordRequest.user.id,
-            email: resetPasswordRequest.user.email,
+            ...resetPasswordRequest,
+            user: { id: resetPasswordRequest.user.id, email: resetPasswordRequest.user.email },
         };
     }
 

@@ -1,7 +1,6 @@
 import { styled } from '@mui/material';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { api } from '../../lib/api';
 import { StudentPage } from '../../components/StudentPage';
 import { Button } from '../../components/Button';
 import { Loader } from '../../components/Loader';
@@ -9,6 +8,8 @@ import { pathHandler } from '../../lib/pathHandler';
 import { computePathKeyToNavigateTo } from '../../lib/computePathKeyToNavigateTo';
 import { attemptActionEncoder } from '../../lib/attemptActionEncoder';
 import { ExamStartText } from '../ExamParameters/components/ExamStartText';
+import { examsApi } from '../../lib/api/examsApi';
+import { attemptsApi } from '../../lib/api/attemptsApi';
 
 type attemptApiType = {
     attempt:
@@ -37,16 +38,16 @@ function StudentHome() {
 
     const attemptQuery = useQuery<attemptApiType>({
         queryKey: ['exams', examId, 'students', studentId, 'attempts'],
-        queryFn: () => api.searchAttempt({ examId, studentId }),
+        queryFn: () => attemptsApi.searchAttempt({ examId, studentId }),
     });
 
     const examQuery = useQuery<examApiType>({
         queryKey: ['exams', examId],
-        queryFn: () => api.fetchExam(examId),
+        queryFn: () => examsApi.getExam(examId),
     });
 
     const createAttemptMutation = useMutation({
-        mutationFn: api.createAttempt,
+        mutationFn: attemptsApi.createAttempt,
         onSuccess: (attempt: any) => {
             const path = pathHandler.getRoutePath('EXAM_TAKING', {
                 studentId,

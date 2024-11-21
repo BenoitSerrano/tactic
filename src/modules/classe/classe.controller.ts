@@ -11,8 +11,7 @@ function buildClasseController() {
         createClasse,
         deleteClasse,
         getAllClasses,
-        getClassesByEstablishment,
-        updateEstablishmentId,
+        updateClasseEstablishmentId,
         updateClasseName,
     };
 
@@ -22,17 +21,11 @@ function buildClasseController() {
         return classeService.getAllClasses();
     }
 
-    async function getClassesByEstablishment(params: {
-        urlParams: { establishmentId: Establishment['id'] };
-    }) {
-        return classeService.getClassesByEstablishment(params.urlParams.establishmentId);
-    }
-
-    async function updateEstablishmentId(params: {
+    async function updateClasseEstablishmentId(params: {
         body: { establishmentId: Establishment['id'] };
         urlParams: { classeId: Classe['id'] };
     }) {
-        return classeService.updateEstablishmentId(
+        return classeService.updateClasseEstablishmentId(
             { classeId: params.urlParams.classeId },
             params.body.establishmentId,
         );

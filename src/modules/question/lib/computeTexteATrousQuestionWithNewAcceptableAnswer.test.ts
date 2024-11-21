@@ -1,7 +1,7 @@
 import { Question } from '../Question.entity';
-import { addAcceptableAnswerToTexteATrousQuestion } from './addAcceptableAnswerToTexteATrousQuestion';
+import { computeTexteATrousQuestionWithNewAcceptableAnswer } from './computeTexteATrousQuestionWithNewAcceptableAnswer';
 
-describe('addAcceptableAnswerToTexteATrousQuestion', () => {
+describe('computeTexteATrousQuestionWithNewAcceptableAnswer', () => {
     it('should add the acceptable answer for a blank', () => {
         const question = new Question();
         question.id = 1;
@@ -11,7 +11,7 @@ describe('addAcceptableAnswerToTexteATrousQuestion', () => {
         question.order = 0;
         question.acceptableAnswers = ['A:ZXN0', 'A:cGFz'];
 
-        const updatedQuestion = addAcceptableAnswerToTexteATrousQuestion(question, {
+        const updatedQuestion = computeTexteATrousQuestionWithNewAcceptableAnswer(question, {
             acceptableAnswer: { answer: 'point', grade: 'B' },
             blankIndex: 1,
         });

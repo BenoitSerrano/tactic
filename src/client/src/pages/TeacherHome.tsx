@@ -1,13 +1,13 @@
 import { Navigate } from 'react-router-dom';
 import { pathHandler } from '../lib/pathHandler';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
+import { establishmentsApi } from '../lib/api/establishmentsApi';
 
 function TeacherHome() {
     const establishmentsQuery = useQuery({
-        queryKey: ['establishments'],
-        queryFn: api.fetchEstablishments,
+        queryKey: ['establishments', 'with-classes'],
+        queryFn: establishmentsApi.getEstablishmentsWithClasses,
     });
 
     if (!establishmentsQuery.data) {

@@ -4,8 +4,8 @@ import { questionWithAnswersType } from '../types';
 import { FLOATING_NUMBER_REGEX } from '../../../constants';
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function DisplayedMark(props: {
     question: questionWithAnswersType;
@@ -16,7 +16,7 @@ function DisplayedMark(props: {
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const saveManualMarkMutation = useMutation({
-        mutationFn: api.updateManualMark,
+        mutationFn: attemptsApi.updateManualMark,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['attempts', props.attemptId] });
         },

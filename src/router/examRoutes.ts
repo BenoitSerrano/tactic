@@ -15,13 +15,6 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
-        path: '/exams',
-        kind: 'authenticated',
-        authorizedRoles: ['teacher'],
-        controller: examController.getExams,
-    },
-    {
-        method: 'GET',
         path: '/users/:userId/exams',
         kind: 'authenticated',
         authorizedRoles: ['admin'],
@@ -170,7 +163,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
         path: '/exams/:examId/shouldDisplayRightAnswers',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
-        controller: examController.fetchShouldDisplayRightAnswersForExamId,
+        controller: examController.getShouldDisplayRightAnswersForExamId,
         checkAuthorization: accessControlBuilder.assertHasAccessToResources([
             {
                 entity: 'exam',
@@ -196,7 +189,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'PATCH',
-        path: '/exams/:examId/classeId',
+        path: '/exams/:examId/classeId/:newClasseId',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: examController.updateClasseId,
@@ -205,10 +198,11 @@ const examRoutes: Array<routeType<any, any, any>> = [
                 entity: 'exam',
                 key: 'examId',
             },
+            {
+                entity: 'classe',
+                key: 'newClasseId',
+            },
         ]),
-        schema: Joi.object({
-            classeId: Joi.string().required(),
-        }),
     },
 ];
 

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Modal } from '../../../components/Modal';
-import { api } from '../../../lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { TextField, Typography, styled } from '@mui/material';
 import { useAlert } from '../../../lib/alert';
 import { extractEmailsFromEmailList } from './lib/extractEmailsFromEmailList';
+import { studentsApi } from '../../../lib/api/studentsApi';
 
 function StudentsCreationModal(props: { close: () => void; isOpen: boolean; classeId: string }) {
     const [emailList, setEmailList] = useState('');
@@ -13,7 +13,7 @@ function StudentsCreationModal(props: { close: () => void; isOpen: boolean; clas
     const emails = extractEmailsFromEmailList(emailList);
 
     const createStudentsMutation = useMutation({
-        mutationFn: api.createStudents,
+        mutationFn: studentsApi.createStudents,
         onSuccess: () => {
             setEmailList('');
             queryClient.invalidateQueries({ queryKey: ['classes', props.classeId, 'students'] });

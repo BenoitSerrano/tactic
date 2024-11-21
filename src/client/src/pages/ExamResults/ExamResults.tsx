@@ -7,7 +7,6 @@ import NoEncryptionGmailerrorredIcon from '@mui/icons-material/NoEncryptionGmail
 import LockIcon from '@mui/icons-material/Lock';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
-import { api } from '../../lib/api';
 import {
     IconButton,
     Table,
@@ -36,6 +35,8 @@ import { examResultsApiType } from './types';
 import { attemptStatusMapping } from './constants';
 import { downloadResultsToCsv } from './lib/downloadResultsToCsv';
 import { ExamPageTitle } from '../../components/ExamPageTitle';
+import { examsApi } from '../../lib/api/examsApi';
+import { attemptsApi } from '../../lib/api/attemptsApi';
 
 type sortColumnType =
     | 'email'
@@ -55,12 +56,12 @@ function ExamResults() {
     const classeId = params.classeId as string;
     const establishmentId = params.establishmentId as string;
     const resultsQuery = useQuery<examResultsApiType>({
-        queryKey: ['exam-results', examId],
-        queryFn: () => api.fetchExamResults(examId),
+        queryKey: ['exams', examId, 'results'],
+        queryFn: () => examsApi.getExamResults(examId),
     });
 
     const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
-        queryFn: () => api.fetchAttemptsCountByCorrectionStatus({ examId }),
+        queryFn: () => attemptsApi.getAttemptsCountByCorrectionStatus({ examId }),
         queryKey: ['attempts-count-by-attempt-status', examId],
     });
 
@@ -68,9 +69,9 @@ function ExamResults() {
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const { displayAlert } = useAlert();
     const deleteAttemptMutation = useMutation({
-        mutationFn: api.deleteAttempt,
+        mutationFn: attemptsApi.deleteAttempt,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exam-results'] });
+            queryClient.invalidateQueries({ queryKey: ['exams', examId, 'results'] });
         },
         onError: (error: any) => {
             displayAlert({
@@ -82,9 +83,9 @@ function ExamResults() {
     });
 
     const lockAttemptMutation = useMutation({
-        mutationFn: api.updateEndedAt,
+        mutationFn: attemptsApi.updateAttemptEndedAt,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exam-results'] });
+            queryClient.invalidateQueries({ queryKey: ['exams', examId, 'results'] });
             displayAlert({
                 variant: 'success',
                 text: "L'examen a bien été terminé pour cet étudiant. Il ne pourra plus modifier sa copie",
@@ -100,9 +101,9 @@ function ExamResults() {
     });
 
     const unlockAttemptMutation = useMutation({
-        mutationFn: api.deleteEndedAt,
+        mutationFn: attemptsApi.deleteAttemptEndedAt,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exam-results'] });
+            queryClient.invalidateQueries({ queryKey: ['exams', examId, 'results'] });
             displayAlert({
                 variant: 'success',
                 text: "L'étudiant peut de nouveau accéder à sa copie, dans la limite du temps imparti.",

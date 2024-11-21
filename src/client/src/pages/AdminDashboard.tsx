@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { IconButton } from '../components/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
 import { pathHandler } from '../lib/pathHandler';
+import { usersApi } from '../lib/api/usersApi';
 
 type userRoleType = 'teacher' | 'admin';
 type planType = { id: string; name: string };
@@ -21,7 +21,7 @@ function AdminDashboard() {
     const navigate = useNavigate();
     const query = useQuery<userSummaryApiType[]>({
         queryKey: ['users-summary'],
-        queryFn: api.fetchUsersSummary,
+        queryFn: usersApi.getUsersSummary,
     });
     if (!query.data) {
         if (query.isLoading) {

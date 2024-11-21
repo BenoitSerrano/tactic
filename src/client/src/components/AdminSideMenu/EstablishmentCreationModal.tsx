@@ -2,18 +2,18 @@ import { TextField } from '@mui/material';
 import { Modal } from '../Modal';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../lib/api';
 import { useAlert } from '../../lib/alert';
+import { establishmentsApi } from '../../lib/api/establishmentsApi';
 
 function EstablishmentCreationModal(props: { isOpen: boolean; close: () => void }) {
     const [name, setName] = useState('');
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
     const createEstablishmentMutation = useMutation({
-        mutationFn: api.createEstablishment,
+        mutationFn: establishmentsApi.createEstablishment,
         onSuccess: () => {
             setName('');
-            queryClient.invalidateQueries({ queryKey: ['establishments'] });
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
             displayAlert({
                 text: `L'établissement "${name}" a bien été créé`,
                 variant: 'success',

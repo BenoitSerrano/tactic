@@ -2,13 +2,14 @@ import { styled } from '@mui/material';
 import { amendableQuestionWithAnswersType } from '../types';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../../../lib/alert';
-import { api } from '../../../lib/api';
 import { computeCanAnswerBeAttributed } from './lib/computeCanAnswerBeAttributed';
 import { computeIsUpdateAnswerButtonLoading } from './lib/computeIsUpdateAnswerButtonLoading';
 import { attemptStatusType, gradeType } from '../../../types';
 import { attributeGradeToAnswerActions } from './constants';
 import { IconButton } from '../../../components/IconButton';
 import { gradeConverter } from '../../../lib/gradeConverter';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
+import { questionsApi } from '../../../lib/api/questionsApi';
 
 function UpdateAnswersButtons(props: {
     attemptStatus: attemptStatusType;
@@ -21,7 +22,7 @@ function UpdateAnswersButtons(props: {
     const { displayAlert } = useAlert();
 
     const removeOkAnswerMutation = useMutation({
-        mutationFn: api.removeOkAnswer,
+        mutationFn: questionsApi.removeOkAnswerFromQuestion,
         onSuccess: () => {
             props.refetch();
         },
@@ -35,7 +36,7 @@ function UpdateAnswersButtons(props: {
     });
 
     const addAcceptableAnswerMutation = useMutation({
-        mutationFn: api.addQuestionAcceptableAnswer,
+        mutationFn: questionsApi.addAcceptableAnswerToQuestion,
         onSuccess: () => {
             props.refetch();
         },
@@ -49,7 +50,7 @@ function UpdateAnswersButtons(props: {
     });
 
     const saveManualMarkMutation = useMutation({
-        mutationFn: api.updateManualMark,
+        mutationFn: attemptsApi.updateManualMark,
         onSuccess: () => {
             props.refetch();
         },

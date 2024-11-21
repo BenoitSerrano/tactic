@@ -8,10 +8,10 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { examApiType } from '../pages/Classe/types';
 import { useAlert } from '../lib/alert';
-import { api } from '../lib/api';
 import { IconButton } from './IconButton';
 import { time } from '../lib/time';
 import { INTEGER_NUMBER_REGEX } from '../constants';
+import { examsApi } from '../lib/api/examsApi';
 
 function EditableExamDuration(props: {
     exam: examApiType;
@@ -35,7 +35,7 @@ function EditableExamDuration(props: {
     }, [props.exam.duration]);
 
     const updateExamDurationMutation = useMutation({
-        mutationFn: api.updateExamDuration,
+        mutationFn: examsApi.updateExamDuration,
         onSuccess: (exam) => {
             displayAlert({
                 variant: 'success',

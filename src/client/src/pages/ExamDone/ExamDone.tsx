@@ -2,10 +2,10 @@ import { styled } from '@mui/material';
 import { StudentPage } from '../../components/StudentPage';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { examApiType } from '../Classe/types';
 import { ExamDoneText } from '../ExamParameters/components/ExamDoneText';
+import { examsApi } from '../../lib/api/examsApi';
 
 function ExamDone() {
     const params = useParams();
@@ -13,7 +13,7 @@ function ExamDone() {
     const examId = params.examId as string;
     const query = useQuery<examApiType>({
         queryKey: ['exams', examId],
-        queryFn: () => api.fetchExam(examId),
+        queryFn: () => examsApi.getExam(examId),
     });
 
     if (!query.data) {

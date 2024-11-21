@@ -6,13 +6,13 @@ import { localSessionHandler } from '../../lib/localSessionHandler';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { Loader } from '../Loader';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../../lib/api/api';
+import { establishmentsApi } from '../../lib/api/establishmentsApi';
 
 function TeacherPage(props: { children: React.ReactNode | null }) {
     const userRoles = localSessionHandler.getUserRoles();
     const establishmentsQuery = useQuery({
-        queryKey: ['establishments'],
-        queryFn: api.fetchEstablishments,
+        queryKey: ['establishments', 'with-classes'],
+        queryFn: establishmentsApi.getEstablishmentsWithClasses,
     });
     if (!userRoles || !userRoles.includes('teacher')) {
         return <Navigate to="/sign-in" />;

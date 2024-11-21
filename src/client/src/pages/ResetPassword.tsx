@@ -5,12 +5,11 @@ import { Card } from '../components/Card';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
-import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
 import { LoadingButton } from '@mui/lab';
 import { pathHandler } from '../lib/pathHandler';
-
-type userApiType = { id: string; email: string };
+import { resetPasswordRequestsApi } from '../lib/api/resetPasswordRequestsApi';
+import { usersApi } from '../lib/api/usersApi';
 
 function ResetPassword() {
     const [password, setPassword] = useState('');
@@ -19,13 +18,14 @@ function ResetPassword() {
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
 
-    const userQuery = useQuery<userApiType>({
-        queryFn: () => api.fetchResetPasswordRequestUser(resetPasswordRequestId),
-        queryKey: ['resetPasswordRequest', resetPasswordRequestId, 'user'],
+    const resetPasswordRequestQuery = useQuery({
+        queryFn: () =>
+            resetPasswordRequestsApi.getResetPasswordRequestWithUser(resetPasswordRequestId),
+        queryKey: ['resetPasswordRequest', resetPasswordRequestId, 'with-user'],
     });
 
     const resetPasswordMutation = useMutation({
-        mutationFn: api.resetPassword,
+        mutationFn: usersApi.updateUserPasswordByResetPasswordRequest,
         onSuccess: () => {
             navigate(pathHandler.getRoutePath('RESET_PASSWORD_SUCCESS'));
         },
@@ -41,8 +41,8 @@ function ResetPassword() {
         return <Navigate to="/sign-in" />;
     }
 
-    if (!userQuery.data) {
-        if (userQuery.isError) {
+    if (!resetPasswordRequestQuery.data) {
+        if (resetPasswordRequestQuery.isError) {
             return <Navigate to="/reset-password-failure" />;
         }
     }
@@ -51,8 +51,8 @@ function ResetPassword() {
         <NotLoggedInPage>
             <ContentContainer>
                 <Card size="medium">
-                    {!!userQuery.isLoading && <Loader />}
-                    {!!userQuery.data && (
+                    {!!resetPasswordRequestQuery.isLoading && <Loader />}
+                    {!!resetPasswordRequestQuery.data && (
                         <CardContent onSubmit={handleSubmit}>
                             <TitleContainer>
                                 <Typography variant="h2">Réinitialiser le mot de passe</Typography>
@@ -67,7 +67,7 @@ function ResetPassword() {
                                         type="email"
                                         disabled
                                         label="Adresse email"
-                                        value={userQuery.data.email}
+                                        value={resetPasswordRequestQuery.data.user.email}
                                     />
                                 </FieldContainer>
                                 <FieldContainer>

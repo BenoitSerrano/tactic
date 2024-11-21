@@ -3,20 +3,20 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { styled } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { api } from '../../lib/api';
 import { Loader } from '../../components/Loader';
 import { ClasseCreationModal } from './ClasseCreationModal';
 import { AdminSideMenu } from '../../components/AdminSideMenu';
 import { EditableName } from './EditableName';
 import { ClasseRow } from './ClasseRow';
 import { Button } from '../../components/Button';
+import { establishmentsApi } from '../../lib/api/establishmentsApi';
 
 function Establishment() {
     const params = useParams();
     const establishmentId = params.establishmentId as string;
     const establishmentsQuery = useQuery({
-        queryKey: ['establishments'],
-        queryFn: api.fetchEstablishments,
+        queryKey: ['establishments', 'with-classes'],
+        queryFn: establishmentsApi.getEstablishmentsWithClasses,
     });
 
     const [isClasseCreationModalOpen, setIsClasseCreationModalOpen] = useState(false);
@@ -59,7 +59,7 @@ function Establishment() {
                             startIcon={<AddCircleOutlineIcon />}
                             variant="contained"
                         >
-                            Ajouter une classe{' '}
+                            Ajouter une classe
                         </Button>
                     </ButtonContainer>
                 </TableContainer>

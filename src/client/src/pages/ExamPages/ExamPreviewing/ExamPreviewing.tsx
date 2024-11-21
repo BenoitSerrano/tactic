@@ -2,17 +2,17 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
-import { api } from '../../../lib/api';
 import { QuestionsPreviewing } from './QuestionsPreviewing';
 import { examWithoutAnswersType } from '../types';
 import { StudentPage } from '../../../components/StudentPage';
+import { examsApi } from '../../../lib/api/examsApi';
 
 function ExamPreviewing() {
     const params = useParams();
     const examId = params.examId as string;
     const query = useQuery<examWithoutAnswersType>({
-        queryKey: ['exam-without-answers', examId],
-        queryFn: () => api.fetchExamWithoutAnswers(examId),
+        queryKey: ['exams', examId, 'without-answers'],
+        queryFn: () => examsApi.getExamWithoutAnswers(examId),
     });
 
     if (!query.data) {

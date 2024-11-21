@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../lib/api';
 import { Loader } from '../components/Loader';
 import { Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@mui/material';
 import { IconButton } from '../components/IconButton';
@@ -9,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { pathHandler } from '../lib/pathHandler';
 import { examApiType } from './Classe/types';
 import { time } from '../lib/time';
+import { examsApi } from '../lib/api/examsApi';
 
 function AdminTeacherExams() {
     const params = useParams();
@@ -16,7 +16,7 @@ function AdminTeacherExams() {
     const navigate = useNavigate();
     const query = useQuery<examApiType[]>({
         queryKey: ['users', userId, 'exams'],
-        queryFn: () => api.fetchUserExams(userId),
+        queryFn: () => examsApi.getExamsByUser(userId),
     });
     if (!query.data) {
         if (query.isLoading) {

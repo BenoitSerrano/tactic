@@ -18,12 +18,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { tableHandler } from '../../../lib/tableHandler';
 import { IconButton as MuiIconButton, Tooltip, styled } from '@mui/material';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
-import { api } from '../../../lib/api';
 import { useAlert } from '../../../lib/alert';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { computeOrderedItems } from './lib/computeOrderedItems';
 import { IconButton } from '../../../components/IconButton';
 import { ExerciseEditing } from './ExerciseEditing';
+import { exercisesApi } from '../../../lib/api/exercisesApi';
 
 function ExercisesEditing(props: {
     title: string;
@@ -39,7 +39,10 @@ function ExercisesEditing(props: {
     const queryClient = useQueryClient();
 
     const updateExercisesOrderMutation = useMutation({
-        mutationFn: api.updateExercisesOrder,
+        mutationFn: exercisesApi.updateExercisesOrder,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['exams', props.examId, 'with-questions'] });
+        },
         onError: () => {
             displayAlert({
                 variant: 'error',
@@ -48,13 +51,13 @@ function ExercisesEditing(props: {
         },
     });
     const deleteExerciseMutation = useMutation({
-        mutationFn: api.deleteExercise,
+        mutationFn: exercisesApi.deleteExercise,
         onSuccess: (deletedExercise: { id: number }) => {
             setOrderedExerciseIds(
                 orderedExerciseIds.filter((exerciseId) => exerciseId !== deletedExercise.id),
             );
             displayAlert({ variant: 'success', text: "L'exercice a été supprimé." });
-            queryClient.invalidateQueries({ queryKey: ['exam-with-questions', props.examId] });
+            queryClient.invalidateQueries({ queryKey: ['exams', props.examId, 'with-questions'] });
         },
         onError: () => {
             displayAlert({

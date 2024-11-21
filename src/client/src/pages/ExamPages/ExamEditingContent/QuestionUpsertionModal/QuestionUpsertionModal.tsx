@@ -4,13 +4,13 @@ import { styled } from '@mui/material';
 import { questionUpsertionModalStatusType } from '../types';
 import { questionKindType } from '../../../../types';
 import { useAlert } from '../../../../lib/alert';
-import { api } from '../../../../lib/api';
 import { questionUpsertionModalContentComponentMapping } from '../constants';
 import { computeConfirmButtonLabel, computeModalTitlePrefix } from '../utils';
 import { computeIsConfirmDisabled } from '../lib/computeIsConfirmDisabled';
 import { Modal } from '../../../../components/Modal';
 import { QuestionKindSelect } from '../../components/QuestionKindSelect';
 import { FLOATING_NUMBER_REGEX } from '../../../../constants';
+import { questionsApi } from '../../../../lib/api/questionsApi';
 
 const DEFAULT_POSSIBLE_ANSWERS = ['', ''];
 
@@ -32,10 +32,10 @@ function QuestionUpsertionModal(props: {
     );
 
     const updateQuestionMutation = useMutation({
-        mutationFn: api.updateQuestion,
+        mutationFn: questionsApi.updateQuestion,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['exam-with-questions', props.examId],
+                queryKey: ['exams', props.examId, 'with-questions'],
             });
             props.close();
             displayAlert({ text: 'La question a bien été modifiée.', variant: 'success' });
@@ -43,10 +43,10 @@ function QuestionUpsertionModal(props: {
     });
 
     const createQuestionMutation = useMutation({
-        mutationFn: api.createQuestion,
+        mutationFn: questionsApi.createQuestion,
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ['exam-with-questions', props.examId],
+                queryKey: ['exams', props.examId, 'with-questions'],
             });
             props.close();
             displayAlert({ text: 'La question a bien été créée.', variant: 'success' });

@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { Typography, styled } from '@mui/material';
 import { StudentPage } from '../../../components/StudentPage';
 import { Loader } from '../../../components/Loader';
-import { api } from '../../../lib/api';
 import { QuestionsAnswering } from './QuestionsAnswering';
 import { attemptWithoutAnswersType } from './types';
 import { computeShouldNavigateToExamDone } from './lib/computeShouldNavigateToExamDone';
@@ -16,6 +15,7 @@ import { useAlert } from '../../../lib/alert';
 import { computePathKeyToNavigateTo } from '../../../lib/computePathKeyToNavigateTo';
 import { time } from '../../../lib/time';
 import { computeRemainingTime } from './lib/computeRemainingTime';
+import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function ExamTaking() {
     const params = useParams();
@@ -23,8 +23,8 @@ function ExamTaking() {
     const studentId = params.studentId as string;
     const navigate = useNavigate();
     const query = useQuery<attemptWithoutAnswersType>({
-        queryKey: ['attempts-without-answers', attemptId],
-        queryFn: () => api.fetchAttemptWithoutAnswers(attemptId),
+        queryKey: ['attempts', attemptId, 'without-answers'],
+        queryFn: () => attemptsApi.getAttemptWithoutAnswers(attemptId),
     });
     const { displayAlert } = useAlert();
 

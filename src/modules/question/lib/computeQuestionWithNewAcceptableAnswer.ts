@@ -3,7 +3,10 @@ import { Question } from '../Question.entity';
 import { acceptableAnswerType } from '../types';
 import { questionEncoder } from './questionEncoder';
 
-function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: acceptableAnswerType) {
+function computeQuestionWithNewAcceptableAnswer(
+    question: Question,
+    acceptableAnswer: acceptableAnswerType,
+) {
     const decodedQuestion = questionEncoder.decodeQuestion(question);
     const sanitizedAcceptableAnswer = sanitizer.sanitizeString(acceptableAnswer.answer);
     const currentParsedAcceptableAnswers = decodedQuestion.acceptableAnswers[0];
@@ -40,4 +43,4 @@ function addAcceptableAnswerToQuestion(question: Question, acceptableAnswer: acc
     return reEncodedQuestion;
 }
 
-export { addAcceptableAnswerToQuestion };
+export { computeQuestionWithNewAcceptableAnswer };

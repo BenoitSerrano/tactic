@@ -5,15 +5,15 @@ import { Card } from '../components/Card';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../lib/api';
 import { pathHandler } from '../lib/pathHandler';
+import { resetPasswordRequestsApi } from '../lib/api/resetPasswordRequestsApi';
 
 function RequestResetPassword() {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
     const { displayAlert } = useAlert();
     const mutation = useMutation({
-        mutationFn: api.createResetPasswordRequest,
+        mutationFn: resetPasswordRequestsApi.createResetPasswordRequest,
         onSuccess: (data) => {
             navigate(pathHandler.getRoutePath('RESET_PASSWORD_REQUESTED'));
         },

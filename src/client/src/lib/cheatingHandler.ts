@@ -1,4 +1,4 @@
-import { api } from './api';
+import { attemptsApi } from './api/attemptsApi';
 import { localStorage } from './localStorage';
 import { pathHandler } from './pathHandler';
 
@@ -41,7 +41,7 @@ function buildOnFocusChangeCallback(kind: focusChangeEventType['kind'], displayA
                 const cheatingSummary = computeCheatingSummary(nextFocusChangesEvents);
                 if (!!cheatingSummary) {
                     try {
-                        await api.updateAttemptCheatingSummary({
+                        await attemptsApi.updateAttemptCheatingSummary({
                             attemptId: currentAttemptId,
                             ...cheatingSummary,
                         });

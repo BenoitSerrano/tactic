@@ -10,8 +10,8 @@ function buildAttemptController() {
         createAttempt,
         updateAttempt,
         searchAttempt,
-        fetchAttemptWithAnswers,
-        fetchAttemptWithoutAnswers,
+        getAttemptWithAnswers,
+        getAttemptWithoutAnswers,
         deleteAttempt,
         updateAttemptCheatingSummary,
         updateManualMark,
@@ -19,7 +19,7 @@ function buildAttemptController() {
         deleteAttemptEndedAt,
         updateAttemptCorrectedAt,
         deleteAttemptCorrectedAt,
-        fetchAttemptsCountByCorrectionStatus,
+        getAttemptsCountByCorrectionStatus,
     };
 
     return attemptController;
@@ -43,12 +43,12 @@ function buildAttemptController() {
         return attemptService.createAttempt(params.urlParams.examId, params.urlParams.studentId);
     }
 
-    async function fetchAttemptWithAnswers(params: { urlParams: { attemptId: string } }) {
-        return attemptService.fetchAttemptWithAnswers(params.urlParams.attemptId);
+    async function getAttemptWithAnswers(params: { urlParams: { attemptId: string } }) {
+        return attemptService.getAttemptWithAnswers(params.urlParams.attemptId);
     }
 
-    async function fetchAttemptWithoutAnswers(params: { urlParams: { attemptId: string } }) {
-        return attemptService.fetchAttemptWithoutAnswers(params.urlParams.attemptId);
+    async function getAttemptWithoutAnswers(params: { urlParams: { attemptId: string } }) {
+        return attemptService.getAttemptWithoutAnswers(params.urlParams.attemptId);
     }
 
     async function deleteAttempt(params: { urlParams: { attemptId: string } }) {
@@ -89,7 +89,7 @@ function buildAttemptController() {
         return attemptService.deleteAttemptCorrectedAt(params.urlParams.attemptId);
     }
 
-    async function fetchAttemptsCountByCorrectionStatus(params: { urlParams: { examId: string } }) {
-        return attemptService.fetchAttemptsCountByCorrectionStatus(params.urlParams.examId);
+    async function getAttemptsCountByCorrectionStatus(params: { urlParams: { examId: string } }) {
+        return attemptService.getAttemptsCountByCorrectionStatus(params.urlParams.examId);
     }
 }

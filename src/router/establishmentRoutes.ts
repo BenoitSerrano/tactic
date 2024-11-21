@@ -8,7 +8,7 @@ const establishmentController = buildEstablishmentController();
 const establishmentRoutes: Array<routeType<any, any, any>> = [
     {
         method: 'GET',
-        path: '/establishments',
+        path: '/establishments/with-classes',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: establishmentController.getEstablishmentsWithClasses,
