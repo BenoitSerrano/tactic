@@ -71,7 +71,7 @@ function ExamResults() {
     const deleteAttemptMutation = useMutation({
         mutationFn: attemptsApi.deleteAttempt,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exam-results'] });
+            queryClient.invalidateQueries({ queryKey: ['exams', examId, 'results'] });
         },
         onError: (error: any) => {
             displayAlert({
@@ -85,7 +85,7 @@ function ExamResults() {
     const lockAttemptMutation = useMutation({
         mutationFn: attemptsApi.updateAttemptEndedAt,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exam-results'] });
+            queryClient.invalidateQueries({ queryKey: ['exams', examId, 'results'] });
             displayAlert({
                 variant: 'success',
                 text: "L'examen a bien été terminé pour cet étudiant. Il ne pourra plus modifier sa copie",
@@ -103,7 +103,7 @@ function ExamResults() {
     const unlockAttemptMutation = useMutation({
         mutationFn: attemptsApi.deleteAttemptEndedAt,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['exam-results'] });
+            queryClient.invalidateQueries({ queryKey: ['exams', examId, 'results'] });
             displayAlert({
                 variant: 'success',
                 text: "L'étudiant peut de nouveau accéder à sa copie, dans la limite du temps imparti.",

@@ -4,19 +4,22 @@ import { TextField } from '@mui/material';
 import { useAlert } from '../../lib/alert';
 import { Modal } from '../../components/Modal';
 import { classesApi } from '../../lib/api/classesApi';
+import { useNavigate } from 'react-router-dom';
+import { pathHandler } from '../../lib/pathHandler';
 
 function ClasseCreationModal(props: {
     close: () => void;
     isOpen: boolean;
     establishmentId: string;
 }) {
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const { displayAlert } = useAlert();
     const [name, setName] = useState('');
 
     const createClasseMutation = useMutation({
         mutationFn: classesApi.createClasse,
-        onSuccess: () => {
+        onSuccess: (classe) => {
             setName('');
             queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
             displayAlert({
@@ -24,6 +27,12 @@ function ClasseCreationModal(props: {
                 variant: 'success',
             });
             props.close();
+            navigate(
+                pathHandler.getRoutePath('CLASSE', {
+                    establishmentId: props.establishmentId,
+                    classeId: classe.id,
+                }),
+            );
         },
         onError: (error) => {
             console.error(error);
