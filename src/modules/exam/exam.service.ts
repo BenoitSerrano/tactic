@@ -23,6 +23,7 @@ function buildExamService() {
         updateExamEdgeText,
         getExamsByClasse,
         getExamsByUser,
+        getExamsWithExercisesByUser,
         getExamWithQuestions,
         getAllExams,
         getExam,
@@ -142,6 +143,15 @@ function buildExamService() {
                 questions: exercise.questions.map(({ id }) => questions[id]),
             })),
         };
+    }
+
+    async function getExamsWithExercisesByUser(user: User) {
+        const exams = examRepository.find({
+            where: { user: { id: user.id } },
+            relations: { exercises: true },
+            select: { id: true, name: true, exercises: { id: true, name: true, order: true } },
+        });
+        return exams;
     }
 
     async function getExamWithoutAnswers(examId: Exam['id']) {

@@ -8,10 +8,11 @@ export { buildExerciseController };
 function buildExerciseController() {
     const exerciseService = buildExerciseService();
     const exerciseController = {
-        deleteExercise,
         updateExercisesOrder,
-        createExercise,
         updateExercise,
+        createExercise,
+        duplicateExercise,
+        deleteExercise,
     };
 
     return exerciseController;
@@ -26,6 +27,13 @@ function buildExerciseController() {
         };
     }) {
         return exerciseService.createExercise(params.urlParams.examId, params.body);
+    }
+
+    function duplicateExercise(params: { urlParams: { exerciseId: string; newExamId: string } }) {
+        return exerciseService.duplicateExercise(
+            params.urlParams.newExamId,
+            Number(params.urlParams.exerciseId),
+        );
     }
 
     function updateExercise(params: {

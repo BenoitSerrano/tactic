@@ -7,6 +7,7 @@ const exercisesApi = {
     updateExercisesOrder,
     updateExercise,
     createExercise,
+    duplicateExercise,
     deleteExercise,
 };
 
@@ -58,6 +59,14 @@ async function createExercise(params: {
         defaultQuestionKind: params.defaultQuestionKind,
         order: params.order,
     });
+}
+
+async function duplicateExercise(params: {
+    newExamId: string;
+    exerciseId: number;
+}): Promise<{ id: number; name: string }> {
+    const URL = `${BASE_URL}/exercises/${params.exerciseId}/exams/${params.newExamId}/duplicate`;
+    return performApiCall(URL, 'POST');
 }
 
 async function deleteExercise(params: { examId: string; exerciseId: number }) {
