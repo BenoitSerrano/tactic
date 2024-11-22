@@ -5,7 +5,10 @@ import { Button } from '../../../components/Button';
 
 const BUTTON_HEIGHT = 40;
 
-function HorizontalDividerToAddExercise(props: { onClick: () => void }) {
+function HorizontalDividerToAddExercise(props: {
+    onCreateExerciseClick: () => void;
+    onImportExerciseClick: () => void;
+}) {
     return (
         <HorizontalDividerWithButton
             buttons={[
@@ -14,14 +17,14 @@ function HorizontalDividerToAddExercise(props: { onClick: () => void }) {
                     label: 'Créer un exercice',
                     IconComponent: AddCircleOutlineIcon,
                     iconPlacement: 'left',
-                    onClick: props.onClick,
+                    onClick: props.onCreateExerciseClick,
                 },
                 {
                     variant: 'outlined',
                     label: 'Importer un exercice déjà créé',
                     IconComponent: FileDownloadIcon,
                     iconPlacement: 'right',
-                    onClick: props.onClick,
+                    onClick: props.onImportExerciseClick,
                 },
             ]}
         />

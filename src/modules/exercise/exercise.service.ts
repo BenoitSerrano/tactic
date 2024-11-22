@@ -19,6 +19,7 @@ function buildExerciseService() {
         updateExercisesOrder,
         getExamId,
         duplicateExercises,
+        duplicateExercise,
     };
 
     return exerciseService;
@@ -139,10 +140,39 @@ function buildExerciseService() {
         for (const newExercise of newExercises) {
             const result = await exerciseRepository.insert(newExercise);
             const newExerciseId = result.identifiers[0].id;
-            await questionService.duplicateQuestions(
-                { ...newExercise, id: newExerciseId },
-                newExercise.questions,
-            );
+            await questionService.duplicateQuestions(newExerciseId, newExercise.questions);
+        }
+    }
+
+    async function duplicateExercise(newExamId: Exam['id'], exerciseId: Exercise['id']) {
+        const questionService = buildQuestionService();
+        const exercise = await exerciseRepository.findOneOrFail({
+            where: { id: exerciseId },
+            relations: ['questions'],
+        });
+        const newOrder = (await getLastExerciseOrder(newExamId)) + 1;
+
+        const newExercise = {
+            ...exercise,
+            order: newOrder,
+            exam: { id: newExamId },
+        };
+        const result = await exerciseRepository.insert(newExercise);
+        const newExerciseId = result.identifiers[0].id;
+        await questionService.duplicateQuestions(newExerciseId, newExercise.questions);
+        return { id: newExerciseId, name: exercise.name };
+    }
+
+    async function getLastExerciseOrder(examId: Exam['id']) {
+        const lastExercise = await exerciseRepository.findOne({
+            where: { exam: { id: examId } },
+            order: { order: 'DESC' },
+            select: { id: true, order: true, exam: { id: true } },
+        });
+        if (lastExercise) {
+            return lastExercise.order;
+        } else {
+            return 0;
         }
     }
 }

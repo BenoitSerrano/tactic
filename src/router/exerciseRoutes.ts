@@ -55,6 +55,16 @@ const exerciseRoutes: Array<routeType<any, any, any>> = [
         }),
     },
     {
+        method: 'POST',
+        path: `/exercises/:exerciseId/exams/:newExamId/duplicate`,
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: exerciseController.duplicateExercise,
+        checkAuthorization: accessControlBuilder.assertHasAccessToResources([
+            { entity: 'exam', key: 'newExamId' },
+        ]),
+    },
+    {
         method: 'DELETE',
         path: `/exams/:examId/exercises/:exerciseId`,
         kind: 'authenticated',

@@ -1,5 +1,5 @@
 import { TestPageLayout } from '../components/TestPageLayout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EXERCISE_ACCORDION_SUMMARY_HEIGHT } from '../components/ExerciseContainer';
 import { computeTotalPoints } from '../lib/computeTotalPoints';
 import { exerciseUpsertionModalStatusType, exerciseWithQuestionsType } from './types';
@@ -24,6 +24,7 @@ import { computeOrderedItems } from './lib/computeOrderedItems';
 import { IconButton } from '../../../components/IconButton';
 import { ExerciseEditing } from './ExerciseEditing';
 import { exercisesApi } from '../../../lib/api/exercisesApi';
+import { ExerciseImportModal } from './ExerciseImportModal';
 
 function ExercisesEditing(props: {
     title: string;
@@ -35,6 +36,7 @@ function ExercisesEditing(props: {
     const [exerciseUpsertionModalStatus, setExerciseUpsertionModalStatus] = useState<
         exerciseUpsertionModalStatusType | undefined
     >(undefined);
+    const [isExerciseImportModalOpen, setIsExerciseImportModalOpen] = useState(false);
 
     const queryClient = useQueryClient();
 
@@ -66,6 +68,11 @@ function ExercisesEditing(props: {
             });
         },
     });
+
+    useEffect(() => {
+        const exerciseIds = props.exercises.map((exercise) => exercise.id);
+        setOrderedExerciseIds(exerciseIds);
+    }, [props.exercises]);
 
     const initialOrderedExerciseIds = props.exercises.map((exercise) => exercise.id);
     const [orderedExerciseIds, setOrderedExerciseIds] = useState(initialOrderedExerciseIds);
@@ -146,7 +153,8 @@ function ExercisesEditing(props: {
                                 })}
                                 {droppableExerciseProvided.placeholder}
                                 <HorizontalDividerToAddExercise
-                                    onClick={buildOpenExerciseCreationModal()}
+                                    onCreateExerciseClick={openExerciseCreationModal}
+                                    onImportExerciseClick={openExerciseImportModal}
                                 />
                             </PageContent>
                         )}
@@ -162,6 +170,12 @@ function ExercisesEditing(props: {
                     modalStatus={exerciseUpsertionModalStatus}
                 />
             )}
+
+            <ExerciseImportModal
+                examId={props.examId}
+                close={closeExerciseImportModal}
+                isOpen={isExerciseImportModalOpen}
+            />
         </>
     );
 
@@ -184,10 +198,16 @@ function ExercisesEditing(props: {
         });
     }
 
-    function buildOpenExerciseCreationModal() {
-        return () => {
-            setExerciseUpsertionModalStatus({ kind: 'creating' });
-        };
+    function openExerciseCreationModal() {
+        setExerciseUpsertionModalStatus({ kind: 'creating' });
+    }
+
+    function openExerciseImportModal() {
+        setIsExerciseImportModalOpen(true);
+    }
+
+    function closeExerciseImportModal() {
+        setIsExerciseImportModalOpen(false);
     }
 
     function buildOpenExerciseEditionModal(exercise: exerciseWithQuestionsType) {
@@ -207,8 +227,6 @@ function ExercisesEditing(props: {
     }
 
     function onCreateExercise(createdExerciseId: number) {
-        const newOrderedExerciseIds = [...orderedExerciseIds, createdExerciseId];
-        setOrderedExerciseIds(newOrderedExerciseIds);
         setCurrentExerciseExpanded(createdExerciseId);
     }
 

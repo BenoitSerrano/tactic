@@ -6,6 +6,7 @@ const examsApi = {
     getExamsByClasse,
     getExamsByUser,
     getExam,
+    getExamsWithExercises,
     getExamWithQuestions,
     getExamWithoutAnswers,
     getExamResults,
@@ -54,6 +55,17 @@ type examWithQuestionsApiType = {
 
 async function getExamWithQuestions(examId: string): Promise<examWithQuestionsApiType> {
     const URL = `${BASE_URL}/exams/${examId}/with-questions`;
+    return performApiCall(URL, 'GET');
+}
+
+type examsWithExercisesType = Array<{
+    id: string;
+    name: string;
+    exercises: Array<{ id: number; name: string; order: number }>;
+}>;
+
+async function getExamsWithExercises(): Promise<examsWithExercisesType> {
+    const URL = `${BASE_URL}/exams/with-exercises`;
     return performApiCall(URL, 'GET');
 }
 
@@ -165,3 +177,4 @@ async function deleteExam(examId: string) {
 }
 
 export { examsApi };
+export type { examsWithExercisesType };

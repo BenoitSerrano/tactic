@@ -28,6 +28,13 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
+        path: '/exams/with-exercises',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: examController.getExamsWithExercises,
+    },
+    {
+        method: 'GET',
         path: '/exams/:examId',
         kind: 'public',
         controller: examController.getExam,

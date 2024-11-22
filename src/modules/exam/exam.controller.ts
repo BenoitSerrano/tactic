@@ -23,6 +23,7 @@ function buildExamController() {
         deleteExam,
         duplicateExam,
         getExamWithQuestions,
+        getExamsWithExercises,
         getShouldDisplayRightAnswersForExamId,
         updateShouldDisplayRightAnswersForExamId,
         updateClasseId,
@@ -113,6 +114,10 @@ function buildExamController() {
 
     async function getExamWithQuestions(params: { urlParams: { examId: string } }) {
         return examService.getExamWithQuestions(params.urlParams.examId);
+    }
+
+    async function getExamsWithExercises(_params: {}, user: User) {
+        return examService.getExamsWithExercisesByUser(user);
     }
 
     async function deleteExam(params: { urlParams: { examId: string } }) {

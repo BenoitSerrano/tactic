@@ -245,10 +245,10 @@ function buildQuestionService() {
         return questions.map(({ id }) => id);
     }
 
-    async function duplicateQuestions(newExercise: Exercise, questions: Question[]) {
+    async function duplicateQuestions(newExerciseId: Exercise['id'], questions: Question[]) {
         const newQuestions = questions.map((question) => ({
             ...question,
-            exercise: newExercise,
+            exercise: { id: newExerciseId },
         }));
         return questionRepository.insert(newQuestions);
     }
