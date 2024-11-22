@@ -1,8 +1,8 @@
 import { Typography, styled } from '@mui/material';
+import { Card } from '../../../components/Card';
 import { Offer } from './Offer';
-import { Card } from '../../components/Card';
 
-function PricingContent() {
+function Pricing() {
     return (
         <MainContainer>
             <InnerMainContainer>
@@ -119,4 +119,4 @@ const CardContainer = styled('div')(({ theme }) => ({
     },
 }));
 
-export { PricingContent };
+export { Pricing };

@@ -31,17 +31,19 @@ import { Establishment } from '../pages/Establishment';
 import { Classe } from '../pages/Classe';
 import { Onboarding } from '../pages/Onboarding';
 import { usersApi } from '../lib/api/usersApi';
-import { Privacy } from '../pages/Privacy';
-import { TermsAndConditions } from '../pages/TermsAndConditions';
-import { FAQ } from '../pages/FAQ';
+import { Privacy } from '../pages/Home/Privacy/Privacy';
+import { TermsAndConditions } from '../pages/Home/TermsAndConditions/TermsAndConditions';
+import { FAQ } from '../pages/Home/FAQ/FAQ';
+import { Pricing } from '../pages/Home/Pricing/Pricing';
+import { Product } from '../pages/Home/Product/Product';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
     { element: JSX.Element; authorizedRole?: userRoleType }
 > = {
-    PRIVACY: { element: <Privacy /> },
-    TERMS_AND_CONDITIONS: { element: <TermsAndConditions /> },
-    FAQ: { element: <FAQ /> },
+    PRIVACY: { element: <Home ContentComponent={<Privacy />} /> },
+    TERMS_AND_CONDITIONS: { element: <Home ContentComponent={<TermsAndConditions />} /> },
+    FAQ: { element: <Home ContentComponent={<FAQ />} /> },
     EXAM_TAKING: {
         element: <ExamTaking />,
     },
@@ -98,7 +100,7 @@ const ROUTE_ELEMENTS: Record<
         element: <SignIn apiCall={usersApi.createUser} title="Créer un compte" />,
     },
     HOME: {
-        element: <Home />,
+        element: <Home ContentComponent={<Product />} />,
     },
     EXAM_CONSULTING: {
         element: <ExamConsulting />,
@@ -133,6 +135,8 @@ const ROUTE_ELEMENTS: Record<
     ADMIN_DASHBOARD: { element: <AdminDashboard />, authorizedRole: 'admin' },
     ADMIN_TEACHER_EXAMS: { element: <AdminTeacherExams />, authorizedRole: 'admin' },
     ONBOARDING: { element: <Onboarding />, authorizedRole: 'teacher' },
+    PRICING: { element: <Home ContentComponent={<Pricing />} /> },
+    PRODUCT: { element: <Home ContentComponent={<Product />} /> },
 };
 
 export { ROUTE_ELEMENTS };

@@ -80,6 +80,8 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     FAQ: { path: '/faq' },
     PRIVACY: { path: '/privacy' },
     TERMS_AND_CONDITIONS: { path: '/terms-and-conditions' },
+    PRICING: { path: '/pricing' },
+    PRODUCT: { path: '/product' },
     NOT_FOUND: { path: '/*' },
 };
 

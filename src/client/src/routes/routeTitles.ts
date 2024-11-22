@@ -35,6 +35,8 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     FAQ: 'Foire Aux Questions',
     TERMS_AND_CONDITIONS: 'Mentions légales',
     PRIVACY: 'Données personnelles',
+    PRICING: 'Tarifs',
+    PRODUCT: 'Produit',
 };
 
 export { ROUTE_TITLES };

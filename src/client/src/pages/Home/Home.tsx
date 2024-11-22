@@ -1,33 +1,20 @@
 import { styled } from '@mui/material';
 import { HomeHeader } from './HomeHeader';
-import { useLocation } from 'react-router-dom';
-import { ProductContent } from './ProductContent';
-import { PricingContent } from './PricingContent';
 import { Footer } from '../../components/Footer';
 import { HEADER_HEIGHT } from '../../constants';
+import { ReactNode } from 'react';
 
-function Home() {
-    const { hash } = useLocation();
+function Home(props: { ContentComponent: ReactNode }) {
+    const { ContentComponent } = props;
     return (
         <Container>
             <HomeHeader />
             <ContentContainer>
-                {renderContent()}
+                {ContentComponent}
                 <Footer />
             </ContentContainer>
         </Container>
     );
-
-    function renderContent() {
-        switch (hash) {
-            case '#product':
-                return <ProductContent />;
-            case '#pricing':
-                return <PricingContent />;
-            default:
-                return <ProductContent />;
-        }
-    }
 }
 
 const Container = styled('div')(({ theme }) => ({
