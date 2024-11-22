@@ -3,7 +3,7 @@ import { HomeHeader } from './HomeHeader';
 import { useLocation } from 'react-router-dom';
 import { ProductContent } from './ProductContent';
 import { PricingContent } from './PricingContent';
-import { Footer } from './Footer';
+import { Footer } from '../../components/Footer';
 import { HEADER_HEIGHT } from '../../constants';
 
 function Home() {

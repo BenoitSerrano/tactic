@@ -32,6 +32,9 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     NOT_FOUND: 'Page non trouvée',
     ADMIN_DASHBOARD: "Tableau d'administration",
     ADMIN_TEACHER_EXAMS: 'Examens',
+    FAQ: 'Foire Aux Questions',
+    TERMS_AND_CONDITIONS: 'Mentions légales',
+    PRIVACY: 'Données personnelles',
 };
 
 export { ROUTE_TITLES };

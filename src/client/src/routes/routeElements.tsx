@@ -31,11 +31,17 @@ import { Establishment } from '../pages/Establishment';
 import { Classe } from '../pages/Classe';
 import { Onboarding } from '../pages/Onboarding';
 import { usersApi } from '../lib/api/usersApi';
+import { Privacy } from '../pages/Privacy';
+import { TermsAndConditions } from '../pages/TermsAndConditions';
+import { FAQ } from '../pages/FAQ';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
     { element: JSX.Element; authorizedRole?: userRoleType }
 > = {
+    PRIVACY: { element: <Privacy /> },
+    TERMS_AND_CONDITIONS: { element: <TermsAndConditions /> },
+    FAQ: { element: <FAQ /> },
     EXAM_TAKING: {
         element: <ExamTaking />,
     },

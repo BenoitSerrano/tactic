@@ -30,6 +30,6 @@ const defaultPalette = {
     divider: '#D0E0E3',
 };
 
-const palette = config.NODE_ENV === 'development' ? developmentPalette : defaultPalette;
+const palette = config.NODE_ENV !== 'development' ? developmentPalette : defaultPalette;
 
 export { palette };
