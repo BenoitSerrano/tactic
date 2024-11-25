@@ -19,7 +19,7 @@ function Card(props: { children: React.ReactNode; style?: CSSProperties; size?: 
 }
 const Container = styled('div')<{ minWidth: string | undefined }>(({ theme, style, minWidth }) => ({
     padding: theme.spacing(3),
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: 'white',
     borderRadius: 10,
     minWidth,
     boxShadow: theme.shadows[1],
