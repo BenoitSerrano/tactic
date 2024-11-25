@@ -30,12 +30,12 @@ import { TeacherHome } from '../pages/TeacherHome';
 import { Establishment } from '../pages/Establishment';
 import { Classe } from '../pages/Classe';
 import { Onboarding } from '../pages/Onboarding';
-import { usersApi } from '../lib/api/usersApi';
 import { Privacy } from '../pages/Home/Privacy/Privacy';
 import { TermsAndConditions } from '../pages/Home/TermsAndConditions/TermsAndConditions';
 import { FAQ } from '../pages/Home/FAQ/FAQ';
 import { Pricing } from '../pages/Home/Pricing/Pricing';
 import { Product } from '../pages/Home/Product/Product';
+import { SignUp } from '../pages/SignUp';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -92,12 +92,10 @@ const ROUTE_ELEMENTS: Record<
         element: <RequestResetPassword />,
     },
     SIGN_IN: {
-        element: (
-            <SignIn shouldDisplayResetPasswordLink apiCall={usersApi.login} title="Se connecter" />
-        ),
+        element: <SignIn title="Se connecter" />,
     },
     SIGN_UP: {
-        element: <SignIn apiCall={usersApi.createUser} title="Créer un compte" />,
+        element: <SignUp title="Créer un compte" />,
     },
     HOME: {
         element: <Home ContentComponent={<Product />} />,

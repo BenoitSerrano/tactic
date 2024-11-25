@@ -13,8 +13,10 @@ function buildUserController() {
 
     return userController;
 
-    async function createUser(params: { body: { email: string; password: string } }) {
-        return userService.createUser(params.body.email, params.body.password);
+    async function createUser(params: {
+        body: { email: string; password: string; establishmentName: string; classeName: string };
+    }) {
+        return userService.createUser(params.body);
     }
 
     async function login(params: { body: { email: string; password: string } }) {

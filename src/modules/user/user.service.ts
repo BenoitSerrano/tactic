@@ -2,6 +2,9 @@ import { dataSource } from '../../dataSource';
 import { hasher } from '../../lib/hasher';
 import { mailer } from '../../lib/mailer';
 import { signer } from '../../lib/signer';
+import { buildClasseService, Classe } from '../classe';
+import { Establishment } from '../establishment';
+import { buildEstablishmentService } from '../establishment/establishment.service';
 import { Plan, buildPlanService } from '../plan';
 import { buildUserConfigurationService } from '../userConfiguration';
 import { User } from './User.entity';
@@ -26,12 +29,17 @@ function buildUserService() {
 
     return userService;
 
-    async function createUser(email: string, password: string) {
+    async function createUser(params: {
+        email: string;
+        password: string;
+        establishmentName: Establishment['name'];
+        classeName: Classe['name'];
+    }) {
         const newUserConfiguration = await userConfigurationService.createUserConfiguration();
         const newUser = new User();
         newUser.roles = ['teacher'];
-        newUser.email = email;
-        newUser.hashedPassword = hasher.hash(password);
+        newUser.email = params.email;
+        newUser.hashedPassword = hasher.hash(params.password);
         newUser.userConfiguration = newUserConfiguration;
 
         const freePlan = await planService.findFreePlan();
@@ -43,10 +51,28 @@ function buildUserService() {
                 `Something wrong happened. ${result.identifiers.length} users were created.`,
             );
         }
+        newUser.id = result.identifiers[0].id;
 
-        await mailer.registerContact(email);
-        const token = createJwt({ userId: result.identifiers[0].id, email, roles: newUser.roles });
-        const userInfo = { email, roles: newUser.roles, plan: newUser.plan.name };
+        const establishmentService = buildEstablishmentService();
+        const establishment = await establishmentService.createEstablishment({
+            name: params.establishmentName,
+            user: newUser,
+        });
+
+        const classeService = buildClasseService();
+        await classeService.createClasse({
+            classeName: params.classeName,
+            establishmentId: establishment.id,
+            user: newUser,
+        });
+
+        await mailer.registerContact(params.email);
+        const token = createJwt({
+            userId: newUser.id,
+            email: params.email,
+            roles: newUser.roles,
+        });
+        const userInfo = { email: params.email, roles: newUser.roles, plan: newUser.plan.name };
         return { token, userInfo };
     }
 

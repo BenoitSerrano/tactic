@@ -1,3 +1,4 @@
+import Joi from 'joi';
 import { buildUserController } from '../modules/user';
 import { routeType } from './types';
 
@@ -9,6 +10,12 @@ const userRoutes: Array<routeType<any, any, any>> = [
         path: '/users',
         kind: 'public',
         controller: userController.createUser,
+        schema: Joi.object({
+            email: Joi.string().required(),
+            password: Joi.string().required(),
+            establishmentName: Joi.string().required(),
+            classeName: Joi.string().required(),
+        }),
     },
     {
         method: 'POST',

@@ -3,23 +3,26 @@ import { NotLoggedInPage } from '../components/NotLoggedInPage';
 import { FormEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Card } from '../components/Card';
-import { Link } from '../components/Link';
 import { pathHandler } from '../lib/pathHandler';
 import { LoadingButton } from '@mui/lab';
 import { localSessionHandler } from '../lib/localSessionHandler';
 import { usersApi } from '../lib/api/usersApi';
 
-function SignIn(props: { title: string }) {
-    const [email, setEmail] = useState('');
+function SignUp(props: { title: string }) {
+    const [searchParams] = useSearchParams();
+    const queryParamsEmail = searchParams.get('email');
+    const [email, setEmail] = useState(queryParamsEmail || '');
     const [password, setPassword] = useState('');
+    const [establishmentName, setEstablishmentName] = useState('');
+    const [classeName, setClasseName] = useState('');
     const navigate = useNavigate();
 
     const { displayAlert } = useAlert();
 
     const mutation = useMutation({
-        mutationFn: usersApi.login,
+        mutationFn: usersApi.createUser,
         onSuccess: (data) => {
             const { token, userInfo } = data;
             localSessionHandler.setToken(token);
@@ -66,18 +69,33 @@ function SignIn(props: { title: string }) {
                                     onChange={(event) => setPassword(event.target.value)}
                                 />
                             </FieldContainer>
-                            <DisplayPasswordLinkContainer>
-                                <Link to="/request-reset-password">
-                                    <Typography>Mot de passe oublié ?</Typography>
-                                </Link>
-                            </DisplayPasswordLinkContainer>
+                            <FieldContainer>
+                                <TextField
+                                    fullWidth
+                                    name="establishment"
+                                    type="text"
+                                    label="Établissement principal"
+                                    value={establishmentName}
+                                    onChange={(event) => setEstablishmentName(event.target.value)}
+                                />
+                            </FieldContainer>
+                            <FieldContainer>
+                                <TextField
+                                    fullWidth
+                                    name="classe"
+                                    type="text"
+                                    label="Classe principale"
+                                    value={classeName}
+                                    onChange={(event) => setClasseName(event.target.value)}
+                                />
+                            </FieldContainer>
                         </FieldsContainer>
 
                         <LoadingButton
                             loading={mutation.isPending}
                             type="submit"
                             variant="contained"
-                            disabled={!password || !email}
+                            disabled={!password || !email || !establishmentName || !classeName}
                         >
                             {props.title}
                         </LoadingButton>
@@ -88,7 +106,7 @@ function SignIn(props: { title: string }) {
     );
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        mutation.mutate({ email, password });
+        mutation.mutate({ email, password, establishmentName, classeName });
         event.preventDefault();
     }
 }
@@ -98,13 +116,6 @@ const ContentContainer = styled('div')({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-});
-
-const DisplayPasswordLinkContainer = styled('div')({
-    display: 'flex',
-    textDecorationLine: 'underline',
-    alignItems: 'center',
-    justifyContent: 'center',
 });
 
 const CardContent = styled('form')(({ theme }) => ({
@@ -125,4 +136,4 @@ const TitleContainer = styled('div')(({ theme }) => ({
     textAlign: 'center',
 }));
 
-export { SignIn };
+export { SignUp };

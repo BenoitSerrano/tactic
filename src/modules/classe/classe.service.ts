@@ -47,15 +47,15 @@ function buildClasseService() {
     }
 
     async function createClasse(params: {
-        className: Classe['name'];
+        classeName: Classe['name'];
         establishmentId: Establishment['id'];
         user: User;
     }) {
         const establishmentService = buildEstablishmentService();
-        const { establishmentId, className, user } = params;
+        const { establishmentId, classeName, user } = params;
         const establishment = await establishmentService.getEstablishment(establishmentId);
         const classe = new Classe();
-        classe.name = className;
+        classe.name = classeName;
         classe.establishment = establishment;
         classe.user = user;
         const insertedClasse = await classeRepository.save(classe);

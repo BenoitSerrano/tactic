@@ -48,7 +48,7 @@ function buildClasseController() {
         user: User,
     ) {
         return classeService.createClasse({
-            className: params.body.name,
+            classeName: params.body.name,
             establishmentId: params.urlParams.establishmentId,
             user,
         });

@@ -8,6 +8,7 @@ function PricingSummary(props: {
 }) {
     const planSummary = computePlanSummary();
     const totalPrice = computeTotalPrice();
+
     return (
         <Container>
             <Title variant="h4">Votre tarif</Title>

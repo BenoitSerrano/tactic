@@ -1,3 +1,4 @@
+import { userInfoType } from '../../constants';
 import { BASE_URL } from './constants';
 import { performApiCall } from './lib/performApiCall';
 
@@ -24,12 +25,25 @@ async function updateUserPasswordByResetPasswordRequest({
     return performApiCall(URL, 'PATCH', { password });
 }
 
-async function createUser(params: { email: string; password: string }) {
+async function createUser(params: {
+    email: string;
+    password: string;
+    establishmentName: string;
+    classeName: string;
+}): Promise<{ token: string; userInfo: userInfoType }> {
     const URL = `${BASE_URL}/users`;
-    return performApiCall(URL, 'POST', { email: params.email, password: params.password });
+    return performApiCall(URL, 'POST', {
+        email: params.email,
+        password: params.password,
+        establishmentName: params.establishmentName,
+        classeName: params.classeName,
+    });
 }
 
-async function login(params: { email: string; password: string }) {
+async function login(params: {
+    email: string;
+    password: string;
+}): Promise<{ token: string; userInfo: userInfoType }> {
     const URL = `${BASE_URL}/login`;
     return performApiCall(URL, 'POST', { email: params.email, password: params.password });
 }
