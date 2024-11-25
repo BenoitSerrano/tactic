@@ -30,6 +30,11 @@ const ROUTE_KEYS = [
     'NOT_FOUND',
     'ADMIN_DASHBOARD',
     'ADMIN_TEACHER_EXAMS',
+    'TERMS_AND_CONDITIONS',
+    'PRIVACY',
+    'FAQ',
+    'PRODUCT',
+    'PRICING',
 ] as const;
 
 const EXAM_ROUTE_KEYS = [

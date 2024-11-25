@@ -1,7 +1,7 @@
 import { LandingPageBody } from './LandingPageBody';
 import { LandingPageHeader } from './LandingPageHeader';
 
-function ProductContent() {
+function Product() {
     return (
         <>
             <LandingPageHeader />
@@ -10,4 +10,4 @@ function ProductContent() {
     );
 }
 
-export { ProductContent };
+export { Product };
