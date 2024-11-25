@@ -1,122 +1,77 @@
-import { Typography, styled } from '@mui/material';
-import { Card } from '../../../components/Card';
-import { Offer } from './Offer';
+import { styled, Typography } from '@mui/material';
+import { PricingToggle } from './PricingToggle';
+import { useState } from 'react';
+import { pricingPlanNameType } from './constants';
+import { PricingSlider } from './PricingSlider';
+import { PricingOptions } from './PricingOptions';
+import { PricingSummary } from './PricingSummary';
 
 function Pricing() {
+    const [selectedPlanName, setSelectedPlanName] = useState<pricingPlanNameType>('PRO');
+    const [selectedPriceIndex, setSelectedPriceIndex] = useState(0);
+
     return (
         <MainContainer>
-            <InnerMainContainer>
-                <PricingDescriptionContainer>
-                    <PricingDescriptionTitleContainer>
-                        <Typography variant="h2">Tarifs</Typography>
-                    </PricingDescriptionTitleContainer>
-                    <Typography variant="h4">
-                        Commencer gratuitement en créant votre premier examen !
-                    </Typography>
-                </PricingDescriptionContainer>
-                <OffersContainer>
-                    <CardContainer>
-                        <Card style={{ flex: 1 }}>
-                            <Offer
-                                title="ESSAI GRATUIT"
-                                price={0}
-                                features={['30 copies maximum', 'Un examen maximum']}
+            <Title variant="h1">Tarifs</Title>
+            <Subtitle variant="h3">Des tarifs flexibles adaptés à vos besoins</Subtitle>
+            <PricingBox>
+                <LeftContainer>
+                    <PricingToggleContainer>
+                        <PricingToggle
+                            selectedPlanName={selectedPlanName}
+                            setSelectedPlanName={setSelectedPlanName}
+                        />
+                    </PricingToggleContainer>
+                    {selectedPlanName === 'PRO' && (
+                        <PricingSliderContainer>
+                            <PricingSlider
+                                selectedIndex={selectedPriceIndex}
+                                setSelectedIndex={setSelectedPriceIndex}
                             />
-                        </Card>
-                    </CardContainer>
-                    <CardContainer>
-                        <Card style={{ flex: 1 }}>
-                            <Offer
-                                title="PRO"
-                                price={12}
-                                features={[
-                                    "Jusqu'à 200 copies par mois",
-                                    "Jusqu'à 5 examens par mois",
-                                    'Support réactif en moins de 24h',
-                                ]}
-                            />
-                        </Card>
-                    </CardContainer>
-                    <CardContainer>
-                        <Card style={{ flex: 1 }}>
-                            <Offer
-                                title="ILLIMITÉ"
-                                price={16}
-                                features={[
-                                    'Copies illimitées',
-                                    'Examens illimités',
-                                    'Support réactif en moins de 24h',
-                                ]}
-                            />
-                        </Card>
-                    </CardContainer>
-                </OffersContainer>
-            </InnerMainContainer>
+                        </PricingSliderContainer>
+                    )}
+                    <PricingOptions selectedPlanName={selectedPlanName} />
+                </LeftContainer>
+                <RightContainer>
+                    <PricingSummary
+                        selectedPriceIndex={selectedPriceIndex}
+                        selectedPlanName={selectedPlanName}
+                    />
+                </RightContainer>
+            </PricingBox>
         </MainContainer>
     );
 }
 
 const MainContainer = styled('div')(({ theme }) => ({
     display: 'flex',
+    padding: theme.spacing(5),
     flex: 1,
-    [theme.breakpoints.up('md')]: {
-        padding: theme.spacing(9),
-        paddingTop: theme.spacing(6),
-    },
-    [theme.breakpoints.down('md')]: {
-        padding: theme.spacing(3),
-        paddingTop: theme.spacing(2),
-    },
-}));
-const InnerMainContainer = styled('div')(({ theme }) => ({
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-        flexDirection: 'row',
-    },
-    [theme.breakpoints.down('md')]: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    width: '100%',
-}));
-const PricingDescriptionContainer = styled('div')(({ theme }) => ({
-    [theme.breakpoints.up('md')]: {
-        width: '35%',
-        marginRight: theme.spacing(4),
-    },
-    [theme.breakpoints.down('md')]: {
-        width: '50%',
-        textAlign: 'center',
-        marginBottom: theme.spacing(4),
-    },
-}));
-const PricingDescriptionTitleContainer = styled('div')(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-}));
-const OffersContainer = styled('div')(({ theme }) => ({
-    [theme.breakpoints.up('md')]: {
-        width: '65%',
-    },
-    [theme.breakpoints.down('md')]: {
-        width: '95%',
-    },
-    display: 'flex',
-    [theme.breakpoints.down('sm')]: {
-        flexDirection: 'column',
-    },
-    justifyContent: 'space-between',
-}));
-const CardContainer = styled('div')(({ theme }) => ({
-    flex: 1,
-    display: 'flex',
     flexDirection: 'column',
-    [theme.breakpoints.down('sm')]: {
-        marginBottom: theme.spacing(2),
-    },
-    [theme.breakpoints.up('sm')]: {
-        marginRight: theme.spacing(2),
-    },
+    alignItems: 'center',
 }));
-
+const Title = styled(Typography)(({ theme }) => ({
+    marginBottom: theme.spacing(1),
+    textAlign: 'center',
+}));
+const Subtitle = styled(Typography)(({ theme }) => ({
+    marginBottom: theme.spacing(5),
+    textAlign: 'center',
+}));
+const PricingBox = styled('div')(({ theme }) => ({
+    borderRadius: '40px',
+    display: 'flex',
+    border: `2px solid ${theme.palette.primary.main}`,
+}));
+const PricingToggleContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(3) }));
+const PricingSliderContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(3) }));
+const LeftContainer = styled('div')(({ theme }) => ({
+    padding: theme.spacing(5),
+    flex: 2,
+    borderRight: `2px solid ${theme.palette.primary.main}`,
+}));
+const RightContainer = styled('div')(({ theme }) => ({
+    padding: theme.spacing(5),
+    flex: 1,
+}));
 export { Pricing };

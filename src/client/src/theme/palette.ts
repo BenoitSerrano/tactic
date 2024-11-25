@@ -10,7 +10,7 @@ const developmentPalette = {
         main: '#1647d8',
     },
     warning: { main: '#e87a00', light: '#f5b44d' },
-    common: { black: '#1F2701' },
+    common: { black: '#1F2701', white: '#EBFEEF' },
     background: { default: '#FAFEEB' },
     divider: '#F5FED8',
 };
@@ -25,11 +25,11 @@ const defaultPalette = {
         main: '#1647d8',
     },
     warning: { main: '#e87a00', light: '#f5b44d' },
-    common: { black: '#034D59' },
+    common: { black: '#0D2F30', white: '#F6FEFE' },
     background: { default: '#CADDDB' },
     divider: '#D0E0E3',
 };
 
-const palette = config.NODE_ENV === 'development' ? developmentPalette : defaultPalette;
+const palette = config.NODE_ENV !== 'development' ? developmentPalette : defaultPalette;
 
 export { palette };
