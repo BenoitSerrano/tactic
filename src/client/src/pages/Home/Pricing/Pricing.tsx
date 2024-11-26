@@ -61,6 +61,7 @@ const Subtitle = styled(Typography)(({ theme }) => ({
 const PricingBox = styled('div')(({ theme }) => ({
     borderRadius: '40px',
     display: 'flex',
+    width: '100%',
     border: `2px solid ${theme.palette.primary.main}`,
 }));
 const PricingToggleContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spacing(3) }));

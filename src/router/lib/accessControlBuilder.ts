@@ -1,30 +1,8 @@
 import { dataSource } from '../../dataSource';
-import { Exam, buildExamService } from '../../modules/exam';
+import { Exam } from '../../modules/exam';
 import { Classe } from '../../modules/classe';
-import { User, buildUserService } from '../../modules/user';
+import { User } from '../../modules/user';
 import { Establishment } from '../../modules/establishment';
-
-function assertHasRightPlanForCreation(entity: 'exam') {
-    const userService = buildUserService();
-    return async (params: Record<string, string>, user: User) => {
-        const plan = await userService.findPlanForUser(user);
-        switch (entity) {
-            case 'exam':
-                if (plan.maxExams === null || plan.maxExams === undefined) {
-                    return;
-                }
-
-                const examService = buildExamService();
-                const examCount = await examService.countExamsForUser(user);
-                if (examCount < plan.maxExams) {
-                    return;
-                }
-                throw new Error(
-                    `Votre formule actuelle ("${plan.name}") ne vous permet pas de créer un examen supplémentaire. Veuillez écrire à benoit.serrano10@gmail.com pour passer au plan PRO ou UNLIMITED.`,
-                );
-        }
-    };
-}
 
 function assertHasAccessToResources(
     resources: Array<{ entity: 'exam' | 'classe' | 'establishment'; key: string }>,
@@ -81,7 +59,6 @@ function assertHasAccessToResources(
 
 const accessControlBuilder = {
     assertHasAccessToResources,
-    assertHasRightPlanForCreation,
 };
 
 export { accessControlBuilder };

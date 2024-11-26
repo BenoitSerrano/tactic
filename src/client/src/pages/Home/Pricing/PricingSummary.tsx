@@ -53,14 +53,14 @@ function PricingSummary(props: {
                 return [
                     { label: 'Tarif gratuit', value: '0.00 €' },
                     { label: '30 copies', value: "inclus à l'inscription" },
-                    { label: 'Arsenal anti-triche', value: 'inclus' },
+                    { label: 'Dispositif anti-triche', value: 'inclus' },
                 ];
             case 'PRO':
                 const { attempts, price } = PRO_PRICES[props.selectedPriceIndex];
                 return [
                     { label: `Pack ${attempts} copies`, value: `${price.toFixed(2)} €` },
                     { label: '30 copies supplémentaires', value: "inclus à l'inscription" },
-                    { label: 'Arsenal anti-triche', value: 'inclus' },
+                    { label: 'Dispositif anti-triche', value: 'inclus' },
                 ];
         }
     }

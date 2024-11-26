@@ -8,7 +8,6 @@ import { Question } from './modules/question';
 import { Exercise } from './modules/exercise';
 import { ResetPasswordRequest } from './modules/resetPasswordRequest';
 import { Classe } from './modules/classe';
-import { Plan } from './modules/plan';
 import { UserConfiguration } from './modules/userConfiguration';
 import { Establishment } from './modules/establishment';
 
@@ -30,7 +29,6 @@ const dataSource = new DataSource({
         Exercise,
         ResetPasswordRequest,
         Classe,
-        Plan,
         UserConfiguration,
         Establishment,
     ],

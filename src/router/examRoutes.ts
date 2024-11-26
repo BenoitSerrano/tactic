@@ -77,7 +77,6 @@ const examRoutes: Array<routeType<any, any, any>> = [
             startDateTime: Joi.number().required(),
             endDateTime: Joi.number().allow(null),
         }),
-        checkAuthorization: accessControlBuilder.assertHasRightPlanForCreation('exam'),
     },
     {
         method: 'POST',

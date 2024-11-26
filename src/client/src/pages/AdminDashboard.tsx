@@ -8,12 +8,10 @@ import { pathHandler } from '../lib/pathHandler';
 import { usersApi } from '../lib/api/usersApi';
 
 type userRoleType = 'teacher' | 'admin';
-type planType = { id: string; name: string };
 type userSummaryApiType = {
     id: string;
     email: string;
     role: userRoleType;
-    plan: planType;
     examsCount: number;
 };
 
@@ -34,7 +32,6 @@ function AdminDashboard() {
             <TableHead>
                 <TableCell>E-mail</TableCell>
                 <TableCell>Rôle</TableCell>
-                <TableCell>Plan</TableCell>
                 <TableCell>Nombre d'examens</TableCell>
                 <TableCell width={20}></TableCell>
             </TableHead>
@@ -47,7 +44,6 @@ function AdminDashboard() {
                         <TableRow key={user.id}>
                             <TableCell>{user.email}</TableCell>
                             <TableCell>{user.role}</TableCell>
-                            <TableCell>{user.plan.name}</TableCell>
                             <TableCell>{user.examsCount}</TableCell>
                             <TableCell>
                                 <IconButton

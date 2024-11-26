@@ -7,7 +7,6 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Plan } from '../plan';
 import { UserConfiguration } from '../userConfiguration';
 import { userRoleType } from './constants';
 import { Exam } from '../exam';
@@ -25,9 +24,6 @@ export class User {
 
     @Column('simple-array', { default: 'teacher' })
     roles: userRoleType[];
-
-    @ManyToOne(() => Plan, { nullable: false })
-    plan: Plan;
 
     @OneToOne(() => UserConfiguration, (userConfiguration) => userConfiguration.user, {
         nullable: false,

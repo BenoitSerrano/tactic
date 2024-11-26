@@ -4,7 +4,6 @@ import { Classe } from '../modules/classe';
 import { Student } from '../modules/student';
 import { User } from '../modules/user';
 import { UserConfiguration } from '../modules/userConfiguration';
-import { Plan } from '../modules/plan';
 import { writeFile, readFile } from 'fs/promises';
 import { Establishment } from '../modules/establishment';
 
@@ -16,7 +15,6 @@ const api = {
     fetchAllClasses,
     fetchAllUsers,
     fetchAllUserConfigurations,
-    fetchAllPlans,
 };
 
 async function saveJson(filename: string, data: Object) {
@@ -30,19 +28,6 @@ async function getJson<entityT>(filename: string) {
     } catch (error) {
         return undefined;
     }
-}
-
-async function fetchAllPlans(): Promise<Plan[]> {
-    const plans = await getJson<Plan>('plans');
-    if (plans) {
-        return plans;
-    }
-    const URL = `https://tactic-app.fr/api/all-plans`;
-
-    const response = await fetch(URL);
-    const parsedData = await response.json();
-    await saveJson('plans', parsedData);
-    return parsedData;
 }
 
 async function fetchAllExams(): Promise<Exam[]> {

@@ -5,7 +5,6 @@ import { signer } from '../../lib/signer';
 import { buildClasseService, Classe } from '../classe';
 import { Establishment } from '../establishment';
 import { buildEstablishmentService } from '../establishment/establishment.service';
-import { Plan, buildPlanService } from '../plan';
 import { buildUserConfigurationService } from '../userConfiguration';
 import { User } from './User.entity';
 
@@ -13,7 +12,6 @@ export { buildUserService };
 
 function buildUserService() {
     const userRepository = dataSource.getRepository(User);
-    const planService = buildPlanService();
     const userConfigurationService = buildUserConfigurationService();
 
     const userService = {
@@ -23,7 +21,6 @@ function buildUserService() {
         getAllUsersWithoutPassword,
         bulkInsertUsers,
         changePassword,
-        findPlanForUser,
         getUsersSummary,
     };
 
@@ -41,9 +38,6 @@ function buildUserService() {
         newUser.email = params.email;
         newUser.hashedPassword = hasher.hash(params.password);
         newUser.userConfiguration = newUserConfiguration;
-
-        const freePlan = await planService.findFreePlan();
-        newUser.plan = freePlan;
 
         const result = await userRepository.insert(newUser);
         if (result.identifiers.length !== 1) {
@@ -72,7 +66,7 @@ function buildUserService() {
             email: params.email,
             roles: newUser.roles,
         });
-        const userInfo = { email: params.email, roles: newUser.roles, plan: newUser.plan.name };
+        const userInfo = { email: params.email, roles: newUser.roles };
         return { token, userInfo };
     }
 
@@ -85,13 +79,13 @@ function buildUserService() {
     }
 
     async function login(email: string, password: string) {
-        const user = await userRepository.findOneOrFail({ where: { email }, relations: ['plan'] });
+        const user = await userRepository.findOneOrFail({ where: { email } });
 
         const isPasswordCorrect = hasher.verify(password, user.hashedPassword);
 
         if (isPasswordCorrect) {
             const token = createJwt({ userId: user.id, email: user.email, roles: user.roles });
-            const userInfo = { email, roles: user.roles, plan: user.plan.name };
+            const userInfo = { email, roles: user.roles };
 
             return { token, userInfo };
         } else {
@@ -101,8 +95,8 @@ function buildUserService() {
 
     async function getAllUsersWithoutPassword() {
         const users = await userRepository.find({
-            relations: ['userConfiguration', 'plan'],
-            select: { plan: { id: true }, userConfiguration: { id: true } },
+            relations: ['userConfiguration'],
+            select: { userConfiguration: { id: true } },
         });
 
         return users.map((user) => ({ ...user, hashedPassword: '' }));
@@ -118,31 +112,20 @@ function buildUserService() {
         return result.affected === 1;
     }
 
-    async function findPlanForUser(user: User): Promise<Plan> {
-        const { plan } = await userRepository.findOneOrFail({
-            where: { id: user.id },
-            relations: ['plan'],
-            select: ['id', 'plan'],
-        });
-        return plan;
-    }
-
     async function getUsersSummary() {
         const users = await userRepository.find({
-            relations: ['plan', 'exams'],
+            relations: ['exams'],
             select: {
                 id: true,
                 email: true,
                 roles: true,
-                plan: { id: true, name: true },
                 exams: { id: true },
             },
         });
-        return users.map(({ id, email, roles, plan, exams }) => ({
+        return users.map(({ id, email, roles, exams }) => ({
             id,
             email,
             roles,
-            plan,
             examsCount: exams.length,
         }));
     }

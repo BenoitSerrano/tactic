@@ -22,7 +22,6 @@ type userRoleType = 'teacher' | 'admin';
 type userInfoType = {
     email: string;
     roles: userRoleType[];
-    plan: 'string';
 };
 
 const questionSpecificityMapping: Record<
