@@ -1,11 +1,14 @@
 import { styled, Typography } from '@mui/material';
 import { Button } from '../../../components/Button';
 import { pricingPlanNameType, PRO_PRICES } from './constants';
+import { useNavigate } from 'react-router-dom';
+import { pathHandler } from '../../../lib/pathHandler';
 
 function PricingSummary(props: {
     selectedPlanName: pricingPlanNameType;
     selectedPriceIndex: number;
 }) {
+    const navigate = useNavigate();
     const planSummary = computePlanSummary();
     const totalPrice = computeTotalPrice();
 
@@ -32,7 +35,7 @@ function PricingSummary(props: {
                     <Typography variant="h4">{totalPrice}</Typography>
                 </ValueContainer>
             </SummaryRowContainer>
-            <Button fullWidth variant="contained">
+            <Button fullWidth variant="contained" onClick={onSubscribe}>
                 S'inscrire
             </Button>
         </Container>
@@ -63,6 +66,10 @@ function PricingSummary(props: {
                     { label: 'Dispositif anti-triche', value: 'inclus' },
                 ];
         }
+    }
+
+    function onSubscribe() {
+        navigate(pathHandler.getRoutePath('SIGN_UP'));
     }
 }
 
