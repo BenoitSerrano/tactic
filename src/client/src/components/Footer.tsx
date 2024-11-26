@@ -12,7 +12,7 @@ function Footer() {
             <BottomContainer>
                 <LinkContainerWithRightBorder>
                     <TextLink
-                        to={pathHandler.getRoutePath('TERMS_AND_CONDITIONS')}
+                        to={pathHandler.getRoutePath('LEGAL_NOTICE')}
                         label="Mentions légales"
                     />
                 </LinkContainerWithRightBorder>

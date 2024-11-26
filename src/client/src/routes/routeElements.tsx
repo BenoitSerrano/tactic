@@ -31,18 +31,19 @@ import { Establishment } from '../pages/Establishment';
 import { Classe } from '../pages/Classe';
 import { Onboarding } from '../pages/Onboarding';
 import { Privacy } from '../pages/Home/Privacy/Privacy';
-import { TermsAndConditions } from '../pages/Home/TermsAndConditions/TermsAndConditions';
+import { LegalNotice } from '../pages/Home/LegalNotice/LegalNotice';
 import { FAQ } from '../pages/Home/FAQ/FAQ';
 import { Pricing } from '../pages/Home/Pricing/Pricing';
 import { Product } from '../pages/Home/Product/Product';
 import { SignUp } from '../pages/SignUp';
+import { TermsAndConditionsOfSale } from '../pages/Home/TermsAndConditionsOfSale/TermsAndConditionsOfSale';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
     { element: JSX.Element; authorizedRole?: userRoleType }
 > = {
     PRIVACY: { element: <Home ContentComponent={<Privacy />} /> },
-    TERMS_AND_CONDITIONS: { element: <Home ContentComponent={<TermsAndConditions />} /> },
+    LEGAL_NOTICE: { element: <Home ContentComponent={<LegalNotice />} /> },
     FAQ: { element: <Home ContentComponent={<FAQ />} /> },
     EXAM_TAKING: {
         element: <ExamTaking />,
@@ -135,6 +136,9 @@ const ROUTE_ELEMENTS: Record<
     ONBOARDING: { element: <Onboarding />, authorizedRole: 'teacher' },
     PRICING: { element: <Home ContentComponent={<Pricing />} /> },
     PRODUCT: { element: <Home ContentComponent={<Product />} /> },
+    TERMS_AND_CONDITIONS_OF_SALE: {
+        element: <Home ContentComponent={<TermsAndConditionsOfSale />} />,
+    },
 };
 
 export { ROUTE_ELEMENTS };

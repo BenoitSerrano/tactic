@@ -1,6 +1,6 @@
 import { styled, Typography } from '@mui/material';
 
-function TermsAndConditions() {
+function LegalNotice() {
     return (
         <Container>
             <Title variant="h1">Mentions légales</Title>
@@ -60,4 +60,4 @@ const Title = styled(Typography)(({ theme }) => ({
 const SectionTitle = styled(Typography)(({ theme }) => ({ marginBottom: theme.spacing(1) }));
 const SectionBody = styled(Typography)(({ theme }) => ({ marginBottom: theme.spacing(2) }));
 
-export { TermsAndConditions };
+export { LegalNotice };

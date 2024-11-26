@@ -79,9 +79,10 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     STUDENT_AUTHENTICATION_EXAM_TAKING_SHORTENED: { path: `/t/:examId` },
     FAQ: { path: '/faq' },
     PRIVACY: { path: '/privacy' },
-    TERMS_AND_CONDITIONS: { path: '/terms-and-conditions' },
+    LEGAL_NOTICE: { path: '/legal-notice' },
     PRICING: { path: '/pricing' },
     PRODUCT: { path: '/product' },
+    TERMS_AND_CONDITIONS_OF_SALE: { path: '/terms-and-conditions-of-sale' },
     NOT_FOUND: { path: '/*' },
 };
 

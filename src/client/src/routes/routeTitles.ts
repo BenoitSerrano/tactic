@@ -33,10 +33,11 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     ADMIN_DASHBOARD: "Tableau d'administration",
     ADMIN_TEACHER_EXAMS: 'Examens',
     FAQ: 'Foire Aux Questions',
-    TERMS_AND_CONDITIONS: 'Mentions légales',
+    LEGAL_NOTICE: 'Mentions légales',
     PRIVACY: 'Données personnelles',
     PRICING: 'Tarifs',
     PRODUCT: 'Produit',
+    TERMS_AND_CONDITIONS_OF_SALE: 'Conditions Générales de Vente',
 };
 
 export { ROUTE_TITLES };

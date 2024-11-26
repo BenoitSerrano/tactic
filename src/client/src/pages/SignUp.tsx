@@ -1,6 +1,6 @@
-import { TextField, Typography, styled } from '@mui/material';
+import { Checkbox, FormControlLabel, TextField, Typography, styled } from '@mui/material';
 import { NotLoggedInPage } from '../components/NotLoggedInPage';
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../lib/alert';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { pathHandler } from '../lib/pathHandler';
 import { LoadingButton } from '@mui/lab';
 import { localSessionHandler } from '../lib/localSessionHandler';
 import { usersApi } from '../lib/api/usersApi';
+import { Link } from 'react-router-dom';
 
 function SignUp(props: { title: string }) {
     const [searchParams] = useSearchParams();
@@ -17,6 +18,7 @@ function SignUp(props: { title: string }) {
     const [password, setPassword] = useState('');
     const [establishmentName, setEstablishmentName] = useState('');
     const [classeName, setClasseName] = useState('');
+    const [isCGVChecked, setIsCGVChecked] = useState(false);
     const navigate = useNavigate();
 
     const { displayAlert } = useAlert();
@@ -50,6 +52,7 @@ function SignUp(props: { title: string }) {
                         <FieldsContainer>
                             <FieldContainer>
                                 <TextField
+                                    required
                                     autoFocus
                                     fullWidth
                                     name="email"
@@ -61,6 +64,7 @@ function SignUp(props: { title: string }) {
                             </FieldContainer>
                             <FieldContainer>
                                 <TextField
+                                    required
                                     fullWidth
                                     name="password"
                                     type="password"
@@ -71,6 +75,7 @@ function SignUp(props: { title: string }) {
                             </FieldContainer>
                             <FieldContainer>
                                 <TextField
+                                    required
                                     fullWidth
                                     name="establishment"
                                     type="text"
@@ -81,6 +86,7 @@ function SignUp(props: { title: string }) {
                             </FieldContainer>
                             <FieldContainer>
                                 <TextField
+                                    required
                                     fullWidth
                                     name="classe"
                                     type="text"
@@ -89,13 +95,40 @@ function SignUp(props: { title: string }) {
                                     onChange={(event) => setClasseName(event.target.value)}
                                 />
                             </FieldContainer>
+                            <FieldContainer>
+                                <FormControlLabel
+                                    required
+                                    control={
+                                        <Checkbox checked={isCGVChecked} onChange={onChangeCGV} />
+                                    }
+                                    label={
+                                        <Typography>
+                                            J'ai lu et j'accepte les 
+                                            <Link
+                                                target="_blank"
+                                                to={pathHandler.getRoutePath(
+                                                    'TERMS_AND_CONDITIONS_OF_SALE',
+                                                )}
+                                            >
+                                                Conditions Générales de Vente
+                                            </Link>
+                                        </Typography>
+                                    }
+                                />
+                            </FieldContainer>
                         </FieldsContainer>
 
                         <LoadingButton
                             loading={mutation.isPending}
                             type="submit"
                             variant="contained"
-                            disabled={!password || !email || !establishmentName || !classeName}
+                            disabled={
+                                !password ||
+                                !email ||
+                                !establishmentName ||
+                                !classeName ||
+                                !isCGVChecked
+                            }
                         >
                             {props.title}
                         </LoadingButton>
@@ -108,6 +141,10 @@ function SignUp(props: { title: string }) {
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         mutation.mutate({ email, password, establishmentName, classeName });
         event.preventDefault();
+    }
+
+    function onChangeCGV(_event: ChangeEvent<HTMLInputElement>, checked: boolean) {
+        setIsCGVChecked(checked);
     }
 }
 
