@@ -1,12 +1,14 @@
 import { styled, Typography } from '@mui/material';
 import { Button } from '../../../components/Button';
-import { pricingPlanNameType, PRO_PRICES } from './constants';
+import { pricingPlanNameType } from './constants';
 import { useNavigate } from 'react-router-dom';
 import { pathHandler } from '../../../lib/pathHandler';
+import { packageApiType } from '../../../lib/api/packagesApi';
 
 function PricingSummary(props: {
     selectedPlanName: pricingPlanNameType;
     selectedPriceIndex: number;
+    packages: packageApiType[];
 }) {
     const navigate = useNavigate();
     const planSummary = computePlanSummary();
@@ -46,7 +48,7 @@ function PricingSummary(props: {
             case 'FREE':
                 return '0.00 €';
             case 'PRO':
-                return `${PRO_PRICES[props.selectedPriceIndex].price.toFixed(2)} €`;
+                return `${props.packages[props.selectedPriceIndex].price.toFixed(2)} €`;
         }
     }
 
@@ -59,9 +61,9 @@ function PricingSummary(props: {
                     { label: 'Dispositif anti-triche', value: 'inclus' },
                 ];
             case 'PRO':
-                const { attempts, price } = PRO_PRICES[props.selectedPriceIndex];
+                const { paperCount, price } = props.packages[props.selectedPriceIndex];
                 return [
-                    { label: `Pack ${attempts} copies`, value: `${price.toFixed(2)} €` },
+                    { label: `Pack ${paperCount} copies`, value: `${price.toFixed(2)} €` },
                     { label: '30 copies supplémentaires', value: "inclus à l'inscription" },
                     { label: 'Dispositif anti-triche', value: 'inclus' },
                 ];

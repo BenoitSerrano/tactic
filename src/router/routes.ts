@@ -9,6 +9,7 @@ import { routeType } from './types';
 import { userConfigurationRoutes } from './userConfigurationRoutes';
 import { userRoutes } from './userRoutes';
 import { establishmentRoutes } from './establishmentRoutes';
+import { packageRoutes } from './packageRoutes';
 
 const routes = buildRoutes();
 
@@ -24,6 +25,7 @@ function buildRoutes() {
     routes.push(...resetPasswordRequestRoutes);
     routes.push(...userConfigurationRoutes);
     routes.push(...establishmentRoutes);
+    routes.push(...packageRoutes);
     return routes;
 }
 

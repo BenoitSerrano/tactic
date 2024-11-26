@@ -14,6 +14,11 @@ type questionIdMappingType = Record<number, number>;
 type userConfigurationIdMappingType = Record<number, number>;
 
 async function importDb() {
+    console.log('=== importDb ===');
+
+    if (process.env['NODE_ENV'] !== 'development') {
+        throw new Error(`Cannot run importDb in non-local mode`);
+    }
     console.log('Initializing database...');
     await dataSource.initialize();
     console.log('Database initialized!');

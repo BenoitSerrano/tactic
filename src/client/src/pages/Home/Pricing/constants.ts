@@ -55,12 +55,5 @@ const PRICING_PLAN_OPTIONS: Record<pricingPlanNameType, planOptionType[]> = {
     ],
 };
 
-const PRO_PRICES = [
-    { attempts: 20, price: 16 },
-    { attempts: 50, price: 30 },
-    { attempts: 100, price: 50 },
-    { attempts: 200, price: 80 },
-];
-
-export { PRICING_PLANS, PRICING_PLAN_NAMES, PRO_PRICES, PRICING_PLAN_OPTIONS };
+export { PRICING_PLANS, PRICING_PLAN_NAMES, PRICING_PLAN_OPTIONS };
 export type { pricingPlanNameType, pricingPlanType };

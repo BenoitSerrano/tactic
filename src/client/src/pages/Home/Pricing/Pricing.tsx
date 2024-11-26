@@ -5,10 +5,24 @@ import { pricingPlanNameType } from './constants';
 import { PricingSlider } from './PricingSlider';
 import { PricingOptions } from './PricingOptions';
 import { PricingSummary } from './PricingSummary';
+import { useQuery } from '@tanstack/react-query';
+import { packagesApi } from '../../../lib/api/packagesApi';
+import { Loader } from '../../../components/Loader';
 
 function Pricing() {
+    const packagesQuery = useQuery({
+        queryKey: ['packages'],
+        queryFn: packagesApi.getPackages,
+    });
     const [selectedPlanName, setSelectedPlanName] = useState<pricingPlanNameType>('PRO');
     const [selectedPriceIndex, setSelectedPriceIndex] = useState(0);
+
+    if (!packagesQuery.data) {
+        if (packagesQuery.isLoading) {
+            return <Loader />;
+        }
+        return <div />;
+    }
 
     return (
         <MainContainer>
@@ -25,6 +39,7 @@ function Pricing() {
                     {selectedPlanName === 'PRO' && (
                         <PricingSliderContainer>
                             <PricingSlider
+                                packages={packagesQuery.data}
                                 selectedIndex={selectedPriceIndex}
                                 setSelectedIndex={setSelectedPriceIndex}
                             />
@@ -34,6 +49,7 @@ function Pricing() {
                 </LeftContainer>
                 <RightContainer>
                     <PricingSummary
+                        packages={packagesQuery.data}
                         selectedPriceIndex={selectedPriceIndex}
                         selectedPlanName={selectedPlanName}
                     />

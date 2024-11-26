@@ -11,6 +11,7 @@
         "test:back": "jest",
         "test:front": "cd src/client && npm run test",
         "script:importDb": "npm run buildServer && node dist/src/scripts/importDb/importDb.js",
+        "script:syncStripeProducts": "npm run buildServer && node dist/src/scripts/syncStripeProducts/syncStripeProducts.js",
         "migration:generate": "npm run buildServer && typeorm migration:generate -d dist/src/dataSource.js src/migrations/$npm_config_name",
         "migration:run": "npm run buildServer && typeorm migration:run -d dist/src/dataSource.js",
         "migration:create": " typeorm migration:create src/migrations/$npm_config_name",
@@ -45,6 +46,7 @@
         "pg": "^8.8.0",
         "pg-connection-string": "^2.6.0",
         "reflect-metadata": "^0.1.13",
+        "stripe": "^17.4.0",
         "typeorm": "^0.3.16"
     },
     "engines": {

@@ -1,22 +1,28 @@
 import { Slider, styled, Typography } from '@mui/material';
-import { PRO_PRICES } from './constants';
+import { packageApiType } from '../../../lib/api/packagesApi';
 
 function PricingSlider(props: {
     selectedIndex: number;
     setSelectedIndex: (index: number) => void;
+    packages: packageApiType[];
 }) {
-    const marks = PRO_PRICES.map(({ attempts }) => ({ value: attempts, label: `${attempts}` }));
+    const marks = props.packages.map(({ paperCount }) => ({
+        value: paperCount,
+        label: `${paperCount}`,
+    }));
+    const minPaperCount = Math.min(...props.packages.map(({ paperCount }) => paperCount));
+    const maxPaperCount = Math.max(...props.packages.map(({ paperCount }) => paperCount));
     const pricePerAttempt = computePricePerAttempt();
     return (
         <Container>
-            <Title variant="h4">{PRO_PRICES[props.selectedIndex].attempts} copies</Title>
+            <Title variant="h4">{props.packages[props.selectedIndex].paperCount} copies</Title>
             <Subtitle variant="body1">{pricePerAttempt} € par copie corrigée</Subtitle>
             <Slider
                 onChange={onChangeValue}
-                value={PRO_PRICES[props.selectedIndex].attempts}
+                value={props.packages[props.selectedIndex].paperCount}
                 step={null}
-                min={Math.min(...PRO_PRICES.map(({ attempts }) => attempts))}
-                max={Math.max(...PRO_PRICES.map(({ attempts }) => attempts))}
+                min={minPaperCount}
+                max={maxPaperCount}
                 valueLabelDisplay="auto"
                 marks={marks}
             />
@@ -25,12 +31,13 @@ function PricingSlider(props: {
 
     function computePricePerAttempt() {
         const pricePerAttempt =
-            PRO_PRICES[props.selectedIndex].price / PRO_PRICES[props.selectedIndex].attempts;
+            props.packages[props.selectedIndex].price /
+            props.packages[props.selectedIndex].paperCount;
         return pricePerAttempt.toFixed(2);
     }
 
     function onChangeValue(_event: Event, value: number | number[]) {
-        const index = PRO_PRICES.map(({ attempts }) => attempts).indexOf(value as number);
+        const index = props.packages.map(({ paperCount }) => paperCount).indexOf(value as number);
         if (index === -1) {
             return;
         }
