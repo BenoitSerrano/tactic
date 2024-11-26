@@ -11,9 +11,11 @@
         "test:back": "jest",
         "test:front": "cd src/client && npm run test",
         "script:importDb": "npm run buildServer && node dist/src/scripts/importDb/importDb.js",
-        "script:syncStripeProducts": "npm run buildServer && node dist/src/scripts/syncStripeProducts/syncStripeProducts.js",
+        "script:syncStripeProducts": "npm run buildServer && npm run script:syncStripeProducts:withoutBuild",
+        "script:syncStripeProducts:withoutBuild": "node dist/src/scripts/syncStripeProducts/syncStripeProducts.js",
         "migration:generate": "npm run buildServer && typeorm migration:generate -d dist/src/dataSource.js src/migrations/$npm_config_name",
-        "migration:run": "npm run buildServer && typeorm migration:run -d dist/src/dataSource.js",
+        "migration:run": "npm run buildServer && npm run migration:run:withoutBuild",
+        "migration:run:withoutBuild": "typeorm migration:run -d dist/src/dataSource.js",
         "migration:create": " typeorm migration:create src/migrations/$npm_config_name",
         "migration:revert": " npm run buildServer && typeorm migration:revert -d dist/src/dataSource.js",
         "typeorm": "typeorm-ts-node-esm"

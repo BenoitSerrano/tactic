@@ -1,1 +1,1 @@
-postdeploy: npm run migration:run
+postdeploy: npm run migration:run:withoutBuild && npm run script:syncStripeProducts:withoutBuild
