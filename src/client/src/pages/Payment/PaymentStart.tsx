@@ -1,11 +1,13 @@
 import { styled, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Modal } from '../../components/Modal';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { packagesApi } from '../../lib/api/packagesApi';
 import { Loader } from '../../components/Loader';
 import { pathHandler } from '../../lib/pathHandler';
+import { paymentsApi } from '../../lib/api/paymentsApi';
+import { useAlert } from '../../lib/alert';
 
 function PaymentStart() {
     const params = useParams();
@@ -17,6 +19,22 @@ function PaymentStart() {
     });
     const navigate = useNavigate();
 
+    const { displayAlert } = useAlert();
+
+    const createCheckoutSessionMutation = useMutation({
+        mutationFn: paymentsApi.createCheckoutSession,
+        onSuccess: ({ url }) => {
+            window.location.replace(url);
+        },
+        onError: (error) => {
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: 'Une erreur est survenue. Le paiement a été annulé.',
+            });
+        },
+    });
+
     useEffect(() => {
         if (packageQuery.data) {
             setIsModalOpen(true);
@@ -26,6 +44,7 @@ function PaymentStart() {
         <Container>
             {packageQuery.isLoading && <Loader />}
             <Modal
+                size="small"
                 isOpen={isModalOpen}
                 close={closeModal}
                 title="Confirmation de paiement"
@@ -55,7 +74,9 @@ function PaymentStart() {
         </Container>
     );
 
-    function onConfirmPaymentStart() {}
+    function onConfirmPaymentStart() {
+        createCheckoutSessionMutation.mutate(packageId);
+    }
 
     function closeModal() {
         navigate(pathHandler.getRoutePath('TEACHER_HOME'));

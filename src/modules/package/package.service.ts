@@ -19,7 +19,6 @@ function buildPackageService() {
     function getPackage(packageId: Package['id']) {
         const packages = packageRepository.findOneOrFail({
             where: { id: packageId },
-            select: { id: true, paperCount: true, price: true },
         });
         return packages;
     }

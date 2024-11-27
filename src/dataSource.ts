@@ -11,6 +11,7 @@ import { Classe } from './modules/classe';
 import { UserConfiguration } from './modules/userConfiguration';
 import { Establishment } from './modules/establishment';
 import { Package } from './modules/package';
+import { PaymentSession } from './modules/payment';
 
 const dataSource = new DataSource({
     type: 'postgres',
@@ -33,6 +34,7 @@ const dataSource = new DataSource({
         UserConfiguration,
         Establishment,
         Package,
+        PaymentSession,
     ],
     subscribers: [],
     migrations: ['**/migrations/*.js'],

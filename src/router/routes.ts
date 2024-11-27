@@ -10,6 +10,7 @@ import { userConfigurationRoutes } from './userConfigurationRoutes';
 import { userRoutes } from './userRoutes';
 import { establishmentRoutes } from './establishmentRoutes';
 import { packageRoutes } from './packageRoutes';
+import { paymentRoutes } from './paymentRoutes';
 
 const routes = buildRoutes();
 
@@ -26,6 +27,7 @@ function buildRoutes() {
     routes.push(...userConfigurationRoutes);
     routes.push(...establishmentRoutes);
     routes.push(...packageRoutes);
+    routes.push(...paymentRoutes);
     return routes;
 }
 
