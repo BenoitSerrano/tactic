@@ -1,6 +1,25 @@
 import { styled, Typography } from '@mui/material';
+import { Loader } from '../../components/Loader';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import { paymentsApi } from '../../lib/api/paymentsApi';
+import { useEffect } from 'react';
+import { pathHandler } from '../../lib/pathHandler';
 
 function PaymentSuccess() {
+    const params = useParams();
+    const stripeCheckoutSessionId = params.stripeCheckoutSessionId as string;
+    const assertIsPaymentSessionCompletedQuery = useQuery({
+        queryFn: () => paymentsApi.assertIsPaymentSessionCompleted(stripeCheckoutSessionId),
+        queryKey: ['stripe-checkout-sessions', stripeCheckoutSessionId, 'is-completed'],
+    });
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (assertIsPaymentSessionCompletedQuery.data) {
+            navigate(pathHandler.getRoutePath('PAYMENT_CONFIRMED'));
+        }
+    }, [assertIsPaymentSessionCompletedQuery.data, navigate]);
     return (
         <Container>
             <ContentContainer>
@@ -9,6 +28,7 @@ function PaymentSuccess() {
                     Votre paiement s'est déroulé avec succès. Veuillez patienter pendant que nous
                     récupérons les données de la commande...
                 </Typography>
+                <Loader />
             </ContentContainer>
         </Container>
     );

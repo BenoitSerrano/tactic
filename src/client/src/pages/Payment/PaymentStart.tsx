@@ -50,6 +50,7 @@ function PaymentStart() {
                 title="Confirmation de paiement"
                 onConfirm={onConfirmPaymentStart}
                 confirmButtonLabel="Commencer le paiement"
+                isConfirmLoading={createCheckoutSessionMutation.isPending}
             >
                 {packageQuery.data ? (
                     <>

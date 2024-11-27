@@ -85,7 +85,9 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     TERMS_AND_CONDITIONS_OF_SALE: { path: '/terms-and-conditions-of-sale' },
     PAYMENT_START: { path: '/teacher/packages/:packageId/payment/start' },
     PAYMENT_CONFIRMED: { path: '/teacher/payment/confirmed' },
-    PAYMENT_SUCCESS: { path: '/teacher/payment/success' },
+    PAYMENT_SUCCESS: {
+        path: '/teacher/payment/stripe-checkout-sessions/:stripeCheckoutSessionId/success',
+    },
     PAYMENT_FAILURE: { path: '/teacher/payment/failure' },
     NOT_FOUND: { path: '/*' },
 };

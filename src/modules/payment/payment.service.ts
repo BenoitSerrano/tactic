@@ -15,6 +15,7 @@ function buildPaymentService() {
         extractSessionIdFromWebhookPayload,
         fullfillCheckout,
         createCheckoutSession,
+        assertIsPaymentSessionCompleted,
     };
 
     async function extractSessionIdFromWebhookPayload(sig: string, payload: string) {
@@ -72,7 +73,8 @@ function buildPaymentService() {
                 },
             ],
             mode: 'payment',
-            success_url: `${config.CLIENT_URL}/teacher/payment/success?paymentSessionId={CHECKOUT_SESSION_ID}`,
+
+            success_url: `${config.CLIENT_URL}/teacher/payment/stripe-checkout-sessions/{CHECKOUT_SESSION_ID}/success`,
             cancel_url: `${config.CLIENT_URL}/teacher/payment/failure`,
         });
         const sessionId = session.id;
@@ -80,8 +82,22 @@ function buildPaymentService() {
             stripeCheckoutSessionId: sessionId,
             user: params.user,
             package: pack,
+            status: 'pending',
         });
         return { url: session.url };
+    }
+
+    async function assertIsPaymentSessionCompleted(
+        stripeCheckoutSessionId: PaymentSession['stripeCheckoutSessionId'],
+    ) {
+        const paymentSession = await paymentSessionRepository.findOneOrFail({
+            where: { stripeCheckoutSessionId },
+            select: { id: true, status: true },
+        });
+        if (paymentSession.status !== 'completed') {
+            throw new Error(`Payment session status not completed: "${paymentSession.status}"`);
+        }
+        return {};
     }
 }
 
