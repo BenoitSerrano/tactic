@@ -38,6 +38,9 @@ import { Product } from '../pages/Home/Product/Product';
 import { SignUp } from '../pages/SignUp';
 import { TermsAndConditionsOfSale } from '../pages/Home/TermsAndConditionsOfSale/TermsAndConditionsOfSale';
 import { PaymentStart } from '../pages/Payment/PaymentStart';
+import { PaymentFailure } from '../pages/Payment/PaymentFailure';
+import { PaymentSuccess } from '../pages/Payment/PaymentSuccess';
+import { PaymentConfirmed } from '../pages/Payment/PaymentConfirmed';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -143,6 +146,18 @@ const ROUTE_ELEMENTS: Record<
     PAYMENT_START: {
         authorizedRole: 'teacher',
         element: <PaymentStart />,
+    },
+    PAYMENT_FAILURE: {
+        authorizedRole: 'teacher',
+        element: <PaymentFailure />,
+    },
+    PAYMENT_SUCCESS: {
+        authorizedRole: 'teacher',
+        element: <PaymentSuccess />,
+    },
+    PAYMENT_CONFIRMED: {
+        authorizedRole: 'teacher',
+        element: <PaymentConfirmed />,
     },
 };
 

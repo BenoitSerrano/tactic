@@ -37,6 +37,9 @@ const ROUTE_KEYS = [
     'PRICING',
     'TERMS_AND_CONDITIONS_OF_SALE',
     'PAYMENT_START',
+    'PAYMENT_SUCCESS',
+    'PAYMENT_CONFIRMED',
+    'PAYMENT_FAILURE',
 ] as const;
 
 const EXAM_ROUTE_KEYS = [

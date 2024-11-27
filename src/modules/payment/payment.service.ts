@@ -26,7 +26,7 @@ function buildPaymentService() {
             ],
             mode: 'payment',
             success_url: `${config.CLIENT_URL}/teacher/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${config.CLIENT_URL}/teacher/payment/canceled`,
+            cancel_url: `${config.CLIENT_URL}/teacher/payment/failure`,
         });
         const sessionId = session.id;
         await paymentSessionRepository.insert({
