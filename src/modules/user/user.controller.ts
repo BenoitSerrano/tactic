@@ -1,3 +1,4 @@
+import { User } from './User.entity';
 import { buildUserService } from './user.service';
 
 export { buildUserController };
@@ -9,6 +10,7 @@ function buildUserController() {
         login,
         getUsersSummary,
         getAllUsers,
+        getUserRemainingPapers,
     };
 
     return userController;
@@ -29,5 +31,9 @@ function buildUserController() {
 
     async function getAllUsers() {
         return userService.getAllUsersWithoutPassword();
+    }
+
+    async function getUserRemainingPapers(_params: {}, user: User) {
+        return userService.getUserRemainingPapers(user);
     }
 }

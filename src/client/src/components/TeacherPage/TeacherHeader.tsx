@@ -10,12 +10,28 @@ import { EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
 import { styled } from '@mui/material';
 import { IconLink } from '../IconLink';
 import { localStorage } from '../../lib/localStorage';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { RemainingPaperIcon } from './RemainingPaperIcon';
+import { useQuery } from '@tanstack/react-query';
+import { usersApi } from '../../lib/api/usersApi';
 
 function TeacherHeader() {
+    const [remainingPapers, setRemainingPapers] = useState<number | undefined>(
+        localStorage.userInfoHandler.get()?.remainingPapers,
+    );
+    const remainingPapersQuery = useQuery({
+        queryKey: ['remaining-papers'],
+        queryFn: usersApi.getUserRemainingPapers,
+    });
+    useEffect(() => {
+        const newRemainingPapers = remainingPapersQuery.data?.remainingPapers;
+        if (newRemainingPapers !== undefined) {
+            setRemainingPapers(newRemainingPapers);
+            localStorage.userInfoHandler.setRemainingPapers(newRemainingPapers);
+        }
+    }, [remainingPapersQuery.data?.remainingPapers]);
+
     const location = useLocation();
-    const userInfo = localStorage.userInfoHandler.get();
 
     const buttons = computeRightButtons(location.pathname);
 
@@ -35,14 +51,13 @@ function TeacherHeader() {
         const rightButtons: ReactNode[] = [];
         const logoutButton = <LogoutButton key="logout-button" />;
         rightButtons.push(logoutButton);
-        console.log(userInfo);
 
         const parsedPath = pathHandler.parsePath(currentPath);
         if (!parsedPath) {
             return rightButtons;
         }
-        if (userInfo) {
-            rightButtons.unshift(<RemainingPaperIcon remainingPapers={userInfo.remainingPapers} />);
+        if (remainingPapers) {
+            rightButtons.unshift(<RemainingPaperIcon remainingPapers={remainingPapers} />);
         }
         if (!EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
             return rightButtons;

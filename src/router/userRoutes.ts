@@ -6,6 +6,20 @@ const userController = buildUserController();
 
 const userRoutes: Array<routeType<any, any, any>> = [
     {
+        method: 'GET',
+        path: '/remaining-papers',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: userController.getUserRemainingPapers,
+    },
+    {
+        method: 'GET',
+        path: '/users-summary',
+        kind: 'authenticated',
+        authorizedRoles: ['admin'],
+        controller: userController.getUsersSummary,
+    },
+    {
         method: 'POST',
         path: '/users',
         kind: 'public',
@@ -23,13 +37,7 @@ const userRoutes: Array<routeType<any, any, any>> = [
         kind: 'public',
         controller: userController.login,
     },
-    {
-        method: 'GET',
-        path: '/users-summary',
-        kind: 'authenticated',
-        authorizedRoles: ['admin'],
-        controller: userController.getUsersSummary,
-    },
+
     { method: 'GET', path: '/all-users', kind: 'public', controller: userController.getAllUsers },
 ];
 

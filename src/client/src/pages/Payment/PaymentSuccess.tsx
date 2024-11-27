@@ -1,6 +1,6 @@
 import { styled, Typography } from '@mui/material';
 import { Loader } from '../../components/Loader';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { paymentsApi } from '../../lib/api/paymentsApi';
 import { useEffect } from 'react';
@@ -14,12 +14,14 @@ function PaymentSuccess() {
         queryKey: ['stripe-checkout-sessions', stripeCheckoutSessionId, 'is-completed'],
     });
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (assertIsPaymentSessionCompletedQuery.data) {
+            queryClient.invalidateQueries({ queryKey: ['remaining-papers'] });
             navigate(pathHandler.getRoutePath('PAYMENT_CONFIRMED'));
         }
-    }, [assertIsPaymentSessionCompletedQuery.data, navigate]);
+    }, [assertIsPaymentSessionCompletedQuery.data, navigate, queryClient]);
     return (
         <Container>
             <ContentContainer>

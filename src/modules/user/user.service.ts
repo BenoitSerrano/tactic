@@ -22,6 +22,7 @@ function buildUserService() {
         bulkInsertUsers,
         changePassword,
         addPapers,
+        getUserRemainingPapers,
         getUsersSummary,
     };
 
@@ -117,6 +118,10 @@ function buildUserService() {
             { id: user.id },
             { remainingPapers: user.remainingPapers + papersToAdd },
         );
+    }
+
+    async function getUserRemainingPapers(user: User) {
+        return { remainingPapers: user.remainingPapers };
     }
 
     async function changePassword(user: User, newPassword: string) {

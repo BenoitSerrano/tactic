@@ -3,11 +3,17 @@ import { BASE_URL } from './constants';
 import { performApiCall } from './lib/performApiCall';
 
 const usersApi = {
+    getUserRemainingPapers,
     getUsersSummary,
     updateUserPasswordByResetPasswordRequest,
     createUser,
     login,
 };
+
+async function getUserRemainingPapers(): Promise<{ remainingPapers: number }> {
+    const URL = `${BASE_URL}/remaining-papers`;
+    return performApiCall(URL, 'GET');
+}
 
 async function getUsersSummary() {
     const URL = `${BASE_URL}/users-summary`;

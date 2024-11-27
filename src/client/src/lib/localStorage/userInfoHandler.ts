@@ -14,10 +14,20 @@ function set(value: userInfoType) {
     localStorage.setItem(KEY, JSON.stringify(value));
 }
 
+function setRemainingPapers(value: number) {
+    const currentUserInfo = localStorage.getItem(KEY);
+    if (!currentUserInfo) {
+        return undefined;
+    }
+    const parsedCurrentUserInfo = JSON.parse(currentUserInfo) as userInfoType;
+    parsedCurrentUserInfo.remainingPapers = value;
+    set(parsedCurrentUserInfo);
+}
+
 function remove() {
     localStorage.removeItem(KEY);
 }
 
-const userInfoHandler = { get, set, remove };
+const userInfoHandler = { get, set, setRemainingPapers, remove };
 
 export { userInfoHandler };
