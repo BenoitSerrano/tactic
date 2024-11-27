@@ -21,6 +21,7 @@ const localeInfo = { locale: 'fr-FR', timeZone: 'Europe/Paris' };
 type userRoleType = 'teacher' | 'admin';
 type userInfoType = {
     email: string;
+    remainingPapers: number;
     roles: userRoleType[];
 };
 

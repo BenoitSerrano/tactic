@@ -22,6 +22,9 @@ export class User {
     @Column()
     hashedPassword: string;
 
+    @Column({ default: 20 })
+    remainingPapers: number;
+
     @Column('simple-array', { default: 'teacher' })
     roles: userRoleType[];
 

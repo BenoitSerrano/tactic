@@ -13,7 +13,11 @@ function Header(props: {
 
                 {!!props.MiddleContent && <MiddleContainer>{props.MiddleContent}</MiddleContainer>}
 
-                <ButtonsContainer>{props.buttons}</ButtonsContainer>
+                <ButtonsContainer>
+                    {props.buttons.map((button, index) => (
+                        <ButtonContainer key={`button-${index}`}>{button}</ButtonContainer>
+                    ))}
+                </ButtonsContainer>
             </ContentContainer>
         </FixedContainer>
     );
@@ -41,5 +45,8 @@ const MiddleContainer = styled('div')({ display: 'flex', flex: 1 });
 const LeftContainer = styled('div')({ display: 'flex' });
 
 const ButtonsContainer = styled('div')({ display: 'flex', alignItems: 'center' });
+const ButtonContainer = styled('div')(({ theme }) => ({
+    marginLeft: theme.spacing(3),
+}));
 
 export { Header };

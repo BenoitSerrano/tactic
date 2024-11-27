@@ -38,6 +38,7 @@ function buildUserService() {
         newUser.email = params.email;
         newUser.hashedPassword = hasher.hash(params.password);
         newUser.userConfiguration = newUserConfiguration;
+        newUser.remainingPapers = 20;
 
         const result = await userRepository.insert(newUser);
         if (result.identifiers.length !== 1) {
@@ -66,7 +67,11 @@ function buildUserService() {
             email: params.email,
             roles: newUser.roles,
         });
-        const userInfo = { email: params.email, roles: newUser.roles };
+        const userInfo = {
+            email: params.email,
+            roles: newUser.roles,
+            remainingPapers: newUser.remainingPapers,
+        };
         return { token, userInfo };
     }
 
@@ -85,7 +90,7 @@ function buildUserService() {
 
         if (isPasswordCorrect) {
             const token = createJwt({ userId: user.id, email: user.email, roles: user.roles });
-            const userInfo = { email, roles: user.roles };
+            const userInfo = { email, roles: user.roles, remainingPapers: user.remainingPapers };
 
             return { token, userInfo };
         } else {

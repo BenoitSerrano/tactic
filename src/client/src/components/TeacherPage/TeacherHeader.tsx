@@ -9,9 +9,13 @@ import { LogoutButton } from './LogoutButton';
 import { EXAM_ROUTE_KEYS } from '../../routes/routeKeys';
 import { styled } from '@mui/material';
 import { IconLink } from '../IconLink';
+import { localStorage } from '../../lib/localStorage';
+import { ReactNode } from 'react';
+import { RemainingPaperIcon } from './RemainingPaperIcon';
 
 function TeacherHeader() {
     const location = useLocation();
+    const userInfo = localStorage.userInfoHandler.get();
 
     const buttons = computeRightButtons(location.pathname);
 
@@ -28,27 +32,35 @@ function TeacherHeader() {
     );
 
     function computeRightButtons(currentPath: string) {
+        const rightButtons: ReactNode[] = [];
         const logoutButton = <LogoutButton key="logout-button" />;
+        rightButtons.push(logoutButton);
+        console.log(userInfo);
+
         const parsedPath = pathHandler.parsePath(currentPath);
         if (!parsedPath) {
-            return [logoutButton];
+            return rightButtons;
+        }
+        if (userInfo) {
+            rightButtons.unshift(<RemainingPaperIcon remainingPapers={userInfo.remainingPapers} />);
         }
         if (!EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
-            return [logoutButton];
+            return rightButtons;
         }
+
         const { parameters } = parsedPath;
         const examPreviewingLink = pathHandler.getRoutePath('EXAM_PREVIEWING', parameters);
-
-        return [
+        const examPreviewingComponent = (
             <PreviewLinkContainer key="preview-link-button">
                 <IconLink
                     title="Aperçu de l'examen"
                     to={examPreviewingLink}
                     IconComponent={VisibilityIcon}
                 />
-            </PreviewLinkContainer>,
-            logoutButton,
-        ];
+            </PreviewLinkContainer>
+        );
+        rightButtons.unshift(examPreviewingComponent);
+        return rightButtons;
     }
 }
 
