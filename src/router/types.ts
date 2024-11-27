@@ -2,6 +2,7 @@ import Joi from 'joi';
 import { User } from '../modules/user';
 import { anonymousControllerType, authenticatedControllerType } from './lib/buildController/types';
 import { userRoleType } from '../modules/user/constants';
+import { Request, Response } from 'express';
 
 type methodType = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 type routeType<paramsT, queryT, bodyT> =
@@ -22,4 +23,6 @@ type routeType<paramsT, queryT, bodyT> =
           schema?: Joi.Schema;
       };
 
-export type { routeType };
+type controllerType = (req: Request, res: Response) => void | Promise<void>;
+
+export type { routeType, methodType, controllerType };

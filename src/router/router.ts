@@ -1,40 +1,62 @@
-import Express from 'express';
+import Express, { Router } from 'express';
 import { buildAnonymousController, buildAuthenticatedController } from './lib/buildController';
 import { routes } from './routes';
+import { webhooks } from './webhooks';
+import { controllerType, methodType } from './types';
 
-const router = buildRouter();
+const apiRouter = buildApiRouter();
+const webhookRouter = buildWebhookRouter();
 
-function buildRouter() {
+function buildApiRouter() {
     const router = Express.Router();
     for (const route of routes) {
         const builtController =
             route.kind === 'authenticated'
                 ? buildAuthenticatedController(route.controller, {
+                      authorizedRoles: route.authorizedRoles,
                       checkAuthorization: route.checkAuthorization,
                       schema: route.schema,
-                      authorizedRoles: route.authorizedRoles,
                   })
                 : buildAnonymousController(route.controller, { schema: route.schema });
-        switch (route.method) {
-            case 'POST':
-                router.post(route.path, builtController);
-                break;
-            case 'GET':
-                router.get(route.path, builtController);
-                break;
-            case 'PATCH':
-                router.patch(route.path, builtController);
-                break;
-            case 'PUT':
-                router.put(route.path, builtController);
-                break;
-            case 'DELETE':
-                router.delete(route.path, builtController);
-                break;
-        }
+
+        addRouteToRouter(router, route.method, route.path, builtController);
     }
 
     return router;
 }
 
-export { router };
+function buildWebhookRouter() {
+    const router = Express.Router();
+
+    for (const webhook of webhooks) {
+        addRouteToRouter(router, webhook.method, webhook.path, webhook.controller);
+    }
+    return router;
+}
+
+function addRouteToRouter(
+    router: Router,
+    method: methodType,
+    path: string,
+    controller: controllerType,
+) {
+    switch (method) {
+        case 'POST':
+            router.post(path, controller);
+            break;
+        case 'GET':
+            router.get(path, controller);
+            break;
+        case 'PATCH':
+            router.patch(path, controller);
+            break;
+        case 'PUT':
+            router.put(path, controller);
+            break;
+        case 'DELETE':
+            router.delete(path, controller);
+            break;
+    }
+}
+
+export { apiRouter, webhookRouter };

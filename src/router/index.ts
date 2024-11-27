@@ -1,3 +1,3 @@
-import { router } from './router';
+import { apiRouter, webhookRouter } from './router';
 
-export { router };
+export { apiRouter, webhookRouter };

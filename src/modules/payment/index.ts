@@ -1,3 +1,4 @@
 import { PaymentSession } from './PaymentSession.entity';
 import { buildPaymentController } from './payment.controller';
-export { PaymentSession, buildPaymentController };
+import { buildPaymentService } from './payment.service';
+export { PaymentSession, buildPaymentController, buildPaymentService };

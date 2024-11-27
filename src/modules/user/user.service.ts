@@ -21,6 +21,7 @@ function buildUserService() {
         getAllUsersWithoutPassword,
         bulkInsertUsers,
         changePassword,
+        addPapers,
         getUsersSummary,
     };
 
@@ -109,6 +110,13 @@ function buildUserService() {
 
     async function bulkInsertUsers(users: Array<User>) {
         return userRepository.insert(users);
+    }
+
+    async function addPapers(user: User, papersToAdd: number) {
+        return userRepository.update(
+            { id: user.id },
+            { remainingPapers: user.remainingPapers + papersToAdd },
+        );
     }
 
     async function changePassword(user: User, newPassword: string) {
