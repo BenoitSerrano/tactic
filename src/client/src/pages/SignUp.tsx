@@ -30,14 +30,11 @@ function SignUp(props: { title: string }) {
             const { token, userInfo } = data;
             localSessionHandler.setToken(token);
             localSessionHandler.setUserInfo(userInfo);
+            const nextSearchParams = queryParamsPackageId
+                ? { packageId: queryParamsPackageId }
+                : undefined;
 
-            navigate(
-                pathHandler.getRoutePath(
-                    'TEACHER_HOME',
-                    {},
-                    { packageId: queryParamsPackageId || '' },
-                ),
-            );
+            navigate(pathHandler.getRoutePath('TEACHER_HOME', {}, nextSearchParams));
         },
         onError: () => {
             displayAlert({

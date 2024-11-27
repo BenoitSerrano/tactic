@@ -83,6 +83,7 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     PRICING: { path: '/pricing' },
     PRODUCT: { path: '/product' },
     TERMS_AND_CONDITIONS_OF_SALE: { path: '/terms-and-conditions-of-sale' },
+    PAYMENT_START: { path: '/packages/:packageId/payment/start' },
     NOT_FOUND: { path: '/*' },
 };
 

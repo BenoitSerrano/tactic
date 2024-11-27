@@ -38,6 +38,7 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     PRICING: 'Tarifs',
     PRODUCT: 'Produit',
     TERMS_AND_CONDITIONS_OF_SALE: 'Conditions Générales de Vente',
+    PAYMENT_START: 'Confirmation paiement',
 };
 
 export { ROUTE_TITLES };

@@ -37,6 +37,7 @@ import { Pricing } from '../pages/Home/Pricing/Pricing';
 import { Product } from '../pages/Home/Product/Product';
 import { SignUp } from '../pages/SignUp';
 import { TermsAndConditionsOfSale } from '../pages/Home/TermsAndConditionsOfSale/TermsAndConditionsOfSale';
+import { PaymentStart } from '../pages/Payment/PaymentStart';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -138,6 +139,10 @@ const ROUTE_ELEMENTS: Record<
     PRODUCT: { element: <Home ContentComponent={<Product />} /> },
     TERMS_AND_CONDITIONS_OF_SALE: {
         element: <Home ContentComponent={<TermsAndConditionsOfSale />} />,
+    },
+    PAYMENT_START: {
+        authorizedRole: 'teacher',
+        element: <PaymentStart />,
     },
 };
 

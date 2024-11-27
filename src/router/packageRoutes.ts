@@ -10,6 +10,12 @@ const packageRoutes: Array<routeType<any, any, any>> = [
         kind: 'public',
         controller: packageController.getPackages,
     },
+    {
+        method: 'GET',
+        path: '/packages/:packageId',
+        kind: 'public',
+        controller: packageController.getPackage,
+    },
 ];
 
 export { packageRoutes };

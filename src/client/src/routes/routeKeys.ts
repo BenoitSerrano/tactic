@@ -36,6 +36,7 @@ const ROUTE_KEYS = [
     'PRODUCT',
     'PRICING',
     'TERMS_AND_CONDITIONS_OF_SALE',
+    'PAYMENT_START',
 ] as const;
 
 const EXAM_ROUTE_KEYS = [
