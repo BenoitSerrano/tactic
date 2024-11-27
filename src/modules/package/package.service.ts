@@ -17,10 +17,10 @@ function buildPackageService() {
     }
 
     function getPackage(packageId: Package['id']) {
-        const packages = packageRepository.findOneOrFail({
+        const pack = packageRepository.findOneOrFail({
             where: { id: packageId },
         });
-        return packages;
+        return pack;
     }
 }
 

@@ -10,13 +10,13 @@ function buildPaymentController() {
 
     function createCheckoutSession(
         params: {
-            urlParams: { packageId: Package['id'] };
+            body: { packageId: Package['id'] };
         },
         user: User,
     ) {
         return paymentService.createCheckoutSession({
             user,
-            packageId: params.urlParams.packageId,
+            packageId: params.body.packageId,
         });
     }
 

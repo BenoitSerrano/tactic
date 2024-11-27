@@ -64,6 +64,7 @@ function buildPaymentService() {
 
     async function createCheckoutSession(params: { user: User; packageId: Package['id'] }) {
         const pack = await packageService.getPackage(params.packageId);
+
         const session = await stripe.checkout.sessions.create({
             customer_email: params.user.email,
             line_items: [
