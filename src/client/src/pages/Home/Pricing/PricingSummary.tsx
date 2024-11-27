@@ -71,7 +71,15 @@ function PricingSummary(props: {
     }
 
     function onSubscribe() {
-        navigate(pathHandler.getRoutePath('SIGN_UP'));
+        switch (props.selectedPlanName) {
+            case 'FREE':
+                navigate(pathHandler.getRoutePath('SIGN_UP'));
+                break;
+            case 'PRO':
+                const packageId = props.packages[props.selectedPriceIndex].id;
+                navigate(pathHandler.getRoutePath('SIGN_UP', {}, { packageId }));
+                break;
+        }
     }
 }
 

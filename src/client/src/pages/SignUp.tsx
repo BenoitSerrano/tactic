@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 function SignUp(props: { title: string }) {
     const [searchParams] = useSearchParams();
     const queryParamsEmail = searchParams.get('email');
+    const queryParamsPackageId = searchParams.get('packageId');
     const [email, setEmail] = useState(queryParamsEmail || '');
     const [password, setPassword] = useState('');
     const [establishmentName, setEstablishmentName] = useState('');
@@ -30,7 +31,13 @@ function SignUp(props: { title: string }) {
             localSessionHandler.setToken(token);
             localSessionHandler.setUserInfo(userInfo);
 
-            navigate(pathHandler.getRoutePath('TEACHER_HOME'));
+            navigate(
+                pathHandler.getRoutePath(
+                    'TEACHER_HOME',
+                    {},
+                    { packageId: queryParamsPackageId || '' },
+                ),
+            );
         },
         onError: () => {
             displayAlert({
