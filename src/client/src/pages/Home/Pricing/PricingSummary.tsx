@@ -4,6 +4,7 @@ import { pricingPlanNameType } from './constants';
 import { useNavigate } from 'react-router-dom';
 import { pathHandler } from '../../../lib/pathHandler';
 import { packageApiType } from '../../../lib/api/packagesApi';
+import { localSessionHandler } from '../../../lib/localSessionHandler';
 
 function PricingSummary(props: {
     selectedPlanName: pricingPlanNameType;
@@ -77,7 +78,13 @@ function PricingSummary(props: {
                 break;
             case 'PRO':
                 const packageId = props.packages[props.selectedPriceIndex].id;
-                navigate(pathHandler.getRoutePath('SIGN_UP', {}, { packageId }));
+                const isAuthenticated = localSessionHandler.getIsAuthenticated();
+                if (isAuthenticated) {
+                    navigate(pathHandler.getRoutePath('TEACHER_HOME', {}, { packageId }));
+                } else {
+                    navigate(pathHandler.getRoutePath('SIGN_UP', {}, { packageId }));
+                }
+
                 break;
         }
     }
