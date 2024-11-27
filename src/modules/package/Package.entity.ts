@@ -13,4 +13,7 @@ export class Package {
 
     @Column()
     stripeProductId: string;
+
+    @Column()
+    stripePriceId: string;
 }

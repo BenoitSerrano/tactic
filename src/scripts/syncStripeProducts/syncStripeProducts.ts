@@ -3,7 +3,12 @@ import { stripeApi } from '../../lib/stripeApi';
 
 import { Package } from '../../modules/package';
 
-type packageDtoType = { paperCount: number; price: number; stripeProductId: string };
+type packageDtoType = {
+    paperCount: number;
+    price: number;
+    stripeProductId: string;
+    stripePriceId: string;
+};
 
 async function syncStripeProducts() {
     console.log('=== syncStripeProducts ===');
@@ -48,6 +53,7 @@ async function syncStripeProducts() {
                 `Cannot sync product ${stripeProduct.id}: could not find stripePrice with id "${stripeProduct.default_price}"`,
             );
         }
+        const stripePriceId = stripePrice.id;
         const priceInCents = stripePrice.unit_amount;
         if (priceInCents === null) {
             throw new Error(
@@ -56,7 +62,7 @@ async function syncStripeProducts() {
         }
         const price = priceInCents / 100;
         const stripeProductId = stripeProduct.id;
-        packageDtos.push({ paperCount, price, stripeProductId });
+        packageDtos.push({ paperCount, price, stripeProductId, stripePriceId });
     }
 
     console.log(`Products formatted to package dtos!`);
