@@ -3,6 +3,7 @@ import { dataSource } from '../../dataSource';
 import { hasher } from '../../lib/hasher';
 import { mailer } from '../../lib/mailer';
 import { signer } from '../../lib/signer';
+import { buildAttemptService } from '../attempt';
 import { buildClasseService, Classe } from '../classe';
 import { Establishment } from '../establishment';
 import { buildEstablishmentService } from '../establishment/establishment.service';
@@ -25,6 +26,8 @@ function buildUserService() {
         addPapers,
         getUserRemainingPapers,
         getUsersSummary,
+        decreaseRemainingPapers,
+        updateAttemptsTreatedAt,
     };
 
     return userService;
@@ -147,5 +150,33 @@ function buildUserService() {
             roles,
             examsCount: exams.length,
         }));
+    }
+
+    async function decreaseRemainingPapers(user: User) {
+        if (user.remainingPapers <= 0) {
+            throw new Error(
+                `Could not decrease remaining papers for user ${user.id}: remainingPapers = ${user.remainingPapers}`,
+            );
+        }
+        return userRepository.update(
+            { id: user.id },
+            { remainingPapers: user.remainingPapers - 1 },
+        );
+    }
+
+    async function updateAttemptsTreatedAt(userId: User['id']) {
+        const attemptService = buildAttemptService();
+        const { remainingPapers } = await userRepository.findOneOrFail({
+            where: { id: userId },
+            select: { id: true, remainingPapers: true },
+        });
+        const treatedAttemptCount = await attemptService.updateNonTreatedAttempts(
+            userId,
+            remainingPapers,
+        );
+        return userRepository.update(
+            { id: userId },
+            { remainingPapers: remainingPapers - treatedAttemptCount },
+        );
     }
 }

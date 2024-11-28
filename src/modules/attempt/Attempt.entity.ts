@@ -9,6 +9,7 @@ import {
 import { AttemptInterface } from './attempt.interface';
 import { Exam } from '../exam';
 import { StudentInterface } from '../student/student.interface';
+import { User } from '../user';
 
 @Entity()
 @Unique('One student has one shot for an exam', ['student', 'exam'])
@@ -45,4 +46,10 @@ export class Attempt implements AttemptInterface {
 
     @Column({ type: 'timestamptz', nullable: true })
     correctedAt: string | null;
+
+    @Column({ type: 'timestamptz', nullable: true })
+    treatedAt: string | null;
+
+    @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: false })
+    user: User;
 }

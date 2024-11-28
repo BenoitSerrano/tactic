@@ -52,6 +52,7 @@ function buildPaymentService() {
         switch (paymentSession.status) {
             case 'pending':
                 await userService.addPapers(paymentSession.user, paymentSession.package.paperCount);
+                await userService.updateAttemptsTreatedAt(paymentSession.user.id);
                 await paymentSessionRepository.update(
                     { id: paymentSession.id },
                     { status: 'completed' },

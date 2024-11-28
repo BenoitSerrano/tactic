@@ -1,4 +1,4 @@
-import { Equal, Not } from 'typeorm';
+import { Equal, In, IsNull, Not } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { Exam, buildExamService } from '../exam';
 import { Exercise, buildExerciseService } from '../exercise';
@@ -9,6 +9,7 @@ import { Attempt } from './Attempt.entity';
 import { attemptAdaptator } from './attempt.adaptator';
 import { attemptUtils } from './attempt.utils';
 import { attemptAnswersType } from './types';
+import { buildUserService, User } from '../user';
 
 export { buildAttemptService };
 
@@ -27,7 +28,6 @@ function buildAttemptService() {
         updateAttemptDuration,
         updateAttemptCheatingSummary,
         getAllAttempts,
-        bulkInsertAttempts,
         deleteQuestionAnswers,
         deleteExerciseAnswers,
         updateManualMark,
@@ -37,6 +37,7 @@ function buildAttemptService() {
         deleteAttemptCorrectedAt,
         getAttemptsCountByCorrectionStatus,
         convertAttemptQuestionsPoints,
+        updateNonTreatedAttempts,
     };
 
     return attemptService;
@@ -57,9 +58,22 @@ function buildAttemptService() {
         const examRepository = dataSource.getRepository(Exam);
 
         const student = await studentRepository.findOneByOrFail({ id: studentId });
-        const exam = await examRepository.findOneByOrFail({ id: examId });
+        const exam = await examRepository.findOneOrFail({
+            where: { id: examId },
+            relations: { user: true },
+        });
 
-        const attempt = await attemptRepository.save({ exam, student });
+        const attempt = await attemptRepository.save({ exam, student, user: exam.user });
+        const hasRemainingPapers = exam.user.remainingPapers > 0;
+
+        if (hasRemainingPapers) {
+            const userService = buildUserService();
+            await userService.decreaseRemainingPapers(exam.user);
+            await attemptRepository.update(
+                { id: attempt.id },
+                { treatedAt: () => 'CURRENT_TIMESTAMP' },
+            );
+        }
 
         return attempt;
     }
@@ -311,14 +325,10 @@ function buildAttemptService() {
     async function getAllAttempts() {
         const attempts = await attemptRepository.find({
             relations: ['student', 'exam'],
-            select: { student: { id: true }, exam: { id: true } },
+            select: { student: { id: true }, exam: { id: true }, user: { id: true } },
         });
 
         return attempts;
-    }
-
-    async function bulkInsertAttempts(attempts: Array<Attempt>) {
-        return attemptRepository.insert(attempts);
     }
 
     async function deleteQuestionAnswers(questionId: Question['id']) {
@@ -388,5 +398,23 @@ function buildAttemptService() {
             }
         }
         return { corrected, notCorrected };
+    }
+
+    async function updateNonTreatedAttempts(userId: User['id'], maxAttemptsToTreat: number) {
+        const nonTreatedAttempts = await attemptRepository.find({
+            where: { treatedAt: IsNull(), user: { id: userId } },
+            order: { startedAt: 'ASC' },
+        });
+        let attemptIdsToTreat: Attempt['id'][] = [
+            ...nonTreatedAttempts.map((attempt) => attempt.id),
+        ];
+        if (nonTreatedAttempts.length > maxAttemptsToTreat) {
+            attemptIdsToTreat = attemptIdsToTreat.slice(0, maxAttemptsToTreat);
+        }
+        await attemptRepository.update(
+            { id: In(attemptIdsToTreat) },
+            { treatedAt: () => 'CURRENT_TIMESTAMP' },
+        );
+        return attemptIdsToTreat.length;
     }
 }
