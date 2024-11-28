@@ -131,7 +131,7 @@ const Container = styled('div')(({ theme }) => ({
     boxShadow: theme.shadows[4],
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: 'white',
 }));
 
 const BasicContainer = styled('div')(({ theme }) => ({ paddingTop: theme.spacing(3) }));
