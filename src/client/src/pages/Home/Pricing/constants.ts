@@ -12,48 +12,6 @@ const PRICING_PLANS: Record<pricingPlanNameType, pricingPlanType> = {
 };
 
 type planOptionType = { title: string; description: string; value: string };
-const PRICING_PLAN_OPTIONS: Record<pricingPlanNameType, planOptionType[]> = {
-    FREE: [
-        {
-            title: 'Nombre de copies corrigées offertes',
-            description:
-                'Ces copies vous seront offertes à la création du compte quel que soit le plan choisi',
-            value: '30 copies offertes',
-        },
-        {
-            title: 'Arsenal anti-triche',
-            description:
-                "Vos élèves ne pourront ni copier-coller de texte lors du passage de l'examen, ni changer de fenêtre sans que vous ne soyez averti",
-            value: 'Inclus',
-        },
-        {
-            title: 'Temps de réponse du support',
-            description:
-                "Une équipe est présente pour répondre à toutes vos questions concernant l'utilisation de la plateforme",
-            value: 'Moins de 72 heures ouvrées',
-        },
-    ],
-    PRO: [
-        {
-            title: 'Nombre de copies corrigées offertes',
-            description:
-                'Ces copies vous seront offertes à la création du compte quel que soit le plan choisi',
-            value: '30 copies offertes',
-        },
-        {
-            title: 'Arsenal anti-triche',
-            description:
-                "Vos élèves ne pourront ni copier-coller de texte lors du passage de l'examen, ni changer de fenêtre sans que vous ne soyez averti",
-            value: 'Inclus',
-        },
-        {
-            title: 'Temps de réponse du support',
-            description:
-                "Une équipe est présente pour répondre à toutes vos questions concernant l'utilisation de la plateforme",
-            value: 'Moins de 24 heures',
-        },
-    ],
-};
 
-export { PRICING_PLANS, PRICING_PLAN_NAMES, PRICING_PLAN_OPTIONS };
-export type { pricingPlanNameType, pricingPlanType };
+export { PRICING_PLANS, PRICING_PLAN_NAMES };
+export type { pricingPlanNameType, pricingPlanType, planOptionType };

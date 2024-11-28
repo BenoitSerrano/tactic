@@ -8,7 +8,7 @@ const packagesApi = {
 
 type packageApiType = { id: string; paperCount: number; price: number };
 
-async function getPackages(): Promise<packageApiType[]> {
+async function getPackages(): Promise<{ freePapersCount: number; packages: packageApiType[] }> {
     const URL = `${BASE_URL}/packages`;
     return performApiCall(URL, 'GET');
 }

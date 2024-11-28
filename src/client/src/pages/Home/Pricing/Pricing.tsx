@@ -39,17 +39,21 @@ function Pricing() {
                     {selectedPlanName === 'PRO' && (
                         <PricingSliderContainer>
                             <PricingSlider
-                                packages={packagesQuery.data}
+                                packages={packagesQuery.data.packages}
                                 selectedIndex={selectedPriceIndex}
                                 setSelectedIndex={setSelectedPriceIndex}
                             />
                         </PricingSliderContainer>
                     )}
-                    <PricingOptions selectedPlanName={selectedPlanName} />
+                    <PricingOptions
+                        freePapersCount={packagesQuery.data.freePapersCount}
+                        selectedPlanName={selectedPlanName}
+                    />
                 </LeftContainer>
                 <RightContainer>
                     <PricingSummary
-                        packages={packagesQuery.data}
+                        packages={packagesQuery.data.packages}
+                        freePapersCount={packagesQuery.data.freePapersCount}
                         selectedPriceIndex={selectedPriceIndex}
                         selectedPlanName={selectedPlanName}
                     />

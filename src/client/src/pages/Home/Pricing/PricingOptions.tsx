@@ -1,13 +1,14 @@
 import { styled, Typography } from '@mui/material';
-import { PRICING_PLAN_OPTIONS, pricingPlanNameType } from './constants';
+import { planOptionType, pricingPlanNameType } from './constants';
 
-function PricingOptions(props: { selectedPlanName: pricingPlanNameType }) {
+function PricingOptions(props: { selectedPlanName: pricingPlanNameType; freePapersCount: number }) {
+    const pricingPlanOptions = computePricingPlanOptions();
     return (
         <Container>
-            {PRICING_PLAN_OPTIONS[props.selectedPlanName].map((PRICING_PLAN_OPTION, index) => (
+            {pricingPlanOptions.map((PRICING_PLAN_OPTION, index) => (
                 <OptionContainer
                     key={`option-${index}`}
-                    isLastItem={index === PRICING_PLAN_OPTIONS[props.selectedPlanName].length - 1}
+                    isLastItem={index === pricingPlanOptions.length - 1}
                 >
                     <OptionLeftPartContainer>
                         <OptionTitle variant="h5">{PRICING_PLAN_OPTION.title}</OptionTitle>
@@ -22,6 +23,53 @@ function PricingOptions(props: { selectedPlanName: pricingPlanNameType }) {
             ))}
         </Container>
     );
+
+    function computePricingPlanOptions(): planOptionType[] {
+        switch (props.selectedPlanName) {
+            case 'FREE':
+                return [
+                    {
+                        title: 'Nombre de copies corrigées offertes',
+                        description:
+                            'Ces copies vous seront offertes à la création du compte quel que soit le plan choisi',
+                        value: `${props.freePapersCount} copies offertes`,
+                    },
+                    {
+                        title: 'Arsenal anti-triche',
+                        description:
+                            "Vos élèves ne pourront ni copier-coller de texte lors du passage de l'examen, ni changer de fenêtre sans que vous ne soyez averti",
+                        value: 'Inclus',
+                    },
+                    {
+                        title: 'Temps de réponse du support',
+                        description:
+                            "Une équipe est présente pour répondre à toutes vos questions concernant l'utilisation de la plateforme",
+                        value: 'Moins de 72 heures ouvrées',
+                    },
+                ];
+            case 'PRO':
+                return [
+                    {
+                        title: 'Nombre de copies corrigées offertes',
+                        description:
+                            'Ces copies vous seront offertes à la création du compte quel que soit le plan choisi',
+                        value: `${props.freePapersCount} copies offertes`,
+                    },
+                    {
+                        title: 'Arsenal anti-triche',
+                        description:
+                            "Vos élèves ne pourront ni copier-coller de texte lors du passage de l'examen, ni changer de fenêtre sans que vous ne soyez averti",
+                        value: 'Inclus',
+                    },
+                    {
+                        title: 'Temps de réponse du support',
+                        description:
+                            "Une équipe est présente pour répondre à toutes vos questions concernant l'utilisation de la plateforme",
+                        value: 'Moins de 24 heures',
+                    },
+                ];
+        }
+    }
 }
 
 const Container = styled('div')(({ theme }) => ({}));

@@ -1,3 +1,4 @@
+import { config } from '../../config';
 import { dataSource } from '../../dataSource';
 import { Package } from './Package.entity';
 
@@ -8,12 +9,12 @@ function buildPackageService() {
         getPackage,
     };
 
-    function getPackages() {
-        const packages = packageRepository.find({
+    async function getPackages() {
+        const packages = await packageRepository.find({
             order: { paperCount: 'ASC' },
             select: { id: true, paperCount: true, price: true },
         });
-        return packages;
+        return { packages, freePapersCount: config.FREE_PAPERS_COUNT };
     }
 
     function getPackage(packageId: Package['id']) {

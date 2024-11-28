@@ -10,6 +10,7 @@ function PricingSummary(props: {
     selectedPlanName: pricingPlanNameType;
     selectedPriceIndex: number;
     packages: packageApiType[];
+    freePapersCount: number;
 }) {
     const navigate = useNavigate();
     const planSummary = computePlanSummary();
@@ -58,14 +59,17 @@ function PricingSummary(props: {
             case 'FREE':
                 return [
                     { label: 'Tarif gratuit', value: '0.00 €' },
-                    { label: '30 copies', value: "inclus à l'inscription" },
+                    { label: `${props.freePapersCount} copies`, value: "inclus à l'inscription" },
                     { label: 'Dispositif anti-triche', value: 'inclus' },
                 ];
             case 'PRO':
                 const { paperCount, price } = props.packages[props.selectedPriceIndex];
                 return [
                     { label: `Pack ${paperCount} copies`, value: `${price.toFixed(2)} €` },
-                    { label: '30 copies supplémentaires', value: "inclus à l'inscription" },
+                    {
+                        label: `${props.freePapersCount} copies supplémentaires`,
+                        value: "inclus à l'inscription",
+                    },
                     { label: 'Dispositif anti-triche', value: 'inclus' },
                 ];
         }

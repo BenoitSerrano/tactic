@@ -1,3 +1,4 @@
+import { config } from '../../config';
 import { dataSource } from '../../dataSource';
 import { hasher } from '../../lib/hasher';
 import { mailer } from '../../lib/mailer';
@@ -40,7 +41,7 @@ function buildUserService() {
         newUser.email = params.email;
         newUser.hashedPassword = hasher.hash(params.password);
         newUser.userConfiguration = newUserConfiguration;
-        newUser.remainingPapers = 20;
+        newUser.remainingPapers = config.FREE_PAPERS_COUNT;
 
         const result = await userRepository.insert(newUser);
         if (result.identifiers.length !== 1) {

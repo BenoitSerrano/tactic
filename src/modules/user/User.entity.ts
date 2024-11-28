@@ -22,7 +22,7 @@ export class User {
     @Column()
     hashedPassword: string;
 
-    @Column({ default: 20 })
+    @Column()
     remainingPapers: number;
 
     @Column('simple-array', { default: 'teacher' })
