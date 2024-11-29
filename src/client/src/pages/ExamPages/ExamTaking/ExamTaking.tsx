@@ -176,10 +176,11 @@ const TitleContainer = styled('div')({
 
 const Subtitle = styled(Typography)({ fontStyle: 'italic' });
 
-const ExamPageContainer = styled('div')({
-    marginTop: 10,
+const ExamPageContainer = styled('div')(({ theme }) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
-});
+    alignItems: 'flex-start',
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+}));

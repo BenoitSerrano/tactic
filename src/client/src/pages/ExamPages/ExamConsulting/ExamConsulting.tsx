@@ -51,10 +51,10 @@ function ExamConsulting() {
 const MainContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     width: '100%',
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
 }));
 
 export { ExamConsulting };

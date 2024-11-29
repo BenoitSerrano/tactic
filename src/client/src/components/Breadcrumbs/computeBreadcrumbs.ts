@@ -48,11 +48,7 @@ function computeBreadcrumbs(
 
         case 'EXAM_EDITING_CONTENT':
             breadcrumbs.push(
-                ...computeBaseBreadcrumbsForExamEditingPages(
-                    parsedPath.routeKey,
-                    parsedPath.parameters,
-                    establishments,
-                ),
+                ...computeBaseBreadcrumbsForExamEditingPages(parsedPath.parameters, establishments),
             );
 
             breadcrumbs.push({
@@ -62,11 +58,7 @@ function computeBreadcrumbs(
             break;
         case 'EXAM_PARAMETERS':
             breadcrumbs.push(
-                ...computeBaseBreadcrumbsForExamEditingPages(
-                    parsedPath.routeKey,
-                    parsedPath.parameters,
-                    establishments,
-                ),
+                ...computeBaseBreadcrumbsForExamEditingPages(parsedPath.parameters, establishments),
             );
 
             breadcrumbs.push({
@@ -76,11 +68,7 @@ function computeBreadcrumbs(
             break;
         case 'EXAM_ATTEMPT_COLLECT':
             breadcrumbs.push(
-                ...computeBaseBreadcrumbsForExamEditingPages(
-                    parsedPath.routeKey,
-                    parsedPath.parameters,
-                    establishments,
-                ),
+                ...computeBaseBreadcrumbsForExamEditingPages(parsedPath.parameters, establishments),
             );
 
             breadcrumbs.push({
@@ -90,11 +78,7 @@ function computeBreadcrumbs(
             break;
         case 'EXAM_RESULTS':
             breadcrumbs.push(
-                ...computeBaseBreadcrumbsForExamEditingPages(
-                    parsedPath.routeKey,
-                    parsedPath.parameters,
-                    establishments,
-                ),
+                ...computeBaseBreadcrumbsForExamEditingPages(parsedPath.parameters, establishments),
             );
 
             breadcrumbs.push({
@@ -104,11 +88,7 @@ function computeBreadcrumbs(
             break;
         case 'EXAM_CONSULT':
             breadcrumbs.push(
-                ...computeBaseBreadcrumbsForExamEditingPages(
-                    parsedPath.routeKey,
-                    parsedPath.parameters,
-                    establishments,
-                ),
+                ...computeBaseBreadcrumbsForExamEditingPages(parsedPath.parameters, establishments),
             );
 
             breadcrumbs.push({
@@ -117,24 +97,9 @@ function computeBreadcrumbs(
             });
             break;
 
-        case 'EXAM_PREVIEWING':
-            breadcrumbs.push(
-                ...computeBaseBreadcrumbsForExamEditingPages(
-                    parsedPath.routeKey,
-                    parsedPath.parameters,
-                    establishments,
-                ),
-            );
-
-            breadcrumbs.push({ label: 'Prévisualisation', isActive: true });
-            break;
         case 'EXAM_CHECKING':
             breadcrumbs.push(
-                ...computeBaseBreadcrumbsForExamEditingPages(
-                    parsedPath.routeKey,
-                    parsedPath.parameters,
-                    establishments,
-                ),
+                ...computeBaseBreadcrumbsForExamEditingPages(parsedPath.parameters, establishments),
             );
 
             breadcrumbs.push({
@@ -150,14 +115,6 @@ function computeBreadcrumbs(
 }
 
 function computeBaseBreadcrumbsForExamEditingPages(
-    routeKey:
-        | 'EXAM_EDITING_CONTENT'
-        | 'EXAM_PARAMETERS'
-        | 'EXAM_ATTEMPT_COLLECT'
-        | 'EXAM_RESULTS'
-        | 'EXAM_PREVIEWING'
-        | 'EXAM_CHECKING'
-        | 'EXAM_CONSULT',
     parameters: Record<string, string>,
     establishments: establishmentWithClassesType[],
 ): breadcrumbItemType[] {

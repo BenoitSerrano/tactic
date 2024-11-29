@@ -117,7 +117,6 @@ const ROUTE_ELEMENTS: Record<
     },
     STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
     EXAM_PREVIEWING: {
-        authorizedRole: 'teacher',
         element: <ExamPreviewing />,
     },
     EXAM_CHECKING: {

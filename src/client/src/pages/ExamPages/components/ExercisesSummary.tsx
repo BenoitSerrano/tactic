@@ -38,7 +38,7 @@ function ExercisesSummary(props: { currentExerciseIndex: number; progresses: num
 export { ExercisesSummary };
 
 const Container = styled('div')(({ theme }) => ({
-    background: theme.palette.common.white,
+    background: 'white',
     position: 'fixed',
     zIndex: 100,
     left: 0,

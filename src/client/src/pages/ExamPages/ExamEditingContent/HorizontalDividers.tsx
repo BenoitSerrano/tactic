@@ -37,7 +37,7 @@ function HorizontalDividerToAddQuestion(props: { onClick: () => void }) {
             buttons={[
                 {
                     iconPlacement: 'left',
-                    variant: 'text',
+                    variant: 'outlined',
                     label: 'Ajouter une question',
                     IconComponent: AddCircleOutlineIcon,
                     onClick: props.onClick,
