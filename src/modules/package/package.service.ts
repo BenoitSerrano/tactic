@@ -6,6 +6,7 @@ function buildPackageService() {
     const packageRepository = dataSource.getRepository(Package);
     return {
         getPackages,
+        getAllPackages,
         getPackage,
     };
 
@@ -15,6 +16,10 @@ function buildPackageService() {
             select: { id: true, paperCount: true, price: true },
         });
         return { packages, freePapersCount: config.FREE_PAPERS_COUNT };
+    }
+
+    async function getAllPackages() {
+        return packageRepository.find({});
     }
 
     function getPackage(packageId: Package['id']) {

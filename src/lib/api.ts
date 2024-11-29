@@ -6,6 +6,7 @@ import { User } from '../modules/user';
 import { UserConfiguration } from '../modules/userConfiguration';
 import { writeFile, readFile } from 'fs/promises';
 import { Establishment } from '../modules/establishment';
+import { Package } from '../modules/package';
 
 const api = {
     fetchAllExams,
@@ -15,6 +16,7 @@ const api = {
     fetchAllClasses,
     fetchAllUsers,
     fetchAllUserConfigurations,
+    fetchAllPackages,
 };
 
 async function saveJson(filename: string, data: Object) {
@@ -40,6 +42,20 @@ async function fetchAllExams(): Promise<Exam[]> {
     const response = await fetch(URL);
     const parsedData = await response.json();
     await saveJson('exams', parsedData);
+
+    return parsedData;
+}
+
+async function fetchAllPackages(): Promise<Package[]> {
+    const packages = await getJson<Package>('packages');
+    if (packages) {
+        return packages;
+    }
+    const URL = `https://tactic-app.fr/api/all-packages`;
+
+    const response = await fetch(URL);
+    const parsedData = await response.json();
+    await saveJson('packages', parsedData);
 
     return parsedData;
 }

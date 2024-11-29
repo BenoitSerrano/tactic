@@ -12,6 +12,12 @@ const packageRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'GET',
+        path: '/all-packages',
+        kind: 'public',
+        controller: packageController.getAllPackages,
+    },
+    {
+        method: 'GET',
         path: '/packages/:packageId',
         kind: 'public',
         controller: packageController.getPackage,
