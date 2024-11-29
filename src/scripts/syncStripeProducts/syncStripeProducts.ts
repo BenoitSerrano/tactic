@@ -17,9 +17,10 @@ async function syncStripeProducts() {
     console.log('Database initialized!');
     const packageRepository = dataSource.getRepository(Package);
 
-    console.log('Erasing local database of packages...');
-
-    await packageRepository.delete({});
+    console.log('Getting current packages...');
+    const packages = await packageRepository.find({});
+    const packageIdsToDelete: Package['id'][] = [];
+    console.log(`${packages.length} packages found in database!`);
 
     console.log('Fetching stripe products...');
 
@@ -29,7 +30,23 @@ async function syncStripeProducts() {
     const stripePrices = (await stripeApi.getAllPrices()).data;
 
     console.log(`${stripePrices.length} prices fetched.`);
-    const packageDtos: packageDtoType[] = [];
+    const packageDtosToAdd: packageDtoType[] = [];
+    for (const pack of packages) {
+        if (
+            stripeProducts.every(
+                (stripeProduct) =>
+                    stripeProduct.id !== pack.stripeProductId ||
+                    stripeProduct.default_price !== pack.stripePriceId,
+            )
+        ) {
+            packageIdsToDelete.push(pack.id);
+        }
+    }
+    console.log(
+        `${packageIdsToDelete.length} local packages to delete : [${packageIdsToDelete.join(
+            ', ',
+        )}]`,
+    );
     for (const stripeProduct of stripeProducts) {
         const paperCount = Number(stripeProduct.metadata['paperCount']);
 
@@ -62,13 +79,20 @@ async function syncStripeProducts() {
         }
         const price = priceInCents / 100;
         const stripeProductId = stripeProduct.id;
-        packageDtos.push({ paperCount, price, stripeProductId, stripePriceId });
+
+        const correspondingPackage = packages.find(
+            (pack) =>
+                pack.stripeProductId === stripeProductId && pack.stripePriceId === stripePriceId,
+        );
+        if (!correspondingPackage) {
+            packageDtosToAdd.push({ paperCount, price, stripeProductId, stripePriceId });
+        }
     }
 
     console.log(`Products formatted to package dtos!`);
-    console.log(`Inserting ${packageDtos.length} packages...`);
+    console.log(`Inserting ${packageDtosToAdd.length} packages...`);
 
-    await packageRepository.insert(packageDtos);
+    await packageRepository.insert(packageDtosToAdd);
 
     console.log('Done!');
 }
