@@ -56,7 +56,7 @@ function TeacherHeader() {
         if (!parsedPath) {
             return rightButtons;
         }
-        if (remainingPapers) {
+        if (remainingPapers !== undefined) {
             rightButtons.unshift(<RemainingPaperIcon remainingPapers={remainingPapers} />);
         }
         if (!EXAM_ROUTE_KEYS.includes(parsedPath.routeKey as any)) {
