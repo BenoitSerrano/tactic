@@ -22,7 +22,14 @@ async function searchAttempt({ examId, studentId }: { examId: string; studentId:
     return performApiCall(URL, 'GET');
 }
 
-async function getAttemptsCountByCorrectionStatus(params: { examId: string }) {
+type attemptsCountByAttemptStatusApiType = {
+    corrected: number;
+    notCorrected: number;
+};
+
+async function getAttemptsCountByCorrectionStatus(params: {
+    examId: string;
+}): Promise<attemptsCountByAttemptStatusApiType> {
     const URL = `${BASE_URL}/exams/${params.examId}/attempts/count-by-correction-status`;
     return performApiCall(URL, 'GET');
 }
@@ -104,3 +111,4 @@ async function deleteAttempt(params: { attemptId: string; examId: string }) {
 }
 
 export { attemptsApi };
+export type { attemptsCountByAttemptStatusApiType };

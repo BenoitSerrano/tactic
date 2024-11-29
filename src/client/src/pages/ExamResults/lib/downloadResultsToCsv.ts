@@ -1,4 +1,4 @@
-import { examResultsApiType } from '../types';
+import { examResultsApiType } from '../../../lib/api/examsApi';
 import { createCsv } from './createCsv';
 
 function downloadResultsToCsv(examResultsApi: examResultsApiType) {

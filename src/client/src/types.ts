@@ -7,11 +7,6 @@ const questionKinds = [
 ] as const;
 type questionKindType = (typeof questionKinds)[number];
 
-type attemptsCountByAttemptStatusApiType = {
-    corrected: number;
-    notCorrected: number;
-};
-
 type gradeType = 'A' | 'B' | 'C' | 'D' | 'E';
 
 type acceptableAnswerType = { grade: gradeType; answer: string };
@@ -20,10 +15,4 @@ type attemptStatusType = 'notStarted' | 'pending' | 'expired' | 'finished' | 'co
 
 export { questionKinds };
 
-export type {
-    questionKindType,
-    attemptStatusType,
-    attemptsCountByAttemptStatusApiType,
-    acceptableAnswerType,
-    gradeType,
-};
+export type { questionKindType, attemptStatusType, acceptableAnswerType, gradeType };

@@ -4,7 +4,6 @@ import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
 import { attemptWithAnswersApiType } from '../types';
-import { attemptsCountByAttemptStatusApiType } from '../../../types';
 import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function ExamChecking() {
@@ -17,7 +16,7 @@ function ExamChecking() {
         queryKey: ['attempts', attemptId, 'with-answers'],
         queryFn: () => attemptsApi.getAttemptWithAnswers({ attemptId }),
     });
-    const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
+    const attemptsCountQuery = useQuery({
         queryFn: () => attemptsApi.getAttemptsCountByCorrectionStatus({ examId }),
         queryKey: ['attempts-count-by-attempt-status', examId],
     });

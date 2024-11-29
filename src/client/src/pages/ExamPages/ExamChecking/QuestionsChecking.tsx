@@ -12,7 +12,7 @@ import { useAlert } from '../../../lib/alert';
 import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
-import { attemptStatusType, attemptsCountByAttemptStatusApiType } from '../../../types';
+import { attemptStatusType } from '../../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { manualQuestionKinds } from '../../../constants';
@@ -26,7 +26,7 @@ import { QuestionContainer } from '../components/QuestionContainer';
 import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
 import { DisplayedMark } from './DisplayedMark';
-import { attemptsApi } from '../../../lib/api/attemptsApi';
+import { attemptsApi, attemptsCountByAttemptStatusApiType } from '../../../lib/api/attemptsApi';
 
 function QuestionsChecking(props: {
     establishmentId: string;

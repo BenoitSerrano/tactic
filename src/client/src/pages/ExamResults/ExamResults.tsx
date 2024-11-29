@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { time } from '../../lib/time';
 import { Loader } from '../../components/Loader';
-import { attemptsCountByAttemptStatusApiType, attemptStatusType } from '../../types';
+import { attemptStatusType } from '../../types';
 import { computeAttemptStatusIcon } from '../../lib/computeAttemptStatusIcon';
 import { useAlert } from '../../lib/alert';
 import { pathHandler } from '../../lib/pathHandler';
@@ -31,12 +31,11 @@ import { Menu } from '../../components/Menu';
 import { computeRoundMark } from '../../lib/computeRoundMark';
 import { IconLink } from '../../components/IconLink';
 import { denominatorHandler, denominatorType } from './lib/denominatorHandler';
-import { examResultsApiType } from './types';
 import { attemptStatusMapping } from './constants';
 import { downloadResultsToCsv } from './lib/downloadResultsToCsv';
 import { ExamPageTitle } from '../../components/ExamPageTitle';
-import { examsApi } from '../../lib/api/examsApi';
-import { attemptsApi } from '../../lib/api/attemptsApi';
+import { examResultsApiType, examsApi } from '../../lib/api/examsApi';
+import { attemptsApi, attemptsCountByAttemptStatusApiType } from '../../lib/api/attemptsApi';
 
 type sortColumnType =
     | 'email'
@@ -55,12 +54,12 @@ function ExamResults() {
     const examId = params.examId as string;
     const classeId = params.classeId as string;
     const establishmentId = params.establishmentId as string;
-    const resultsQuery = useQuery<examResultsApiType>({
+    const resultsQuery = useQuery({
         queryKey: ['exams', examId, 'results'],
         queryFn: () => examsApi.getExamResults(examId),
     });
 
-    const attemptsCountQuery = useQuery<attemptsCountByAttemptStatusApiType>({
+    const attemptsCountQuery = useQuery({
         queryFn: () => attemptsApi.getAttemptsCountByCorrectionStatus({ examId }),
         queryKey: ['attempts-count-by-attempt-status', examId],
     });

@@ -1,8 +1,8 @@
+import { examResultApiType, examResultsApiType } from '../../../lib/api/examsApi';
 import { computeRoundMark } from '../../../lib/computeRoundMark';
 import { CONVERSION_DENOMINATOR, convertMark } from '../../../lib/convertMark';
 import { formatNumber } from '../../../lib/formatNumber';
 import { time } from '../../../lib/time';
-import { examResultApiType, examResultsApiType } from '../types';
 
 const COLUMNS = [
     'email',

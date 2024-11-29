@@ -1,3 +1,4 @@
+import { attemptStatusType } from '../../types';
 import { BASE_URL } from './constants';
 import { exerciseWithQuestionsType } from './exercisesApi';
 import { performApiCall } from './lib/performApiCall';
@@ -74,7 +75,29 @@ async function getExamWithoutAnswers(examId: string) {
     return performApiCall(URL, 'GET');
 }
 
-async function getExamResults(examId: string) {
+type examResultApiType = {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    attemptId: string;
+    startedAt: string;
+    isTimeLimitExceeded: boolean;
+    attemptStatus: attemptStatusType;
+    actualDuration: number | undefined;
+    mark: number;
+    roundTrips: number;
+    timeSpentOutside: number;
+};
+
+type examResultsApiType = {
+    results: Array<examResultApiType>;
+    totalPoints: number;
+    examName: string;
+    examDuration: number;
+};
+
+async function getExamResults(examId: string): Promise<examResultsApiType> {
     const URL = `${BASE_URL}/exams/${examId}/results`;
     return performApiCall(URL, 'GET');
 }
@@ -177,4 +200,4 @@ async function deleteExam(examId: string) {
 }
 
 export { examsApi };
-export type { examsWithExercisesType };
+export type { examsWithExercisesType, examResultsApiType, examResultApiType };
