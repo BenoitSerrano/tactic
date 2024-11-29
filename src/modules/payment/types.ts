@@ -1,4 +1,4 @@
-const paymentSessionStatuses = ['pending', 'completed'] as const;
+const paymentSessionStatuses = ['pending', 'completed', 'expired'] as const;
 type paymentSessionStatusType = (typeof paymentSessionStatuses)[number];
 
 export { paymentSessionStatuses };

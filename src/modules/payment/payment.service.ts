@@ -12,13 +12,17 @@ function buildPaymentService() {
     const userService = buildUserService();
     const paymentSessionRepository = dataSource.getRepository(PaymentSession);
     return {
-        extractSessionIdFromWebhookPayload,
+        extractInfoFromWebhookPayload,
         fullfillCheckout,
         createCheckoutSession,
+        expirePaymentSession,
         assertIsPaymentSessionCompleted,
     };
 
-    async function extractSessionIdFromWebhookPayload(sig: string, payload: string) {
+    async function extractInfoFromWebhookPayload(
+        sig: string,
+        payload: string,
+    ): Promise<{ eventKind: 'completed' | 'expired'; stripeCheckoutSessionId: string }> {
         let event;
 
         try {
@@ -35,16 +39,18 @@ function buildPaymentService() {
 
         switch (eventType) {
             case 'checkout.session.completed':
-                return event.data.object.id;
+                return { eventKind: 'completed', stripeCheckoutSessionId: event.data.object.id };
+            case 'checkout.session.expired':
+                return { eventKind: 'expired', stripeCheckoutSessionId: event.data.object.id };
             default:
                 throw new Error(`Could not handle event.type "${eventType}"`);
         }
     }
 
-    async function fullfillCheckout(stripeSessionId: string): Promise<number> {
+    async function fullfillCheckout(stripeCheckoutSessionId: string): Promise<number> {
         const paymentSession = await paymentSessionRepository.findOneOrFail({
             where: {
-                stripeCheckoutSessionId: stripeSessionId,
+                stripeCheckoutSessionId,
             },
             relations: { user: true, package: true },
         });
@@ -60,13 +66,17 @@ function buildPaymentService() {
                 return 1;
             case 'completed':
                 return 1;
+            case 'expired':
+                throw new Error(
+                    `Trying to fulfill a checkout for an expired stripe checkout session "${stripeCheckoutSessionId}"`,
+                );
         }
     }
 
     async function createCheckoutSession(params: { user: User; packageId: Package['id'] }) {
         const pack = await packageService.getPackage(params.packageId);
 
-        const session = await stripe.checkout.sessions.create({
+        const stripeCheckoutSession = await stripe.checkout.sessions.create({
             customer_email: params.user.email,
             line_items: [
                 {
@@ -79,14 +89,28 @@ function buildPaymentService() {
             success_url: `${config.CLIENT_URL}/teacher/payment/stripe-checkout-sessions/{CHECKOUT_SESSION_ID}/success`,
             cancel_url: `${config.CLIENT_URL}/teacher/payment/failure`,
         });
-        const sessionId = session.id;
+        const stripeCheckoutSessionId = stripeCheckoutSession.id;
         await paymentSessionRepository.insert({
-            stripeCheckoutSessionId: sessionId,
+            stripeCheckoutSessionId,
             user: params.user,
             package: pack,
             status: 'pending',
         });
-        return { url: session.url };
+        return { url: stripeCheckoutSession.url };
+    }
+
+    async function expirePaymentSession(
+        stripeCheckoutSessionId: PaymentSession['stripeCheckoutSessionId'],
+    ) {
+        const result = await paymentSessionRepository.update(
+            { stripeCheckoutSessionId },
+            { status: 'expired' },
+        );
+        if (result.affected !== 1) {
+            throw new Error(
+                `Could not find paymentSession with stripeCheckoutSession "${stripeCheckoutSessionId}"`,
+            );
+        }
     }
 
     async function assertIsPaymentSessionCompleted(

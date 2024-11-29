@@ -11,10 +11,21 @@ const stripeWebhook: webhookType = {
         const payload = req.body;
 
         try {
-            const sessionId = await paymentService.extractSessionIdFromWebhookPayload(sig, payload);
-            const errorCode = await paymentService.fullfillCheckout(sessionId);
-            if (errorCode !== 1) {
-                throw new Error(`Could not handle checkout session id: "${sessionId}"`);
+            const { eventKind, stripeCheckoutSessionId } =
+                await paymentService.extractInfoFromWebhookPayload(sig, payload);
+            switch (eventKind) {
+                case 'completed':
+                    const errorCode = await paymentService.fullfillCheckout(
+                        stripeCheckoutSessionId,
+                    );
+                    if (errorCode !== 1) {
+                        throw new Error(
+                            `Could not handle checkout session id: "${stripeCheckoutSessionId}"`,
+                        );
+                    }
+                    break;
+                case 'expired':
+                    await paymentService.expirePaymentSession(stripeCheckoutSessionId);
             }
         } catch (err: any) {
             logger.error(err);
