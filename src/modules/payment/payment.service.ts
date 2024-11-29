@@ -98,11 +98,13 @@ function buildPaymentService() {
 
     async function createCheckoutSession(params: { user: User; packageId: Package['id'] }) {
         const pack = await packageService.getPackage(params.packageId);
+        const checkoutSessionCreationParams = params.user.stripeCustomerId
+            ? { customer: params.user.stripeCustomerId }
+            : { customer_email: params.user.email };
 
         const stripeCheckoutSession = await stripe.checkout.sessions.create({
-            customer_email: params.user.email,
+            ...checkoutSessionCreationParams,
             customer_creation: 'always',
-            customer: params.user.stripeCustomerId || undefined,
             line_items: [
                 {
                     price: pack.stripePriceId,
