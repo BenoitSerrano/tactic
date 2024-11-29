@@ -25,6 +25,9 @@ export class User {
     @Column()
     remainingPapers: number;
 
+    @Column('varchar', { nullable: true })
+    stripeCustomerId: string | null;
+
     @Column('simple-array', { default: 'teacher' })
     roles: userRoleType[];
 

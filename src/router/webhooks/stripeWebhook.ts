@@ -11,12 +11,13 @@ const stripeWebhook: webhookType = {
         const payload = req.body;
 
         try {
-            const { eventKind, stripeCheckoutSessionId } =
+            const { eventKind, stripeCheckoutSessionId, stripeCustomerId } =
                 await paymentService.extractInfoFromWebhookPayload(sig, payload);
             switch (eventKind) {
                 case 'completed':
                     const errorCode = await paymentService.fullfillCheckout(
                         stripeCheckoutSessionId,
+                        stripeCustomerId,
                     );
                     if (errorCode !== 1) {
                         throw new Error(

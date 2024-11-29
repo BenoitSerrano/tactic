@@ -27,6 +27,7 @@ function buildUserService() {
         getUserRemainingPapers,
         getUsersSummary,
         decreaseRemainingPapers,
+        updateStripeCustomerId,
         updateAttemptsTreatedAt,
     };
 
@@ -162,6 +163,13 @@ function buildUserService() {
             { id: user.id },
             { remainingPapers: user.remainingPapers - 1 },
         );
+    }
+
+    async function updateStripeCustomerId(userId: User['id'], stripeCustomerId: string) {
+        const result = await userRepository.update({ id: userId }, { stripeCustomerId });
+        if (result.affected !== 1) {
+            throw new Error(`Could not find user "${userId}" to update stripe customer id`);
+        }
     }
 
     async function updateAttemptsTreatedAt(userId: User['id']) {

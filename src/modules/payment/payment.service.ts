@@ -22,8 +22,13 @@ function buildPaymentService() {
     async function extractInfoFromWebhookPayload(
         sig: string,
         payload: string,
-    ): Promise<{ eventKind: 'completed' | 'expired'; stripeCheckoutSessionId: string }> {
+    ): Promise<{
+        eventKind: 'completed' | 'expired';
+        stripeCheckoutSessionId: string;
+        stripeCustomerId: string | null;
+    }> {
         let event;
+        let stripeCustomerId: string | null = null;
 
         try {
             event = stripe.webhooks.constructEvent(
@@ -39,21 +44,39 @@ function buildPaymentService() {
 
         switch (eventType) {
             case 'checkout.session.completed':
-                return { eventKind: 'completed', stripeCheckoutSessionId: event.data.object.id };
+                stripeCustomerId = event.data.object.customer as string | null;
+
+                return {
+                    eventKind: 'completed',
+                    stripeCheckoutSessionId: event.data.object.id,
+                    stripeCustomerId,
+                };
             case 'checkout.session.expired':
-                return { eventKind: 'expired', stripeCheckoutSessionId: event.data.object.id };
+                stripeCustomerId = event.data.object.customer as string | null;
+
+                return {
+                    eventKind: 'expired',
+                    stripeCheckoutSessionId: event.data.object.id,
+                    stripeCustomerId,
+                };
             default:
                 throw new Error(`Could not handle event.type "${eventType}"`);
         }
     }
 
-    async function fullfillCheckout(stripeCheckoutSessionId: string): Promise<number> {
+    async function fullfillCheckout(
+        stripeCheckoutSessionId: string,
+        stripeCustomerId: string | null,
+    ): Promise<number> {
         const paymentSession = await paymentSessionRepository.findOneOrFail({
             where: {
                 stripeCheckoutSessionId,
             },
             relations: { user: true, package: true },
         });
+        if (stripeCustomerId) {
+            await userService.updateStripeCustomerId(paymentSession.user.id, stripeCustomerId);
+        }
 
         switch (paymentSession.status) {
             case 'pending':
@@ -78,6 +101,8 @@ function buildPaymentService() {
 
         const stripeCheckoutSession = await stripe.checkout.sessions.create({
             customer_email: params.user.email,
+            customer_creation: 'always',
+            customer: params.user.stripeCustomerId || undefined,
             line_items: [
                 {
                     price: pack.stripePriceId,
