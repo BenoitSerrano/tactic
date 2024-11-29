@@ -460,10 +460,15 @@ const TitleContainer = styled('div')(({ theme }) => ({
 
 const ResultTableRow = styled(TableRow)<{ isTreated: boolean }>(({ theme, isTreated }) => ({
     filter: isTreated ? undefined : 'blur(5px)',
+
+    '& td': {
+        userSelect: isTreated ? undefined : 'none',
+    },
 }));
 
 const TableCellContent = styled('div')<{ isTreated: boolean }>(({ isTreated }) => ({
     display: isTreated ? 'flex' : 'none',
+    userSelect: isTreated ? undefined : 'none',
     alignItems: 'center',
 }));
 
