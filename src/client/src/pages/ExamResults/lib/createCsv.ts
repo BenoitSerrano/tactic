@@ -37,7 +37,8 @@ function createCsv(
     const header = columns.map((column) => HEADERS[column]);
     csv.push(header);
     const rows: string[][] = [];
-    for (const examResult of examResultsApi.results) {
+    const treatedResults = examResultsApi.results.filter((result) => result.isTreated);
+    for (const examResult of treatedResults) {
         const row: string[] = [];
         for (const column of columns) {
             const value = getValueForColumn(examResult, examResultsApi.totalPoints, column);

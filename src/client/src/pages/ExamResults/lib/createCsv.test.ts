@@ -16,6 +16,7 @@ describe('createCsv', () => {
                 mark: 30.625,
                 roundTrips: 0,
                 timeSpentOutside: 0,
+                isTreated: true,
             },
             {
                 id: 'machin',
@@ -30,6 +31,7 @@ describe('createCsv', () => {
                 mark: 52.5,
                 roundTrips: 0,
                 timeSpentOutside: 0,
+                isTreated: true,
             },
         ];
         const examResults = {

@@ -88,6 +88,7 @@ type examResultApiType = {
     mark: number;
     roundTrips: number;
     timeSpentOutside: number;
+    isTreated: boolean;
 };
 
 type examResultsApiType = {

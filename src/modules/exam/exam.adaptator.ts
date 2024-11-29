@@ -60,6 +60,7 @@ function convertExamWithAttemptsToResults(
             attemptStatus,
             roundTrips: attempt.roundTrips,
             timeSpentOutside: attempt.timeSpentOutside,
+            isTreated: !!attempt.treatedAt,
         };
         return result;
     });

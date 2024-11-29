@@ -254,6 +254,8 @@ function buildExamService() {
         const examWithAttempts = await examRepository.findOneOrFail({
             where: { id: examId },
             select: {
+                // TODO plutôt juste récup les attempts via un service côté attempt
+                id: true,
                 attempts: {
                     id: true,
                     startedAt: true,
@@ -265,6 +267,7 @@ function buildExamService() {
                     answers: true,
                     endedAt: true,
                     correctedAt: true,
+                    treatedAt: true,
                 },
             },
             relations: ['attempts', 'attempts.student'],

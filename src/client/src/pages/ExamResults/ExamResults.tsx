@@ -212,10 +212,10 @@ function ExamResults() {
                             shouldDisplayTime: true,
                         });
                         return (
-                            <TableRow key={result.attemptId}>
+                            <ResultTableRow isTreated={result.isTreated} key={result.attemptId}>
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>
-                                    <TableCellContent>
+                                    <TableCellContent isTreated={result.isTreated}>
                                         <IconLink
                                             to={computeAttemptRoute(result.attemptId)}
                                             IconComponent={FindInPageIcon}
@@ -260,9 +260,13 @@ function ExamResults() {
                                     <TableCell>{readableDeadlineDate}</TableCell>
                                 )}
                                 <TableCell>
-                                    <Link to={computeAttemptRoute(result.attemptId)}>
-                                        {result.email}
-                                    </Link>
+                                    {result.isTreated ? (
+                                        <Link to={computeAttemptRoute(result.attemptId)}>
+                                            {result.email}
+                                        </Link>
+                                    ) : (
+                                        <Typography>{result.email}</Typography>
+                                    )}
                                 </TableCell>
                                 <TableCell>{result.lastName}</TableCell>
                                 <TableCell>{result.firstName}</TableCell>
@@ -292,7 +296,7 @@ function ExamResults() {
                                 <TableCell>{result.actualDuration}</TableCell>
                                 <TableCell>{result.roundTrips}</TableCell>
                                 <TableCell>{result.timeSpentOutside}</TableCell>
-                            </TableRow>
+                            </ResultTableRow>
                         );
                     })}
                 </TableBody>
@@ -387,6 +391,7 @@ function ExamResults() {
                 timeSpentOutside: time.formatToClock(Math.floor(result.timeSpentOutside / 1000), {
                     hideHours: true,
                 }),
+                isTreated: result.isTreated,
             };
         });
     }
@@ -402,6 +407,7 @@ function ExamResults() {
             attemptStatus: attemptStatusType;
             roundTrips: number;
             timeSpentOutside: string;
+            isTreated: boolean;
         },
     >(data: Array<T>, activeSort: sortColumnType, sortDirection: 'asc' | 'desc'): Array<T> {
         return data.sort((resultA, resultB) => {
@@ -452,7 +458,14 @@ const TitleContainer = styled('div')(({ theme }) => ({
     textAlign: 'center',
 }));
 
-const TableCellContent = styled('div')({ display: 'flex', alignItems: 'center' });
+const ResultTableRow = styled(TableRow)<{ isTreated: boolean }>(({ theme, isTreated }) => ({
+    filter: isTreated ? undefined : 'blur(5px)',
+}));
+
+const TableCellContent = styled('div')<{ isTreated: boolean }>(({ isTreated }) => ({
+    display: isTreated ? 'flex' : 'none',
+    alignItems: 'center',
+}));
 
 const MarksContainer = styled('div')({ display: 'flex', flexDirection: 'column' });
 const BoldContainer = styled('span')({ fontWeight: 'bolder' });
