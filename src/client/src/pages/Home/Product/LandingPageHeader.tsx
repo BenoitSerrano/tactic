@@ -19,7 +19,7 @@ function LandingPageHeader() {
             <Title variant="h1">Gagnez du temps en automatisant la correction de vos copies</Title>
             <Subtitle variant="h2">
                 Créez et faites passer vos examens sur une seule plateforme. Avec Tactic, vous
-                divisez en moyenne par 4 votre temps de correction.
+                divisez en moyenne par 3 votre temps de correction.
             </Subtitle>
             <FormContainer onSubmit={handleSubmit}>
                 <EmailInput
