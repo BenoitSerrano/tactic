@@ -6,8 +6,8 @@ import { attemptUtils } from './attempt.utils';
 import { attemptAnswersType } from './types';
 
 const attemptAdaptator = {
-    convertAttemptToAttemptWithAnswers,
     convertAttemptToAttemptWithoutAnswers,
+    convertAttemptToAttemptWithAnswers,
 };
 
 function convertAttemptToAttemptWithoutAnswers(
@@ -65,6 +65,7 @@ function convertAttemptToAttemptWithAnswers(
         startedAt: attempt.startedAt,
         updatedAt: attempt.updatedAt,
         correctedAt: attempt.correctedAt,
+        isTreated: !!attempt.treatedAt,
         attemptStatus,
         studentEmail,
         exam: {

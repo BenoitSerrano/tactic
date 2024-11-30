@@ -30,6 +30,7 @@ import { attemptsApi, attemptsCountByAttemptStatusApiType } from '../../../lib/a
 
 function QuestionsChecking(props: {
     establishmentId: string;
+    isAttemptTreated: boolean;
     classeId: string;
     refetch: () => void;
     exercises: Array<exerciseWithAnswersType>;
@@ -117,12 +118,12 @@ function QuestionsChecking(props: {
     const isConfirmAccessAnotherAttemptDialogOpen = !!attemptIdToNavigateTo;
 
     const { next, previous } = computeAttemptIdNeighbours(props.attemptId, attemptIds);
-
     const { statuses: questionsCorrectionStatuses, isCorrectionDone } =
         computeExercisesCorrectionStatus(props.exercises);
     const UpdateCorrectedAtButton = renderUpdateCorrectedAtButton(props.attemptStatus);
     return (
         <TestPageLayout
+            isHeaderBlurred={!props.isAttemptTreated}
             studentEmail={props.studentEmail}
             title={props.examName}
             centerElement={UpdateCorrectedAtButton || undefined}
@@ -183,7 +184,7 @@ function QuestionsChecking(props: {
                         ? 'Il reste des questions non notées dans cet exercice'
                         : undefined;
                     return (
-                        <>
+                        <ExerciseBox isBlurred={!props.isAttemptTreated}>
                             <ExerciseAccordionContainer
                                 isExpanded={currentExerciseExpanded === exercise.id}
                                 onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
@@ -243,7 +244,7 @@ function QuestionsChecking(props: {
                                 })}
                             </ExerciseAccordionContainer>
                             {!isLastExercise && <HorizontalDivider />}
-                        </>
+                        </ExerciseBox>
                     );
                 })}
 
@@ -330,6 +331,9 @@ function QuestionsChecking(props: {
 
     function buildOnExerciseExpandedChange(exerciseId: number) {
         return (_: any, isExpanded: boolean) => {
+            if (!props.isAttemptTreated) {
+                return;
+            }
             setCurrentExerciseExpanded(isExpanded ? exerciseId : undefined);
         };
     }
@@ -371,6 +375,11 @@ function QuestionsChecking(props: {
     }
 }
 const ARROW_CONTAINER_SIZE = 100;
+
+const ExerciseBox = styled('div')<{ isBlurred: boolean }>(({ isBlurred }) => ({
+    filter: isBlurred ? 'blur(10px)' : 'none',
+    userSelect: isBlurred ? 'none' : 'inherit',
+}));
 
 const LeftArrowContainer = styled('div')(({ theme }) => ({
     display: 'flex',

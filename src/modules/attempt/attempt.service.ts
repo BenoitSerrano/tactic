@@ -118,6 +118,7 @@ function buildAttemptService() {
                 endedAt: true,
                 answers: true,
                 manualMarks: true,
+                treatedAt: true,
                 student: { id: true, email: true },
             },
 

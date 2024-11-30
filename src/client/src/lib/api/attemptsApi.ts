@@ -1,3 +1,5 @@
+import { questionWithAnswersType } from '../../pages/ExamPages/types';
+import { attemptStatusType } from '../../types';
 import { BASE_URL } from './constants';
 import { performApiCall } from './lib/performApiCall';
 
@@ -34,7 +36,32 @@ async function getAttemptsCountByCorrectionStatus(params: {
     return performApiCall(URL, 'GET');
 }
 
-async function getAttemptWithAnswers(params: { attemptId: string }) {
+type attemptWithAnswersApiType = {
+    id: string;
+    correctedAt: string | null;
+    studentEmail: string;
+    exam: examWithAnswersType;
+    attemptStatus: attemptStatusType;
+    isTreated: boolean;
+};
+
+type examWithAnswersType = {
+    id: string;
+    name: string;
+    shouldDisplayRightAnswers: boolean;
+    exercises: Array<exerciseWithAnswersType>;
+};
+
+type exerciseWithAnswersType = {
+    id: number;
+    name: string;
+    instruction: string;
+    questions: Array<questionWithAnswersType>;
+};
+
+async function getAttemptWithAnswers(params: {
+    attemptId: string;
+}): Promise<attemptWithAnswersApiType> {
     const URL = `${BASE_URL}/attempts/${params.attemptId}/with-answers`;
     return performApiCall(URL, 'GET');
 }

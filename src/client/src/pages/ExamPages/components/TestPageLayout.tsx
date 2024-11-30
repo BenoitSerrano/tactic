@@ -5,6 +5,7 @@ import { QuickScrollArrows } from './QuickScrollArrows';
 function TestPageLayout(props: {
     title: string;
     subtitle?: string;
+    isHeaderBlurred?: boolean;
     studentEmail?: string;
     highlightedResult?: string;
     lowlightedResult?: string;
@@ -26,7 +27,7 @@ function TestPageLayout(props: {
                 <Title variant="h2">{props.title}</Title>
                 {!!props.subtitle && <Subtitle variant="h5">{props.subtitle}</Subtitle>}
             </TitleContainer>
-            <StudentInfoContainer>
+            <StudentInfoContainer isBlurred={!!props.isHeaderBlurred}>
                 <StudentEmailContainer>
                     {!!props.studentEmail && (
                         <StudentEmail>Adresse e-mail : {props.studentEmail}</StudentEmail>
@@ -89,11 +90,13 @@ const LeftFooterPart = styled('div')({
     display: 'flex',
 });
 
-const StudentInfoContainer = styled('div')(({ theme }) => ({
+const StudentInfoContainer = styled('div')<{ isBlurred: boolean }>(({ theme, isBlurred }) => ({
     marginBottom: theme.spacing(2),
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    filter: isBlurred ? 'blur(10px)' : 'none',
+    userSelect: isBlurred ? 'none' : 'inherit',
 }));
 
 const StudentEmail = styled(Typography)(({ theme }) => ({

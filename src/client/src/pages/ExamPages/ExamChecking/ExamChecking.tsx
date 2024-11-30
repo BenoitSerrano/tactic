@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
-import { attemptWithAnswersApiType } from '../types';
 import { attemptsApi } from '../../../lib/api/attemptsApi';
 
 function ExamChecking() {
@@ -12,7 +11,7 @@ function ExamChecking() {
     const examId = params.examId as string;
     const establishmentId = params.establishmentId as string;
     const classeId = params.classeId as string;
-    const attemptWithAnswersQuery = useQuery<attemptWithAnswersApiType>({
+    const attemptWithAnswersQuery = useQuery({
         queryKey: ['attempts', attemptId, 'with-answers'],
         queryFn: () => attemptsApi.getAttemptWithAnswers({ attemptId }),
     });
@@ -27,10 +26,10 @@ function ExamChecking() {
         }
         return <div />;
     }
-
     return (
         <MainContainer>
             <QuestionsChecking
+                isAttemptTreated={attemptWithAnswersQuery.data.isTreated}
                 establishmentId={establishmentId}
                 classeId={classeId}
                 refetch={attemptWithAnswersQuery.refetch}

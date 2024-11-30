@@ -9,7 +9,6 @@ function FinishExamModal(props: {
     onConfirm: () => void;
     isConfirmLoading: boolean;
 }) {
-    console.log(props.progresses);
     const untouchedExercises = props.progresses.reduce((acc, progress, index) => {
         return progress === 0 ? [...acc, index] : acc;
     }, [] as number[]);
