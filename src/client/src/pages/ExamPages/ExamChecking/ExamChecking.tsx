@@ -4,6 +4,7 @@ import { styled } from '@mui/material';
 import { Loader } from '../../../components/Loader';
 import { QuestionsChecking } from './QuestionsChecking';
 import { attemptsApi } from '../../../lib/api/attemptsApi';
+import { ModalNotEnoughPaper } from './ModalNotEnoughPaper';
 
 function ExamChecking() {
     const params = useParams();
@@ -28,6 +29,7 @@ function ExamChecking() {
     }
     return (
         <MainContainer>
+            <ModalNotEnoughPaper isAttemptTreated={attemptWithAnswersQuery.data.isTreated} />
             <QuestionsChecking
                 isAttemptTreated={attemptWithAnswersQuery.data.isTreated}
                 establishmentId={establishmentId}
