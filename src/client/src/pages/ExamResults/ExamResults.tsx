@@ -127,9 +127,7 @@ function ExamResults() {
     const formattedData = formatData(resultsQuery.data.results);
 
     const sortedData = sortData(formattedData, activeSort, sortDirection);
-    const sortedAttemptIds = sortedData
-        .filter((result) => result.isTreated)
-        .map(({ attemptId }) => attemptId);
+    const sortedAttemptIds = sortedData.map(({ attemptId }) => attemptId);
     const subtite = computeSubtitle(attemptsCountQuery.data);
     const menuButtons = [
         {
