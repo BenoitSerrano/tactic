@@ -12,11 +12,9 @@ function PricingSlider(props: {
     }));
     const minPaperCount = Math.min(...props.packages.map(({ paperCount }) => paperCount));
     const maxPaperCount = Math.max(...props.packages.map(({ paperCount }) => paperCount));
-    const pricePerAttempt = computePricePerAttempt();
     return (
         <Container>
             <Title variant="h4">{props.packages[props.selectedIndex].paperCount} copies</Title>
-            <Subtitle variant="body1">{pricePerAttempt} € par copie corrigée</Subtitle>
             <Slider
                 onChange={onChangeValue}
                 value={props.packages[props.selectedIndex].paperCount}
@@ -29,13 +27,6 @@ function PricingSlider(props: {
         </Container>
     );
 
-    function computePricePerAttempt() {
-        const pricePerAttempt =
-            props.packages[props.selectedIndex].price /
-            props.packages[props.selectedIndex].paperCount;
-        return pricePerAttempt.toFixed(2);
-    }
-
     function onChangeValue(_event: Event, value: number | number[]) {
         const index = props.packages.map(({ paperCount }) => paperCount).indexOf(value as number);
         if (index === -1) {
@@ -46,6 +37,8 @@ function PricingSlider(props: {
 }
 
 const Container = styled('div')(({ theme }) => ({}));
-const Title = styled(Typography)(({ theme }) => ({ textAlign: 'center' }));
-const Subtitle = styled(Typography)(({ theme }) => ({ textAlign: 'center' }));
+const Title = styled(Typography)(({ theme }) => ({
+    textAlign: 'center',
+    marginBottom: theme.spacing(1),
+}));
 export { PricingSlider };

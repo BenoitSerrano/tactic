@@ -44,7 +44,7 @@ function PricingOptions(props: { selectedPlanName: pricingPlanNameType; freePape
                         title: 'Temps de réponse du support',
                         description:
                             "Une équipe est présente pour répondre à toutes vos questions concernant l'utilisation de la plateforme",
-                        value: 'Moins de 72 heures ouvrées',
+                        value: 'Moins de 72 heures',
                     },
                 ];
             case 'PRO':

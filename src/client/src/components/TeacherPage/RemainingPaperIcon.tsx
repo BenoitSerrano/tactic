@@ -3,7 +3,7 @@ import { Badge, Tooltip } from '@mui/material';
 
 function RemainingPaperIcon(props: { remainingPapers: number }) {
     return (
-        <Tooltip title={`${props.remainingPapers} copies corrigées restantes`}>
+        <Tooltip title={`${props.remainingPapers} copies restantes sur votre compte`}>
             <Badge
                 showZero
                 badgeContent={props.remainingPapers}
