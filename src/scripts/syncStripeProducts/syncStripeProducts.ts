@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { dataSource } from '../../dataSource';
 import { stripeApi } from '../../lib/stripeApi';
 
@@ -47,6 +48,9 @@ async function syncStripeProducts() {
             ', ',
         )}]`,
     );
+    console.log(`Deleting...`);
+    const result = await packageRepository.delete({ id: In(packageIdsToDelete) });
+    console.log(`${result.affected} packages deleted`);
     for (const stripeProduct of stripeProducts) {
         const paperCount = Number(stripeProduct.metadata['paperCount']);
 
