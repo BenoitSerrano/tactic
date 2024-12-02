@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import HistoryIcon from '@mui/icons-material/History';
@@ -212,7 +212,10 @@ function ExamResults() {
                             shouldDisplayTime: true,
                         });
                         return (
-                            <ResultTableRow isTreated={result.isTreated} key={result.attemptId}>
+                            <ResultTableRow
+                                key={result.attemptId}
+                                isAttemptTreated={result.isTreated}
+                            >
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>
                                     <TableCellContent isTreated={result.isTreated}>
@@ -454,15 +457,25 @@ function ExamResults() {
     }
 }
 
+function ResultTableRow(props: { children: ReactNode; isAttemptTreated: boolean }) {
+    if (props.isAttemptTreated) {
+        return <TableRow>{props.children}</TableRow>;
+    }
+    return (
+        <Tooltip title="Vous n'avez plus de copie sur votre compte, cette copie n'a pas pu être corrigée. Veuillez recharger votre compte.">
+            <BlurredTableRow>{props.children}</BlurredTableRow>
+        </Tooltip>
+    );
+}
+
 const TitleContainer = styled('div')(({ theme }) => ({
     textAlign: 'center',
 }));
 
-const ResultTableRow = styled(TableRow)<{ isTreated: boolean }>(({ theme, isTreated }) => ({
-    filter: isTreated ? undefined : 'blur(5px)',
-
+const BlurredTableRow = styled(TableRow)(({ theme }) => ({
+    filter: 'blur(5px)',
     '& td': {
-        userSelect: isTreated ? undefined : 'none',
+        userSelect: 'none',
     },
 }));
 

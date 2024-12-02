@@ -15,8 +15,8 @@ function ModalNotEnoughPaper(props: { isAttemptTreated: boolean }) {
             confirmButtonLabel="Choisir la taille du lot"
         >
             <Typography>
-                Il semblerait que vous n'ayez plus de copie corrigée sur votre compte...
-                Souhaitez-vous acheter un nouveau lot ?
+                Il semblerait que vous n'ayez plus de copie sur votre compte... Souhaitez-vous
+                acheter un nouveau lot ?
             </Typography>
         </Modal>
     );
