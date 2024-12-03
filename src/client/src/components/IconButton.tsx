@@ -11,12 +11,21 @@ function IconButton(props: {
     IconComponent: React.ElementType;
     disabled?: boolean;
     type?: 'submit';
+    titleWhenDisabled?: string;
     placement?: 'top' | 'bottom' | 'left' | 'right';
 }) {
     const { IconComponent } = props;
     const size = props.size || 'medium';
     if (props.disabled) {
-        return renderButton();
+        if (props.titleWhenDisabled) {
+            return (
+                <Tooltip title={props.titleWhenDisabled} placement={props.placement}>
+                    <div>{renderButton()}</div>
+                </Tooltip>
+            );
+        } else {
+            return renderButton();
+        }
     }
     return (
         <Tooltip title={props.title} placement={props.placement}>

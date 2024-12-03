@@ -1,5 +1,5 @@
-import { LoadingButton } from '@mui/lab';
 import { IconButton } from '../IconButton';
+import { LoadingButton } from '../LoadingButton';
 import { PopupMenu } from './PopupMenu';
 import { buttonType, buttonVariantType } from './types';
 import { useState } from 'react';
@@ -23,6 +23,8 @@ function MenuButton(props: { button: buttonType }) {
                     />
                 )}
                 <IconButton
+                    titleWhenDisabled={props.button.titleWhenDisabled}
+                    disabled={props.button.isDisabled}
                     IconComponent={IconComponent}
                     title={title}
                     onClick={onClick}
@@ -42,7 +44,9 @@ function MenuButton(props: { button: buttonType }) {
                 />
             )}
             <LoadingButton
-                loading={isLoading}
+                titleWhenDisabled={props.button.titleWhenDisabled}
+                disabled={props.button.isDisabled}
+                isLoading={isLoading}
                 variant={shape}
                 startIcon={<IconComponent />}
                 onClick={onClick}
@@ -51,6 +55,7 @@ function MenuButton(props: { button: buttonType }) {
             </LoadingButton>
         </>
     );
+
     function onClick(event: React.MouseEvent<HTMLButtonElement>) {
         if (props.button.popupMenu) {
             openPopupMenu(event);

@@ -14,6 +14,7 @@ import { ClasseHeader } from './ClasseHeader';
 import { examsApi } from '../../lib/api/examsApi';
 import { studentsApi } from '../../lib/api/studentsApi';
 import { establishmentsApi, establishmentWithClassesType } from '../../lib/api/establishmentsApi';
+import { localStorage } from '../../lib/localStorage';
 
 function Classe() {
     const params = useParams();
@@ -61,6 +62,9 @@ function Classe() {
         return <Navigate to={pathHandler.getRoutePath('TEACHER_HOME')} />;
     }
     const { classe, establishment } = headerInfo;
+    const createExamDisableInfo = computeCreateExamDisableInfo(
+        studentsCountQuery.data.studentsCount,
+    );
 
     return (
         <>
@@ -71,6 +75,8 @@ function Classe() {
                     <Menu
                         buttons={[
                             {
+                                isDisabled: createExamDisableInfo.isDisabled,
+                                titleWhenDisabled: createExamDisableInfo.titleWhenDisabled,
                                 onClick: openCreationModal,
                                 IconComponent: PostAddIcon,
                                 title: 'Créer un examen',
@@ -118,6 +124,27 @@ function Classe() {
             />
         </>
     );
+
+    function computeCreateExamDisableInfo(studentsCount: number): {
+        isDisabled: boolean;
+        titleWhenDisabled?: string;
+    } {
+        const remainingPapers = localStorage.userInfoHandler.get()?.remainingPapers;
+        if (remainingPapers === undefined) {
+            return {
+                isDisabled: true,
+                titleWhenDisabled:
+                    "Le nombre de copies restantes sur votre compte n'a pas pu être récupéré, vous ne pouvez donc pas encore créer d'examen pour cette classe. Veuillez recharger la page.",
+            };
+        }
+        if (remainingPapers < studentsCount) {
+            return {
+                isDisabled: true,
+                titleWhenDisabled: `Vous n'avez pas suffisamment de copies restantes (${remainingPapers}) sur votre compte pour créer un examen pour cette classe (${studentsCount} élèves). Vous pouvez acheter un lot de copie sur votre profil.`,
+            };
+        }
+        return { isDisabled: false };
+    }
 
     function openCreationModal() {
         setIsCreateExamModalOpen(true);

@@ -9,7 +9,9 @@ type popupMenuOptionType = {
 type buttonType = {
     IconComponent: React.ElementType;
     onClick: () => void;
+    isDisabled?: boolean;
     title: string;
+    titleWhenDisabled?: string;
     shape?: 'outlined' | 'contained';
     variant?: buttonVariantType;
     isLoading?: boolean;
