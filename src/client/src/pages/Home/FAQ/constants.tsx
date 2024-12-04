@@ -56,10 +56,6 @@ const FAQ_CONTENT: Array<{ question: string; answer: string | ReactNode }> = [
         ),
     },
     {
-        question: "Quels types d'exercice puis-je utiliser pour mes examens ?",
-        answer: 'Tactic prend en charge les QCM, les questions à réponse courte, les phrases à reconstituer, les textes à trous, et les compositions libres. Pour ces dernières, Tactic ne propose pas de correction automatique.',
-    },
-    {
         question: 'Comment fonctionne la correction automatique ?',
         answer: "Lors de la création de l'examen, vous spécifiez via une interface intuitive les réponses correctes pour vos exercices. Après le passage de l'examen par vos élèves, vous pouvez toujours parcourir les copies pour vérifier que la correction est conforme à vos attentes, et attribuer des points à certaines réponses que vous considéreriez comme partiellement correctes. Pour vous simplifier la correction et permettre une notation équitable, si vous attribuez une note à une réponse partiellement correcte, tous les autres élèves ayant fourni la même réponse se verront automatiquement gratifiés du même nombre de points pour la question concernée.",
     },
