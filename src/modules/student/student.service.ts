@@ -115,7 +115,7 @@ function buildStudentService() {
         return studentRepository.findOneOrFail({
             where: {
                 email: criteria.email.trim().toLowerCase(),
-                classe: { id: examClasseId },
+                // classe: { id: examClasseId },
             },
             select: {
                 id: true,
