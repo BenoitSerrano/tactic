@@ -58,7 +58,7 @@ function QuestionsAnswering(props: {
         retry: 2,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['attempts-without-answers', props.attemptId],
+                queryKey: ['attempts', props.attemptId, 'without-answers'],
             });
         },
         onError: (error: any) => {
