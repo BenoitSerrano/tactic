@@ -3,6 +3,7 @@ on: push
 env:
     HASH_SECRET: ${{ secrets.HASH_SECRET }}
     JWT_TOKEN_SECRET: ${{ secrets.JWT_TOKEN_SECRET }}
+    TZ: 'Europe/Paris'
 jobs:
     test:
         runs-on: ubuntu-latest
