@@ -64,12 +64,18 @@ describe('pathHandler', () => {
 
         it('should return path with parameter if path has one parameter', () => {
             const examId = `${Math.floor(Math.random() * 10000) + 1}`;
-            const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', { examId });
+            const classeId = `${Math.floor(Math.random() * 10000) + 1}`;
+            const establishmentId = `${Math.floor(Math.random() * 10000) + 1}`;
+            const path = pathHandler.getRoutePath('EXAM_EDITING_CONTENT', {
+                examId,
+                classeId,
+                establishmentId,
+            });
 
             const parsedPath = pathHandler.parsePath(path);
 
             expect(parsedPath?.routeKey).toEqual('EXAM_EDITING_CONTENT');
-            expect(parsedPath?.parameters).toEqual({ examId });
+            expect(parsedPath?.parameters).toEqual({ examId, classeId, establishmentId });
         });
 
         it('should return path with several parameters if path has several parameters', () => {

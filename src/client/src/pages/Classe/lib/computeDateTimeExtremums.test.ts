@@ -25,7 +25,7 @@ describe('computeDateTimeExtremums', () => {
 
             const startDateTime = computeDateTime(date, time);
 
-            expect(startDateTime).toBe(1735650720000);
+            expect(startDateTime?.getTime()).toBe(1735650720000);
         });
     });
 });
