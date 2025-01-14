@@ -21,7 +21,7 @@ function buildEstablishmentService() {
     async function getEstablishmentsWithClasses(user: User) {
         const establishments = await establishmentRepository.find({
             where: { user: { id: user.id } },
-            order: { name: 'ASC' },
+            order: { name: 'ASC', classes: { name: 'ASC' } },
             relations: { user: true, classes: true },
             select: { id: true, name: true, classes: { id: true, name: true }, user: { id: true } },
         });
