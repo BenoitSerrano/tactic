@@ -1,5 +1,4 @@
 import { dataSource } from '../../dataSource';
-import { Exam } from '../exam';
 import { User } from '../user';
 import { Establishment } from './Establishment.entity';
 
