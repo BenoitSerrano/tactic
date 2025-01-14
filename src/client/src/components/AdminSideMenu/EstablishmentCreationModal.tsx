@@ -38,7 +38,13 @@ function EstablishmentCreationModal(props: { isOpen: boolean; close: () => void 
             onConfirm={onConfirm}
             isConfirmDisabled={!canConfirm}
         >
-            <TextField onChange={onChange} value={name} fullWidth label="Nom de l'établissement" />
+            <TextField
+                autoFocus
+                onChange={onChange}
+                value={name}
+                fullWidth
+                label="Nom de l'établissement"
+            />
         </Modal>
     );
 
