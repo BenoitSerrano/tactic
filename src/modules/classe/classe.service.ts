@@ -1,4 +1,6 @@
 import { dataSource } from '../../dataSource';
+import { In } from 'typeorm';
+
 import { Classe } from './Classe.entity';
 import { Establishment } from '../establishment';
 import { User } from '../user';
@@ -17,6 +19,7 @@ function buildClasseService() {
         deleteClasse,
         updateClasseEstablishmentId,
         updateClasseName,
+        bulkUpdateClasseEstablishmentId,
     };
 
     return classeService;
@@ -85,6 +88,22 @@ function buildClasseService() {
         if (result.affected !== 1) {
             throw new Error(`Could not update classe ${critera.classeId}`);
         }
+        return true;
+    }
+
+    async function bulkUpdateClasseEstablishmentId(params: {
+        user: User;
+        establishments: Array<{ id: Establishment['id']; classeIds: string[] }>;
+    }) {
+        await Promise.all(
+            params.establishments.map(({ id, classeIds }) =>
+                classeRepository.update(
+                    { id: In(classeIds), user: { id: params.user.id } },
+                    { establishment: { id } },
+                ),
+            ),
+        );
+
         return true;
     }
 }

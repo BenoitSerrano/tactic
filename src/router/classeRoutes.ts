@@ -22,6 +22,21 @@ const classeRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'PATCH',
+        path: '/classes/establishmentId/bulk',
+        kind: 'authenticated',
+        authorizedRoles: ['teacher'],
+        controller: classeController.bulkUpdateClasseEstablishmentId,
+        schema: Joi.object({
+            establishments: Joi.array().items(
+                Joi.object({
+                    id: Joi.string().required(),
+                    classeIds: Joi.array().items(Joi.string()).required(),
+                }),
+            ),
+        }),
+    },
+    {
+        method: 'PATCH',
         path: '/classes/:classeId/establishmentId',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
@@ -31,6 +46,7 @@ const classeRoutes: Array<routeType<any, any, any>> = [
         controller: classeController.updateClasseEstablishmentId,
         schema: Joi.object({ establishmentId: Joi.string().required() }),
     },
+
     {
         method: 'PATCH',
         path: '/classes/:classeId/name',
