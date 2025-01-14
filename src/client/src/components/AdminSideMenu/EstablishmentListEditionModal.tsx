@@ -13,7 +13,7 @@ import {
     OnDragEndResponder,
     OnDragStartResponder,
 } from 'react-beautiful-dnd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { classesApi } from '../../lib/api/classesApi';
 import { useAlert } from '../../lib/alert';
@@ -30,6 +30,13 @@ function EstablishmentListEditionModal(props: {
     const [droppableIdCurrentlyDragging, setDroppableIdCurrentlyDragging] = useState<
         string | undefined
     >(undefined);
+
+    useEffect(() => {
+        const mappedEstablishements = props.establishments.reduce((acc, establishment) => {
+            return { ...acc, [establishment.id]: establishment };
+        }, {} as Record<string, establishmentWithClassesType>);
+        setCurrentEstablishments(mappedEstablishements);
+    }, [props.establishments]);
     const { displayAlert } = useAlert();
 
     const queryClient = useQueryClient();
@@ -62,7 +69,7 @@ function EstablishmentListEditionModal(props: {
         >
             <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
                 <ModalContent>
-                    {props.establishments.map(({ id }) => {
+                    {Object.values(currentEstablishments).map(({ id }) => {
                         const establishment = currentEstablishments[id];
                         return (
                             <Droppable
