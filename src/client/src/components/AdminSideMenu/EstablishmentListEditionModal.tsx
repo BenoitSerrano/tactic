@@ -14,6 +14,9 @@ import {
     OnDragStartResponder,
 } from 'react-beautiful-dnd';
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { classesApi } from '../../lib/api/classesApi';
+import { useAlert } from '../../lib/alert';
 
 function EstablishmentListEditionModal(props: {
     isOpen: boolean;
@@ -27,6 +30,27 @@ function EstablishmentListEditionModal(props: {
     const [droppableIdCurrentlyDragging, setDroppableIdCurrentlyDragging] = useState<
         string | undefined
     >(undefined);
+    const { displayAlert } = useAlert();
+
+    const queryClient = useQueryClient();
+    const bulkUpdateClasseEstablishmentIdMutation = useMutation({
+        mutationFn: classesApi.bulkUpdateClasseEstablishmentId,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['establishments', 'with-classes'] });
+            displayAlert({
+                text: `La liste des établissements a bien été modifiée.`,
+                variant: 'success',
+            });
+            props.close();
+        },
+        onError: (error) => {
+            console.error(error);
+            displayAlert({
+                variant: 'error',
+                text: "Une erreur est survenue. La liste des établissements n'a pas pu être modifiée.",
+            });
+        },
+    });
     return (
         <Modal
             size="large"
@@ -109,7 +133,14 @@ function EstablishmentListEditionModal(props: {
         </Modal>
     );
 
-    function onConfirm() {}
+    function onConfirm() {
+        bulkUpdateClasseEstablishmentIdMutation.mutate({
+            establishments: Object.values(currentEstablishments).map((establishment) => ({
+                id: establishment.id,
+                classeIds: establishment.classes.map((classe) => classe.id),
+            })),
+        });
+    }
     function onDragStart(start: DragStart): ReturnType<OnDragStartResponder> {
         setDroppableIdCurrentlyDragging(start.source.droppableId);
     }

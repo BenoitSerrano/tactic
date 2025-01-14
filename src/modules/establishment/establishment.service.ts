@@ -13,6 +13,7 @@ function buildEstablishmentService() {
         updateEstablishmentName,
         getEstablishment,
         getAllEstablishments,
+        assertEstablishmentBelongsToUser,
     };
 
     return establishmentService;
@@ -25,6 +26,22 @@ function buildEstablishmentService() {
             select: { id: true, name: true, classes: { id: true, name: true }, user: { id: true } },
         });
         return establishments;
+    }
+
+    async function assertEstablishmentBelongsToUser(
+        establishmentId: Establishment['id'],
+        user: User,
+    ) {
+        const establishment = await establishmentRepository.findOneOrFail({
+            where: { id: establishmentId },
+            relations: ['user'],
+            select: { id: true, user: { id: true } },
+        });
+        if (establishment.user.id !== user.id) {
+            throw new Error(
+                `Error: establishment ${establishmentId} does not belong to user ${user.id}`,
+            );
+        }
     }
 
     async function getAllEstablishments() {

@@ -3,7 +3,13 @@ import { performApiCall } from './lib/performApiCall';
 
 type classeType = { id: string; name: string };
 
-const classesApi = { createClasse, updateClasseEstablishmentId, updateClasseName, deleteClasse };
+const classesApi = {
+    createClasse,
+    updateClasseEstablishmentId,
+    bulkUpdateClasseEstablishmentId,
+    updateClasseName,
+    deleteClasse,
+};
 
 async function createClasse(params: {
     name: string;
@@ -16,6 +22,13 @@ async function createClasse(params: {
 async function updateClasseEstablishmentId(params: { establishmentId: string; classeId: string }) {
     const URL = `${BASE_URL}/classes/${params.classeId}/establishmentId`;
     return performApiCall(URL, 'PATCH', { establishmentId: params.establishmentId });
+}
+
+async function bulkUpdateClasseEstablishmentId(params: {
+    establishments: Array<{ id: string; classeIds: string[] }>;
+}) {
+    const URL = `${BASE_URL}/classes/establishmentId/bulk`;
+    return performApiCall(URL, 'PATCH', { establishments: params.establishments });
 }
 
 async function updateClasseName({ classeId, name }: { classeId: string; name: string }) {

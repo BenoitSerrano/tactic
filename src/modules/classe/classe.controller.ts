@@ -1,4 +1,5 @@
 import { Establishment } from '../establishment';
+import { buildEstablishmentService } from '../establishment/establishment.service';
 import { User } from '../user';
 import { Classe } from './Classe.entity';
 import { buildClasseService } from './classe.service';
@@ -7,11 +8,13 @@ export { buildClasseController };
 
 function buildClasseController() {
     const classeService = buildClasseService();
+    const establishmentService = buildEstablishmentService();
     const classeController = {
         createClasse,
         deleteClasse,
         getAllClasses,
         updateClasseEstablishmentId,
+        bulkUpdateClasseEstablishmentId,
         updateClasseName,
     };
 
@@ -30,6 +33,24 @@ function buildClasseController() {
             params.body.establishmentId,
         );
     }
+
+    async function bulkUpdateClasseEstablishmentId(
+        params: {
+            body: { establishments: Array<{ id: Establishment['id']; classeIds: string[] }> };
+        },
+        user: User,
+    ) {
+        await Promise.all(
+            params.body.establishments.map((establishment) =>
+                establishmentService.assertEstablishmentBelongsToUser(establishment.id, user),
+            ),
+        );
+        return classeService.bulkUpdateClasseEstablishmentId({
+            establishments: params.body.establishments,
+            user,
+        });
+    }
+
     async function updateClasseName(params: {
         body: { name: Classe['name'] };
         urlParams: { classeId: Classe['id'] };
