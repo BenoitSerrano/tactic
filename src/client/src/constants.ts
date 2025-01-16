@@ -8,6 +8,7 @@ import { questionKindType } from './types';
 
 const FLOATING_NUMBER_REGEX = /^([0-9]+)?(\.)?([0-9]*)?$/;
 const INTEGER_NUMBER_REGEX = /^[0-9]*$/;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const TAT_BLANK_STRING = '....';
 
 const TEXTE_A_TROU_REGEX = /(\.{4})/g;
@@ -68,6 +69,7 @@ const questionSpecificityMapping: Record<
 export {
     questionSpecificityMapping,
     FLOATING_NUMBER_REGEX,
+    UUID_REGEX,
     INTEGER_NUMBER_REGEX,
     TEXTE_A_TROU_REGEX,
     HEADER_HEIGHT,

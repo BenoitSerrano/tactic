@@ -145,10 +145,17 @@ function buildExamController() {
     }
 
     async function updateClasseId(params: {
-        urlParams: { examId: Exam['id']; newClasseId: Classe['id'] };
+        urlParams: {
+            examId: Exam['id'];
+            newClasseId: Classe['id'];
+            previousClasseId: Classe['id'];
+        };
     }) {
         return examService.updateClasseId(
-            { examId: params.urlParams.examId },
+            {
+                examId: params.urlParams.examId,
+                previousClasseId: params.urlParams.previousClasseId,
+            },
             params.urlParams.newClasseId,
         );
     }

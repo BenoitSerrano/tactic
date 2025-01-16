@@ -9,6 +9,7 @@ import { ExamPageTitle } from '../../components/ExamPageTitle';
 import { EditableExamDuration } from '../../components/EditableExamDuration';
 import { SelectExamExtremumsSection } from './components/SelectExamExtremumsSection';
 import { examsApi } from '../../lib/api/examsApi';
+import { EditableClasse } from './components/EditableClasse';
 
 function ExamParameters() {
     const params = useParams();
@@ -31,16 +32,25 @@ function ExamParameters() {
     return (
         <Container>
             <ExamPageTitle examName={examName} />
-
             <Typography variant="h3">Paramètres</Typography>
             <Row>
-                <Section title="Durée de l'examen">
-                    <EditableExamDuration
-                        exam={examQuery.data}
-                        classeId={classeId}
-                        establishmentId={establishmentId}
-                    />
-                </Section>
+                <Row>
+                    <Section title="Durée de l'examen">
+                        <EditableExamDuration
+                            exam={examQuery.data}
+                            classeId={classeId}
+                            establishmentId={establishmentId}
+                        />
+                    </Section>
+                    <Section title="Classe de l'examen">
+                        <EditableClasse
+                            currentEtablishmentId={establishmentId}
+                            examId={examId}
+                            currentClasseId={classeId}
+                            examName={examQuery.data.name}
+                        />
+                    </Section>
+                </Row>
                 <SelectExamExtremumsSection exam={examQuery.data} />
             </Row>
             <Row>

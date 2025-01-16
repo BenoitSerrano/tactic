@@ -190,9 +190,13 @@ async function updateShouldDisplayRightAnswersForExamId(params: {
     });
 }
 
-async function updateClasseId(params: { classeId: string; examId: string }) {
-    const URL = `${BASE_URL}/exams/${params.examId}/classeId`;
-    return performApiCall(URL, 'PATCH', { classeId: params.classeId });
+async function updateClasseId(params: {
+    previousClasseId: string;
+    newClasseId: string;
+    examId: string;
+}) {
+    const URL = `${BASE_URL}/classes/${params.previousClasseId}/exams/${params.examId}/classeId/${params.newClasseId}`;
+    return performApiCall(URL, 'PATCH', {});
 }
 
 async function deleteExam(examId: string) {

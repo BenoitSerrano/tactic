@@ -195,7 +195,7 @@ const examRoutes: Array<routeType<any, any, any>> = [
     },
     {
         method: 'PATCH',
-        path: '/exams/:examId/classeId/:newClasseId',
+        path: '/classes/:previousClasseId/exams/:examId/classeId/:newClasseId',
         kind: 'authenticated',
         authorizedRoles: ['teacher'],
         controller: examController.updateClasseId,
@@ -207,6 +207,10 @@ const examRoutes: Array<routeType<any, any, any>> = [
             {
                 entity: 'classe',
                 key: 'newClasseId',
+            },
+            {
+                entity: 'classe',
+                key: 'previousClasseId',
             },
         ]),
     },

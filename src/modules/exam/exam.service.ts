@@ -43,12 +43,16 @@ function buildExamService() {
 
     return examService;
 
-    async function updateClasseId(criteria: { examId: Exam['id'] }, classeId: Classe['id']) {
+    async function updateClasseId(
+        criteria: { examId: Exam['id']; previousClasseId: Classe['id'] },
+        classeId: Classe['id'],
+    ) {
         const result = await examRepository.update(
-            { id: criteria.examId },
+            { id: criteria.examId, classe: { id: criteria.previousClasseId } },
             { classe: { id: classeId } },
         );
         if (result.affected !== 1) {
+            console.log(result);
             throw new Error(`Could not update classeId for exam ${criteria.examId}`);
         }
         return true;
