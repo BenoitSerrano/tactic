@@ -1,12 +1,13 @@
+import { useState } from 'react';
 import { TextField, styled } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { useState } from 'react';
 import { QuestionInputContainer } from './QuestionInputContainer';
 import { acceptableAnswerType } from '../../../../types';
 import { WordsBlanker } from '../components/WordsBlanker';
 import { PointsPerBlankHandler } from '../components/PointsPerBlankHandler';
 import { converter } from '../../lib/converter';
 import { Button } from '../../../../components/Button';
+import { textSplitter } from '../../../../lib/textSplitter';
 
 function TexteATrousUpsertionModalContent(props: {
     title: string;
@@ -22,7 +23,7 @@ function TexteATrousUpsertionModalContent(props: {
         : Number(props.points);
     const [pointsPerBlank, setPointsPerBlank] = useState(`${initialPointsPerBlank}`);
     const [isWholeSentenceFrozen, setIsWholeSentenceFrozen] = useState(!!props.title);
-    const blankCount = converter.computeBlankCount(props.title);
+    const blankCount = textSplitter.countBlanks(props.title);
     const displayedTitle = converter.convertBlankedTitleToFullTitle(
         props.title,
         props.acceptableAnswers,

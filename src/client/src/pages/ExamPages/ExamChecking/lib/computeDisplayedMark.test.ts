@@ -2,7 +2,7 @@ import { gradeType } from '../../../../types';
 import { computeDisplayedMark } from './computeDisplayedMark';
 
 describe('computeDisplayedMark', () => {
-    const baseQuestion = { id: 1, points: 1, title: 'titre ....' };
+    const baseQuestion = { id: 1, points: 1, title: 'titre Ø' };
     it('should return the grade for automatic questions even if answer not filled', () => {
         const answer = undefined;
         const grade = 'E' as gradeType;

@@ -5,7 +5,7 @@ describe(`computeAutomaticMark`, () => {
     const points = 60;
     const baseQuestionDto = {
         id: 1,
-        title: 'tu .... es',
+        title: 'tu Ø es',
         order: 1,
         possibleAnswers: [],
         grade: 'A',

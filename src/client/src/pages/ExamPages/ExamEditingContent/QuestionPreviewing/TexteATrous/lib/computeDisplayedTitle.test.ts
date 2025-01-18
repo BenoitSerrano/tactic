@@ -3,7 +3,7 @@ import { computeDisplayedTitle } from './computeDisplayedTitle';
 
 describe('computeDisplayedTitle', () => {
     it('should return the title with color for right answers', () => {
-        const title = 'la .... est .... belle de toutes.';
+        const title = 'la Ø est Ø belle de toutes.';
         const acceptableAnswers = [
             [{ grade: 'A' as gradeType, answer: 'vie' }],
             [{ grade: 'A' as gradeType, answer: 'la plus' }],

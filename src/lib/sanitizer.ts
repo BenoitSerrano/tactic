@@ -1,9 +1,16 @@
+import { NON_WORD_CHARACTERS } from '../modules/question/constants';
+
 const sanitizer = {
     sanitizeString,
 };
 
 function sanitizeString(value: string) {
-    return value
+    let sanitizedValue = value;
+    for (const char of NON_WORD_CHARACTERS) {
+        sanitizedValue = sanitizedValue.replace(new RegExp(`\\${char}`, 'g'), ` ${char} `);
+    }
+
+    sanitizedValue = sanitizedValue
         .split(' ')
         .filter(Boolean)
         .join(' ')
@@ -17,6 +24,7 @@ function sanitizeString(value: string) {
         .replace(/é/g, 'é')
         .replace(/ê/g, 'ê')
         .replace(/ ?\.+$/, '');
+    return sanitizedValue;
 }
 
 export { sanitizer };

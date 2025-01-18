@@ -26,7 +26,7 @@ describe('computeExerciseProgress', () => {
             {
                 id: 1,
                 kind: 'texteATrous' as const,
-                title: "la .... est .... mais la .... l'est ....",
+                title: "la Ø est Ø mais la Ø l'est Ø",
             },
         ];
         const attemptAnswers = { 1: 'vie||mort|plus' };
@@ -41,7 +41,7 @@ describe('computeExerciseProgress', () => {
             {
                 id: 1,
                 kind: 'texteATrous' as const,
-                title: "la .... est .... mais la .... l'est ....",
+                title: "la Ø est Ø mais la Ø l'est Ø",
             },
             { id: 2, kind: 'qcm' as const, title: '' },
         ];
@@ -57,7 +57,7 @@ describe('computeExerciseProgress', () => {
             {
                 id: 1,
                 kind: 'texteATrous' as const,
-                title: "la .... est .... mais la .... l'est ....",
+                title: "la Ø est Ø mais la Ø l'est Ø",
             },
             { id: 2, kind: 'qcm' as const, title: '' },
         ];

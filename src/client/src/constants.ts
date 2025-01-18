@@ -9,9 +9,28 @@ import { questionKindType } from './types';
 const FLOATING_NUMBER_REGEX = /^([0-9]+)?(\.)?([0-9]*)?$/;
 const INTEGER_NUMBER_REGEX = /^[0-9]*$/;
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const TAT_BLANK_STRING = '....';
+const TAT_BLANK_STRING = 'Ø';
+const NON_WORD_CHARACTERS = [
+    ',',
+    '.',
+    '-',
+    ';',
+    ':',
+    '!',
+    '?',
+    '(',
+    ')',
+    '[',
+    ']',
+    '{',
+    '}',
+    '<',
+    '>',
+    '"',
+    "'",
+];
 
-const TEXTE_A_TROU_REGEX = /(\.{4})/g;
+const TEXTE_A_TROU_REGEX = /(Ø)/g;
 const HEADER_HEIGHT = 60;
 const BREADCRUMBS_HEIGHT = 60;
 
@@ -77,6 +96,7 @@ export {
     manualQuestionKinds,
     BREADCRUMBS_HEIGHT,
     TAT_BLANK_STRING,
+    NON_WORD_CHARACTERS,
 };
 
 export type { userRoleType, userInfoType };

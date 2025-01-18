@@ -34,5 +34,4 @@ function countBlanks(text: string): number {
     const REGEX = new RegExp(TAT_BLANK_STRING, 'g');
     return text.match(REGEX)?.length ?? 0;
 }
-
 export { textSplitter };

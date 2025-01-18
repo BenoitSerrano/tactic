@@ -1,5 +1,5 @@
 import { sanitizer } from '../../../lib/sanitizer';
-import { computeBlankCount } from '../../question/lib/computeBlankCount';
+import { textSplitter } from '../../question/lib/textSplitter';
 import { convertGradeToMark } from '../../question/lib/convertGradeToMark';
 import { gradeType, questionDtoType } from '../../question/types';
 
@@ -17,13 +17,14 @@ function computeAutomaticMark({
     }
     if (questionDto.kind === 'texteATrous') {
         const chunks = answer.split('|');
-        const blankCount = computeBlankCount(questionDto.title);
+        const blankCount = textSplitter.countBlanks(questionDto.title);
 
         if (chunks.length !== questionDto.acceptableAnswers.length) {
             throw new Error(
                 `The answer "${answer}" for questionId ${questionDto.id} does not have the same number of chunks (${chunks.length}) as acceptableAnswers (${questionDto.acceptableAnswers.length})`,
             );
         }
+
         const mark = chunks.reduce((totalMark, word, index) => {
             for (const acceptableAnswerPerBlank of questionDto.acceptableAnswers[index]) {
                 const { grade, answer: answerForBlank } = acceptableAnswerPerBlank;

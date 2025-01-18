@@ -5,7 +5,6 @@ import { acceptableAnswerType } from '../../../types';
 const SPLITTING_CHARACTER_FOR_TAT = '|';
 
 const converter = {
-    computeBlankCount,
     convertTextInputToAnswer,
     convertWordIndexToAnswerIndex,
     convertAnswerToTextInputs,
@@ -25,7 +24,7 @@ function convertTextInputToAnswer({
 }) {
     let newAnswer: string[];
     if (!currentAnswer) {
-        const blankCount = computeBlankCount(title);
+        const blankCount = textSplitter.countBlanks(title);
         newAnswer = SPLITTING_CHARACTER_FOR_TAT.repeat(blankCount - 1).split(
             SPLITTING_CHARACTER_FOR_TAT,
         );
@@ -56,7 +55,7 @@ function convertAnswerToTextInputs({
     currentAnswer: string;
     title: string;
 }) {
-    const blankCount = computeBlankCount(title);
+    const blankCount = textSplitter.countBlanks(title);
     if (!currentAnswer) {
         return SPLITTING_CHARACTER_FOR_TAT.repeat(blankCount)
             .split('')
@@ -82,15 +81,11 @@ function convertWordIndexToAnswerIndex({ wordIndex, title }: { wordIndex: number
     return -1;
 }
 
-function computeBlankCount(title: string) {
-    return textSplitter.split(title).filter((word) => word === TAT_BLANK_STRING).length;
-}
-
 function convertBlankedTitleToFullTitle(
     blankedTitle: string,
     acceptableAnswers: acceptableAnswerType[][],
 ) {
-    const blankCount = computeBlankCount(blankedTitle);
+    const blankCount = textSplitter.countBlanks(blankedTitle);
     let fullTitle = blankedTitle;
     if (blankCount !== acceptableAnswers.length) {
         console.error(

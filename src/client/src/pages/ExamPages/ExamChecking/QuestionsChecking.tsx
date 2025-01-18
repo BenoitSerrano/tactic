@@ -184,11 +184,13 @@ function QuestionsChecking(props: {
                         ? 'Il reste des questions non notées dans cet exercice'
                         : undefined;
                     return (
-                        <ExerciseBox isBlurred={!props.isAttemptTreated}>
+                        <ExerciseBox
+                            isBlurred={!props.isAttemptTreated}
+                            key={'exercise-' + exercise.id}
+                        >
                             <ExerciseAccordionContainer
                                 isExpanded={currentExerciseExpanded === exercise.id}
                                 onChangeExpanded={buildOnExerciseExpandedChange(exercise.id)}
-                                key={'exercise-' + exercise.id}
                                 exercise={exercise}
                                 warningToDisplay={warningToDisplay}
                             >
@@ -201,7 +203,7 @@ function QuestionsChecking(props: {
                                     const isLastQuestion =
                                         questionIndex === exercise.questions.length - 1;
                                     return (
-                                        <>
+                                        <div key={'question' + question.id}>
                                             <QuestionContainer key={'question-' + question.id}>
                                                 <QuestionIndicatorsContainer>
                                                     {(question.kind === 'phraseMelangee' ||
@@ -239,7 +241,7 @@ function QuestionsChecking(props: {
                                                 />
                                             </QuestionContainer>
                                             {!isLastQuestion && <HorizontalDivider />}
-                                        </>
+                                        </div>
                                     );
                                 })}
                             </ExerciseAccordionContainer>

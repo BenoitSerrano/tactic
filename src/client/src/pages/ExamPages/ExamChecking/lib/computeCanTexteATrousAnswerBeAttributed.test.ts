@@ -1,10 +1,10 @@
-import { acceptableAnswerType, gradeType } from '../../../../types';
+import { acceptableAnswerType } from '../../../../types';
 import { computeCanTexteATrousAnswerBeAttributed } from './computeCanTexteATrousAnswerBeAttributed';
 
 describe('computeCanTexteATrousAnswerBeAttributed', () => {
     const baseQuestion = {
         id: 2,
-        title: 'la vie .... belle, ne trouves-tu .... ?',
+        title: 'la vie Ø belle, ne trouves-tu Ø ?',
         kind: 'texteATrous' as const,
         answer: 'est|pas',
         points: 2,

@@ -8,9 +8,9 @@ describe('sanitizer', () => {
         expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
     });
 
-    it('should return true if several points', () => {
-        const answer1 = 'je suis .....';
-        const answer2 = 'je suis ..';
+    it('should return true if points or no final point', () => {
+        const answer1 = 'je suis ';
+        const answer2 = 'je suis .';
 
         expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
     });
@@ -18,6 +18,13 @@ describe('sanitizer', () => {
     it('should return true if different guillemets', () => {
         const answer1 = `je suis « Benoit »`;
         const answer2 = `je suis “Benoit”`;
+
+        expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
+    });
+
+    it('should return true if spaces different', () => {
+        const answer1 = `trouves-tu ?`;
+        const answer2 = `trouves - tu?`;
 
         expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
     });
