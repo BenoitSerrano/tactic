@@ -325,7 +325,7 @@ function buildAttemptService() {
 
     async function getAllAttempts() {
         const attempts = await attemptRepository.find({
-            relations: ['student', 'exam'],
+            relations: ['student', 'exam', 'user'],
             select: { student: { id: true }, exam: { id: true }, user: { id: true } },
         });
 
