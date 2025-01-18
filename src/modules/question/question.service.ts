@@ -11,7 +11,7 @@ import { computeTexteATrousQuestionWithNewAcceptableAnswer } from './lib/compute
 import { removeOkAnswerFromQuestionFromTexteATrousQuestion } from './lib/removeOkAnswerFromQuestionFromTexteATrousQuestion';
 import { Exam } from '../exam';
 import { logger } from '../../lib/logger';
-import { computeBlankCount } from './lib/computeBlankCount';
+import { textSplitter } from './lib/textSplitter';
 
 export { buildQuestionService };
 
@@ -96,7 +96,7 @@ function buildQuestionService() {
         });
         await Promise.all(
             tatQuestions.map((tatQuestion) => {
-                const blankCount = computeBlankCount(tatQuestion.title);
+                const blankCount = textSplitter.countBlanks(tatQuestion.title);
                 const totalPoints = blankCount * points;
                 return questionRepository.update({ id: tatQuestion.id }, { points: totalPoints });
             }),

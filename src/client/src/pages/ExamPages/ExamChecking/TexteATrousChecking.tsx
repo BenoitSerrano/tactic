@@ -10,20 +10,23 @@ import { attemptStatusType, gradeType } from '../../../types';
 import { questionWithAnswersType } from '../types';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { IconButton } from '../../../components/IconButton';
-import { TAT_BLANK_STRING } from '../../../constants';
 import { AcceptableAnswers } from '../components/AcceptableAnswers';
 import { questionsApi } from '../../../lib/api/questionsApi';
+import { textSplitter } from '../../../lib/textSplitter';
 
 const styledContainerMapping = {
-    right: styled('span')(({ theme }) => ({
+    right: styled('span')<{ onClick?: Function }>(({ theme, onClick }) => ({
         color: theme.palette.success.main,
-        cursor: 'pointer',
+        cursor: onClick ? 'pointer' : 'default',
     })),
-    acceptable: styled('span')(({ theme }) => ({
+    acceptable: styled('span')<{ onClick?: Function }>(({ theme, onClick }) => ({
         color: theme.palette.warning.main,
-        cursor: 'pointer',
+        cursor: onClick ? 'pointer' : 'default',
     })),
-    wrong: styled('span')(({ theme }) => ({ color: theme.palette.error.main, cursor: 'pointer' })),
+    wrong: styled('span')<{ onClick?: Function }>(({ theme, onClick }) => ({
+        color: theme.palette.error.main,
+        cursor: onClick ? 'pointer' : 'default',
+    })),
 };
 
 function TexteATrousChecking(props: {
@@ -40,7 +43,6 @@ function TexteATrousChecking(props: {
         element: HTMLElement;
         chunkIndex: number;
     } | null>(null);
-
     const { displayAlert } = useAlert();
     const queryClient = useQueryClient();
 
@@ -74,9 +76,7 @@ function TexteATrousChecking(props: {
         },
     });
 
-    const blankCount = props.question.title
-        .split(' ')
-        .filter((word) => word === TAT_BLANK_STRING).length;
+    const blankCount = textSplitter.countBlanks(props.question.title);
 
     const pointsPerBlank = props.question.points / blankCount;
 
@@ -135,6 +135,7 @@ function TexteATrousChecking(props: {
 
                                         return (
                                             <IconButton
+                                                key={`grade-button-${grade}`}
                                                 IconComponent={IconComponent}
                                                 onClick={buildAttributeGradeToTatAnswer({
                                                     grade,
@@ -161,17 +162,28 @@ function TexteATrousChecking(props: {
                 {props.displayedAnswer.title.map((chunk, chunkIndex) => {
                     switch (chunk.kind) {
                         case 'text':
-                            return <span>{chunk.value}</span>;
+                            return <span key={`chunk-text-${chunkIndex}`}>{chunk.value}</span>;
                         case 'coloredText':
                             const StyledComponent = styledContainerMapping[chunk.status || 'wrong'];
-                            return (
-                                <>
-                                    <StyledComponent onClick={buildHandleChunkClick(chunkIndex)}>
-                                        {' '}
-                                        {chunk.value}{' '}
-                                    </StyledComponent>
-                                </>
-                            );
+                            if (props.canUpdateAnswers) {
+                                return (
+                                    <span key={`chunk-colored-text-${chunkIndex}`}>
+                                        <StyledComponent
+                                            onClick={buildHandleChunkClick(chunkIndex)}
+                                        >
+                                            {' '}
+                                            {chunk.value}{' '}
+                                        </StyledComponent>
+                                    </span>
+                                );
+                            } else {
+                                return (
+                                    <span key={`chunk-colored-text-${chunkIndex}`}>
+                                        <StyledComponent> {chunk.value} </StyledComponent>
+                                    </span>
+                                );
+                            }
+
                         default:
                             return <span />;
                     }

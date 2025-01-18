@@ -57,7 +57,7 @@ describe('computeDisplayedAnswer', () => {
         it('should return the title if answers empty', () => {
             const question = {
                 id: 2,
-                title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
+                title: 'Portez-vous Ø vêtements décontractés pour aller au travail ? Chez Ø personne, vous remarquez en premier : Ø yeux, Ø silhouette, Ø sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
@@ -76,15 +76,15 @@ describe('computeDisplayedAnswer', () => {
             expect(displayedAnswer).toEqual({
                 title: [
                     { kind: 'text', value: 'Portez-vous' },
-                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
+                    { kind: 'coloredText', value: 'Ø', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
+                    { kind: 'coloredText', value: 'Ø', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
-                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
+                    { kind: 'coloredText', value: 'Ø', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'yeux,' },
-                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
+                    { kind: 'coloredText', value: 'Ø', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'silhouette,' },
-                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
+                    { kind: 'coloredText', value: 'Ø', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'sourire?' },
                 ],
                 displayedRightAnswers: [
@@ -97,7 +97,7 @@ describe('computeDisplayedAnswer', () => {
         it('should return the title if one answer is acceptable', () => {
             const question = {
                 id: 2,
-                title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
+                title: 'Portez-vous Ø vêtements décontractés pour aller au travail ? Chez Ø personne, vous remarquez en premier : Ø yeux, Ø silhouette, Ø sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
@@ -140,7 +140,7 @@ describe('computeDisplayedAnswer', () => {
         it('should return the title with color for right answers', () => {
             const question = {
                 id: 2,
-                title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
+                title: 'Portez-vous Ø vêtements décontractés pour aller au travail ? Chez Ø personne, vous remarquez en premier : Ø yeux, Ø silhouette, Ø sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
@@ -180,7 +180,7 @@ describe('computeDisplayedAnswer', () => {
         it('should return the title with different color for answers', () => {
             const question = {
                 id: 2,
-                title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
+                title: 'Portez-vous Ø vêtements décontractés pour aller au travail ? Chez Ø personne, vous remarquez en premier : Ø yeux, Ø silhouette, Ø sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
@@ -220,7 +220,7 @@ describe('computeDisplayedAnswer', () => {
         it('should return the title with several answers not filled', () => {
             const question = {
                 id: 2,
-                title: 'Portez-vous .... vêtements décontractés pour aller au travail ? Chez .... personne, vous remarquez en premier : .... yeux, .... silhouette, .... sourire?',
+                title: 'Portez-vous Ø vêtements décontractés pour aller au travail ? Chez Ø personne, vous remarquez en premier : Ø yeux, Ø silhouette, Ø sourire?',
                 kind: 'texteATrous' as const,
                 possibleAnswers: [],
                 acceptableAnswers: [
@@ -241,7 +241,7 @@ describe('computeDisplayedAnswer', () => {
                     { kind: 'text', value: 'Portez-vous' },
                     { kind: 'coloredText', value: 'des', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'vêtements décontractés pour aller au travail ? Chez' },
-                    { kind: 'coloredText', value: '....', status: 'wrong', grade: 'E' },
+                    { kind: 'coloredText', value: 'Ø', status: 'wrong', grade: 'E' },
                     { kind: 'text', value: 'personne, vous remarquez en premier :' },
                     { kind: 'coloredText', value: 'ses', status: 'right', grade: 'A' },
                     { kind: 'text', value: 'yeux,' },

@@ -1,10 +1,11 @@
 import { acceptableAnswerType } from '../../../../../types';
 import { computeDisplayedTitle } from './lib/computeDisplayedTitle';
-import { RightAnswerTextField } from './components/RightAnswerTextField';
+import { BlankTextField } from './components/BlankTextField';
 import { PlainText } from './components/PlainText';
 import { Typography, styled } from '@mui/material';
 import { Caption } from '../../../components/Caption';
-import { converter } from '../../../lib/converter';
+import { computeShouldDisplaySpaceBeforeCharacter } from './lib/shouldDisplaySpaceBeforeCharacter';
+import { textSplitter } from '../../../../../lib/textSplitter';
 
 function TexteATrousPreviewing(props: {
     index: number;
@@ -12,7 +13,7 @@ function TexteATrousPreviewing(props: {
     title: string;
     acceptableAnswers: acceptableAnswerType[][];
 }) {
-    const blankCount = converter.computeBlankCount(props.title);
+    const blankCount = textSplitter.countBlanks(props.title);
     const pointsPerBlank = Number(props.points) / blankCount;
     const displayedTitle = computeDisplayedTitle(props.title, props.acceptableAnswers);
     return (
@@ -22,10 +23,21 @@ function TexteATrousPreviewing(props: {
                 {displayedTitle.map((chunk, index) => {
                     switch (chunk.kind) {
                         case 'text':
-                            return <PlainText key={`chunk-text-${index}`}>{chunk.word}</PlainText>;
+                            const shouldDisplaySpaceBeforeCharacter =
+                                computeShouldDisplaySpaceBeforeCharacter(chunk.word);
+                            return (
+                                <PlainText
+                                    shouldDisplaySpaceBeforeCharacter={
+                                        shouldDisplaySpaceBeforeCharacter
+                                    }
+                                    key={`chunk-text-${index}`}
+                                >
+                                    {chunk.word}
+                                </PlainText>
+                            );
                         case 'rightAnswerText':
                             return (
-                                <RightAnswerTextField
+                                <BlankTextField
                                     key={`chunk-rightAnswerText-${index}`}
                                     variant="standard"
                                     disabled
@@ -46,7 +58,19 @@ function TexteATrousPreviewing(props: {
                     const key = `question-${props.index}-chunk-${chunkIndex}`;
                     switch (chunk.kind) {
                         case 'text':
-                            return <PlainText key={key}>{chunk.word}</PlainText>;
+                            const shouldDisplaySpaceBeforeCharacter =
+                                computeShouldDisplaySpaceBeforeCharacter(chunk.word);
+
+                            return (
+                                <PlainText
+                                    shouldDisplaySpaceBeforeCharacter={
+                                        shouldDisplaySpaceBeforeCharacter
+                                    }
+                                    key={key}
+                                >
+                                    {chunk.word}
+                                </PlainText>
+                            );
                         case 'rightAnswerText':
                             return (
                                 <RightAnswerText key={key}>{chunk.words.join(' ')}</RightAnswerText>
@@ -78,7 +102,7 @@ const TitleContainer = styled(Typography)(({ theme }) => ({
 
 const RightAnswerText = styled('span')(({ theme }) => ({
     color: theme.palette.success.main,
-    marginRight: theme.spacing(1),
+    marginLeft: '4px',
     fontWeight: 'bold',
 }));
 

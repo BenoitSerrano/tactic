@@ -2,7 +2,7 @@ import { acceptableAnswerType } from '../../../types';
 import { converter } from './converter';
 
 describe('converter', () => {
-    const title = 'tu es .... la .... belle de toutes .... femmes';
+    const title = 'tu es Ø la Ø belle de toutes Ø femmes';
     describe('convertTextInputToAnswer', () => {
         it('should convert when there was no character before, first word', () => {
             const currentAnswer = '';
@@ -183,7 +183,7 @@ describe('converter', () => {
 
         it('should return full title if one blank', () => {
             const acceptableAnswers: acceptableAnswerType[][] = [[{ answer: 'la', grade: 'A' }]];
-            const blankedTitle = 'tu es .... plus belle';
+            const blankedTitle = 'tu es Ø plus belle';
 
             const fullTitle = converter.convertBlankedTitleToFullTitle(
                 blankedTitle,

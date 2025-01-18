@@ -1,5 +1,5 @@
+import { textSplitter } from '../../../../lib/textSplitter';
 import { acceptableAnswerType, questionKindType } from '../../../../types';
-import { converter } from '../../lib/converter';
 
 const formErrorHandler = {
     computeFormErrors,
@@ -119,7 +119,7 @@ function areThereAcceptableAnswers(acceptableAnswers: acceptableAnswerType[][]) 
 }
 
 function areBlanksConsistent(title: string, acceptableAnswers: acceptableAnswerType[][]) {
-    const blankCount = converter.computeBlankCount(title);
+    const blankCount = textSplitter.countBlanks(title);
     return blankCount === acceptableAnswers.length;
 }
 

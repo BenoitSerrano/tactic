@@ -1,8 +1,10 @@
 import { Typography, styled } from '@mui/material';
+import { TAT_BLANK_STRING } from '../../../constants';
 
 function IsolatedWord(props: { word: string; onClick?: () => void }) {
     const Container = props.onClick ? ClickableContainer : NonClickableContainer;
-    return <Container onClick={props.onClick}>{props.word}</Container>;
+    const displayedWord = props.word === TAT_BLANK_STRING ? '....' : props.word;
+    return <Container onClick={props.onClick}>{displayedWord}</Container>;
 }
 
 const ClickableContainer = styled(Typography)({

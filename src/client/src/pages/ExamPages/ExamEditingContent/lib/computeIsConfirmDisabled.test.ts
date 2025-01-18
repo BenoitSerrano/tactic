@@ -189,7 +189,7 @@ describe('computeIsConfirmDisabled', () => {
         expect(isConfirmDisabled).toBe(false);
     });
 
-    test('texteATrous with no .... = true', () => {
+    test('texteATrous with no Ø = true', () => {
         const questionKind = 'texteATrous';
         const title = 'tu es la plus belle';
         const possibleAnswers: string[] = [];
@@ -206,9 +206,9 @@ describe('computeIsConfirmDisabled', () => {
         expect(isConfirmDisabled).toBe(true);
     });
 
-    test('texteATrous with a  difference between .... count and right answers length = true', () => {
+    test('texteATrous with a  difference between Ø count and right answers length = true', () => {
         const questionKind = 'texteATrous';
-        const title = 'tu es .... plus belle';
+        const title = 'tu es Ø plus belle';
         const possibleAnswers: string[] = [];
         const acceptableAnswers: acceptableAnswerType[][] = [
             [{ grade: 'C', answer: 'la' }],
@@ -226,9 +226,9 @@ describe('computeIsConfirmDisabled', () => {
         expect(isConfirmDisabled).toBe(true);
     });
 
-    test('texteATrous with right count of acceptableAnswers and .... = false', () => {
+    test('texteATrous with right count of acceptableAnswers and Ø = false', () => {
         const questionKind = 'texteATrous';
-        const title = 'tu .... la .... belle';
+        const title = 'tu Ø la Ø belle';
         const possibleAnswers: string[] = [];
         const acceptableAnswers: acceptableAnswerType[][] = [
             [{ grade: 'C', answer: 'la' }],

@@ -1,4 +1,4 @@
-import { TEXTE_A_TROU_REGEX } from '../../../constants';
+import { TAT_BLANK_STRING, TEXTE_A_TROU_REGEX } from '../../../constants';
 import { gradeConverter } from '../../../lib/gradeConverter';
 import { sanitizer } from '../../../lib/sanitizer';
 import { acceptableAnswerType, gradeType } from '../../../types';
@@ -57,7 +57,6 @@ function computeDisplayedAnswer(
             let displayedRightAnswer = '';
             const tATRegexMatch = question.title.matchAll(TEXTE_A_TROU_REGEX);
             let value = tATRegexMatch.next();
-            // const displayedRightAnswers: string[] = [];
             if (!!value.done) {
                 console.error(`texte à trous wrongly formatted: ${question.title}`);
                 return {
@@ -97,12 +96,12 @@ function computeDisplayedAnswer(
 
                 title.push({
                     kind: 'coloredText',
-                    value: answers[blankIndex] || '....',
+                    value: answers[blankIndex] || TAT_BLANK_STRING,
                     status: blankStatus,
                     grade: matchingAcceptableAnswer?.grade || 'E',
                 });
                 displayedRightAnswer += rightAnswers[blankIndex].join(' / ');
-                lastIndexFound = (value.value.index || 0) + 4;
+                lastIndexFound = (value.value.index || 0) + TAT_BLANK_STRING.length;
                 value = tATRegexMatch.next();
                 blankIndex++;
             }
