@@ -4,7 +4,7 @@ import { questionSpecificityMapping } from '../../../constants';
 import { questionKindType, questionKinds } from '../../../types';
 
 function QuestionKindSelect(props: {
-    currentQuestionKind: questionKindType;
+    currentQuestionKind: questionKindType | undefined;
     onSelect: (questionKind: questionKindType) => void;
 }) {
     return (

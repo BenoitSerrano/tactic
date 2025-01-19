@@ -33,10 +33,11 @@ function ExerciseUpsertionModal(props: {
 
     const initialQuestionKind =
         props.modalStatus.kind === 'creating'
-            ? 'qcm'
+            ? undefined
             : props.modalStatus.exercise.defaultQuestionKind;
-    const [defaultQuestionKind, setDefaultQuestionKind] =
-        useState<questionKindType>(initialQuestionKind);
+    const [defaultQuestionKind, setDefaultQuestionKind] = useState<questionKindType | undefined>(
+        initialQuestionKind,
+    );
 
     const updateExerciseMutation = useMutation({
         mutationFn: exercisesApi.updateExercise,
@@ -171,7 +172,7 @@ function ExerciseUpsertionModal(props: {
     }
 
     function computeIsConfirmDisabled(): boolean {
-        if (!name) {
+        if (!name || !defaultQuestionKind) {
             return true;
         }
         switch (pointsMode) {
@@ -210,7 +211,7 @@ function ExerciseUpsertionModal(props: {
 
     function saveExercise() {
         const { modalStatus } = props;
-        if (!modalStatus) {
+        if (!modalStatus || !defaultQuestionKind) {
             return;
         }
         const newExercise = {
