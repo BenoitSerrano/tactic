@@ -6,6 +6,7 @@ import { Exam, buildExamService } from '../exam';
 import { Classe } from '../classe';
 import { buildClasseService } from '../classe/classe.service';
 import { buildQuestionService } from '../question';
+import { capitalize } from './lib/capitalize';
 
 export { buildStudentService };
 
@@ -57,9 +58,10 @@ function buildStudentService() {
         studentId: Student['id'],
         names: { firstName?: string; lastName?: string },
     ) {
+        const formattedFirstName = names.firstName ? capitalize(names.firstName) : undefined;
         return studentRepository.update(
             { id: studentId },
-            { firstName: names.firstName, lastName: names.lastName?.toUpperCase() },
+            { firstName: formattedFirstName, lastName: names.lastName?.toUpperCase() },
         );
     }
 
