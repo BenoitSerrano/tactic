@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 const FAQ_CONTENT: Array<{ question: string; answer: string | ReactNode }> = [
     {
         question: 'Puis-je utiliser Tactic gratuitement ?',
-        answer: 'Oui, la correction des 20 premières copies est entièrement gratuite. Vous pourrez ensuite choisir un forfait adapté à vos besoins.',
+        answer: 'Oui, la correction des 30 premières copies est entièrement gratuite. Vous pourrez ensuite choisir un forfait adapté à vos besoins.',
     },
     {
         question: 'Comment les élèves accèdent-ils aux examens ?',

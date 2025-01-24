@@ -22,7 +22,7 @@ const config = {
     BREVO_API_KEY: process.env.BREVO_API_KEY || '',
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || '',
     STRIPE_WEBHOOK_ENDPOINT_SECRET: process.env.STRIPE_WEBHOOK_ENDPOINT_SECRET || '',
-    FREE_PAPERS_COUNT: process.env.FREE_PAPERS_COUNT ? Number(process.env.FREE_PAPERS_COUNT) : 20,
+    FREE_PAPERS_COUNT: process.env.FREE_PAPERS_COUNT ? Number(process.env.FREE_PAPERS_COUNT) : 30,
     DATABASE_HOST: process.env.DATABASE_HOST || '',
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD || '',
     DATABASE_USER: process.env.DATABASE_USER || '',

@@ -16,7 +16,7 @@ function TermsAndConditionsOfSale() {
                 <ul>
                     <li>
                         <strong>Section gratuite :</strong> Chaque professeur bénéficie de la
-                        correction gratuite des 20 premières copies.
+                        correction gratuite des 30 premières copies.
                     </li>
                     <li>
                         <strong>Lots de copies corrigées :</strong> Les Clients peuvent acheter des
