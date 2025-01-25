@@ -41,6 +41,7 @@ import { PaymentStart } from '../pages/Payment/PaymentStart';
 import { PaymentFailure } from '../pages/Payment/PaymentFailure';
 import { PaymentSuccess } from '../pages/Payment/PaymentSuccess';
 import { PaymentConfirmed } from '../pages/Payment/PaymentConfirmed';
+import { Profile } from '../pages/Profile/Profile';
 
 const ROUTE_ELEMENTS: Record<
     (typeof ROUTE_KEYS)[number],
@@ -116,6 +117,7 @@ const ROUTE_ELEMENTS: Record<
         element: <Classe />,
     },
     STUDENTS: { authorizedRole: 'teacher', element: <Students /> },
+    PROFILE: { authorizedRole: 'teacher', element: <Profile /> },
     EXAM_PREVIEWING: {
         element: <ExamPreviewing />,
     },
