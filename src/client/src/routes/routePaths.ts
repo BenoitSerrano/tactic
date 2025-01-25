@@ -63,6 +63,7 @@ const ROUTE_PATHS: Record<(typeof ROUTE_KEYS)[number], { path: string }> = {
     },
     ONBOARDING: { path: `/teacher/onboarding` },
     STUDENTS: { path: `/teacher/establishments/:establishmentId/classes/:classeId/students` },
+    PROFILE: { path: `/teacher/profile` },
     EXAM_PREVIEWING: {
         path: `/teacher/establishments/:establishmentId/classes/:classeId/exams/:examId/preview`,
     },

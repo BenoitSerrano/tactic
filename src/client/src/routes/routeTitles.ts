@@ -13,6 +13,7 @@ const ROUTE_TITLES: Record<(typeof ROUTE_KEYS)[number], string> = {
     REQUEST_RESET_PASSWORD: 'Demande de réinitialisation de mot de passe',
     SIGN_IN: 'Connexion',
     SIGN_UP: 'Inscription',
+    PROFILE: 'Profil',
     HOME: 'Accueil',
     EXAM_CONSULTING: 'Consultation de copie',
     EXAM_DONE: 'Examen terminé',
