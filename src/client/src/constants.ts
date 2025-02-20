@@ -27,10 +27,9 @@ const NON_WORD_CHARACTERS = [
     '<',
     '>',
     '"',
-    "'",
-    '’',
-    'ʼ',
 ];
+
+const APOSTROPHES = ["'", '’', 'ʼ'];
 
 const TEXTE_A_TROU_REGEX = /(Ø)/g;
 const HEADER_HEIGHT = 60;
@@ -99,6 +98,7 @@ export {
     BREADCRUMBS_HEIGHT,
     TAT_BLANK_STRING,
     NON_WORD_CHARACTERS,
+    APOSTROPHES,
 };
 
 export type { userRoleType, userInfoType };

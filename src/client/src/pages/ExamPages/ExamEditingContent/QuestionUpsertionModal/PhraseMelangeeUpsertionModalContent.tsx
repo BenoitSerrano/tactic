@@ -152,7 +152,9 @@ function PhraseMelangeeUpsertionModalContent(props: {
     }
 
     function computeShuffledPhrase(originalPhrase: string) {
-        const words = textSplitter.split(originalPhrase.trim());
+        const words = textSplitter.split(originalPhrase.trim(), {
+            shouldApostrophesBeBinding: true,
+        });
         const shuffledCombination = combinator.generate(words.length);
         const isolatedWords = [];
         for (let i = 0; i < shuffledCombination.length; i++) {

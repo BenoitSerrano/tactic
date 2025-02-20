@@ -1,12 +1,15 @@
-import { NON_WORD_CHARACTERS, TAT_BLANK_STRING } from '../constants';
+import { APOSTROPHES, NON_WORD_CHARACTERS, TAT_BLANK_STRING } from '../constants';
 
 const textSplitter = { split, countBlanks };
 
 const SEPARATORS = [' ', '\n', '\t'];
 
-function split(text: string): string[] {
+function split(text: string, option?: { shouldApostrophesBeBinding?: boolean }): string[] {
     let words: string[] = [];
     let currentWord = '';
+    const SPLITTING_CHARACTERS = option?.shouldApostrophesBeBinding
+        ? NON_WORD_CHARACTERS
+        : [...NON_WORD_CHARACTERS, ...APOSTROPHES];
     for (let i = 0; i < text.length; i++) {
         const char = text[i];
         if (SEPARATORS.includes(char)) {
@@ -14,7 +17,7 @@ function split(text: string): string[] {
                 words.push(currentWord);
                 currentWord = '';
             }
-        } else if (NON_WORD_CHARACTERS.includes(char)) {
+        } else if (SPLITTING_CHARACTERS.includes(char)) {
             if (currentWord !== '') {
                 words.push(currentWord);
                 currentWord = '';
