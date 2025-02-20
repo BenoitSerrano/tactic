@@ -28,6 +28,8 @@ const NON_WORD_CHARACTERS = [
     '>',
     '"',
     "'",
+    '’',
+    'ʼ',
 ];
 
 const TEXTE_A_TROU_REGEX = /(Ø)/g;
