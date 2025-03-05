@@ -1,6 +1,6 @@
 import { Typography, styled, Tooltip } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import Markdown from 'react-markdown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -12,6 +12,8 @@ import { computeHash, exerciseIndexesType } from '../lib/useExerciseIndex';
 import { Button } from '../../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { ProgressBar } from './ProgressBar';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 const EXERCISE_ACCORDION_SUMMARY_HEIGHT = 52;
 
@@ -26,6 +28,7 @@ function ExerciseContainer<
     warningToDisplay?: string;
     indication?: exerciseIndicationType;
 }) {
+    const [isInstructionDisplayed, setIsInstructionDisplayed] = useState(true);
     const navigate = useNavigate();
     const { result, progress } = computeExerciseIndication(props.exercise, props.indication);
     return (
@@ -52,9 +55,23 @@ function ExerciseContainer<
             <Typography variant="h4">{props.exercise.name}</Typography>
 
             <ContentContainer>
-                <Typography>
-                    <Markdown className="exercise-markdown">{props.exercise.instruction}</Markdown>
-                </Typography>
+                {isInstructionDisplayed && (
+                    <Typography>
+                        <Markdown className="exercise-markdown">
+                            {props.exercise.instruction}
+                        </Markdown>
+                    </Typography>
+                )}
+                <ExpandButtonContainer>
+                    <Button
+                        onClick={toggleInstructions}
+                        endIcon={
+                            isInstructionDisplayed ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />
+                        }
+                    >
+                        {isInstructionDisplayed ? 'Cacher les consignes' : 'Afficher les consignes'}
+                    </Button>
+                </ExpandButtonContainer>
                 {props.children}
             </ContentContainer>
             <FooterContainer>
@@ -77,6 +94,10 @@ function ExerciseContainer<
             </FooterContainer>
         </Container>
     );
+
+    function toggleInstructions() {
+        setIsInstructionDisplayed(!isInstructionDisplayed);
+    }
 
     function onPreviousExerciseClick() {
         if (props.exerciseIndexes.previous === undefined) {
@@ -135,6 +156,11 @@ const HeaderContainer = styled('div')(({ theme }) => ({ marginBottom: theme.spac
 const ExerciseTitle = styled(Typography)(({ theme }) => ({
     marginRight: theme.spacing(2),
     textDecoration: 'underline',
+}));
+const ExpandButtonContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-end',
 }));
 
 const ExerciseHeaderContainer = styled('div')({ display: 'flex', alignItems: 'center', flex: 1 });
