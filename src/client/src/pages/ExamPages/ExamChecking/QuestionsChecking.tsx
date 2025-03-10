@@ -12,7 +12,7 @@ import { useAlert } from '../../../lib/alert';
 import { exerciseWithAnswersType } from '../types';
 import { computeAnswerStatus } from '../lib/computeAnswerStatus';
 import { UpdateAnswersButtons } from './UpdateAnswersButtons';
-import { attemptStatusType } from '../../../types';
+import { attemptStatusType, questionKindType } from '../../../types';
 import { computeAttemptIdNeighbours } from './lib/computeAttemptIdNeighbours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { manualQuestionKinds } from '../../../constants';
@@ -27,6 +27,8 @@ import { HorizontalDivider } from '../../../components/HorizontalDivider';
 import { computeExercisesCorrectionStatus } from './lib/computeExercisesCorrectionStatus';
 import { DisplayedMark } from './DisplayedMark';
 import { attemptsApi, attemptsCountByAttemptStatusApiType } from '../../../lib/api/attemptsApi';
+
+const QUESTION_KINDS_FOR_WHICH_TO_DISPLAY_RIGHT_ANSWERS: questionKindType[] = ['questionReponse'];
 
 function QuestionsChecking(props: {
     establishmentId: string;
@@ -230,6 +232,9 @@ function QuestionsChecking(props: {
                                                     />
                                                 </QuestionIndicatorsContainer>
                                                 <QuestionChecking
+                                                    shouldDisplayRightAnswers={QUESTION_KINDS_FOR_WHICH_TO_DISPLAY_RIGHT_ANSWERS.includes(
+                                                        question.kind,
+                                                    )}
                                                     attemptStatus={props.attemptStatus}
                                                     attemptId={props.attemptId}
                                                     examId={props.examId}
