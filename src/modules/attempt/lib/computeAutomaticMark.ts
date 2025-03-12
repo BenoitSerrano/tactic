@@ -1,9 +1,9 @@
 import { sanitizer } from '../../../lib/sanitizer';
 import { textSplitter } from '../../question/lib/textSplitter';
 import { convertGradeToMark } from '../../question/lib/convertGradeToMark';
-import { gradeType, questionDtoType } from '../../question/types';
+import { acceptableAnswerType, gradeType, questionDtoType } from '../../question/types';
 
-export { computeAutomaticMark };
+export { computeAutomaticMark, findMatchingAcceptableAnswer };
 
 function computeAutomaticMark({
     questionDto,
@@ -44,9 +44,10 @@ function computeAutomaticMark({
     if (answer === undefined) {
         return { mark: 0, grade: 'E' };
     }
-    const matchingAcceptableAnswer = questionDto.acceptableAnswers[0].find(
-        (acceptableAnswer) =>
-            sanitizer.sanitizeString(acceptableAnswer.answer) === sanitizer.sanitizeString(answer),
+
+    const matchingAcceptableAnswer = findMatchingAcceptableAnswer(
+        answer,
+        questionDto.acceptableAnswers[0],
     );
     if (matchingAcceptableAnswer) {
         const mark = convertGradeToMark(matchingAcceptableAnswer.grade, questionDto.points);
@@ -54,4 +55,11 @@ function computeAutomaticMark({
     } else {
         return { mark: 0, grade: 'E' };
     }
+}
+
+function findMatchingAcceptableAnswer(answer: string, acceptableAnswers: acceptableAnswerType[]) {
+    return acceptableAnswers.find(
+        (acceptableAnswer) =>
+            sanitizer.sanitizeString(acceptableAnswer.answer) === sanitizer.sanitizeString(answer),
+    );
 }

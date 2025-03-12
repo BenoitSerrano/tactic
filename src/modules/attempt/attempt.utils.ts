@@ -94,10 +94,11 @@ function computeNotationInfo({
         return { grade: undefined, mark };
     }
 
-    return computeAutomaticMark({
+    const automaticMark = computeAutomaticMark({
         questionDto: question,
         answer: answers[question.id],
     });
+    return automaticMark;
 }
 
 function encodeManualMarks(manualMarks: Record<Question['id'], number>): string[] {

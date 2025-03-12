@@ -9,19 +9,22 @@ function sanitizeString(value: string) {
     }
 
     sanitizedValue = sanitizedValue
+        .toLowerCase()
         .split(' ')
         .filter(Boolean)
         .join(' ')
-        .toLowerCase()
-        .replace(/’/g, "'")
-        .replace(/“ ?/g, `"`)
-        .replace(/ ?”/g, `"`)
-        .replace(/« ?/g, `"`)
-        .replace(/ ?»/g, `"`)
-        .replace(/ ?' ?/g, "'")
+        .replace(/’/g, " ' ")
+        .replace(/“ ?/g, ` " `)
+        .replace(/ ?”/g, ` " `)
+        .replace(/« ?/g, ` " `)
+        .replace(/ ?»/g, ` " `)
+        .replace(/ ?' ?/g, " ' ")
         .replace(/é/g, 'é')
         .replace(/ê/g, 'ê')
-        .replace(/ ?\.+$/, '');
+        .replace(/\.+$/, '')
+        .split(' ')
+        .filter(Boolean)
+        .join(' ');
     return sanitizedValue;
 }
 

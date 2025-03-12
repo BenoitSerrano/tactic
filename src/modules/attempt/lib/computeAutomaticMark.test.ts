@@ -1,5 +1,5 @@
 import { acceptableAnswerType } from '../../question/types';
-import { computeAutomaticMark } from './computeAutomaticMark';
+import { computeAutomaticMark, findMatchingAcceptableAnswer } from './computeAutomaticMark';
 
 describe(`computeAutomaticMark`, () => {
     const points = 60;
@@ -284,5 +284,24 @@ describe(`computeAutomaticMark`, () => {
         });
 
         expect(mark).toBe(60);
+    });
+});
+
+describe('findMatchingAcceptableAnswer', () => {
+    it('should return a matching answer regardless of guillemets', () => {
+        const answer = `Faux, “loin de tout communautarisme”`;
+        const acceptableAnswers = [
+            {
+                grade: 'A' as const,
+                answer: 'Faux - « Loin de tout communautarisme, ils veulent un théâtre ancré dans son environnement social »',
+            },
+            { grade: 'A' as const, answer: 'faux , "loin de tout communautarisme"' },
+        ];
+        const matchingAcceptableAnswer = findMatchingAcceptableAnswer(answer, acceptableAnswers);
+
+        expect(matchingAcceptableAnswer).toEqual({
+            grade: 'A',
+            answer: 'faux , "loin de tout communautarisme"',
+        });
     });
 });

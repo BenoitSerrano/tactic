@@ -28,4 +28,11 @@ describe('sanitizer', () => {
 
         expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
     });
+
+    it('should return true if guillemets differents', () => {
+        const answer1 = `“réponse”`;
+        const answer2 = `"réponse"`;
+
+        expect(sanitizer.sanitizeString(answer1)).toEqual(sanitizer.sanitizeString(answer2));
+    });
 });
