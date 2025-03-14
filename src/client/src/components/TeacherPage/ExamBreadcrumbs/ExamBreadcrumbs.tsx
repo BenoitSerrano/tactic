@@ -26,9 +26,7 @@ function ExamBreadcrumbs() {
             const editingBreadcrumb = editingBreadcrumbs[i];
             if (editingBreadcrumb.isActive || !editingBreadcrumb.href) {
                 renderedBreadcrumbs.push(
-                    <ActiveText key={`breadcrumb-editing-${i}`}>
-                        {editingBreadcrumb.label}
-                    </ActiveText>,
+                    <ActiveText key={`breadcrumb-editing-${i}`} label={editingBreadcrumb.label} />,
                 );
             } else {
                 renderedBreadcrumbs.push(

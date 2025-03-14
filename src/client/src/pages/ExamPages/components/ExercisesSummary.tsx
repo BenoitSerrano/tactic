@@ -3,6 +3,7 @@ import { TextLink } from '../../../components/TextLink';
 import { computeHash } from '../lib/useExerciseIndex';
 import { BREADCRUMBS_HEIGHT, HEADER_HEIGHT } from '../../../constants';
 import { ActiveText } from '../../../components/ActiveText';
+import { ProgressBar } from './ProgressBar';
 
 function ExercisesSummary(props: { currentExerciseIndex: number; progresses: number[] }) {
     return (
@@ -10,19 +11,28 @@ function ExercisesSummary(props: { currentExerciseIndex: number; progresses: num
             <ExerciseList>
                 {props.progresses.map((progress, exerciseIndex) => {
                     const hash = computeHash(exerciseIndex);
-                    const label = `Exercice ${exerciseIndex + 1}`;
-                    const formattedProgress = `${Math.floor(progress * 100)} %`;
+                    const smallLabel = `${exerciseIndex + 1}`;
+                    const label = `Exercice ${smallLabel}`;
+                    const progressValue = Math.floor(progress * 100);
+                    const formattedProgress = `${progressValue} %`;
                     const TextComponent =
                         exerciseIndex === props.currentExerciseIndex ? (
-                            <ActiveText>{label}</ActiveText>
+                            <ActiveText label={label} smallLabel={smallLabel} />
                         ) : (
-                            <TextLink onClick={scrollToTop} label={label} to={hash} />
+                            <TextLink
+                                onClick={scrollToTop}
+                                label={label}
+                                smallLabel={smallLabel}
+                                to={hash}
+                            />
                         );
                     return (
                         <ExerciseSummaryContainer>
                             {TextComponent}
-                             - 
-                            <Typography variant="body2">{formattedProgress}</Typography>
+                            <ProgressBarContainer>
+                                <ProgressBar hideValue progress={progressValue} />
+                            </ProgressBarContainer>
+                            <PercentageText variant="body2"> - {formattedProgress}</PercentageText>
                         </ExerciseSummaryContainer>
                     );
                 })}
@@ -44,14 +54,34 @@ const Container = styled('div')(({ theme }) => ({
     left: 0,
     top: HEADER_HEIGHT + BREADCRUMBS_HEIGHT,
     padding: theme.spacing(1),
-    margin: theme.spacing(1),
+    [theme.breakpoints.up('lg')]: {
+        margin: theme.spacing(1),
+    },
     borderRadius: '2px',
-    [theme.breakpoints.down('md')]: {
+}));
+
+const PercentageText = styled(Typography)(({ theme }) => ({
+    [theme.breakpoints.down('lg')]: {
         display: 'none',
     },
+}));
+const ProgressBarContainer = styled('div')(({ theme }) => ({
+    [theme.breakpoints.up('lg')]: {
+        display: 'none',
+    },
+    width: '100%',
 }));
 const ExerciseSummaryContainer = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
+    [theme.breakpoints.up('lg')]: {
+        flexDirection: 'row',
+    },
+    [theme.breakpoints.down('lg')]: {
+        flexDirection: 'column',
+    },
+    ':not(:last-child)': {
+        marginBottom: theme.spacing(1),
+    },
 }));
 const ExerciseList = styled('div')(({ theme }) => ({ display: 'flex', flexDirection: 'column' }));

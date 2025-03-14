@@ -125,7 +125,7 @@ const Container = styled('div')(({ theme }) => ({
         paddingRight: theme.spacing(3),
     },
     [theme.breakpoints.down('md')]: {
-        width: '85%',
+        width: '80%',
         padding: theme.spacing(1),
     },
     marginBottom: FOOTER_HEIGHT,
