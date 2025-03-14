@@ -2,10 +2,17 @@ import { styled } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { IconButton } from '../../../components/IconButton';
+import { useLocation } from 'react-router-dom';
+
+const CRISP_RIGHT_OFFSET = 34;
+const CRISP_BOTTOM_OFFSET = 88;
 
 function QuickScrollArrows() {
+    const location = useLocation();
+    const isTeacherPage = location.pathname.startsWith('/teacher/');
+    const isCrispIconDisplayed = isTeacherPage;
     return (
-        <Container>
+        <Container isCrispIconDisplayed={isCrispIconDisplayed}>
             <IconContainer>
                 <IconButton
                     title="Aller en haut"
@@ -36,14 +43,17 @@ function QuickScrollArrows() {
 
 export { QuickScrollArrows };
 
-const Container = styled('div')(({ theme }) => ({
-    [theme.breakpoints.down('md')]: {
-        right: theme.spacing(1),
-    },
-    [theme.breakpoints.up('md')]: {
-        right: 34,
-    },
-    position: 'fixed',
-    bottom: 88,
-}));
+const Container = styled('div')<{ isCrispIconDisplayed: boolean }>(
+    ({ theme, isCrispIconDisplayed }) => ({
+        [theme.breakpoints.down('md')]: {
+            right: 0,
+            bottom: isCrispIconDisplayed ? CRISP_BOTTOM_OFFSET : 0,
+        },
+        [theme.breakpoints.up('md')]: {
+            bottom: isCrispIconDisplayed ? CRISP_BOTTOM_OFFSET : theme.spacing(1), // to fit in the middle of the crisp icon,
+            right: isCrispIconDisplayed ? CRISP_RIGHT_OFFSET : theme.spacing(1), // to fit in the middle of the crisp icon
+        },
+        position: 'fixed',
+    }),
+);
 const IconContainer = styled('div')({});
